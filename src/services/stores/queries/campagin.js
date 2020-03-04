@@ -325,13 +325,16 @@ export const campaignDetailsQuery = gql`
       }
     }
     investNow {
-      toc {
-        label
-        order
+      page {
+        title
         page
-        account
         regulation
-        required
+        toc {
+          label
+          order
+          account
+          required
+        }
       }
     }
     closureSummary {
@@ -443,13 +446,16 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     isAvailablePublicly
     stage
     investNow {
-      toc {
-        label
-        order
+      page {
+        title
         page
-        account
         regulation
-        required
+        toc {
+          label
+          order
+          account
+          required
+        }
       }
     }
     closureSummary {

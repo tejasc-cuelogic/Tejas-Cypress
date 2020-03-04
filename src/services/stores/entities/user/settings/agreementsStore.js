@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { toJS, observable, computed, action } from 'mobx';
-import { forEach, filter, get } from 'lodash';
+import { forEach, filter, get, groupBy, map } from 'lodash';
 import graphql from 'mobx-apollo';
 import { uiStore, campaignStore, userDetailsStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
@@ -73,6 +73,8 @@ export class AgreementsStore {
   @observable alreadySet = false;
 
   @observable tocRequiredArray = [];
+
+  @observable agreementPage = 0;
 
   @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_TEMPLATE_DETAILS_INFO);
 
@@ -251,33 +253,37 @@ export class AgreementsStore {
     let investNowTocs = campaignStatus.investNowToc;
     const checkAccountValidation = acc => (!acc || acc === 'ALL' || acc === currentSelectedAccount);
     const checkRegulationValidation = reg => (!reg || !reg.length || reg.includes(currentRegulation));
-    investNowTocs = filter(investNowTocs, i => (checkAccountValidation(i.account) && checkRegulationValidation(i.regulation)));
-    // Filter as per Account Type:
-    // const filterAllAccountTypeArray = filter(tocArray, o => o.account === 'ALL');
-    // const filterSpecificAccountTypeArray = filter(tocArray, o => o.account !== 'ALL' && o.account === currentSelectedAccount);
-    // const filterAccountTypeArray = [...filterAllAccountTypeArray, ...filterSpecificAccountTypeArray];
-    // // Filter as per Regulation Type:
-    // const filterDefaultValueArray = filter(filterAccountTypeArray, o => !o.regulation);
-    // const filteredRegulationArray = filter(filterAccountTypeArray, o => o.regulation && o.regulation.includes(currentRegulation));
-    // const resultArray = [...filteredRegulationArray, ...filterDefaultValueArray];
-    const valuesArray = [];
+    investNowTocs = filter(investNowTocs, i => (checkRegulationValidation(i.regulation)));
+    investNowTocs = groupBy(investNowTocs, 'page');
+    console.log(investNowTocs);
+    investNowTocs = map(investNowTocs, page => page.map(t => ({ ...t, toc: t.toc && t.toc.length ? t.toc.filter(toc => checkAccountValidation(toc.account)) : [] })));
+    console.log(investNowTocs);
     const requiredArray = [];
-    forEach(investNowTocs, (data) => {
-      const valueObj = {};
-      const label = this.preview(data.label, params);
-      valueObj.label = label;
-      valueObj.value = data.order;
-      valuesArray.push(valueObj);
-      if (data.required) {
-        requiredArray.push(data.order);
-      }
+    if (investNowTocs.length > 1) {
+      this.AGREEMENT_DETAILS_FORM = Validator.addMoreRecordToSubSection(this.AGREEMENT_DETAILS_FORM, 'page', investNowTocs.length - 1, true);
+    }
+    forEach(investNowTocs, (tocs, index) => {
+      const pageRequiredArray = [];
+      const valuesArray = [];
+      forEach(get(tocs, '[0].toc'), (data) => {
+        const valueObj = {};
+        const label = this.preview(data.label, params);
+        valueObj.label = label;
+        valueObj.value = data.order;
+        valuesArray.push(valueObj);
+        if (data.required) {
+          pageRequiredArray.push(data.order);
+        }
+      });
+      requiredArray.push(pageRequiredArray);
+      this.AGREEMENT_DETAILS_FORM.fields.page[index].title.value = get(tocs, '[0].title');
+      this.AGREEMENT_DETAILS_FORM.fields.page[index].toc.values = valuesArray;
     });
     this.tocRequiredArray = requiredArray;
-    this.AGREEMENT_DETAILS_FORM.fields.toc.values = valuesArray;
   }
 
   @computed get isAgreementFormValid() {
-    return toJS(this.tocRequiredArray).every(e => toJS(this.AGREEMENT_DETAILS_FORM.fields.toc.value).includes(e));
+    return toJS(this.tocRequiredArray).every(e => toJS(this.AGREEMENT_DETAILS_FORM.fields.page[this.agreementPage].toc.value).includes(e));
   }
 
   @action

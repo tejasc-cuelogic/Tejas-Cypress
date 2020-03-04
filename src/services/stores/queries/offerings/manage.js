@@ -226,13 +226,16 @@ export const getOfferingDetails = gql`
         sfAccountNumberRegD
       }
       investNow {
-        toc {
-          label
-          order
+        page {
+          title
           page
-          account
           regulation
-          required
+          toc {
+            label
+            order
+            account
+            required
+          }
         }
       }
       closureProcess {

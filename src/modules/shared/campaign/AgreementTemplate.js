@@ -123,7 +123,7 @@ function AgreementTemplate(props) {
     agreementDetails,
     investmentFlowErrorMessage,
   } = props.investmentStore;
-  const { AGREEMENT_DETAILS_FORM, setCheckbox, isAgreementFormValid, embedUrl, docLoading } = props.agreementsStore;
+  const { AGREEMENT_DETAILS_FORM, setCheckbox, isAgreementFormValid, embedUrl, docLoading, agreementPage } = props.agreementsStore;
   const { getCurrentInvestNowHealthCheck } = props.investmentLimitStore;
   const previouslyInvestedAmount = get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') ? get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') : '0';
   const { uiStore } = props; // match
@@ -132,6 +132,7 @@ function AgreementTemplate(props) {
   const { campaign, campaignStatus } = props.campaignStore;
   const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
   const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
+  const index = agreementPage;
   return (
     <>
       <Modal open={open} closeOnDimmerClick={false} size="mini">
@@ -182,7 +183,13 @@ function AgreementTemplate(props) {
             <Header as="h3" className="mb-40">
               Let&#39;s confirm your investment.<br />You are investing
                 <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
-              </Header>
+              {AGREEMENT_DETAILS_FORM.fields.page[index].title
+              && (
+              <Header.Subheader>
+                {AGREEMENT_DETAILS_FORM.fields.page[index].title}
+              </Header.Subheader>
+              )}
+            </Header>
             <Form
               error={(showError
                 && !props.agreementsStore.AGREEMENT_DETAILS_FORM.meta.isValid)
@@ -193,7 +200,7 @@ function AgreementTemplate(props) {
                   <Grid.Column width={8}>
                     <FormCheckbox
                       defaults
-                      fielddata={AGREEMENT_DETAILS_FORM.fields.toc}
+                      fielddata={AGREEMENT_DETAILS_FORM.fields.page[index].toc}
                       name="toc"
                       containerclassname={`ui very relaxed list ${showError && !AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
                       changed={setCheckbox}
