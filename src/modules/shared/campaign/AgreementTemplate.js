@@ -202,7 +202,7 @@ function AgreementTemplate(props) {
                       defaults
                       fielddata={AGREEMENT_DETAILS_FORM.fields.page[index].toc}
                       name="toc"
-                      containerclassname={`ui very relaxed list ${showError && !AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
+                      containerclassname={`ui list agreement-list very relaxed ${showError && !AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
                       changed={(e, res) => setCheckbox(e, res, 'page', index)}
                       disabled={inProgress}
                     />

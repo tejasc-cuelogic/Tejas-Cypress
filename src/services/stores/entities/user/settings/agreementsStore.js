@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { toJS, observable, computed, action } from 'mobx';
-import { forEach, filter, get, groupBy, map } from 'lodash';
+import { forEach, filter, get, groupBy, map, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import { uiStore, campaignStore, userDetailsStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
@@ -255,9 +255,7 @@ export class AgreementsStore {
     const checkRegulationValidation = reg => (!reg || !reg.length || reg.includes(currentRegulation));
     investNowTocs = filter(investNowTocs, i => (checkRegulationValidation(i.regulation)));
     investNowTocs = groupBy(investNowTocs, 'page');
-    console.log(investNowTocs);
-    investNowTocs = map(investNowTocs, page => page.map(t => ({ ...t, toc: t.toc && t.toc.length ? t.toc.filter(toc => checkAccountValidation(toc.account)) : [] })));
-    console.log(investNowTocs);
+    investNowTocs = map(investNowTocs, page => page.map(t => ({ ...t, toc: t.toc && t.toc.length ? orderBy(t.toc.filter(toc => checkAccountValidation(toc.account)), ['order'], ['asc']) : [] })));
     const requiredArray = [];
     if (investNowTocs.length > 1) {
       this.AGREEMENT_DETAILS_FORM = Validator.addMoreRecordToSubSection(this.AGREEMENT_DETAILS_FORM, 'page', investNowTocs.length - 1, true);
