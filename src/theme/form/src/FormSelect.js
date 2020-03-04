@@ -31,7 +31,7 @@ const FormSelect = observer((props) => {
               wide
               showOnlyPopup={!isMobile}
             />
-          ) : { label }
+          ) : <span>{label}</span>
         }
       </label>
       <Select
