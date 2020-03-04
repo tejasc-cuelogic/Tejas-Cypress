@@ -125,7 +125,16 @@ export const FORGOT_PASS = {
 
 export const RESET_PASS = {
   email: { ...COMMON.email },
-  password: { ...COMMON.password },
+  password: {
+    value: '',
+    label: 'New Password',
+    placeHolder: 'Type your password',
+    rule: 'required|min:8|max:40',
+    error: undefined,
+    customErrors: {
+      required: '* required field.',
+    },
+  },
   verify: { ...COMMON.verify },
   code: { ...COMMON.code },
 };
