@@ -83,7 +83,7 @@ class ChangeInvestmentLimit extends Component {
                   // changed={maskingFieldChange}
                   changed={(values, name) => this.change(values, name)}
                   toolTipOnLabel
-                // onblur={investmentCalculate}
+                  onblur={investmentCalculate}
                 />
               ))
             }
