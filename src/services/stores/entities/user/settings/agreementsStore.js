@@ -208,7 +208,7 @@ export class AgreementsStore {
   encodeString = (data, { docuSignHandeler, refLink, agreementPDFLoader }) => {
     let encodedString = data;
     if (data) {
-      const content = data.split('-');
+      const content = data.split('--');
       const identifier = get(content, '[0]');
       const title = get(content, '[1]');
       const accountType = get(content, '[3]');
