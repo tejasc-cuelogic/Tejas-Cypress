@@ -183,10 +183,10 @@ function AgreementTemplate(props) {
             <Header as="h3" className="mb-40">
               Let&#39;s confirm your investment.<br />You are investing
                 <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
-              {AGREEMENT_DETAILS_FORM.fields.page[index].title
+              {AGREEMENT_DETAILS_FORM.fields.page[index].title.value
               && (
               <Header.Subheader>
-                {AGREEMENT_DETAILS_FORM.fields.page[index].title}
+                {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
               </Header.Subheader>
               )}
             </Header>
