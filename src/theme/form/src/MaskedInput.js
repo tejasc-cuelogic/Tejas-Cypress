@@ -1,12 +1,12 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon, Button, Modal, Header } from 'semantic-ui-react';
+import { Form, Icon, Button, Modal, Header } from 'semantic-ui-react';
 import { has } from 'lodash';
 import NumberFormat from 'react-number-format';
 import InputMask from 'react-input-mask';
 import { Link } from 'react-router-dom';
-import { FieldError } from '../../shared';
+import { FieldError, PopUpModal } from '../../shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const NumberFormatWrapped = props => (
@@ -53,18 +53,16 @@ export default class MaskedInput extends Component {
         </Modal>
       )
         : (
-        <Popup
-          on={props.toolTipOnLabel ? 'click' : 'hover'}
+        <PopUpModal
+          on="hover"
           hoverable={props.toolTipOnLabel ? false : props.hoverable}
-          trigger={trigger}
+          customTrigger={trigger}
           position={isMobile ? 'bottom center' : 'top center'}
           className={props.containerClassname}
+          content={tooltip}
+          showOnlyPopup={!isMobile}
           wide
-        >
-          <Popup.Content>
-            {tooltip}
-          </Popup.Content>
-        </Popup>
+        />
         )
     }
     {props.removed
@@ -86,11 +84,10 @@ export default class MaskedInput extends Component {
         className={fieldClass}
         width={props.containerwidth || false}
       >
-
         {!props.hidelabel
           && (
-            <label className={props.toolTipOnLabel ? 'dotted-tooltip' : ''}>
-              {props.toolTipOnLabel ? <CustomToolTip trigger={<span>{fieldLabel}</span>} /> : fieldLabel}
+            <label className={props.toolTipOnLabel}>
+              {props.toolTipOnLabel ? <CustomToolTip trigger={<span className="popup-label">{fieldLabel}</span>} /> : fieldLabel}
               {!props.toolTipOnLabel && tooltip
                 && (
                   <>
