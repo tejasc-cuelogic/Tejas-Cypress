@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Button, Table, Popup, Icon, Message } from 'semantic-ui-react';
+import { Header, Button, Table, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import money from 'money-math';
 import Helper from '../../../../../helper/utility';
+import { PopUpModal } from '../../../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('investmentStore', 'investmentLimitStore', 'uiStore', 'accreditationStore')
 @withRouter
@@ -101,12 +104,12 @@ class TransferRequest extends Component {
             }
             <Table.Row>
               <Table.Cell>
-                Available Cash:
-                <Popup
+                <PopUpModal
                   wide
-                  trigger={<Icon name="help circle" color="green" />}
+                  customTrigger={<span className="popup-label">Available Cash:</span>}
                   content="If this investment is a request to change an existing investment in this offering, then Cash Available also includes any dollars currently reserved or invested in the same offering."
                   position="top center"
+                  showOnlyPopup={!isMobile}
                 />
               </Table.Cell>
               <Table.Cell collapsing className="right-align">
