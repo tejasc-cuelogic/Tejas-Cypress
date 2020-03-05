@@ -82,8 +82,8 @@ class TransferRequest extends Component {
       );
     }
     return (
-      <div className="center-align">
-        <Header as="h3" textAlign="center">Confirm Transfer Request</Header>
+      <>
+        <Header as="h4">Confirm Transfer Request</Header>
         <Table basic="very" className="confirm-transfer-table mt-30" compact>
           <Table.Body>
             <Table.Row>
@@ -151,7 +151,7 @@ class TransferRequest extends Component {
           amount equal to the Transfer Requested above. I understand this transfer will
           be initiated within 1-3 business days.
         </p>
-      </div>
+      </>
     );
   }
 }

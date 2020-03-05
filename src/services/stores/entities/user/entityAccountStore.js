@@ -40,6 +40,8 @@ class EntityAccountStore {
 
   @observable retry = 0;
 
+  @observable apiCall = false;
+
   @observable showProcessingModal = false;
 
   @observable isFormSubmitted = false;
@@ -125,6 +127,11 @@ class EntityAccountStore {
   }
 
   @computed
+  get isThankYouStep() {
+    return this.stepToBeRendered === 8;
+  }
+
+  @computed
   get isValidEntityForm() {
     return this.FIN_INFO_FRM.meta.isValid && this.GEN_INFO_FRM.meta.isValid
       && this.TRUST_INFO_FRM.meta.isValid
@@ -181,11 +188,16 @@ class EntityAccountStore {
     currentStep,
     removeUploadedData = false, field = null,
   ) => new Promise((resolve) => {
-    this.validateAndSubmitStep(currentStep, removeUploadedData, field).then(() => {
-      resolve();
-    }).catch(() => {
-      uiStore.setProgress(false);
-    });
+    if (!this.apiCall) {
+      this.setFieldValue('apiCall', true);
+      this.validateAndSubmitStep(currentStep, removeUploadedData, field).then(() => {
+        this.setFieldValue('apiCall', false);
+        resolve();
+      }).catch(() => {
+        this.setFieldValue('apiCall', false);
+        uiStore.setProgress(false);
+      });
+    }
   })
 
   @action

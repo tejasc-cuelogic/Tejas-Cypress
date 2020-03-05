@@ -75,6 +75,24 @@ export const INVEST_ACCOUNT_TYPES = {
   rule: 'required',
 };
 
+export const AGREEMENT_TEMPLATE_DETAILS_INFO = {
+  page: [{
+    toc: {
+    value: [],
+    values: [],
+    error: undefined,
+    rule: 'required',
+  },
+  title: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'required',
+  },
+  }],
+};
+
+
 export const AGREEMENT_DETAILS_INFO = {
   checkboxesLeft: {
     value: [],
