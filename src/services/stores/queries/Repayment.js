@@ -98,14 +98,14 @@ export const updatePaymentIssuer = gql`
 `;
 
 export const adminPaymentSendIssuerDraftNotice = gql`
-  mutation adminPaymentSendIssuerDraftNotice{
-    adminPaymentSendIssuerDraftNotice
+  mutation adminPaymentSendIssuerDraftNotice($date: String!){
+    adminPaymentSendIssuerDraftNotice(date: $date)
   }
 `;
 
 export const adminPaymentSendGoldStarDraftInstructions = gql`
-  mutation adminPaymentSendGoldStarDraftInstructions{
-    adminPaymentSendGoldStarDraftInstructions
+  mutation adminPaymentSendGoldStarDraftInstructions($date: String!){
+    adminPaymentSendGoldStarDraftInstructions(date: $date)
   }
 `;
 
