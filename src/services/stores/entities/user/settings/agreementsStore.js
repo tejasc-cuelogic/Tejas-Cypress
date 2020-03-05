@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { toJS, observable, computed, action } from 'mobx';
+import { Popup, Icon } from 'semantic-ui-react';
 import { forEach, filter, get, groupBy, map, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import { uiStore, campaignStore, userDetailsStore } from '../../../index';
@@ -10,6 +11,7 @@ import { AGREEMENT_TEMPLATE_DETAILS_INFO } from '../../../../constants/investmen
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
+import { PopUpModal } from '../../../../../theme/shared';
 
 export class AgreementsStore {
   @observable legalDocsList = [];
@@ -204,6 +206,7 @@ export class AgreementsStore {
       this.legalDocsList.push(newItem);
     });
   }
+// TOOLTIP--tooltip content--tooltip title
 
   encodeString = (data, { docuSignHandeler, refLink, agreementPDFLoader }) => {
     let encodedString = data;
@@ -211,8 +214,8 @@ export class AgreementsStore {
       const content = data.split('--');
       const identifier = get(content, '[0]');
       const title = get(content, '[1]');
+      const params = get(content, '[2]');
       const accountType = get(content, '[3]');
-      const agreementKey = get(content, '[2]');
       switch (identifier) {
         case 'CF_MODAL':
           encodedString = (<Link to={`${refLink}/change-investment-limit`}>{title}</Link>);
@@ -221,7 +224,27 @@ export class AgreementsStore {
           encodedString = (<Link to="/" onClick={e => docuSignHandeler(e, true)}>{title}</Link>);
           break;
         case 'AGREEMENT':
-          encodedString = (<Link to="/" onClick={e => agreementPDFLoader(e, true, agreementKey, accountType)}>{title}</Link>);
+          encodedString = (<Link to="/" onClick={e => agreementPDFLoader(e, true, params, accountType)}>{title}</Link>);
+          break;
+        case 'TOOLTIP':
+          // eslint-disable-next-line no-case-declarations
+          const tooltipContent = (
+            <HtmlEditor
+              tag="span"
+              noDivWrap
+              readOnly
+              content={title}
+            />
+          );
+          encodedString = params ? (
+          <PopUpModal
+            customTrigger={<span className="popup-label">{params}</span>}
+            content={tooltipContent}
+            position="top center"
+          />
+          ) : (
+          <Popup trigger={<Icon className="ns-help-circle" />} content={tooltipContent} position="top center" wide />
+          );
           break;
         default:
           encodedString = (

@@ -87,7 +87,7 @@ function AgreementTemplate(props) {
   };
 
   const submit = () => {
-    if (props.agreementsStore.AGREEMENT_DETAILS_FORM.meta.isValid) {
+    if (props.agreementsStore.isAgreementFormValid) {
       setShowError(false);
       props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
       props.investmentStore.investNowSubmit().then((investmentStatus) => {
@@ -192,7 +192,7 @@ function AgreementTemplate(props) {
             </Header>
             <Form
               error={(showError
-                && !props.agreementsStore.AGREEMENT_DETAILS_FORM.meta.isValid)
+                && !isAgreementFormValid)
                 || investmentFlowErrorMessage}
             >
               <Grid stackable>
@@ -202,7 +202,7 @@ function AgreementTemplate(props) {
                       defaults
                       fielddata={AGREEMENT_DETAILS_FORM.fields.page[index].toc}
                       name="toc"
-                      containerclassname={`ui list agreement-list very relaxed ${showError && !AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
+                      containerclassname={`ui list agreement-list very relaxed ${showError && !isAgreementFormValid ? 'error' : ''}`}
                       changed={(e, res) => setCheckbox(e, res, 'page', index)}
                       disabled={inProgress}
                     />
@@ -223,7 +223,7 @@ function AgreementTemplate(props) {
                 )
               }
               {showError
-                && !props.agreementsStore.AGREEMENT_DETAILS_FORM.meta.isValid
+                && !isAgreementFormValid
                 && <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
               }
             </Form>
