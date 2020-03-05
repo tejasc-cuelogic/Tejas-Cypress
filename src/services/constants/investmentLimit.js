@@ -7,7 +7,7 @@ export const ACCREDITATION_STATUS_LABEL = {
   INVALID: 'Invalid',
 };
 
-export const INVESTEMENT_LIMIT = {
+export const INVESTMENT_LIMIT = {
   annualIncome: {
     value: '',
     label: 'Annual Income',

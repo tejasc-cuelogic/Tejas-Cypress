@@ -1,8 +1,10 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon, Select } from 'semantic-ui-react';
-import { FieldError } from '../../shared';
+import { Form, Select } from 'semantic-ui-react';
+import { FieldError, PopUpModal } from '../../shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 const FormSelect = observer((props) => {
   const {
@@ -19,17 +21,17 @@ const FormSelect = observer((props) => {
   return (
     <Form.Field error={error} width={width}>
       <label>
-        {label}
         {props.tooltip
-          && (
-<Popup
-  trigger={<Icon className="ns-help-circle" />}
-  content={props.tooltip}
-  position="top center"
-  className="center-align"
-  wide
-/>
-          )
+          ? (
+            <PopUpModal
+              customTrigger={<span className="popup-label">{label}</span>}
+              content={props.tooltip}
+              position="top center"
+              className="center-align"
+              wide
+              showOnlyPopup={!isMobile}
+            />
+          ) : <span>{label}</span>
         }
       </label>
       <Select

@@ -341,34 +341,34 @@ export default class NewUpdate extends Component {
                   )
                   : (
                     <>
-                      <Card fluid>
-                        <Card.Content>
-                          <Form>
-                            {
-                              isManager
-                              && (
-                                <>
-                                  <MaskedInput
-                                    readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                                    ishidelabel
-                                    fluid
-                                    name="updatedDate"
-                                    fielddata={PBUILDER_FRM.fields.updatedDate}
-                                    changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
-                                    dateOfBirth
-                                  />
-                                  {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
-                                    && (
-                                      this.sendInvestorNotificationTemplate(isReadonly, isManager)
-                                    )
-                                  }
-                                </>
-                              )
-                            }
-                            {this.postUpdateAsTemplate()}
-                          </Form>
-                        </Card.Content>
-                      </Card>
+                      {
+                        isManager
+                        && (
+                          <Card fluid>
+                            <Card.Content>
+                              <Form>
+                                    <>
+                                      <MaskedInput
+                                        readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                        ishidelabel
+                                        fluid
+                                        name="updatedDate"
+                                        fielddata={PBUILDER_FRM.fields.updatedDate}
+                                        changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
+                                        dateOfBirth
+                                      />
+                                      {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
+                                        && (
+                                          this.sendInvestorNotificationTemplate(isReadonly, isManager),
+                                          this.postUpdateAsTemplate()
+                                        )
+                                      }
+                                    </>
+                              </Form>
+                            </Card.Content>
+                          </Card>
+                        )
+                      }
                       <Card fluid>
                         <Card.Content>
                           <Header as="h4">Update Topic Ideas</Header>
