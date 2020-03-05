@@ -117,7 +117,7 @@ class FinancialInfo extends Component {
                     :{' '}
                     {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
                     {/* <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link> */}
-                    <Link to={`${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
+                    <Link to={`${match.url}/change-investment-limit`} className="link"> <small>Update</small></Link>
                   </p>
                 )
               }
