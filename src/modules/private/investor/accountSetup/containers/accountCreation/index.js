@@ -40,13 +40,14 @@ export default class AccountCreation extends Component {
       const { res } = await this.props.identityStore.verifyCip();
       const { cipStepUrlMapping } = this.props.identityStore;
       const { step } = res.data.verifyCip;
+      const { isLegalDocsPresent, isUserVerified } = this.props.userDetailsStore;
       const isCipOffline = step === 'OFFLINE';
-      const isCipFail = !this.props.userDetailsStore.isUserVerified || step === 'userCIPHardFail' || isCipOffline;
-      if (!this.props.userDetailsStore.isUserVerified && step === 'userCIPSoftFail') {
+      const isCipFail = !isUserVerified || step === 'userCIPHardFail' || isCipOffline;
+      if (!isUserVerified && step === 'userCIPSoftFail') {
         this.props.history.push(cipStepUrlMapping.cipSoftFail.url);
-      } else if (isCipFail) {
+      } else if (isCipFail && !isLegalDocsPresent) {
         this.props.history.push(cipStepUrlMapping.ciphardFail.url);
-      } else if (this.props.userDetailsStore.isLegalDocsPresent && isCipOffline) {
+      } else if (isLegalDocsPresent && isCipOffline) {
         const processingUrl = await this.props.accountStore.accountProcessingWrapper(accountType, this.props.match);
         this.props.history.push(processingUrl);
       } else {
