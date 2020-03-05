@@ -38,7 +38,7 @@ export default class Agreement extends React.Component {
     if (!alreadySet) {
       getLegalDocsFileIds().then(() => {
         // getBoxEmbedLink(doc.to, doc.id);
-        console.log('successfully doc get');
+        // console.log('successfully doc get');
       });
     }
     resetAggrementForm();
@@ -81,7 +81,6 @@ export default class Agreement extends React.Component {
       this.props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
       this.props.investmentStore.investNowSubmit().then((investmentStatus) => {
         if (investmentStatus) {
-          console.log(this.props);
           this.props.history.push('congratulation');
         }
       });
