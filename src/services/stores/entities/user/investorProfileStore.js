@@ -32,6 +32,8 @@ export class InvestorProfileStore extends DataModelStore {
 
   INVESTMENT_EXP_FRM = Validator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
 
+  isFormSubmitted = false;
+
   @action
   upsertInvestorProfile = async (currentStep) => {
     const { fields } = this[currentStep.form];
@@ -45,14 +47,10 @@ export class InvestorProfileStore extends DataModelStore {
         runInAction(() => {
           Validator.setIsDirty(this[currentStep.form], false);
           userDetailsStore.setUserStatus(res.data.createInvestorProfile.status);
-          userDetailsStore.mergeUserData('investorProfileData', payLoad, 'userPayLoad');
-          if (currentStep.form === 'INVESTMENT_EXP_FRM') {
-            userDetailsStore.mergeUserData(
-              'investorProfileData',
-              userDetailsStore.userPayLoad.investorProfileData, 'currentUser',
-            );
+          userDetailsStore.mergeUserData('investorProfileData', payLoad);
+          if (currentStep.form !== 'INVESTMENT_EXP_FRM') {
+            this.setStepToBeRendered(currentStep.stepToBeRendered);
           }
-          this.setStepToBeRendered(currentStep.stepToBeRendered);
         });
       }
       return true;
@@ -190,6 +188,7 @@ decorate(InvestorProfileStore, {
   FINANCIAL_INFO_FRM: observable,
   INVESTMENT_EXP_FRM: observable,
   INVESTOR_PROFILE_FULL: observable,
+  isFormSubmitted: observable,
   setInvestorDetailInfo: action,
   populateData: action,
   setFormDataWithRadio: action,
