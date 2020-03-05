@@ -1,8 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Button, Form, Divider, Grid, Message, Header } from 'semantic-ui-react';
-import { ListErrors } from '../../../../../../theme/shared';
+import { Button, Form, Divider, Grid, Header } from 'semantic-ui-react';
 import cipVerificationHOC from '../../containers/cipVerificationHOC';
 import { FormSelect } from '../../../../../../theme/form';
 
@@ -39,7 +38,7 @@ class CipSoftFail extends React.Component {
   }
 
   render() {
-    const { NsModal, cipUtility, isLoading, errors } = this.props;
+    const { NsModal, cipUtility, isLoading } = this.props;
     const { ID_VERIFICATION_QUESTIONS, identityQuestionAnswerChange } = this.props.identityStore;
     const { fields } = ID_VERIFICATION_QUESTIONS;
     return (
@@ -69,20 +68,6 @@ class CipSoftFail extends React.Component {
                   );
                 })}
               </Grid>
-              {errors && errors.message
-                && (
-                  <Message error className="mt-30">
-                    <ListErrors errors={[errors.message]} />
-                  </Message>
-                )
-              }
-              {errors && !errors.message
-                && (
-                  <Message error className="mt-30">
-                    <ListErrors errors={[errors]} />
-                  </Message>
-                )
-              }
               <div className="mt-40 mb-20">
                 <Button loading={isLoading} color="green" fluid={isMobile} disabled={!ID_VERIFICATION_QUESTIONS.meta.isValid || isLoading}>Verify my identity</Button>
               </div>
