@@ -79,10 +79,10 @@ export default class NewPhoneNumber extends Component {
                 <FormRadioGroup
                   fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
                   name="mfaMethod"
-                  containerclassname="mt-30 radio-basic"
-                  widths="4"
+                  containerclassname={`${isMobile ? '' : 'radio-basic'} mt-30`}
+                  widths={isMobile ? '' : '4'}
                   changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
-                  classname="center-align"
+                  classname={isMobile ? '' : 'center-align'}
                 />
               </div>
               <div className="mt-30 mb-20">
