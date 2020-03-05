@@ -43,12 +43,20 @@ export default class NewEmailAddress extends Component {
       return null;
     }
     return (
-      <NsModal closeOnDimmerClick={false} open closeIcon onClose={this.handleCloseModal}>
+      <NsModal
+        closeOnDimmerClick={false}
+        open
+        closeIcon
+        onClose={this.handleCloseModal}
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+      >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
           <Grid.Column width="8" className="pt-0">
             <Header as="h3">Enter new email address</Header>
-            <Divider hidden />
             <p>We will send you a verification code to the email address you provide.</p>
+            <Divider hidden />
             <Form error onSubmit={this.handleChangeEmailAddress}>
               <FormInput
                 fluid
