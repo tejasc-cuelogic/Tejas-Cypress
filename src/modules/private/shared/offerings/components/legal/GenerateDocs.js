@@ -40,9 +40,9 @@ export default class GenerateDocs extends Component {
     let documentLists = ['escrow', 'resolutionOfBorrowing', 'formC', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'];
     if ([CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE, CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE].includes(securities)) {
       documentLists = [...documentLists, 'npa'];
-    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY || (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && ['PREFERRED', 'CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(equityClass))) {
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && ['PREFERRED', 'CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(equityClass)) {
       documentLists = [...documentLists, 'purchaseAgreement', 'proxyAgreement'];
-    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY || (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && ['LLC_MEMBERSHIP_UNITS'].includes(equityClass))) {
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && ['LLC_MEMBERSHIP_UNITS'].includes(equityClass)) {
       documentLists = [...documentLists, 'llcAgreement', 'subscriptionAgreement', 'specialPurposeEntityAgreement'];
     } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE) {
       documentLists = [...documentLists, 'safeNote'];
