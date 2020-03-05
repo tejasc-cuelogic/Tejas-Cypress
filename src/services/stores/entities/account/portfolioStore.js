@@ -50,10 +50,10 @@ export class PortfolioStore {
         EQUITY: { name: 'Equity', value: 0 },
         TERM_NOTE: { name: 'Term Note', value: 0 },
         REVENUE_SHARING_NOTE: { name: 'Rev Share', value: 0 },
-        PREFERRED_EQUITY_506C: { name: 'Preferred Equity', value: 0 },
+        PREFERRED_EQUITY_506C: { name: 'Preferred Equity', value: 0 }, // Needs to be removed?
         CONVERTIBLE_NOTES: { name: 'Convertible Notes', value: 0 },
         SAFE: { name: 'SAFE', value: 0 },
-        REAL_ESTATE: { name: 'LLC Membership Interests', value: 0 },
+        REAL_ESTATE: { name: 'LLC Membership Interests', value: 0 }, // Needs to be removed?
         FUNDS: { name: 'Funds - Limited Partner Interest', value: 0 },
       },
       industry: {

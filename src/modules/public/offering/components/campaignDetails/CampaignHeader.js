@@ -184,7 +184,7 @@ export default class CampaignHeader extends Component {
                   {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                     && (
                       <p className="raise-type mb-0">
-                        {campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_KEYTERMS_SECURITIES.PREFERRED_EQUITY_506C : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
+                        {campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_KEYTERMS_SECURITIES.EQUITY : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
                       </p>
                     )
                   }
@@ -251,18 +251,6 @@ export default class CampaignHeader extends Component {
                       </>
                     )
                   }
-                  {/* {campaignStatus.isRealEstate
-                    && (
-                      <>
-                      <p className="mb-0">
-                        Preferred Return : {get(campaign, 'keyTerms.preferredReturn') ? `${get(campaign, 'keyTerms.preferredReturn')}%` : '-'}
-                      </p>
-                      <p className="mb-0">
-                        Targeted Investment Period : {get(campaign, 'keyTerms.targetInvestmentPeriod') || '-'} months
-                      </p>
-                      </>
-                    )
-                  } */}
                   <div className="mt-20">
                     {isCreation
                       ? <Button fluid secondary={diffForProcessing.value !== 0} content="Coming Soon" disabled />

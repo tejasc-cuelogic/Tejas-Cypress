@@ -364,8 +364,8 @@ export class CampaignStore {
     campaignStatus.isSafe = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE;
     campaignStatus.isConvertibleNotes = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.CONVERTIBLE_NOTES;
     campaignStatus.isEquity = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY;
-    campaignStatus.isRealEstate = (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE || (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(campaign, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
-    campaignStatus.isPreferredEquity = (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C || (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(campaign, 'keyTerms.equityClass') === 'PREFERRED' || (this.inInvestmentFlow && ['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(campaign, 'keyTerms.equityClass'))))));
+    campaignStatus.isRealEstate = ((this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(campaign, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
+    campaignStatus.isPreferredEquity = ((this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(campaign, 'keyTerms.equityClass') === 'PREFERRED' || (this.inInvestmentFlow && ['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(campaign, 'keyTerms.equityClass'))))));
     campaignStatus.doneComputing = (get(this.details, 'data.getOfferingDetailsBySlug') && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
     return campaignStatus;
   }

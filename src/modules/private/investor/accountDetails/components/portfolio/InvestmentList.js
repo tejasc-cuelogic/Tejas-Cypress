@@ -112,7 +112,7 @@ const INVESTMENT_CARD_META = [
   { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months`, isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['TERM_NOTE'] }, // pending
-  { label: 'Realized Multiple', key: 'realizedMultiple', getRowValue: value => `${value}x`, for: ['completed', 'active'], isMobile: true, isDesktop: true, securityType: ['PREFERRED_EQUITY_506C'] },
+  { label: 'Realized Multiple', key: 'realizedMultiple', getRowValue: value => `${value}x`, for: ['completed', 'active'], isMobile: true, isDesktop: true, securityType: ['PREFERRED_EQUITY_506C'] }, // Does this needs to be removed
   { label: 'Payments Remaining', key: 'remainingPayment', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['REVENUE_SHARING_NOTE'] },
   {
     label: '', for: ['pending'], children: data => handleActions(data), isMobile: false, isDesktop: true, securityType: [],
