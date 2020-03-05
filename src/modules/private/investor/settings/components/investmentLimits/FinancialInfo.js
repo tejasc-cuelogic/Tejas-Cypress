@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { startCase, get } from 'lodash';
-import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
+import { Grid, Card, Statistic, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
-import { EmptyDataSet, InlineLoader } from '../../../../../../theme/shared';
+import { EmptyDataSet, InlineLoader, PopUpModal } from '../../../../../../theme/shared';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../../services/constants/investmentLimit';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -110,13 +110,13 @@ export default class FinancialInfo extends Component {
                           </p>
                           <Statistic size="tiny">
                             <Statistic.Label>
-                              Your current investment limit
-                            <Popup
-                              trigger={<Icon className="ns-help-circle" />}
-                              content="Your current investment limit as of today"
-                              position="top center"
-                              className="left-align"
-                            />
+                              <PopUpModal
+                                customTrigger={<span className="popup-label">Your current investment limit</span>}
+                                content="Your current investment limit as of today"
+                                position="top center"
+                                showOnlyPopup={!isMobile}
+                                className="left-align"
+                              />
                             </Statistic.Label>
                             <Statistic.Value>
                               {account.name === 'entity'

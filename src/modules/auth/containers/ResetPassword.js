@@ -90,7 +90,7 @@ export default class ResetPassword extends Component {
               minScore={4}
               tooShortWord="Weak"
               scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-              inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+              inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'New Password' }}
               changed={resetPassChange}
               fielddata={RESET_PASS_FRM.fields.password}
             />
