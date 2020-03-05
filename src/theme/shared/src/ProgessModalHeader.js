@@ -22,7 +22,7 @@ const ProgressModalHeader = ({ Modal, name, percent, handleClose, closeCta, isPr
           <Logo dataSrc="LogoGreenGrey" size="small" />
           {(
             <>
-              {name && <span className="vertical-divider">|</span>}
+              {name && <span className="vertical-divider" />}
               <span className="display-block ml-16">{name || ''}</span>
             </>
           )}

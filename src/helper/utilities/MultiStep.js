@@ -298,7 +298,7 @@ export default class MultiStep extends React.Component {
                         <Logo dataSrc="LogoGreenGrey" size="small" />
                         {!currentStep.isHideName && (
                           <>
-                            <span className="vertical-divider">|</span>
+                            <span className="vertical-divider" />
                             <span className="display-block ml-16">{currentStep.name}</span>
                           </>
                         )}

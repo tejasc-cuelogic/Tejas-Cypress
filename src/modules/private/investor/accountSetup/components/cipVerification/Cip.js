@@ -23,8 +23,6 @@ const loaderMsg = (
   <>
     Please wait...
       <br />
-    <br />
-    We are verifying your identity.
       <br />
     This can take up to a minute.
     </>
