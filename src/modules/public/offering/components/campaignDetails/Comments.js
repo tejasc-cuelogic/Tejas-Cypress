@@ -80,6 +80,7 @@ class Comments extends Component {
     if (!this.state.visiblePost) {
       this.setState({ visiblePost: true });
     }
+    this.setState({ commentId: null });
   }
 
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
@@ -123,25 +124,25 @@ class Comments extends Component {
         {
           // !showOnlyOne
           // && (
-            <>
-              <p>
-                Note that both NextSeed and issuers are notified of all comments immediately,
-                but there may be a slight delay in response to questions submitted outside of
-                standard business hours (9am to 5pm CST, Monday through Friday).
+          <>
+            <p>
+              Note that both NextSeed and issuers are notified of all comments immediately,
+              but there may be a slight delay in response to questions submitted outside of
+              standard business hours (9am to 5pm CST, Monday through Friday).
         </p>
-              <p>
-                Most questions will be answered by issuers in approximately two business days,
-                although some questions require more thorough analyses and will take additional
-                time.
+            <p>
+              Most questions will be answered by issuers in approximately two business days,
+              although some questions require more thorough analyses and will take additional
+              time.
         </p>
-              <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
-              <p>
-                If you have any technical questions or questions about NextSeed, please
+            <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
+            <p>
+              If you have any technical questions or questions about NextSeed, please
           email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
         </p>
-            </>
+          </>
           // )
-          }
+        }
         {!canPostComment && !frozenAccounts.length
           ? (
             <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
@@ -183,7 +184,7 @@ class Comments extends Component {
                         containerclassname="secondary"
                       />
                       <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />
-                  </Form>
+                    </Form>
                   ) : ''
                 }
               </>
@@ -316,10 +317,8 @@ class Comments extends Component {
                                     containerclassname="secondary"
                                     placeholder="Write a reply..."
                                   />
-                                  {/* <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)} disabled={buttonLoader === 'PUBLIC'}>
-                                    Cancel Reply
-                                </Button> */}
                                   <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />
+                                  <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)} disabled={buttonLoader === 'PUBLIC'} basic>Cancel</Button>
                                 </Form>
                                 <Divider hidden />
                                 <p>
