@@ -1,6 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
+import { toJS } from 'mobx';
 import { Form, Popup, Icon, Dropdown } from 'semantic-ui-react';
 import { FieldError } from '../../shared';
 import { US_STATES } from '../../../constants/account';
@@ -40,7 +41,7 @@ const FormDropDown = observer((props) => {
           </label>
         )
       }
-      <Dropdown {...props} value={value} className={`${displayMode && 'readonly'}`} disabled={displayMode} />
+      <Dropdown {...props} value={toJS(value)} className={`${displayMode && 'readonly'}`} disabled={displayMode} />
       {!props.ishidelabel && label !== ''
         && <div className="dropdown-effect">{label}</div>
       }
