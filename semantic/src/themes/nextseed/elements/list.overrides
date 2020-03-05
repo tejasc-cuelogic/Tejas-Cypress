@@ -78,6 +78,14 @@
     &.capital-list{
         column-count: 2;
     }
+    &.agreement-list{
+        column-count:2;
+        column-gap: 30px;
+        >.item{
+            padding:0 !important;
+            margin:0 0 @20px !important;
+        }
+    }
     &.job-list>.item{
         .header, .content{
             line-height: 26px;

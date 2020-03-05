@@ -490,7 +490,7 @@ export const OFFERS = {
       label: 'Security Type',
       error: undefined,
       rule: 'optional',
-      default: 'TERM_NOTE',
+      defaultValue: 'TERM_NOTE',
     },
     amount: {
       value: '',
@@ -631,7 +631,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
-      default: null,
+      defaultValue: null,
     },
   }],
 };
