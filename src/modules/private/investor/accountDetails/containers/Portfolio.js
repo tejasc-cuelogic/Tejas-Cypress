@@ -112,7 +112,7 @@ export default class Portfolio extends PureComponent {
           path={`${match.url}/investment-details/:offeringSlug`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}
         />
-        <Route exact path={`${match.url}/:offeringId/invest-now/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={match.params.offeringId} refLink={match.url} {...props} />} />
+        <Route exact path={`${match.url}/:offeringId/invest-now/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment offeringId={match.params.offeringId} refLink={match.url} {...props} />} />
         <Route
           path={`${match.url}/:offeringId/invest-now`}
           render={props => <InvestNow changeInvest refLink={match.url} {...props} />}

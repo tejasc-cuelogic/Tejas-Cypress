@@ -326,6 +326,7 @@ export class InvestmentLimitStore {
   updateInvestmentLimits = (
     data, accountId, resetProgress = true, offeringId = undefined,
   ) => {
+    console.log(resetProgress);
     uiStore.setProgress();
     const { campaign } = campaignStore;
     const offeringDetailId = offeringId || campaign.id;
@@ -339,34 +340,36 @@ export class InvestmentLimitStore {
             netWorth: data.netWorth,
             otherRegCfInvestments: data.cfInvestments,
           },
-          refetchQueries: [
-            //   {
-            //   query: getInvestNowHealthCheck,
-            //   variables: {
-            //     userId: userDetailsStore.currentUserId,
-            //     accountId,
-            //     offeringId: campaign.id,
-            //   },
-            // },
-            {
+          refetchQueries: [{
               query: userDetailsQuery,
             }],
         })
         .then(() => {
           if (offeringDetailId) {
-            this.getInvestNowHealthCheck(accountId, offeringDetailId);
+            this.getInvestNowHealthCheck(accountId, offeringDetailId)
+              .then(() => {
+                uiStore.setProgress(false);
+                resolve();
+              }).catch((err) => {
+                console.log('Error :: getInvestNowHealthCheck', err);
+                uiStore.setProgress(false);
+                resolve();
+              });
+          } else {
+            uiStore.setProgress(false);
+            resolve();
           }
-          resolve();
         })
         .catch((error) => {
+          uiStore.setProgress(false);
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
-        })
-        .finally(() => {
+        });
+        /* .finally(() => {
           if (resetProgress) {
             uiStore.setProgress(false);
           }
-        });
+        }); */
     });
   }
 

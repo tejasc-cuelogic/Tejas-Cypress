@@ -8,7 +8,7 @@ import Helper from '../../../../../helper/utility';
 import { MaskedInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 
-@inject('investmentStore', 'userDetailsStore', 'uiStore', 'investmentLimitStore')
+@inject('investmentStore', 'userDetailsStore', 'uiStore', 'investmentLimitStore', 'campaignStore')
 @withRouter
 @observer
 class ChangeInvestmentLimit extends Component {
@@ -30,11 +30,13 @@ class ChangeInvestmentLimit extends Component {
 
   changeInvestmentLimit = () => {
     const { uiStore } = this.props;
+    const { offeringUUID } = this.props.campaignStore;
     uiStore.setProgress();
-    const offeringId = this.props.offeringId ? this.props.offeringId : this.props.match.params.offeringId;
+    const offeringId = this.props.offeringId ? this.props.offeringId : this.props.match.url.includes('portfolio') ? offeringUUID : this.props.match.params.offeringId;
     this.props.investmentStore.updateInvestmentLimits(offeringId).then(() => {
-      Helper.toast('Investment limit changed successfully.', 'success');
-      this.handleCloseModal();
+      const redirectPath = this.props.match.url.includes('agreement') ? `${this.props.refLink}/${this.props.match.params.offeringId}/agreement` : `${this.props.refLink}/${this.props.match.params.offeringId}/invest-now`;
+      this.props.history.push(redirectPath);
+      // this.handleCloseModal();
     });
   }
 
