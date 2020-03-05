@@ -51,12 +51,20 @@ export default class NewPhoneNumber extends Component {
     } = this.props.identityStore;
     const { errors, inProgress } = this.props.uiStore;
     return (
-      <NsModal open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick={false}>
+      <NsModal
+        open
+        closeIcon
+        onClose={this.handleCloseModal}
+        closeOnDimmerClick={false}
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+      >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
           <Grid.Column width="8" className="pt-0">
             <Header as="h3">Enter new phone number</Header>
-            <Divider hidden />
             <p>We will send you a verification code to the phone number you provide.</p>
+            <Divider hidden />
             <Form error onSubmit={this.handleChangePhoneNumber}>
               <MaskedInput
                 name="phoneNumber"

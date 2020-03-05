@@ -35,7 +35,7 @@ const NsModal = (props) => {
     >
       {<ProgressModalHeader Modal={Modal} handleClose={onClose} closeCta isProgressHeaderDisable={isProgressHeaderDisable} borderedHeader={borderedHeader} headerLogo={headerLogo} />}
 
-      <Modal.Content className={modalContentClass || ''}>
+      <Modal.Content className={modalContentClass || 'multistep'}>
         {
           back && !isMobile
           && (
