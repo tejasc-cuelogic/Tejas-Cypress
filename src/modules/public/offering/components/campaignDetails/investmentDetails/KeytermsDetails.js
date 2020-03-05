@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { get, capitalize } from 'lodash';
 import { inject, observer } from 'mobx-react';
 // import money from 'money-math';
-import { Table, Divider, Grid, Icon } from 'semantic-ui-react';
+import { Table, Divider, Grid } from 'semantic-ui-react';
 import {
   CAMPAIGN_OFFERED_BY,
   CAMPAIGN_REGULATION_DETAILED,
@@ -355,7 +355,6 @@ class KeyTermsDetails extends Component {
               title={(
                 <PopUpModal
                   customTrigger={<span className="popup-label">Security Interest</span>}
-                  trigger={<Icon name="help circle" color="green" />}
                   content={<>The Issuer will grant a security interest in its assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities.<a target="_blank" href="/resources/education-center/investor/how-term-notes-work">View Details</a></>}
                   position="top center"
                   showOnlyPopup={!isMobile}

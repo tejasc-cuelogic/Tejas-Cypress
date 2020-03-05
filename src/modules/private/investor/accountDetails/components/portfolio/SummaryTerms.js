@@ -59,7 +59,7 @@ const summaryData = summaryValues => [
         },
         {
           title: 'Available Cash',
-          value: Helper.CurrencyFormat(summaryValues.availableCash.replace(/\D./g, '')),
+          value: Helper.MoneyMathDisplayCurrency(summaryValues.availableCash),
           tooltip: 'Cash that is immediately available for investment in your account.',
         },
         {

@@ -525,10 +525,8 @@ export const SCOPE_VALUES = [
 export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
-  { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
   { key: 'Convertible Notes', value: 'CONVERTIBLE_NOTES', text: 'Convertible Notes' },
   { key: 'SAFE', value: 'SAFE', text: 'SAFE' },
-  { key: 'Real Estate', value: 'REAL_ESTATE', text: 'Real Estate' },
   { key: 'Funds - Limited Partner Interest', value: 'FUNDS', text: 'Funds - Limited Partner Interest' },
   { key: 'Equity', value: 'EQUITY', text: 'Equity' },
 ];
