@@ -904,7 +904,7 @@ export class AccreditationStore {
       : accountSelected || userDetailsStore.currentActiveAccountDetails.name;
     const intialAccountStatus = this.userSelectedAccountStatus(currentSelectedAccount);
     this.setUserSelectedAccountStatus(intialAccountStatus);
-    let investmentType = 'CF';
+    let investmentType = 'BD_CF';
     if (intialAccountStatus === 'FULL' && regulationCheck) {
       let currentAcitveObject = {};
       if (aggreditationDetails) {
@@ -914,7 +914,7 @@ export class AccreditationStore {
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration
         ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
           === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
-      investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'CF';
+      investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'BD_CF';
       this.setFieldVal('accountAccreditationStatus', accountStatus);
       switch (accountStatus) {
         case 'REQUESTED':
