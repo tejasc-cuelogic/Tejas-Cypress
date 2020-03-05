@@ -295,7 +295,7 @@ export class AuthStore {
           },
         })
         .then(() => {
-          userDetailsStore.getUser(userStore.currentUser.sub);
+          userDetailsStore.setUserEmail(sessionStorage.getItem('changedEmail'));
           resolve();
         })
         .catch((err) => {

@@ -818,3 +818,26 @@ export const FOOTER_NAV = [
   //   ],
   // },
 ];
+
+export const CIP_ROUTES = [
+  {
+    path: 'cip',
+    component: 'Cip',
+  },
+  {
+    path: 'cip/uploads',
+    component: 'CipHardFail',
+  },
+  {
+    path: 'cip/questions',
+    component: 'CipSoftFail',
+  },
+  {
+    path: 'cip/address-verification',
+    component: 'CipAddressVerification',
+  },
+  {
+    path: 'cip/phone-verification',
+    component: 'CipPhoneVerification',
+  },
+];

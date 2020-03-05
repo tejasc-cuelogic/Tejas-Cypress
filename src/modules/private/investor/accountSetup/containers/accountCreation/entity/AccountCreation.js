@@ -9,6 +9,7 @@ import PersonalInformation from './PersonalInformation';
 import FormationDocuments from './FormationDocuments';
 import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
+import { ThankYouStep } from '../../../components/confirmModal';
 
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'entityAccountStore', 'userDetailsStore', 'userStore', 'investmentLimitStore')
 @observer
@@ -19,14 +20,15 @@ export default class AccountCreation extends React.Component {
     if (!this.props.entityAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('entity');
-      this.props.accountStore.setAccTypeChange(2);
     }
+    this.props.accountStore.setAccTypeChange(2);
     this.props.investmentLimitStore.getInvestedAmount();
   }
 
   checkIfAccountIsAlreadyPresent = (accountType) => {
     const { checkIfAccountIsAlreadyPresent, getInvestorAccountsRoute } = this.props.userDetailsStore;
-    if (checkIfAccountIsAlreadyPresent(accountType)) {
+    const { isThankYouStep } = this.props.entityAccountStore;
+    if (checkIfAccountIsAlreadyPresent(accountType) && !isThankYouStep) {
       const route = getInvestorAccountsRoute(accountType);
       this.props.history.push(`/dashboard/account-details/${route}/portfolio`);
     }
@@ -166,10 +168,14 @@ export default class AccountCreation extends React.Component {
         // validForm: isValidEntityForm,
         disableNextButton: true,
       },
+      {
+        ...ThankYouStep,
+        stepToBeRendered: 8,
+      },
     ];
     return (
       <div className="step-progress">
-        <MultiStep isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} page setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

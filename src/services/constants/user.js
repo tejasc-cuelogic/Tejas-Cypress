@@ -64,43 +64,27 @@ export const securitySections = [
   },
 ];
 
-export const USER_IDENTITY = {
-  salutation: {
-    key: 'salutation',
+export const PHONE_NUMBER = {
+  phoneNumber: {
+    key: 'phoneNumber',
     value: '',
-    label: 'Title',
-    placeHolder: 'Select',
+    label: 'Phone Number',
+    showError: true,
+    format: '(###) ###-####',
+    type: 'tel',
+    placeHolder: '(123) 456-7890',
     error: undefined,
-    rule: 'optional',
-    objRefOutput: 'legalName',
-    objRef: 'legalDetails.legalName',
-  },
-  firstLegalName: {
-    key: 'firstLegalName',
-    value: '',
-    label: 'First Name (Legal)',
-    placeHolder: 'John',
-    error: undefined,
-    rule: 'required',
+    rule: 'required|maskedPhoneNumber',
+    skipField: true,
+    objRef: 'phone',
     customErrors: {
       required: '* required.',
+      maskedPhoneNumber: 'The phone number is not in the format XXX-XXX-XXXX.',
     },
-    objRefOutput: 'legalName',
-    objRef: 'legalDetails.legalName',
   },
-  lastLegalName: {
-    key: 'lastLegalName',
-    value: '',
-    label: 'Last Name (Legal)',
-    placeHolder: 'Smith',
-    error: undefined,
-    rule: 'required',
-    customErrors: {
-      required: '* required.',
-    },
-    objRefOutput: 'legalName',
-    objRef: 'legalDetails.legalName',
-  },
+};
+
+export const USER_ADDRESS = {
   street: {
     key: 'street',
     value: '',
@@ -168,22 +152,44 @@ export const USER_IDENTITY = {
     objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
-  phoneNumber: {
-    key: 'phoneNumber',
+};
+
+export const USER_IDENTITY = {
+  salutation: {
+    key: 'salutation',
     value: '',
-    label: 'Phone Number',
-    showError: true,
-    format: '(###) ###-####',
-    type: 'tel',
-    placeHolder: '(123) 456-7890',
+    label: 'Title',
+    placeHolder: 'Select',
     error: undefined,
-    rule: 'required|maskedPhoneNumber',
-    skipField: true,
-    objRef: 'phone',
+    rule: 'optional',
+    objRefOutput: 'legalName',
+    objRef: 'legalDetails.legalName',
+  },
+  firstLegalName: {
+    key: 'firstLegalName',
+    value: '',
+    label: 'First Name (Legal)',
+    placeHolder: 'John',
+    error: undefined,
+    rule: 'required',
     customErrors: {
       required: '* required.',
-      maskedPhoneNumber: 'The phone number is not in the format XXX-XXX-XXXX.',
     },
+    objRefOutput: 'legalName',
+    objRef: 'legalDetails.legalName',
+  },
+  lastLegalName: {
+    key: 'lastLegalName',
+    value: '',
+    label: 'Last Name (Legal)',
+    placeHolder: 'Smith',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+    objRefOutput: 'legalName',
+    objRef: 'legalDetails.legalName',
   },
   dateOfBirth: {
     key: 'dateOfBirth',
@@ -223,6 +229,8 @@ export const USER_IDENTITY = {
     skipField: true,
     rule: 'optional',
   },
+  ...USER_ADDRESS,
+  ...PHONE_NUMBER,
 };
 
 export const USER_TITLE = [
