@@ -683,15 +683,18 @@
             display: flex;
             margin-bottom: 28px;
             align-items: center;
+            position: relative;
             .ui.image.logo{
                 margin-right: @17px;
             }
-            .vertical-divider{
-                display: block;
-                color: @neutral-offdark;
-                font-size: @30px;
-                line-height: 30px;
-                font-weight: 100;
+            .vertical-divider:before{
+                content: '';
+                height: @20px;
+                width: auto;
+                position: absolute;
+                top: 50%;
+                transform: translate(0, -50%);
+                border: 1px solid @neutral-offdark;
             }
         }
         .ui.progress.attached {

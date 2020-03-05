@@ -32,7 +32,7 @@ export default class AccountTypes extends React.Component {
         mountNode={mountNode}
       >
         {<ProgressModalHeader Modal={Modal} handleClose={close} closeCta name="ACCOUNT SETUP" />}
-        <Modal.Content className="signup-content">
+        <Modal.Content className="multistep">
           <Grid
             centered
             textAlign="left"
