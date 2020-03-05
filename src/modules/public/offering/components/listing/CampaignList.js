@@ -17,15 +17,15 @@ const keyTermList = [
   { label: 'Security', forFunded: true, key: 'keyTerms.securities', type: CAMPAIGN_KEYTERMS_SECURITIES, for: ['ALL'] },
   { label: 'Offering', key: 'keyTerms.regulation', type: CAMPAIGN_KEYTERMS_REGULATION_PARALLEL, for: ['ALL'] },
   { label: 'Investment Minimum', key: 'keyTerms.minInvestAmt', type: '$', for: ['ALL'] },
-  { label: 'Offering Size', key: 'keyTerms.offeringSize', type: '$', for: ['EQUITY'], equityClass: ['LLC_MEMBERSHIP_UNITS'] },
+  { label: 'Offering Size', key: 'keyTerms.offeringSize', type: '$', for: [], equityClass: ['LLC_MEMBERSHIP_UNITS'] },
   { label: 'Multiple', forFunded: true, key: 'closureSummary.keyTerms.multiple', type: 'X', for: ['REVENUE_SHARING_NOTE'] },
   { label: 'Interest Rate', forFunded: true, key: 'closureSummary.keyTerms.interestRate', type: '%', for: ['TERM_NOTE'] },
   { label: 'Maturity', key: 'keyTerms.maturity', type: 'months', for: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
-  { label: 'Pre-Money Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: ['EQUITY'], equityClass: ['PREFERRED'] },
-  { label: 'Share Price', key: 'keyTerms.priceCopy', type: '', for: ['EQUITY'], equityClass: ['PREFERRED'] },
+  { label: 'Pre-Money Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: [], equityClass: ['PREFERRED'] },
+  { label: 'Share Price', key: 'keyTerms.priceCopy', type: '', for: [], equityClass: ['PREFERRED'] },
   { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   { label: 'Discount', key: 'keyTerms.discount', type: '', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
-  { label: 'Targeted IRR ', value: 'View in Data Room', for: ['EQUITY'], equityClass: ['LLC_MEMBERSHIP_UNITS'] },
+  { label: 'Targeted IRR ', value: 'View in Data Room', for: [], equityClass: ['LLC_MEMBERSHIP_UNITS'] },
 ];
 
 @inject('campaignStore', 'accreditationStore')

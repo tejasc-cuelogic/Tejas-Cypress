@@ -109,10 +109,10 @@ const INVESTMENT_CARD_META = [
     getRowValue: value => ((DataFormatter.diffDays(value, false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label}` : DataFormatter.diffInDaysHoursMin(value).diffText)) || 'N/A',
   },
   { label: 'Annualized Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%`, isMobile: true, isDesktop: true, securityType: ['TERM_NOTE'] },
-  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months`, isMobile: true, isDesktop: true, securityType: [] },
-  { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months`, isMobile: true, isDesktop: true, securityType: ['ALL'] },
+  { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['ALL'] },
   { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['TERM_NOTE'] }, // pending
-  { label: 'Realized Multiple', key: 'realizedMultiple', getRowValue: value => `${value}x`, for: ['completed', 'active'], isMobile: true, isDesktop: true, securityType: ['PREFERRED_EQUITY_506C'] }, // Does this needs to be removed
+  { label: 'Realized Multiple', key: 'realizedMultiple', getRowValue: value => `${value}x`, for: ['completed', 'active'], isMobile: true, isDesktop: true, securityType: [], equityClass: ['PREFERRED'] },
   { label: 'Payments Remaining', key: 'remainingPayment', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['REVENUE_SHARING_NOTE'] },
   {
     label: '', for: ['pending'], children: data => handleActions(data), isMobile: false, isDesktop: true, securityType: [],
@@ -125,7 +125,16 @@ const INVESTMENT_CARD_MOBILE = INVESTMENT_CARD_META.filter(meta => meta.isMobile
 const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleInvestNowClick, isAdmin, match }) => {
   const [active, setActive] = useState(false);
   const toggleAccordion = () => setActive(!active);
-  const mobileMeta = INVESTMENT_CARD_MOBILE.filter(i => (listOf === 'active' ? i.for.includes(listOf) && (i.securityType.length === 0 || i.securityType.includes(get(data, 'offering.keyTerms.securities'))) : i.for.includes(listOf)));
+  const mobileMeta = INVESTMENT_CARD_MOBILE.filter(i => (listOf === 'active' ? i.for.includes(listOf)
+                                  && (
+                                      (
+                                        i.securityType === 'ALL' || i.securityType.includes(get(data, 'offering.keyTerms.securities'))
+                                      )
+                                      || (
+                                        i.equityClass.length === 0 || i.equityClass.includes(get(data, 'offering.keyTerms.equityClass'))
+                                      )
+                                     )
+                                  : i.for.includes(listOf)));
   return (
     <Accordion fluid styled>
       <Accordion.Title className="text-capitalize">
