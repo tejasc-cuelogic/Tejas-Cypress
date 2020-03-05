@@ -34,8 +34,7 @@ const loaderMsg = (
 class Cip extends React.Component {
   constructor(props) {
     super(props);
-    this.props.identityStore.changeSsnRules(true);
-    this.props.identityStore.setFieldValue('cipBackUrl', [this.props.investorUrls.cipForm]);
+    this.props.identityStore.resetCipData();
   }
 
   handleEncryptedSsn = (fielddata) => {

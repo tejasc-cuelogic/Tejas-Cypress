@@ -66,14 +66,15 @@ export default class NewPhoneNumber extends Component {
                 changed={(values, name) => personalInfoMaskedChange(values, name, 'ID_VERIFICATION_FRM')}
                 phoneNumber
               />
-              <div className="field center-align">
+              <div className="field">
                 <Header as="label">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
                 <FormRadioGroup
                   fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
                   name="mfaMethod"
-                  containerclassname="mt-30 radio-basic center-align"
-                  widths="equal"
+                  containerclassname="mt-30 radio-basic"
+                  widths="4"
                   changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
+                  classname="center-align"
                 />
               </div>
               <div className="mt-30 mb-20">

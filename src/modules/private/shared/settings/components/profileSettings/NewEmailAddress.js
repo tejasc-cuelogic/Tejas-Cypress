@@ -66,7 +66,7 @@ export default class NewEmailAddress extends Component {
                   </Message>
                 )
               }
-              <Button primary size="large" className="very relaxed" content="Change Email Address" disabled={typeof CONFIRM_FRM.fields.email.error !== 'undefined' || isEmpty(CONFIRM_FRM.fields.email.value) || this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} />
+              <Button primary size="large" className="mt-30" content="Change Email Address" disabled={typeof CONFIRM_FRM.fields.email.error !== 'undefined' || isEmpty(CONFIRM_FRM.fields.email.value) || this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} />
             </Form>
           </Grid.Column>
         </Grid>

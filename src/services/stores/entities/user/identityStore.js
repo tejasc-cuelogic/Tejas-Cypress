@@ -909,6 +909,13 @@ export class IdentityStore {
   validateForm = (form) => {
     FormValidator.validateForm(this[form], false, true);
   }
+
+  resetCipData = () => {
+    this.changeSsnRules(true);
+    this.setFieldValue('cipBackUrl', [INVESTOR_URLS.cipForm]);
+    this.isAddressFailed = false;
+    this.isPhoneFailed = false;
+  }
 }
 
 export default new IdentityStore();
