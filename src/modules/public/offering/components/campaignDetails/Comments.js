@@ -318,7 +318,7 @@ class Comments extends Component {
                                     placeholder="Write a reply..."
                                   />
                                   <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />
-                                  <Button fluid={isMobile} className={isMobile && 'mt-20 mb-30'} onClick={() => this.closeTextBox(c.id)} disabled={buttonLoader === 'PUBLIC'} basic>Cancel</Button>
+                                  <Button fluid={isMobile} className={isMobile && 'mlr-0 mt-20 mb-30'} onClick={() => this.closeTextBox(c.id)} disabled={buttonLoader === 'PUBLIC'} basic>Cancel</Button>
                                 </Form>
                                 <Divider hidden />
                                 <p>
