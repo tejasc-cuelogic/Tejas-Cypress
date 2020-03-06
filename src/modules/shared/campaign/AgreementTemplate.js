@@ -48,7 +48,7 @@ function AgreementTemplate(props) {
     } = agreementsStore;
     if (!alreadySet) {
       getLegalDocsFileIds().then(() => {
-        // console.log('successfully doc get');
+        // console.log('successfully doc get.');
       });
     }
     resetAggrementForm();
@@ -166,6 +166,7 @@ function AgreementTemplate(props) {
         headerLogo
         borderedHeader
         isProgressHeaderDisable
+        isHeaderDisabled={showDocuSign || showAgreementPdf}
       >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
           <Grid.Column width="14" className="pt-0">
@@ -174,7 +175,7 @@ function AgreementTemplate(props) {
                 <iframe onLoad={props.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
                 <iframe onLoad={props.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
               </div>
-              <div className=" mt-20">
+              <div className="center-align mt-20">
                 <Button type="button" content="Go Back" primary onClick={e => docuSignHandeler(e, false)} />
               </div>
             </div>
@@ -192,7 +193,7 @@ function AgreementTemplate(props) {
                   )
                 }
               </div>
-              <div className="mt-20">
+              <div className="center-align mt-20">
                 <Button type="button" content="Go Back" primary onClick={e => agreementPDFLoader(e, false)} />
               </div>
             </div>

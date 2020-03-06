@@ -178,6 +178,7 @@ export default class Agreement extends React.Component {
           headerLogo
           borderedHeader
           isProgressHeaderDisable
+          isHeaderDisabled={this.state.showDocuSign || this.state.showAgreementPdf}
         >
           <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
             <Grid.Column width="14" className="pt-0">

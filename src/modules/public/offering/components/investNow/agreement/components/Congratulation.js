@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { Header, Button, Icon, Divider, Grid } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 import { NsModal } from '../../../../../../../theme/shared';
@@ -50,7 +50,7 @@ export default class Congratulation extends React.Component {
     const { campaign, campaignStatus } = this.props.campaignStore;
     const accountType = investAccTypes && investAccTypes.value ? investAccTypes.value : '-';
     const accountRedirectURL = accountType && accountType !== '-' ? `/dashboard/account-details/${accountType}/portfolio` : '/dashboard/setup';
-    const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
+    const offeringDetailsObj = campaign && !isEmpty(campaign) ? campaign : get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     setTimeout(() => {
       if (this.props.changeInvestment) {
