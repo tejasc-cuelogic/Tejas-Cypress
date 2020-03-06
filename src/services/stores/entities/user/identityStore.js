@@ -319,7 +319,7 @@ export class IdentityStore {
 
   @action
   changeSsnRules = (isRequired = false) => {
-    this.ID_VERIFICATION_FRM.fields.ssn.rule = this.ID_VERIFICATION_FRM.fields.ssn.value.includes('X') && !isRequired ? 'optional' : 'required';
+    this.ID_VERIFICATION_FRM.fields.ssn.rule = this.ID_VERIFICATION_FRM.fields.ssn.value.includes('X') && !isRequired ? 'optional|maskedSSN' : 'required|maskedSSN';
   }
 
   @action
