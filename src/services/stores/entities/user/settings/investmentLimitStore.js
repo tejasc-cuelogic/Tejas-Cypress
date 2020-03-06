@@ -41,6 +41,8 @@ export class InvestmentLimitStore {
 
   @observable isLimitAmountInputChange = false;
 
+  @observable isUpdateLimitActionActive = false;
+
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
@@ -198,6 +200,7 @@ export class InvestmentLimitStore {
             uiStore.setProgress(false);
             this.setFieldValue('currentLimit', data.getInvestorInvestmentLimit);
             this.setFieldValue('isLimitAmountInputChange', false);
+            this.setFieldValue('isUpdateLimitActionActive', true);
             resolve();
           }
         },
@@ -293,6 +296,7 @@ export class InvestmentLimitStore {
       { name: field, value: values.floatValue },
     );
     this.setFieldValue('isLimitAmountInputChange', true);
+    this.setFieldValue('isUpdateLimitActionActive', false);
   };
 
   /*

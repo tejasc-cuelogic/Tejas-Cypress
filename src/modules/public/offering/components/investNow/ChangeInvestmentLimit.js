@@ -23,6 +23,11 @@ class ChangeInvestmentLimit extends Component {
     }
   }
 
+  componentWillUnmount() {
+    const { setFieldValue } = this.props.investmentLimitStore;
+    setFieldValue('isUpdateLimitActionActive', false);
+  }
+
   changeInvestmentLimit = () => {
     const { uiStore } = this.props;
     const { offeringUUID } = this.props.campaignStore;
@@ -56,7 +61,7 @@ class ChangeInvestmentLimit extends Component {
       INVESTMENT_LIMITS_FORM,
       // changedInvestmentLimit,
     } = this.props.investmentStore;
-    const { calculateCfLimit, currentLimit } = this.props.investmentLimitStore;
+    const { calculateCfLimit, currentLimit, isUpdateLimitActionActive } = this.props.investmentLimitStore;
     // const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
     const { fields } = INVESTMENT_LIMITS_FORM;
     return (
@@ -103,7 +108,7 @@ class ChangeInvestmentLimit extends Component {
             <div className="center-align mt-30">
               <Button.Group>
                 <Button type="button" disabled={inProgress} onClick={this.handleCloseModal}>Cancel</Button>
-                <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTMENT_LIMITS_FORM.meta.isValid || inProgress} onClick={this.changeInvestmentLimit} />
+                <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTMENT_LIMITS_FORM.meta.isValid || inProgress || !isUpdateLimitActionActive} onClick={this.changeInvestmentLimit} />
               </Button.Group>
             </div>
           </Form>
