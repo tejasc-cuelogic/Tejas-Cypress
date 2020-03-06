@@ -32,89 +32,81 @@ export default class General extends Component {
     const { errors } = this.props.uiStore;
     return (
       <>
-        <Header as="h3" textAlign={isMobile ? '' : 'center'}>General information</Header>
-        <p className={isMobile ? '' : 'center-align'}>
-          Let
-          {"'"}
-          s create your Entity Investment Account. Get started by providing your
-                    entity information.
+        <Header as="h4">General information</Header>
+        <p className="mb-20">
+          Let{"'"}s create your Entity Investment Account. Get started by providing your entity information.
         </p>
         <Form error>
-          <div className={isMobile ? '' : 'field-wrap'}>
+          <FormInput
+            name="name"
+            fielddata={GEN_INFO_FRM.fields.name}
+            changed={genInfoChange}
+            showerror
+          />
+          <Form.Group widths="equal">
+            <MaskedInput
+              name="taxId"
+              fielddata={GEN_INFO_FRM.fields.taxId}
+              changed={maskedGenInfoChange}
+              format="##-#######"
+              taxId
+              showerror
+            />
+            <FormDropDown
+              fielddata={GEN_INFO_FRM.fields.entityType}
+              selection
+              // value={GEN_INFO_FRM.fields.entityType.value}
+              name="entityType"
+              options={ENTITY_TYPES}
+              placeholder="Select one"
+              onChange={(e, result) => genInfoChange(e, result)}
+            />
+          </Form.Group>
+          <Header as={!isMobile ? 'h5' : 'h4'}>Registered Address</Header>
+          <AutoComplete
+            name="street"
+            fielddata={GEN_INFO_FRM.fields.street}
+            onplaceselected={setAddressFields}
+            changed={genInfoChange}
+          />
+          <FormInput
+            name="streetTwo"
+            fielddata={GEN_INFO_FRM.fields.streetTwo}
+            changed={genInfoChange}
+            showerror
+          />
+          <Form.Group widths="equal">
             <FormInput
-              name="name"
-              fielddata={GEN_INFO_FRM.fields.name}
+              name="city"
+              fielddata={GEN_INFO_FRM.fields.city}
               changed={genInfoChange}
               showerror
             />
-            <Form.Group widths="equal">
-              <MaskedInput
-                name="taxId"
-                fielddata={GEN_INFO_FRM.fields.taxId}
-                changed={maskedGenInfoChange}
-                format="##-#######"
-                taxId
-                showerror
-              />
-              <FormDropDown
-                fielddata={GEN_INFO_FRM.fields.entityType}
-                selection
-                // value={GEN_INFO_FRM.fields.entityType.value}
-                name="entityType"
-                options={ENTITY_TYPES}
-                placeholder="Select one"
-                onChange={(e, result) => genInfoChange(e, result)}
-              />
-            </Form.Group>
-            <Header as={!isMobile ? 'h5' : 'h4'}>Registered Address</Header>
-            <AutoComplete
-              name="street"
-              fielddata={GEN_INFO_FRM.fields.street}
-              onplaceselected={setAddressFields}
-              changed={genInfoChange}
+            <FormDropDown
+              name="state"
+              fielddata={GEN_INFO_FRM.fields.state}
+              options={US_STATES_FOR_INVESTOR}
+              search
+              selection
+              placeholder="Select"
+              onChange={genInfoChange}
             />
-            <FormInput
-              name="streetTwo"
-              fielddata={GEN_INFO_FRM.fields.streetTwo}
-              changed={genInfoChange}
+            <MaskedInput
+              name="zipCode"
+              fielddata={GEN_INFO_FRM.fields.zipCode}
+              changed={maskedGenInfoChange}
+              zipCode
               showerror
             />
-            <Form.Group widths="equal">
-              <FormInput
-                name="city"
-                fielddata={GEN_INFO_FRM.fields.city}
-                changed={genInfoChange}
-                showerror
-              />
-              <FormDropDown
-                name="state"
-                fielddata={GEN_INFO_FRM.fields.state}
-                options={US_STATES_FOR_INVESTOR}
-                search
-                selection
-                placeholder="Select"
-                onChange={genInfoChange}
-              />
-              <MaskedInput
-                name="zipCode"
-                fielddata={GEN_INFO_FRM.fields.zipCode}
-                changed={maskedGenInfoChange}
-                zipCode
-                showerror
-              />
-            </Form.Group>
-          </div>
+          </Form.Group>
           {errors
             && (
-              <Message className={isMobile ? '' : 'center-align'} error>
+              <Message error>
                 <ListErrors errors={[errors]} />
               </Message>
             )
           }
-          {isMobile && (
-            <Button fluid primary className="relaxed" content="Continue" disabled={!GEN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
-          )
-          }
+          <Button fluid={isMobile} primary className={`${isMobile ? '' : 'mt-30'} relaxed`} content="Continue" disabled={!GEN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
         </Form>
       </>
     );

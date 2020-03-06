@@ -4,18 +4,20 @@ import { Link, Route } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
 // import money from 'money-math';
 import { get } from 'lodash';
-import { InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader, SuspenseBoundary } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import CashMovement from '../components/CashMovement';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 import AccountCreation from '../../accountSetup/containers/accountCreation';
-import IdentityVerification from '../../accountSetup/containers/identityVerification';
+import ConfirmPhoneNumber from '../../../../auth/containers/ConfirmPhoneNumber';
 import EstablishProfile from '../../accountSetup/containers/establishProfile';
+import CipVerification from '../../accountSetup/containers/cipVerification/index';
 import Helper from '../../../../../helper/utility';
 import ProccessingAccountsScreen from '../components/processingAccountsScreen';
 import StickyNotification from '../components/stickyNotification';
 
 const isMobile = document.documentElement.clientWidth < 768;
+
 const summaryDetails = ({
   totalInvested, pendingInvestments, paidToDate, tnar,
 }) => {
@@ -76,9 +78,12 @@ export default class Dashboard extends Component {
     }
     return (
       <>
-        <Route path="/dashboard/setup/account-creation" component={AccountCreation} />
-        <Route exact path="/dashboard/setup/identity-verification/:step" component={IdentityVerification} />
-        <Route path="/dashboard/setup/establish-profile" component={EstablishProfile} />
+        <SuspenseBoundary>
+          <Route path="/dashboard/setup/account-creation" component={AccountCreation} />
+          <Route path={`${this.props.match.url}/cip`} component={CipVerification} />
+          <Route exact path={`${this.props.match.url}/phone-verification`} component={ConfirmPhoneNumber} />
+          <Route path="/dashboard/setup/establish-profile" component={EstablishProfile} />
+        </SuspenseBoundary>
         <PrivateLayout
           {...this.props}
           P4={

@@ -35,8 +35,8 @@ export default class UploadDocument extends Component {
     const { ASSETS_UPLOAD_DOC_FORM, formChange } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">{this.props.isEntity ? 'Upload verification letter' : 'Net Worth'}</Header>
-        <p className="center-align">{this.props.isEntity ? 'Upload a signed letter from your lawyer, CPA, investment advisor or investment broker verifying your entity`s status as an accredited investor.' : 'To verify your net worth, you can upload personal financial statements, a statement from a financial institution, asset appraisals, or a signed letter from your lawyer, accountant, investment advisor or investment broker indicating your status as an accredited investor.'}</p>
+        <Header as="h4">{this.props.isEntity ? 'Upload verification letter' : 'Net Worth'}</Header>
+        <p>{this.props.isEntity ? 'Upload a signed letter from your lawyer, CPA, investment advisor or investment broker verifying your entity`s status as an accredited investor.' : 'To verify your net worth, you can upload personal financial statements, a statement from a financial institution, asset appraisals, or a signed letter from your lawyer, accountant, investment advisor or investment broker indicating your status as an accredited investor.'}</p>
         <Divider hidden />
         <Form>
           <DropZone
@@ -60,9 +60,7 @@ export default class UploadDocument extends Component {
             )
           }
           <Divider hidden />
-          <div className="center-align">
-            <Button onClick={() => this.props.clicked('ASSETS_UPLOAD_DOC_FORM')} primary size="large" disabled={!ASSETS_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
-          </div>
+          <Button onClick={() => this.props.clicked('ASSETS_UPLOAD_DOC_FORM')} primary size="large" disabled={!ASSETS_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
         </Form>
       </div>
     );

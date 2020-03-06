@@ -56,8 +56,16 @@ export const verifyCipSoftFail = gql`
   }`;
 
 export const verifyCipHardFail = gql`
-mutation verifyCipHardFail($license: String!, $residence: String!) {
+  mutation verifyCipHardFail($license: String!, $residence: String!) {
     verifyCipHardFail(
+      license: $license
+      residence: $residence
+    )
+  }`;
+
+export const cipLegalDocUploads = gql`
+  mutation cipLegalDocUploads($license: String!, $residence: String!) {
+    cipLegalDocUploads(
       license: $license
       residence: $residence
     )

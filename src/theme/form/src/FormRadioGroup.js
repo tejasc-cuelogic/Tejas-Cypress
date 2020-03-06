@@ -74,7 +74,7 @@ const FormRadioGroup = observer((props) => {
                 error={error}
                 label={radio.label}
                 value={radio.value}
-                className={`${props.value} ${radio.value}`}
+                className={`${props.value} ${radio.value} ${props.classname}`}
                 checked={value === radio.value}
                 onChange={props.changed}
               />

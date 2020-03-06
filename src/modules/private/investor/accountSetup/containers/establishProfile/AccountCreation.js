@@ -15,7 +15,10 @@ import Experience from './Experience';
 export default class AccountCreation extends React.Component {
   constructor(props) {
     super(props);
-    this.props.userDetailsStore.setUserAccDetails();
+    const { setUserAccDetails } = this.props.userDetailsStore;
+    if (!this.props.investorProfileStore.isFormSubmitted) {
+      setUserAccDetails('investorProfile');
+    }
   }
 
   handleMultiStepModalclose = () => {
@@ -114,7 +117,6 @@ export default class AccountCreation extends React.Component {
     ];
 
     return (
-
       <div className="step-progress">
         <MultiStep isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={updateInvestorProfileData} inProgress={inProgress} steps={steps} formTitle="Complete your investor profile" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
