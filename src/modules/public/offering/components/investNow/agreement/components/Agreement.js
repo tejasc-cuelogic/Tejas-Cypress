@@ -180,7 +180,7 @@ export default class Agreement extends React.Component {
           isProgressHeaderDisable
         >
           <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
-            <Grid.Column width="9" className="pt-0">
+            <Grid.Column width="14" className="pt-0">
               <div style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
                 <div className="pdf-viewer">
                   <iframe onLoad={this.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
