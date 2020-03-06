@@ -6,14 +6,14 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
+import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, cipLegalDocUploads, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
 import { INVESTOR_URLS } from '../../../constants/url';
-import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
+import identityHelper from '../../../../modules/private/investor/accountSetup/containers/cipVerification/helper/index';
 import { US_STATES, FILE_UPLOAD_STEPS, US_STATES_FOR_INVESTOR } from '../../../../constants/account';
 import commonStore from '../commonStore';
 
@@ -40,6 +40,14 @@ export class IdentityStore {
 
   @observable isOptConfirmed = false;
 
+  @observable isAddressFailed = false;
+
+  @observable isPhoneFailed = false;
+
+  @observable cipBackUrl = [INVESTOR_URLS.cipForm];
+
+  @observable cipErrors = undefined;
+
   @observable sendOtpToMigratedUser = [];
 
   @observable signUpLoading = false;
@@ -50,7 +58,9 @@ export class IdentityStore {
     ciphardFail: { steps: ['userCIPHardFail', 'userCIPFail'], url: INVESTOR_URLS.cipHardFail, status: 'HARD_FAIL' },
     cipSoftFail: { steps: ['userCIPSoftFail'], url: INVESTOR_URLS.cipSoftFail, status: 'SOFT_FAIL' },
     cipPass: { steps: ['userCIPPass', 'OFFLINE', 'phoneMfa'], url: INVESTOR_URLS.phoneVerification, status: 'PASS' },
-    cip: { steps: ['UNIQUE_SSN', 'ADDRESS_VERIFICATION', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
+    cip: { steps: ['UNIQUE_SSN'], url: INVESTOR_URLS.cipForm },
+    cipAddressFail: { steps: ['ADDRESS_VERIFICATION'], url: INVESTOR_URLS.cipAddressFail },
+    cipPhoneFail: { steps: ['PHONE_VERIFICATION'], url: INVESTOR_URLS.cipPhoneFail },
   }
 
   @action
@@ -92,18 +102,18 @@ export class IdentityStore {
   }
 
   @action
-  personalInfoChange = (e, result) => {
-    this.ID_VERIFICATION_FRM = FormValidator.onChange(
-      this.ID_VERIFICATION_FRM,
+  personalInfoChange = (e, result, form) => {
+    this[form] = FormValidator.onChange(
+      this[form],
       FormValidator.pullValues(e, result),
     );
   };
 
   @action
-  personalInfoMaskedChange = (values, field) => {
+  personalInfoMaskedChange = (values, field, form) => {
     const finalValue = (field === 'dateOfBirth') ? values.formattedValue : values.value;
-    this.ID_VERIFICATION_FRM = FormValidator.onChange(
-      this.ID_VERIFICATION_FRM,
+    this[form] = FormValidator.onChange(
+      this[form],
       { name: field, value: finalValue },
     );
   }
@@ -142,17 +152,17 @@ export class IdentityStore {
   }
 
   @action
-  setAddressFieldsForUserVerification = (place) => {
+  setAddressFieldsForUserVerification = (place, form) => {
     if (this.isStreetCodeExistInAutoComplete(place)) {
-      FormValidator.setAddressFields(place, this.ID_VERIFICATION_FRM);
-      const state = US_STATES.find(s => s.text === this.ID_VERIFICATION_FRM.fields.state.value.toUpperCase());
-      this.ID_VERIFICATION_FRM.fields.state.value = state ? state.key : '';
+      FormValidator.setAddressFields(place, this[form]);
+      const state = US_STATES.find(s => s.text === this[form].fields.state.value.toUpperCase());
+      this[form].fields.state.value = state ? state.key : '';
     } else {
-      this.ID_VERIFICATION_FRM = FormValidator.onChange(
-        this.ID_VERIFICATION_FRM,
+      this[form] = FormValidator.onChange(
+        this[form],
         { name: 'street', value: Helper.gAddressClean(place).residentalStreet },
       );
-      ['city', 'state', 'zipCode'].forEach((field) => { this.ID_VERIFICATION_FRM.fields[field].value = ''; });
+      ['city', 'state', 'zipCode'].forEach((field) => { this[form].fields[field].value = ''; });
     }
   }
 
@@ -189,6 +199,7 @@ export class IdentityStore {
   get formattedUserInfoForCip() {
     const { fields } = this.ID_VERIFICATION_FRM;
     const user = FormValidator.evaluateFormData(fields);
+
     if (userDetailsStore.isLegalDocsPresent) {
       user.verificationDocs = this.verificationDocs();
     }
@@ -235,6 +246,7 @@ export class IdentityStore {
   verifyCip = async (isAdmin = false) => {
     this.setFieldValue('isAdmin', isAdmin);
     this.setCipDetails();
+    delete this.formattedUserInfoForCip.user.verificationDocs;
     let variables = { isCipOffline: false, ...this.formattedUserInfoForCip };
     variables = isAdmin ? { ...variables, userId: userDetailsStore.selectedUserId } : { ...variables };
     const payLoad = {
@@ -243,19 +255,24 @@ export class IdentityStore {
       variables,
     };
     const { res, url } = await this.cipWrapper(payLoad);
+    let redirectUrl = url;
+    const resData = res.data.verifyCip;
 
-    if (res.data.verifyCip.questions) {
-      this.setIdentityQuestions(res.data.verifyCip.questions);
+    if (resData.questions) {
+      this.setIdentityQuestions(resData.questions);
     }
 
-    if (res.data.verifyCip.step === 'OFFLINE') {
+    if (resData.step === 'ADDRESS_VERIFICATION' && this.isAddressFailed) {
+      redirectUrl = INVESTOR_URLS.cipHardFail;
+    }
+
+    if (resData.step === 'OFFLINE') {
       userDetailsStore.updateUserDetails('legalDetails', { status: 'OFFLINE' });
       window.sessionStorage.setItem('cipErrorMessage',
-        JSON.stringify(res.data.verifyCip.errorMessage));
+        JSON.stringify(resData.errorMessage));
     }
-
-    this.setVerifyIdentityResponse(res.data.verifyCip);
-    return { res, url };
+    this.setVerifyIdentityResponse(resData);
+    return { res, url: redirectUrl };
   }
 
   updateUserDataAndSendOtp = async () => {
@@ -281,14 +298,38 @@ export class IdentityStore {
 
 
   @action
+  cipLegalDocUploads = async () => {
+    const payLoad = {
+      mutation: cipLegalDocUploads,
+      mutationName: 'cipLegalDocUploads',
+      variables: {
+        license: this.verificationDocs().idProof.fileId,
+        residence: this.verificationDocs().addressProof.fileId,
+      },
+    };
+    const { res: response } = await this.cipWrapper(payLoad);
+    if (response.data.cipLegalDocUploads) {
+      const { res, url } = await this.verifyCip();
+      this.setFieldValue('isAddressFailed', false);
+      this.setFieldValue('cipBackUrl', [...this.cipBackUrl, ...[INVESTOR_URLS.cipForm]]);
+      return { res, url };
+    }
+    return false;
+  }
+
+  @action
+  changeSsnRules = (isRequired = false) => {
+    this.ID_VERIFICATION_FRM.fields.ssn.rule = this.ID_VERIFICATION_FRM.fields.ssn.value.includes('X') && !isRequired ? 'optional' : 'required';
+  }
+
+  @action
   verifyCipHardFail = async () => {
-    const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
     const payLoad = {
       mutation: verifyCipHardFail,
       mutationName: 'verifyCipHardFail',
       variables: {
-        license: photoId.fileId,
-        residence: proofOfResidence.fileId,
+        license: this.verificationDocs().idProof.fileId,
+        residence: this.verificationDocs().addressProof.fileId,
       },
       cipPassStatus: 'MANUAL_VERIFICATION_PENDING',
     };
@@ -301,8 +342,8 @@ export class IdentityStore {
 
   cipWrapper = async (payLoad) => {
     try {
-      let url;
       this.setFieldValue('signUpLoading', true);
+      this.setFieldValue('cipErrors', null);
       const res = await client
         .mutate({
           mutation: payLoad.mutation,
@@ -312,16 +353,17 @@ export class IdentityStore {
         this.cipStepUrlMapping[key].steps.includes(get(res, `data.${payLoad.mutationName}.step`))
       )));
       // eslint-disable-next-line prefer-destructuring
-      url = get(this.cipStepUrlMapping[stepName], 'url');
+      const url = get(this.cipStepUrlMapping[stepName], 'url');
+      const { message } = !get(res, `data.${payLoad.mutationName}.status`) && res.data[`${payLoad.mutationName}`];
 
       if (stepName === 'cipPass') {
         await this.updateUserDataAndSendOtp();
-      } else if (!get(res, `data.${payLoad.mutationName}.status`)
-        && res.data[`${payLoad.mutationName}`].message) {
-        url = undefined;
-        uiStore.setFieldvalue('errors',
+      }
+
+      if ((stepName === 'cip' && message) || (stepName === 'cipPhoneFail' && this.isPhoneFailed && message)) {
+        this.setFieldValue('cipErrors',
           DataFormatter.getSimpleErr({
-            message: res.data[`${payLoad.mutationName}`].message,
+            message,
           }));
       }
 
@@ -338,7 +380,7 @@ export class IdentityStore {
 
       return { res, url };
     } catch (err) {
-      uiStore.setFieldvalue('errors', DataFormatter.getSimpleErr(err));
+      this.setFieldValue('cipErrors', DataFormatter.getSimpleErr(err));
       this.setFieldValue('signUpLoading', false);
       return Promise.reject(err);
     }
@@ -480,7 +522,7 @@ export class IdentityStore {
             });
           } else {
             const error = {
-              message: 'Please enter correct verification code.',
+              message: 'Invalid verification code.',
             };
             uiStore.setErrors(error);
             reject();
@@ -516,7 +558,7 @@ export class IdentityStore {
             resolve();
           } else {
             const error = {
-              message: 'Please enter correct verification code.',
+              message: 'Invalid verification code.',
             };
             uiStore.setErrors(error);
             reject();
@@ -729,36 +771,37 @@ export class IdentityStore {
   @action
   setCipDetails = () => {
     const { legalDetails, phone } = this.isAdmin ? userDetailsStore.detailsOfUser.data.user : userDetailsStore.userDetails;
-    const { fields } = this.ID_VERIFICATION_FRM;
-    if (legalDetails && legalDetails.legalName) {
-      fields.salutation.value = legalDetails.legalName.salutation;
-      fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
-      fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
-    }
-    if (legalDetails && legalDetails.legalAddress) {
-      fields.city.value = legalDetails.legalAddress.city;
-      const state = US_STATES.find(s => s.key === legalDetails.legalAddress.state);
-      const selectedState = state ? state.key : fields.state.value;
-      if (selectedState) {
-        fields.state.value = selectedState;
+    const { fields, meta } = this.ID_VERIFICATION_FRM;
+    if (!meta.isValid && get(legalDetails, 'legalAddress')) {
+      if (get(legalDetails, 'legalName')) {
+        fields.salutation.value = legalDetails.legalName.salutation;
+        fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
+        fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
       }
-      fields.street.value = legalDetails.legalAddress.street;
-      fields.streetTwo.value = legalDetails.legalAddress.streetTwo;
-      fields.zipCode.value = legalDetails.legalAddress.zipCode;
-    }
-    if (legalDetails && legalDetails.dateOfBirth) {
-      fields.dateOfBirth.value = legalDetails.dateOfBirth;
-    }
-
-    if (legalDetails && legalDetails.ssn) {
-      fields.ssn.value = legalDetails.ssn;
-    }
-    if (legalDetails && phone && phone.number) {
-      fields.phoneNumber.value = get(fields, 'phoneNumber.value') && !this.isAdmin ? fields.phoneNumber.value : phone.number;
+      if (get(legalDetails, 'legalAddress')) {
+        fields.city.value = legalDetails.legalAddress.city;
+        const state = US_STATES.find(s => s.key === legalDetails.legalAddress.state);
+        const selectedState = state ? state.key : fields.state.value;
+        if (selectedState) {
+          fields.state.value = selectedState;
+        }
+        fields.street.value = legalDetails.legalAddress.street;
+        fields.streetTwo.value = legalDetails.legalAddress.streetTwo;
+        fields.zipCode.value = legalDetails.legalAddress.zipCode;
+      }
+      if (get(legalDetails, 'dateOfBirth')) {
+        fields.dateOfBirth.value = legalDetails.dateOfBirth;
+      }
+      if (get(legalDetails, 'ssn')) {
+        fields.ssn.value = legalDetails.ssn;
+      }
+      if (legalDetails && phone && phone.number) {
+        fields.phoneNumber.value = get(fields, 'phoneNumber.value') && !this.isAdmin ? fields.phoneNumber.value : phone.number;
+      }
     }
   }
 
-  requestOtpWrapper = (isMobile = false) => {
+  requestOtpWrapper = () => {
     uiStore.setProgress();
     const { email, givenName } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
@@ -777,9 +820,9 @@ export class IdentityStore {
         })
         .then((result) => {
           this.setRequestOtpResponse(result.data.requestOTPWrapper);
-          if (!isMobile) {
-            Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
-          }
+          // if (!isMobile) {
+          //   Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
+          // }
           commonStore.removeLocalStorage(['tags']);
           resolve();
         })
@@ -814,7 +857,7 @@ export class IdentityStore {
             resolve();
           } else {
             const error = {
-              message: 'Please enter correct verification code.',
+              message: 'Invalid verification code.',
             };
             uiStore.setErrors(error);
             uiStore.setProgress(false);
@@ -847,7 +890,7 @@ export class IdentityStore {
             resolve();
           } else {
             const error = {
-              message: 'Please enter correct verification code.',
+              message: 'Invalid verification code.',
             };
             uiStore.setProgress(false);
             uiStore.setErrors(error);
@@ -865,6 +908,13 @@ export class IdentityStore {
   @action
   validateForm = (form) => {
     FormValidator.validateForm(this[form], false, true);
+  }
+
+  resetCipData = () => {
+    this.changeSsnRules(true);
+    this.setFieldValue('cipBackUrl', [INVESTOR_URLS.cipForm]);
+    this.isAddressFailed = false;
+    this.isPhoneFailed = false;
   }
 }
 

@@ -104,7 +104,7 @@ const SortableList = SortableContainer(({
       ))}
     </div>
 ));
-@inject('uiStore', 'offeringsStore', 'offeringCreationStore')
+@inject('uiStore', 'offeringsStore', 'offeringCreationStore', 'manageOfferingStore')
 @withRouter
 @observer
 export default class DraggableListing extends Component {
@@ -115,6 +115,7 @@ export default class DraggableListing extends Component {
     this.props.offeringCreationStore.setFieldValue('isListingPage', true);
     this.props.offeringsStore.resetInitLoad();
     this.props.offeringCreationStore.resetInitLoad();
+    this.props.manageOfferingStore.resetInitLoad();
     this.props.offeringsStore.resetPagination();
   }
 

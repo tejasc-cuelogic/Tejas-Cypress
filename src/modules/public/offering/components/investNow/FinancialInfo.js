@@ -78,14 +78,14 @@ class FinancialInfo extends Component {
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
     if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading
       || this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
-      return <Spinner loaderMessage="Loading.." />;
+      return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
     const isCenterAlignedCls = campaignStatus.isPreferredEquity ? 'center-align' : '';
     const isOfferingPreferredEquity = !!campaignStatus.isPreferredEquity;
     return (
       <>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
-        <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
+        <Header as="h4">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
         {this.props.changeInvest
           && (
             <>
@@ -117,7 +117,7 @@ class FinancialInfo extends Component {
                     :{' '}
                     {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
                     {/* <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link> */}
-                    <Link to={`${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
+                    <Link to={`${match.url}/change-investment-limit`} className="link"> <small>Update</small></Link>
                   </p>
                 )
               }
@@ -220,11 +220,7 @@ class FinancialInfo extends Component {
                 autoFocus
                 allowNegative={false}
               />
-              {isMobile
-                && (
-                  <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
-                )
-              }
+              <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
               </>
             )}
         </Form>

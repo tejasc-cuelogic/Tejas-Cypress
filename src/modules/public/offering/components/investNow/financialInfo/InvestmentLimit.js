@@ -8,7 +8,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 
 const InvestmentLimit = props => (
   <>
-    <Header as={props.changeInvest ? 'h6' : 'h4'} textAlign={props.changeInvest ? '' : 'center'}>
+    <Header as={props.changeInvest ? 'h6' : 'h4'}>
       Your{' '}
       <PopUpModal
         wide

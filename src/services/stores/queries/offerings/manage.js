@@ -225,6 +225,20 @@ export const getOfferingDetails = gql`
         isinRegD
         sfAccountNumberRegD
       }
+      investNow {
+        template
+        page {
+          title
+          page
+          regulation
+          toc {
+            label
+            order
+            account
+            required
+          }
+        }
+      }
       closureProcess {
         checkBalance {
           finished

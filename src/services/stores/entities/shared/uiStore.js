@@ -218,7 +218,7 @@ export class UiStore {
 
   @action
   setcreateAccountMessage= () => {
-    this.createAccountMessage = 'Please wait...<br /><br /> We are finalizing your account. This can take up to a minute.';
+    this.createAccountMessage = 'Please wait...<br /><br /> This could take up to a minute.';
   }
 
   @action

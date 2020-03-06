@@ -86,8 +86,8 @@ export default class ManualForm extends Component {
     }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
-      <div className={isMobile ? '' : 'center-align'}>
-        <Header as="h3">
+      <div>
+        <Header as="h4">
         Enter your bank account and routing number
         </Header>
         <Form error={!!errors} onSubmit={this.handleSubmitForm}>
@@ -99,12 +99,12 @@ export default class ManualForm extends Component {
                   changed={accountTypeChange}
                   name="accountType"
                   value={formLinkBankManually.fields.value}
-                  containerclassname={`${isMobile ? 'horizontal' : ''} button-radio center-align`}
+                  containerclassname={`${isMobile ? 'horizontal no-flex-wrap' : 'two wide'} button-radio`}
                 />
               }
             </>
           </Form.Field>
-          <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
+          <div className="left-align">
             <MaskedInput
               name="accountNumber"
               type="tel"
@@ -133,9 +133,9 @@ export default class ManualForm extends Component {
             </p>
             )
           }
-          <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
+          <Button primary size="large" fluid={isMobile} className="mt-30 relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
         </Form>
-        <div className="center-align">
+        <div className={isMobile && 'center-align'}>
           <Button color="green" className="link-button mt-30" content="Link bank account automatically" onClick={this.linkAccountDirectly} />
         </div>
       </div>
