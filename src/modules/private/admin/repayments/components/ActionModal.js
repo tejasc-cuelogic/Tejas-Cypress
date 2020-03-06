@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { isEmpty, get } from 'lodash';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
 import beautify from 'json-beautify';
-import { MaskedInput } from '../../../../../theme/form';
+import { MaskedInput, FormInput, FormRadioGroup } from '../../../../../theme/form';
 
 const title = {
   adminPaymentGenerateAdminSummary: 'Generate Admin Summary',
@@ -21,7 +21,7 @@ function ActionModal(props) {
   const paymentCtaHandlers = () => {
     props.paymentStore.paymentCtaHandlers(props.showActionModal).then((res) => { setResponse(get(res, `data.${props.showActionModal}`)); setShowResponse(true); });
   };
-  const { ACTION_FRM, maskChange } = props.paymentStore;
+  const { ACTION_FRM, maskChange, formChange } = props.paymentStore;
   const { loadingArray } = props.nsUiStore;
   return (
     <Modal open={!!props.showActionModal} size="small" closeOnDimmerClick={false} closeIcon onClose={() => props.updateState('showActionModal', false)}>
@@ -36,6 +36,20 @@ function ActionModal(props) {
               changed={(values, name) => maskChange(values, name, 'ACTION_FRM', 'formatted')}
               dateOfBirth
             />
+            <FormInput
+              fluid
+              name="scope"
+              fielddata={ACTION_FRM.fields.scope}
+              changed={(e, result) => formChange(e, result, 'ACTION_FRM')}
+            />
+            <div className="field">
+              <Header as="label">{ACTION_FRM.fields.sendEmail.label}</Header>
+              <FormRadioGroup
+                fielddata={ACTION_FRM.fields.sendEmail}
+                name="sendEmail"
+                changed={(e, result) => formChange(e, result, 'ACTION_FRM')}
+              />
+            </div>
           </Form.Field>
           <div className="center-align mt-30">
             <Button className="relaxed red" content="Cancel" onClick={() => props.updateState('showActionModal', false)} />
