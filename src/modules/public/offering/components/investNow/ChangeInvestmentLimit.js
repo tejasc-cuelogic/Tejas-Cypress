@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-// import { Button, Table, Popup, Icon, Modal, Form, Header } from 'semantic-ui-react';
 import { Modal, Header, Divider, Button, Message, Form, Statistic } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import { get } from 'lodash';
@@ -8,7 +7,7 @@ import Helper from '../../../../../helper/utility';
 import { MaskedInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 
-@inject('investmentStore', 'userDetailsStore', 'uiStore', 'investmentLimitStore')
+@inject('investmentStore', 'userDetailsStore', 'uiStore', 'investmentLimitStore', 'campaignStore')
 @withRouter
 @observer
 class ChangeInvestmentLimit extends Component {
@@ -18,22 +17,23 @@ class ChangeInvestmentLimit extends Component {
     this.props.investmentStore.resetFormErrors('INVESTMONEY_FORM');
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     const { getCurrentInvestNowHealthCheck, setFieldValue } = this.props.investmentLimitStore;
-    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
-    setFieldValue('currentLimit', currentInvestmentLimit);
+    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit');
+    if (currentInvestmentLimit) {
+      setFieldValue('currentLimit', currentInvestmentLimit);
+    }
   }
 
   componentWillUnmount() {
-    const { getCurrentInvestNowHealthCheck, setFieldValue } = this.props.investmentLimitStore;
-    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
-    setFieldValue('currentLimit', currentInvestmentLimit);
+    const { setFieldValue } = this.props.investmentLimitStore;
+    setFieldValue('isUpdateLimitActionActive', false);
   }
 
   changeInvestmentLimit = () => {
     const { uiStore } = this.props;
+    const { offeringUUID } = this.props.campaignStore;
     uiStore.setProgress();
-    const offeringId = this.props.offeringId ? this.props.offeringId : this.props.match.params.offeringId;
+    const offeringId = this.props.offeringId ? this.props.offeringId : this.props.match.url.includes('portfolio') ? offeringUUID : this.props.match.params.offeringId;
     this.props.investmentStore.updateInvestmentLimits(offeringId).then(() => {
-      Helper.toast('Investment limit changed successfully.', 'success');
       this.handleCloseModal();
     });
   }
@@ -61,7 +61,7 @@ class ChangeInvestmentLimit extends Component {
       INVESTMENT_LIMITS_FORM,
       // changedInvestmentLimit,
     } = this.props.investmentStore;
-    const { calculateCfLimit, currentLimit } = this.props.investmentLimitStore;
+    const { calculateCfLimit, currentLimit, isUpdateLimitActionActive } = this.props.investmentLimitStore;
     // const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
     const { fields } = INVESTMENT_LIMITS_FORM;
     return (
@@ -108,7 +108,7 @@ class ChangeInvestmentLimit extends Component {
             <div className="center-align mt-30">
               <Button.Group>
                 <Button type="button" disabled={inProgress} onClick={this.handleCloseModal}>Cancel</Button>
-                <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTMENT_LIMITS_FORM.meta.isValid || inProgress} onClick={this.changeInvestmentLimit} />
+                <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTMENT_LIMITS_FORM.meta.isValid || inProgress || !isUpdateLimitActionActive} onClick={this.changeInvestmentLimit} />
               </Button.Group>
             </div>
           </Form>
