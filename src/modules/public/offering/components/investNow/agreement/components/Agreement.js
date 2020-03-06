@@ -2,11 +2,12 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { get, startsWith, includes } from 'lodash';
-import { Modal, Header, Button, Grid, Form, Message } from 'semantic-ui-react';
+import { Header, Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
-import { InlineLoader } from '../../../../../../../theme/shared';
+import { InlineLoader, NsModal } from '../../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore', 'agreementsStore', 'investmentLimitStore')
 @withRouter
 @observer
@@ -147,154 +148,171 @@ export default class Agreement extends React.Component {
     const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
     return (
       <>
-        <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
-          <Modal.Content className="center-align">
-            <Header as="h3">Confirm cancellation</Header>
-            {this.props.changeInvestment
-              ? <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(previouslyInvestedAmount)} in this offering will remain in place.`}</p>
-              : <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
-            }
-            <div className="center-align">
+        <NsModal
+          open={this.state.open}
+          closeOnDimmerClick={false}
+          headerLogo
+          borderedHeader
+          isProgressHeaderDisable
+        >
+          <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
+            <Grid.Column width="8" className="pt-0">
+              <Header as="h3">Confirm cancellation</Header>
+              {this.props.changeInvestment
+                ? <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(previouslyInvestedAmount)} in this offering will remain in place.`}</p>
+                : <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
+              }
               <Button.Group widths="2" className="inline">
                 <Button primary content="Back" onClick={this.handleCancel} />
                 <Button color="gray" content="Confirm" onClick={this.handleConfirm} />
               </Button.Group>
-            </div>
-          </Modal.Content>
-        </Modal>
-        <Modal size="large" className="confirm-investment" open closeIcon={!agreementDetails} closeOnRootNodeClick={false} closeOnDimmerClick={false} onClose={e => this.handleCloseModal(e)}>
-          <Modal.Content className="signup-content">
-            <div style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
-              <div className="pdf-viewer">
-                <iframe onLoad={this.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
-                <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
+           </Grid.Column>
+          </Grid>
+        </NsModal>
+        <NsModal
+          open
+          closeIcon={!agreementDetails}
+          closeOnRootNodeClick={false}
+          closeOnDimmerClick={false}
+          onClose={e => this.handleCloseModal(e)}
+          headerLogo
+          borderedHeader
+          isProgressHeaderDisable
+        >
+          <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
+            <Grid.Column width="14" className="pt-0">
+              <div style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
+                <div className="pdf-viewer">
+                  <iframe onLoad={this.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
+                  <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
+                </div>
+                <div className="center-align mt-20">
+                  <Button type="button" content="Go Back" primary onClick={e => this.docuSignHandeler(e, false)} />
+                </div>
               </div>
-              <div className="center-align mt-20">
-                <Button type="button" content="Go Back" primary onClick={e => this.docuSignHandeler(e, false)} />
+              <div style={{ display: this.state.showAgreementPdf ? 'block' : 'none' }}>
+                <div className="pdf-viewer">
+                  {(docLoading || !embedUrl) ? <InlineLoader />
+                    : (
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        title="agreement"
+                        src={embedUrl}
+                        ref={(c) => { this.iframeComponent = c; }}
+                      />
+                    )
+                  }
+                </div>
+                <div className="center-align mt-20">
+                  <Button type="button" content="Go Back" primary onClick={e => this.agreementPDFLoader(e, false)} />
+                </div>
               </div>
-            </div>
-            <div style={{ display: this.state.showAgreementPdf ? 'block' : 'none' }}>
-              <div className="pdf-viewer">
-                {(docLoading || !embedUrl) ? <InlineLoader />
-                  : (
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      title="agreement"
-                      src={embedUrl}
-                      ref={(c) => { this.iframeComponent = c; }}
-                    />
-                  )
-                }
-              </div>
-              <div className="center-align mt-20">
-                <Button type="button" content="Go Back" primary onClick={e => this.agreementPDFLoader(e, false)} />
-              </div>
-            </div>
-            <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
-              <Header as="h3" className="mb-40">
-                Let&#39;s confirm your investment.<br />You are investing
-                <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
-              </Header>
-              <Form
-                error={(this.state.showError
-                  && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid)
-                  || investmentFlowErrorMessage}
-              >
-                <Grid stackable>
-                  <Grid.Row>
-                    {['checkboxesLeft', 'checkboxesRight'].map(field => (
-                      <Grid.Column width={8}>
-                        <FormCheckbox
-                          defaults
-                          fielddata={AGREEMENT_DETAILS_FORM.fields[field]}
-                          name={field}
-                          containerclassname={`ui very relaxed list ${this.state.showError && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
-                          changed={setCheckbox}
-                          disabled={inProgress}
-                          customLabel={(
-                            <>
-                              I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
-                            </>
-                          )}
-                          conditionalCustomLabel={(
-                            startsWith(offeringRegulationType, 'BD_')
-                              ? (
-<>
-                                I have reviewed NextSeed’s <Link target="_blank" to="/resources/education-center/investor">educational materials</Link>, understand that
-                                the entire amount of my investment may be lost,
-                                and confirm that I am in a
-                                financial condition to bear the loss.
-                                I have read and agree to the terms of
-                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
-                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
-                                and <Link onClick={e => this.agreementPDFLoader(e, true, 'bDIAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>
-                                </>
-                              )
-                              : (
-                                <>
+              <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
+                <Header as="h3" className="mb-40">
+                  Let&#39;s confirm your investment.<br />You are investing
+                  <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
+                </Header>
+                <Form
+                  error={(this.state.showError
+                    && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid)
+                    || investmentFlowErrorMessage}
+                >
+                  <Grid stackable>
+                    <Grid.Row>
+                      {['checkboxesLeft', 'checkboxesRight'].map(field => (
+                        <Grid.Column width={8}>
+                          <FormCheckbox
+                            defaults
+                            fielddata={AGREEMENT_DETAILS_FORM.fields[field]}
+                            name={field}
+                            containerclassname={`ui very relaxed list ${this.state.showError && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
+                            changed={setCheckbox}
+                            disabled={inProgress}
+                            customLabel={(
+                              <>
+                                I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
+                              </>
+                            )}
+                            conditionalCustomLabel={(
+                              startsWith(offeringRegulationType, 'BD_')
+                                ? (
+  <>
                                   I have reviewed NextSeed’s <Link target="_blank" to="/resources/education-center/investor">educational materials</Link>, understand that
                                   the entire amount of my investment may be lost,
                                   and confirm that I am in a
                                   financial condition to bear the loss.
                                   I have read and agree to the terms of
                                   the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
-                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
-                                  and <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed US LLC Membership Agreement</Link>
+                                  the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
+                                  and <Link onClick={e => this.agreementPDFLoader(e, true, 'bDIAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>
+                                  </>
+                                )
+                                : (
+                                  <>
+                                    I have reviewed NextSeed’s <Link target="_blank" to="/resources/education-center/investor">educational materials</Link>, understand that
+                                    the entire amount of my investment may be lost,
+                                    and confirm that I am in a
+                                    financial condition to bear the loss.
+                                    I have read and agree to the terms of
+                                    the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
+                                  the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
+                                    and <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed US LLC Membership Agreement</Link>
+                                  </>
+                                )
+                            )}
+                            customUpdateLimitLabel={(
+                              regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck)
+                                ? (
+                                  <>
+                                    I hereby certify that I have a reasonable expectation that I will
+                                    continue to meet or exceed the requirements to be considered an
+                                      accredited investor.
                                 </>
-                              )
-                          )}
-                          customUpdateLimitLabel={(
-                            regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck)
-                              ? (
-                                <>
-                                  I hereby certify that I have a reasonable expectation that I will
-                                   continue to meet or exceed the requirements to be considered an
-                                    accredited investor.
+                                )
+                                : (
+                                  <>
+                                    I confirm that I am complying with my <b>annual investment limit</b> {' '}
+                                    {regulationCheck && !includes(['BD_506C', 'BD_506B'], regulationCheck) && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
+                                  </>
+                                )
+                            )}
+                            customRegulationLabel={(
+                              <>
+                                I understand that investing in securities sold in reliance on {' '}
+                                {regualtionTypeStatement} involves risks and I should not invest
+                                  any funds unless I can afford to lose the entire amount.
                               </>
-                              )
-                              : (
-                                <>
-                                  I confirm that I am complying with my <b>annual investment limit</b> {' '}
-                                  {regulationCheck && !includes(['BD_506C', 'BD_506B'], regulationCheck) && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
-                                </>
-                              )
-                          )}
-                          customRegulationLabel={(
-                            <>
-                              I understand that investing in securities sold in reliance on {' '}
-                              {regualtionTypeStatement} involves risks and I should not invest
-                                any funds unless I can afford to lose the entire amount.
-                            </>
-                          )}
-                          tooltipHardDisable={(regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck))}
-                          currentInvestmentStatus={regulationCheck}
-                        />
-                      </Grid.Column>
-                    ))}
-                  </Grid.Row>
-                </Grid>
-                <div className="center-align mt-30">
-                  <Button.Group widths="2" className="inline">
-                    <Button type="button" color="gray" disabled={inProgress} content="Cancel" onClick={this.handleCancelAgreement} />
-                    <Button primary content="Invest" disabled={inProgress} loading={inProgress} onClick={this.submit} />
-                  </Button.Group>
-                </div>
-                {!this.state.showError && investmentFlowErrorMessage
-                  && (
-                    <Message error className="mt-30 bottom-error">
-                      {investmentFlowErrorMessage}
-                    </Message>
-                  )
-                }
-                {this.state.showError
-                  && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid
-                  && <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
-                }
-              </Form>
-            </div>
-          </Modal.Content>
-        </Modal>
+                            )}
+                            tooltipHardDisable={(regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck))}
+                            currentInvestmentStatus={regulationCheck}
+                          />
+                        </Grid.Column>
+                      ))}
+                    </Grid.Row>
+                  </Grid>
+                  <div className="mt-30">
+                    <Button.Group widths="2" className="inline">
+                      <Button type="button" color="gray" disabled={inProgress} content="Cancel" onClick={this.handleCancelAgreement} />
+                      <Button primary content="Invest" disabled={inProgress} loading={inProgress} onClick={this.submit} />
+                    </Button.Group>
+                  </div>
+                  {!this.state.showError && investmentFlowErrorMessage
+                    && (
+                      <Message error className="mt-30 bottom-error">
+                        {investmentFlowErrorMessage}
+                      </Message>
+                    )
+                  }
+                  {this.state.showError
+                    && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid
+                    && <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
+                  }
+                </Form>
+              </div>
+            </Grid.Column>
+          </Grid>
+        </NsModal>
       </>
     );
   }

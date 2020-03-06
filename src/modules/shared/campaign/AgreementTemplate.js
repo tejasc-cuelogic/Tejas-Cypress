@@ -2,11 +2,12 @@ import React, { useEffect, useState, useRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
-import { Modal, Header, Button, Grid, Form, Message } from 'semantic-ui-react';
+import { Header, Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../theme/form';
 import Helper from '../../../helper/utility';
-import { InlineLoader } from '../../../theme/shared';
+import { InlineLoader, NsModal } from '../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
 function AgreementTemplate(props) {
   const [showDocuSign, setShowDocuSign] = useState(false);
   const [open, setOpen] = useState(false);
@@ -135,101 +136,118 @@ function AgreementTemplate(props) {
   const index = agreementPage;
   return (
     <>
-      <Modal open={open} closeOnDimmerClick={false} size="mini">
-        <Modal.Content className="center-align">
-          <Header as="h3">Confirm cancellation</Header>
-          {props.changeInvestment
-            ? <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(previouslyInvestedAmount)} in this offering will remain in place.`}</p>
-            : <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
-          }
-          <div className="center-align">
+      <NsModal
+        open={open}
+        closeOnDimmerClick={false}
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+      >
+        <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
+          <Grid.Column width="8" className="pt-0">
+            <Header as="h3">Confirm cancellation</Header>
+            {props.changeInvestment
+              ? <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(previouslyInvestedAmount)} in this offering will remain in place.`}</p>
+              : <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
+            }
             <Button.Group widths="2" className="inline">
               <Button primary content="Back" onClick={handleCancel} />
               <Button color="gray" content="Confirm" onClick={handleConfirm} />
             </Button.Group>
-          </div>
-        </Modal.Content>
-      </Modal>
-      <Modal size="large" className="confirm-investment" open closeIcon={!agreementDetails} closeOnRootNodeClick={false} closeOnDimmerClick={false} onClose={e => handleCloseModal(e)}>
-        <Modal.Content className="signup-content">
-          <div style={{ display: showDocuSign ? 'block' : 'none' }}>
-            <div className="pdf-viewer">
-              <iframe onLoad={props.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
-              <iframe onLoad={props.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
-            </div>
-            <div className="center-align mt-20">
-              <Button type="button" content="Go Back" primary onClick={e => docuSignHandeler(e, false)} />
-            </div>
-          </div>
-          <div style={{ display: showAgreementPdf ? 'block' : 'none' }}>
-            <div className="pdf-viewer">
-              {(docLoading || !embedUrl) ? <InlineLoader />
-                : (
-                  <iframe
-                    width="100%"
-                    height="100%"
-                    title="agreement"
-                    src={embedUrl}
-                    ref={iframeComponent}
-                  />
-                )
-              }
-            </div>
-            <div className="center-align mt-20">
-              <Button type="button" content="Go Back" primary onClick={e => agreementPDFLoader(e, false)} />
-            </div>
-          </div>
-          <div style={{ display: showDocuSign || showAgreementPdf ? 'none' : 'block' }}>
-            <Header as="h3" className="mb-40">
-              Let&#39;s confirm your investment.<br />You are investing
-                <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
-              {AGREEMENT_DETAILS_FORM.fields.page[index].title.value
-              && (
-              <Header.Subheader>
-                {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
-              </Header.Subheader>
-              )}
-            </Header>
-            <Form
-              error={(showError
-                && !isAgreementFormValid)
-                || investmentFlowErrorMessage}
-            >
-              <Grid stackable>
-                <Grid.Row>
-                  <Grid.Column width={16}>
-                    <FormCheckbox
-                      defaults
-                      fielddata={AGREEMENT_DETAILS_FORM.fields.page[index].toc}
-                      name="toc"
-                      containerclassname={`ui list agreement-list very relaxed ${showError && !isAgreementFormValid ? 'error' : ''}`}
-                      changed={(e, res) => setCheckbox(e, res, 'page', index)}
-                      disabled={inProgress}
-                    />
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-              <div className="center-align mt-30">
-                <Button.Group widths="2" className="inline">
-                  <Button type="button" color="gray" disabled={inProgress} content="Cancel" onClick={handleCancelAgreement} />
-                  <Button primary content="Invest" disabled={inProgress || !isAgreementFormValid} loading={inProgress} onClick={submit} />
-                </Button.Group>
+          </Grid.Column>
+        </Grid>
+      </NsModal>
+      <NsModal
+        open
+        closeIcon={!agreementDetails}
+        closeOnRootNodeClick={false}
+        closeOnDimmerClick={false}
+        onClose={e => handleCloseModal(e)}
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+      >
+        <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
+          <Grid.Column width="14" className="pt-0">
+            <div style={{ display: showDocuSign ? 'block' : 'none' }}>
+              <div className="pdf-viewer">
+                <iframe onLoad={props.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
+                <iframe onLoad={props.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
               </div>
-              {!showError && investmentFlowErrorMessage
+              <div className=" mt-20">
+                <Button type="button" content="Go Back" primary onClick={e => docuSignHandeler(e, false)} />
+              </div>
+            </div>
+            <div style={{ display: showAgreementPdf ? 'block' : 'none' }}>
+              <div className="pdf-viewer">
+                {(docLoading || !embedUrl) ? <InlineLoader />
+                  : (
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      title="agreement"
+                      src={embedUrl}
+                      ref={iframeComponent}
+                    />
+                  )
+                }
+              </div>
+              <div className="mt-20">
+                <Button type="button" content="Go Back" primary onClick={e => agreementPDFLoader(e, false)} />
+              </div>
+            </div>
+            <div style={{ display: showDocuSign || showAgreementPdf ? 'none' : 'block' }}>
+              <Header as="h3" className="mb-40">
+                Let&#39;s confirm your investment.<br />You are investing
+                  <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
+                {AGREEMENT_DETAILS_FORM.fields.page[index].title.value
                 && (
-                  <Message error className="mt-30 bottom-error">
-                    {investmentFlowErrorMessage}
-                  </Message>
-                )
-              }
-              {showError
-                && !isAgreementFormValid
-                && <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
-              }
-            </Form>
-          </div>
-        </Modal.Content>
-      </Modal>
+                <Header.Subheader>
+                  {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
+                </Header.Subheader>
+                )}
+              </Header>
+              <Form
+                error={(showError
+                  && !isAgreementFormValid)
+                  || investmentFlowErrorMessage}
+              >
+                <Grid stackable>
+                  <Grid.Row>
+                    <Grid.Column width={16}>
+                      <FormCheckbox
+                        defaults
+                        fielddata={AGREEMENT_DETAILS_FORM.fields.page[index].toc}
+                        name="toc"
+                        containerclassname={`ui list agreement-list very relaxed ${showError && !isAgreementFormValid ? 'error' : ''}`}
+                        changed={(e, res) => setCheckbox(e, res, 'page', index)}
+                        disabled={inProgress}
+                      />
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+                <div className="mt-30">
+                  <Button.Group widths="2" className="inline">
+                    <Button type="button" color="gray" disabled={inProgress} content="Cancel" onClick={handleCancelAgreement} />
+                    <Button primary content="Invest" disabled={inProgress || !isAgreementFormValid} loading={inProgress} onClick={submit} />
+                  </Button.Group>
+                </div>
+                {!showError && investmentFlowErrorMessage
+                  && (
+                    <Message error className="mt-30 bottom-error">
+                      {investmentFlowErrorMessage}
+                    </Message>
+                  )
+                }
+                {showError
+                  && !isAgreementFormValid
+                  && <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
+                }
+              </Form>
+            </div>
+          </Grid.Column>
+        </Grid>
+      </NsModal>
     </>
   );
 }
