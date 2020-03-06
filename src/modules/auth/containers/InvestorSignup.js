@@ -5,6 +5,8 @@ import cookie from 'react-cookies';
 import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
 import { ListErrors } from '../../../theme/shared';
 import formHOC from '../../../theme/form/formHOC';
+import { FormValidator as Validator } from '../../../helper';
+
 
 const isMobile = document.documentElement.clientWidth < 768;
 const metaInfo = {
@@ -28,29 +30,28 @@ class InvestorSignup extends Component {
     this.props.authStore.checkEmailExistsPresignup(email);
   }
 
-  handleSubmitForm = (e) => {
+  handleSubmitForm = async (e) => {
     e.preventDefault();
     const { authStore, uiStore, history, identityStore } = this.props;
     if (authStore.newPasswordRequired) {
-    history.push('/change-password');
+      history.push('/change-password');
     } else {
-      const { email, password, givenName } = authStore.SIGNUP_FRM.fields;
+      const { email, password, givenName } = Validator.ExtractValues(authStore.SIGNUP_FRM.fields);
       uiStore.setProgress();
-      authStore.checkEmailExistsPresignup(email.value).then((res) => {
-        if (res) {
-          uiStore.setProgress(false);
-          authStore.setCredentials({
-            email: email.value,
-            password: password.value,
-            givenName: givenName.value,
+      const res = await authStore.checkEmailExistsPresignup(email);
+      if (res) {
+        uiStore.setProgress(false);
+        authStore.setCredentials({
+          email,
+          password,
+          givenName,
+        });
+        if (authStore.SIGNUP_FRM.meta.isValid) {
+          identityStore.requestOtpWrapper(isMobile).then(() => {
+            history.push('/confirm-email');
           });
-          if (authStore.SIGNUP_FRM.meta.isValid) {
-              identityStore.requestOtpWrapper(isMobile).then(() => {
-              history.push('/confirm-email');
-            });
-          }
         }
-      });
+      }
     }
   };
 
@@ -93,9 +94,11 @@ class InvestorSignup extends Component {
             </Form.Group>
             {smartElement.Input('email')}
             {smartElement.FormPasswordStrength('password',
-              { changed: signupChange,
+              {
+                changed: signupChange,
                 userInputs: [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
-                SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value] })}
+                SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value],
+              })}
             {smartElement.Input('verify', { type: pwdInputType })}
             {errors
               && (

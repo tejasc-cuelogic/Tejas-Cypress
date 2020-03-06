@@ -4,10 +4,11 @@ import { Link, withRouter } from 'react-router-dom';
 import { isEmpty, get } from 'lodash';
 import queryString from 'query-string';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Header, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 import formHOC from '../../../theme/form/formHOC';
+import Spinner from '../../../theme/shared/src/Spinner';
 
 const metaInfo = {
   store: 'authStore',
@@ -94,9 +95,7 @@ class Login extends Component {
         && !this.props.authStore.newPasswordRequired
     ) {
       return (
-        <Dimmer active className="fullscreen">
-          <Loader active />
-        </Dimmer>
+        <Spinner page />
       );
     }
     const {

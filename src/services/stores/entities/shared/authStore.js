@@ -374,6 +374,7 @@ export class AuthStore extends DataModelStore {
         onError: (err) => {
           uiStore.setErrors(err);
           uiStore.setProgress(false);
+          res(false);
         },
         fetchPolicy: 'network-only',
       });
