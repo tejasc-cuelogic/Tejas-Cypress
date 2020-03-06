@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-// import { Button, Table, Popup, Icon, Modal, Form, Header } from 'semantic-ui-react';
 import { Modal, Header, Divider, Button, Message, Form, Statistic } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import { get } from 'lodash';
@@ -18,14 +17,10 @@ class ChangeInvestmentLimit extends Component {
     this.props.investmentStore.resetFormErrors('INVESTMONEY_FORM');
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     const { getCurrentInvestNowHealthCheck, setFieldValue } = this.props.investmentLimitStore;
-    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
-    setFieldValue('currentLimit', currentInvestmentLimit);
-  }
-
-  componentWillUnmount() {
-    const { getCurrentInvestNowHealthCheck, setFieldValue } = this.props.investmentLimitStore;
-    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
-    setFieldValue('currentLimit', currentInvestmentLimit);
+    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit');
+    if (currentInvestmentLimit) {
+      setFieldValue('currentLimit', currentInvestmentLimit);
+    }
   }
 
   changeInvestmentLimit = () => {
@@ -34,9 +29,7 @@ class ChangeInvestmentLimit extends Component {
     uiStore.setProgress();
     const offeringId = this.props.offeringId ? this.props.offeringId : this.props.match.url.includes('portfolio') ? offeringUUID : this.props.match.params.offeringId;
     this.props.investmentStore.updateInvestmentLimits(offeringId).then(() => {
-      const redirectPath = this.props.match.url.includes('agreement') ? `${this.props.refLink}/${this.props.match.params.offeringId}/agreement` : `${this.props.refLink}/${this.props.match.params.offeringId}/invest-now`;
-      this.props.history.push(redirectPath);
-      // this.handleCloseModal();
+      this.handleCloseModal();
     });
   }
 
