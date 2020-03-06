@@ -318,7 +318,7 @@ class AccountType extends Component {
       || (!showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length > 0)
       || (showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length === 1)
       || this.props.inProgress) {
-      return <Spinner className="fullscreen" loaderMessage="Loading1.." />;
+      return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     const { currentUser } = this.props.userStore;
@@ -328,7 +328,7 @@ class AccountType extends Component {
         ? `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/dashboard/setup' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
     if ((isRegulationCheck && selectedAccountStatus === 'FULL' && !userAccredetiationState) || this.props.inProgress) {
-      return <Spinner className="fullscreen" loaderMessage="Loading2.." />;
+      return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
     const currentStatus = userProfileFullStatus && userProfileFullStatus !== 'FULL' && userProfileFullStatus !== 'BASIC' ? 'USER-PARTIAL' : selectedAccountStatus;
@@ -345,7 +345,7 @@ class AccountType extends Component {
       }
     }
     if (headerSubheaderObj.header === '' || this.props.inProgress) {
-      return <Spinner className="fullscreen" loaderMessage="Loading3.." />;
+      return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
     return (
       <>
