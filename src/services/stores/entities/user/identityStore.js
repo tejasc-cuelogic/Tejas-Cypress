@@ -319,7 +319,7 @@ export class IdentityStore {
 
   @action
   changeSsnRules = (isRequired = false) => {
-    this.ID_VERIFICATION_FRM.fields.ssn.rule = this.ID_VERIFICATION_FRM.fields.ssn.value.includes('X') && !isRequired ? 'optional' : 'required';
+    this.ID_VERIFICATION_FRM.fields.ssn.rule = this.ID_VERIFICATION_FRM.fields.ssn.value.includes('X') && !isRequired ? 'optional|maskedSSN' : 'required|maskedSSN';
   }
 
   @action
@@ -772,13 +772,13 @@ export class IdentityStore {
   setCipDetails = () => {
     const { legalDetails, phone } = this.isAdmin ? userDetailsStore.detailsOfUser.data.user : userDetailsStore.userDetails;
     const { fields, meta } = this.ID_VERIFICATION_FRM;
-    if (!meta.isDirty || !meta.isValid) {
-      if (legalDetails && legalDetails.legalName) {
+    if (!meta.isValid && get(legalDetails, 'legalAddress')) {
+      if (get(legalDetails, 'legalName')) {
         fields.salutation.value = legalDetails.legalName.salutation;
         fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
         fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
       }
-      if (legalDetails && legalDetails.legalAddress) {
+      if (get(legalDetails, 'legalAddress')) {
         fields.city.value = legalDetails.legalAddress.city;
         const state = US_STATES.find(s => s.key === legalDetails.legalAddress.state);
         const selectedState = state ? state.key : fields.state.value;
@@ -789,10 +789,10 @@ export class IdentityStore {
         fields.streetTwo.value = legalDetails.legalAddress.streetTwo;
         fields.zipCode.value = legalDetails.legalAddress.zipCode;
       }
-      if (legalDetails && legalDetails.dateOfBirth) {
+      if (get(legalDetails, 'dateOfBirth')) {
         fields.dateOfBirth.value = legalDetails.dateOfBirth;
       }
-      if (legalDetails && legalDetails.ssn) {
+      if (get(legalDetails, 'ssn')) {
         fields.ssn.value = legalDetails.ssn;
       }
       if (legalDetails && phone && phone.number) {
@@ -908,6 +908,13 @@ export class IdentityStore {
   @action
   validateForm = (form) => {
     FormValidator.validateForm(this[form], false, true);
+  }
+
+  resetCipData = () => {
+    this.changeSsnRules(true);
+    this.setFieldValue('cipBackUrl', [INVESTOR_URLS.cipForm]);
+    this.isAddressFailed = false;
+    this.isPhoneFailed = false;
   }
 }
 

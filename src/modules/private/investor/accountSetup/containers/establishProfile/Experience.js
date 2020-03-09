@@ -12,6 +12,9 @@ const metaInfo = {
 };
 
 const isMobile = document.documentElement.clientWidth < 768;
+const loaderMsg = (
+  'Please wait... <br /> <br /> This can take up to a minute.'
+);
 @inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
@@ -36,8 +39,10 @@ class Experience extends Component {
           form: 'INVESTMENT_EXP_FRM',
           stepToBeRendered: 6,
         };
+        this.props.uiStore.setFieldvalue('loaderMessage', loaderMsg);
         upsertInvestorProfile(currentStep).then(() => {
           const { signupStatus, userStatus, hasAnyAccount, getInvestorAccountsRoute } = this.props.userDetailsStore;
+          this.props.uiStore.setFieldvalue('loaderMessage', '');
           if (signupStatus.isMigratedFullAccount
             || (userStatus && userStatus.includes('FULL'))) {
             if (hasAnyAccount) {

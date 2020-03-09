@@ -266,6 +266,17 @@ export default class DataModelStore {
     this[form] = FormValidator.resetFormData(this[form]);
   }
 
+  addMore = (form, key, count = 1) => {
+    this[form] = FormValidator.addMoreRecordToSubSection(this[form], key, count, true);
+  }
+
+  removeOne = (form, arrayName, index, e = undefined) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this[form].fields[arrayName].splice(index, 1);
+  }
+
   resetAll = () => {
     this.client.clearStore();
   }
@@ -327,6 +338,10 @@ export default class DataModelStore {
       },
     };
   }
+
+  resetInitLoad = () => {
+    this.initLoad = [];
+  }
 }
 
 export const decorateDefault = {
@@ -336,6 +351,7 @@ export const decorateDefault = {
   currentScore: observable,
   stepToBeRendered: observable,
   removeUploadedFiles: action,
+  resetInitLoad: action,
   setFieldValue: action,
   formChange: action,
   maskChange: action,
@@ -356,4 +372,6 @@ export const decorateDefault = {
   setInitiateSrch: action,
   setFormData: action,
   resetFilters: action,
+  addMore: action,
+  removeOne: action,
 };

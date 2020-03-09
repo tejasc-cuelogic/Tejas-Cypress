@@ -23,8 +23,6 @@ const loaderMsg = (
   <>
     Please wait...
       <br />
-    <br />
-    We are verifying your identity.
       <br />
     This can take up to a minute.
     </>
@@ -34,8 +32,7 @@ const loaderMsg = (
 class Cip extends React.Component {
   constructor(props) {
     super(props);
-    this.props.identityStore.changeSsnRules(true);
-    this.props.identityStore.setFieldValue('cipBackUrl', [this.props.investorUrls.cipForm]);
+    this.props.identityStore.resetCipData();
   }
 
   handleEncryptedSsn = (fielddata) => {
