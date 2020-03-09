@@ -15,7 +15,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     Input = (name, props) => {
-      const fieldData = this.props[metaInfo.store][metaInfo.form].fields[name];
+      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
       return (
         <FormInput
           name={name}
@@ -49,7 +49,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     CodeInput = (name, props) => {
-      const fieldData = this.props[metaInfo.store][metaInfo.form].fields[name];
+      const fieldData = this.fieldData[name];
       return (
         <ReactCodeInput
           fields={props.fields || 6}
@@ -84,6 +84,7 @@ function formHoc(WrappedComponent, metaInfo) {
         ondrop={files => this.props[metaInfo.store].setFileUploadData(metaInfo.form, name, this.props[metaInfo.store][metaInfo.form].fields[name].multiple || get(props, 'multiple'), get(props, 'index'), get(props, 'arrayName'), get(props, 'stepName') || this.props[metaInfo.store][metaInfo.form].fields[name].stepName, files, { userRole: metaInfo.userRole || get(props, 'userRole'), investorId: get(props, 'investorId') || '', offeringId: get(props, 'offeringId') || '', applicationId: get(props, 'applicationId') || '', applicationIssuerId: get(props, 'applicationIssuerId') || '', tags: get(props, 'tags') || '' })}
         onremove={(field, index) => this.props[metaInfo.store].removeUploadedData(metaInfo.form, field, index)}
         containerclassname="fluid"
+        {...props}
       />
     )
 
@@ -104,7 +105,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     CodeInput = (name, props) => {
-      const fieldData = this.props[metaInfo.store][metaInfo.form].fields[name];
+      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
       return (
         <ReactCodeInput
           fields={props.fields || 6}
@@ -121,7 +122,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     FormCheckBox = (name, props) => {
-      const fieldData = this.props[metaInfo.store][metaInfo.form].fields[name];
+      const fieldData = this.fieldsData[name];
       return (
         <FormCheckbox
           name={name}
@@ -134,7 +135,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     FormSelect = (name, props) => {
-      const fieldData = this.props[metaInfo.store][metaInfo.form].fields[name];
+      const fieldData = get(props, 'fielddata') || this.props[metaInfo.store][metaInfo.form].fields[name];
       return (
         <FormSelect
           containerwidth={8}
@@ -149,7 +150,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     FormPasswordStrength = (name, props) => {
-      const fieldData = this.props[metaInfo.store][metaInfo.form].fields[name];
+      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
       return (
         <FormPasswordStrength
           key={name}
@@ -162,6 +163,9 @@ function formHoc(WrappedComponent, metaInfo) {
           inputProps={{
             name: 'password', autoComplete: 'off', placeholder: 'Password',
           }}
+          userInputs={
+            get(props, 'userInputs')
+          }
           changed={(e, result) => this.props[metaInfo.store].passwordChange(e, result, metaInfo.form)}
           fielddata={fieldData}
           showRequiredError

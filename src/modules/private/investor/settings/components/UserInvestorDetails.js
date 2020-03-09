@@ -234,7 +234,7 @@ export default class UserInvestorDetails extends Component {
                 name="netWorth"
                 wrapperClass="ui input compact"
                 fielddata={INVESTOR_PROFILE_FULL.fields.netWorth}
-                changed={(values, name) => maskChange(values, formName, name)}
+                changed={(values, name) => maskChange(values, name, formName)}
                 currency
                 prefix="$"
                 hidelabel
@@ -249,7 +249,7 @@ export default class UserInvestorDetails extends Component {
                     name={key}
                     wrapperClass="ui input compact"
                     fielddata={INVESTOR_PROFILE_FULL.fields[key]}
-                    changed={(values, name) => maskChange(values, formName, name)}
+                    changed={(values, name) => maskChange(values, name, formName)}
                     currency
                     prefix="$"
                     hidelabel
