@@ -200,6 +200,7 @@ export class InvestmentStore {
       value: values.floatValue,
     });
     investmentLimitStore.setFieldValue('isLimitAmountInputChange', true);
+    investmentLimitStore.setFieldValue('isUpdateLimitActionActive', false);
   };
 
   @computed get investmentAmount() {

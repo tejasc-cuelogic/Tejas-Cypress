@@ -10,7 +10,7 @@ const NsModal = (props) => {
   const { iconName, closeOnDimmerClick, modalClassName,
     onClose, className, disableCloseIcon, headerLogo,
     isLoading, loaderMsg, actions, size, borderedHeader,
-    modalContentClass, useMountNode, back, isProgressHeaderDisable } = props;
+    modalContentClass, useMountNode, back, isProgressHeaderDisable, isHeaderDisabled } = props;
   const history = useHistory();
   const mountNode = Helper.customModalWrapper();
   return (
@@ -33,7 +33,7 @@ const NsModal = (props) => {
       basic
       centered={false}
     >
-      {<ProgressModalHeader Modal={Modal} handleClose={onClose} closeCta isProgressHeaderDisable={isProgressHeaderDisable} borderedHeader={borderedHeader} headerLogo={headerLogo} />}
+      {!isHeaderDisabled && <ProgressModalHeader Modal={Modal} handleClose={onClose} closeCta isProgressHeaderDisable={isProgressHeaderDisable} borderedHeader={borderedHeader} headerLogo={headerLogo} />}
 
       <Modal.Content className={modalContentClass || 'multistep'}>
         {
