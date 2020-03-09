@@ -96,7 +96,7 @@ class FinancialInfo extends Component {
               }
               {!includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) && showLimitComponent
                 && (
-                  <p className={isCenterAlignedCls}>
+                  <p>
                     Your
                     <PopUpModal
                       wide
@@ -179,7 +179,7 @@ class FinancialInfo extends Component {
                 </Table>
                 {this.props.changeInvest && getDiffInvestmentLimitAmount
                   && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
-                  ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{isOfferingPreferredEquity ? Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0) : Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
+                  ? <p className="mt-20">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{isOfferingPreferredEquity ? Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0) : Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
                 }
 
                 {investmentFlowEquityErrorMessage
@@ -200,7 +200,7 @@ class FinancialInfo extends Component {
                     </Message>
                   )
                 }
-                <p className="note mt-40 center-align">{equityCalculateShareAmount()}</p>
+                <p className="note mt-40">{equityCalculateShareAmount()}</p>
               </>
             )
             : (
