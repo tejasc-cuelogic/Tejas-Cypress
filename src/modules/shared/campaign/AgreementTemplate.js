@@ -18,7 +18,6 @@ function AgreementTemplate(props) {
   const docuSignHandeler = (event, state) => {
     event.preventDefault();
     setShowDocuSign(state);
-    setShowAgreementPdf(state);
   };
 
   const agreementPDFLoader = (event, state, agreementKey, agreementType) => {
@@ -102,10 +101,10 @@ function AgreementTemplate(props) {
     }
   };
 
-  // const handleCancelAgreement = (e) => {
-  //   e.preventDefault();
-  //   setOpen(true);
-  // };
+  const handleCancelAgreement = () => {
+    // e.preventDefault();
+    setOpen(true);
+  };
 
   const handleCancel = (e) => {
     e.preventDefault();
@@ -118,6 +117,12 @@ function AgreementTemplate(props) {
     props.accreditationStore.resetUserAccreditatedStatus();
     props.history.push(`${props.refLink}/invest-now`);
     setOpen(false);
+  };
+
+  const handleBack = (e) => {
+    e.preventDefault();
+    setShowDocuSign(false);
+    setShowAgreementPdf(false);
   };
 
   const {
@@ -160,7 +165,7 @@ function AgreementTemplate(props) {
       </NsModal>
       <NsModal
         open
-        closeIcon={!agreementDetails}
+        // closeIcon={!agreementDetails}
         closeOnRootNodeClick={false}
         closeOnDimmerClick={false}
         onClose={e => handleCloseModal(e)}
@@ -169,19 +174,21 @@ function AgreementTemplate(props) {
         isProgressHeaderDisable
         isHeaderDisabled={showDocuSign || showAgreementPdf}
         modalContentClass={(showDocuSign || showAgreementPdf) ? 'pt-0 pb-0' : ''}
+        back={handleCancelAgreement}
+        disableCloseIcon={showDocuSign || showAgreementPdf}
       >
         {(showDocuSign || showAgreementPdf)
           && (
           <Button
             icon={{ className: 'ns-chevron-left' }}
             className="prev link-button multistep__btn prev mt-50"
-            onClick={e => docuSignHandeler(e, false)}
+            onClick={e => handleBack(e)}
             content="Back"
             type="button"
           />
         )}
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
-          <Grid.Column width="14" className="pt-0">
+          <Grid.Column width="10" className="pt-0">
             <div style={{ display: showDocuSign ? 'block' : 'none' }}>
               <div className="pdf-viewer">
                 <iframe onLoad={props.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />

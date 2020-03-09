@@ -90,10 +90,10 @@ export default class Agreement extends React.Component {
     }
   }
 
-  // handleCancelAgreement = (e) => {
-  //   e.preventDefault();
-  //   this.setState({ open: true });
-  // }
+  handleCancelAgreement = () => {
+    // e.preventDefault();
+    this.setState({ open: true });
+  }
 
   handleCancel = (e) => {
     e.preventDefault();
@@ -110,7 +110,7 @@ export default class Agreement extends React.Component {
 
   docuSignHandeler = (event, state) => {
     event.preventDefault();
-    this.setState({ showDocuSign: state, showAgreementPdf: state });
+    this.setState({ showDocuSign: state });
   }
 
   agreementPDFLoader = (event, state, agreementKey, agreementType) => {
@@ -121,6 +121,11 @@ export default class Agreement extends React.Component {
       getBoxEmbedLink(doc.to, doc.id, agreementType);
     }
     this.setState({ showAgreementPdf: state });
+  }
+
+  handleBack = (e) => {
+    e.preventDefault();
+    this.setState({ showDocuSign: false, showAgreementPdf: false });
   }
 
   render() {
@@ -171,7 +176,7 @@ export default class Agreement extends React.Component {
         </NsModal>
         <NsModal
           open
-          closeIcon={!agreementDetails}
+          // closeIcon={!agreementDetails}
           closeOnRootNodeClick={false}
           closeOnDimmerClick={false}
           onClose={e => this.handleCloseModal(e)}
@@ -180,18 +185,20 @@ export default class Agreement extends React.Component {
           isProgressHeaderDisable
           isHeaderDisabled={this.state.showDocuSign || this.state.showAgreementPdf}
           modalContentClass={(this.state.showDocuSign || this.state.showAgreementPdf) ? 'pt-0 pb-0' : ''}
+          back={e => this.handleCancelAgreement(e)}
+          disableCloseIcon={this.state.showDocuSign || this.state.showAgreementPdf}
         >
           {(this.state.showDocuSign || this.state.showAgreementPdf)
           && (
           <Button
             icon={{ className: 'ns-chevron-left' }}
             className="multistep__btn prev prev link-button mt-50"
-            onClick={e => this.docuSignHandeler(e, false)}
+            onClick={e => this.handleBack(e)}
             content="Back"
           />
           )}
           <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
-            <Grid.Column width="14" className="pt-0">
+            <Grid.Column width="10" className="pt-0">
               <div style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
                 <div className="pdf-viewer">
                   <iframe onLoad={this.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
