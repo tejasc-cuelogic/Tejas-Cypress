@@ -47,6 +47,7 @@ export class InvestorProfileStore extends DataModelStore {
         runInAction(() => {
           Validator.setIsDirty(this[currentStep.form], false);
           userDetailsStore.setUserStatus(res.data.createInvestorProfile.status);
+          this.isFormSubmitted = true;
           userDetailsStore.mergeUserData('investorProfileData', payLoad);
           if (currentStep.form !== 'INVESTMENT_EXP_FRM') {
             this.setStepToBeRendered(currentStep.stepToBeRendered);

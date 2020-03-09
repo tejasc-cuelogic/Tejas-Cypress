@@ -9,6 +9,11 @@ import Address from './src/Address';
 function formHoc(WrappedComponent, metaInfo) {
   // eslint-disable-next-line no-unused-expressions
   return inject(metaInfo.store, 'nsUiStore')(observer((class extends React.Component {
+    constructor(props) {
+      super(props);
+      this.fieldsData = this.props[metaInfo.store][metaInfo.form].fields;
+    }
+
     Input = (name, props) => {
       const fieldData = this.props[metaInfo.store][metaInfo.form].fields[name];
       return (
@@ -38,20 +43,6 @@ function formHoc(WrappedComponent, metaInfo) {
           onblur={get(props, 'handleBlur') || false}
           changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form))}
           label={get(props, 'label') || false}
-          {...props}
-        />
-      );
-    }
-
-    RadioGroup = (name, props) => {
-      const fieldData = this.props[metaInfo.store][metaInfo.form].fields[name];
-      return (
-        <FormRadioGroup
-          fielddata={fieldData}
-          name={name}
-          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
-          containerclassname="button-radio center-align"
-          showerror={fieldData.showError}
           {...props}
         />
       );
