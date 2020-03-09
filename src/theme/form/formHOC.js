@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { get, pick } from 'lodash';
+import { get, pick, isEmpty } from 'lodash';
 import ReactCodeInput from 'react-code-input';
 import { Header } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown, FormTextarea } from '.';
@@ -237,7 +237,7 @@ function formHoc(WrappedComponent, metaInfo) {
     // }
 
     FormDropDown = (name, props) => {
-      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? !isEmpty(this.fieldsData[props.multiForm[1]][props.multiForm[2]][name]) ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name] : this.fieldsData[name]));
       return (
         <FormDropDown
           name={name}
