@@ -169,7 +169,7 @@ function AgreementTemplate(props) {
         closeOnRootNodeClick={false}
         closeOnDimmerClick={false}
         onClose={handleCancelAgreement}
-        headerLogo={!showAgreementPdf}
+        headerLogo
         borderedHeader
         isProgressHeaderDisable
         isHeaderDisabled={showDocuSign || showAgreementPdf}

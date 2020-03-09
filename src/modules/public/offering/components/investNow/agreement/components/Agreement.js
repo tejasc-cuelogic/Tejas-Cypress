@@ -180,7 +180,7 @@ export default class Agreement extends React.Component {
           closeOnRootNodeClick={false}
           closeOnDimmerClick={false}
           onClose={this.handleCancelAgreement}
-          headerLogo={!this.state.showAgreementPdf}
+          headerLogo
           borderedHeader
           isProgressHeaderDisable
           isHeaderDisabled={this.state.showDocuSign || this.state.showAgreementPdf}
