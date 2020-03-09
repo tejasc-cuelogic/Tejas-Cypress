@@ -14,7 +14,7 @@ const metaInfo = {
 @inject('manageOfferingStore')
 @withRouter
 @observer
-class InvestNowTocContent extends Component {
+class InvestNowTocList extends Component {
   state = {
     showConfirm: false,
   };
@@ -83,4 +83,4 @@ class InvestNowTocContent extends Component {
   }
 }
 
-export default formHOC(InvestNowTocContent, metaInfo);
+export default formHOC(InvestNowTocList, metaInfo);

@@ -2,6 +2,28 @@
 import { REGULATION_VALUES } from '../../admin/offerings';
 
 export const INVEST_NOW_TOC = {
+  page: {
+    label: 'Page',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'e.g. 1',
+  },
+  title: {
+    label: 'Page Title',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'e.g. Enter here',
+  },
+  regulation: {
+    label: 'Regulation',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    options: REGULATION_VALUES,
+    placeHolder: 'Enter here',
+  },
   toc: [{
     label: {
       label: 'Label',
@@ -27,14 +49,6 @@ export const INVEST_NOW_TOC = {
         { key: 'INDIVIDUAL_IRA', value: 'INDIVIDUAL', text: 'Individual & IRA' },
         { key: 'ENTITY', value: 'ENTITY', text: 'Entity' },
       ],
-      placeHolder: 'Enter here',
-    },
-    regulation: {
-      label: 'Regulation',
-      value: [],
-      error: undefined,
-      rule: 'required',
-      options: REGULATION_VALUES,
       placeHolder: 'Enter here',
     },
     required: {
