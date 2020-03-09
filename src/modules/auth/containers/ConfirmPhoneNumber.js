@@ -103,9 +103,8 @@ export default class ConfirmPhoneNumber extends Component {
   cancelChangePhoneNo = () => {
     if (!this.props.newPhoneNumber) {
       this.props.uiStore.setEditMode(false);
-    } else {
-      this.props.uiStore.clearErrors();
     }
+    this.props.uiStore.clearErrors();
     this.setConfirmPhoneFormData();
   }
 
