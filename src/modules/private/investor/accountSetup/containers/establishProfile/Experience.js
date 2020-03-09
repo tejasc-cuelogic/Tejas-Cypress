@@ -6,6 +6,9 @@ import { FormCheckbox, FormArrowButton } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
+const loaderMsg = (
+  'Please wait... <br /> <br /> This can take up to a minute.'
+);
 @inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
@@ -30,8 +33,10 @@ export default class Experience extends Component {
           form: 'INVESTMENT_EXP_FORM',
           stepToBeRendered: 6,
         };
+        this.props.uiStore.setFieldvalue('loaderMessage', loaderMsg);
         updateInvestorProfileData(currentStep).then(() => {
           const { signupStatus, userStatus, hasAnyAccount, getInvestorAccountsRoute } = this.props.userDetailsStore;
+          this.props.uiStore.setFieldvalue('loaderMessage', '');
           if (signupStatus.isMigratedFullAccount
             || (userStatus && userStatus.includes('FULL'))) {
             if (hasAnyAccount) {
