@@ -70,22 +70,22 @@ function AgreementTemplate(props) {
     };
   }, []);
 
-  const handleCloseModal = (e) => {
-    if (!showDocuSign && !showAgreementPdf) {
-      props.investmentStore.resetData();
-      props.accreditationStore.resetUserAccreditatedStatus();
-    }
-    if (showDocuSign) {
-      docuSignHandeler(e, false);
-    } else if (showAgreementPdf) {
-      agreementPDFLoader(e, false);
-    } else if (props.changeInvestment) {
-      const { offeringId } = props.match.params;
-      props.history.push(`${props.refLink}/${offeringId}`);
-    } else {
-      props.history.push(`${props.refLink}`);
-    }
-  };
+  // const handleCloseModal = (e) => {
+  //   if (!showDocuSign && !showAgreementPdf) {
+  //     props.investmentStore.resetData();
+  //     props.accreditationStore.resetUserAccreditatedStatus();
+  //   }
+  //   if (showDocuSign) {
+  //     docuSignHandeler(e, false);
+  //   } else if (showAgreementPdf) {
+  //     agreementPDFLoader(e, false);
+  //   } else if (props.changeInvestment) {
+  //     const { offeringId } = props.match.params;
+  //     props.history.push(`${props.refLink}/${offeringId}`);
+  //   } else {
+  //     props.history.push(`${props.refLink}`);
+  //   }
+  // };
 
   const submit = () => {
     if (props.agreementsStore.isAgreementFormValid) {
@@ -168,13 +168,13 @@ function AgreementTemplate(props) {
         // closeIcon={!agreementDetails}
         closeOnRootNodeClick={false}
         closeOnDimmerClick={false}
-        onClose={e => handleCloseModal(e)}
-        headerLogo
+        onClose={handleCancelAgreement}
+        headerLogo={!showAgreementPdf}
         borderedHeader
         isProgressHeaderDisable
         isHeaderDisabled={showDocuSign || showAgreementPdf}
         modalContentClass={(showDocuSign || showAgreementPdf) ? 'pt-0 pb-0' : ''}
-        back={handleCancelAgreement}
+        // back={handleCancelAgreement}
         disableCloseIcon={showDocuSign || showAgreementPdf}
       >
         {(showDocuSign || showAgreementPdf)

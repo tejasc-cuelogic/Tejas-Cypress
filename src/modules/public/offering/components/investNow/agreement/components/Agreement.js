@@ -179,13 +179,13 @@ export default class Agreement extends React.Component {
           // closeIcon={!agreementDetails}
           closeOnRootNodeClick={false}
           closeOnDimmerClick={false}
-          onClose={e => this.handleCloseModal(e)}
-          headerLogo
+          onClose={this.handleCancelAgreement}
+          headerLogo={!this.state.showAgreementPdf}
           borderedHeader
           isProgressHeaderDisable
           isHeaderDisabled={this.state.showDocuSign || this.state.showAgreementPdf}
           modalContentClass={(this.state.showDocuSign || this.state.showAgreementPdf) ? 'pt-0 pb-0' : ''}
-          back={e => this.handleCancelAgreement(e)}
+          // back={e => this.handleCancelAgreement(e)}
           disableCloseIcon={this.state.showDocuSign || this.state.showAgreementPdf}
         >
           {(this.state.showDocuSign || this.state.showAgreementPdf)
