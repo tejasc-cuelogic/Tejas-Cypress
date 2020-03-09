@@ -7,7 +7,7 @@ import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
-import { uiStore, userDetailsStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
+import { uiStore, userDetailsStore, campaignStore, portfolioStore, investmentLimitStore, agreementsStore } from '../../index';
 import { investNowSubmit, investNowGeneratePurchaseAgreement, investNowGetInvestmentAgreement } from '../../queries/investNow';
 
 export class InvestmentStore {
@@ -87,11 +87,6 @@ export class InvestmentStore {
       return differenceResult;
     }
     return 0;
-    // const oldLimit = parseFloat((portfolioStore.getInvestorAccountById &&
-    //   portfolioStore.getInvestorAccountById.investedAmount) || 0, 2);
-    // const currentLimit = parseFloat(this.INVESTMONEY_FORM.fields.investmentAmount.value, 2);
-
-    // return currentLimit - oldLimit;
   }
 
   @computed get getSelectedAccountTypeId() {
@@ -204,6 +199,7 @@ export class InvestmentStore {
       name: field,
       value: values.floatValue,
     });
+    investmentLimitStore.setFieldValue('isLimitAmountInputChange', true);
   };
 
   @computed get investmentAmount() {
@@ -530,6 +526,7 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMONEY_FORM);
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
+    Validator.resetFormData(agreementsStore.AGREEMENT_DETAILS_FORM);
     Validator.resetFormData(this.PREFERRED_EQUITY_INVESTMONEY_FORM, ['shares']);
     this.setByDefaultRender(true);
     this.setFieldValue('equityInvestmentAmount', '$ 0');

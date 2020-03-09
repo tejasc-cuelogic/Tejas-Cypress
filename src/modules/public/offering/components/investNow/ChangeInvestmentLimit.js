@@ -15,6 +15,17 @@ class ChangeInvestmentLimit extends Component {
   constructor(props) {
     super(props);
     this.props.investmentStore.setInvestmentLimitData();
+    this.props.investmentStore.resetFormErrors('INVESTMONEY_FORM');
+    this.props.investmentStore.setFieldValue('disableNextbtn', true);
+    const { getCurrentInvestNowHealthCheck, setFieldValue } = this.props.investmentLimitStore;
+    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
+    setFieldValue('currentLimit', currentInvestmentLimit);
+  }
+
+  componentWillUnmount() {
+    const { getCurrentInvestNowHealthCheck, setFieldValue } = this.props.investmentLimitStore;
+    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
+    setFieldValue('currentLimit', currentInvestmentLimit);
   }
 
   changeInvestmentLimit = () => {
@@ -50,8 +61,8 @@ class ChangeInvestmentLimit extends Component {
       INVESTMENT_LIMITS_FORM,
       // changedInvestmentLimit,
     } = this.props.investmentStore;
-    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
-    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
+    const { calculateCfLimit, currentLimit } = this.props.investmentLimitStore;
+    // const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
     const { fields } = INVESTMENT_LIMITS_FORM;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick={false}>
@@ -67,7 +78,7 @@ class ChangeInvestmentLimit extends Component {
         <Modal.Content>
           <Statistic size="tiny">
             <Statistic.Label>Estimated investment limit</Statistic.Label>
-            <Statistic.Value>{Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}</Statistic.Value>
+            <Statistic.Value>{Helper.MoneyMathDisplayCurrency(currentLimit || 0, false)}</Statistic.Value>
           </Statistic>
           <Divider clearing hidden />
           <Form error onSubmit={this.submit}>
@@ -82,7 +93,8 @@ class ChangeInvestmentLimit extends Component {
                   fielddata={fields[field]}
                   // changed={maskingFieldChange}
                   changed={(values, name) => this.change(values, name)}
-                // onblur={investmentCalculate}
+                  onblur={calculateCfLimit}
+                  toolTipOnLabel
                 />
               ))
             }
@@ -95,8 +107,8 @@ class ChangeInvestmentLimit extends Component {
             }
             <div className="center-align mt-30">
               <Button.Group>
-                <Button type="button" onClick={this.handleCloseModal}>Cancel</Button>
-                <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTMENT_LIMITS_FORM.meta.isValid} onClick={this.changeInvestmentLimit} />
+                <Button type="button" disabled={inProgress} onClick={this.handleCloseModal}>Cancel</Button>
+                <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTMENT_LIMITS_FORM.meta.isValid || inProgress} onClick={this.changeInvestmentLimit} />
               </Button.Group>
             </div>
           </Form>

@@ -1,3 +1,6 @@
+import React from 'react';
+import { Icon } from 'semantic-ui-react';
+
 export const COMMON = {
   email: {
     value: '',
@@ -90,6 +93,24 @@ export const SIGNUP = {
   verify: { ...COMMON.verify },
   role: {
     value: '',
+    values: [
+      {
+        label: <><Icon className="ns-money-circle" />Investor</>,
+        labelDescription: <>
+          Open an investment account</>,
+        value: 'investor',
+      },
+      {
+        label: <><Icon className="ns-business-circle" />Business</>,
+        labelDescription: <>Apply for funding for your business</>,
+        value: 'issuer-type1',
+      },
+      {
+        label: <><Icon className="ns-building-circle" />Commercial Real Estate</>,
+        labelDescription: <>Apply for real estate funding</>,
+        value: 'issuer-type2',
+      },
+    ],
     error: undefined,
     rule: 'required',
     key: 'role',
@@ -125,7 +146,16 @@ export const FORGOT_PASS = {
 
 export const RESET_PASS = {
   email: { ...COMMON.email },
-  password: { ...COMMON.password },
+  password: {
+    value: '',
+    label: 'New Password',
+    placeHolder: 'Type your password',
+    rule: 'required|min:8|max:40',
+    error: undefined,
+    customErrors: {
+      required: '* required field.',
+    },
+  },
   verify: { ...COMMON.verify },
   code: { ...COMMON.code },
 };

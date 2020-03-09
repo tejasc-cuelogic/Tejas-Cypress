@@ -58,7 +58,7 @@ class InvestNowTocContent extends Component {
               </small>
             )}
           {smartElement.FormDropDown('account', { multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
-          {smartElement.FormDropDown('regulation', { multiple: true, multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
+          {smartElement.FormDropDown('regulation', { multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
           {smartElement.RadioGroup('required', { multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
           {smartElement.TextArea('label', { multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
           <Divider hidden />

@@ -226,6 +226,7 @@ export const getOfferingDetails = gql`
         sfAccountNumberRegD
       }
       investNow {
+        template
         page {
           title
           page

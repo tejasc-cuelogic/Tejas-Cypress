@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Route, withRouter, Link } from 'react-router-dom';
-import { Header, Form, Popup, Icon, Divider, Table, Message, Button } from 'semantic-ui-react';
+import { Header, Form, Divider, Table, Message, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get, includes, capitalize } from 'lodash';
 import { MaskedInput } from '../../../../../theme/form';
 import InvestmentLimit from './financialInfo/InvestmentLimit';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 import Helper from '../../../../../helper/utility';
-import { Spinner, ListErrors } from '../../../../../theme/shared';
+import { Spinner, ListErrors, PopUpModal } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
@@ -78,14 +78,14 @@ class FinancialInfo extends Component {
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
     if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading
       || this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
-      return <Spinner loaderMessage="Loading.." />;
+      return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
     const isCenterAlignedCls = campaignStatus.isPreferredEquity ? 'center-align' : '';
     const isOfferingPreferredEquity = !!campaignStatus.isPreferredEquity;
     return (
       <>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
-        <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
+        <Header as="h4">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
         {this.props.changeInvest
           && (
             <>
@@ -97,25 +97,27 @@ class FinancialInfo extends Component {
               {!includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) && showLimitComponent
                 && (
                   <p className={isCenterAlignedCls}>
-                    Your investment limit: {' '}
-                    {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
-                    <Popup
+                    Your
+                    <PopUpModal
                       wide
-                      trigger={<Icon className="ns-help-circle ml-10" color="green" />}
+                      customTrigger={<span className="popup-label">{' '}investment limit</span>}
                       content={(
                         <span>
                           Under Regulation Crowdfunding, you have a limit as to how much you may invest
                           in Reg CF offerings over a 12-month period.
                            This limit is calculated based on your
-            annual income and net worth. <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link> for how this is calculated. If you believe
-            your limit is innacurate, please update your <Link to="/dashboard/account-settings/profile-data">Investor Profile</Link>
+                          annual income and net worth. <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link> for how this is calculated. If you believe
+                          your limit is innacurate, please update your <Link to="/dashboard/account-settings/profile-data">Investor Profile</Link>
                         </span>
                       )}
                       position="top center"
+                      showOnlyPopup={!isMobile}
                       hoverable
                     />
+                    :{' '}
+                    {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
                     {/* <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link> */}
-                    <Link to={`${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
+                    <Link to={`${match.url}/change-investment-limit`} className="link"> <small>Update</small></Link>
                   </p>
                 )
               }
@@ -218,11 +220,7 @@ class FinancialInfo extends Component {
                 autoFocus
                 allowNegative={false}
               />
-              {isMobile
-                && (
-                  <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
-                )
-              }
+              <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
               </>
             )}
         </Form>
@@ -235,13 +233,15 @@ class FinancialInfo extends Component {
           !campaignStatus.isSafe && estReturnVal && estReturnVal !== '-'
             && investmentAmount
             ? (
-              <Header as="h4">Total Investment Return: Up to {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
-                <Popup
+              <Header as="h4">
+                <PopUpModal
                   wide
-                  trigger={<Icon className="ns-help-circle" color="green" />}
-                  content="This calculates the total amount that the issuer agrees to pay you under the note purchase agrrement, based on what you enter above. Payment is not guaranteed or ensured and investors may lose some or all of the principal invested. "
+                  customTrigger={<span className="popup-label">Total Investment Return</span>}
+                  content="This calculates the total amount that the issuer agrees to pay you under the note purchase agreement, based on what you enter above. Payment is not guaranteed or ensured and investors may lose some or all of the principal invested. "
                   position="top center"
+                  showOnlyPopup={!isMobile}
                 />
+                : Up to {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
               </Header>
             )
             : null

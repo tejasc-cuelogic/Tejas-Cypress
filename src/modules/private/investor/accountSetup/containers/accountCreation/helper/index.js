@@ -30,6 +30,7 @@ class Helper {
     formLinkBankManually: 5,
     addFunds: 6,
     summary: 7,
+    THANK_YOU: 8,
   });
 
   iraSteps = fundingType => (fundingType !== 0 ? {
@@ -38,6 +39,7 @@ class Helper {
     FUNDING_FRM: 3,
     IDENTITY_FRM: 4,
     summary: 5,
+    THANK_YOU: 6,
   } : {
     FIN_INFO_FRM: 1,
     ACC_TYPES_FRM: 2,
@@ -46,11 +48,13 @@ class Helper {
     ADD_FUNDS: 5,
     IDENTITY_FRM: 6,
     summary: 7,
+    THANK_YOU: 8,
   });
 
   individualSteps = () => ({
     formLinkBankManually: 1,
     summary: 2,
+    THANK_YOU: 3,
   });
 
   establishProfileSteps = () => ({

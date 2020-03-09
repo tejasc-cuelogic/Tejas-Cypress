@@ -341,12 +341,12 @@ export default class NewUpdate extends Component {
                   )
                   : (
                     <>
-                      <Card fluid>
-                        <Card.Content>
-                          <Form>
-                            {
-                              isManager
-                              && (
+                      {
+                        isManager
+                        && (
+                          <Card fluid>
+                            <Card.Content>
+                              <Form>
                                 <>
                                   <MaskedInput
                                     readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
@@ -359,16 +359,18 @@ export default class NewUpdate extends Component {
                                   />
                                   {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
                                     && (
-                                      this.sendInvestorNotificationTemplate(isReadonly, isManager)
+                                      <>
+                                      {this.sendInvestorNotificationTemplate(isReadonly, isManager)}
+                                      {this.postUpdateAsTemplate()}
+                                      </>
                                     )
                                   }
                                 </>
-                              )
-                            }
-                            {this.postUpdateAsTemplate()}
-                          </Form>
-                        </Card.Content>
-                      </Card>
+                              </Form>
+                            </Card.Content>
+                          </Card>
+                        )
+                      }
                       <Card fluid>
                         <Card.Content>
                           <Header as="h4">Update Topic Ideas</Header>

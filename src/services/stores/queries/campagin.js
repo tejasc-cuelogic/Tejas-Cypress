@@ -325,6 +325,7 @@ export const campaignDetailsQuery = gql`
       }
     }
     investNow {
+      template
       page {
         title
         page
@@ -446,6 +447,7 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     isAvailablePublicly
     stage
     investNow {
+      template
       page {
         title
         page
