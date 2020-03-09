@@ -137,7 +137,7 @@ class FinancialInfo extends Component {
             />
           )
         }
-        <Form error size="huge">
+        <Form error>
           {campaignStatus.isPreferredEquity
             ? (
               <>
@@ -160,11 +160,6 @@ class FinancialInfo extends Component {
                           className="right-align-placeholder"
                           containerclassname="right-align"
                         />
-                        {isMobile
-                          && (
-                            <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
-                          )
-                        }
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row>
@@ -176,6 +171,9 @@ class FinancialInfo extends Component {
                       <Table.Cell className="plr-0 highlight-text right-align">
                         <b>{equityInvestmentAmount}</b>
                       </Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                    <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
                     </Table.Row>
                   </Table.Body>
                 </Table>
