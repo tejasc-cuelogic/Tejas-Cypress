@@ -833,6 +833,10 @@ export class AccreditationStore {
       && userDetails.roles.find(role => role.name === accountType);
     const appData = accountType === 'entity' ? entityAccreditation && entityAccreditation.details : userDetails;
 
+    if (form === 'ACCREDITATION_FORM' && ref === 'accreditation') {
+      this[form] = Validator.setFormData(this[form], appData, ref);
+    }
+
     if (!appData || ['INVALID', 'EXPIRED', null].includes(get(userDetails, 'accreditation.status'))) {
       return false;
     }
