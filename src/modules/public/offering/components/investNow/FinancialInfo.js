@@ -137,7 +137,7 @@ class FinancialInfo extends Component {
             />
           )
         }
-        <Form error size="huge">
+        <Form error>
           {campaignStatus.isPreferredEquity
             ? (
               <>
