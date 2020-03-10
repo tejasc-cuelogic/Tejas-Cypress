@@ -4,11 +4,11 @@ import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Link, withRouter, Route } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Message, Divider, Dimmer, Loader } from 'semantic-ui-react';
+import { Button, Header, Form, Message, Divider, Grid } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import { authActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
-import { ListErrors, SuccessScreen } from '../../../theme/shared';
+import { ListErrors, SuccessScreen, NsModal } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 import ConfirmCreateOrCancel from './ConfirmCreateOrCancel';
@@ -67,8 +67,7 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.refLink) {
       this.props.authStore.verifyAndUpdateEmail().then(() => {
         this.props.identityStore.setIsOptConfirmed(true);
-        Helper.toast('Email has been verified and updated', 'success');
-        this.props.history.push(this.props.refLink);
+        sessionStorage.removeItem('changedEmail');
       })
         .catch(() => { });
     } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''
@@ -138,7 +137,7 @@ export default class ConfirmEmailAddress extends Component {
     this.props.authStore.setProgress('resend');
     if (this.props.refLink) {
       this.props.authStore.requestEmailChange().then(() => {
-        Helper.toast('Re-sent the verification code', 'success');
+        // Helper.toast('Re-sent the verification code', 'success');
         this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
         this.props.uiStore.clearErrors();
       })
@@ -160,7 +159,7 @@ export default class ConfirmEmailAddress extends Component {
     } else if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
       this.props.history.replace(this.props.userDetailsStore.pendingStep);
     } else {
-      this.props.history.replace('/dashboard/setup/identity-verification/0');
+      this.props.history.replace('/dashboard/setup/cip');
     }
     this.props.identityStore.setIsOptConfirmed(false);
   }
@@ -180,75 +179,82 @@ export default class ConfirmEmailAddress extends Component {
     if (errors && errors.code === 'NotAuthorizedException') {
       this.props.history.push('/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
-      return <SuccessScreen successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Your e-mail address has been confirmed.'}`} handleContinue={this.handleContinue} />;
+      return (
+      <SuccessScreen
+        successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Thank  you! Your email address has been confirmed.'}`}
+        handleContinue={this.handleContinue}
+        closeLink={this.props.refLink ? '/dashboard/account-settings' : '/'}
+      />
+);
     }
     return (
-      <Modal closeOnDimmerClick={false} size="tiny" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
+      <NsModal
+        closeOnDimmerClick={false}
+        open
+        isLoading={confirmProgress === 'confirm' && inProgress}
+        closeOnRootNodeClick={false}
+        onClose={this.handleCloseModal}
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+      >
         <Route exact path={`${this.props.match.url}/create-or-cancel`} render={() => <ConfirmCreateOrCancel refLink={this.props.match.url} />} />
-        <Modal.Header className="center-align signup-header">
-          <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your e-mail address</Header>
-          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
-            We use Multi-Factor Authentication (MFA) to increase the security of your
-            NextSeed investment account.
+        <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
+          <Grid.Column width="8" className="pt-0">
+            <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your e-mail address</Header>
+            <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
+              We use Multi-Factor Authentication (MFA) to increase the security of your
+              NextSeed investment account.
           </p>
-          <Divider section={!responsiveVars.isMobile} />
-          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
-            Please confirm the 6-digit verification code sent to your email
+            <Divider hidden />
+            <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
+              Please confirm the 6-digit verification code sent to your email
           </p>
-        </Modal.Header>
-        <Modal.Content className="signup-content center-align">
-          {(confirmProgress === 'confirm' && inProgress)
-            && (
-              <Dimmer page active={inProgress}>
-                <Loader active={inProgress} />
-              </Dimmer>
-            )
-          }
-          <FormInput
-            ishidelabel
-            type="email"
-            name="email"
-            fielddata={CONFIRM_FRM.fields.email}
-            changed={ConfirmChange}
-            readOnly
-            displayMode
-            disabled
-            title={CONFIRM_FRM.fields.email.value}
-            className={`${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only`}
-          />
-          {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value))
-            && <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
-          }
-          <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)}>
-            <Form.Field className="otp-wrap">
-              <label>Enter verification code here:</label>
-              <ReactCodeInput
-                fields={6}
-                type="number"
-                autoFocus={!isMobile}
-                filterChars
-                className="otp-field"
-                pattern="[0-9]*"
-                inputmode="numeric"
-                disabled={isEmpty(CONFIRM_FRM.fields.email.value)}
-                fielddata={CONFIRM_FRM.fields.code}
-                onChange={ConfirmChange}
-              />
-              {!isEmpty(CONFIRM_FRM.fields.email.value)
-                && <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
-              }
-            </Form.Field>
-            {errors
-              && (
-                <Message error className="mb-40">
-                  <ListErrors errors={[errors.message]} />
-                </Message>
-              )
+            <FormInput
+              ishidelabel
+              type="email"
+              name="email"
+              fielddata={CONFIRM_FRM.fields.email}
+              changed={ConfirmChange}
+              readOnly
+              displayMode
+              disabled
+              title={CONFIRM_FRM.fields.email.value}
+              className={`${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only no-border`}
+            />
+            {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value))
+              && <Link to={changeEmailAddressLink} color="green">Change email address</Link>
             }
-            <Button primary size="large" className="very relaxed" content="Confirm" disabled={!canSubmitConfirmEmail || (errors && errors.message) || inProgress} />
-          </Form>
-        </Modal.Content>
-      </Modal>
+            <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)}>
+              <Form.Field className="otp-wrap">
+                <ReactCodeInput
+                  fields={6}
+                  type="number"
+                  autoFocus={!isMobile}
+                  filterChars
+                  className="otp-field"
+                  pattern="[0-9]*"
+                  inputmode="numeric"
+                  disabled={isEmpty(CONFIRM_FRM.fields.email.value)}
+                  fielddata={CONFIRM_FRM.fields.code}
+                  onChange={ConfirmChange}
+                />
+                {!isEmpty(CONFIRM_FRM.fields.email.value)
+                  && <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="green" className="link-button mt-20" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
+                }
+              </Form.Field>
+              {errors
+                && (
+                  <Message error className="mb-40">
+                    <ListErrors errors={[errors.message]} />
+                  </Message>
+                )
+              }
+              <Button fluid={isMobile} primary content="Confirm" disabled={!canSubmitConfirmEmail || (errors && errors.message) || inProgress} />
+            </Form>
+          </Grid.Column>
+        </Grid>
+      </NsModal>
     );
   }
 }

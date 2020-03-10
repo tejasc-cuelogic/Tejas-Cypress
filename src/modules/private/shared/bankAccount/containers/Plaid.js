@@ -51,7 +51,6 @@ export default class Plaid extends Component {
   }
 
   handleBankSelect = (referenceLink) => {
-    // const returnResult = bankAccountActions.bankSelect(institutionID, action);
     this.props.transactionStore.requestOtpForManageTransactions(true).then(() => {
       const confirmUrl = `${referenceLink}/confirm`;
       this.props.history.push(confirmUrl);
@@ -91,20 +90,11 @@ export default class Plaid extends Component {
     if (bankLinkInterface === 'form') {
       return <ManualForm action={action} refLink={refLink} />;
     }
-    // if (action === 'change' && inProgress) {
-    //   return (
-    //     <Dimmer className="fullscreen" active={inProgress}>
-    //       <Loader active={inProgress}>
-    //         Please wait...
-    //       </Loader>
-    //     </Dimmer>
-    //   );
-    // }
     return (
       <>
-        <div className={isMobile ? '' : 'center-align'}>
-          <Header as="h3">{headerText}</Header>
-          <p className="mb-30">{subHeaderText}</p>
+        <>
+          <Header as="h4">{headerText}</Header>
+          <p className="mb-20">{subHeaderText}</p>
           <Form>
             <Input
               fluid
@@ -119,21 +109,18 @@ export default class Plaid extends Component {
             />
           </Form>
           <div className="bank-list">
-            {/* <Dimmer active={inProgress}>
-              <Loader active={inProgress} />
-            </Dimmer> */}
             {typeof bankListing !== 'undefined' && bankListing.length === 0
               && (
-                <Grid column={1} textAlign="center">
+                <Grid column={1}>
                   <Grid.Column>No results found.</Grid.Column>
                 </Grid>
               )
             }
             {
-              <Grid centered>
+              <Grid>
                 {typeof bankListing !== 'undefined'
                   && bankListing.map(bankData => (
-                    <Grid.Column key={bankData.institution_id} computer={5} tablet={5} mobile={8}>
+                    <Grid.Column key={bankData.institution_id} computer={5} tablet={5} mobile={8} className={isMobile ? 'pb-half pt-half' : ''}>
                       <Link
                         as="a"
                         className="bank-link"
@@ -145,8 +132,8 @@ export default class Plaid extends Component {
                         }
                       >
                         <span>
-                          {bankData.logo !== null && <Image centered size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}
-                          {bankData.logo === null && <NSImage centered size="mini" path="banks/default.png" />}
+                          {bankData.logo !== null && <Image size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}
+                          {bankData.logo === null && <NSImage size="mini" path="banks/default.png" />}
                           <span>{bankData.name}</span>
                         </span>
                       </Link>
@@ -155,7 +142,7 @@ export default class Plaid extends Component {
                 }
                 {typeof bankListing === 'undefined'
                   && IND_BANK_LIST.map(bankData => (
-                    <Grid.Column key={bankData.institutionID} computer={5} tablet={5} mobile={8}>
+                    <Grid.Column key={bankData.institutionID} computer={5} tablet={5} mobile={8} className={isMobile ? 'pb-half pt-half' : ''}>
                       <Link
                         as="a"
                         className="bank-link"
@@ -166,7 +153,7 @@ export default class Plaid extends Component {
                       >
                         {/* eslint-disable import/no-dynamic-require */}
                         {/* eslint-disable global-require */}
-                        <NSImage centered path={`banks/${bankData.institutionID}.png`} />
+                        <NSImage path={`banks/${bankData.institutionID}.png`} />
                       </Link>
                     </Grid.Column>
                   ))
@@ -181,16 +168,15 @@ export default class Plaid extends Component {
               </Message>
             )
           }
-          <div className="center-align mt-30">
+          <div className={`${isMobile && 'center-align'} mt-30`}>
             <Button color="green" className="link-button" content="Link bank account manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
           </div>
-        </div>
-        <div className="center-align mt-30">
-          {
-            (isAccountPresent && action !== 'change')
-            && <Button color="green" className="link-button" content="Keep existing linked bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
-          }
-        </div>
+        </>
+        {(isAccountPresent && action !== 'change') && (
+          <div className={`${isMobile && 'center-align'} mt-30`}>
+               <Button color="green" className="link-button" content="Keep existing linked bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
+          </div>
+        )}
       </>
     );
   }
