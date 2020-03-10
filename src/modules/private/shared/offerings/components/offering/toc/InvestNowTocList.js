@@ -8,6 +8,11 @@ import { CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../../constants/off
 import InvestNowAddPage from './InvestNowAddPage';
 import InvestNowAddToc from './InvestNowAddToc';
 
+const accountTitle = {
+  INDIVIDUAL: 'Individual & IRA',
+  ENTITY: 'Entity',
+};
+
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, tocIndex, pageIndex }) => (
   <div className="row-wrap striped-table">
@@ -16,7 +21,7 @@ const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, 
       {preview(get(toc, 'label'))}
     </div>
     <div className="balance width-100">
-      {get(toc, 'account')}
+      {get(toc, 'account') ? accountTitle[get(toc, 'account')] : 'N/A'}
     </div>
     <div className="action right-align width-100">
       <Button.Group>
@@ -55,7 +60,7 @@ const SortableList = SortableContainer(({ data, handleAction, preview, isReadOnl
     ))}
   </div>
 ));
-@inject('manageOfferingStore', 'agreementsStore')
+@inject('manageOfferingStore', 'agreementsStore', 'offeringsStore')
 @withRouter
 @observer
 export default class InvestNowTocList extends Component {
@@ -149,12 +154,13 @@ export default class InvestNowTocList extends Component {
   preview = label => this.props.agreementsStore.preview(label, { docuSignHandeler: this.callbackFun, refLink: '', agreementPDFLoader: this.callbackFun });
 
   render() {
-    const { data, regulation } = this.props;
+    const { data, regulation, offeringsStore } = this.props;
+    const { offer } = offeringsStore;
     const { showConfirm, activeIndex, showModal, page } = this.state;
-    const isReadOnly = false;
+    const isReadOnly = get(offer, 'stage') !== 'CREATION';
     return (
       <>
-        <Button size="small" color="blue" floated="right" className="link-button mt-20 mb-20" onClick={e => this.addMore(e, 'PAGE')}>+ Add another Page</Button>
+        {!isReadOnly && <Button size="small" color="blue" floated="right" className="link-button mt-20 mb-20" onClick={e => this.addMore(e, 'PAGE')}>+ Add another Page</Button>}
         {data && data.length ? data.map((toc, index) => (data.length === 1 ? (
           <>
           {toc.title && <Header as="h6" content={toc.title} />}
@@ -178,14 +184,14 @@ export default class InvestNowTocList extends Component {
               />
             </div>
           </div>
-          <Button size="small" floated="right" color="blue" className="link-button" onClick={e => this.addMore(e, 'TOC', toc.page)}>+ Add another TOC</Button>
+          {!isReadOnly && <Button size="small" floated="right" color="blue" className="link-button" onClick={e => this.addMore(e, 'TOC', toc.page)}>+ Add another TOC</Button>}
           </>
         ) : (
           <Accordion exclusive={false} fluid styled className={`card-style ${index === 0 ? 'mt-20' : ''}`}>
             <Accordion.Title onClick={() => this.toggleAccordianContent(index)}>
               <Icon className={activeIndex.includes(index) ? 'ns-chevron-up' : 'ns-chevron-down'} />
               {`${CAMPAIGN_KEYTERMS_REGULATION[toc.regulation]} ToC Page - ${toc.page}`}
-              {data.length > 1 && <Button size="small" floated="right" color="red" className="link-button mt-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}>Remove Page {toc.page}</Button>}
+              {!isReadOnly && data.length > 1 && <Button size="small" floated="right" color="red" className="link-button mt-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}>Remove Page {toc.page}</Button>}
             </Accordion.Title>
             <Accordion.Content active={activeIndex.includes(index)} className="categories-acc">
               {toc.title && <Header as="h6" content={toc.title} />}
@@ -209,7 +215,7 @@ export default class InvestNowTocList extends Component {
                   />
                 </div>
               </div>
-              <Button size="small" floated="right" color="blue" className="link-button" onClick={e => this.addMore(e, 'TOC', toc.page)}>+ Add another TOC</Button>
+              {!isReadOnly && <Button size="small" floated="right" color="blue" className="link-button" onClick={e => this.addMore(e, 'TOC', toc.page)}>+ Add another TOC</Button>}
             </Accordion.Content>
           </Accordion>
         ))) : ''}

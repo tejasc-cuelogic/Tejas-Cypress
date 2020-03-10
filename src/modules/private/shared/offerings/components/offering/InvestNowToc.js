@@ -6,7 +6,7 @@ import InvestNowTocList from './toc/InvestNowTocList';
 import { CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 
-@inject('manageOfferingStore', 'offeringsStore', 'uiStore')
+@inject('manageOfferingStore', 'uiStore')
 @withRouter
 @observer
 export default class InvestNowToc extends Component {
@@ -20,7 +20,6 @@ export default class InvestNowToc extends Component {
     if (inProgress === 'save') {
       return (<InlineLoader />);
     }
-    // const isReadOnly = get(offer, 'stage') === 'CREATION';
     return (
       <div className="inner-content-spacer">
         <Grid>
