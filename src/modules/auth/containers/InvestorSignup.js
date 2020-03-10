@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
-import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
+import { Button, Header, Form, Message, Grid } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
-import { ListErrors } from '../../../theme/shared';
+import { ListErrors, NsModal } from '../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -62,8 +62,7 @@ class InvestorSignup extends Component {
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
-      <Modal
-        size="mini"
+      <NsModal
         open
         closeOnDimmerClick={false}
         onClose={
@@ -72,84 +71,82 @@ class InvestorSignup extends Component {
             this.props.history.push(this.props.uiStore.authRef || '/');
           }
         }
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+        back="/register"
       >
-        <Modal.Header className="center-align signup-header">
-          <Header as="h3" className="mb-0">
-            Sign up as an Investor
-          </Header>
-          <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link>
-        </Modal.Header>
-        <Modal.Content className="signup-content">
-          {/* <Form>
-            <Button fluid color="facebook" size="large" content="Sign up with Facebook" />
-          </Form>
-          <Divider horizontal section>or</Divider> */}
-          <Form error onSubmit={this.handleSubmitForm}>
-            <Form.Group widths="equal">
-              {
-                ['givenName', 'familyName'].map(field => (
-                  <FormInput
-                    key={field}
-                    type="text"
-                    autoFocus={!responsiveVars.isMobile && field === 'givenName'}
-                    name={field}
-                    fielddata={SIGNUP_FRM.fields[field]}
-                    changed={signupChange}
-                  />
-                ))
-              }
+        <Grid centered stackable className={isMobile ? 'full-width' : ''}>
+          <Grid.Column width="8" className="pt-0">
+            <Header as="h3" className="mb-40">
+              Sign up as an investor
+              {/* <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link> */}
+            </Header>
+            <Form error onSubmit={this.handleSubmitForm}>
+              <Form.Group widths="equal">
+                {
+                  ['givenName', 'familyName'].map(field => (
+                    <FormInput
+                      key={field}
+                      type="text"
+                      autoFocus={!responsiveVars.isMobile && field === 'givenName'}
+                      name={field}
+                      fielddata={SIGNUP_FRM.fields[field]}
+                      changed={signupChange}
+                    />
+                  ))
+                }
 
-            </Form.Group>
-            <FormInput
-              type="email"
-              name="email"
-              fielddata={SIGNUP_FRM.fields.email}
-              changed={signupChange}
-            />
-            <FormPasswordStrength
-              key="password"
-              name="password"
-              type="password"
-              minLength={8}
-              minScore={4}
-              iconDisplay
-              tooShortWord="Weak"
-              // scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-              scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
-              inputProps={{
-                name: 'password', autoComplete: 'off', placeholder: 'Password',
-              }}
-              userInputs={
-                [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
+              </Form.Group>
+              <FormInput
+                type="email"
+                name="email"
+                fielddata={SIGNUP_FRM.fields.email}
+                changed={signupChange}
+              />
+              <FormPasswordStrength
+                key="password"
+                name="password"
+                type="password"
+                minLength={8}
+                minScore={4}
+                iconDisplay
+                tooShortWord="Weak"
+                // scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
+                inputProps={{
+                  name: 'password', autoComplete: 'off', placeholder: 'Password',
+                }}
+                userInputs={
+                  [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
                   SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value]
+                }
+                changed={signupChange}
+                fielddata={SIGNUP_FRM.fields.password}
+                showRequiredError
+              />
+              <FormInput
+                key="verify"
+                name="verify"
+                type={pwdInputType}
+                fielddata={SIGNUP_FRM.fields.verify}
+                changed={signupChange}
+              />
+              {errors
+                && (
+                  <Message error textAlign="left" className="mt-30">
+                    <ListErrors errors={[customError]} />
+                  </Message>
+                )
               }
-              changed={signupChange}
-              fielddata={SIGNUP_FRM.fields.password}
-              showRequiredError
-            />
-            <FormInput
-              key="verify"
-              name="verify"
-              type={pwdInputType}
-              fielddata={SIGNUP_FRM.fields.verify}
-              changed={signupChange}
-            />
-            {errors
-              && (
-                <Message error textAlign="left" className="mt-30">
-                  <ListErrors errors={[customError]} />
-                </Message>
-              )
-            }
-            <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
-            </div>
-          </Form>
-        </Modal.Content>
-        <Modal.Actions className="signup-actions">
-          <p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>
-        </Modal.Actions>
-      </Modal>
+              <div className="mt-30">
+                <Button fluid={isMobile} primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
+              </div>
+              <p className="mt-40">Already have an account? <Link to="/login">Log in</Link></p>
+            </Form>
+          </Grid.Column>
+        </Grid>
+      </NsModal>
     );
   }
 }

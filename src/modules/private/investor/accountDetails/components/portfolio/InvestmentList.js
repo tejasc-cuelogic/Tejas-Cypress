@@ -160,7 +160,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
               )
             }
             {((!get(data, 'tranche') || get(data, 'tranche') < 1) && !isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0))))
-              && <Button className="mt-20" primary fluid onClick={e => handleInvestNowClick(e, data.offering.offeringSlug)} content="Change Investment Amount" />
+              && <Button className="mt-20" primary fluid onClick={e => handleInvestNowClick(e, data.offering.offeringSlug, data.offering.id)} content="Change Investment Amount" />
             }
             {((!get(data, 'tranche') || get(data, 'tranche') < 1) && (isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)))))
               && <Button className="mt-20 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
