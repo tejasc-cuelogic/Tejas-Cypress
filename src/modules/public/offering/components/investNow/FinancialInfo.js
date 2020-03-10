@@ -96,7 +96,7 @@ class FinancialInfo extends Component {
               }
               {!includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) && showLimitComponent
                 && (
-                  <p className={isCenterAlignedCls}>
+                  <p>
                     Your
                     <PopUpModal
                       wide
@@ -137,7 +137,7 @@ class FinancialInfo extends Component {
             />
           )
         }
-        <Form error size="huge">
+        <Form error>
           {campaignStatus.isPreferredEquity
             ? (
               <>
@@ -160,11 +160,6 @@ class FinancialInfo extends Component {
                           className="right-align-placeholder"
                           containerclassname="right-align"
                         />
-                        {isMobile
-                          && (
-                            <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
-                          )
-                        }
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row>
@@ -177,11 +172,14 @@ class FinancialInfo extends Component {
                         <b>{equityInvestmentAmount}</b>
                       </Table.Cell>
                     </Table.Row>
+                    <Table.Row>
+                    <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
+                    </Table.Row>
                   </Table.Body>
                 </Table>
                 {this.props.changeInvest && getDiffInvestmentLimitAmount
                   && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
-                  ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{isOfferingPreferredEquity ? Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0) : Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
+                  ? <p className="mt-20">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{isOfferingPreferredEquity ? Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0) : Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
                 }
 
                 {investmentFlowEquityErrorMessage
@@ -202,7 +200,7 @@ class FinancialInfo extends Component {
                     </Message>
                   )
                 }
-                <p className="note mt-40 center-align">{equityCalculateShareAmount()}</p>
+                <p className="note mt-40">{equityCalculateShareAmount()}</p>
               </>
             )
             : (

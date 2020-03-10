@@ -104,7 +104,7 @@ export default class UploadDocument extends Component {
                 || INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.fileId === '')}
             containerclassname="ui relaxed list"
           />
-          <Button fluid={isMobile} onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
+          <Button className="mt-30" fluid={isMobile} onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
         </Form>
       </div>
     );
