@@ -1,5 +1,5 @@
-import { decorate, observable, action, toJS } from 'mobx';
-import { startCase, get } from 'lodash';
+import { decorate, observable, action, computed, toJS } from 'mobx';
+import { startCase, get, filter, orderBy } from 'lodash';
 import cleanDeep from 'clean-deep';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
@@ -16,6 +16,21 @@ export class ManageOfferingStore extends DataModelStore {
   onDragSaveEnable = false;
 
   initLoad = [];
+
+  // eslint-disable-next-line class-methods-use-this
+  get getAgreementTocList() {
+    const { offer } = offeringsStore;
+    const regulation = get(offer, 'regulation');
+    const investNow = get(offer, 'investNow.page') || [];
+    const investNowTocs = {};
+    if (regulation === 'BD_CF_506C') {
+      investNowTocs.BD_506C = orderBy(filter(investNow, i => i.regulation === 'BD_506C'), ['page'], ['asc']);
+      investNowTocs.BD_CF = orderBy(filter(investNow, i => i.regulation === 'BD_CF'), ['page'], ['asc']);
+    } else {
+      investNowTocs[regulation] = orderBy(filter(investNow, i => i.regulation === regulation), ['page'], ['asc']);
+    }
+    return investNowTocs;
+  }
 
   updateOffering = params => new Promise((res) => {
     const { keyName, forms, cleanData } = params;
@@ -113,6 +128,7 @@ export class ManageOfferingStore extends DataModelStore {
     INVEST_NOW_TOC_FRM: observable,
     initLoad: observable,
     onDragSaveEnable: observable,
+    getAgreementTocList: computed,
     reOrderHandle: action,
     resetInitLoad: action,
     updateOffering: action,
