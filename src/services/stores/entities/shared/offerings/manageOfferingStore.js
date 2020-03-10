@@ -1,9 +1,10 @@
 import { decorate, observable, action, computed, toJS } from 'mobx';
 import { startCase, get, filter, orderBy } from 'lodash';
 import cleanDeep from 'clean-deep';
+import omitDeep from 'omit-deep';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
-import { INVEST_NOW_TOC } from '../../../../constants/offering/formMeta';
+import { INVEST_NOW_TOC, INVEST_NOW_PAGE } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore } from '../../../index';
@@ -12,6 +13,8 @@ import { offeringUpsert } from '../../../queries/offerings/manageOffering';
 
 export class ManageOfferingStore extends DataModelStore {
   INVEST_NOW_TOC_FRM = Validator.prepareFormObject(INVEST_NOW_TOC);
+
+  INVEST_NOW_PAGE_FRM = Validator.prepareFormObject(INVEST_NOW_PAGE);
 
   onDragSaveEnable = false;
 
@@ -32,11 +35,48 @@ export class ManageOfferingStore extends DataModelStore {
     return investNowTocs;
   }
 
+  investNowAddData = (params) => {
+    const { form, regulation, page, type } = params;
+    const agreementLists = this.getAgreementTocList;
+    const { offer } = offeringsStore;
+    let investNow = get(offer, 'investNow.page') || [];
+    if (form === 'INVEST_NOW_PAGE_FRM') {
+      const formData = Validator.evaluateFormData(this[form].fields);
+      const addPage = {
+        page: ((agreementLists[regulation] && agreementLists[regulation].length) || 0) + 1,
+        regulation,
+        title: formData.title,
+      };
+      investNow.push(addPage);
+    } else if (form === 'INVEST_NOW_TOC_FRM') {
+      const formData = Validator.evaluateFormData(this[form].fields);
+      const agreementToc = investNow.find(i => i.page === page && i.regulation === regulation);
+      const addTOC = {
+        label: formData.label,
+        order: ((agreementToc.toc && agreementToc.toc.length) || 0) + 1,
+        required: formData.required,
+        account: formData.account,
+      };
+      investNow = investNow.map(i => ((i.regulation === regulation && i.page === page) ? { ...i, toc: i.toc && i.toc.length ? [...i.toc, addTOC] : [addTOC] } : { ...i }));
+    } else if (type === 'PAGE') {
+      const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
+      investNow.splice(index, 1);
+    } else if (type === 'TOC') {
+      console.log('');
+    } else if (type === 'REORDER') {
+      const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
+      return { index, investNow };
+    }
+    return { page: investNow };
+  }
+
   updateOffering = params => new Promise((res) => {
-    const { keyName, forms, cleanData } = params;
+    const { keyName, forms, cleanData, offeringData } = params;
     let offeringDetails = {};
     let data;
-    if (Array.isArray(forms)) {
+    if (offeringData) {
+      data = offeringData;
+    } else if (Array.isArray(forms)) {
       forms.forEach((f) => {
         data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
       });
@@ -48,6 +88,7 @@ export class ManageOfferingStore extends DataModelStore {
     }
     if (cleanData) {
       data = cleanDeep(data);
+      data = omitDeep(data, ['__typename', 'fileHandle']);
     }
     if (keyName) {
       offeringDetails[keyName] = data;
@@ -60,7 +101,6 @@ export class ManageOfferingStore extends DataModelStore {
       offeringDetails,
       res,
     };
-    console.log(offeringDetails);
     this.updateOfferingMutation(mutationsParams);
   });
 
@@ -126,6 +166,7 @@ export class ManageOfferingStore extends DataModelStore {
   decorate(ManageOfferingStore, {
     ...dataModelStore.decorateDefault,
     INVEST_NOW_TOC_FRM: observable,
+    INVEST_NOW_PAGE_FRM: observable,
     initLoad: observable,
     onDragSaveEnable: observable,
     getAgreementTocList: computed,
