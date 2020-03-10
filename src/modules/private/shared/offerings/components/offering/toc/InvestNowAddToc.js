@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Form, Divider } from 'semantic-ui-react';
@@ -11,6 +11,12 @@ const metaInfo = {
 };
 
 function InvestNowAddToc(props) {
+  useEffect(() => {
+    const { resetForm } = props.manageOfferingStore;
+    return () => {
+      resetForm('INVEST_NOW_TOC_FRM');
+    };
+  }, []);
   const handleFormSubmit = () => {
     const { updateOffering, investNowAddData } = props.manageOfferingStore;
     const offeringData = investNowAddData({ form: 'INVEST_NOW_TOC_FRM', regulation: props.regulation, page: props.page });
