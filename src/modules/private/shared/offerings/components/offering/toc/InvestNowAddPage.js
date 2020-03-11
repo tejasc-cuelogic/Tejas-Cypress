@@ -34,7 +34,7 @@ function InvestNowAddPage(props) {
     updateOffering({ keyName: 'investNow', offeringData, cleanData: true });
   };
 
-  const { smartElement, manageOfferingStore } = props;
+  const { smartElement, manageOfferingStore, type } = props;
   const { INVEST_NOW_PAGE_FRM } = manageOfferingStore;
   return (
     <div className="inner-content-spacer">
@@ -42,7 +42,7 @@ function InvestNowAddPage(props) {
         {smartElement.Input('title', { fielddata: INVEST_NOW_PAGE_FRM.fields.title })}
         <Divider hidden />
           <OfferingButtonGroup
-            buttonTitle="Create"
+            buttonTitle={['PAGE_EDIT'].includes(type) ? 'Update' : 'Create'}
             updateOffer={handleFormSubmit}
           />
       </Form>

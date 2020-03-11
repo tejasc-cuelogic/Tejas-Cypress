@@ -34,7 +34,7 @@ export default class Offering extends Component {
         ...[
           { title: 'Misc', to: 'misc', component: 'Misc' },
           { title: 'Launch', to: 'launch', component: 'OfferingLaunch' },
-          { title: 'InvestNow TOC', to: 'invest-now-toc', component: 'InvestNowToc' },
+          { title: 'InvestNow ToC', to: 'invest-now-toc', component: 'InvestNowToc' },
         ],
       ];
     }

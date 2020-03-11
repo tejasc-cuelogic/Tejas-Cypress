@@ -32,7 +32,7 @@ function InvestNowAddToc(props) {
     updateOffering({ keyName: 'investNow', offeringData, cleanData: true });
   };
 
-  const { smartElement, manageOfferingStore } = props;
+  const { smartElement, manageOfferingStore, type } = props;
   const { INVEST_NOW_TOC_FRM } = manageOfferingStore;
   const isReadOnly = false;
   return (
@@ -45,6 +45,7 @@ function InvestNowAddToc(props) {
         {!isReadOnly
           && (
             <OfferingButtonGroup
+              buttonTitle={['TOC_EDIT'].includes(type) ? 'Update' : 'Create'}
               updateOffer={handleFormSubmit}
               isDisable={!INVEST_NOW_TOC_FRM.meta.isValid}
             />

@@ -142,9 +142,6 @@ export default class InvestNowTocList extends Component {
     } else if (action === 'REQUIRED') {
       this.updateState('showConfirm', 'TOC_REQUIRED');
     }
-    // const { manageOfferingStore, history, index, refLink } = this.props;
-    // manageOfferingStore.removeOne('INVEST_NOW_TOC_FRM', 'toc', index);
-    // history.push(`${refLink}/${index}`);
   }
 
   onSortEnd = ({ oldIndex, newIndex }, page, regulation) => {
@@ -239,7 +236,7 @@ export default class InvestNowTocList extends Component {
         ))) : ''}
         <Modal open={!!showModal} closeIcon onClose={() => this.updateState('showModal', null)} size="small" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
-            <Header as="h3">{['PAGE_EDIT', 'TOC_EDIT'].includes(showModal) ? 'Edit' : 'Add'} new {['PAGE', 'PAGE_EDIT'].includes(showModal) ? 'ToC page' : 'ToC'}</Header>
+            <Header as="h3">{['PAGE_EDIT', 'TOC_EDIT'].includes(showModal) ? 'Edit' : 'Add new'} {['PAGE', 'PAGE_EDIT'].includes(showModal) ? 'ToC page' : 'ToC'}</Header>
           </Modal.Header>
           <Modal.Content className="signup-content">
             {['PAGE', 'PAGE_EDIT'].includes(showModal) && <InvestNowAddPage type={showModal} regulation={regulation} page={page} />}
