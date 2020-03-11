@@ -173,6 +173,7 @@ export default class GeneralRiskFactors extends Component {
           Preferred equity investments are not guaranteed or secured by any assets of the
           business.
         </p>
+        {/* Does this statement needs to change, I guess no still want to confirm. */}
         <Divider hidden />
         <Header as="h5">The securities sold in offerings on NextSeed are restricted and not freely transferrable</Header>
         <p>
