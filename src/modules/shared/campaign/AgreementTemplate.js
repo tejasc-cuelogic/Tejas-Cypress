@@ -172,8 +172,8 @@ function AgreementTemplate(props) {
         headerLogo
         borderedHeader
         isProgressHeaderDisable
-        isHeaderDisabled={showDocuSign || showAgreementPdf}
-        modalContentClass={(showDocuSign || showAgreementPdf) ? 'pt-0 pb-0' : ''}
+        isHeaderDisabled={showAgreementPdf}
+        modalContentClass={showAgreementPdf ? 'pt-0 pb-0' : ''}
         // back={handleCancelAgreement}
         disableCloseIcon={showDocuSign || showAgreementPdf}
       >
@@ -181,10 +181,9 @@ function AgreementTemplate(props) {
           && (
           <Button
             icon={{ className: 'ns-chevron-left' }}
-            className="prev link-button multistep__btn prev mt-50"
+            className={`${showAgreementPdf ? 'mt-50' : ''} multistep__btn prev prev link-button`}
             onClick={e => handleBack(e)}
             content="Back"
-            type="button"
           />
         )}
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
