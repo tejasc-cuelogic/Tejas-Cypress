@@ -36,11 +36,24 @@ export class ManageOfferingStore extends DataModelStore {
   }
 
   investNowAddData = (params) => {
-    const { form, regulation, page, type } = params;
+    const { form, regulation, page, type, tocIndex } = params;
     const agreementLists = this.getAgreementTocList;
     const { offer } = offeringsStore;
     let investNow = get(offer, 'investNow.page') || [];
-    if (form === 'INVEST_NOW_PAGE_FRM') {
+    if (['TOC_EDIT', 'PAGE_EDIT'].includes(type)) {
+      const formData = Validator.evaluateFormData(this[form].fields);
+      const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
+      if (type === 'TOC_EDIT' && tocIndex >= 0) {
+        const editTOC = {
+          label: formData.label,
+          required: formData.required,
+          account: formData.account,
+        };
+        investNow[index].toc[tocIndex] = { ...investNow[index].toc[tocIndex], editTOC };
+      } else {
+        investNow[index] = { ...investNow[index], title: formData.title };
+      }
+    } else if (form === 'INVEST_NOW_PAGE_FRM') {
       const formData = Validator.evaluateFormData(this[form].fields);
       const addPage = {
         page: ((agreementLists[regulation] && agreementLists[regulation].length) || 0) + 1,
@@ -61,8 +74,18 @@ export class ManageOfferingStore extends DataModelStore {
     } else if (type === 'PAGE') {
       const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
       investNow.splice(index, 1);
-    } else if (type === 'TOC') {
-      console.log('');
+    } else if (type === 'TOC_DELETE') {
+      // delete particular toc
+      investNow = investNow.map((i) => {
+        let iData;
+        if (i.regulation === regulation && i.page === page) {
+          i.toc.splice(tocIndex, 1);
+          iData = { ...i, toc: i.toc };
+        } else {
+          iData = { ...i };
+        }
+        return iData;
+      });
     } else if (type === 'REORDER') {
       const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
       return { index, investNow };
@@ -161,6 +184,27 @@ export class ManageOfferingStore extends DataModelStore {
     this[form] = Validator.validateForm(this[form], multiForm, false, false);
     return false;
   }
+
+  setFormDataV2 = ({ type, page, regulation, tocIndex }) => {
+    const { offer } = offeringsStore;
+    const investNow = get(offer, 'investNow.page') ? JSON.parse(JSON.stringify([...get(offer, 'investNow.page')])) : [];
+    if (type === 'TOC_EDIT') {
+      const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
+      if (index > -1) {
+        const pageData = investNow[index];
+        const toc = pageData.toc && pageData.toc.length ? pageData.toc[tocIndex] : { };
+        this.INVEST_NOW_TOC_FRM = Validator.setFormData(this.INVEST_NOW_TOC_FRM, toc);
+        this.INVEST_NOW_TOC_FRM = Validator.validateForm(this.INVEST_NOW_TOC_FRM);
+      }
+    } else {
+      const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
+      if (index > -1) {
+        const pageData = investNow[index];
+        this.INVEST_NOW_PAGE_FRM = Validator.setFormData(this.INVEST_NOW_PAGE_FRM, pageData);
+        this.INVEST_NOW_PAGE_FRM = Validator.validateForm(this.INVEST_NOW_PAGE_FRM);
+      }
+    }
+  }
 }
 
   decorate(ManageOfferingStore, {
@@ -175,6 +219,7 @@ export class ManageOfferingStore extends DataModelStore {
     updateOffering: action,
     updateOfferingMutation: action,
     setFormData: action,
+    setFormDataV2: action,
   });
 
 export default new ManageOfferingStore();

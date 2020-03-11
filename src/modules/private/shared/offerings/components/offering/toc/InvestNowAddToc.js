@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
 import { Form, Divider } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../OfferingButtonGroup';
 import formHOC from '../../../../../../../theme/form/formHOC';
@@ -12,34 +11,47 @@ const metaInfo = {
 
 function InvestNowAddToc(props) {
   useEffect(() => {
-    const { resetForm } = props.manageOfferingStore;
+    const { manageOfferingStore, type, page, regulation, tocIndex } = props;
+    const { resetForm, setFormDataV2 } = manageOfferingStore;
+    if (type === 'TOC_EDIT') {
+      setFormDataV2({ type, page, regulation, tocIndex });
+    }
     return () => {
       resetForm('INVEST_NOW_TOC_FRM');
     };
   }, []);
   const handleFormSubmit = () => {
-    const { updateOffering, investNowAddData } = props.manageOfferingStore;
-    const offeringData = investNowAddData({ form: 'INVEST_NOW_TOC_FRM', regulation: props.regulation, page: props.page });
+    const { manageOfferingStore, type, page, regulation, tocIndex } = props;
+    const { updateOffering, investNowAddData } = manageOfferingStore;
+    let offeringData;
+    if (type === 'TOC_EDIT') {
+      offeringData = investNowAddData({ form: 'INVEST_NOW_TOC_FRM', regulation, page, tocIndex, type });
+    } else {
+      offeringData = investNowAddData({ form: 'INVEST_NOW_TOC_FRM', regulation, page });
+    }
     updateOffering({ keyName: 'investNow', offeringData, cleanData: true });
   };
 
   const { smartElement, manageOfferingStore } = props;
   const { INVEST_NOW_TOC_FRM } = manageOfferingStore;
+  const isReadOnly = false;
   return (
     <div className="inner-content-spacer">
       <Form>
-        {smartElement.FormDropDown('account')}
-        {smartElement.RadioGroup('required')}
-        {smartElement.TextArea('label')}
+        {smartElement.FormDropDown('account', { fielddata: INVEST_NOW_TOC_FRM.fields.account, displayMode: isReadOnly })}
+        {smartElement.RadioGroup('required', { fielddata: INVEST_NOW_TOC_FRM.fields.required, displayMode: isReadOnly })}
+        {smartElement.TextArea('label', { fielddata: INVEST_NOW_TOC_FRM.fields.label, displayMode: isReadOnly })}
         <Divider hidden />
-          <OfferingButtonGroup
-            buttonTitle="Create"
-            updateOffer={handleFormSubmit}
-            isDisable={!INVEST_NOW_TOC_FRM.meta.isValid}
-          />
+        {!isReadOnly
+          && (
+            <OfferingButtonGroup
+              updateOffer={handleFormSubmit}
+              isDisable={!INVEST_NOW_TOC_FRM.meta.isValid}
+            />
+          )}
       </Form>
     </div>
   );
 }
 
-export default withRouter(formHOC(observer(InvestNowAddToc), metaInfo));
+export default formHOC(observer(InvestNowAddToc), metaInfo);

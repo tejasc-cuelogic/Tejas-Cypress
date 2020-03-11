@@ -12,7 +12,11 @@ const metaInfo = {
 
 function InvestNowAddPage(props) {
   useEffect(() => {
-    const { resetForm } = props.manageOfferingStore;
+    const { manageOfferingStore, type, page, regulation, tocIndex } = props;
+    const { resetForm, setFormDataV2 } = manageOfferingStore;
+    if (type === 'PAGE_EDIT') {
+      setFormDataV2({ type, page, regulation, tocIndex });
+    }
     return () => {
       resetForm('INVEST_NOW_PAGE_FRM');
     };
@@ -24,11 +28,12 @@ function InvestNowAddPage(props) {
     updateOffering({ keyName: 'investNow', offeringData, cleanData: true });
   };
 
-  const { smartElement } = props;
+  const { smartElement, manageOfferingStore } = props;
+  const { INVEST_NOW_PAGE_FRM } = manageOfferingStore;
   return (
     <div className="inner-content-spacer">
       <Form>
-        {smartElement.Input('title')}
+        {smartElement.Input('title', { fielddata: INVEST_NOW_PAGE_FRM.fields.title })}
         <Divider hidden />
           <OfferingButtonGroup
             buttonTitle="Create"

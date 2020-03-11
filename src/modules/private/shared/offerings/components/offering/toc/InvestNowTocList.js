@@ -11,6 +11,7 @@ import InvestNowAddToc from './InvestNowAddToc';
 const accountTitle = {
   INDIVIDUAL: 'Individual & IRA',
   ENTITY: 'Entity',
+  ALL: 'All',
 };
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
@@ -97,6 +98,7 @@ export default class InvestNowTocList extends Component {
     activeIndex: [0],
     showModal: null,
     page: null,
+    tocIndex: null,
   };
 
   toggleAccordianContent = (categoryIndex = null) => {
@@ -131,13 +133,14 @@ export default class InvestNowTocList extends Component {
 
   handleAction = (e, { action, tocIndex, pageIndex }) => {
     e.preventDefault();
-    console.log(action, tocIndex, pageIndex);
+    this.updateState('page', pageIndex);
+    this.updateState('tocIndex', tocIndex);
     if (action === 'DELETE') {
-      this.updateState('showConfirm', 'TOC');
+      this.updateState('showConfirm', 'TOC_DELETE');
     } else if (action === 'EDIT') {
-      this.updateState('showModal', 'TOC');
+      this.updateState('showModal', 'TOC_EDIT');
     } else if (action === 'REQUIRED') {
-      this.updateState('showModal', 'TOC');
+      this.updateState('showModal', 'TOC_REQUIRED');
     }
     // const { manageOfferingStore, history, index, refLink } = this.props;
     // manageOfferingStore.removeOne('INVEST_NOW_TOC_FRM', 'toc', index);
@@ -169,12 +172,14 @@ export default class InvestNowTocList extends Component {
     this.updateState('page', page);
   }
 
-  remove = (type, page, regulation) => {
+  remove = (type, page, regulation, tocIndex) => {
     this.updateState('showConfirm', null);
+    this.updateState('page', null);
+    this.updateState('tocIndex', null);
     const { updateOffering, investNowAddData } = this.props.manageOfferingStore;
     let offeringData;
-    if (type === 'PAGE') {
-      offeringData = investNowAddData({ type, page, regulation });
+    if (type === 'PAGE' || type === 'TOC_DELETE') {
+      offeringData = investNowAddData({ type, page, regulation, tocIndex });
     }
     updateOffering({ keyName: 'investNow', offeringData, cleanData: true });
   }
@@ -184,14 +189,14 @@ export default class InvestNowTocList extends Component {
   render() {
     const { data, regulation, offeringsStore } = this.props;
     const { offer } = offeringsStore;
-    const { showConfirm, activeIndex, showModal, page } = this.state;
+    const { showConfirm, activeIndex, showModal, page, tocIndex } = this.state;
     const isReadOnly = get(offer, 'stage') !== 'CREATION';
     return (
       <>
         {!isReadOnly && <Button size="small" color="blue" floated="right" className="link-button mt-20 mb-20" onClick={e => this.addMore(e, 'PAGE')}>+ Add Page</Button>}
         {data && data.length ? data.map((toc, index) => (data.length === 1 ? (
           <>
-            {!isReadOnly && data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
+            {!isReadOnly && data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
             {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-view" /></Button>}
             <ToCList
               toc={toc}
@@ -232,11 +237,11 @@ export default class InvestNowTocList extends Component {
         ))) : ''}
         <Modal open={!!showModal} closeIcon onClose={() => this.updateState('showModal', null)} size="small" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
-        <Header as="h3">Add new {showModal === 'PAGE' ? 'ToC page' : 'ToC'}</Header>
+            <Header as="h3">{['PAGE_EDIT', 'TOC_EDIT'].includes(showModal) ? 'Edit' : 'Add'} new {['PAGE', 'PAGE_EDIT'].includes(showModal) ? 'ToC page' : 'ToC'}</Header>
           </Modal.Header>
           <Modal.Content className="signup-content">
-            {showModal === 'PAGE' && <InvestNowAddPage regulation={regulation} />}
-            {showModal === 'TOC' && <InvestNowAddToc page={page} regulation={regulation} />}
+            {['PAGE', 'PAGE_EDIT'].includes(showModal) && <InvestNowAddPage type={showModal} regulation={regulation} page={page} />}
+            {['TOC', 'TOC_EDIT'].includes(showModal) && <InvestNowAddToc type={showModal} tocIndex={tocIndex} page={page} regulation={regulation} />}
           </Modal.Content>
         </Modal>
         <Confirm
@@ -244,7 +249,7 @@ export default class InvestNowTocList extends Component {
           content={`Are you sure you want to remove ${showConfirm === 'PAGE' ? `ToC page - ${page}` : 'ToC'}`}
           open={!!showConfirm}
           onCancel={() => this.updateState('showConfirm', null)}
-          onConfirm={() => this.remove(showConfirm, page, regulation)}
+          onConfirm={() => this.remove(showConfirm, page, regulation, tocIndex)}
           size="mini"
           className="deletion"
         />

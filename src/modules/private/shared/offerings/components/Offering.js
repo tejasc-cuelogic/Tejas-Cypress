@@ -17,7 +17,6 @@ export default class Offering extends Component {
     this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
     this.props.offeringCreationStore.setFormData('OFFERING_MISC_FRM', 'offering.misc');
-    // this.props.manageOfferingStore.setFormData('INVEST_NOW_TOC_FRM', 'investNow');
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
