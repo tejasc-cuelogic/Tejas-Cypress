@@ -37,7 +37,7 @@ const NsModal = (props) => {
 
       <Modal.Content className={modalContentClass || 'multistep'}>
         {
-          back && !isMobile
+          back && !isMobile && !isHeaderDisabled
           && (
             <Button
               icon={{ className: 'ns-chevron-left' }}

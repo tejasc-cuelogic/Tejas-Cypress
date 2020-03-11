@@ -90,8 +90,8 @@ export default class Agreement extends React.Component {
     }
   }
 
-  handleCancelAgreement = (e) => {
-    e.preventDefault();
+  handleCancelAgreement = () => {
+    // e.preventDefault();
     this.setState({ open: true });
   }
 
@@ -121,6 +121,11 @@ export default class Agreement extends React.Component {
       getBoxEmbedLink(doc.to, doc.id, agreementType);
     }
     this.setState({ showAgreementPdf: state });
+  }
+
+  handleBack = (e) => {
+    e.preventDefault();
+    this.setState({ showDocuSign: false, showAgreementPdf: false });
   }
 
   render() {
@@ -171,24 +176,33 @@ export default class Agreement extends React.Component {
         </NsModal>
         <NsModal
           open
-          closeIcon={!agreementDetails}
+          // closeIcon={!agreementDetails}
           closeOnRootNodeClick={false}
           closeOnDimmerClick={false}
-          onClose={e => this.handleCloseModal(e)}
+          onClose={this.handleCancelAgreement}
           headerLogo
           borderedHeader
           isProgressHeaderDisable
           isHeaderDisabled={this.state.showDocuSign || this.state.showAgreementPdf}
+          modalContentClass={(this.state.showDocuSign || this.state.showAgreementPdf) ? 'pt-0 pb-0' : ''}
+          // back={e => this.handleCancelAgreement(e)}
+          disableCloseIcon={this.state.showDocuSign || this.state.showAgreementPdf}
         >
+          {(this.state.showDocuSign || this.state.showAgreementPdf)
+          && (
+          <Button
+            icon={{ className: 'ns-chevron-left' }}
+            className="multistep__btn prev prev link-button mt-50"
+            onClick={e => this.handleBack(e)}
+            content="Back"
+          />
+          )}
           <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
-            <Grid.Column width="14" className="pt-0">
+            <Grid.Column width="10" className="pt-0">
               <div style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
                 <div className="pdf-viewer">
                   <iframe onLoad={this.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
                   <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
-                </div>
-                <div className="center-align mt-20">
-                  <Button type="button" content="Go Back" primary onClick={e => this.docuSignHandeler(e, false)} />
                 </div>
               </div>
               <div style={{ display: this.state.showAgreementPdf ? 'block' : 'none' }}>
@@ -204,9 +218,6 @@ export default class Agreement extends React.Component {
                       />
                     )
                   }
-                </div>
-                <div className="center-align mt-20">
-                  <Button type="button" content="Go Back" primary onClick={e => this.agreementPDFLoader(e, false)} />
                 </div>
               </div>
               <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
@@ -293,10 +304,10 @@ export default class Agreement extends React.Component {
                     </Grid.Row>
                   </Grid>
                   <div className="mt-30">
-                    <Button.Group widths="2" className="inline">
+                    <Button primary content="Invest" disabled={inProgress} loading={inProgress} onClick={this.submit} />
+                    {/* <Button.Group widths="2" className="inline">
                       <Button type="button" color="gray" disabled={inProgress} content="Cancel" onClick={this.handleCancelAgreement} />
-                      <Button primary content="Invest" disabled={inProgress} loading={inProgress} onClick={this.submit} />
-                    </Button.Group>
+                    </Button.Group> */}
                   </div>
                   {!this.state.showError && investmentFlowErrorMessage
                     && (
