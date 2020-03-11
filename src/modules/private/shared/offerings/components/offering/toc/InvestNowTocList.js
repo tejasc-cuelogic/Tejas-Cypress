@@ -29,13 +29,13 @@ const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, 
           && (
             <>
               <Button color="green" className="link-button" onClick={e => handleAction(e, { action: 'REQUIRED', tocIndex, pageIndex })}>
-                <Icon name="asterisk" />
+                <Icon name="asterisk" color="green" />
               </Button>
               <Button icon className="link-button" onClick={e => handleAction(e, { action: 'EDIT', tocIndex, pageIndex })}>
                 <Icon className="ns-pencil" />
               </Button>
               <Button color="red" icon className="link-button" onClick={e => handleAction(e, { action: 'DELETE', tocIndex, pageIndex })}>
-                <Icon className="ns-trash" />
+                <Icon className="ns-trash" color="red" />
               </Button>
             </>
           )
@@ -191,8 +191,10 @@ export default class InvestNowTocList extends Component {
         {!isReadOnly && <Button size="small" color="blue" floated="right" className="link-button mt-20 mb-20" onClick={e => this.addMore(e, 'PAGE')}>+ Add Page</Button>}
         {data && data.length ? data.map((toc, index) => (data.length === 1 ? (
           <>
-            {!isReadOnly && data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
-            {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-view" /></Button>}
+            <Button.Group className="toc-list">
+              {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-view" /></Button>}
+              {!isReadOnly && data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
+            </Button.Group>
             <ToCList
               toc={toc}
               handleAction={this.handleAction}
