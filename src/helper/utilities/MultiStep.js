@@ -269,7 +269,7 @@ export default class MultiStep extends React.Component {
       this.next();
     }
     const closeDimmerClickAction = this.props.closeOnDimmerClick ? this.props.closeOnDimmerClick : false;
-    const isBackCta = ((!currentStep.disablePrevButton && this.state.compState !== 0) || this.props.steps[this.state.compState].backUrl)
+    const isBackCta = ((!currentStep.disablePrevButton && this.state.compState !== 0) || this.props.steps[this.state.compState].backUrl);
     return (
       /* eslint-disable jsx-a11y/no-static-element-interactions */
       <div onKeyDown={!currentStep.disableNextButton
