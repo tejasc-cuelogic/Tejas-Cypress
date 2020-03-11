@@ -66,10 +66,8 @@ export class PaymentStore extends DataModelStore {
     };
 
     paymentCtaHandlers = mutation => new Promise((resolve) => {
-      let variables = false;
-      if (mutation === 'adminPaymentGenerateAdminSummary') {
-        variables = { ...toJS(Validator.evaluateFormData(this.ACTION_FRM.fields)) };
-      }
+      let variables = { ...toJS(Validator.evaluateFormData(this.ACTION_FRM.fields)) };
+      variables = { ...variables, sendEmail: variables.sendEmail === '' ? false : variables.sendEmail };
       this.executeMutation({
         mutation,
         setLoader: mutation,
@@ -228,6 +226,8 @@ export class PaymentStore extends DataModelStore {
               } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) > 150 && !actualOpeningDate) {
                 data = 'Min Payment Starting Next Month';
               } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) < 180 && !actualOpeningDate) {
+                data = 'No Payment Due';
+              } else {
                 data = 'No Payment Due';
               }
               break;

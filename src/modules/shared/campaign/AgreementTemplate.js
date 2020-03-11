@@ -70,22 +70,22 @@ function AgreementTemplate(props) {
     };
   }, []);
 
-  const handleCloseModal = (e) => {
-    if (!showDocuSign && !showAgreementPdf) {
-      props.investmentStore.resetData();
-      props.accreditationStore.resetUserAccreditatedStatus();
-    }
-    if (showDocuSign) {
-      docuSignHandeler(e, false);
-    } else if (showAgreementPdf) {
-      agreementPDFLoader(e, false);
-    } else if (props.changeInvestment) {
-      const { offeringId } = props.match.params;
-      props.history.push(`${props.refLink}/${offeringId}`);
-    } else {
-      props.history.push(`${props.refLink}`);
-    }
-  };
+  // const handleCloseModal = (e) => {
+  //   if (!showDocuSign && !showAgreementPdf) {
+  //     props.investmentStore.resetData();
+  //     props.accreditationStore.resetUserAccreditatedStatus();
+  //   }
+  //   if (showDocuSign) {
+  //     docuSignHandeler(e, false);
+  //   } else if (showAgreementPdf) {
+  //     agreementPDFLoader(e, false);
+  //   } else if (props.changeInvestment) {
+  //     const { offeringId } = props.match.params;
+  //     props.history.push(`${props.refLink}/${offeringId}`);
+  //   } else {
+  //     props.history.push(`${props.refLink}`);
+  //   }
+  // };
 
   const submit = () => {
     if (props.agreementsStore.isAgreementFormValid) {
@@ -101,8 +101,8 @@ function AgreementTemplate(props) {
     }
   };
 
-  const handleCancelAgreement = (e) => {
-    e.preventDefault();
+  const handleCancelAgreement = () => {
+    // e.preventDefault();
     setOpen(true);
   };
 
@@ -117,6 +117,12 @@ function AgreementTemplate(props) {
     props.accreditationStore.resetUserAccreditatedStatus();
     props.history.push(`${props.refLink}/invest-now`);
     setOpen(false);
+  };
+
+  const handleBack = (e) => {
+    e.preventDefault();
+    setShowDocuSign(false);
+    setShowAgreementPdf(false);
   };
 
   const {
@@ -159,24 +165,33 @@ function AgreementTemplate(props) {
       </NsModal>
       <NsModal
         open
-        closeIcon={!agreementDetails}
+        // closeIcon={!agreementDetails}
         closeOnRootNodeClick={false}
         closeOnDimmerClick={false}
-        onClose={e => handleCloseModal(e)}
+        onClose={handleCancelAgreement}
         headerLogo
         borderedHeader
         isProgressHeaderDisable
-        isHeaderDisabled={showDocuSign || showAgreementPdf}
+        isHeaderDisabled={showAgreementPdf}
+        modalContentClass={showAgreementPdf ? 'pt-0 pb-0' : ''}
+        // back={handleCancelAgreement}
+        disableCloseIcon={showDocuSign || showAgreementPdf}
       >
+        {(showDocuSign || showAgreementPdf)
+          && (
+          <Button
+            icon={{ className: 'ns-chevron-left' }}
+            className={`${showAgreementPdf ? 'mt-50' : ''} multistep__btn prev prev link-button`}
+            onClick={e => handleBack(e)}
+            content="Back"
+          />
+        )}
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
-          <Grid.Column width="14" className="pt-0">
+          <Grid.Column width="10" className="pt-0">
             <div style={{ display: showDocuSign ? 'block' : 'none' }}>
               <div className="pdf-viewer">
                 <iframe onLoad={props.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
                 <iframe onLoad={props.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
-              </div>
-              <div className="center-align mt-20">
-                <Button type="button" content="Go Back" primary onClick={e => docuSignHandeler(e, false)} />
               </div>
             </div>
             <div style={{ display: showAgreementPdf ? 'block' : 'none' }}>
@@ -192,9 +207,6 @@ function AgreementTemplate(props) {
                     />
                   )
                 }
-              </div>
-              <div className="center-align mt-20">
-                <Button type="button" content="Go Back" primary onClick={e => agreementPDFLoader(e, false)} />
               </div>
             </div>
             <div style={{ display: showDocuSign || showAgreementPdf ? 'none' : 'block' }}>
@@ -228,10 +240,10 @@ function AgreementTemplate(props) {
                   </Grid.Row>
                 </Grid>
                 <div className="mt-30">
-                  <Button.Group widths="2" className="inline">
+                  <Button primary content="Invest" disabled={inProgress || !isAgreementFormValid} loading={inProgress} onClick={submit} />
+                  {/* <Button.Group widths="2" className="inline">
                     <Button type="button" color="gray" disabled={inProgress} content="Cancel" onClick={handleCancelAgreement} />
-                    <Button primary content="Invest" disabled={inProgress || !isAgreementFormValid} loading={inProgress} onClick={submit} />
-                  </Button.Group>
+                  </Button.Group> */}
                 </div>
                 {!showError && investmentFlowErrorMessage
                   && (

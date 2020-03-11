@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Card, Table, Button, Grid, Form, Icon, Header, Popup, Confirm } from 'semantic-ui-react';
+import { Card, Table, Button, Grid, Form, Icon, Header, Popup } from 'semantic-ui-react';
 import moment from 'moment';
 import { get } from 'lodash';
 import Helper from '../../../../../helper/utility';
@@ -129,7 +129,6 @@ export default class AllRepayments extends PureComponent {
     TERM_NOTE: true,
     REVENUE_SHARING_NOTE: true,
     showActionModal: false,
-    showConfirmModal: false,
   }
 
   constructor(props) {
@@ -170,15 +169,15 @@ export default class AllRepayments extends PureComponent {
   validDate = (data, field) => (get(data, field) && moment(get(data, field), 'MM/DD/YYYY', true).isValid() ? moment(get(data, field)).format('M/D/YY') : '');
 
   render() {
-    const { paymentCtaHandlers, calculateFormula, termNotes, revenueSharingNotes, sortOrderRSN, sortOrderTN, repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
+    const { calculateFormula, termNotes, revenueSharingNotes, sortOrderRSN, sortOrderTN, repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
     const { loadingArray } = this.props.nsUiStore;
-    const { showConfirmModal, showActionModal, STARTUP_PERIOD, IN_REPAYMENT, TERM_NOTE, REVENUE_SHARING_NOTE } = this.state;
+    const { showActionModal, STARTUP_PERIOD, IN_REPAYMENT, TERM_NOTE, REVENUE_SHARING_NOTE } = this.state;
     if (loadingArray.includes('adminPaymentsIssuerList')) {
       return <InlineLoader />;
     }
     return (
       <>
-        {showActionModal && <ActionModal toggleVisibilityStatus={this.toggleVisibilityStatus} showActionModal={showActionModal} />}
+        {!!showActionModal && <ActionModal updateState={this.updateState} showActionModal={showActionModal} />}
         <Form>
           <Grid stackable>
             <Grid.Row>
@@ -189,13 +188,13 @@ export default class AllRepayments extends PureComponent {
                 more="no"
                 addon={(
                   <Grid.Column width={11} textAlign="right">
-                      <Button color="green" size="small" floated="right" onClick={() => this.toggleVisibilityStatus('showActionModal')}>
+                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentGenerateAdminSummary')}>
                         Generate Admin Summary
                       </Button>
-                      <Button color="green" size="small" floated="right" loading={loadingArray.includes('adminPaymentSendGoldStarDraftInstructions')} disabled={loadingArray.includes('adminPaymentSendGoldStarDraftInstructions')} onClick={() => this.updateState('showConfirmModal', 'adminPaymentSendGoldStarDraftInstructions')}>
+                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentSendGoldStarDraftInstructions')}>
                         Send GoldStar Draft Instructions
                       </Button>
-                      <Button color="green" size="small" floated="right" loading={loadingArray.includes('adminPaymentSendIssuerDraftNotice')} disabled={loadingArray.includes('adminPaymentSendIssuerDraftNotice')} onClick={() => this.updateState('showConfirmModal', 'adminPaymentSendIssuerDraftNotice')}>
+                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerDraftNotice')}>
                         Send Issuer Draft Notice
                       </Button>
                     </Grid.Column>
@@ -267,15 +266,6 @@ export default class AllRepayments extends PureComponent {
               />
             </>
           )}
-        <Confirm
-          header="Confirm"
-          content="Are you sure to continue with selected action?"
-          open={showConfirmModal}
-          onCancel={() => this.updateState('showConfirmModal', null)}
-          onConfirm={() => { paymentCtaHandlers(showConfirmModal); this.updateState('showConfirmModal', null); }}
-          size="mini"
-          className="deletion"
-        />
       </>
     );
   }

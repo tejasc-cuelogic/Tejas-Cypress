@@ -750,7 +750,7 @@ export class AccreditationStore {
       client,
       query: userAccreditationQuery,
       fetchPolicy: 'network-only',
-      variables: userId ? { userId } : { },
+      variables: userId ? { userId } : {},
       onFetch: () => {
         if (!this.userData.loading) {
           if (setInProgressArray) {
@@ -832,6 +832,10 @@ export class AccreditationStore {
     const entityAccreditation = userDetails && userDetails.roles
       && userDetails.roles.find(role => role.name === accountType);
     const appData = accountType === 'entity' ? entityAccreditation && entityAccreditation.details : userDetails;
+
+    if (form === 'ACCREDITATION_FORM' && ref === 'accreditation') {
+      this[form] = Validator.setFormData(this[form], appData, ref);
+    }
 
     if (!appData || ['INVALID', 'EXPIRED', null].includes(get(userDetails, 'accreditation.status'))) {
       return false;
@@ -1078,9 +1082,8 @@ export class AccreditationStore {
             headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'Please confirm your accredited investor status to invest in this offering.';
             break;
           case 'EXPIRED':
-            // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}
             headerSubheaderTextObj.header = 'Accredited Status Expired';
-            headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
+            // headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
             break;
           case 'PROCESSING':
             headerSubheaderTextObj.header = 'Your account is being processed.';
