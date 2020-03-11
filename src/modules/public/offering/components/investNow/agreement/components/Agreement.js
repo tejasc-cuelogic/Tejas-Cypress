@@ -183,16 +183,16 @@ export default class Agreement extends React.Component {
           headerLogo
           borderedHeader
           isProgressHeaderDisable
-          isHeaderDisabled={this.state.showDocuSign || this.state.showAgreementPdf}
-          modalContentClass={(this.state.showDocuSign || this.state.showAgreementPdf) ? 'pt-0 pb-0' : ''}
+          isHeaderDisabled={this.state.showAgreementPdf}
+          modalContentClass={this.state.showAgreementPdf ? 'pt-0 pb-0' : ''}
           // back={e => this.handleCancelAgreement(e)}
-          disableCloseIcon={this.state.showDocuSign || this.state.showAgreementPdf}
+          disableCloseIcon={this.state.showAgreementPdf || this.state.showDocuSign}
         >
           {(this.state.showDocuSign || this.state.showAgreementPdf)
           && (
           <Button
             icon={{ className: 'ns-chevron-left' }}
-            className="multistep__btn prev prev link-button mt-50"
+            className={`${this.state.showAgreementPdf ? 'mt-50' : ''} multistep__btn prev prev link-button`}
             onClick={e => this.handleBack(e)}
             content="Back"
           />
@@ -200,13 +200,13 @@ export default class Agreement extends React.Component {
           <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
             <Grid.Column width="10" className="pt-0">
               <div style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
-                <div className="pdf-viewer">
+                <div className={`${this.state.showDocuSign ? 'short' : ''} pdf-viewer`}>
                   <iframe onLoad={this.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
                   <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
                 </div>
               </div>
               <div style={{ display: this.state.showAgreementPdf ? 'block' : 'none' }}>
-                <div className="pdf-viewer">
+                <div className={`${this.state.showDocuSign ? 'short' : ''} pdf-viewer`}>
                   {(docLoading || !embedUrl) ? <InlineLoader />
                     : (
                       <iframe

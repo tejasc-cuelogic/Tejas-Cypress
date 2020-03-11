@@ -229,6 +229,9 @@
         }
         .pdf-viewer {
             height: 90vh;
+            &.short{
+                height: 68vh;
+            }
         }
         &.new-update-modal{
             word-wrap: break-all;

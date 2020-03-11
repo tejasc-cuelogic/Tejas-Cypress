@@ -172,8 +172,8 @@ function AgreementTemplate(props) {
         headerLogo
         borderedHeader
         isProgressHeaderDisable
-        isHeaderDisabled={showDocuSign || showAgreementPdf}
-        modalContentClass={(showDocuSign || showAgreementPdf) ? 'pt-0 pb-0' : ''}
+        isHeaderDisabled={showAgreementPdf}
+        modalContentClass={showAgreementPdf ? 'pt-0 pb-0' : ''}
         // back={handleCancelAgreement}
         disableCloseIcon={showDocuSign || showAgreementPdf}
       >
@@ -181,22 +181,21 @@ function AgreementTemplate(props) {
           && (
           <Button
             icon={{ className: 'ns-chevron-left' }}
-            className="prev link-button multistep__btn prev mt-50"
+            className={`${showAgreementPdf ? 'mt-50' : ''} multistep__btn prev prev link-button`}
             onClick={e => handleBack(e)}
             content="Back"
-            type="button"
           />
         )}
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
           <Grid.Column width="10" className="pt-0">
             <div style={{ display: showDocuSign ? 'block' : 'none' }}>
-              <div className="pdf-viewer">
+              <div className={`${showDocuSign ? 'short' : ''} pdf-viewer`}>
                 <iframe onLoad={props.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
                 <iframe onLoad={props.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
               </div>
             </div>
             <div style={{ display: showAgreementPdf ? 'block' : 'none' }}>
-              <div className="pdf-viewer">
+              <div className={`${showDocuSign ? 'short' : ''} pdf-viewer`}>
                 {(docLoading || !embedUrl) ? <InlineLoader />
                   : (
                     <iframe
