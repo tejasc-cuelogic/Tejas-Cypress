@@ -25,21 +25,18 @@ function InvestNowAddToc(props) {
 
   const { smartElement, manageOfferingStore } = props;
   const { INVEST_NOW_TOC_FRM } = manageOfferingStore;
-  const isReadOnly = false;
   return (
     <div className="inner-content-spacer">
       <Form>
-        {smartElement.FormDropDown('account', { displayMode: isReadOnly })}
-        {smartElement.RadioGroup('required', { displayMode: isReadOnly })}
-        {smartElement.TextArea('label', { displayMode: isReadOnly })}
+        {smartElement.FormDropDown('account')}
+        {smartElement.RadioGroup('required')}
+        {smartElement.TextArea('label')}
         <Divider hidden />
-        {!isReadOnly
-          && (
-            <OfferingButtonGroup
-              updateOffer={handleFormSubmit}
-              isDisable={!INVEST_NOW_TOC_FRM.meta.isValid}
-            />
-          )}
+          <OfferingButtonGroup
+            buttonTitle="Create"
+            updateOffer={handleFormSubmit}
+            isDisable={!INVEST_NOW_TOC_FRM.meta.isValid}
+          />
       </Form>
     </div>
   );

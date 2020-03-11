@@ -24,23 +24,16 @@ function InvestNowAddPage(props) {
     updateOffering({ keyName: 'investNow', offeringData, cleanData: true });
   };
 
-  const { smartElement, manageOfferingStore } = props;
-  const { INVEST_NOW_PAGE_FRM } = manageOfferingStore;
-  const isReadOnly = false;
+  const { smartElement } = props;
   return (
     <div className="inner-content-spacer">
       <Form>
-        {/* {smartElement.Masked('page', { displayMode: isReadOnly })} */}
-        {smartElement.Input('title', { displayMode: isReadOnly })}
-        {/* {smartElement.FormDropDown('regulation', { displayMode: isReadOnly })} */}
+        {smartElement.Input('title')}
         <Divider hidden />
-        {!isReadOnly
-          && (
-            <OfferingButtonGroup
-              updateOffer={handleFormSubmit}
-              isDisable={!INVEST_NOW_PAGE_FRM.meta.isValid}
-            />
-          )}
+          <OfferingButtonGroup
+            buttonTitle="Create"
+            updateOffer={handleFormSubmit}
+          />
       </Form>
     </div>
   );

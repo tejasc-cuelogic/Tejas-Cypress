@@ -20,7 +20,7 @@ export const INVEST_NOW_TOC = FormHelper.generateMeta([
 ]);
 
 export const INVEST_NOW_PAGE = FormHelper.generateMeta([
-  ['title', 'Page Description', '', 'optional', 'Page Description'],
+  ['title', 'Description (optional)', '', 'optional', 'Description (optional)'],
   // ['page', 'Page no.', '', 'optional', 'Page no.'],
   // ['regulation', 'Regulation', '', 'required', 'Regulation', { props: {
   //   options: REGULATION_VALUES,

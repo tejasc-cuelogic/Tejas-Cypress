@@ -28,14 +28,14 @@ const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, 
         {!isReadOnly
           && (
             <>
-              <Button icon className="link-button">
-                <Icon className="ns-view" onClick={e => handleAction(e, { action: 'REQUIRED', tocIndex, pageIndex })} />
+              <Button color="green" className="link-button" onClick={e => handleAction(e, { action: 'REQUIRED', tocIndex, pageIndex })}>
+                <Icon name="asterisk" />
               </Button>
-              <Button icon className="link-button">
-                <Icon className="ns-pencil" onClick={e => handleAction(e, { action: 'EDIT', tocIndex, pageIndex })} />
+              <Button icon className="link-button" onClick={e => handleAction(e, { action: 'EDIT', tocIndex, pageIndex })}>
+                <Icon className="ns-pencil" />
               </Button>
-              <Button icon className="link-button">
-                <Icon className="ns-trash" onClick={e => handleAction(e, { action: 'DELETE', tocIndex, pageIndex })} />
+              <Button color="red" icon className="link-button" onClick={e => handleAction(e, { action: 'DELETE', tocIndex, pageIndex })}>
+                <Icon className="ns-trash" />
               </Button>
             </>
           )
@@ -60,6 +60,34 @@ const SortableList = SortableContainer(({ data, handleAction, preview, isReadOnl
     ))}
   </div>
 ));
+
+const ToCList = ({ toc, regulation, isReadOnly, onSortEnd, handleAction, preview, addMore }) => (
+  <>
+  {toc.title && <Header as="h6" content={toc.title} />}
+  <div className="ui card fluid">
+    <div className="ui basic table">
+      <div className="row-wrap striped-table thead">
+        <div className="balance first-column">Label</div>
+        <div className="balance width-100">Account</div>
+        <div className="action right-align width-100" />
+      </div>
+      <SortableList
+        pageIndex={toc.page}
+        data={toc.toc}
+        pressDelay={100}
+        handleAction={handleAction}
+        onSortEnd={e => onSortEnd(e, toc.page, regulation)}
+        lockAxis="y"
+        useDragHandle
+        preview={preview}
+        isReadOnly={isReadOnly}
+      />
+    </div>
+  </div>
+  {!isReadOnly && <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, 'TOC', toc.page)}>+ Add ToC</Button>}
+  </>
+);
+
 @inject('manageOfferingStore', 'agreementsStore', 'offeringsStore')
 @withRouter
 @observer
@@ -160,62 +188,45 @@ export default class InvestNowTocList extends Component {
     const isReadOnly = get(offer, 'stage') !== 'CREATION';
     return (
       <>
-        {!isReadOnly && <Button size="small" color="blue" floated="right" className="link-button mt-20 mb-20" onClick={e => this.addMore(e, 'PAGE')}>+ Add another Page</Button>}
+        {!isReadOnly && <Button size="small" color="blue" floated="right" className="link-button mt-20 mb-20" onClick={e => this.addMore(e, 'PAGE')}>+ Add Page</Button>}
         {data && data.length ? data.map((toc, index) => (data.length === 1 ? (
           <>
-          {toc.title && <Header as="h6" content={toc.title} />}
-          <div className="ui card fluid">
-            <div className="ui basic table">
-              <div className="row-wrap striped-table thead">
-                <div className="balance first-column">Label</div>
-                <div className="balance width-100">Account</div>
-                <div className="action right-align width-100" />
-              </div>
-              <SortableList
-                pageIndex={toc.page}
-                data={toc.toc}
-                pressDelay={100}
-                handleAction={this.handleAction}
-                onSortEnd={e => this.onSortEnd(e, toc.page, regulation)}
-                lockAxis="y"
-                useDragHandle
-                preview={this.preview}
-                isReadOnly={isReadOnly}
-              />
-            </div>
-          </div>
-          {!isReadOnly && <Button size="small" floated="right" color="blue" className="link-button" onClick={e => this.addMore(e, 'TOC', toc.page)}>+ Add another TOC</Button>}
+            {!isReadOnly && data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
+            {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-view" /></Button>}
+            <ToCList
+              toc={toc}
+              handleAction={this.handleAction}
+              onSortEnd={this.onSortEnd}
+              preview={this.preview}
+              isReadOnly={isReadOnly}
+              regulation={regulation}
+              addMore={this.addMore}
+            />
           </>
         ) : (
           <Accordion exclusive={false} fluid styled className={`card-style ${index === 0 ? 'mt-20' : ''}`}>
             <Accordion.Title onClick={() => this.toggleAccordianContent(index)}>
               <Icon className={activeIndex.includes(index) ? 'ns-chevron-up' : 'ns-chevron-down'} />
               {`${CAMPAIGN_KEYTERMS_REGULATION[toc.regulation]} ToC Page - ${toc.page}`}
-              {!isReadOnly && data.length > 1 && <Button size="small" floated="right" color="red" className="link-button mt-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}>Remove Page {toc.page}</Button>}
+              {!isReadOnly
+              && (
+                <>
+                  {data.length > 1 && <Button floated="right" color="red" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-trash" /></Button>}
+                  {data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
+                </>
+              )}
+              {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-view" /></Button>}
             </Accordion.Title>
             <Accordion.Content active={activeIndex.includes(index)} className="categories-acc">
-              {toc.title && <Header as="h6" content={toc.title} />}
-              <div className="ui card fluid">
-                <div className="ui basic table">
-                  <div className="row-wrap striped-table thead">
-                    <div className="balance first-column">Label</div>
-                    <div className="balance width-100">Account</div>
-                    <div className="action right-align width-100" />
-                  </div>
-                  <SortableList
-                    pageIndex={toc.page}
-                    data={toc.toc}
-                    pressDelay={100}
-                    handleAction={this.handleAction}
-                    onSortEnd={e => this.onSortEnd(e, toc.page, regulation)}
-                    lockAxis="y"
-                    useDragHandle
-                    preview={this.preview}
-                    isReadOnly={isReadOnly}
-                  />
-                </div>
-              </div>
-              {!isReadOnly && <Button size="small" floated="right" color="blue" className="link-button" onClick={e => this.addMore(e, 'TOC', toc.page)}>+ Add another TOC</Button>}
+            <ToCList
+              toc={toc}
+              handleAction={this.handleAction}
+              onSortEnd={this.onSortEnd}
+              preview={this.preview}
+              isReadOnly={isReadOnly}
+              regulation={regulation}
+              addMore={this.addMore}
+            />
             </Accordion.Content>
           </Accordion>
         ))) : ''}
