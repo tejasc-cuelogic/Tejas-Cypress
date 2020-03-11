@@ -518,23 +518,23 @@ export class IdentityStore {
         .then((result) => {
           if (result.data.verifyOtp) {
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
+              uiStore.setProgress(false);
               resolve();
             });
           } else {
             const error = {
               message: 'Invalid verification code.',
             };
+            uiStore.setProgress(false);
             uiStore.setErrors(error);
             reject();
           }
         })
         .catch(action((err) => {
           uiStore.setErrors(JSON.stringify(err.message));
-          reject(err);
-        }))
-        .finally(() => {
           uiStore.setProgress(false);
-        });
+          reject(err);
+        }));
     });
   }
 
