@@ -401,7 +401,7 @@ class AccountType extends Component {
                                     <>
                                       <FormArrowButton
                                         fielddata={PARALLEL_INVESTMENT_OPTIONS.option}
-                                        name="investAccountType"
+                                        name="parallelOption"
                                         changed={(e, res) => this.accTypeChangedForParallel(e, res, redirectURL)}
                                         action={submitStep}
                                       />
