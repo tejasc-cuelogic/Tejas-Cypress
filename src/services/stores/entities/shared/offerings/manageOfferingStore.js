@@ -40,16 +40,19 @@ export class ManageOfferingStore extends DataModelStore {
     const agreementLists = this.getAgreementTocList;
     const { offer } = offeringsStore;
     let investNow = get(offer, 'investNow.page') || [];
-    if (['TOC_EDIT', 'PAGE_EDIT'].includes(type)) {
-      const formData = Validator.evaluateFormData(this[form].fields);
+    if (['TOC_EDIT', 'PAGE_EDIT', 'TOC_REQUIRED'].includes(type)) {
+      let formData;
+      if (type !== 'TOC_REQUIRED') {
+        formData = Validator.evaluateFormData(this[form].fields);
+      }
       const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
-      if (type === 'TOC_EDIT' && tocIndex >= 0) {
-        const editTOC = {
+      if (['TOC_REQUIRED', 'TOC_EDIT'].includes(type) && tocIndex >= 0) {
+        const editTOC = type === 'TOC_EDIT' ? {
           label: formData.label,
           required: formData.required,
           account: formData.account,
-        };
-        investNow[index].toc[tocIndex] = { ...investNow[index].toc[tocIndex], editTOC };
+        } : { required: !investNow[index].toc[tocIndex].required };
+        investNow[index].toc[tocIndex] = { ...investNow[index].toc[tocIndex], ...editTOC };
       } else {
         investNow[index] = { ...investNow[index], title: formData.title };
       }

@@ -30,7 +30,7 @@ const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, 
           && (
             <>
               <Button color="green" className="link-button" onClick={e => handleAction(e, { action: 'REQUIRED', tocIndex, pageIndex })}>
-                <Icon name="asterisk" color="green" />
+                <Icon name="asterisk" color={get(toc, 'required') ? 'green' : ''} />
               </Button>
               <Button icon className="link-button" onClick={e => handleAction(e, { action: 'EDIT', tocIndex, pageIndex })}>
                 <Icon className="ns-pencil" />
@@ -47,7 +47,7 @@ const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, 
 ));
 const SortableList = SortableContainer(({ data, handleAction, preview, isReadOnly, pageIndex }) => (
   <div className="tbody">
-    {data && data.length && data.map((toc, index) => (
+    {data && data.length ? data.map((toc, index) => (
       <SortableItem
         key={`item-${toc.index}`}
         toc={toc}
@@ -58,7 +58,7 @@ const SortableList = SortableContainer(({ data, handleAction, preview, isReadOnl
         preview={preview}
         isReadOnly={isReadOnly}
       />
-    ))}
+    )) : <div className="center-align mb-10">No record found.</div>}
   </div>
 ));
 
@@ -140,7 +140,7 @@ export default class InvestNowTocList extends Component {
     } else if (action === 'EDIT') {
       this.updateState('showModal', 'TOC_EDIT');
     } else if (action === 'REQUIRED') {
-      this.updateState('showModal', 'TOC_REQUIRED');
+      this.updateState('showConfirm', 'TOC_REQUIRED');
     }
     // const { manageOfferingStore, history, index, refLink } = this.props;
     // manageOfferingStore.removeOne('INVEST_NOW_TOC_FRM', 'toc', index);
@@ -178,7 +178,7 @@ export default class InvestNowTocList extends Component {
     this.updateState('tocIndex', null);
     const { updateOffering, investNowAddData } = this.props.manageOfferingStore;
     let offeringData;
-    if (type === 'PAGE' || type === 'TOC_DELETE') {
+    if (['TOC_REQUIRED', 'PAGE', 'TOC_DELETE'].includes(type)) {
       offeringData = investNowAddData({ type, page, regulation, tocIndex });
     }
     updateOffering({ keyName: 'investNow', offeringData, cleanData: true });
@@ -198,7 +198,7 @@ export default class InvestNowTocList extends Component {
           <>
             <Button.Group className="toc-list">
               {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-view" /></Button>}
-              {!isReadOnly && data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE_EDIT'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
+              {!isReadOnly && data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
             </Button.Group>
             <ToCList
               toc={toc}
@@ -219,7 +219,7 @@ export default class InvestNowTocList extends Component {
               && (
                 <>
                   {data.length > 1 && <Button floated="right" color="red" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-trash" /></Button>}
-                  {data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE_EDIT'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
+                  {data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
                 </>
               )}
               {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-view" /></Button>}
@@ -248,7 +248,7 @@ export default class InvestNowTocList extends Component {
         </Modal>
         <Confirm
           header="Confirm"
-          content={`Are you sure you want to remove ${showConfirm === 'PAGE' ? `ToC page - ${page}` : 'ToC'}`}
+          content={showConfirm === 'TOC_REQUIRED' ? 'Are you sure you want to execute required action?' : `Are you sure you want to remove ${showConfirm === 'PAGE' ? `ToC page - ${page}` : 'ToC'}`}
           open={!!showConfirm}
           onCancel={() => this.updateState('showConfirm', null)}
           onConfirm={() => this.remove(showConfirm, page, regulation, tocIndex)}

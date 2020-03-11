@@ -23,8 +23,14 @@ function InvestNowAddPage(props) {
   }, []);
 
   const handleFormSubmit = () => {
-    const { updateOffering, investNowAddData } = props.manageOfferingStore;
-    const offeringData = investNowAddData({ form: 'INVEST_NOW_PAGE_FRM', regulation: props.regulation });
+    const { manageOfferingStore, type, page, regulation } = props;
+    const { updateOffering, investNowAddData } = manageOfferingStore;
+    let offeringData;
+    if (type === 'PAGE_EDIT') {
+      offeringData = investNowAddData({ form: 'INVEST_NOW_PAGE_FRM', regulation, page, type });
+    } else {
+      offeringData = investNowAddData({ form: 'INVEST_NOW_PAGE_FRM', regulation });
+    }
     updateOffering({ keyName: 'investNow', offeringData, cleanData: true });
   };
 
