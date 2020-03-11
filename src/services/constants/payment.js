@@ -39,7 +39,7 @@ export const PAYMENT = FormHelper.generateMeta([
 ]);
 
 export const ACTION = FormHelper.generateMeta([
-  ['date', 'Date', moment().format('MM-DD-YYYY'), 'required|date', 'MM-DD-YYYY', { props: { default: moment().format('MM-DD-YYYY') }, customErrors: { date: 'Date is not a valid date format.' }, asIn: true }],
+  ['date', 'Date', moment().format('MM-DD-YYYY'), 'required|date', 'MM-DD-YYYY', { props: { defaultValue: moment().format('MM-DD-YYYY') }, customErrors: { date: 'Date is not a valid date format.' }, asIn: true }],
   ['scope', 'Scope', '', '', 'e.g ISSUER'],
   ['sendEmail', 'Send Email', false, '', 'Send Email',
   { props: { values: [
