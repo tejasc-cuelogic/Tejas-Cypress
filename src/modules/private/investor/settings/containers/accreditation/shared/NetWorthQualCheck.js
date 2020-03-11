@@ -13,12 +13,12 @@ export default class NetWorthQualCheck extends Component {
     const { NETWORTH_QAL_FORM, accreditationMethodChange } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">How are you an accredited investor?</Header>
-        <p className="center-align">
+        <Header as="h4">How are you an accredited investor?</Header>
+        <p>
           To invest in Regulation D offerings on the NextSeed platform, we are required to
           verify your status as an accredited investor using standards put into place by the SEC.
         </p>
-        <p className="center-align"><b>Does your net worth qualify you as an accredited investor?</b></p>
+        <p><b>Does your net worth qualify you as an accredited investor?</b></p>
         <Form error className="account-type-tab">
           <Grid columns={1}>
             {NETWORTH_QAL_FORM.fields.method.values.map(method => (
@@ -34,11 +34,7 @@ export default class NetWorthQualCheck extends Component {
               </Grid.Column>
             ))}
           </Grid>
-          {isMobile
-          && (
-            <Button onClick={this.props.submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
-          )
-          }
+          <Button onClick={this.props.submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
         </Form>
       </div>
     );

@@ -227,6 +227,8 @@ export class PaymentStore extends DataModelStore {
                 data = 'Min Payment Starting Next Month';
               } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) < 180 && !actualOpeningDate) {
                 data = 'No Payment Due';
+              } else {
+                data = 'No Payment Due';
               }
               break;
             case 'Start Payment Date':

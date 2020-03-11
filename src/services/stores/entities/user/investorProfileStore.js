@@ -35,6 +35,8 @@ class InvestorProfileStore {
 
   @observable stepToBeRendered = 0;
 
+  @observable isFormSubmitted = false;
+
   @observable isInvestmentExperienceValid = true;
 
   @observable finishInvestorProfileLater = false;
@@ -289,14 +291,14 @@ class InvestorProfileStore {
         })
         .then(action((data) => {
           FormValidator.setIsDirty(this[currentStep.form], false);
+          this.isFormSubmitted = true;
+          userDetailsStore.updateUserDetails('investorProfileData', formPayload);
           if (currentStep.form === 'INVESTMENT_EXP_FORM') {
             if (data.data.createInvestorProfile && data.data.createInvestorProfile.status) {
               userDetailsStore.setUserStatus(data.data.createInvestorProfile.status);
             }
-            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
-              uiStore.setProgress(false);
-              resolve();
-            });
+            uiStore.setProgress(false);
+            resolve();
           } else {
             this.setStepToBeRendered(currentStep.stepToBeRendered);
             uiStore.setProgress(false);

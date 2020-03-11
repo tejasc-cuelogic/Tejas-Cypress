@@ -364,9 +364,11 @@ export class CampaignStore {
     campaignStatus.isSafe = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE;
     campaignStatus.isConvertibleNotes = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.CONVERTIBLE_NOTES;
     campaignStatus.isEquity = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY;
-    campaignStatus.isRealEstate = (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE || (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(campaign, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
-    campaignStatus.isPreferredEquity = (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C || (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(campaign, 'keyTerms.equityClass') === 'PREFERRED' || (this.inInvestmentFlow && ['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(campaign, 'keyTerms.equityClass'))))));
+    campaignStatus.isRealEstate = ((this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(campaign, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
+    campaignStatus.isPreferredEquity = ((this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(campaign, 'keyTerms.equityClass') === 'PREFERRED' || (this.inInvestmentFlow && ['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(campaign, 'keyTerms.equityClass'))))));
     campaignStatus.doneComputing = (get(this.details, 'data.getOfferingDetailsBySlug') && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
+    campaignStatus.isAgreementTemplate = (get(campaign, 'investNow.template') && get(campaign, 'investNow.template') === 2);
+    campaignStatus.investNowToc = get(campaign, 'investNow.page');
     return campaignStatus;
   }
 
@@ -561,7 +563,7 @@ export class CampaignStore {
       const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506') && get(offeringKeyTermDetails, 'maxOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'maxOfferingAmount506') : get(offeringKeyTermDetails, 'maxOfferingAmount506C') ? get(offeringKeyTermDetails, 'maxOfferingAmount506C') : '0.00';
       const regulation = get(offeringKeyTermDetails, 'regulation');
       const securities = get(offeringKeyTermDetails, 'securities');
-      const isRealEstate = (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE || (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(offeringKeyTermDetails, 'equityClass') === 'LLC_MEMBERSHIP_UNITS'));
+      const isRealEstate = (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(offeringKeyTermDetails, 'equityClass') === 'LLC_MEMBERSHIP_UNITS');
       const minimumOfferingAmount = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
       const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
       const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
