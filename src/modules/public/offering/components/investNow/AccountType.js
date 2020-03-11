@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { includes, uniq, get } from 'lodash';
-import { Header, Form, Button, Icon, Card } from 'semantic-ui-react';
+import { Header, Form, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
 import { FormArrowButton } from '../../../../../theme/form';
 import { Spinner } from '../../../../../theme/shared';
+import { PARALLEL_INVESTMENT_OPTIONS } from '../../../../../services/constants/investment';
 
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 @inject('investmentStore', 'userDetailsStore', 'accountStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore', 'portfolioStore')
 @withRouter
 @observer
@@ -248,6 +249,14 @@ class AccountType extends Component {
     setStepToBeRendered(1);
   }
 
+  accTypeChangedForParallel = (e, res, redirectUrl) => {
+    if (res.value === 'yes') {
+      this.props.history.push(redirectUrl);
+    } else {
+      this.handleInvestmentWihoutAccreditation(e);
+    }
+  }
+
   render() {
     const {
       activeAccounts,
@@ -358,12 +367,12 @@ class AccountType extends Component {
                   ? (
                     <>
                       <p>{headerSubheaderObj.subHeader}</p>
-                        <FormArrowButton
-                          fielddata={investAccTypes}
-                          name="investAccountType"
-                          changed={accTypeChanged}
-                          action={submitStep}
-                        />
+                      <FormArrowButton
+                        fielddata={investAccTypes}
+                        name="investAccountType"
+                        changed={accTypeChanged}
+                        action={submitStep}
+                      />
                     </>
                   )
                   : (
@@ -389,7 +398,19 @@ class AccountType extends Component {
                               {(userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING' || (userAccredetiationState === 'EXPIRED' && offeringReuglation === 'BD_CF_506C'))
                                 ? offeringReuglation && offeringReuglation === 'BD_CF_506C'
                                   ? (
-                                    <Card.Group itemsPerRow={isMobile ? '1' : '2'}>
+                                    <>
+                                      <FormArrowButton
+                                        fielddata={PARALLEL_INVESTMENT_OPTIONS.option}
+                                        name="investAccountType"
+                                        changed={(e, res) => this.accTypeChangedForParallel(e, res, redirectURL)}
+                                        action={submitStep}
+                                      />
+                                      <p className="note mt-20">
+                                        For a limited time, accredited investors can earn a $100 bonus
+                            by verifying your status on NextSeed. <a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See rules for details.</a>
+                                      </p>
+                                    </>
+                                    /* <Card.Group itemsPerRow={isMobile ? '1' : '2'}>
                                       <Card>
                                         <Card.Content>
                                           <Header as="h5" color="green">Yes, let’s get you verified.</Header>
@@ -415,7 +436,7 @@ class AccountType extends Component {
                                           <Button basic className="relaxed" content="Continue" onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
                                         </Card.Content>
                                       </Card>
-                                    </Card.Group>
+                                    </Card.Group> */
                                   )
                                   : (
                                     <>
