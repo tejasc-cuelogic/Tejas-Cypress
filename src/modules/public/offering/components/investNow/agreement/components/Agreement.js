@@ -183,16 +183,16 @@ export default class Agreement extends React.Component {
           headerLogo
           borderedHeader
           isProgressHeaderDisable
-          isHeaderDisabled={this.state.showDocuSign || this.state.showAgreementPdf}
-          modalContentClass={(this.state.showDocuSign || this.state.showAgreementPdf) ? 'pt-0 pb-0' : ''}
+          isHeaderDisabled={this.state.showAgreementPdf}
+          modalContentClass={this.state.showAgreementPdf ? 'pt-0 pb-0' : ''}
           // back={e => this.handleCancelAgreement(e)}
-          disableCloseIcon={this.state.showDocuSign || this.state.showAgreementPdf}
+          disableCloseIcon={this.state.showAgreementPdf || this.state.showDocuSign}
         >
           {(this.state.showDocuSign || this.state.showAgreementPdf)
           && (
           <Button
             icon={{ className: 'ns-chevron-left' }}
-            className="multistep__btn prev prev link-button mt-50"
+            className={`${this.state.showAgreementPdf ? 'mt-50' : ''} multistep__btn prev prev link-button`}
             onClick={e => this.handleBack(e)}
             content="Back"
           />
