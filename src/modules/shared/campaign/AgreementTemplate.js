@@ -175,7 +175,7 @@ function AgreementTemplate(props) {
           <Grid.Column width="10" className="pt-0">
             <div style={{ display: showDocuSign ? 'block' : 'none' }}>
               <div className="pdf-viewer">
-                <iframe onLoad={props.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
+                {/* <iframe onLoad={props.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} /> */}
                 <iframe onLoad={props.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
               </div>
             </div>
