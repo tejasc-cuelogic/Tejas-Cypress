@@ -38,7 +38,7 @@ function InvestNowAddToc(props) {
   return (
     <div className="inner-content-spacer">
       <Form>
-        {smartElement.FormDropDown('account', { fielddata: INVEST_NOW_TOC_FRM.fields.account, displayMode: isReadOnly })}
+        {smartElement.FormDropDown('account', { fielddata: INVEST_NOW_TOC_FRM.fields.account, containerclassname: 'dropdown-field', displayMode: isReadOnly })}
         {smartElement.RadioGroup('required', { fielddata: INVEST_NOW_TOC_FRM.fields.required, displayMode: isReadOnly })}
         {smartElement.TextArea('label', { fielddata: INVEST_NOW_TOC_FRM.fields.label, displayMode: isReadOnly })}
         <Divider hidden />
