@@ -118,7 +118,7 @@ export default class ConfirmPhoneNumber extends Component {
         isLoading={inProgress}
       >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
-          <Grid.Column width="8" className="pt-0">
+          <Grid.Column mobile={16} tablet={10} computer={8} className="pt-0">
             <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your phone number</Header>
             <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
               We&#39;re introducing Multi-Factor Authentication (MFA) to

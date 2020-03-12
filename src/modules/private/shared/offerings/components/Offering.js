@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { get } from 'lodash';
 import { Grid } from 'semantic-ui-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
@@ -7,7 +8,7 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const getModule = component => lazyRetry(() => import(`./offering/${component}`));
 
-@inject('userStore', 'uiStore', 'offeringCreationStore', 'manageOfferingStore')
+@inject('userStore', 'uiStore', 'offeringCreationStore', 'offeringsStore')
 @withRouter
 @observer
 export default class Offering extends Component {
@@ -17,14 +18,16 @@ export default class Offering extends Component {
     this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
     this.props.offeringCreationStore.setFormData('OFFERING_MISC_FRM', 'offering.misc');
-    // this.props.manageOfferingStore.setFormData('INVEST_NOW_TOC_FRM', 'investNow');
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
   }
 
   render() {
-    const { isIssuer } = this.props.userStore;
+    const { offeringsStore, match, userStore } = this.props;
+    const { isIssuer } = userStore;
+    const { offer } = offeringsStore;
+    const showInvestNowToc = !!get(offer, 'investNow.page[0]') || get(offer, 'stage') === 'CREATION';
     let navItems = [
       { title: 'Overview', to: 'overview', component: 'OfferingOverview' },
       { title: 'About the Company', to: 'about-company', component: 'OfferingCompany' },
@@ -35,11 +38,10 @@ export default class Offering extends Component {
         ...[
           { title: 'Misc', to: 'misc', component: 'Misc' },
           { title: 'Launch', to: 'launch', component: 'OfferingLaunch' },
-          { title: 'InvestNow TOC', to: 'invest-now-toc', component: 'InvestNowToc' },
+          showInvestNowToc && { title: 'InvestNow ToC', to: 'invest-now-toc', component: 'InvestNowToc' },
         ],
       ];
     }
-    const { match } = this.props;
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
         <Grid>
