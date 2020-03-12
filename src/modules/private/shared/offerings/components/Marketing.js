@@ -16,7 +16,7 @@ export default class Marketing extends Component {
       this.props.history.push(`${this.props.match.url}/tombstone`);
     }
     this.props.manageOfferingStore.setFormData('TOMBSTONE_BASIC_FRM', 'tombstone');
-    this.props.manageOfferingStore.setFormData('HEADER_BASIC_FRM', 'header');
+    // this.props.manageOfferingStore.setFormData('HEADER_BASIC_FRM', 'header');
     this.props.manageOfferingStore.setFormData('OFFERING_MISC_FRM', 'misc');
   }
 

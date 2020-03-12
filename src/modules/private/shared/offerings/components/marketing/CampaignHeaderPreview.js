@@ -53,7 +53,7 @@ export default class CampaignHeaderPreview extends Component {
                         />
                       )
                     }
-                    {headerBasicFields.toggleMeta.value.length
+                    {headerBasicFields.toggleMeta.value && headerBasicFields.toggleMeta.value.length
                     ? (
                       <div className="offer-stats">
                         <Statistic.Group>

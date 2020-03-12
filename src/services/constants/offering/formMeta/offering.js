@@ -21,7 +21,7 @@ export const TOMBSTONE_BASIC = FormHelper.generateMeta([
 
 export const HEADER_BASIC = FormHelper.generateMeta([
   ['heroVideoURL', 'Hero Video URL', '', 'optional', 'Enter here...'],
-  ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { values: HEADER_TOGGLE_META } }],
+  ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { defaultValue: [], values: HEADER_TOGGLE_META } }],
   ['heroImage', 'Hero Image', '', 'optional', '', { s3Upload: true }],
   ['heroBackgroundImage', 'Hero Background Image', '', 'optional', '', { s3Upload: true }],
 ]);
