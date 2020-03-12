@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingIdBySlug, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingIdBySlug, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist, getOfferingMedia } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
@@ -146,6 +146,24 @@ export class CampaignStore {
         reject(err);
       },
     });
+  });
+
+  @action
+  getOfferingMediaMeta = id => new Promise((resolve) => {
+    graphql({
+        client,
+        query: getOfferingMedia,
+        fetchPolicy: 'no-cache',
+        variables: { id },
+        onFetch: (res) => {
+          if (res !== undefined) {
+            resolve(res.getOfferingDetailsBySlug.media);
+          }
+        },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+        },
+      });
   });
 
   @action
