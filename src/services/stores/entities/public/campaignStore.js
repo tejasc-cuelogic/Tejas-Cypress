@@ -74,6 +74,8 @@ export class CampaignStore {
     closingBinder: { selectedDoc: null, accordionActive: true },
   };
 
+  @observable mediaDetails = {};
+
   @action
   setFieldValue = (field, val, path = false) => {
     if (path) {
@@ -149,21 +151,43 @@ export class CampaignStore {
   });
 
   @action
-  getOfferingMediaMeta = id => new Promise((resolve) => {
-    graphql({
-        client,
+  getOfferingMediaMetaOLD = id => new Promise((resolve) => {
+    const gqlClient = authStore.isUserLoggedIn ? client : clientPublic;
+    this.mediaDetails = graphql({
+      client: gqlClient,
         query: getOfferingMedia,
         fetchPolicy: 'no-cache',
-        variables: { id },
+        variables: { id, isValid: true },
         onFetch: (res) => {
-          if (res !== undefined) {
+          if (res || !this.mediaDetails.loading) {
             resolve(res.getOfferingDetailsBySlug.media);
           }
         },
-        onError: () => {
+        onError: (err) => {
+          console.log(err);
           Helper.toast('Something went wrong, please try again later.', 'error');
         },
       });
+  });
+
+  @action
+  getOfferingMediaMeta = id => new Promise((resolve) => {
+    const gqlClient = authStore.isUserLoggedIn ? client : clientPublic;
+    this.mediaDetails = graphql({
+      client: gqlClient,
+      query: getOfferingMedia,
+      variables: { id, isValid: true },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && data.getOfferingDetailsBySlug && !this.mediaDetails.loading) {
+          resolve(data.getOfferingDetailsBySlug.media);
+        }
+      },
+      onError: (err) => {
+        console.log(err);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
   });
 
   @action

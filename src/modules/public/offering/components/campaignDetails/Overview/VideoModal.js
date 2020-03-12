@@ -27,18 +27,22 @@ class VideoModal extends Component {
     }
   }
 
-  handleClose = () => this.props.history.goBack();
+  handleClose = () => {
+    const redirectUrlArr = this.props.location.pathname.split('herovideo');
+    this.props.history.push(redirectUrlArr[0]);
+  }
 
   getOfferingMedia = async () => {
-    const { getOfferingMediaMeta } = this.props.campaignStore;
-    const res = await getOfferingMediaMeta(this.props.match.params.id);
-    const videoUrl = (res && res.heroVideo && res.heroVideo.fileName) || null;
+    const { getCampaignDetails } = this.props.campaignStore;
+    const res = await getCampaignDetails(this.props.match.params.id);
+    const videoUrl = get(res, 'media.heroVideo.fileName') || null;
     const vimeoId = (videoUrl && get(videoUrl.split('/'), '[0]')) || null;
     this.setState({ loading: false, videoUrl, vimeoId });
     return res;
   }
 
   render() {
+    console.log(this.props);
     const isTabletLand = (this.props.isTabletLand || (document.documentElement.clientWidth >= 992 && document.documentElement.clientWidth < 1200));
     return (
       <Modal open onClose={this.handleClose} size="large" closeIcon={!this.state.loading} className="video-modal">

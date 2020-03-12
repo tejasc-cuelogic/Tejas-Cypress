@@ -618,8 +618,8 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
 `;
 
 export const getOfferingMedia = gql`
-  query getOfferingDetailsBySlug($id: String!) {
-    getOfferingDetailsBySlug(offeringSlug: $id) {
+  query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
+    getOfferingDetailsBySlug(offeringSlug: $id, isValid: $isValid) {
       id
       offeringSlug
       referralCode
