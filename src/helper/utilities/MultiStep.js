@@ -351,7 +351,7 @@ export default class MultiStep extends React.Component {
                     )
                   }
                   <Grid centered textAlign="left">
-                    <Grid.Column width="8">
+                    <Grid.Column mobile={16} tablet={10} computer={8}>
                       {currentStep.component}
                     </Grid.Column>
                   </Grid>
