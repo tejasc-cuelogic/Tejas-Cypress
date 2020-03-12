@@ -330,6 +330,9 @@
             }
             >.item{
                 width: 33%;
+                @media only screen and (min-width :@tabletBreakpoint) and (max-width :@largestTabletScreen){
+                    width: 50%;
+                }
                 @media only screen and (max-width :@largestMobileScreen){
                     width:100%;
                 }
