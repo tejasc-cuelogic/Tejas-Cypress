@@ -64,7 +64,8 @@
 //    Custom for NS V.2
 .ui.selection.dropdown{
     min-width: auto;
-	border-bottom:@border-color 1px solid;
+    border-bottom:@border-color 1px solid;
+    min-height: 43px;
 	.menu{
 		border:none;
 		padding:0 @menuGutterWidth;
