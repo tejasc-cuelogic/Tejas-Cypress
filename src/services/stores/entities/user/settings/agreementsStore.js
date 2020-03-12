@@ -275,7 +275,7 @@ export class AgreementsStore {
     const currentSelectedAccount = ['individual', 'ira'].includes(currentActiveAccount) ? 'INDIVIDUAL' : 'ENTITY';
     let investNowTocs = campaignStatus.investNowToc;
     const checkAccountValidation = acc => (!acc || acc === 'ALL' || acc === currentSelectedAccount);
-    const checkRegulationValidation = reg => (!reg || !reg.length || reg.includes(currentRegulation));
+    const checkRegulationValidation = reg => (!reg || reg === currentRegulation);
     investNowTocs = filter(investNowTocs, i => (checkRegulationValidation(i.regulation)));
     investNowTocs = groupBy(investNowTocs, 'page');
     investNowTocs = map(investNowTocs, page => page.map(t => ({ ...t, toc: t.toc && t.toc.length ? orderBy(t.toc.filter(toc => checkAccountValidation(toc.account)), ['order'], ['asc']) : [] })));
