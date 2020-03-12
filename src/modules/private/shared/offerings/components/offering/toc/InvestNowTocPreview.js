@@ -40,7 +40,7 @@ function InvestNowTocPreview(props) {
                   defaults
                   fielddata={AGREEMENT_DETAILS_FORM.fields.page[index].toc}
                   name="toc"
-                  containerclassname={`ui list agreement-list very relaxed ${!isAgreementFormValid ? 'error' : ''}`}
+                  containerclassname="ui list agreement-list very relaxed"
                   changed={(e, res) => setCheckbox(e, res, 'page', index)}
                 />
               </Grid.Column>
