@@ -61,7 +61,7 @@ export default class NewPhoneNumber extends Component {
         isProgressHeaderDisable
       >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
-          <Grid.Column width="8" className="pt-0">
+          <Grid.Column mobile={16} tablet={10} computer={8} className="pt-0">
             <Header as="h3">Enter new phone number</Header>
             <p>We will send you a verification code to the phone number you provide.</p>
             <Divider hidden />
