@@ -77,7 +77,7 @@ class InvestorSignup extends Component {
         back="/register"
       >
         <Grid centered stackable className={isMobile ? 'full-width' : ''}>
-          <Grid.Column width="8" className="pt-0">
+          <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
             <Header as="h3" className="mb-40">
               Sign up as an investor
               {/* <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link> */}

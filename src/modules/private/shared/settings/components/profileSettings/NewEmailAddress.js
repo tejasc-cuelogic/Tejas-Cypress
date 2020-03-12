@@ -53,7 +53,7 @@ export default class NewEmailAddress extends Component {
         isProgressHeaderDisable
       >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
-          <Grid.Column width="8" className="pt-0">
+          <Grid.Column mobile={16} tablet={10} computer={8} className="pt-0">
             <Header as="h3">Enter new email address</Header>
             <p>We will send you a verification code to the email address you provide.</p>
             <Divider hidden />
