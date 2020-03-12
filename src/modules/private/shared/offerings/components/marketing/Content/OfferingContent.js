@@ -63,7 +63,7 @@ class OfferingContent extends Component {
             {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: true })}
-            {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: true })}
+            {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
           </Form.Group>
           <Divider hidden />
           {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM'
