@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Button, Grid, Form, Message } from 'semantic-ui-react';
-import { get, startsWith } from 'lodash';
+import { get } from 'lodash';
 import { FormCheckbox } from '../../../../../../../theme/form';
 
 function CustomAgreement(props) {
@@ -40,7 +40,7 @@ function CustomAgreement(props) {
                               </>
                 )}
                 conditionalCustomLabel={(
-                  startsWith(offeringRegulationType, 'BD_')
+                  offeringRegulationType !== 'BD_CF'
                     ? (
                       <>
                         I have reviewed NextSeed’s <Link target="_blank" to="/resources/education-center/investor">educational materials</Link>, understand that
@@ -97,7 +97,7 @@ function CustomAgreement(props) {
         </Grid.Row>
       </Grid>
       <div className="mt-30">
-        <Button primary content="Invest" disabled={inProgress} loading={inProgress} onClick={submit} />
+        <Button primary content="Invest" disabled={inProgress} loading={inProgress} onClick={() => submit('CUSTOM')} />
         {/* <Button.Group widths="2" className="inline">
                       <Button type="button" color="gray" disabled={inProgress} content="Cancel" onClick={handleCancelAgreement} />
                     </Button.Group> */}

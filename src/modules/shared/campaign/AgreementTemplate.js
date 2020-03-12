@@ -71,8 +71,9 @@ function AgreementTemplate(props) {
     };
   }, []);
 
-  const submit = () => {
-    if (props.agreementsStore.isAgreementFormValid) {
+  const submit = (currentAction = undefined) => {
+    const isFormValid = currentAction && currentAction === 'CUSTOM' ? props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid : props.agreementsStore.isAgreementFormValid;
+    if (isFormValid) {
       setShowError(false);
       props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
       props.investmentStore.investNowSubmit().then((investmentStatus) => {
