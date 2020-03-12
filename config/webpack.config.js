@@ -696,6 +696,13 @@ module.exports = (webpackEnv) => {
           to: 'assets/js/r.js',
         },
         {
+          from: 'src/assets/js/g.js',
+          to: 'assets/js/g.js',
+          transform(content) {
+            return Promise.resolve(content.toString().replace('__SEGMENT_WRITE_KEY__', env.stringified['process.env'].REACT_APP_SEGMENT_WRITE_KEY));
+          },
+        },
+        {
           from: 'src/assets/js/a.js',
           to: 'assets/js/a.js',
           transform(content) {
