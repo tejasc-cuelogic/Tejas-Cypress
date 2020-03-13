@@ -41,7 +41,7 @@ const NsModal = (props) => {
           && (
             <Button
               icon={{ className: 'ns-chevron-left' }}
-              className="prev link-button"
+              className="prev link-button multistep__btn"
               onClick={() => (typeof back === 'string'
                 ? history.push(back) : back())}
               content="Back"

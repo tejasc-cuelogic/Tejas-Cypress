@@ -62,6 +62,8 @@ export default class UploadDocument extends Component {
                 </Grid.Column>
               ))
             }
+          </Grid>
+          <Grid stackable width={16}>
             {
               ['previousEstimateIncome', 'estimateIncome'].map(field => (
                 ((!isFilling && field === 'previousEstimateIncome')

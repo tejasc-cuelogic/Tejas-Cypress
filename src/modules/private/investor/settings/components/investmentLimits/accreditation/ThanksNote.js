@@ -1,26 +1,24 @@
 import React from 'react';
-import { Modal, Header, Divider, Icon } from 'semantic-ui-react';
+import { Header, Grid, Button } from 'semantic-ui-react';
+import { NsModal } from '../../../../../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 const ThanksNote = props => (
-  <Modal open closeIcon onClose={props.closeModal} size="mini">
-    <Modal.Header className="center-align signup-header">
-      <Header as="h2">
-        <Icon.Group>
-          <Icon className="ns-document" />
-          <Icon corner color="orange" className="ns-reload-circle" />
-        </Icon.Group>
-      </Header>
-      <Header as="h3">Thank you! <br />Your request was received.</Header>
-      <Divider section />
-      <p>
-        We are processing your request and we will notify you about status changes.
-      </p>
-    </Modal.Header>
-    {/* <div className="center-align">
-      <Button onClick={props.closeModal} primary size="large">Close</Button>
-    </div> */}
-    <Divider hidden />
-  </Modal>
+  <NsModal
+    open
+    onClose={props.closeModal}
+  >
+    <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
+      <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
+        <Header as="h3">Thank you! Your request was received.</Header>
+        <p>
+          We are processing your request and we will notify you about status changes.
+        </p>
+        <Button fluid={isMobile} primary>Explore Campaigns</Button>
+      </Grid.Column>
+    </Grid>
+  </NsModal>
 );
 
 export default ThanksNote;
