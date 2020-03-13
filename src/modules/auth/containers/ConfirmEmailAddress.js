@@ -200,7 +200,7 @@ export default class ConfirmEmailAddress extends Component {
       >
         <Route exact path={`${this.props.match.url}/create-or-cancel`} render={() => <ConfirmCreateOrCancel refLink={this.props.match.url} />} />
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
-          <Grid.Column width="8" className="pt-0">
+          <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
             <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your e-mail address</Header>
             <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
               We use Multi-Factor Authentication (MFA) to increase the security of your
