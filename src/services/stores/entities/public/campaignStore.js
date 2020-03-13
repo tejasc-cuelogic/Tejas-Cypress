@@ -74,8 +74,6 @@ export class CampaignStore {
     closingBinder: { selectedDoc: null, accordionActive: true },
   };
 
-  @observable mediaDetails = {};
-
   @action
   setFieldValue = (field, val, path = false) => {
     if (path) {
