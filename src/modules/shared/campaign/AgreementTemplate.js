@@ -133,7 +133,7 @@ function AgreementTemplate(props) {
   const { AGREEMENT_DETAILS_FORM, setCheckbox, isAgreementFormValid, embedUrl, docLoading, agreementPage } = props.agreementsStore;
   const { getCurrentInvestNowHealthCheck } = props.investmentLimitStore;
   const previouslyInvestedAmount = get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') ? get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') : '0';
-  const { uiStore } = props; // match
+  const { uiStore } = props;
   const { inProgress } = uiStore;
   const { getInvestorAccountById } = props.portfolioStore;
   const { campaign, campaignStatus } = props.campaignStore;
