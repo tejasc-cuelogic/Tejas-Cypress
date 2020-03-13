@@ -1,9 +1,10 @@
 /* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
-import { get, find, has, cloneDeep } from 'lodash';
+import { get, find, has, cloneDeep, includes } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Responsive, Container, Grid, Visibility, Button, Icon } from 'semantic-ui-react';
+// import queryString from 'query-string';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, MobileDropDownNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
@@ -291,7 +292,7 @@ class offerDetails extends Component {
                       <Route exact path={`${match.url}/agreement`} render={() => <AgreementTemplate refLink={this.props.match.url} />} />
                       <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
                       <Route exact path={`${match.url}/congratulation`} render={() => <Congratulation refLink={this.props.match.url} />} />
-                      <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
+                      <Route exact path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
                       <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
                       <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
                       <Route component={NotFound} />
@@ -302,6 +303,7 @@ class offerDetails extends Component {
             </section>
           </Container>
         </div>
+        { includes(this.props.location.pathname, 'herovideo') && <VideoModal refLink={this.props.match} {...this.props} />}
       </>
     );
   }
