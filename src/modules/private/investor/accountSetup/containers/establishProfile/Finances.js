@@ -43,7 +43,7 @@ class Finances extends Component {
           <Divider hidden />
           <Form.Group widths={2} className="mt-40">
             {['netWorth', 'annualIncomeCurrentYear'].map(field => (
-              smartElement.Input(field)
+              smartElement.Masked(field, { currency: true })
             ))}
           </Form.Group>
           {errors

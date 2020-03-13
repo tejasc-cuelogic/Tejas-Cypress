@@ -157,7 +157,7 @@ export class InvestorProfileStore extends DataModelStore {
           this.setFormData(form, investorProfileData);
           Validator.onChange(this[form], '', '', false);
         });
-        userDetailsStore.mergeUserData('investorProfileData', investorProfileData, 'userPayLoad');
+        userDetailsStore.mergeUserData('investorProfileData', investorProfileData);
         this.invProfileForms.some((form) => {
           const getProfileStep = AccCreationHelper.establishProfileSteps();
           if (!this[form].meta.isValid) {
