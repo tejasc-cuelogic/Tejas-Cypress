@@ -1,9 +1,10 @@
 /* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
-import { get, find, has, cloneDeep } from 'lodash';
+import { get, find, has, cloneDeep, includes } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Responsive, Container, Grid, Visibility, Button, Icon } from 'semantic-ui-react';
+// import queryString from 'query-string';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, MobileDropDownNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
@@ -302,6 +303,7 @@ class offerDetails extends Component {
             </section>
           </Container>
         </div>
+        { includes(this.props.location.pathname, 'herovideo') && <VideoModal refLink={this.props.match} {...this.props} />}
       </>
     );
   }
