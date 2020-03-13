@@ -2,10 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
-import { Header, Button, Grid, Form, Message } from 'semantic-ui-react';
-import { FormCheckbox } from '../../../theme/form';
+import { Header, Button, Grid } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 import { InlineLoader, NsModal } from '../../../theme/shared';
+import CustomAgreement from '../../public/offering/components/investNow/agreement/agreementTemplates/customAgreement';
+import DynamicAgreement from '../../public/offering/components/investNow/agreement/agreementTemplates/dynamicAgreement';
 
 const isMobile = document.documentElement.clientWidth < 768;
 function AgreementTemplate(props) {
@@ -70,25 +71,9 @@ function AgreementTemplate(props) {
     };
   }, []);
 
-  // const handleCloseModal = (e) => {
-  //   if (!showDocuSign && !showAgreementPdf) {
-  //     props.investmentStore.resetData();
-  //     props.accreditationStore.resetUserAccreditatedStatus();
-  //   }
-  //   if (showDocuSign) {
-  //     docuSignHandeler(e, false);
-  //   } else if (showAgreementPdf) {
-  //     agreementPDFLoader(e, false);
-  //   } else if (props.changeInvestment) {
-  //     const { offeringId } = props.match.params;
-  //     props.history.push(`${props.refLink}/${offeringId}`);
-  //   } else {
-  //     props.history.push(`${props.refLink}`);
-  //   }
-  // };
-
-  const submit = () => {
-    if (props.agreementsStore.isAgreementFormValid) {
+  const submit = (currentAction = undefined) => {
+    const isFormValid = currentAction && currentAction === 'CUSTOM' ? props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid : props.agreementsStore.isAgreementFormValid;
+    if (isFormValid) {
       setShowError(false);
       props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
       props.investmentStore.investNowSubmit().then((investmentStatus) => {
@@ -133,12 +118,14 @@ function AgreementTemplate(props) {
   const { AGREEMENT_DETAILS_FORM, setCheckbox, isAgreementFormValid, embedUrl, docLoading, agreementPage } = props.agreementsStore;
   const { getCurrentInvestNowHealthCheck } = props.investmentLimitStore;
   const previouslyInvestedAmount = get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') ? get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') : '0';
-  const { uiStore } = props; // match
+  const { uiStore } = props;
   const { inProgress } = uiStore;
   const { getInvestorAccountById } = props.portfolioStore;
   const { campaign, campaignStatus } = props.campaignStore;
   const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
   const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
+  const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
+  const offeringRegulationType = get(campaign, 'keyTerms.regulation');
   const index = agreementPage;
   return (
     <>
@@ -165,33 +152,30 @@ function AgreementTemplate(props) {
       </NsModal>
       <NsModal
         open
-        // closeIcon={!agreementDetails}
         closeOnRootNodeClick={false}
         closeOnDimmerClick={false}
         onClose={handleCancelAgreement}
         headerLogo
         borderedHeader
         isProgressHeaderDisable
-        isHeaderDisabled={showDocuSign || showAgreementPdf}
-        modalContentClass={(showDocuSign || showAgreementPdf) ? 'pt-0 pb-0' : ''}
-        // back={handleCancelAgreement}
+        isHeaderDisabled={showAgreementPdf}
+        modalContentClass={showAgreementPdf ? 'pt-0 pb-0' : ''}
         disableCloseIcon={showDocuSign || showAgreementPdf}
       >
         {(showDocuSign || showAgreementPdf)
           && (
-          <Button
-            icon={{ className: 'ns-chevron-left' }}
-            className="prev link-button multistep__btn prev mt-50"
-            onClick={e => handleBack(e)}
-            content="Back"
-            type="button"
-          />
-        )}
+            <Button
+              icon={{ className: 'ns-chevron-left' }}
+              className={`${showAgreementPdf ? 'mt-50' : ''} multistep__btn prev prev link-button`}
+              onClick={e => handleBack(e)}
+              content="Back"
+            />
+          )}
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
           <Grid.Column width="10" className="pt-0">
             <div style={{ display: showDocuSign ? 'block' : 'none' }}>
               <div className="pdf-viewer">
-                <iframe onLoad={props.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
+                {/* <iframe onLoad={props.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} /> */}
                 <iframe onLoad={props.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
               </div>
             </div>
@@ -215,49 +199,41 @@ function AgreementTemplate(props) {
                 Let&#39;s confirm your investment.<br />You are investing
                   <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
                 {AGREEMENT_DETAILS_FORM.fields.page[index].title.value
-                && (
-                <Header.Subheader>
-                  {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
-                </Header.Subheader>
-                )}
-              </Header>
-              <Form
-                error={(showError
-                  && !isAgreementFormValid)
-                  || investmentFlowErrorMessage}
-              >
-                <Grid stackable>
-                  <Grid.Row>
-                    <Grid.Column width={16}>
-                      <FormCheckbox
-                        defaults
-                        fielddata={AGREEMENT_DETAILS_FORM.fields.page[index].toc}
-                        name="toc"
-                        containerclassname={`ui list agreement-list very relaxed ${showError && !isAgreementFormValid ? 'error' : ''}`}
-                        changed={(e, res) => setCheckbox(e, res, 'page', index)}
-                        disabled={inProgress}
-                      />
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
-                <div className="mt-30">
-                  <Button primary content="Invest" disabled={inProgress || !isAgreementFormValid} loading={inProgress} onClick={submit} />
-                  {/* <Button.Group widths="2" className="inline">
-                    <Button type="button" color="gray" disabled={inProgress} content="Cancel" onClick={handleCancelAgreement} />
-                  </Button.Group> */}
-                </div>
-                {!showError && investmentFlowErrorMessage
                   && (
-                    <Message error className="mt-30 bottom-error">
-                      {investmentFlowErrorMessage}
-                    </Message>
+                    <Header.Subheader>
+                      {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
+                    </Header.Subheader>
+                  )}
+              </Header>
+              {
+                campaignStatus.isAgreementTemplate
+                  ? (
+                    <DynamicAgreement
+                      inProgress={inProgress}
+                      showError={showError}
+                      docuSignHandeler={docuSignHandeler}
+                      agreementPDFLoader={agreementPDFLoader}
+                      submit={submit}
+                      setCheckbox={setCheckbox}
+                      isAgreementFormValid={isAgreementFormValid}
+                      investmentFlowErrorMessage={investmentFlowErrorMessage}
+                      index={index}
+                      {...props}
+                    />
                   )
-                }
-                {showError
-                  && !isAgreementFormValid
-                  && <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
-                }
-              </Form>
+                  : (
+                    <CustomAgreement
+                      inProgress={inProgress}
+                      showError={showError}
+                      docuSignHandeler={docuSignHandeler}
+                      agreementPDFLoader={agreementPDFLoader}
+                      submit={submit}
+                      agreementStatement={agreementStatement}
+                      offeringRegulationType={offeringRegulationType}
+                      {...props}
+                    />
+                  )
+              }
             </div>
           </Grid.Column>
         </Grid>

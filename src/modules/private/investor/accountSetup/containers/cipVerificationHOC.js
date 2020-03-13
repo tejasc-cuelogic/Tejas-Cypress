@@ -4,7 +4,7 @@ import { NsModal, ListErrors } from '../../../../../theme/shared';
 import { FormInput, MaskedInput, FormDropDown } from '../../../../../theme/form';
 import { US_STATES } from '../../../../../constants/account';
 import { INVESTOR_URLS } from '../../../../../services/constants/url';
-
+import Helper from '../../../../../helper/utility';
 
 function cipVerificationHOC(WrappedComponent) {
   // eslint-disable-next-line no-unused-expressions
@@ -102,7 +102,7 @@ function cipVerificationHOC(WrappedComponent) {
           <FormDropDown
             name="state"
             fielddata={{ ...addressForm.fields.state, error: undefined }}
-            options={US_STATES}
+            options={US_STATES.map(s => ({ ...s, ...{ text: Helper.caseify(s.text) } }))}
             search
             selection
             placeholder="Select"

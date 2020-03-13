@@ -12,7 +12,7 @@ import InvestNow from '../components/investNow/InvestNow';
 import CommunityGuideline from '../components/campaignDetails/CommunityGuideline';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import SecondaryMenu from '../components/CampaignSecondaryMenu';
-import Agreement from '../components/investNow/agreement/components/Agreement';
+// import Agreement from '../components/investNow/agreement/components/Agreement';
 import AgreementTemplate from '../../../shared/campaign/AgreementTemplate';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
@@ -232,7 +232,7 @@ class offerDetails extends Component {
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
     const showWatchingBtn = isWatching !== 'loading';
-    const AgreementComponent = campaignStatus.isAgreementTemplate ? AgreementTemplate : Agreement;
+    // const AgreementComponent = campaignStatus.isAgreementTemplate ? AgreementTemplate : Agreement;
     const followBtn = (
       <Button disabled={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} inverted loading={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} fluid color="white" onClick={this.handleFollowBtn}>
         {showWatchingBtn && <Icon name={` ${!this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') && 'heart'} ${isWatching ? '' : 'outline'}`} color={isWatching ? 'green' : ''} />} {isWatching ? 'Following' : 'Follow'}
@@ -288,7 +288,7 @@ class offerDetails extends Component {
                       <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
                       <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
                       <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}${newLayout ? '#comments' : '/comments'}`} {...props} />} />
-                      <Route exact path={`${match.url}/agreement`} render={() => <AgreementComponent refLink={this.props.match.url} />} />
+                      <Route exact path={`${match.url}/agreement`} render={() => <AgreementTemplate refLink={this.props.match.url} />} />
                       <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
                       <Route exact path={`${match.url}/congratulation`} render={() => <Congratulation refLink={this.props.match.url} />} />
                       <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />

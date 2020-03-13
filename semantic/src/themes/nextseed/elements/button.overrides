@@ -303,6 +303,11 @@
     +.ui.buttons {
         margin-top: @10px;
     }
+    &.toc-list{
+        float: right;
+        margin-top: 44px;
+        margin-right: -77px;
+    }
 }
 
 .ui.button.multistep__btn{
