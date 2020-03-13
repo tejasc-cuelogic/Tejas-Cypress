@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingIdBySlug, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist, getOfferingMedia } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingIdBySlug, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
@@ -146,46 +146,6 @@ export class CampaignStore {
         offeringCreationStore.setCurrentOfferingId(null);
         portfolioStore.setFieldValue('investmentDetails', {});
         reject(err);
-      },
-    });
-  });
-
-  @action
-  getOfferingMediaMetaOLD = id => new Promise((resolve) => {
-    const gqlClient = authStore.isUserLoggedIn ? client : clientPublic;
-    this.mediaDetails = graphql({
-      client: gqlClient,
-        query: getOfferingMedia,
-        fetchPolicy: 'no-cache',
-        variables: { id, isValid: true },
-        onFetch: (res) => {
-          if (res || !this.mediaDetails.loading) {
-            resolve(res.getOfferingDetailsBySlug.media);
-          }
-        },
-        onError: (err) => {
-          console.log(err);
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        },
-      });
-  });
-
-  @action
-  getOfferingMediaMeta = id => new Promise((resolve) => {
-    const gqlClient = authStore.isUserLoggedIn ? client : clientPublic;
-    this.mediaDetails = graphql({
-      client: gqlClient,
-      query: getOfferingMedia,
-      variables: { id, isValid: true },
-      fetchPolicy: 'network-only',
-      onFetch: (data) => {
-        if (data && data.getOfferingDetailsBySlug && !this.mediaDetails.loading) {
-          resolve(data.getOfferingDetailsBySlug.media);
-        }
-      },
-      onError: (err) => {
-        console.log(err);
-        Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
   });
