@@ -20,7 +20,9 @@ const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, 
   <div className="row-wrap striped-table">
     <div className="balance first-column">
       <DragHandle />
+      <div>
       {preview(get(toc, 'label'))}
+      </div>
     </div>
     <div className="balance width-100">
       {get(toc, 'account') ? accountTitle[get(toc, 'account')] : 'N/A'}
