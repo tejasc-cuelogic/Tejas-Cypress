@@ -137,10 +137,10 @@ class Comments extends Component {
               time.
         </p>
             <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
-            <p>
+            {/* <p>
               If you have any technical questions or questions about NextSeed, please
           email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
-        </p>
+        </p> */}
           </>
           // )
         }
@@ -166,10 +166,20 @@ class Comments extends Component {
           : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
             ? (
               <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
-                <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
-                <Form reply className="public-form clearfix">
-                  <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
-                </Form>
+                {isInvestorAccreditated.requestedStatus
+                  ? (
+                    <p>In order to leave a comment, we must confirm your status as an accredited investor. If you have any questions about your
+                    approval status, please contact <a href="mailto: support@nextseed.com">support@nextseed.com</a>.</p>
+                  )
+                  : (
+                    <>
+                      <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
+                      <Form reply className="public-form clearfix">
+                        <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
+                      </Form>
+                    </>
+                  )
+                }
               </section>
             )
             : (!disablePostComment)
