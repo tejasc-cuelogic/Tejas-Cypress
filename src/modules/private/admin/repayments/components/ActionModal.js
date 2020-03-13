@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { isEmpty, get } from 'lodash';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
 import beautify from 'json-beautify';
-import { MaskedInput, FormInput, FormRadioGroup } from '../../../../../theme/form';
+import { MaskedInput, FormInput, FormRadioGroup, FormDropDown } from '../../../../../theme/form';
 
 const title = {
   adminPaymentGenerateAdminSummary: 'Generate Admin Summary',
@@ -36,11 +36,13 @@ function ActionModal(props) {
               changed={(values, name) => maskChange(values, name, 'ACTION_FRM', 'formatted')}
               dateOfBirth
             />
-            <FormInput
-              fluid
+            <FormDropDown
               name="scope"
-              fielddata={ACTION_FRM.fields.scope}
-              changed={(e, result) => formChange(e, result, 'ACTION_FRM')}
+              fielddata={{ ...ACTION_FRM.fields.scope.values, error: undefined }}
+              options={ACTION_FRM.fields.scope.values.map(s => ({ ...s, ...{ text: s.text } }))}
+              search
+              selection
+              placeholder="Select"
             />
             <div className="field">
               <Header as="label">{ACTION_FRM.fields.sendEmail.label}</Header>
@@ -64,7 +66,7 @@ function ActionModal(props) {
               <>
               <Header as="h5">Response: </Header>
               <pre className="no-updates bg-offwhite padded json-text">
-                {beautify(response, null, 2, 100)}
+                {beautify(response, null, 2, 30)}
               </pre>
               </>
             )
