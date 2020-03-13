@@ -40,21 +40,20 @@ export const PAYMENT = FormHelper.generateMeta([
 
 export const ACTION = FormHelper.generateMeta([
   ['date', 'Date', moment().format('MM-DD-YYYY'), 'required|date', 'MM-DD-YYYY', { props: { defaultValue: moment().format('MM-DD-YYYY') }, customErrors: { date: 'Date is not a valid date format.' }, asIn: true }],
-  ['scope1', 'Scope1', '', '', 'e.g ISSUER'],
   ['scope', 'Scope', '', '', '',
   {
     asIn: true,
     props: {
         values: [
-          { key: 'ADMIN', text: 'ADMIN', value: 'ADMIN', applicableFor: ['ALL'] },
-          { key: 'DEV', text: 'DEV', value: 'DEV', applicableFor: ['ALL'] },
-          { key: 'ISSUER', text: 'ISSUER', value: 'ISSUER', applicableFor: ['ALL'] },
-          { key: 'GOLDSTAR', text: 'GOLDSTAR', value: 'GOLDSTAR', applicableFor: ['GOLDSTAR'] },
+          { key: 'ADMIN', text: 'ADMIN', value: 'admin', applicableFor: ['ALL'] },
+          { key: 'DEV', text: 'DEV', value: 'dev', applicableFor: ['ALL'] },
+          { key: 'ISSUER', text: 'ISSUER', value: 'issuer', applicableFor: ['ALL'] },
+          { key: 'GOLDSTAR', text: 'GOLDSTAR', value: 'goldstar', applicableFor: ['GOLDSTAR'] },
         ],
     },
   },
 ],
-  ['sendEmail', 'Send Email', false, '', 'Send Email',
+  ['sendEmail', 'Send Email', true, '', 'Send Email',
   { props: { values: [
     { label: 'Yes', value: true },
     { label: 'No', value: false },
