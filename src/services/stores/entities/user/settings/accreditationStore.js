@@ -1082,9 +1082,8 @@ export class AccreditationStore {
             headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'Please confirm your accredited investor status to invest in this offering.';
             break;
           case 'EXPIRED':
-            // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}
             headerSubheaderTextObj.header = 'Accredited Status Expired';
-            headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
+            // headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
             break;
           case 'PROCESSING':
             headerSubheaderTextObj.header = 'Your account is being processed.';

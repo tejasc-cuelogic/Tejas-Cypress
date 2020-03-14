@@ -30,7 +30,7 @@ export default class EmailWelcomeScreen extends Component {
     return (
       <NsModal open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick={false}>
         <Grid centered stackable className={responsiveVars.isMobile ? 'full-width mt-0' : 'mt-0'}>
-          <Grid.Column width="8" className="pt-0">
+          <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
             <Header as="h3" className="mt-30">Welcome!</Header>
             <p className="mt-30">
               Hi {`${get(userDetails, 'info.firstName') || ''}`},<br />

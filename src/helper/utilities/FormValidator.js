@@ -4,7 +4,7 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import moment from 'moment';
-import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get, isUndefined, pickBy, identity } from 'lodash';
+import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get, isUndefined, pickBy, identity, isEmpty } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
@@ -285,6 +285,9 @@ class FormValidator {
   setAddressFields = (place, form) => {
     const currentForm = form;
     const data = Helper.gAddressClean(place);
+    if (isEmpty(data)) {
+      return false;
+    }
     if (currentForm.fields.street) {
       this.onChange(currentForm, { name: 'street', value: data.residentalStreet });
     } else {
@@ -292,7 +295,7 @@ class FormValidator {
     }
     this.onChange(currentForm, { name: 'state', value: data.state || '' });
     this.onChange(currentForm, { name: 'city', value: data.city || '' });
-    this.onChange(currentForm, { name: 'zipCode', value: data.zipCode || '' });
+    return this.onChange(currentForm, { name: 'zipCode', value: data.zipCode || '' });
   }
 
   setAddressFieldsIndex = (place, form, formName, subForm = 'data', index, action = false, US_STATES = false) => {

@@ -99,7 +99,7 @@ const summaryData = summaryValues => [
     },
     {
       title: 'Total Net Annualized Return',
-      value: summaryValues.tnar,
+      value: `${summaryValues.tnar}%`,
       tooltip: 'TNAR calculation(new calculation accounts for all payments to date plus a balloon payment at maturity for the current remaining balance)',
     },
     {

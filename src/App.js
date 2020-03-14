@@ -57,7 +57,7 @@ class App extends Component {
     window.addEventListener('resize', this.handleResize);
     this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
     const urlParameter = queryString.parse(this.props.location.search);
-    if (urlParameter) {
+    if (!isEmpty(urlParameter)) {
       let tags = DataFormatter.createEligibleTagsObj(urlParameter);
       if (!isEmpty(tags)) {
         const existingTags = JSON.parse(window.localStorage.getItem('tags'));
@@ -81,8 +81,8 @@ class App extends Component {
   componentDidMount() {
     const { location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
-    if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue.
-      history.push(location.pathname.replace(/\/+$/, ''));
+    if (location.pathname.endsWith('/') && !location.hash) { // resolved trailing slash issue.
+      history.push(location.pathname.replace(/\/+$/, location.search));
     }
     this.checkForPasswordProtect();
     authActions.verifySession()
