@@ -345,7 +345,8 @@ export class CampaignStore {
     campaignStatus.dataRooms = this.dataRoomDocs.length;
     campaignStatus.gallary = get(campaign, 'media.gallery') ? get(campaign, 'media.gallery').length : 0;
     campaignStatus.keyTerms = get(campaign, 'keyTerms');
-    campaignStatus.issuerStatement = get(campaign, 'keyTerms.offeringDisclaimer');
+    campaignStatus.campaignTemplate = get(campaign, 'template');
+    campaignStatus.issuerStatement = campaignStatus.campaignTemplate === 2 ? get(campaign, 'misc.issuerStatement') : get(campaign, 'keyTerms.offeringDisclaimer');
     campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
     campaignStatus.businessModel = get(campaign, 'offering.about.businessModel');
     campaignStatus.localAnalysis = get(campaign, 'offering.about.locationAnalysis');

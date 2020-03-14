@@ -1,21 +1,19 @@
 import { FormHelper } from '../../../../helper';
 
 const TOMBSTONE_TOGGLE_META = [
-  { label: 'Early Bird', value: 'EARLY_BIRD' },
   { label: 'Investor Count', value: 'INVESTOR_COUNT' },
 ];
 
 const HEADER_TOGGLE_META = [
-  { label: 'Early Bird', value: 'EARLY_BIRD' },
-  { label: 'Investor Count', value: 'INVESTOR_COUNT' },
-  { label: 'Repayment Count', value: 'REPAYMENT_COUNT' },
   { label: 'Days Left', value: 'DAYS_LEFT' },
+  { label: 'Investor Count', value: 'INVESTOR_COUNT' },
+  { label: 'Early Bird', value: 'EARLY_BIRD' },
 ];
 
 export const TOMBSTONE_BASIC = FormHelper.generateMeta([
   ['description', 'Tombstone Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
   ['customTag', 'Tombstone Custom Tag', '', 'optional', 'Enter here...'],
-  ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { values: TOMBSTONE_TOGGLE_META } }],
+  ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { defaultValue: [], values: TOMBSTONE_TOGGLE_META } }],
   ['image', 'Tombstone Image', '', 'optional', '', { s3Upload: true }],
 ]);
 
@@ -124,17 +122,19 @@ export const TOMBSTONE_HEADER_META = {
       error: undefined,
       rule: 'optional',
       options: [
-        { key: 'multiple', value: 'investmentMultiple', text: 'Multiple' },
-        { key: 'Max Offering Amount CF', value: 'maxOfferingAmountCF', text: 'Max Offering Amount CF' },
-        { key: 'Max Offering Amount 506', value: 'maxOfferingAmount506', text: 'Max Offering Amount 506' },
-        { key: 'Max Offering Amount 506C', value: 'maxOfferingAmount506C', text: 'Max Offering Amount 506C' },
-        { key: 'Min Offering Amount CF', value: 'minOfferingAmountCF', text: 'Min Offering Amount CF' },
-        { key: 'Min Offering Amount 506', value: 'minOfferingAmount506', text: 'Min Offering Amount 506' },
-        { key: 'Min Offering Amount 506C', value: 'minOfferingAmount506C', text: 'Min Offering Amount 506C' },
-        { key: 'Security', value: 'securities', text: 'Security' },
-        { key: 'Total Round Size', value: 'totalRoundSize', text: 'Total Round Size' },
-        { key: 'Preferred Return', value: 'preferredReturn', text: 'Preferred Return' },
-        { key: 'Offering Size', value: 'offeringSize', text: 'Offering Size' },
+        { key: 'multiple', value: 'keyTerms.investmentMultiple', text: 'Multiple' },
+        { key: 'Max Offering Amount CF', value: 'keyTerms.maxOfferingAmountCF', text: 'Max Offering Amount CF' },
+        { key: 'Max Offering Amount 506', value: 'keyTerms.maxOfferingAmount506', text: 'Max Offering Amount 506' },
+        { key: 'Max Offering Amount 506C', value: 'keyTerms.maxOfferingAmount506C', text: 'Max Offering Amount 506C' },
+        { key: 'Min Offering Amount CF', value: 'keyTerms.minOfferingAmountCF', text: 'Min Offering Amount CF' },
+        { key: 'Min Offering Amount 506', value: 'keyTerms.minOfferingAmount506', text: 'Min Offering Amount 506' },
+        { key: 'Min Offering Amount 506C', value: 'keyTerms.minOfferingAmount506C', text: 'Min Offering Amount 506C' },
+        { key: 'Security', value: 'keyTerms.securities', text: 'Security' },
+        { key: 'Maturity', value: 'keyTerms.maturity', text: 'Maturity' },
+        { key: 'Regulation', value: 'keyTerms.regulation', text: 'Regulation' },
+        { key: 'Total Round Size', value: 'keyTerms.totalRoundSize', text: 'Total Round Size' },
+        { key: 'Preferred Return', value: 'keyTerms.preferredReturn', text: 'Preferred Return' },
+        { key: 'Offering Size', value: 'keyTerms.offeringSize', text: 'Offering Size' },
       ],
       placeHolder: 'Enter here',
     },

@@ -12,20 +12,17 @@ class IssuerStatement extends Component {
   }
 
   render() {
-    const { campaign, newLayout } = this.props;
-    const offeirngDisclaimer = campaign && campaign.keyTerms
-      && campaign.keyTerms.offeringDisclaimer
-      ? campaign.keyTerms.offeringDisclaimer : null;
+    const { issuerStatement, newLayout } = this.props;
     return (
       <>
         <Header as="h3" className={`${newLayout && isTablet ? 'mb-20 mt-40' : newLayout ? 'mt-40 mb-30' : ''} anchor-wrap`}>
           Issuer Statement
           <span className="anchor" id="issuer-statement" />
         </Header>
-        {offeirngDisclaimer
+        {issuerStatement
           ? (
             <p className="mb-40 copyright-info">
-              <HtmlEditor readOnly content={(offeirngDisclaimer)} />
+              <HtmlEditor readOnly content={(issuerStatement)} />
             </p>
           )
           : <InlineLoader text="No Data Found" className="bg-offwhite" />

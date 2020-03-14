@@ -26,20 +26,21 @@ export default class CampaignHeaderPreview extends Component {
     return (
       <>
         <div className="campaign-banner">
-          {get(headerBasicFields, 'heroBackgroundImage.preSignedUrl')
-            && <Image64 bg className="campaign-details-banner" srcUrl={get(headerBasicFields, 'heroBackgroundImage.preSignedUrl')} />
+          {headerBasicFields.heroBackgroundImage.preSignedUrl
+            && <Image64 originalImg bg className="campaign-details-banner" srcUrl={get(headerBasicFields, 'heroBackgroundImage.preSignedUrl')} />
           }
           <section className="banner">
             <Responsive minWidth={768} as={Container}>
               <Grid relaxed stackable centered>
                 <Grid.Column width={9}>
                   <div className="video-wrapper campaign">
-                    {get(headerBasicFields, 'heroVideoURL.value')
+                    {headerBasicFields.heroVideoURL.value
                       ? (
                         <>
                           <Image64
+                            originalImg
                             bg
-                            srcUrl={get(headerBasicFields, 'heroImage.preSignedUrl')}
+                            srcUrl={headerBasicFields.heroImage.preSignedUrl}
                             imgType="heroImage"
                           />
                           <Icon className="ns-play play-icon" />
@@ -47,8 +48,9 @@ export default class CampaignHeaderPreview extends Component {
                       )
                       : (
                         <Image64
+                          originalImg
                           bg
-                          srcUrl={get(headerBasicFields, 'heroImage.preSignedUrl')}
+                          srcUrl={headerBasicFields.heroImage.preSignedUrl}
                           imgType="heroImage"
                         />
                       )
@@ -61,8 +63,8 @@ export default class CampaignHeaderPreview extends Component {
                           {headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
                             && (
                             <Statistic size="mini" className="basic">
-                              <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                              <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                              <Statistic.Value>{countDown.valueToShow || 'X'}</Statistic.Value>
+                              <Statistic.Label>{countDown.labelToShow || 'Days Left'}</Statistic.Label>
                             </Statistic>
                             )}
                             {headerBasicFields.toggleMeta.value.includes('INVESTOR_COUNT')
@@ -173,7 +175,7 @@ export default class CampaignHeaderPreview extends Component {
                     <>
                       {(
                         <p className="mb-0">
-                          {row.keyLabel.value && `${row.keyLabel.value} :`} {row.keyType.value === 'custom' ? row.keyValue.value : Helper.formatValue(row.keyFormat.value, get(offer, `keyTerms.${row.keyValue.value}`))}
+                          {row.keyLabel.value && `${row.keyLabel.value}:`} {row.keyType.value === 'custom' ? row.keyValue.value : Helper.formatValue(row.keyFormat.value, Helper.enumToText(row.keyValue.value, get(offer, row.keyValue.value)))}
                         </p>
                       )}
                     </>

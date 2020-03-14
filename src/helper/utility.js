@@ -13,6 +13,7 @@ import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLO
 import authStore from '../services/stores/entities/shared/authStore';
 import userStore from '../services/stores/entities/userStore';
 import DataFormatter from './utilities/DataFormatter';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../constants/offering';
 
 export class Utility {
   // Default options for the toast
@@ -396,6 +397,20 @@ export class Utility {
     const regulationType = _.get(offeringRegulationArr, '[0]');
     return regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
   }
+
+  enumToText = (valKey = '', value) => {
+    let key = valKey.split('.');
+    let val = value;
+    if (valKey && key.length) {
+      key = key[key.length - 1];
+      if (key === 'securities') {
+        val = CAMPAIGN_KEYTERMS_SECURITIES[value];
+      } else if (key === 'regulation') {
+        val = CAMPAIGN_KEYTERMS_REGULATION[value];
+      }
+    }
+    return val;
+  };
 }
 
 export default new Utility();

@@ -287,7 +287,7 @@ class CampaignLayout extends Component {
         {campaignStatus.issuerStatement ? (
           <>
             <Divider hidden section />
-            <IssuerStatement newLayout campaign={campaign} />
+            <IssuerStatement newLayout issuerStatement={campaignStatus.issuerStatement} />
           </>
         ) : null
         }

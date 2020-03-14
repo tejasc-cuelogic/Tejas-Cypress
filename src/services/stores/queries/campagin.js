@@ -212,6 +212,7 @@ export const campaignDetailsQuery = gql`
     template
     ${offeringTemplate2.header}
     ${offeringTemplate2.content}
+    ${offeringTemplate2.misc}
     investmentSummary {
       isInvestedInOffering
       tranche

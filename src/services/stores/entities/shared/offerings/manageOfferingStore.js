@@ -55,7 +55,7 @@ export class ManageOfferingStore extends DataModelStore {
     campaignStatus.maxFlagStatus = !!(money.isZero(formatedReachedMaxCompairAmountValue)
       || money.isPositive(formatedReachedMaxCompairAmountValue));
     campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
-    campaignStatus.address = get(offer, 'keyTerms.city') || get(offer, 'keyTerms.state') ? `${get(offer, 'keyTerms.city') || '-'}, ${get(offer, 'keyTerms.state') || '-'}` : '--';
+    campaignStatus.address = get(offer, 'keyTerms.city') || get(offer, 'keyTerms.state') ? `${get(offer, 'keyTerms.city') || 'Houston'}, ${get(offer, 'keyTerms.state') || 'Texas'}` : 'Houston, Texas';
     campaignStatus.isClosed = get(offer, 'stage') !== 'LIVE';
     campaignStatus.isCreation = get(offer, 'stage') === 'CREATION';
     campaignStatus.earlyBird = get(offer, 'earlyBird') || null;
@@ -189,7 +189,6 @@ export class ManageOfferingStore extends DataModelStore {
     TOMBSTONE_HEADER_META_FRM: observable,
     HEADER_BASIC_FRM: observable,
     OFFERING_MISC_FRM: observable,
-    uploadMedia: action,
     reOrderHandle: action,
     updateOffering: action,
     uploadFileToS3: action,

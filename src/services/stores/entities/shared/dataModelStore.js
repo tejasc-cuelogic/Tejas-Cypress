@@ -258,7 +258,7 @@ export default class DataModelStore {
     this.setMediaAttribute(form, 'showLoader', true, name);
     fileUpload.uploadToS3(fileObj, path)
       .then((res) => {
-        console.log(res);
+        window.logger(res);
         const url = res.split('/');
         this.setMediaAttribute(form, 'value', url[url.length - 1], name);
         this.setMediaAttribute(form, 'preSignedUrl', res, name);
@@ -266,7 +266,7 @@ export default class DataModelStore {
       })
       .catch((err) => {
         this.setMediaAttribute(form, 'showLoader', false, name);
-        console.log(err);
+        window.logger(err);
       });
   };
 
@@ -395,6 +395,7 @@ export const decorateDefault = {
   currentScore: observable,
   removeUploadedFiles: action,
   setFieldValue: action,
+  uploadMedia: action,
   formChange: action,
   maskChange: action,
   validateForm: action,

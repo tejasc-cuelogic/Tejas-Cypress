@@ -33,6 +33,7 @@ export default class TombstonePreview extends Component {
               <div className="campaign-image-wrap">
                 <div className="campaign-card-image">
                   <Image64
+                    originalImg
                     reRender
                     bg
                     centered
@@ -77,7 +78,7 @@ export default class TombstonePreview extends Component {
                                 <Table.Row verticalAlign="top">
                                   <Table.Cell collapsing>{row.keyLabel.value}</Table.Cell>
                                   <Table.Cell className="highlight-text right-align">
-                                    <b>{row.keyType.value === 'custom' ? row.keyValue.value : Helper.formatValue(row.keyFormat.value, get(offer, `keyTerms.${row.keyValue.value}`))}</b>
+                                    <b>{row.keyType.value === 'custom' ? row.keyValue.value : Helper.formatValue(row.keyFormat.value, Helper.enumToText(row.keyValue.value, get(offer, row.keyValue.value)))}</b>
                                   </Table.Cell>
                                 </Table.Row>
                               )
@@ -92,12 +93,17 @@ export default class TombstonePreview extends Component {
                 </Card.Content>
               </div>
               <Card.Content extra>
+                {[TOMBSTONE_BASIC_FRM.fields.toggleMeta.value].includes('INVESTOR_COUNT')
+                && (
+                <>
                 <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount') || 0, 0)} from {get(offer, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
                 {isFunded
                   && (
                     <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offer, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>
                   )
                 }
+                </>
+                )}
                 <p className="more-info">
                   Offered by {get(offer, 'regulation')
                     ? CAMPAIGN_OFFERED_BY[get(offer, 'regulation')]
