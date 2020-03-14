@@ -182,7 +182,7 @@ export default class CampaignHeaderV2 extends Component {
                         <>
                           {(
                             <p className="mb-0">
-                              {`${row.keyLabel || ''} :`} {row.keyType === 'custom' ? row.keyValue : Helper.formatValue(row.keyFormat, Helper.enumToText(row.keyValue, get(campaign, row.keyValue)))}
+                              {`${row.keyLabel || ''}:`} {row.keyType === 'custom' ? row.keyValue : Helper.formatValue(row.keyFormat, Helper.enumToText(row.keyValue, get(campaign, row.keyValue)))}
                             </p>
                           )}
                         </>
