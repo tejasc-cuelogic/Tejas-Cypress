@@ -209,9 +209,9 @@ export default class MultiStep extends React.Component {
       this.props.setUiStorevalue('inProgressArray', []);
       return;
     }
-
-    if (this.state.compState === 0 && this.props.isAccountCreation) {
-      this.props.history.push('/dashboard/setup/account-creation');
+    const { backUrl } = this.props.steps[this.state.compState];
+    if (backUrl) {
+      this.props.history.push(backUrl);
     }
 
     if (this.state.compState > 0) {
@@ -269,6 +269,7 @@ export default class MultiStep extends React.Component {
       this.next();
     }
     const closeDimmerClickAction = this.props.closeOnDimmerClick ? this.props.closeOnDimmerClick : false;
+    const isBackCta = ((!currentStep.disablePrevButton && this.state.compState !== 0) || this.props.steps[this.state.compState].backUrl);
     return (
       /* eslint-disable jsx-a11y/no-static-element-interactions */
       <div onKeyDown={!currentStep.disableNextButton
@@ -307,7 +308,7 @@ export default class MultiStep extends React.Component {
                   {isMobile
                     && (
                       <>
-                        {!currentStep.disablePrevButton
+                        {isBackCta
                           && (
                             <Button
                               icon={{ className: 'ns-chevron-left' }}
@@ -340,7 +341,7 @@ export default class MultiStep extends React.Component {
             {!isMobile
               ? (
                 <>
-                  {!currentStep.disablePrevButton
+                  {isBackCta
                     && (
                       <Button
                         icon={{ className: 'ns-chevron-left' }}
@@ -351,7 +352,7 @@ export default class MultiStep extends React.Component {
                     )
                   }
                   <Grid centered textAlign="left">
-                    <Grid.Column width="8">
+                    <Grid.Column mobile={16} tablet={10} computer={8}>
                       {currentStep.component}
                     </Grid.Column>
                   </Grid>

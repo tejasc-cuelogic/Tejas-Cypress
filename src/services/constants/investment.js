@@ -218,3 +218,26 @@ export const VOID_TYPE = [
   { key: 'ADMINCANCEL', value: 'ADMINCANCEL', text: 'ADMIN CANCEL' },
   { key: 'OFFERING_TERMINATED', value: 'OFFERING_TERMINATED', text: 'OFFERING TERMINATED' },
 ];
+
+export const PARALLEL_INVESTMENT_OPTIONS = {
+  option: {
+    value: '',
+    values: [
+      {
+        label: 'Yes',
+        labelDescription: <>
+          Verify my status as an accredited investor</>,
+        value: 'yes',
+      },
+      {
+        label: 'No',
+        labelDescription: <>
+          Proceed to invest under Regulation Crowdfunding</>,
+        value: 'no',
+      },
+    ],
+    // error: undefined,
+    // rule: 'required',
+    // key: 'role',
+  },
+};
