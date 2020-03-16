@@ -248,7 +248,7 @@ export class Auth {
     const attributeList = {
       'custom:roles': JSON.stringify([fields.role.value]),
       given_name: fields.givenName.value,
-      family_name: fields.familyName.value,
+      family_name: fields.email.value,
     };
     try {
       const user = await AmplifyAuth.signUp({
