@@ -541,10 +541,7 @@ module.exports = (webpackEnv) => {
         {},
         {
           inject: true,
-          template: paths.appHtml,
-          apiKeys: {
-            google: (process.env.GOOGLE_API_KEY) ? process.env.GOOGLE_API_KEY : '',
-          }
+          template: paths.appHtml
         },
         isEnvProduction
           ? {

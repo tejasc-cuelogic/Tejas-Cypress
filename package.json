@@ -111,6 +111,7 @@
     "react-copy-to-clipboard": "^5.0.1",
     "react-custom-scrollbars": "^4.2.1",
     "react-datepicker": "^1.4.1",
+    "react-dependent-script": "^1.1.2",
     "react-dev-utils": "^9.0.1",
     "react-diff-viewer": "^1.1.0",
     "react-dom": "^16.8.6",
