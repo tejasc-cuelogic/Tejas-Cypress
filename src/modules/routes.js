@@ -94,6 +94,11 @@ export const publicRoutes = [
     props: 'newLayout',
   },
   {
+    path: '/offerings/:id/herovideo',
+    component: OfferDetails,
+    props: 'newLayout',
+  },
+  {
     path: '/offerings/:id',
     component: OfferDetails,
     props: 'newLayout',

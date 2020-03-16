@@ -18,9 +18,11 @@ const accountTitle = {
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, tocIndex, pageIndex }) => (
   <div className="row-wrap striped-table">
-    <div className="balance first-column">
+    <div className="balance first-column break-text">
       <DragHandle />
+      <div>
       {preview(get(toc, 'label'))}
+      </div>
     </div>
     <div className="balance width-100">
       {get(toc, 'account') ? accountTitle[get(toc, 'account')] : 'N/A'}
@@ -63,9 +65,9 @@ const SortableList = SortableContainer(({ data, handleAction, preview, isReadOnl
   </div>
 ));
 
-const ToCList = ({ toc, regulation, isReadOnly, onSortEnd, handleAction, preview, addMore }) => (
+const ToCList = ({ toc, title, regulation, isReadOnly, onSortEnd, handleAction, preview, addMore }) => (
   <>
-  {toc.title && <Header as="h6" content={toc.title} />}
+  {title && <Header as="h6" content={title} />}
   <div className="ui card fluid">
     <div className="ui basic table">
       <div className="row-wrap striped-table thead">
@@ -202,10 +204,23 @@ export default class InvestNowTocList extends Component {
         {!isReadOnly && <Button size="small" color="blue" floated="right" className="link-button mt-20 mb-20" onClick={e => this.addMore(e, 'PAGE')}>+ Add Page</Button>}
         {data && data.length ? data.map((toc, index) => (data.length === 1 ? (
           <>
-            <Button.Group className="toc-list">
-              {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => this.handlePreview(toc.page)}><Icon className="ns-view" /></Button>}
-              {!isReadOnly && data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
-            </Button.Group>
+            <div className="toc-header">
+              <Header as="h6" content={toc.title} />
+              <Button.Group>
+                {data.length
+                  && (
+                  <Button color="green" className="link-button mb-10" onClick={() => this.handlePreview(toc.page)}>
+                    <Icon className="ns-view" />
+                  </Button>
+                )}
+                {!isReadOnly && data.length
+                  && (
+                  <Button className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}>
+                    <Icon className="ns-pencil" />
+                  </Button>
+                )}
+              </Button.Group>
+            </div>
             <ToCList
               toc={toc}
               handleAction={this.handleAction}
@@ -233,6 +248,7 @@ export default class InvestNowTocList extends Component {
             <Accordion.Content active={activeIndex.includes(index)} className="categories-acc">
             <ToCList
               toc={toc}
+              title={toc.title}
               handleAction={this.handleAction}
               onSortEnd={this.onSortEnd}
               preview={this.preview}

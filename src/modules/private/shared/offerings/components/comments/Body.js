@@ -48,8 +48,9 @@ const Body = props => (
             avatarUrl: get(msg, 'createdUserInfo.info.avatar.url') || null,
             roles: [get(msg, 'createdUserInfo.roles[0].name')],
           };
+          const isAnotherAdmin = (!props.isIssuer && userInfo.roles[0] === 'admin');
           const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
-          return (((props.isIssuer && msg.scope === 'NEXTSEED') || msg.isSample) ? false : get(msg, 'createdUserInfo.id') !== props.currentUserId ? (
+          return (((props.isIssuer && msg.scope === 'NEXTSEED') || msg.isSample) ? false : (get(msg, 'createdUserInfo.id') !== props.currentUserId && !isAnotherAdmin) ? (
             <>
               <Item className="in">
                 <UserAvatar size="mini" UserInfo={userInfo} />
