@@ -136,6 +136,14 @@ export const IND_LINK_BANK_MANUALLY = {
     // tooltip: 'Put your 4 to 17 digit bank account number',
     maxLength: 17,
   },
+  bankName: {
+    key: 'bankName',
+    value: '',
+    error: undefined,
+    placeHolder: 'Enter your bank name',
+    rule: 'required',
+    label: 'Bank Name',
+  },
   accountType: {
     value: '',
     key: 'accountType',
