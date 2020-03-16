@@ -18,9 +18,9 @@ const accountTitle = {
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, tocIndex, pageIndex }) => (
   <div className="row-wrap striped-table">
-    <div className="balance first-column text-ellipsis">
+    <div className="balance first-column break-text">
       <DragHandle />
-      <div className="text-ellipsis">
+      <div>
       {preview(get(toc, 'label'))}
       </div>
     </div>
