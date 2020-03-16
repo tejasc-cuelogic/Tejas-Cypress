@@ -493,7 +493,7 @@ class FormValidator {
         } else if (fields[key].objType === 'DATE') {
           fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : data[key] ? moment(data[key]).format('MM/DD/YYYY') : '';
         } else {
-          fields[key].value = data && typeof data === 'object' ? (data[key] !== null && data[key] !== '' && data[key] !== undefined) ? data[key] : fields[key].value : data;
+          fields[key].value = data && typeof data === 'object' ? (data[key] !== null && data[key] !== '' && data[key] !== undefined) ? data[key] : fields[key].value : data || fields[key].value;
         }
         if (fields[key].refSelector) {
           fields[key].refSelectorValue = fields[key].value !== '';
