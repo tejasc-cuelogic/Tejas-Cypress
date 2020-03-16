@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce, isArray } from 'lodash';
+import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce, isArray, camelCase } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -347,6 +347,12 @@ export class CampaignStore {
     campaignStatus.keyTerms = get(campaign, 'keyTerms');
     campaignStatus.campaignTemplate = get(campaign, 'template');
     campaignStatus.issuerStatement = campaignStatus.campaignTemplate === 2 ? get(campaign, 'misc.issuerStatement') : get(campaign, 'keyTerms.offeringDisclaimer');
+    const templateNavs = [];
+    if (campaignStatus.campaignTemplate === 2 && get(campaign, 'content[0]')) {
+      const content = orderBy(get(campaign, 'content'), c => c.order, ['ASC']);
+      content.forEach((c, i) => templateNavs.push({ title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
+    }
+    campaignStatus.templateNavs = templateNavs;
     campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
     campaignStatus.businessModel = get(campaign, 'offering.about.businessModel');
     campaignStatus.localAnalysis = get(campaign, 'offering.about.locationAnalysis');

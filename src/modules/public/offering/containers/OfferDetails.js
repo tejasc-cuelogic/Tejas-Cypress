@@ -1,6 +1,6 @@
 /* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
-import { get, find, has, cloneDeep, camelCase, orderBy } from 'lodash';
+import { get, find, has, cloneDeep } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Responsive, Container, Grid, Visibility, Button, Icon } from 'semantic-ui-react';
@@ -204,9 +204,8 @@ class offerDetails extends Component {
     } = campaignStore;
     const { isWatching } = this.props.watchListStore;
     let navItems = [];
-    if (newLayout && get(campaign, 'template') === 2 && get(campaign, 'content[0]')) {
-      const content = orderBy(get(campaign, 'content'), c => c.order, ['ASC']);
-      content.forEach(c => navItems.push({ title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true }));
+    if (newLayout && campaignStatus.campaignTemplate === 2) {
+      navItems = campaignStatus.templateNavs;
     } else {
       const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
       if (isMobile) {

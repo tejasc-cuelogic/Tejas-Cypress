@@ -147,8 +147,11 @@ class CampaignLayout extends Component {
 
   handleOnScroll = () => {
     this.processLazyLoadImages();
-    const { campaignNavData } = this.props.campaignStore;
-    const navs = toJS(campaignNavData);
+    const { campaignNavData, campaignStatus } = this.props.campaignStore;
+    let navs = toJS(campaignNavData);
+    if (campaignStatus.campaignTemplate === 2) {
+      navs = campaignStatus.templateNavs;
+    }
     if (navs && Array.isArray(navs)) {
       navs.forEach((item) => {
         if (document.getElementById(item.to.slice(1))
