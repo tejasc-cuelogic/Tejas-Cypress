@@ -545,6 +545,11 @@ export const BUSINESS_TYPE_VALUES = [
   { key: 'Other', value: 'OTHER', text: 'Other' },
 ];
 
+export const OFFERING_TEMPLATE_VALUES = [
+  { key: 1, value: 1, text: '1' },
+  { key: 2, value: 2, text: '2' },
+];
+
 export const REGULATION_VALUES = [
   { key: 'Reg CF', value: 'BD_CF', text: 'Reg CF' },
   { key: 'Reg D 506(c)', value: 'BD_506C', text: 'Reg D 506(c)' },

@@ -20,7 +20,7 @@ export default class OfferingV2 extends Component {
   render() {
     const { isIssuer } = this.props.userStore;
     const navItems = [
-      { title: 'Invest Now', to: 'tombstone', component: 'offering/InvestNow' },
+      { title: 'Invest Now', to: 'tombstone', component: 'offering/InvestNowToc' },
       { title: 'Launch', to: 'Launch', component: 'offering/OfferingLaunch' },
       { title: 'Close', to: 'close', component: 'Close' },
     ];
