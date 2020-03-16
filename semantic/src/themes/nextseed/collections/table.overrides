@@ -66,6 +66,12 @@
                     border-top:none;
                 }
             }
+            tr.row-highlight{
+                background:fade(@neutral-middark, 30%) !important;
+                td{
+                    border-top:none;
+                }
+            }            
         }
     }
     &.user-list{
@@ -621,6 +627,9 @@
     }
     &.striped-table:not(.thead):nth-child(odd){
         background-color:@neutral-offwhite;
+    }
+    &.row-highlight{
+       background-color:fade(@neutral-middark, 30%) !important;
     }
     &.categories-table{
         background-color:@neutral-offwhite;

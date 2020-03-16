@@ -3,7 +3,7 @@ import { get, capitalize } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -19,7 +19,7 @@ class KeyTerms extends Component {
 
   render() {
     const { campaign } = this.props;
-    const { offerStructure } = this.props.campaignStore;
+    const { offerStructure, campaignStatus } = this.props.campaignStore;
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     return (
@@ -43,14 +43,14 @@ class KeyTerms extends Component {
                 { get(campaign, 'regulation')
                   && CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                   ? (
-<Popup
-  trigger={<Icon name="help circle" color="green" />}
-  content={
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={
                         CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                       }
-  hoverable
-  position="top center"
-/>
+                    hoverable
+                    position="top center"
+                  />
                   ) : ''
                 }
               </Table.Cell>
@@ -67,15 +67,16 @@ class KeyTerms extends Component {
                   : '-'}
               </Table.Cell>
             </Table.Row>
-            {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
+            {campaignStatus.isTermNote
             && (
             <>
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5} className="neutral-text"><b>Interest Rate{' '}</b>
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content={`Interest payment is calculated at a gross annualized interest rate of ${campaign && campaign.keyTerms && campaign.keyTerms.interestRate
-                      ? `${campaign.keyTerms.interestRate}%` : 'NA'} each month on the remaining balance of your investment from the prior month.`}
+                    content={campaignStatus.isTermNote
+                      ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>)
+                      : campaignStatus.isConvertibleNotes ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>) : ''}
                     position="top center"
                   />
                 </Table.Cell>
@@ -89,7 +90,7 @@ class KeyTerms extends Component {
             </>
             )
             }
-            {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
+            {campaignStatus.isRevenueShare
             && (
             <>
               <Table.Row verticalAlign="top">
@@ -121,13 +122,13 @@ class KeyTerms extends Component {
             </>
             )
             }
-            {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
+            {!campaignStatus.isPreferredEquity
               ? (
-<Table.Row verticalAlign="top">
+              <Table.Row verticalAlign="top">
                 <Table.Cell width={5}><b>Maturity</b>{' '}
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                    content={<>This is the deadline by which the issuer is obligated to make payment in full to investors.</>}
                     position="top center"
                   />
                 </Table.Cell>
@@ -141,29 +142,9 @@ class KeyTerms extends Component {
               )
               : (
                 <>
-                  {/* <Table.Row verticalAlign="top">
-                  <Table.Cell width={5} className="neutral-text"><b>Total Round Size{' '}</b>
-                  </Table.Cell>
-                  <Table.Cell>
-                    NA
-                  </Table.Cell>
-                </Table.Row> */}
-                {/* {get(campaign, 'keyTerms.premoneyValuation') &&
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={5} className="neutral-text"><b>Pre-Money Valuation{' '}</b>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>
-                      {get(campaign, 'keyTerms.premoneyValuation') ?
-                      Helper.CurrencyFormat(get(campaign,
-                        'keyTerms.premoneyValuation')) : ' NA'}
-                    </p>
-                  </Table.Cell>
-                </Table.Row>
-                } */}
                 {get(campaign, 'keyTerms.priceCopy')
                 && (
-<Table.Row verticalAlign="top">
+                <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>{`${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price`}{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
@@ -175,8 +156,7 @@ class KeyTerms extends Component {
                 )
                 }
                 </>
-              )
-            }
+              )}
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Offered By</b></Table.Cell>
               <Table.Cell className="grey-header">

@@ -19,7 +19,7 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   offering, handleAction, stage,
 }) => (
-    <div className="row-wrap striped-table">
+    <div className={(offering.isAvailablePublicly) ? 'row-wrap striped-table' : 'row-wrap row-highlight striped-table'}>
       <div className="balance first-column">
         <DragHandle />
         <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
@@ -104,7 +104,7 @@ const SortableList = SortableContainer(({
       ))}
     </div>
 ));
-@inject('uiStore', 'offeringsStore', 'offeringCreationStore')
+@inject('uiStore', 'offeringsStore', 'offeringCreationStore', 'manageOfferingStore')
 @withRouter
 @observer
 export default class DraggableListing extends Component {
@@ -115,6 +115,7 @@ export default class DraggableListing extends Component {
     this.props.offeringCreationStore.setFieldValue('isListingPage', true);
     this.props.offeringsStore.resetInitLoad();
     this.props.offeringCreationStore.resetInitLoad();
+    this.props.manageOfferingStore.resetInitLoad();
     this.props.offeringsStore.resetPagination();
   }
 

@@ -8,7 +8,7 @@ import Helper from '../../../../../helper/utility';
 import { InlineLoader } from '../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
-import { DEV_FEATURE_ONLY } from '../../../../../constants/common';
+import ActionModal from './ActionModal';
 
 const repaymentMeta = [
   { title: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE', 'STARTUP_PERIOD', 'IN_REPAYMENT'], link: true },
@@ -128,6 +128,7 @@ export default class AllRepayments extends PureComponent {
     STARTUP_PERIOD: true,
     TERM_NOTE: true,
     REVENUE_SHARING_NOTE: true,
+    showActionModal: false,
   }
 
   constructor(props) {
@@ -141,7 +142,11 @@ export default class AllRepayments extends PureComponent {
   }
 
   toggleVisibilityStatus = (field) => {
-    this.setState({ [field]: !this.state[field] });
+    this.updateState(field, !this.state[field]);
+  }
+
+  updateState = (field, value) => {
+    this.setState({ [field]: value });
   }
 
   handleSort = (clickedColumn, key) => {
@@ -165,28 +170,35 @@ export default class AllRepayments extends PureComponent {
 
   render() {
     const { calculateFormula, termNotes, revenueSharingNotes, sortOrderRSN, sortOrderTN, repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
-    if (this.props.nsUiStore.loadingArray.includes('adminPaymentsIssuerList')) {
+    const { loadingArray } = this.props.nsUiStore;
+    const { showActionModal, STARTUP_PERIOD, IN_REPAYMENT, TERM_NOTE, REVENUE_SHARING_NOTE } = this.state;
+    if (loadingArray.includes('adminPaymentsIssuerList')) {
       return <InlineLoader />;
     }
     return (
       <>
+        {!!showActionModal && <ActionModal updateState={this.updateState} showActionModal={showActionModal} />}
         <Form>
           <Grid stackable>
             <Grid.Row>
               <ByKeyword
                 change={this.executeSearch}
-                w={[11]}
+                w={[5]}
                 placeholder="Search by keyword or phrase"
                 more="no"
-                addon={(DEV_FEATURE_ONLY
-                  && (
-                    <Grid.Column width={5} textAlign="right">
-                      <Button color="green" as={Link} floated="right" to="/dashboard/payments">
-                        Add New Repayment
-                    </Button>
+                addon={(
+                  <Grid.Column width={11} textAlign="right">
+                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentGenerateAdminSummary')}>
+                        Generate Admin Summary
+                      </Button>
+                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentSendGoldStarDraftInstructions')}>
+                        Send GoldStar Draft Instructions
+                      </Button>
+                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerDraftNotice')}>
+                        Send Issuer Draft Notice
+                      </Button>
                     </Grid.Column>
-                  )
-                )}
+                  )}
               />
             </Grid.Row>
           </Grid>
@@ -205,7 +217,7 @@ export default class AllRepayments extends PureComponent {
                 getLink={this.getLink}
                 sortKey="sortOrderSP"
                 toggleVisibilityStatus={this.toggleVisibilityStatus}
-                stateToggle={this.state.STARTUP_PERIOD}
+                stateToggle={STARTUP_PERIOD}
               />
               <PaymentsList
                 headerTitle="In Repayment"
@@ -218,7 +230,7 @@ export default class AllRepayments extends PureComponent {
                 getLink={this.getLink}
                 sortKey="sortOrderRP"
                 toggleVisibilityStatus={this.toggleVisibilityStatus}
-                stateToggle={this.state.IN_REPAYMENT}
+                stateToggle={IN_REPAYMENT}
               />
             </>
             )
@@ -236,7 +248,7 @@ export default class AllRepayments extends PureComponent {
                 getLink={this.getLink}
                 sortKey="sortOrderTN"
                 toggleVisibilityStatus={this.toggleVisibilityStatus}
-                stateToggle={this.state.TERM_NOTE}
+                stateToggle={TERM_NOTE}
               />
               <PaymentsList
                 calculateFormula={calculateFormula}
@@ -250,7 +262,7 @@ export default class AllRepayments extends PureComponent {
                 getLink={this.getLink}
                 sortKey="sortOrderRSN"
                 toggleVisibilityStatus={this.toggleVisibilityStatus}
-                stateToggle={this.state.REVENUE_SHARING_NOTE}
+                stateToggle={REVENUE_SHARING_NOTE}
               />
             </>
           )}

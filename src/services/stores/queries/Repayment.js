@@ -96,3 +96,21 @@ export const updatePaymentIssuer = gql`
     }
   }
 `;
+
+export const adminPaymentSendIssuerDraftNotice = gql`
+  mutation adminPaymentSendIssuerDraftNotice($date: String!, $scope: String, $sendEmail: Boolean){
+    adminPaymentSendIssuerDraftNotice(date: $date, scope: $scope, sendEmail: $sendEmail)
+  }
+`;
+
+export const adminPaymentSendGoldStarDraftInstructions = gql`
+  mutation adminPaymentSendGoldStarDraftInstructions($date: String!, $scope: String, $sendEmail: Boolean){
+    adminPaymentSendGoldStarDraftInstructions(date: $date, scope: $scope, sendEmail: $sendEmail)
+  }
+`;
+
+export const adminPaymentGenerateAdminSummary = gql`
+  mutation adminPaymentGenerateAdminSummary($date: String!, $scope: String, $sendEmail: Boolean){
+    adminPaymentGenerateAdminSummary(date: $date, scope: $scope, sendEmail: $sendEmail)
+  }
+`;

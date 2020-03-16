@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { FormHelper } from '../../helper';
 
 export const PAYMENT = FormHelper.generateMeta([
@@ -35,4 +36,28 @@ export const PAYMENT = FormHelper.generateMeta([
   asIn: true },
   ],
   ['sinkingFundBalance', 'Sinking Fund Balance', 0, '', '', { props: { objRef: '', skipField: true }, asIn: true }],
+]);
+
+export const ACTION = FormHelper.generateMeta([
+  ['date', 'Date', moment().format('MM-DD-YYYY'), 'required|date', 'MM-DD-YYYY', { props: { defaultValue: moment().format('MM-DD-YYYY') }, customErrors: { date: 'Date is not a valid date format.' }, asIn: true }],
+  ['scope', 'Scope', '', '', '',
+  {
+    asIn: true,
+    props: {
+        values: [
+          { key: 'ADMIN', text: 'ADMIN', value: 'admin', applicableFor: ['ALL'] },
+          { key: 'DEV', text: 'DEV', value: 'dev', applicableFor: ['ALL'] },
+          { key: 'ISSUER', text: 'ISSUER', value: 'issuer', applicableFor: ['ALL'] },
+          { key: 'GOLDSTAR', text: 'GOLDSTAR', value: 'goldstar', applicableFor: ['GOLDSTAR'] },
+        ],
+    },
+  },
+],
+  ['sendEmail', 'Send Email', true, '', 'Send Email',
+  { props: { values: [
+    { label: 'Yes', value: true },
+    { label: 'No', value: false },
+  ] },
+  asIn: true },
+  ],
 ]);

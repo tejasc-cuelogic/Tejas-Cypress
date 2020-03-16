@@ -7,7 +7,7 @@ import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
-import { uiStore, userDetailsStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
+import { uiStore, userDetailsStore, campaignStore, portfolioStore, investmentLimitStore, agreementsStore } from '../../index';
 import { investNowSubmit, investNowGeneratePurchaseAgreement, investNowGetInvestmentAgreement } from '../../queries/investNow';
 
 export class InvestmentStore {
@@ -87,11 +87,6 @@ export class InvestmentStore {
       return differenceResult;
     }
     return 0;
-    // const oldLimit = parseFloat((portfolioStore.getInvestorAccountById &&
-    //   portfolioStore.getInvestorAccountById.investedAmount) || 0, 2);
-    // const currentLimit = parseFloat(this.INVESTMONEY_FORM.fields.investmentAmount.value, 2);
-
-    // return currentLimit - oldLimit;
   }
 
   @computed get getSelectedAccountTypeId() {
@@ -204,6 +199,8 @@ export class InvestmentStore {
       name: field,
       value: values.floatValue,
     });
+    investmentLimitStore.setFieldValue('isLimitAmountInputChange', true);
+    investmentLimitStore.setFieldValue('isUpdateLimitActionActive', false);
   };
 
   @computed get investmentAmount() {
@@ -282,9 +279,8 @@ export class InvestmentStore {
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
     uiStore.setProgress();
     if (this.investmentAmount) {
-      const { campaign } = campaignStore;
-      const offeringSecurityType = get(campaign, 'keyTerms.securities') || '0';
-      if (includes(['REAL_ESTATE'], offeringSecurityType) && this.realEstateValidation()) {
+      const { campaignStatus } = campaignStore;
+      if (campaignStatus.isRealEstate && this.realEstateValidation()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
         this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Your investment cannot be reduced.';
@@ -298,7 +294,7 @@ export class InvestmentStore {
         this.INVESTMONEY_FORM.meta.isValid = false;
         uiStore.setProgress(false);
         resolve();
-      } else if (!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) && !this.isValidMultipleAmount(this.investmentAmount)) {
+      } else if (!campaignStatus.isPreferredEquity && !this.isValidMultipleAmount(this.investmentAmount)) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
         this.setFieldValue('investmentFlowErrorMessage', 'Investments must be in increments of $100');
@@ -335,7 +331,7 @@ export class InvestmentStore {
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
 
-            if (includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)) {
+            if (campaignStatus.isPreferredEquity) {
               const errorMessage = !status ? message : null;
               this.setFieldValue('investmentFlowEquityErrorMessage', errorMessage);
             }
@@ -531,6 +527,7 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMONEY_FORM);
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
+    Validator.resetFormData(agreementsStore.AGREEMENT_DETAILS_FORM);
     Validator.resetFormData(this.PREFERRED_EQUITY_INVESTMONEY_FORM, ['shares']);
     this.setByDefaultRender(true);
     this.setFieldValue('equityInvestmentAmount', '$ 0');

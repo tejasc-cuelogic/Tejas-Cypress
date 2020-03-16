@@ -17,6 +17,7 @@ import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
 import { userIdleTime, NEXTSEED_BOX_URL } from './constants/common';
 import { DataFormatter } from './helper';
+import { REDIRECT_META } from './constants/redirect';
 /**
  * Main App
  */
@@ -43,7 +44,7 @@ const metaTagsData = [
 ];
 const isMobile = document.documentElement.clientWidth < 768;
 const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/insights/category/', '/dashboard/resources/knowledge-base/', '/space/'];
-@inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
+@inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore', 'referralsStore')
 @withRouter
 @observer
 class App extends Component {
@@ -56,12 +57,23 @@ class App extends Component {
     window.addEventListener('resize', this.handleResize);
     this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
     const urlParameter = queryString.parse(this.props.location.search);
-    if (urlParameter) {
+    if (!isEmpty(urlParameter)) {
       let tags = DataFormatter.createEligibleTagsObj(urlParameter);
       if (!isEmpty(tags)) {
         const existingTags = JSON.parse(window.localStorage.getItem('tags'));
         tags = !isEmpty(existingTags) ? { ...existingTags, ...tags } : tags;
         window.localStorage.setItem('tags', JSON.stringify(tags));
+      }
+      const utmCampaign = get(urlParameter, 'utm_campaign') || get(urlParameter, 'campaign') || null;
+      const rsCode = get(urlParameter, 'rsCode') || null;
+      if (['marketplace', 'saasquatch'].includes(utmCampaign) && rsCode) {
+        props.referralsStore.getReferralCreditsInformation(rsCode).then(() => {
+          window.localStorage.setItem('SAASQUATCH_REFERRAL_CODE', rsCode);
+          const redirectMeta = REDIRECT_META.find(r => r.live && r.rsCode === rsCode);
+          if (redirectMeta && redirectMeta.rsRedirect) {
+            props.history.push(redirectMeta.rsRedirect);
+          }
+        });
       }
     }
   }
@@ -69,8 +81,8 @@ class App extends Component {
   componentDidMount() {
     const { location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
-    if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue.
-      history.push(location.pathname.replace(/\/+$/, ''));
+    if (location.pathname.endsWith('/') && !location.hash) { // resolved trailing slash issue.
+      history.push(location.pathname.replace(/\/+$/, location.search));
     }
     this.checkForPasswordProtect();
     authActions.verifySession()
@@ -290,8 +302,7 @@ class App extends Component {
             <Layout>
               <Switch>
                 <Redirect from="/app/*" to="/dashboard/*" />
-                <Route exact path="/dashboard/*" component={Private} />
-                <Route exact path="/dashboard" component={Private} />
+                <Route exact path={['/dashboard', '/dashboard/*']} component={Private} />
                 <Route path="/" component={Public} />
               </Switch>
             </Layout>
@@ -301,6 +312,7 @@ class App extends Component {
         {uiStore.devBanner
           && <DevBanner toggle={this.playDevBanner} />
         }
+        <div className="custom-modal-wrapper" />
       </div>
     );
   }

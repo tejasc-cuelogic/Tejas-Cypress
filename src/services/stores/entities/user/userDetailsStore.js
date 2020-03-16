@@ -243,8 +243,9 @@ export class UserDetailsStore {
         individualAccountStore.populateData(this.userDetails);
       } else if (investmentAccType === 'entity') {
         entityAccountStore.populateData(this.userDetails);
+      } else if (investmentAccType === 'investorProfile') {
+        investorProfileStore.populateData(this.userDetails);
       }
-      investorProfileStore.populateData(this.userDetails);
     }
   }
 
@@ -306,6 +307,13 @@ export class UserDetailsStore {
   });
 
   @action
+  setUserEmail = (newEmail) => {
+    if (newEmail) {
+      this.currentUser.data.user.email.address = newEmail;
+    }
+  }
+
+  @action
   getUser = () => new Promise((res) => {
     this.currentUser = graphql({
       client,
@@ -352,7 +360,8 @@ export class UserDetailsStore {
     let accreditation = get(this.currentUser, 'data.user.accreditation.status');
     accreditation = accreditation === 'CONFIRMED' ? Helper.checkAccreditationExpiryStatus(get(this.currentUser, 'data.user.accreditation.expiration')) === 'ACTIVE' ? 'CONFIRMED' : 'EXPIRED' : accreditation;
     const status = (accreditation === 'CONFIRMED' || entityAccreditation === 'CONFIRMED');
-    return { status, dataRoomStatus: (status || (accreditation === 'REQUESTED' || entityAccreditation === 'REQUESTED')) };
+    const requestedStatus = (accreditation === 'REQUESTED' || entityAccreditation === 'REQUESTED');
+    return { status, dataRoomStatus: (status || (accreditation === 'REQUESTED' || entityAccreditation === 'REQUESTED')), requestedStatus };
   }
 
   @computed
@@ -633,10 +642,10 @@ export class UserDetailsStore {
         this.setSignUpDataForMigratedUser(this.userDetails);
         routingUrl = '/welcome-email';
       } else if (!this.signupStatus.isMigratedFullAccount && !get(this.userDetails, 'cip.requestId')) {
-        routingUrl = '/dashboard/setup/identity-verification/0';
+        routingUrl = '/dashboard/setup/cip';
       } else if ((get(this.userDetails, 'cip.requestId'))) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
-          routingUrl = '/dashboard/setup/identity-verification/3';
+          routingUrl = '/dashboard/setup/phone-verification';
         } else if (!this.signupStatus.investorProfileCompleted) {
           routingUrl = '/dashboard/setup/establish-profile';
         }
@@ -647,9 +656,9 @@ export class UserDetailsStore {
       && this.signupStatus.idVerification !== 'OFFLINE'
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
-      routingUrl = '/dashboard/setup/identity-verification/0';
+      routingUrl = '/dashboard/setup/cip';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
-      routingUrl = '/dashboard/setup/identity-verification/3';
+      routingUrl = '/dashboard/setup/phone-verification';
     } else if (!this.signupStatus.investorProfileCompleted) {
       routingUrl = '/dashboard/setup/establish-profile';
     } else if (isEmpty(investorAccountCreatedList)) {

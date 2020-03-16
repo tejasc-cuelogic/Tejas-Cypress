@@ -68,6 +68,8 @@ export class CampaignStore {
 
   @observable offeringUUID = null;
 
+  @observable inInvestmentFlow = false;
+
   @observable documentMeta = {
     closingBinder: { selectedDoc: null, accordionActive: true },
   };
@@ -366,9 +368,14 @@ export class CampaignStore {
     campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
     campaignStatus.isFund = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS;
-    campaignStatus.isRealEstate = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE;
-    campaignStatus.isPreferredEquity = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C;
+    campaignStatus.isSafe = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE;
+    campaignStatus.isConvertibleNotes = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.CONVERTIBLE_NOTES;
+    campaignStatus.isEquity = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY;
+    campaignStatus.isRealEstate = ((this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(campaign, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
+    campaignStatus.isPreferredEquity = ((this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(campaign, 'keyTerms.equityClass') === 'PREFERRED' || (this.inInvestmentFlow && ['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(campaign, 'keyTerms.equityClass'))))));
     campaignStatus.doneComputing = (get(this.details, 'data.getOfferingDetailsBySlug') && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
+    campaignStatus.isAgreementTemplate = (get(campaign, 'investNow.template') && get(campaign, 'investNow.template') === 2);
+    campaignStatus.investNowToc = get(campaign, 'investNow.page');
     return campaignStatus;
   }
 
@@ -563,6 +570,7 @@ export class CampaignStore {
       const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506') && get(offeringKeyTermDetails, 'maxOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'maxOfferingAmount506') : get(offeringKeyTermDetails, 'maxOfferingAmount506C') ? get(offeringKeyTermDetails, 'maxOfferingAmount506C') : '0.00';
       const regulation = get(offeringKeyTermDetails, 'regulation');
       const securities = get(offeringKeyTermDetails, 'securities');
+      const isRealEstate = (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(offeringKeyTermDetails, 'equityClass') === 'LLC_MEMBERSHIP_UNITS');
       const minimumOfferingAmount = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
       const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
       const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
@@ -602,8 +610,8 @@ export class CampaignStore {
         && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
         resultObject.isBannerShow = true;
         resultObject.datesBanner = 'NEW';
-        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
-        if (securities === 'REAL_ESTATE') {
+        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, isRealEstate);
+        if (isRealEstate) {
           resultObject.realEstateBanner = 'Real Estate';
         }
         resultObject.launchDate = moment(launchDate).unix() || null;
@@ -614,8 +622,8 @@ export class CampaignStore {
         const labelBannerFirst = ((includes(['Minute Left', 'Minutes Left'], closeDaysToRemainsInHours.label) && closeDaysToRemainsInHours.value > 0) || closeDaysToRemainsInHours.value <= 48) ? `${closeDaysToRemainsInHours.value} ${closeDaysToRemainsInHours.label}` : closeDaysToRemains === 1 ? `${closeDaysToRemains} Day Left` : `${closeDaysToRemains} Days Left`;
         resultObject.isBannerShow = !!labelBannerFirst;
         resultObject.datesBanner = labelBannerFirst;
-        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
-        if (securities === 'REAL_ESTATE') {
+        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, isRealEstate);
+        if (isRealEstate) {
           resultObject.realEstateBanner = 'Real Estate';
         }
         resultObject.launchDate = moment(launchDate).unix() || null;
@@ -627,7 +635,7 @@ export class CampaignStore {
       } if (isInProcessing) {
         resultObject.isBannerShow = true;
         resultObject.datesBanner = 'Processing';
-        if (securities === 'REAL_ESTATE') {
+        if (isRealEstate) {
           resultObject.realEstateBanner = 'Real Estate';
         }
         resultObject.launchDate = moment(launchDate).unix() || null;
@@ -640,8 +648,8 @@ export class CampaignStore {
       //   && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
       //   resultObject.datesBanner = 'NEW';
       // }
-      resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
-      if (securities === 'REAL_ESTATE') {
+      resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, isRealEstate);
+      if (isRealEstate) {
         resultObject.realEstateBanner = 'Real Estate';
       }
       resultObject.isBannerShow = !!(resultObject.datesBanner || resultObject.amountsBanner);
@@ -679,10 +687,10 @@ export class CampaignStore {
     return sortedResultObject;
   }
 
-  generateLabelBannerSecond = (amountCompairResult, percentageCompairResult, percent, offeringSecurity) => {
+  generateLabelBannerSecond = (amountCompairResult, percentageCompairResult, percent, isRealEstate) => {
     let labelBannerSecond = null;
     if (money.isNegative(amountCompairResult)
-      && !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult) && !['REAL_ESTATE'].includes(offeringSecurity)) {
+      && !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult) && !isRealEstate) {
       labelBannerSecond = `${Math.round(percent)}% Funded`;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';

@@ -1,7 +1,10 @@
 import React from 'react';
-import { Header, Grid, Form, Popup, Icon } from 'semantic-ui-react';
+import { Header, Grid, Form } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
+import { PopUpModal } from '../../../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 const GeneralInformation = props => (
   <FormElementWrap hideFields={props.hideFields} header="General Information">
@@ -37,18 +40,18 @@ const GeneralInformation = props => (
       <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
         <div className="field-wrap">
           <Header as="h6">
-            Entity Address
             {props.currentApplicationType === 'commercial-real-estate'
-            && (
-            <Popup
-              trigger={<Icon className="ns-help-circle" />}
+            ? (
+            <PopUpModal
+              customTrigger={<span className="popup-label">Entity Address</span>}
               content="Enter address of investment location,
                           not of owner or entity."
               position="top center"
               className="left-align"
               wide
+              showOnlyPopup={!isMobile}
             />
-            )
+            ) : (<span>Entity Address</span>)
           }
           </Header>
           <AutoComplete

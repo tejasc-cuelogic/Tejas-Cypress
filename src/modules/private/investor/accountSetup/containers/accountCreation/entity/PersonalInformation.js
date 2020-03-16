@@ -33,39 +33,37 @@ export default class PersonalInformation extends Component {
     const { errors } = this.props.uiStore;
     return (
       <>
-      <Header as="h3" textAlign={isMobile ? '' : 'center'}>Authorized Signatory Informaiton</Header>
-        <p className={`${isMobile ? 'mb-30 mt-0' : 'center-align'} account-type-tab`}>Please provide your title and a copy of your photo ID.</p>
-        <p className="grey-header"><b>Authorized Signatory’s</b></p>
+      <Header as="h4">Authorized Signatory Informaiton</Header>
+        <p className={`${isMobile ? 'mb-30 mt-0' : ''} account-type-tab`}>Please provide your title and a copy of your photo ID.</p>
+        <p className="grey-header mb-20"><b>Authorized Signatory’s</b></p>
         <Form error>
-          <Form.Group widths="equal" className={isMobile ? '' : 'field-wrap no-bg small'}>
-            <Form.Input
-              label="First Name (Legal)"
-              value={currentUser.givenName}
-              className="readonly"
-              readOnly
-            />
-            <Form.Input
-              label="Last Name (Legal)"
-              value={currentUser.familyName}
-              className="readonly"
-              readOnly
-            />
-          </Form.Group>
-          <div className={isMobile ? '' : 'field-wrap small'}>
-            <FormInput
-              name="title"
-              fielddata={PERSONAL_INFO_FRM.fields.title}
-              changed={personalInfoChange}
-              showerror
-            />
-          </div>
+          {/* <Form.Group widths="equal" className={isMobile ? '' : 'mt-60 no-bg small'}> */}
+          <Form.Input
+            label="First Name (Legal)"
+            value={currentUser.givenName}
+            className="readonly"
+            readOnly
+          />
+          <Form.Input
+            label="Last Name (Legal)"
+            value={currentUser.familyName}
+            className="readonly"
+            readOnly
+          />
+          {/* </Form.Group> */}
+          <FormInput
+            name="title"
+            fielddata={PERSONAL_INFO_FRM.fields.title}
+            changed={personalInfoChange}
+            showerror
+          />
           <DropZone
             name="legalDocUrl"
             fielddata={PERSONAL_INFO_FRM.fields.legalDocUrl}
             ondrop={this.onLegalDocUrlDrop}
             onremove={this.handleDelLegalDocUrl}
-            uploadtitle={isMobile ? 'Choose file' : 'Choose a file or drag it here'}
-            containerclassname={`${isMobile ? 'mt-30 mb-30' : ''} fluid`}
+            uploadtitle="Choose file"
+            containerclassname={`${isMobile ? 'mb-30' : ''} mt-30 fluid`}
           />
           {errors
             && (
@@ -74,10 +72,7 @@ export default class PersonalInformation extends Component {
               </Message>
             )
           }
-          {isMobile && (
-            <Button fluid primary className="relaxed" content="Continue" disabled={!PERSONAL_INFO_FRM.meta.isValid || errors} onClick={this.handleContinueButton} />
-          )
-          }
+          <Button fluid={isMobile} primary className={`${isMobile ? '' : 'mt-30'} relaxed`} content="Continue" disabled={!PERSONAL_INFO_FRM.meta.isValid || errors} onClick={this.handleContinueButton} />
         </Form>
       </>
     );

@@ -1,24 +1,26 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Button, Divider, Confirm, Icon, Popup, Grid } from 'semantic-ui-react';
+import { Form, Header, Button, Divider, Confirm, Icon, Grid } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox, ImageCropper, FormDropDown } from '../../../../../../theme/form';
-import { Image64 } from '../../../../../../theme/shared';
+import { Image64, PopUpModal } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { PROFILE_PHOTO_BYTES } from '../../../../../../services/constants/user';
 import { US_STATES_FOR_INVESTOR, US_STATES } from '../../../../../../constants/account';
 import ButtonGroup from '../ButtonGroup';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 const HeaderWithTooltip = ({ header, tooltip }) => (
   <Header as="h4">
-    {header}
-    <Popup
-      trigger={<Icon className="ns-help-circle" />}
+    <PopUpModal
+      customTrigger={<span className="popup-label">{header}</span>}
       content={tooltip}
       position="top center"
       className="center-align"
+      showOnlyPopup={!isMobile}
       wide
     />
   </Header>

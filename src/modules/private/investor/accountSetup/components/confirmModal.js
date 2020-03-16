@@ -1,20 +1,47 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import { Modal, Header, Divider, Button } from 'semantic-ui-react';
+import { useHistory } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import { Header, Button } from 'semantic-ui-react';
 
 const isMobile = document.documentElement.clientWidth < 768;
-const ConfirmModal = props => (
-  <Modal open={props.open} onClose={props.handleCloseModal} size={isMobile ? 'fullscreen' : 'mini'} className={isMobile && 'full-screen-modal'}>
-    <Modal.Content className={isMobile ? 'mt-60' : 'mt-30 center-align'}>
-      <Header as="h3">Thank you for creating a NextSeed account</Header>
+const successMessage = 'Check out some of the investment opportunities now available to you as a member of the NextSeed community.';
+const processingMessage = <span>While we set up your account, check out some of the investment opportunities now available to you as a member of the NextSeed community.</span>;
+
+const ConfirmModal = inject('iraAccountStore', 'entityAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'accountStore')(observer((props) => {
+  const accountType = props.accountStore.investmentAccType;
+  const message = props[`${accountType}AccountStore`].showProcessingModal ? processingMessage : successMessage;
+  const history = useHistory();
+
+  const HandleModalCta = () => {
+    const { partialInvestNowSessionURL, setPartialInvestmenSession } = props.userDetailsStore;
+    if (partialInvestNowSessionURL) {
+      history.push(partialInvestNowSessionURL);
+      setPartialInvestmenSession();
+    } else {
+      history.push('/offerings');
+      props.uiStore.resetcreateAccountMessage();
+    }
+  };
+  return (
+    <>
+      <Header as="h4">Thank you for creating a NextSeed account</Header>
       <p className="mt-30 mb-30">
-        {props.content}
+        {message}
       </p>
-      <Divider hidden />
-      <Button fluid={isMobile} onClick={props.HandleModalCta} primary size="large">Explore Campaigns</Button>
-      <Divider hidden />
-    </Modal.Content>
-  </Modal>
-);
+      <Button fluid={isMobile} onClick={HandleModalCta} primary size="large">Explore Campaigns</Button>
+    </>
+  );
+}));
+
+export const ThankYouStep = {
+  name: 'Thank You',
+  isValid: false,
+  isDirty: false,
+  disableNextButton: true,
+  isHideName: true,
+  disablePrevButton: true,
+  component: <ConfirmModal />,
+};
 
 export default ConfirmModal;

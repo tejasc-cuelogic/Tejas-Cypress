@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Button, Table, Popup, Icon, Message } from 'semantic-ui-react';
+import { Header, Button, Table, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import money from 'money-math';
 import Helper from '../../../../../helper/utility';
+import { PopUpModal } from '../../../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('investmentStore', 'investmentLimitStore', 'uiStore', 'accreditationStore')
 @withRouter
@@ -54,7 +57,7 @@ class TransferRequest extends Component {
   }
 
   render() {
-    const { investmentStore, investmentLimitStore, changeInvest, offeringSecurityType } = this.props;
+    const { investmentStore, investmentLimitStore, changeInvest, isPreferredEquity } = this.props;
     const {
       getTransferRequestAmount,
       showTransferRequestErr,
@@ -66,7 +69,6 @@ class TransferRequest extends Component {
     const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
     const getPreviousInvestedAmount = (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
     const bankAndAccountName = userAmountDetails && userAmountDetails.bankNameAndAccountNumber ? userAmountDetails.bankNameAndAccountNumber : '-';
-    const isPreferredEquityOffering = !!(offeringSecurityType && ['PREFERRED_EQUITY_506C'].includes(offeringSecurityType));
     if (showTransferRequestErr) {
       return (
         <div className="center-align">
@@ -80,14 +82,14 @@ class TransferRequest extends Component {
       );
     }
     return (
-      <div className="center-align">
-        <Header as="h3" textAlign="center">Confirm Transfer Request</Header>
+      <>
+        <Header as="h4">Confirm Transfer Request</Header>
         <Table basic="very" className="confirm-transfer-table mt-30" compact>
           <Table.Body>
             <Table.Row>
               <Table.Cell>Investment Amount:</Table.Cell>
               <Table.Cell collapsing className="right-align">
-                {isPreferredEquityOffering ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}
+                {isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}
               </Table.Cell>
             </Table.Row>
             {changeInvest
@@ -95,23 +97,23 @@ class TransferRequest extends Component {
                 <Table.Row>
                   <Table.Cell>Previous Investment:</Table.Cell>
                   <Table.Cell collapsing className="right-align">
-                    {isPreferredEquityOffering ? Helper.CurrencyFormat(getPreviousInvestedAmount) : Helper.CurrencyFormat(getPreviousInvestedAmount, 0)}
+                    {isPreferredEquity ? Helper.CurrencyFormat(getPreviousInvestedAmount) : Helper.CurrencyFormat(getPreviousInvestedAmount, 0)}
                   </Table.Cell>
                 </Table.Row>
               )
             }
             <Table.Row>
               <Table.Cell>
-                Available Cash:
-                <Popup
+                <PopUpModal
                   wide
-                  trigger={<Icon name="help circle" color="green" />}
+                  customTrigger={<span className="popup-label">Available Cash:</span>}
                   content="If this investment is a request to change an existing investment in this offering, then Cash Available also includes any dollars currently reserved or invested in the same offering."
                   position="top center"
+                  showOnlyPopup={!isMobile}
                 />
               </Table.Cell>
               <Table.Cell collapsing className="right-align">
-                {isPreferredEquityOffering ? Helper.CurrencyFormat(getCurrCashAvailable) : Helper.CurrencyFormat(getCurrCashAvailable, 0)}
+                {isPreferredEquity ? Helper.CurrencyFormat(getCurrCashAvailable) : Helper.CurrencyFormat(getCurrCashAvailable, 0)}
               </Table.Cell>
             </Table.Row>
             {!money.isZero(getCurrCreditAvailable)
@@ -119,7 +121,7 @@ class TransferRequest extends Component {
                 <Table.Row>
                   <Table.Cell>Available Credit: </Table.Cell>
                   <Table.Cell collapsing className="right-align">
-                    {isPreferredEquityOffering ? Helper.CurrencyFormat(getCurrCreditAvailable) : Helper.CurrencyFormat(getCurrCreditAvailable, 0)}
+                    {isPreferredEquity ? Helper.CurrencyFormat(getCurrCreditAvailable) : Helper.CurrencyFormat(getCurrCreditAvailable, 0)}
                   </Table.Cell>
                 </Table.Row>
               )
@@ -128,7 +130,7 @@ class TransferRequest extends Component {
           <Table.Footer>
             <Table.Row>
               <Table.HeaderCell>Transfer Request: </Table.HeaderCell>
-              <Table.HeaderCell className="positive-text right-align" collapsing>{isPreferredEquityOffering ? Helper.CurrencyFormat(getTransferRequestAmount) : Helper.CurrencyFormat(getTransferRequestAmount, 0)}</Table.HeaderCell>
+              <Table.HeaderCell className="positive-text right-align" collapsing>{isPreferredEquity ? Helper.CurrencyFormat(getTransferRequestAmount) : Helper.CurrencyFormat(getTransferRequestAmount, 0)}</Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
         </Table>
@@ -149,7 +151,7 @@ class TransferRequest extends Component {
           amount equal to the Transfer Requested above. I understand this transfer will
           be initiated within 1-3 business days.
         </p>
-      </div>
+      </>
     );
   }
 }

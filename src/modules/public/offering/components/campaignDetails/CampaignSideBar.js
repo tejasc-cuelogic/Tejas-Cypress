@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Route, Link } from 'react-router-dom';
 import { get, capitalize } from 'lodash';
-import { Header, Icon, Statistic, Button, Menu, Responsive, Progress, Popup, Divider } from 'semantic-ui-react';
+import { Header, Icon, Statistic, Button, Menu, Responsive, Progress, Divider } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import Helper from '../../../../../helper/utility';
 import share from './Share';
 import { Image64, PopUpModal } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
@@ -86,34 +86,35 @@ export default class CampaignSideBar extends Component {
               }
               {!campaignStatus.isFund
                 ? (
-                  <p className={newLayout ? 'mt-10' : ''}>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
-                    {isMobile
-                      ? (<PopUpModal label={minFlagStatus ? 'Max target' : 'Min target'} content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account." />)
-                      : (
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                          position="top center"
-                        />
-                      )
-                    }
-                  </p>
-                ) : (
                   <>
-                    <p className={`${newLayout ? 'mt-10' : ''} mr-10`}>
-                      {Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
-                      <Popup
-                        trigger={<Icon name="help circle" color="green" />}
-                        content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                    <p>
+                      {Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)}{' '}
+                      <PopUpModal
+                        customTrigger={<span className="popup-label">{minFlagStatus ? 'max target' : 'min target'}</span>}
+                        content={!minFlagStatus ? 'This is the minimum fundraising goal. If this amount is not raised by the end of the offering period, any funds invested will be automatically returned to your NextSeed account.' : 'This is the maximum fundraising goal. The offering will remain open until the issuer raises the Offering Max or the offering period ends. As long as the raise exceeds the Offering Min, the issuer will receive the funds.'}
                         position="top center"
+                        showOnlyPopup={!isMobile}
                       />
                     </p>
-                    <p className={`${newLayout ? 'mt-10' : ''} mr-10`}>
-                      {Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
-                      <Popup
-                        trigger={<Icon name="help circle" color="green" />}
-                        content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      {Helper.CurrencyFormat(minOffering, 0)}{' '}
+                      <PopUpModal
+                        customTrigger={<span className="popup-label">min target</span>}
+                        content="This is the minimum fundraising goal. If this amount is not raised by the end of the offering period, any funds invested will be automatically returned to your NextSeed account."
                         position="top center"
+                        showOnlyPopup={!isMobile}
+                      />
+                    </p>
+                    <p>
+                      {Helper.CurrencyFormat(maxOffering, 0)}{' '}
+                      <PopUpModal
+                        customTrigger={<span className="popup-label">max target</span>}
+                        content="This is the maximum fundraising goal. The offering will remain open until the issuer raises the Offering Max or the offering period ends. As long as the raise exceeds the Offering Min, the issuer will receive the funds."
+                        position="top center"
+                        showOnlyPopup={!isMobile}
                       />
                     </p>
                   </>
@@ -161,25 +162,25 @@ export default class CampaignSideBar extends Component {
               {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                 && (
                   <p className="raise-type mt-20 mb-0">
-                    {['REAL_ESTATE'].includes(offerStructure) ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
+                    {campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_KEYTERMS_SECURITIES.PREFERRED_EQUITY_506C : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
                   </p>
                 )
               }
-              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+              {campaignStatus.isRealEstate
                 && (
                   <p className="mb-0">
                     Asset Type: Hotel Development
                         </p>
                 )
               }
-              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE && dataRooms > 0
+              {campaignStatus.isRealEstate && dataRooms > 0
                 && (
                   <p className="mb-0">
                     Targeted IRR: <Link to={`${this.props.match.url}#data-room`}> View in Data Room</Link>
                   </p>
                 )
               }
-              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE
+              {campaignStatus.isSafe
                 && (
                   <>
                     {get(campaign, 'keyTerms.valuationCap') && (
@@ -195,27 +196,27 @@ export default class CampaignSideBar extends Component {
                   </>
                 )
               }
-              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
+              {campaignStatus.isTermNote
                 && (
                   <p className="mb-0">
                     Interest Rate: {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
                   </p>
                 )
               }
-              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
+              {campaignStatus.isRevenueShare
                 && (
                   <p className="mb-0">
                     Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
                   </p>
                 )
               }
-              {[CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE, CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE].includes(offerStructure)
+              {(campaignStatus.isRevenueShare || campaignStatus.isTermNote)
                 ? (
                   <p className="mb-0">
                     Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                 </p>
                 )
-                : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? (
+                : campaignStatus.isPreferredEquity ? (
                   <>
                     <p className="mb-0">
                       Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : '-'}
@@ -266,8 +267,7 @@ export default class CampaignSideBar extends Component {
                   <NavItems needNavLink sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={isBonusReward} isBonusReward={isBonusReward} />
                 </Menu>
               </>
-            )
-          }
+            )}
           <Route path={`${this.props.match.url}/share`} component={share} />
         </div>
       </>

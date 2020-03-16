@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import isEmpty from 'lodash/isEmpty';
 import { withRouter } from 'react-router-dom';
-import { Header, Modal, Form, Button, Message } from 'semantic-ui-react';
+import { Header, Grid, Form, Button, Message, Divider } from 'semantic-ui-react';
 import { MaskedInput, FormRadioGroup } from '../../../../../../theme/form';
-import { ListErrors } from '../../../../../../theme/shared';
+import { ListErrors, NsModal } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -49,46 +49,56 @@ export default class NewPhoneNumber extends Component {
       personalInfoMaskedChange,
       personalInfoChange,
     } = this.props.identityStore;
-    const { errors } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick={false}>
-        <Modal.Header className="center-align signup-header">
-          <Header as="h3">Enter new phone number</Header>
-          <p>We will send you a verification code to the phone number you provide.</p>
-        </Modal.Header>
-        <Modal.Content>
-          <Form error onSubmit={this.handleChangePhoneNumber}>
-            <MaskedInput
-              name="phoneNumber"
-              type="tel"
-              fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-              format="(###) ###-####"
-              changed={personalInfoMaskedChange}
-              phoneNumber
-            />
-            <div className="field center-align">
-              <Header as="label">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
-              <FormRadioGroup
-                fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
-                name="mfaMethod"
-                containerclassname="mt-30 radio-basic center-align"
-                widths="equal"
-                changed={(e, result) => personalInfoChange(e, result)}
+      <NsModal
+        open
+        closeIcon
+        onClose={this.handleCloseModal}
+        closeOnDimmerClick={false}
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+      >
+        <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
+          <Grid.Column mobile={16} tablet={10} computer={8} className="pt-0">
+            <Header as="h3">Enter new phone number</Header>
+            <p>We will send you a verification code to the phone number you provide.</p>
+            <Divider hidden />
+            <Form error onSubmit={this.handleChangePhoneNumber}>
+              <MaskedInput
+                name="phoneNumber"
+                type="tel"
+                fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
+                format="(###) ###-####"
+                changed={(values, name) => personalInfoMaskedChange(values, name, 'ID_VERIFICATION_FRM')}
+                phoneNumber
               />
-            </div>
-            {errors
-              && (
-<Message error className="mt-20">
-                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-              </Message>
-              )
-            }
-            <div className="center-align mt-30">
-              <Button primary size="large" className="very relaxed" content="Change Phone Number" loading={this.props.uiStore.inProgress} disabled={!!ID_VERIFICATION_FRM.fields.phoneNumber.error || isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)} />
-            </div>
-          </Form>
-        </Modal.Content>
-      </Modal>
+              <div className="field">
+                <Header as="label">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
+                <FormRadioGroup
+                  fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
+                  name="mfaMethod"
+                  containerclassname={`${isMobile ? '' : 'radio-basic'} mt-30`}
+                  widths={isMobile ? '' : '4'}
+                  changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
+                  classname={isMobile ? '' : 'center-align'}
+                />
+              </div>
+              <div className="mt-30 mb-20">
+                <Button primary content="Change Phone Number" loading={this.props.uiStore.inProgress} disabled={!!ID_VERIFICATION_FRM.fields.phoneNumber.error || isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value) || inProgress} />
+              </div>
+              {errors
+                && (
+                  <Message error className="mt-20">
+                    <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+                  </Message>
+                )
+              }
+            </Form>
+          </Grid.Column>
+        </Grid>
+      </NsModal>
     );
   }
 }

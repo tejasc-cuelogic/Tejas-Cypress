@@ -5,6 +5,7 @@ import { Header, Form, Button } from 'semantic-ui-react';
 import { FormInput, FormDropDown } from '../../../../../../../theme/form';
 import { VARIFY_ROLES } from '../../../../../../../constants/account';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('accreditationStore')
 @withRouter
 @observer
@@ -13,11 +14,11 @@ export default class VerificationForm extends Component {
     const { VERIFICATION_REQUEST_FORM, verificationFormChange } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">Send verification request</Header>
-        <p className="center-align">We will send a request to your lawyer, CPA, investment advisor or investment broker asking them to confirm in writing that they have seen evidence of your status as an accredited investor.</p>
-        <p className="center-align">By submitting the below information, you are giving us permission to contact the listed verifier to verify your status, and you are giving the listed verifier permission to advise us of your status.</p>
+        <Header as="h4">Send verification request</Header>
+        <p>We will send a request to your lawyer, CPA, investment advisor or investment broker asking them to confirm in writing that they have seen evidence of your status as an accredited investor.</p>
+        <p>By submitting the below information, you are giving us permission to contact the listed verifier to verify your status, and you are giving the listed verifier permission to advise us of your status.</p>
         <Form error>
-          <div className="field-wrap">
+          <div className="mt-60 mb-60">
             <FormInput
               name="name"
               fielddata={VERIFICATION_REQUEST_FORM.fields.name}
@@ -38,7 +39,7 @@ export default class VerificationForm extends Component {
               changed={verificationFormChange}
             />
           </div>
-          <div className="center-align">
+          <div className={isMobile && 'center-align'}>
             <Button onClick={() => this.props.clicked('VERIFICATION_REQUEST_FORM')} primary size="large" disabled={!VERIFICATION_REQUEST_FORM.meta.isValid}>Send verification request</Button>
           </div>
         </Form>

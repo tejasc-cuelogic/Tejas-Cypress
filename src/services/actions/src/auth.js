@@ -6,6 +6,7 @@ import { GqlClient as client } from '../../../api/gqlApi';
 import {
   USER_POOL_ID, COGNITO_CLIENT_ID, AWS_REGION, COGNITO_IDENTITY_POOL_ID,
 } from '../../../constants/aws';
+import { REACT_APP_DEPLOY_ENV } from '../../../constants/common';
 import {
   userStore,
   userDetailsStore,
@@ -261,7 +262,7 @@ export class Auth {
         const signUpRole = authStore.SIGNUP_FRM.fields.role.value;
         if (!isMobile) {
           if (signUpRole === 'investor') {
-            Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
+            // Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
           } else if (signUpRole === 'issuer') {
             Helper.toast('Congrats, you have been PreQualified on NextSeed.', 'success');
           }
@@ -300,6 +301,7 @@ export class Auth {
     const { email } = Validator.ExtractValues(authStore.FORGOT_PASS_FRM.fields);
     try {
       await AmplifyAuth.forgotPassword(email.toLowerCase());
+      sessionStorage.setItem('forgotPasswordEmailReference', email);
     } catch (err) {
       if (get(err, 'code') === 'UserNotFoundException') {
         return true;
@@ -323,7 +325,7 @@ export class Auth {
     const { code, email, password } = Validator.ExtractValues(authStore.RESET_PASS_FRM.fields);
     try {
       await AmplifyAuth.forgotPasswordSubmit(email.toLowerCase(), code, password);
-      Helper.toast('Password changed successfully', 'success');
+      // Helper.toast('Password changed successfully', 'success');
     } catch (err) {
       uiStore.setErrors(this.simpleErr(err));
       throw err;
@@ -341,7 +343,7 @@ export class Auth {
       const user = await AmplifyAuth.currentAuthenticatedUser();
       if (user) {
         await AmplifyAuth.changePassword(user, passData.oldPasswd, passData.newPasswd);
-        Helper.toast('Password changed successfully', 'success');
+        // Helper.toast('Password changed successfully', 'success');
       }
     } catch (err) {
       uiStore.setErrors(this.simpleErr(err));
@@ -373,7 +375,7 @@ export class Auth {
         if (user) {
           try {
             await AmplifyAuth.completeNewPassword(user, passData.newPasswd);
-            Helper.toast('Password changed successfully', 'success');
+            // Helper.toast('Password changed successfully', 'success');
           } catch (error) {
             uiStore.setErrors(this.simpleErr(error));
             throw error;
@@ -441,11 +443,11 @@ export class Auth {
     new Promise((res, rej) => {
       try {
         this.resetData(logoutType);
-        AmplifyAuth.signOut({ global: true });
+        AmplifyAuth.signOut({ global: !['localhost', 'dev', 'review'].includes(REACT_APP_DEPLOY_ENV) });
         AWS.config.clear();
         res();
       } catch (err) {
-        console.log('Error occured while logout====', err);
+        console.log('Error occured while logout', err);
         rej();
       }
     })

@@ -77,7 +77,7 @@ export default class OfferingDetails extends Component {
       return <InlineLoader />;
     }
     const template = get(offer, 'template') === 2 ? 2 : 1;
-    const isDev = ['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
+    const isDev = ['localhost', 'dev'].includes(REACT_APP_DEPLOY_ENV);
     navItems = navStore.filterByAccess(
       navItems,
       get(find(offeringsStore.phases, (s, i) => i === offer.stage), 'accessKey'),

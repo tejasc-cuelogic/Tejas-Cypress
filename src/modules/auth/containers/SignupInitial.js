@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Grid, Header, Divider, Icon } from 'semantic-ui-react';
-import { USER_TYPES_META } from '../../../constants/user';
+import { Header, Divider, Form, Grid } from 'semantic-ui-react';
+import { NsModal } from '../../../theme/shared';
+import { FormArrowButton } from '../../../theme/form';
 
-const GetBtn = ({ type }) => {
-  const BtnMeta = {
-    investor: { label: 'Open account', to: '/register-investor' },
-    'issuer-type1': { label: 'Start application process', to: '/business-application/business' },
-    'issuer-type2': { label: 'Start application process', to: '/business-application/commercial-real-estate' },
-  };
-  return <Button disabled={!type} as={Link} to={type ? BtnMeta[type].to : '/register'} primary size="large" className="very relaxed" content={type ? BtnMeta[type].label : 'Open account'} />;
+const redirectByRole = {
+  investor: { to: '/register-investor' },
+  'issuer-type1': { to: '/business-application/business' },
+  'issuer-type2': { to: '/business-application/commercial-real-estate' },
 };
 
 @inject('authStore', 'uiStore', 'navStore')
@@ -28,42 +25,40 @@ class signupInitial extends Component {
     this.props.history.push(this.props.uiStore.authRef || '/');
   }
 
+  handleSignupChange = (e, result) => {
+    this.props.authStore.signupChange(e, result);
+    this.props.history.push(redirectByRole[result.value].to);
+  }
+
   render() {
-    const userTypes = USER_TYPES_META.slice();
-    const { SIGNUP_FRM, signupChange } = this.props.authStore;
-    const selectedType = SIGNUP_FRM.fields.role;
+    const { SIGNUP_FRM } = this.props.authStore;
     const isMobile = document.documentElement.clientWidth < 768;
     return (
-      <Modal closeOnDimmerClick={false} open closeIcon onClose={this.handleCloseModal} className={`${this.props.match.params.type && 'tiny'}`}>
-        <Modal.Header className="center-align signup-header">
-          <Header as="h3">Join the NextSeed community</Header>
-        </Modal.Header>
-        <Modal.Content className="signup-content">
-          <Grid stackable textAlign="center" columns="equal">
-            {userTypes.map(type => !type.exclude.includes(this.props.match.params.type) && (
-              <Grid.Column
-                onClick={e => signupChange(e, { name: 'role', value: type.value })}
-                key={type.key}
-              >
-                <div className={`user-type ${(`${selectedType.value}-${type.subVal}` === `${type.value}-${type.subVal}` ? 'active' : '')}`}>
-                  <Icon className={type.icon} size="huge" />
-                  <div className={isMobile ? 'left-align' : ''}>
-                    <Header as="h4">{type.text}</Header>
-                    <p>{type.desc}</p>
-                  </div>
-                </div>
-              </Grid.Column>
-            ))}
-          </Grid>
-          <Divider hidden />
-          <div className="center-align">
-            <GetBtn type={selectedType.value} />
-          </div>
-        </Modal.Content>
-        <Modal.Actions className="signup-actions">
-          <p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>
-        </Modal.Actions>
-      </Modal>
+      <NsModal
+        closeOnDimmerClick={false}
+        open
+        onClose={this.handleCloseModal}
+        modalClassName={`${this.props.match.params.type && 'tiny'}`}
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+        modalContentClass="signup-content"
+      >
+        <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
+          <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
+            <Header as="h3">Join the NextSeed community</Header>
+            <Form error className={isMobile ? '' : 'account-type-tab'}>
+              <FormArrowButton
+                name="role"
+                fielddata={SIGNUP_FRM.fields.role}
+                changed={(e, result) => this.handleSignupChange(e, result)}
+                classname="icon-arrow-button"
+              />
+            </Form>
+            <Divider hidden />
+          </Grid.Column>
+        </Grid>
+      </NsModal>
     );
   }
 }

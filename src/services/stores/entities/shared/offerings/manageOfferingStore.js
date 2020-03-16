@@ -1,15 +1,17 @@
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { startCase, get, includes } from 'lodash';
+import { startCase, get, includes, filter, orderBy } from 'lodash';
 import money from 'money-math';
+import cleanDeep from 'clean-deep';
+import omitDeep from 'omit-deep';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
 import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC } from '../../../../constants/offering/formMeta/offering';
+import { INVEST_NOW_TOC, INVEST_NOW_PAGE } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore } from '../../../index';
-import { offeringUpsert } from '../../../queries/offerings/manage-v2';
+import { offeringUpsert } from '../../../queries/offerings/manageOffering';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
-
 
 export class ManageOfferingStore extends DataModelStore {
   TOMBSTONE_BASIC_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
@@ -23,6 +25,88 @@ export class ManageOfferingStore extends DataModelStore {
   OFFERING_MISC_FRM = Validator.prepareFormObject(OFFERING_MISC);
 
   onDragSaveEnable = false;
+
+  INVEST_NOW_TOC_FRM = Validator.prepareFormObject(INVEST_NOW_TOC);
+
+  INVEST_NOW_PAGE_FRM = Validator.prepareFormObject(INVEST_NOW_PAGE);
+
+  initLoad = [];
+
+  // eslint-disable-next-line class-methods-use-this
+  get getAgreementTocList() {
+    const { offer } = offeringsStore;
+    const regulation = get(offer, 'regulation');
+    const investNow = get(offer, 'investNow.page') || [];
+    const investNowTocs = {};
+    if (regulation === 'BD_CF_506C') {
+      investNowTocs.BD_506C = orderBy(filter(investNow, i => i.regulation === 'BD_506C'), ['page'], ['asc']);
+      investNowTocs.BD_CF = orderBy(filter(investNow, i => i.regulation === 'BD_CF'), ['page'], ['asc']);
+    } else {
+      investNowTocs[regulation] = orderBy(filter(investNow, i => i.regulation === regulation), ['page'], ['asc']);
+    }
+    return investNowTocs;
+  }
+
+  investNowAddData = (params) => {
+    const { form, regulation, page, type, tocIndex } = params;
+    const agreementLists = this.getAgreementTocList;
+    const { offer } = offeringsStore;
+    let investNow = get(offer, 'investNow.page') || [];
+    if (['TOC_EDIT', 'PAGE_EDIT', 'TOC_REQUIRED'].includes(type)) {
+      let formData;
+      if (type !== 'TOC_REQUIRED') {
+        formData = Validator.evaluateFormData(this[form].fields);
+      }
+      const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
+      if (['TOC_REQUIRED', 'TOC_EDIT'].includes(type) && tocIndex >= 0) {
+        const editTOC = type === 'TOC_EDIT' ? {
+          label: formData.label,
+          required: formData.required,
+          account: formData.account,
+        } : { required: !investNow[index].toc[tocIndex].required };
+        investNow[index].toc[tocIndex] = { ...investNow[index].toc[tocIndex], ...editTOC };
+      } else {
+        investNow[index] = { ...investNow[index], title: formData.title };
+      }
+    } else if (form === 'INVEST_NOW_PAGE_FRM') {
+      const formData = Validator.evaluateFormData(this[form].fields);
+      const addPage = {
+        page: ((agreementLists[regulation] && agreementLists[regulation].length) || 0) + 1,
+        regulation,
+        title: formData.title,
+      };
+      investNow.push(addPage);
+    } else if (form === 'INVEST_NOW_TOC_FRM') {
+      const formData = Validator.evaluateFormData(this[form].fields);
+      const agreementToc = investNow.find(i => i.page === page && i.regulation === regulation);
+      const addTOC = {
+        label: formData.label,
+        order: ((agreementToc.toc && agreementToc.toc.length) || 0) + 1,
+        required: formData.required,
+        account: formData.account,
+      };
+      investNow = investNow.map(i => ((i.regulation === regulation && i.page === page) ? { ...i, toc: i.toc && i.toc.length ? [...i.toc, addTOC] : [addTOC] } : { ...i }));
+    } else if (type === 'PAGE') {
+      const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
+      investNow.splice(index, 1);
+    } else if (type === 'TOC_DELETE') {
+      // delete particular toc
+      investNow = investNow.map((i) => {
+        let iData;
+        if (i.regulation === regulation && i.page === page) {
+          i.toc.splice(tocIndex, 1);
+          iData = { ...i, toc: i.toc };
+        } else {
+          iData = { ...i };
+        }
+        return iData;
+      });
+    } else if (type === 'REORDER') {
+      const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
+      return { index, investNow };
+    }
+    return { page: investNow };
+  }
 
   get campaignStatus() {
     console.log(this.TOMBSTONE_BASIC_FRM);
@@ -90,10 +174,12 @@ export class ManageOfferingStore extends DataModelStore {
   }
 
   updateOffering = params => new Promise((res) => {
-    const { keyName, forms } = params;
+    const { keyName, forms, cleanData, offeringData } = params;
     let offeringDetails = {};
     let data;
-    if (Array.isArray(forms)) {
+    if (offeringData) {
+      data = offeringData;
+    } else if (Array.isArray(forms)) {
       forms.forEach((f) => {
         data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
       });
@@ -102,6 +188,10 @@ export class ManageOfferingStore extends DataModelStore {
       data = { ...data, ...Validator.evaluateFormData(this[forms].fields) };
     } else {
       data = Validator.evaluateFormData(this[forms].fields);
+    }
+    if (cleanData) {
+      data = cleanDeep(data);
+      data = omitDeep(data, ['__typename', 'fileHandle']);
     }
     if (keyName) {
       offeringDetails[keyName] = data;
@@ -114,7 +204,6 @@ export class ManageOfferingStore extends DataModelStore {
       offeringDetails,
       res,
     };
-    console.log(offeringDetails);
     this.updateOfferingMutation(mutationsParams);
   });
 
@@ -158,13 +247,14 @@ export class ManageOfferingStore extends DataModelStore {
       HEADER_BASIC_FRM: { isMultiForm: false },
       OFFERING_CONTENT_FRM: { isMultiForm: true },
       OFFERING_MISC_FRM: { isMultiForm: false },
+      INVEST_NOW_TOC_FRM: { isMultiForm: true },
     };
     return metaDataMapping[formName][getField];
   }
 
-  reOrderHandle = (orderedForm) => {
+  reOrderHandle = (orderedForm = 'OFFERING_CONTENT_FRM', form, arrayName = 'content') => {
     const content = toJS(orderedForm).map((d, index) => ({ ...d, order: { ...d.order, value: index + 1 } }));
-    this.setFieldValue('OFFERING_CONTENT_FRM', content, 'fields.content');
+    this.setFieldValue(form, content, `fields.${arrayName}`);
   }
 
   setFormData = (form, ref, keepAtLeastOne) => {
@@ -179,22 +269,49 @@ export class ManageOfferingStore extends DataModelStore {
     this[form] = Validator.validateForm(this[form], multiForm, false, false);
     return false;
   }
+
+  setFormDataV2 = ({ type, page, regulation, tocIndex }) => {
+    const { offer } = offeringsStore;
+    const investNow = get(offer, 'investNow.page') ? JSON.parse(JSON.stringify([...get(offer, 'investNow.page')])) : [];
+    if (type === 'TOC_EDIT') {
+      const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
+      if (index > -1) {
+        const pageData = investNow[index];
+        const toc = pageData.toc && pageData.toc.length ? pageData.toc[tocIndex] : { };
+        this.INVEST_NOW_TOC_FRM = Validator.setFormData(this.INVEST_NOW_TOC_FRM, toc);
+        this.INVEST_NOW_TOC_FRM = Validator.validateForm(this.INVEST_NOW_TOC_FRM);
+      }
+    } else {
+      const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
+      if (index > -1) {
+        const pageData = investNow[index];
+        this.INVEST_NOW_PAGE_FRM = Validator.setFormData(this.INVEST_NOW_PAGE_FRM, pageData);
+        this.INVEST_NOW_PAGE_FRM = Validator.validateForm(this.INVEST_NOW_PAGE_FRM);
+      }
+    }
+  }
 }
 
-  decorate(ManageOfferingStore, {
-    ...dataModelStore.decorateDefault,
-    TOMBSTONE_BASIC_FRM: observable,
-    onDragSaveEnable: observable,
-    OFFERING_CONTENT_FRM: observable,
-    TOMBSTONE_HEADER_META_FRM: observable,
-    HEADER_BASIC_FRM: observable,
-    OFFERING_MISC_FRM: observable,
-    reOrderHandle: action,
-    updateOffering: action,
-    uploadFileToS3: action,
-    updateOfferingMutation: action,
-    setFormData: action,
-    campaignStatus: computed,
-  });
+decorate(ManageOfferingStore, {
+  ...dataModelStore.decorateDefault,
+  TOMBSTONE_BASIC_FRM: observable,
+  onDragSaveEnable: observable,
+  OFFERING_CONTENT_FRM: observable,
+  TOMBSTONE_HEADER_META_FRM: observable,
+  HEADER_BASIC_FRM: observable,
+  OFFERING_MISC_FRM: observable,
+  uploadFileToS3: action,
+  campaignStatus: computed,
+  INVEST_NOW_TOC_FRM: observable,
+  INVEST_NOW_PAGE_FRM: observable,
+  initLoad: observable,
+  getAgreementTocList: computed,
+  reOrderHandle: action,
+  resetInitLoad: action,
+  updateOffering: action,
+  updateOfferingMutation: action,
+  setFormData: action,
+  setFormDataV2: action,
+});
 
 export default new ManageOfferingStore();

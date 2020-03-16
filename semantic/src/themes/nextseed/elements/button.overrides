@@ -8,7 +8,7 @@
         box-shadow:none;
     }
     &.basic {
-        border: 1px solid @thumbBackground;
+        border: 1px solid @thumbBackground !important;
         box-shadow: none !important;
         &.highlight-text {
             color: @primary-one !important;
@@ -26,6 +26,14 @@
             &:hover, &:active, &:focus{
                 background: @primary-two !important;
                 color: @white !important;
+            }
+        }
+        &.primary-hover{
+            &:hover, &:active, &:focus{
+                background: transparent!important;
+                color: @neutral !important;
+                border-color: @primary-one!important;
+                box-shadow: 0 1px 2px rgba(49,51,61,.25)!important;
             }
         }
     }
@@ -192,29 +200,37 @@
         justify-content: space-between;
         align-items: center;
         padding: @14px @21px !important;
-        border: 1px solid @border-color !important;
+        border: 1px solid @neutral-darkwhite !important;
         text-align: left;
         width: 100%;
-        &:focus{
-            background: @primary-one !important;
-            color: @neutral-offdark !important;
-            border-color: @white !important;
+        &:focus, &:hover{
+            background: transparent !important;
+            color: @neutral !important;
+            border-color: @primary-one !important;
+            box-shadow: 0px 1px 2px rgba(49, 51, 61, 0.25) !important;
             .details{
-                color: @white;
+                color: @neutral;
                 .ui.header,span{
-                    color: @white;
+                    color: @neutral;
                 }
+            }
+            i.grey.icon{
+                color: @primary-one !important;
             }
         }
         &.active{
-            background: @primary-one !important;
-            color: @white !important;
+            background: transparent !important;
+            color: @neutral !important;
             border-color: @primary-one !important;
+            box-shadow: 0px 1px 2px rgba(49, 51, 61, 0.25) !important;
             .details{
-                color: @white !important;
+                color: @neutral !important;
                 .ui.header,span{
-                    color: @white;
+                    color: @neutral;
                 }
+            }
+            i.grey.icon{
+                color: @primary-one !important;
             }
             &.error{
                 background: transparent !important;
@@ -237,6 +253,27 @@
                 font-size: @15px;
                 line-height: 24px;
                 color: @neutral;
+            }
+        }
+        &.icon-arrow-button{
+            .details{
+                position: relative;
+                padding-left: @48px;
+                .ui.header i.icon{
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    transform: translate(0, -50%);
+                    font-size: @26px;
+                    line-height: 1;
+                    color: lighten(@border-color, 2%);
+                    margin-left: 0;
+                }
+            }
+            &:focus, &:hover, &.active{
+                .details .ui.header i.icon{
+                    color: @primary-one;
+                }
             }
         }
     }
@@ -266,36 +303,34 @@
     +.ui.buttons {
         margin-top: @10px;
     }
+    &.toc-list{
+        float: right;
+        margin-top: 44px;
+        margin-right: -77px;
+    }
 }
 
 .ui.button.multistep__btn{
-    background:@white;
-    color:@primary-one;
+    color:@neutral-middark;
     letter-spacing:0;
-    box-shadow:0 0 16px 2px fade(@fullBlack, 15%) !important;
     margin:0;
     position:absolute;
-    top:50%;
     @media only screen and (max-width:@largestMobileScreen){
         box-shadow: none !important;
-        background: transparent;
+        background: transparent !important;
     }
     &.disabled{
-        background:@border-light;
         color:@border-color;
         opacity:1 !important;
-        @media only screen and (max-width:@largestMobileScreen){
-            box-shadow: none !important;
-            background: transparent;
-        }
     }
     >.icon{
         width:auto;
     }
     &.prev{
         left:0;
-        transform:translate(-50%, -50%);
         @media only screen and (max-width:@largestMobileScreen){
+            top: 50%;
+            transform:translate(-50%, -50%);
             left: @20px;
             color: @neutral-middark;
             &.disabled{
