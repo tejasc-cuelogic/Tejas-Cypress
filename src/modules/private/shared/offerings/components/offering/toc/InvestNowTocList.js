@@ -18,9 +18,9 @@ const accountTitle = {
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, tocIndex, pageIndex }) => (
   <div className="row-wrap striped-table">
-    <div className="balance first-column">
+    <div className="balance first-column text-ellipsis">
       <DragHandle />
-      <div>
+      <div className="text-ellipsis">
       {preview(get(toc, 'label'))}
       </div>
     </div>
@@ -205,11 +205,21 @@ export default class InvestNowTocList extends Component {
         {data && data.length ? data.map((toc, index) => (data.length === 1 ? (
           <>
             <div className="toc-header">
-              <Button.Group className="toc-list">
-                {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => this.handlePreview(toc.page)}><Icon className="ns-view" /></Button>}
-                {!isReadOnly && data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
-              </Button.Group>
               {toc.title && <Header as="h6" content={toc.title} />}
+              <Button.Group>
+                {data.length
+                  && (
+                  <Button color="green" className="link-button mb-10" onClick={() => this.handlePreview(toc.page)}>
+                    <Icon className="ns-view" />
+                  </Button>
+                )}
+                {!isReadOnly && data.length
+                  && (
+                  <Button className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}>
+                    <Icon className="ns-pencil" />
+                  </Button>
+                )}
+              </Button.Group>
             </div>
             <ToCList
               toc={toc}
