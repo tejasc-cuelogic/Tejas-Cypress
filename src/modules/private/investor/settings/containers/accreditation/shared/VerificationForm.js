@@ -40,7 +40,7 @@ export default class VerificationForm extends Component {
             />
           </div>
           <div className={isMobile && 'center-align'}>
-            <Button onClick={() => this.props.clicked('VERIFICATION_REQUEST_FORM')} primary size="large" disabled={!VERIFICATION_REQUEST_FORM.meta.isValid}>Send verification request</Button>
+            <Button onClick={() => this.props.clicked('VERIFICATION_REQUEST_FORM')} primary disabled={!VERIFICATION_REQUEST_FORM.meta.isValid}>Send Request</Button>
           </div>
         </Form>
       </div>

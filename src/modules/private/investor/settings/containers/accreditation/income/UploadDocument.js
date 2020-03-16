@@ -43,7 +43,7 @@ export default class UploadDocument extends Component {
       <div>
         <Header as="h4">Upload documents</Header>
         <p>
-          Upload your tax returns, Form W-2s, or other IRS or foreign tax authority documents evidencing your income for the past 2 years, or a letter from your personal lawyer, CPA, investment advisor or investment broker verifying your income for such years.
+           Upload your tax returns, Form W-2s, or other IRS or foreign tax authority documents evidencing your income for the past 2 years.
         </p>
         <Divider hidden />
         <Form>
@@ -63,7 +63,7 @@ export default class UploadDocument extends Component {
               ))
             }
           </Grid>
-          <Grid stackable width={16}>
+          <Grid stackable columns={isFilling ? 1 : 2}>
             {
               ['previousEstimateIncome', 'estimateIncome'].map(field => (
                 ((!isFilling && field === 'previousEstimateIncome')
@@ -86,8 +86,8 @@ export default class UploadDocument extends Component {
           <Divider hidden />
           {isFilling
             && (
-              <p>
-                <b>Note:</b> If you provide tax documents, W-2s, or other direct forms of income verification, your accredited investor status will be valid for the remainder of this calendar year. If you provide an upload of communication from a qualified advisor, your accredited investor status will be valid for 90 days from the date of your verifier`s confirmation.
+              <p className="note">
+                <b>Note:</b> if you provide tax documents, W-2s, or other direct froms of income verification, your accredited investor status will be valid for the remainder of this calender year.
           </p>
             )
           }
