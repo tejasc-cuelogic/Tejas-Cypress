@@ -5,7 +5,7 @@ import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
-import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC } from '../../../../constants/offering/formMeta/offering';
+import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC, SUB_HEADER_BASIC } from '../../../../constants/offering/formMeta/offering';
 import { INVEST_NOW_TOC, INVEST_NOW_PAGE } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -19,6 +19,8 @@ export class ManageOfferingStore extends DataModelStore {
   TOMBSTONE_HEADER_META_FRM = Validator.prepareFormObject(TOMBSTONE_HEADER_META);
 
   HEADER_BASIC_FRM = Validator.prepareFormObject(HEADER_BASIC);
+
+  SUB_HEADER_BASIC_FRM = Validator.prepareFormObject(SUB_HEADER_BASIC);
 
   OFFERING_CONTENT_FRM = Validator.prepareFormObject(OFFERING_CONTENT);
 
@@ -244,6 +246,7 @@ export class ManageOfferingStore extends DataModelStore {
     const metaDataMapping = {
       TOMBSTONE_HEADER_META_FRM: { isMultiForm: true },
       TOMBSTONE_BASIC_FRM: { isMultiForm: false },
+      SUB_HEADER_BASIC_FRM: { isMultiForm: false },
       HEADER_BASIC_FRM: { isMultiForm: false },
       OFFERING_CONTENT_FRM: { isMultiForm: true },
       OFFERING_MISC_FRM: { isMultiForm: false },

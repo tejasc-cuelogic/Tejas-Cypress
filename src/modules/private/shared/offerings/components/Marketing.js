@@ -12,12 +12,13 @@ const getModule = component => lazyRetry(() => import(`./marketing/${component}`
 export default class Marketing extends Component {
   constructor(props) {
     super(props);
-    if (this.props.match.isExact) {
-      this.props.history.push(`${this.props.match.url}/tombstone`);
+    const { match, manageOfferingStore, history } = props;
+    if (match.isExact) {
+      history.push(`${match.url}/tombstone`);
     }
-    this.props.manageOfferingStore.setFormData('TOMBSTONE_BASIC_FRM', 'tombstone');
-    this.props.manageOfferingStore.setFormData('HEADER_BASIC_FRM', 'header');
-    this.props.manageOfferingStore.setFormData('OFFERING_MISC_FRM', 'misc');
+    manageOfferingStore.setFormData('TOMBSTONE_BASIC_FRM', 'tombstone');
+    manageOfferingStore.setFormData('HEADER_BASIC_FRM', match.url.includes('sub-header') ? 'subHeader' : 'header');
+    manageOfferingStore.setFormData('OFFERING_MISC_FRM', 'misc');
   }
 
   render() {
@@ -25,6 +26,7 @@ export default class Marketing extends Component {
     const navItems = [
       { title: 'Tombstone', to: 'tombstone', component: 'Tombstone' },
       { title: 'Header', to: 'header', component: 'CampaignHeader' },
+      { title: 'Sub Header', to: 'sub-header', component: 'CampaignSubHeader' },
       { title: 'Content', to: 'content', component: 'Content' },
       { title: 'Misc', to: 'misc', component: 'Misc' },
     ];

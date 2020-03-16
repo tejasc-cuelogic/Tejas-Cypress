@@ -62,6 +62,15 @@ const offeringTemplate2 = {
     }
     toggleMeta
   }`,
+  subHeader: `subHeader {
+    meta {
+      keyLabel
+      keyType
+      keyValue
+      keyFormat
+    }
+    toggleMeta
+  }`,
 };
 
 export const allOfferings = gql`

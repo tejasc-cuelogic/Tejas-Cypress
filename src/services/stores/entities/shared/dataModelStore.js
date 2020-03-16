@@ -178,17 +178,6 @@ export default class DataModelStore {
     this.currTime = +new Date();
   };
 
-  addMore = (form, key, count = 1) => {
-    this[form] = FormValidator.addMoreRecordToSubSection(this[form], key, count, true);
-  }
-
-  removeOne = (form, arrayName, index, e = undefined) => {
-    if (e) {
-      e.preventDefault();
-    }
-    this[form].fields[arrayName].splice(index, 1);
-  }
-
   passwordChange = (e, result, form) => {
     FormValidator.onChange(this[form], FormValidator.pullValuesForPassword(e, result));
     if (e.score !== undefined) {

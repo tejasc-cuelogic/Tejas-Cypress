@@ -110,6 +110,15 @@ const common = {
     customTag
     toggleMeta
   }
+  subHeader {
+    meta {
+      keyLabel
+      keyType
+      keyValue
+      keyFormat
+    }
+    toggleMeta
+  }
   header {
     heroImage {
       url

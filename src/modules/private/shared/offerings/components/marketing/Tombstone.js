@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { Form, Header, Divider, Grid } from 'semantic-ui-react';
 import OfferingButtonGroup from '../OfferingButtonGroup';
 import formHOC from '../../../../../../theme/form/formHOC';
-import TombstoneMeta from './TombstoneMeta';
+import TombstoneHeaderMeta from './TombstoneHeaderMeta';
 import TombstonePreview from './TombstonePreview';
 
 const metaInfo = {
@@ -55,7 +55,7 @@ class Tombstone extends Component {
               {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Tombstone Toggle Meta' })}
             </Grid.Column>
           </Grid>
-          <TombstoneMeta />
+          <TombstoneHeaderMeta />
           <Divider section />
           <OfferingButtonGroup
             updateOffer={this.handleFormSubmit}

@@ -11,14 +11,14 @@ const metaInfo = {
     form: 'TOMBSTONE_HEADER_META_FRM',
   };
 
-function TombstoneMeta(props) {
-  const { smartElement, manageOfferingStore, offeringsStore } = props;
+function TombstoneHeaderMeta(props) {
+  const { smartElement, manageOfferingStore, offeringsStore, title } = props;
   const { offer } = offeringsStore;
   const { TOMBSTONE_HEADER_META_FRM, removeOne, addMore } = manageOfferingStore;
   return (
     <>
       <Header as="h4">
-        Tombstone Meta
+        {title || 'Tombstone Meta'}
         {TOMBSTONE_HEADER_META_FRM.fields.meta.length < 5
         && <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMore('TOMBSTONE_HEADER_META_FRM', 'meta')}>+ Add another section</Button>
         }
@@ -68,4 +68,4 @@ function TombstoneMeta(props) {
   );
 }
 
-export default inject('offeringsStore')(withRouter(formHOC(observer(TombstoneMeta), metaInfo)));
+export default inject('offeringsStore')(withRouter(formHOC(observer(TombstoneHeaderMeta), metaInfo)));
