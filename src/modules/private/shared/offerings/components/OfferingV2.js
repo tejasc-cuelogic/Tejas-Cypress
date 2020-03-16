@@ -33,11 +33,6 @@ export default class OfferingV2 extends Component {
     if (get(offer, 'stage') === 'LIVE') {
       navItems.push({ title: 'Close', to: 'close', component: 'Close' });
     }
-    // const navItems = [
-    //   showInvestNowToc && { title: 'Invest Now', to: 'tombstone', component: 'offering/InvestNowToc' },
-    //   { title: 'Launch', to: 'Launch', component: 'offering/OfferingLaunch' },
-    //   { title: 'Close', to: 'close', component: 'Close' },
-    // ];
     return (
       <div className={isIssuer ? 'ui card fluid' : ''}>
         <SecondaryMenu force2ary={!isIssuer} match={match} navItems={navItems} />
