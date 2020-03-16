@@ -12,7 +12,6 @@ import NetWorthCheck from './shared/NetWorthQualCheck';
 import EntityAccreditationMethod from './shared/EntityAcceditationMethod';
 import TrustEntityAccreditationMethod from './shared/TrustEntityAccreditationMethod';
 import FillingStatus from './shared/FillingStatus';
-import AccreditationInitCheck from './shared/AccreditationInitCheck';
 
 @inject('uiStore', 'accreditationStore')
 @withRouter
@@ -32,14 +31,6 @@ export default class PopulateAccreditationSteps extends React.Component {
   }
 
   StepsMetaData = {
-    ACCREDITATION_INIT_FORM: {
-      name: '',
-      component: <AccreditationInitCheck submitStep={this.handleSubmitStep} {...this.props} />,
-      isHideLabel: true,
-      formName: 'ACCREDITATION_INIT_FORM',
-      isDirty: true,
-      backUrl: this.props.refLink,
-    },
     ACCREDITATION_FORM: {
       name: '',
       component: <IncomeQualCheck submitStep={this.handleSubmitStep} {...this.props} />,
@@ -47,7 +38,7 @@ export default class PopulateAccreditationSteps extends React.Component {
       formName: 'ACCREDITATION_FORM',
       isDirty: true,
       // disablePrevButton: true,
-      // backUrl: this.props.refLink,
+      backUrl: this.props.refLink,
     },
     NETWORTH_QAL_FORM: {
       name: 'Net worth',
@@ -100,6 +91,7 @@ export default class PopulateAccreditationSteps extends React.Component {
     this.props.history.push('/dashboard/account-settings/investment-limits');
     this.props.accreditationStore.resetAllForms();
     this.props.accreditationStore.setFieldVal('firstInit', '');
+    this.props.accreditationStore.setFieldVal('isAccreditationFlowInProgress', { open: false, accountSelectedType: null });
     this.props.accreditationStore.resetUserAccreditatedStatus();
   }
 
@@ -109,8 +101,7 @@ export default class PopulateAccreditationSteps extends React.Component {
 
   populateSteps = () => {
     const { formArray, accreditationStore } = this.props;
-    const CustomformArray = { key: 'ACCREDITATION_INIT_FORM', formArray };
-    const steps = map(CustomformArray, (form, index) => {
+    const steps = map(formArray, (form, index) => {
       const formObj = {
         ...this.StepsMetaData[form.key],
         isHideLabel: this.StepsMetaData[form.key].isHideLabel || false,
@@ -131,7 +122,7 @@ export default class PopulateAccreditationSteps extends React.Component {
         formObj.isValid = accreditationStore[form.key].meta.isFieldValid ? '' : 'error';
         formObj.disableNxtBtn = !accreditationStore[form.key].meta.isValid;
       }
-      if (index === (CustomformArray.length - 1) && !form.enableNextBtn) {
+      if (index === (formArray.length - 1) && !form.enableNextBtn) {
         formObj.disableNextButton = true;
       }
       return formObj;

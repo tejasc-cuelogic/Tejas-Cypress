@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Grid, Button } from 'semantic-ui-react';
+import { Form, Header } from 'semantic-ui-react';
+import { FormArrowButton } from '../../../../../../../theme/form';
 
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @inject('accreditationStore')
 @observer
@@ -20,7 +21,14 @@ export default class NetWorthQualCheck extends Component {
         </p>
         <p><b>Does your net worth qualify you as an accredited investor?</b></p>
         <Form error className="account-type-tab">
-          <Grid columns={1}>
+          <FormArrowButton
+            fielddata={NETWORTH_QAL_FORM.fields.method}
+            name="method"
+            formName="NETWORTH_QAL_FORM"
+            changed={accreditationMethodChange}
+            action={this.props.submitStep}
+          />
+          {/* <Grid columns={1}>
             {NETWORTH_QAL_FORM.fields.method.values.map(method => (
               <Grid.Column
                 key={method.value}
@@ -34,7 +42,7 @@ export default class NetWorthQualCheck extends Component {
               </Grid.Column>
             ))}
           </Grid>
-          <Button onClick={this.props.submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
+          <Button onClick={this.props.submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" /> */}
         </Form>
       </div>
     );

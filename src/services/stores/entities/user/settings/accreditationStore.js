@@ -107,6 +107,8 @@ export class AccreditationStore {
 
   @observable docReference = null;
 
+  @observable isAccreditationFlowInProgress = { open: false, accountSelectedType: null };
+
   @action
   setFieldValue = (field, value, objRef = false) => {
     if (objRef) {

@@ -44,6 +44,7 @@ export default class FinancialInfo extends Component {
     e.preventDefault();
     console.log(accountType);
     this.setState({ open: true, accountSelectedType: accountType });
+    this.props.accreditationStore.setFieldVal('isAccreditationFlowInProgress', { open: true, accountSelectedType: accountType });
     // if (this.props.userDetailsStore.isEntityTrust && accountType === 'entity') {
     //   this.props.history.push(`${this.props.match.url}/verify-trust-entity-accreditation/${accountType}`);
     // } else {
@@ -52,7 +53,6 @@ export default class FinancialInfo extends Component {
   }
 
   handleVerifyAccreditationSteps = () => {
-    console.log('call...', this.state.accountSelectedType);
     const { accountSelectedType } = this.state;
     if (this.props.userDetailsStore.isEntityTrust && accountSelectedType === 'entity') {
       this.props.history.push(`${this.props.match.url}/verify-trust-entity-accreditation/${accountSelectedType}`);
@@ -76,6 +76,7 @@ export default class FinancialInfo extends Component {
   handleCloseModal = () => {
     this.setState({ open: false, accountSelectedType: null });
     this.props.history.push('/dashboard/account-settings/investment-limits');
+    this.props.accreditationStore.setFieldVal('isAccreditationFlowInProgress', { open: false, accountSelectedType: null });
   }
 
   render() {

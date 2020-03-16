@@ -14,14 +14,18 @@ const FormArrowButton = observer((props) => {
     // error,
     // placeHolder,
   } = props.fielddata;
-  const { name, changed, action, ctaErrors, classname } = props;
+  const { name, changed, action, ctaErrors, classname, formName } = props;
   if (values && Array.isArray(toJS(values))) {
     return (
 <Button.Group fluid vertical>{values.map(field => (
   <>
     <Button
       onClick={(e) => {
+        if (formName) {
+        changed(e, formName, { name, value: field.value });
+        } else {
         changed(e, { name, value: field.value });
+        }
         if (action) {
           action();
         }
