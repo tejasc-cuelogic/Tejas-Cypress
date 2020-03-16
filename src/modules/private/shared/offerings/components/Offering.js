@@ -38,9 +38,11 @@ export default class Offering extends Component {
         ...[
           { title: 'Misc', to: 'misc', component: 'Misc' },
           { title: 'Launch', to: 'launch', component: 'OfferingLaunch' },
-          showInvestNowToc && { title: 'InvestNow ToC', to: 'invest-now-toc', component: 'InvestNowToc' },
         ],
       ];
+    }
+    if (showInvestNowToc) {
+      navItems.push({ title: 'InvestNow ToC', to: 'invest-now-toc', component: 'InvestNowToc' });
     }
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>

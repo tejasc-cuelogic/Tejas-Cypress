@@ -362,6 +362,12 @@ h6{
 .overflow-visible{
 	overflow: visible !important;
 }
+.text-ellipsis{
+	white-space: nowrap; 
+	width: 100%; 
+	overflow: hidden;
+	text-overflow: ellipsis; 
+}
 //	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;
@@ -3326,3 +3332,11 @@ h3.ui.header.error-2{
 	}
 }
 /* Message Modal End */
+
+.toc-header{
+    display: flex;
+    flex-direction: row;
+	justify-content: space-between;
+	margin: @24px 0;
+	clear: both;
+}
