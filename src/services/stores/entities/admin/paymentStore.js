@@ -3,7 +3,7 @@ import { orderBy, get, findIndex, pick, forEach, remove } from 'lodash';
 import moment from 'moment';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary } from '../../queries/Repayment';
+import { adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions } from '../../queries/Repayment';
 import { PAYMENT, ACTION } from '../../../constants/payment';
 import { uiStore } from '../../index';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
@@ -11,7 +11,7 @@ import Helper from '../../../../helper/utility';
 
 export class PaymentStore extends DataModelStore {
   constructor() {
-    super({ adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary });
+    super({ adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions });
   }
 
   data = [];

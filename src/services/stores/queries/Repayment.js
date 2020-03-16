@@ -108,9 +108,3 @@ export const adminPaymentSendGoldStarDraftInstructions = gql`
     adminPaymentSendGoldStarDraftInstructions(date: $date, scope: $scope, sendEmail: $sendEmail)
   }
 `;
-
-export const adminPaymentGenerateAdminSummary = gql`
-  mutation adminPaymentGenerateAdminSummary($date: String!, $scope: String, $sendEmail: Boolean){
-    adminPaymentGenerateAdminSummary(date: $date, scope: $scope, sendEmail: $sendEmail)
-  }
-`;
