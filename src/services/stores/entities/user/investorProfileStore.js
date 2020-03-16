@@ -106,22 +106,24 @@ export class InvestorProfileStore extends DataModelStore {
     const { fields } = this[form];
     fields[textField].value = data[textField] !== 'false' ? data[textField] : '';
     fields[radioField].value = data[textField] && data[textField] !== ''
-      && data[textField] !== 'false' ? 'yes' : data[textField] === null ? '' : 'no';
+      && data[textField] !== 'false' ? 'yes' : 'no';
   }
 
   setInvestorDetailInfo = (data) => {
-    this.INVESTOR_PROFILE_FULL = Validator.prepareFormObject(INVESTOR_PROFILE_FULL_META, true);
-    [...this.invProfileForms, ...['INVESTMENT_EXP_FRM']].forEach((form) => {
-      this.setFormData(form, data);
-      this.INVESTOR_PROFILE_FULL.fields = { ...this.INVESTOR_PROFILE_FULL.fields, ...this[form].fields };
-    });
-    ['isRiskTaker', 'isComfortable'].map((field) => {
-      if (data && data[field]) {
-        this.INVESTOR_PROFILE_FULL.fields[field].value = data[field] ? ['checked'] : [];
-      }
-      return false;
-    });
-    Validator.onChange(this.INVESTOR_PROFILE_FULL, '', '', false);
+    if (data) {
+      this.INVESTOR_PROFILE_FULL = Validator.prepareFormObject(INVESTOR_PROFILE_FULL_META, true);
+      [...this.invProfileForms, ...['INVESTMENT_EXP_FRM']].forEach((form) => {
+        this.setFormData(form, data);
+        this.INVESTOR_PROFILE_FULL.fields = { ...this.INVESTOR_PROFILE_FULL.fields, ...this[form].fields };
+      });
+      ['isRiskTaker', 'isComfortable'].map((field) => {
+        if (data && data[field]) {
+          this.INVESTOR_PROFILE_FULL.fields[field].value = data[field] ? ['checked'] : [];
+        }
+        return false;
+      });
+      Validator.onChange(this.INVESTOR_PROFILE_FULL, '', '', false);
+    }
   }
 
   updateInvestorEditProfileData = async () => {
@@ -157,7 +159,6 @@ export class InvestorProfileStore extends DataModelStore {
           this.setFormData(form, investorProfileData);
           Validator.onChange(this[form], '', '', false);
         });
-        userDetailsStore.mergeUserData('investorProfileData', investorProfileData);
         this.invProfileForms.some((form) => {
           const getProfileStep = AccCreationHelper.establishProfileSteps();
           if (!this[form].meta.isValid) {
