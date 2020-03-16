@@ -7,6 +7,7 @@ import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'r
 import { CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../../constants/offering';
 import InvestNowAddPage from './InvestNowAddPage';
 import InvestNowAddToc from './InvestNowAddToc';
+import InvestNowTocPreview from './InvestNowTocPreview';
 
 const accountTitle = {
   INDIVIDUAL: 'Individual & IRA',
@@ -19,7 +20,9 @@ const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, 
   <div className="row-wrap striped-table">
     <div className="balance first-column">
       <DragHandle />
+      <div>
       {preview(get(toc, 'label'))}
+      </div>
     </div>
     <div className="balance width-100">
       {get(toc, 'account') ? accountTitle[get(toc, 'account')] : 'N/A'}
@@ -99,6 +102,7 @@ export default class InvestNowTocList extends Component {
     showModal: null,
     page: null,
     tocIndex: null,
+    previewMode: false,
   };
 
   toggleAccordianContent = (categoryIndex = null) => {
@@ -169,6 +173,13 @@ export default class InvestNowTocList extends Component {
     this.updateState('page', page);
   }
 
+  handlePreview = (page) => {
+    this.updateState('page', page);
+    this.updateState('previewMode', true);
+  }
+
+  handleClosePreview = () => this.updateState('previewMode', false);
+
   remove = (type, page, regulation, tocIndex) => {
     this.updateState('showConfirm', null);
     this.updateState('page', null);
@@ -186,7 +197,7 @@ export default class InvestNowTocList extends Component {
   render() {
     const { data, regulation, offeringsStore } = this.props;
     const { offer } = offeringsStore;
-    const { showConfirm, activeIndex, showModal, page, tocIndex } = this.state;
+    const { showConfirm, activeIndex, showModal, page, tocIndex, previewMode } = this.state;
     const isReadOnly = get(offer, 'stage') !== 'CREATION';
     return (
       <>
@@ -194,7 +205,7 @@ export default class InvestNowTocList extends Component {
         {data && data.length ? data.map((toc, index) => (data.length === 1 ? (
           <>
             <Button.Group className="toc-list">
-              {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-view" /></Button>}
+              {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => this.handlePreview(toc.page)}><Icon className="ns-view" /></Button>}
               {!isReadOnly && data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
             </Button.Group>
             <ToCList
@@ -219,7 +230,7 @@ export default class InvestNowTocList extends Component {
                   {data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
                 </>
               )}
-              {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-view" /></Button>}
+              {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => this.handlePreview(toc.page)}><Icon className="ns-view" /></Button>}
             </Accordion.Title>
             <Accordion.Content active={activeIndex.includes(index)} className="categories-acc">
             <ToCList
@@ -234,6 +245,7 @@ export default class InvestNowTocList extends Component {
             </Accordion.Content>
           </Accordion>
         ))) : ''}
+        {previewMode && <InvestNowTocPreview handleClosePreview={this.handleClosePreview} page={page} regulation={regulation} previewMode callbackFun={this.callbackFun} />}
         <Modal open={!!showModal} closeIcon onClose={() => this.updateState('showModal', null)} size="small" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
             <Header as="h3">{['PAGE_EDIT', 'TOC_EDIT'].includes(showModal) ? 'Edit' : 'Add new'} {['PAGE', 'PAGE_EDIT'].includes(showModal) ? 'ToC page' : 'ToC'}</Header>

@@ -4,7 +4,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import { Popup, Icon } from 'semantic-ui-react';
 import { forEach, filter, get, groupBy, map, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
-import { uiStore, campaignStore, userDetailsStore } from '../../../index';
+import { uiStore, campaignStore, userDetailsStore, offeringsStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
 import { getBoxEmbedLink, getLegalDocsFileIds, getS3DownloadLinkByFileId } from '../../../queries/agreements';
 import { AGREEMENT_TEMPLATE_DETAILS_INFO } from '../../../../constants/investment';
@@ -300,6 +300,30 @@ export class AgreementsStore {
       this.AGREEMENT_DETAILS_FORM.fields.page[index].title.value = get(tocs, '[0].title');
       this.AGREEMENT_DETAILS_FORM.fields.page[index].toc.values = valuesArray;
     });
+    this.tocRequiredArray = requiredArray;
+  }
+
+  @action
+  previewAgreementTocs = (regulation, page, params) => {
+    const { offer } = offeringsStore;
+    let investNowTocs = get(offer, 'investNow.page') || [];
+    investNowTocs = investNowTocs.find(i => i.page === page && i.regulation === regulation);
+    const requiredArray = [];
+    const pageRequiredArray = [];
+    const valuesArray = [];
+    forEach(get(investNowTocs, 'toc'), (data) => {
+      const valueObj = {};
+      const label = this.preview(data.label, params);
+      valueObj.label = label;
+      valueObj.value = data.order;
+      valuesArray.push(valueObj);
+      if (data.required) {
+        pageRequiredArray.push(data.order);
+      }
+    });
+    requiredArray.push(pageRequiredArray);
+    this.AGREEMENT_DETAILS_FORM.fields.page[0].title.value = get(investNowTocs, 'title');
+    this.AGREEMENT_DETAILS_FORM.fields.page[0].toc.values = valuesArray;
     this.tocRequiredArray = requiredArray;
   }
 

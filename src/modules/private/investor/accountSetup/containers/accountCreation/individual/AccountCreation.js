@@ -82,6 +82,7 @@ export default class AccountCreation extends React.Component {
         isDirty: isPlaidDirty,
         stepToBeRendered: 1,
         disableNextButton: !linkbankSummary,
+        backUrl: '/dashboard/setup/account-creation',
         validForm: isAccountPresent,
       },
       {
