@@ -193,7 +193,14 @@ export default class CampaignList extends Component {
                             </Card.Content>
                           </div>
                           <Card.Content extra className={!get(offering, 'isAvailablePublicly') ? 'disabled' : ''}>
-                            {showInvestorsCount(offering) && <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} {get(offering, 'keyTerms.securities') !== 'FUNDS' ? `from ${get(offering, 'closureSummary.totalInvestorCount') || 0} investors` : ''}</b></p>}
+                            <p><b>
+                            {showInvestorsCount(offering)
+                            && (
+                              <>
+                               {isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} {get(offering, 'keyTerms.securities') !== 'FUNDS' ? `from ${get(offering, 'closureSummary.totalInvestorCount') || 0} investors` : ''}
+                              </>
+                            )}
+                            </b></p>
                             {isFunded
                               && (
                                 <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>
