@@ -47,14 +47,16 @@ export default class CampaignList extends Component {
     this.setState({ filters: filters === false });
   }
 
-  renderBaners = (offering) => {
+  renderBaners = (offering, additionalTag = null) => {
     const resultFound = get(offering, 'isBannerShow');
     const realEstateBanner = get(offering, 'realEstateBanner');
+    const customTag = additionalTag ? (<Label color="grey">{additionalTag}</Label>) : null;
     if (resultFound) {
       const bannerFirst = get(offering, 'datesBanner');
       const bannerSecond = get(offering, 'amountsBanner');
       return (
         <Label.Group size="small">
+          {customTag}
           {realEstateBanner
             && <Label color="grey">{realEstateBanner}</Label>
           }
@@ -69,8 +71,15 @@ export default class CampaignList extends Component {
     } if (realEstateBanner) {
       return (
         <Label.Group size="small">
+          {customTag}
           <Label color="grey">{realEstateBanner}</Label>
         </Label.Group>
+      );
+    } if (customTag) {
+      return (
+      <Label.Group size="small">
+        {customTag}
+      </Label.Group>
       );
     }
     return null;
@@ -82,6 +91,7 @@ export default class CampaignList extends Component {
     const tombstoneImage = offering => (isTemplate2(get(offering, 'template')) ? get(offering, 'tombstone.image.url') : get(offering, 'media.tombstoneImage.url'));
     const getTombstoneDescription = offering => (isTemplate2(get(offering, 'template')) ? get(offering, 'tombstone.description') : get(offering, 'offering.overview.tombstoneDescription'));
     const showInvestorsCount = offering => (!isTemplate2(get(offering, 'template')) || (isTemplate2(get(offering, 'template')) && (get(offering, 'tombstone.toggleMeta') || []).includes('INVESTOR_COUNT')));
+    const getCustomTag = offering => ((isTemplate2(get(offering, 'template')) && get(offering, 'tombstone.customTag')) || '');
     return (
       <>
         <section className="campaign-list-wrapper">
@@ -105,7 +115,7 @@ export default class CampaignList extends Component {
                               />
                             </div>
                           </div>
-                          {offering.stage === 'LIVE' ? this.renderBaners(offering) : null}
+                          {offering.stage === 'LIVE' ? this.renderBaners(offering, getCustomTag(offering)) : null}
                           {(['INVESTOR', 'WATCHING'].includes(offering.watchListStatus))
                             && (
                               <Icon name="heart" />
