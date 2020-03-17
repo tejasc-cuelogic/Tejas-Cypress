@@ -14,11 +14,6 @@ import * as stores from './services/stores';
 import { ErrorBoundry as CustomErrorBoundry, Utilities as Utils } from './helper';
 import { REACT_APP_DEPLOY_ENV, NODE_ENV } from './constants/common';
 
-console.log('---------------------');
-console.log(process.env.REACT_APP_GOOGLE_PLACE_API_KEY);
-console.log(process.env);
-console.log('---------------------');
-
 // Set the default error boundry to the customErrorBoundry
 // and reassign it if one from Bugsnag is present
 // let ErrorBoundary = CustomErrorBoundry;
