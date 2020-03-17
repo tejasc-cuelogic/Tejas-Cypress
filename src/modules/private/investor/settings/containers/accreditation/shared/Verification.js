@@ -35,16 +35,18 @@ export default class Verification extends Component {
               accountType={accountType}
               clicked={this.submit}
               isEntity={isEntity}
+              isUploadLater={INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocumentLatter'}
               {...this.props}
             />
           )
-          : (ACCREDITATION_FORM.fields.method.value === 'INCOME')
+          : (ACCREDITATION_FORM.fields.method.value === 'INCOME' && INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value !== 'uploaddocumentLatter')
             ? <IncomeUploadDocument accountType={accountType} clicked={this.submit} {...this.props} />
             : (
               <AssetsUploadDocument
                 accountType={accountType}
                 clicked={this.submit}
                 isEntity={isEntity}
+                isUploadLater={INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocumentLatter'}
                 {...this.props}
               />
             )

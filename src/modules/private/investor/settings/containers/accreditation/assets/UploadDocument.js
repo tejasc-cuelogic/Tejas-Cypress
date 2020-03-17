@@ -10,7 +10,7 @@ import { DropZoneConfirm as DropZone, FormCheckbox } from '../../../../../../../
 export default class UploadDocument extends Component {
   constructor(props) {
     super(props);
-    if (this.props.isEntity) {
+    if (this.props.isEntity || this.props.isUploadLater) {
       this.props.accreditationStore.setDefaultCheckboxVal();
     }
   }
@@ -35,8 +35,8 @@ export default class UploadDocument extends Component {
     const { ASSETS_UPLOAD_DOC_FORM, formChange } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h4">{this.props.isEntity ? 'Upload verification letter' : 'Upload Documents'}</Header>
-        <p>{this.props.isEntity ? 'Upload a signed letter from your lawyer, CPA, investment advisor or investment broker verifying your entity`s status as an accredited investor.' : 'To verify your net worth, you can upload personal financial statements, a statement from a financial institution, asset appraisals, or a signed letter from your lawyer, accountant, investment advisor or investment broker indicating your status as an accredited investor.'}</p>
+        <Header as="h4">{(this.props.isEntity || this.props.isUploadLater) ? 'Upload verification letter' : 'Upload Documents'}</Header>
+        <p>{(this.props.isEntity || this.props.isUploadLater) ? 'Upload a signed letter from your lawyer, CPA, investment advisor or investment broker verifying your entity`s status as an accredited investor.' : 'To verify your net worth, you can upload personal financial statements, a statement from a financial institution, asset appraisals, or a signed letter from your lawyer, accountant, investment advisor or investment broker indicating your status as an accredited investor.'}</p>
         <Divider hidden />
         <Form>
           <DropZone
@@ -47,7 +47,7 @@ export default class UploadDocument extends Component {
             onremove={this.handleDelDoc}
             containerclassname="fluid"
           />
-          {!this.props.isEntity
+          {!this.props.isEntity && !this.props.isUploadLater
             && (
               <FormCheckbox
                 fielddata={ASSETS_UPLOAD_DOC_FORM.fields.isAccepted}

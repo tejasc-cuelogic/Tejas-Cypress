@@ -14,7 +14,7 @@ const FormArrowButton = observer((props) => {
     // error,
     // placeHolder,
   } = props.fielddata;
-  const { name, changed, action, ctaErrors, classname, formName } = props;
+  const { name, changed, action, ctaErrors, classname, formName, activeClass } = props;
   if (values && Array.isArray(toJS(values))) {
     return (
 <Button.Group fluid vertical>{values.map(field => (
@@ -58,7 +58,7 @@ const FormArrowButton = observer((props) => {
     );
   }
   return (
-    <Button onClick={e => changed(e, { name, value })} basic fluid labelPosition="left" className="arrow-button">
+    <Button onClick={e => changed(e, { name, value })} basic fluid labelPosition="left" className={`arrow-button ${activeClass ? 'active' : ''}`}>
       <div className="details">
         {label && labelDescription
           ? (
