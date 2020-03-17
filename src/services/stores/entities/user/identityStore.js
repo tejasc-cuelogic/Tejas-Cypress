@@ -836,11 +836,10 @@ export class IdentityStore {
 
   verifyOTPWrapper = () => {
     uiStore.setProgress();
-    const { email, code, givenName } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
     const verifyOTPData = {
       confirmationCode: code,
       address: email,
-      firstName: givenName,
     };
     return new Promise((resolve, reject) => {
       publicClient
