@@ -368,12 +368,19 @@ export class IdentityStore {
       }
 
       if (stepName !== 'cip' && get(this.cipStepUrlMapping[stepName], 'status')) {
-        userDetailsStore.updateUserDetails('legalDetails', {
-          status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
-        });
-        userDetailsStore.updateUserDetails('cip', {
-          expiration: Helper.getDaysfromNow(21),
-        });
+        const userObj = {
+          legalDetails: {
+            status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
+          },
+          cip: {
+            expiration: Helper.getDaysfromNow(21),
+          },
+          info: {
+            firstName: this.ID_VERIFICATION_FRM.fields.firstLegalName.value,
+            lastName: this.ID_VERIFICATION_FRM.fields.lastLegalName.value,
+          },
+        };
+        Object.keys(userObj).forEach(key => userDetailsStore.updateUserDetails(key, userObj[key]));
       }
 
       this.setFieldValue('signUpLoading', false);
