@@ -82,21 +82,6 @@ class InvestorSignup extends Component {
               {/* <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link> */}
             </Header>
             <Form error onSubmit={this.handleSubmitForm}>
-              {/* <Form.Group widths="equal">
-                {
-                  ['givenName', 'familyName'].map(field => (
-                    <FormInput
-                      key={field}
-                      type="text"
-                      autoFocus={!responsiveVars.isMobile && field === 'givenName'}
-                      name={field}
-                      fielddata={SIGNUP_FRM.fields[field]}
-                      changed={signupChange}
-                    />
-                  ))
-                }
-
-              </Form.Group> */}
               <FormInput
                 type="email"
                 name="email"
@@ -123,13 +108,6 @@ class InvestorSignup extends Component {
                 fielddata={SIGNUP_FRM.fields.password}
                 showRequiredError
               />
-              {/* <FormInput
-                key="verify"
-                name="verify"
-                type={pwdInputType}
-                fielddata={SIGNUP_FRM.fields.verify}
-                changed={signupChange}
-              /> */}
               {errors
                 && (
                   <Message error textAlign="left" className="mt-30">
