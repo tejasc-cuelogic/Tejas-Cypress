@@ -14,11 +14,15 @@ import * as stores from './services/stores';
 import { ErrorBoundry as CustomErrorBoundry, Utilities as Utils } from './helper';
 import { REACT_APP_DEPLOY_ENV, NODE_ENV } from './constants/common';
 
+console.log('---------------------');
+console.log(process.env.REACT_APP_GOOGLE_PLACE_API_KEY);
+console.log(process.env);
+console.log('---------------------');
+
 // Set the default error boundry to the customErrorBoundry
 // and reassign it if one from Bugsnag is present
 // let ErrorBoundary = CustomErrorBoundry;
 let ErrorBoundary = CustomErrorBoundry;
-const googleApiKey = process.env.REACT_APP_GOOGLE_PLACE_API_KEY;
 
 if (process.env.REACT_APP_BUG_SNAG_KEY) {
   const bugsnagClient = bugsnag({
@@ -62,7 +66,7 @@ ReactDOM.render(
       <ErrorBoundary>
       <ReactDependentScript
         scripts={[
-        `https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places`,
+        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_PLACE_API_KEY}&libraries=places`,
       ]}
       >
         <App />
