@@ -13,6 +13,7 @@ export default class OfferingCreation extends Component {
     const { isIssuer } = this.props.userStore;
     let navItems = navStore.specificNavs.subNavigations;
     navItems = navStore.filterByAccess(navItems, 1, ['overview', 'activity-history']); // navigation of creation stage
+    navItems = navItems.filter(n => (n.template === 1 || !n.template));
     return (
       <div className={isIssuer ? 'ui card fluid' : ''}>
         <SecondaryMenu force2ary={!isIssuer} match={match} navItems={navItems} />

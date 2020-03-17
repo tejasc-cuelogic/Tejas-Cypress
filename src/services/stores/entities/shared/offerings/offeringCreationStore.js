@@ -1200,7 +1200,7 @@ export class OfferingCreationStore extends DataModelStore {
         } else if (keyName === false && payload.stage === 'LIVE') {
           this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.LIVE, 'Application launched!', 'LAUNCHED');
         }
-        res();
+        res((get(result, 'data.updateOffering.template')));
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));

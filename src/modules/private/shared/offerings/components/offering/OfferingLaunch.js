@@ -50,8 +50,9 @@ export default class OfferingLaunch extends Component {
         true, 'Offering Launched successfully.', false, res, rej,
       );
     })
-      .then(() => {
-        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/offering/launch`);
+      .then((template) => {
+        const isTemplate2 = template === 2;
+        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}${isTemplate2 ? '' : '/offering-creation'}/offering/launch`);
       });
   }
 

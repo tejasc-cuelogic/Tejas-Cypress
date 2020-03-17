@@ -4,6 +4,7 @@ const common = {
   offeringBasics: `
   isAvailablePublicly
   offeringSlug
+  template
   keyTerms {
     legalBusinessName
     shorthandBusinessName
