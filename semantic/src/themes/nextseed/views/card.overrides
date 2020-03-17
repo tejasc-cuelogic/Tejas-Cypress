@@ -150,6 +150,8 @@
                 }
                 > .meta{
                     text-transform:none;
+                    font-size: @15px;
+                    line-height: 24px;
                 }
                 .description{
                     min-height:120px;
@@ -188,6 +190,7 @@
             top: auto;
             width: 100%;
             background: @white;
+            min-height: 73px !important;
             @media only screen and (max-width : @largestMobileScreen){
                 padding:0 @22px @20px;
             }
