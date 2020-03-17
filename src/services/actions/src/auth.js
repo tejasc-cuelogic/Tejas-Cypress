@@ -247,7 +247,7 @@ export class Auth {
     const signupFields = authStore.CONFIRM_FRM.fields;
     const attributeList = {
       'custom:roles': JSON.stringify([fields.role.value]),
-      given_name: fields.givenName.value,
+      given_name: fields.givenName.value || 'New Signup',
       family_name: fields.email.value,
     };
     try {

@@ -803,12 +803,10 @@ export class IdentityStore {
 
   requestOtpWrapper = () => {
     uiStore.setProgress();
-    const { email, givenName } = authStore.SIGNUP_FRM.fields;
+    const { email } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
-    const firstNameInCookie = authStore.CONFIRM_FRM.fields.givenName.value;
     let payload = {
       address: (email.value || emailInCookie).toLowerCase(),
-      firstName: givenName.value || firstNameInCookie,
     };
     const tags = JSON.parse(window.localStorage.getItem('tags'));
     payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
