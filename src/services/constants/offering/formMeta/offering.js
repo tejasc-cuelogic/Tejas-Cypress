@@ -13,6 +13,7 @@ const HEADER_TOGGLE_META = [
 const SUB_HEADER_TOGGLE_META = [
   { label: 'Investor Count', value: 'INVESTOR_COUNT' },
   { label: 'Raised Amount', value: 'RAISED_AMOUNT' },
+  { label: 'Days Left', value: 'DAYS_LEFT' },
 ];
 
 export const TOMBSTONE_BASIC = FormHelper.generateMeta([

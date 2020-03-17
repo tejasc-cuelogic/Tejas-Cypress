@@ -31,7 +31,8 @@ export default class CampaignSecondaryMenu extends Component {
     const { newLayout } = this.props;
     const isTemplate2 = campaignStatus.campaignTemplate === 2;
     const toggleMeta = get(campaign, 'subHeader.toggleMeta') || [];
-    const showInvestorCount = ((isTemplate2 && toggleMeta.includes('INVESTOR_COUNT')) || !isTemplate2);
+    const showInvestorCount = (isTemplate2 && toggleMeta.includes('INVESTOR_COUNT'));
+    const showDaysLeft = (isTemplate2 && toggleMeta.includes('DAYS_LEFT'));
     const showRaisedAmount = ((isTemplate2 && toggleMeta.includes('RAISED_AMOUNT')) || !isTemplate2);
     return (
       <Visibility offset={[72, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
@@ -41,8 +42,8 @@ export default class CampaignSecondaryMenu extends Component {
               {!isMobile
                 && (
                   <>
-                    {(showInvestorCount && !campaignStatus.isFund) && <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>}
-                    {!isClosed && diffForProcessing.value > 0
+                    {(showInvestorCount && (!isTemplate2 && !campaignStatus.isFund)) && <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>}
+                    {((showDaysLeft || !isClosed) && diffForProcessing.value > 0)
                       && <List.Item>{countDown.valueToShow} {' '} {countDown.labelToShow}</List.Item>
                     }
                     {isClosed && get(campaign, 'closureSummary.repayment.count')

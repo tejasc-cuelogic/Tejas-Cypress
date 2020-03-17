@@ -17,7 +17,6 @@ const metaInfo = {
 class CampaignSubHeader extends Component {
   constructor(props) {
     super(props);
-    this.props.manageOfferingStore.setFormData('SUB_HEADER_BASIC_FRM', 'subHeader');
     this.props.manageOfferingStore.setFormData('TOMBSTONE_HEADER_META_FRM', 'subHeader');
   }
 

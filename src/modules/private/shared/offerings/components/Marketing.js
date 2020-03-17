@@ -17,7 +17,8 @@ export default class Marketing extends Component {
       history.push(`${match.url}/tombstone`);
     }
     manageOfferingStore.setFormData('TOMBSTONE_BASIC_FRM', 'tombstone');
-    manageOfferingStore.setFormData('HEADER_BASIC_FRM', match.url.includes('sub-header') ? 'subHeader' : 'header');
+    manageOfferingStore.setFormData('SUB_HEADER_BASIC_FRM', 'subHeader');
+    manageOfferingStore.setFormData('HEADER_BASIC_FRM', 'header');
     manageOfferingStore.setFormData('OFFERING_MISC_FRM', 'misc');
   }
 
