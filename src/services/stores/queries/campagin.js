@@ -221,6 +221,7 @@ export const campaignDetailsQuery = gql`
     id
     template
     ${offeringTemplate2.header}
+    ${offeringTemplate2.subHeader}
     ${offeringTemplate2.content}
     ${offeringTemplate2.misc}
     investmentSummary {

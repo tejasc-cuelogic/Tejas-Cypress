@@ -61,10 +61,11 @@ export const OFFERING_CONTENT = {
     },
     order: {
       label: 'Order',
-      value: '',
+      value: 1,
       error: undefined,
       rule: 'optional',
       placeHolder: 'e.g. 1',
+      defaultValue: 1,
     },
     scope: {
       label: 'Scope',

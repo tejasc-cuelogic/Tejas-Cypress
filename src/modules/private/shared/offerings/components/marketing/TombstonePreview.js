@@ -93,7 +93,7 @@ export default class TombstonePreview extends Component {
                 </Card.Content>
               </div>
               <Card.Content extra>
-                {[TOMBSTONE_BASIC_FRM.fields.toggleMeta.value].includes('INVESTOR_COUNT')
+                {TOMBSTONE_BASIC_FRM.fields.toggleMeta.value.includes('INVESTOR_COUNT')
                 && (
                 <>
                 <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount') || 0, 0)} from {get(offer, 'closureSummary.totalInvestorCount') || 0} investors</b></p>

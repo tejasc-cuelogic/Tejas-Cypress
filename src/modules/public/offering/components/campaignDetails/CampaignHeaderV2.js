@@ -111,8 +111,8 @@ export default class CampaignHeaderV2 extends Component {
                           ) : null}
                       </div>
                       <div className="clearfix social-links mt-10">
-                        {campaign && get(campaign, 'offering.overview.social')
-                          ? campaign.offering.overview.social.map(site => (
+                        {campaign && get(campaign, 'misc.social')
+                          ? campaign.misc.social.map(site => (
                             <React.Fragment key={site.type}>
                               {site.url
                                 && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>

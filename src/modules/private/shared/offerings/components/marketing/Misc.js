@@ -15,10 +15,6 @@ const metaInfo = {
 @withRouter
 @observer
 class Misc extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.props.manageOfferingStore.setFormData('OFFERING_MISC_FRM', 'misc');
-  // }
   onFileDrop = (files, name) => {
     this.props.manageOfferingStore.uploadFileToS3('OFFERING_MISC_FRM', name, files);
   }
@@ -85,20 +81,6 @@ class Misc extends Component {
               </>
             ))
           }
-          {/* <Grid columns="2">
-            <Grid.Column>
-              <Header as="h4">{OFFERING_MISC_FRM.fields.image.label}</Header>
-              {smartElement.ImageCropper('image', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
-              <Divider hidden />
-            </Grid.Column>
-            <Grid.Column>
-              <Header as="h4">Tombstone</Header>
-              {smartElement.Input('customTag', { readOnly: isReadonly })}
-              {smartElement.FormTextarea('description', { readOnly: isReadonly, containerclassname: 'secondary' })}
-              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Tombstone Toggle Meta' })}
-            </Grid.Column>
-          </Grid>
-          <Divider section /> */}
           <OfferingButtonGroup
             updateOffer={this.handleFormSubmit}
           />

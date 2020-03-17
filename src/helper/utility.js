@@ -410,14 +410,16 @@ export class Utility {
   }
 
   enumToText = (valKey = '', value) => {
-    let key = valKey.split('.');
     let val = value;
-    if (valKey && key.length) {
-      key = key[key.length - 1];
-      if (key === 'securities') {
-        val = CAMPAIGN_KEYTERMS_SECURITIES[value];
-      } else if (key === 'regulation') {
-        val = CAMPAIGN_KEYTERMS_REGULATION[value];
+    if (valKey) {
+      let key = valKey.split('.');
+      if (valKey && key.length) {
+        key = key[key.length - 1];
+        if (key === 'securities') {
+          val = CAMPAIGN_KEYTERMS_SECURITIES[value];
+        } else if (key === 'regulation') {
+          val = CAMPAIGN_KEYTERMS_REGULATION[value];
+        }
       }
     }
     return val;

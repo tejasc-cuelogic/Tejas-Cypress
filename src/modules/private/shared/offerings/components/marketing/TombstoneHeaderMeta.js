@@ -12,14 +12,14 @@ const metaInfo = {
   };
 
 function TombstoneHeaderMeta(props) {
-  const { smartElement, manageOfferingStore, offeringsStore, title } = props;
+  const { smartElement, manageOfferingStore, offeringsStore, title, noAddMore } = props;
   const { offer } = offeringsStore;
   const { TOMBSTONE_HEADER_META_FRM, removeOne, addMore } = manageOfferingStore;
   return (
     <>
       <Header as="h4">
         {title || 'Tombstone Meta'}
-        {TOMBSTONE_HEADER_META_FRM.fields.meta.length < 5
+        {!noAddMore && TOMBSTONE_HEADER_META_FRM.fields.meta.length < 5
         && <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMore('TOMBSTONE_HEADER_META_FRM', 'meta')}>+ Add another section</Button>
         }
       </Header>

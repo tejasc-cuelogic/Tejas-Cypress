@@ -29,6 +29,10 @@ export default class CampaignSecondaryMenu extends Component {
     } = campaignStatus;
     const { navStatus, subNavStatus } = this.props.navStore;
     const { newLayout } = this.props;
+    const isTemplate2 = campaignStatus.campaignTemplate === 2;
+    const toggleMeta = get(campaign, 'subHeader.toggleMeta') || [];
+    const showInvestorCount = ((isTemplate2 && toggleMeta.includes('INVESTOR_COUNT')) || !isTemplate2);
+    const showRaisedAmount = ((isTemplate2 && toggleMeta.includes('RAISED_AMOUNT')) || !isTemplate2);
     return (
       <Visibility offset={[72, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
         <div className={`menu-secondary-fixed ${navStatus && navStatus === 'sub' && 'active'} ${subNavStatus} ${newLayout && isMobile ? 'campaign-secondary-menu-v2' : ''}`}>
@@ -37,7 +41,7 @@ export default class CampaignSecondaryMenu extends Component {
               {!isMobile
                 && (
                   <>
-                    {!campaignStatus.isFund && <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>}
+                    {(showInvestorCount && !campaignStatus.isFund) && <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>}
                     {!isClosed && diffForProcessing.value > 0
                       && <List.Item>{countDown.valueToShow} {' '} {countDown.labelToShow}</List.Item>
                     }
@@ -56,14 +60,23 @@ export default class CampaignSecondaryMenu extends Component {
               <List.Item>
                 <List.Header>{get(campaign, 'keyTerms.shorthandBusinessName')}</List.Header>
               </List.Item>
+              {showRaisedAmount
+              && (
               <List.Item>
                 <List.Header>
                   <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span>
                   {!isClosed && (campaignStatus.isTermNote || maxFlagStatus || get(campaign, 'stage') === 'LIVE' || get(campaign, 'stage') === 'PROCESSING' || get(campaign, 'stage') === 'LOCK') ? ' raised' : ' invested'}
                 </List.Header>
               </List.Item>
-              {!isMobile && !campaignStatus.isFund
+              )}
+              {!isTemplate2 && !isMobile && !campaignStatus.isFund
                 && <List.Item>{campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isSafe ? `${get(campaign, 'keyTerms.valuationCap') || ''} Valuation Cap` : campaignStatus.isTermNote ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : campaignStatus.isPreferredEquity ? `${get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : ''} Pre-Money Valuation` : `${get(campaign, 'keyTerms.investmentMultiple') || ''} Investment Multiple`}</List.Item>
+              }
+              {isTemplate2 && get(campaign, 'subHeader.meta[0]') && get(campaign, 'subHeader.meta').map(row => (
+                <List.Item>
+                  {row.keyLabel ? `${row.keyLabel}:` : ''} {row.keyType === 'custom' ? row.keyValue : Helper.formatValue(row.keyFormat, Helper.enumToText(row.keyValue, get(campaign, row.keyValue)))}
+                </List.Item>
+              ))
               }
             </List>
           </Container>
