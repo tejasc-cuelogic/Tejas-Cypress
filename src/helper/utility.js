@@ -13,7 +13,7 @@ import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLO
 import authStore from '../services/stores/entities/shared/authStore';
 import userStore from '../services/stores/entities/userStore';
 import DataFormatter from './utilities/DataFormatter';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL } from '../constants/offering';
 
 export class Utility {
   // Default options for the toast
@@ -418,7 +418,7 @@ export class Utility {
         if (key === 'securities') {
           val = CAMPAIGN_KEYTERMS_SECURITIES[value];
         } else if (key === 'regulation') {
-          val = CAMPAIGN_KEYTERMS_REGULATION[value];
+          val = CAMPAIGN_KEYTERMS_REGULATION_PARALLEL[value];
         }
       }
     }

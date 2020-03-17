@@ -77,10 +77,12 @@ export const allOfferings = gql`
 query getOfferingList($filters: OfferingListFilterInputType){
     getOfferingList(filters: $filters) {
       id
+      template
       isAvailablePublicly
       watchListStatus
       offeringSlug
       stage
+      ${offeringTemplate2.tombstone}
       updated {
         date
       }
