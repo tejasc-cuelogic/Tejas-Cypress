@@ -15,7 +15,7 @@ export default class CampaignHeaderPreview extends Component {
   render() {
     const { offeringsStore, manageOfferingStore, followBtn, newLayout } = this.props;
     const { offer } = offeringsStore;
-    const { HEADER_BASIC_FRM, TOMBSTONE_HEADER_META_FRM, campaignStatus } = manageOfferingStore;
+    const { HEADER_BASIC_FRM, TOMBSTONE_HEADER_META_FRM, OFFERING_MISC_FRM, campaignStatus } = manageOfferingStore;
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
@@ -23,6 +23,7 @@ export default class CampaignHeaderPreview extends Component {
     } = campaignStatus;
     const headerBasicFields = HEADER_BASIC_FRM.fields;
     const headerMetaFields = TOMBSTONE_HEADER_META_FRM.fields;
+    const miscFields = OFFERING_MISC_FRM.fields;
     return (
       <>
         <div className="campaign-banner">
@@ -104,14 +105,13 @@ export default class CampaignHeaderPreview extends Component {
                       ) : null}
                   </div>
                   <div className="clearfix social-links mt-10">
-                    {offer && get(offer, 'misc.social')
-                      ? offer.misc.social.map(site => (
-                        <React.Fragment key={site.type}>
-                          {site.url
-                            && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
-                          }
-                        </React.Fragment>
-                      )) : ''}
+                    {['facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url', 'yelp_url'].map(field => (
+                      <React.Fragment key={field}>
+                        {miscFields[field].value
+                          && <a target="_blank" rel="noopener noreferrer" href={miscFields[field].value.includes('http') ? miscFields[field].value : `http://${miscFields[field].value}`}><Icon name={(field.split('_'))[0]} /></a>
+                        }
+                      </React.Fragment>
+                    ))}
                     <Link to={`${this.props.match.url}${newLayout ? '' : '/overview'}/photogallery`} onClick={this.handleViewGallery} className="pull-right">
                       View gallery <Icon size="small" className="ns-chevron-right" />
                     </Link>

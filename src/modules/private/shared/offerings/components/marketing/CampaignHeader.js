@@ -6,6 +6,7 @@ import OfferingButtonGroup from '../OfferingButtonGroup';
 import formHOC from '../../../../../../theme/form/formHOC';
 import TombstoneHeaderMeta from './TombstoneHeaderMeta';
 import CampaignHeaderPreview from './CampaignHeaderPreview';
+import CampaignHeaderSocial from './CampaignHeaderSocial';
 
 const metaInfo = {
   store: 'manageOfferingStore',
@@ -32,7 +33,7 @@ class CampaignHeader extends Component {
   handleFormSubmit = () => {
     const params = {
       keyName: 'header',
-      forms: ['HEADER_BASIC_FRM', 'TOMBSTONE_HEADER_META_FRM'],
+      forms: ['HEADER_BASIC_FRM', 'TOMBSTONE_HEADER_META_FRM', 'OFFERING_MISC_FRM'],
     };
     this.props.manageOfferingStore.updateOffering(params);
   }
@@ -68,6 +69,7 @@ class CampaignHeader extends Component {
               {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Header Toggle Meta' })}
             </Grid.Column>
           </Grid>
+          <CampaignHeaderSocial />
           <TombstoneHeaderMeta hideHighlight title="Header Meta" />
           <Divider section />
           <OfferingButtonGroup

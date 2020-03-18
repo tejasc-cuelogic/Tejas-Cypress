@@ -179,11 +179,17 @@ export class ManageOfferingStore extends DataModelStore {
     const { keyName, forms, cleanData, offeringData } = params;
     let offeringDetails = {};
     let data;
+    let miscData;
     if (offeringData) {
       data = offeringData;
     } else if (Array.isArray(forms)) {
       forms.forEach((f) => {
-        data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
+        if (f === 'OFFERING_MISC_FRM') {
+          miscData = offeringCreationStore.evaluateFormFieldToArray(this[f].fields, false);
+          miscData = { ...miscData, ...Validator.evaluateFormData(this[f].fields) };
+        } else {
+          data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
+        }
       });
     } else if (keyName === 'misc') {
       data = offeringCreationStore.evaluateFormFieldToArray(this[forms].fields, false);
@@ -197,6 +203,9 @@ export class ManageOfferingStore extends DataModelStore {
     }
     if (keyName) {
       offeringDetails[keyName] = data;
+      if (keyName !== 'misc' && forms.includes('OFFERING_MISC_FRM')) {
+        offeringDetails.misc = miscData;
+      }
     } else {
       offeringDetails = { ...data };
     }

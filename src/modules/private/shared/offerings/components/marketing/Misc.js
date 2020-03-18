@@ -53,7 +53,7 @@ class Misc extends Component {
             <Header as="h6">{OFFERING_MISC_FRM.fields.issuerStatement.label}</Header>
             {smartElement.HtmlEditor('issuerStatement', { readOnly: isReadonly, imageUploadPath: `offerings/${currentOfferingId}` })}
           </Form.Field>
-          <Header as="h4">Social Media
+          {/* <Header as="h4">Social Media
             <Header.Subheader>
               Links to social media profiles where investors can learn more about offering
             </Header.Subheader>
@@ -63,7 +63,7 @@ class Misc extends Component {
               smartElement.Input(field, { displayMode: isReadonly, key: field })
             ))
           }
-          <Divider section />
+          <Divider section /> */}
           <Header as="h4">Social media share links
             <Header.Subheader>
               Share links that go on the user’s social media to share the offering
