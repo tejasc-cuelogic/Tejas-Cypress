@@ -29,7 +29,7 @@ function TombstoneHeaderMeta(props) {
               <Table.Body>
                 {!hideHighlight
                 && (
-                <Table.Cell>
+                <Table.Cell collapsing>
                   {smartElement.FormCheckBox('isHighlight', { multiForm: [metaInfo.form, 'meta', i], toggle: true, defaults: true })}
                 </Table.Cell>
                 )}
