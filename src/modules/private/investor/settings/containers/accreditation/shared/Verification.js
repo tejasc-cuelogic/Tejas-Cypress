@@ -47,6 +47,7 @@ export default class Verification extends Component {
                 clicked={this.submit}
                 isEntity={isEntity}
                 isUploadLater={INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocumentLatter'}
+                isIncome={ACCREDITATION_FORM.fields.method.value === 'INCOME'}
                 {...this.props}
               />
             )

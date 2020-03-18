@@ -32,7 +32,7 @@ export default class PopulateAccreditationSteps extends React.Component {
 
   StepsMetaData = {
     ACCREDITATION_FORM: {
-      name: '',
+      name: 'Verify your status',
       component: <IncomeQualCheck submitStep={this.handleSubmitStep} {...this.props} />,
       isHideLabel: true,
       formName: 'ACCREDITATION_FORM',
@@ -41,19 +41,19 @@ export default class PopulateAccreditationSteps extends React.Component {
       backUrl: this.props.refLink,
     },
     NETWORTH_QAL_FORM: {
-      name: 'Net worth',
+      name: 'Verify your status',
       component: <NetWorthCheck submitStep={this.handleSubmitStep} {...this.props} />,
       formName: 'NETWORTH_QAL_FORM',
       isDirty: true,
     },
     NET_WORTH_FORM: {
-      name: 'Net worth',
+      name: 'Verify your status',
       component: <NetWorth submitStep={this.handleSubmitStep} {...this.props} />,
       formName: 'NET_WORTH_FORM',
       isDirty: true,
     },
     FILLING_STATUS_FORM: {
-      name: 'Evidence',
+      name: 'Verify your status',
       component: <FillingStatus submitStep={this.handleSubmitStep} {...this.props} />,
       formName: 'FILLING_STATUS_FORM',
       isHideLabel: true,
@@ -61,25 +61,25 @@ export default class PopulateAccreditationSteps extends React.Component {
       isValid: true,
     },
     INCOME_EVIDENCE_FORM: {
-      name: 'Evidence',
+      name: 'Verify your status',
       component: <IncomeEvidence submitStep={this.handleSubmitStep} {...this.props} />,
       formName: 'INCOME_EVIDENCE_FORM',
       isDirty: true,
     },
     VERIFICATION: {
-      name: 'Verification',
+      name: 'Verify your status',
       component: <Verification submitStep={this.handleSubmitStep} {...this.props} />,
       isDirty: true,
     },
     ENTITY_ACCREDITATION_FORM: {
-      name: '',
+      name: 'Verify your status',
       component: <EntityAccreditationMethod submitStep={this.handleSubmitStep} {...this.props} />,
       isHideLabel: true,
       isDirty: true,
       formName: 'ENTITY_ACCREDITATION_FORM',
     },
     TRUST_ENTITY_ACCREDITATION_FRM: {
-      name: '',
+      name: 'Verify your status',
       component: <TrustEntityAccreditationMethod submitStep={this.handleSubmitStep} {...this.props} />,
       isHideLabel: true,
       isDirty: true,

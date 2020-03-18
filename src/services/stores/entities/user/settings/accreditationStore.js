@@ -260,10 +260,10 @@ export class AccreditationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '') => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '', isIncomeUploadLater = false) => {
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
-    if (accreditationMethod === 'Income') {
+    if (accreditationMethod === 'Income' && !isIncomeUploadLater) {
       tags.push(this.getFileUploadEnum(field, 'IncomeDoc'));
     }
     if (typeof files !== 'undefined' && files.length) {
@@ -500,11 +500,11 @@ export class AccreditationStore {
 
   isAllFormValidCheck = (type) => {
     const forms = {
-      ACCREDITATION_FORM: [1, 2, 3, 4, 5, 6, 9, 10, 11, 12],
+      ACCREDITATION_FORM: [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13],
       // NET_WORTH_FORM: [3, 4, 7, 8, 11, 12],
-      INCOME_EVIDENCE_FORM: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      INCOME_EVIDENCE_FORM: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
       VERIFICATION_REQUEST_FORM: [1, 3, 5, 7, 9, 11],
-      ASSETS_UPLOAD_DOC_FORM: [4, 6, 8, 10],
+      ASSETS_UPLOAD_DOC_FORM: [4, 6, 8, 10, 13],
       INCOME_UPLOAD_DOC_FORM: [2, 12],
       ENTITY_ACCREDITATION_FORM: [],
       FILLING_STATUS_FORM: [],
@@ -528,7 +528,7 @@ export class AccreditationStore {
       } else if (accreditationType === 3) {
         formType = 11;
       }
-    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'INCOME') && ['uploaddocument', 'uploaddocumentLatter'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value)) {
+    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'INCOME') && ['uploaddocument'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value)) {
       if (accreditationType === 1) {
         formType = 2;
       } else if (accreditationType === 3) {
@@ -546,7 +546,7 @@ export class AccreditationStore {
           formType = 9;
         }
       }
-    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'ASSETS') && ['uploaddocument', 'uploaddocumentLatter'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value)) {
+    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'ASSETS') && ['uploaddocument'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value)) {
       if (accreditationType === 1) {
         formType = 4;
       } else if (accreditationType === 2) {
@@ -564,6 +564,8 @@ export class AccreditationStore {
       } else if (this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
         formType = 6;
       }
+    } else if (['INCOME', 'ASSETS'].includes(this.ACCREDITATION_FORM.fields.method.value) && ['uploaddocumentLatter'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value)) {
+      formType = 13;
     }
     return formType;
   }
@@ -591,15 +593,18 @@ export class AccreditationStore {
       });
       const fileUploadData = userAccreditationDetails.assetsUpload;
       userAccreditationDetails.assetsUpload = [];
+      // const isIncomeUpdateLatter = !!(['INCOME'].includes(this.ACCREDITATION_FORM.fields.method.value) && ['uploaddocumentLatter'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value));
       forEach(fileUploadData, (file, key) => {
         if (key === 'statementDoc' || (file.fileId && file.fileName)) {
           const fileObj = {};
+          // fileObj.type = isIncomeUpdateLatter ? 'INCOME' : UPLOAD_ASSET_ENUMS[key];
           fileObj.type = UPLOAD_ASSET_ENUMS[key];
           fileObj.fileInfo = file;
           userAccreditationDetails.assetsUpload.push(fileObj);
         } else if (Array.isArray(file)) {
           file.forEach((f) => {
             const fileObj = {};
+            // fileObj.type = isIncomeUpdateLatter ? 'INCOME' : UPLOAD_ASSET_ENUMS[key];
             fileObj.type = UPLOAD_ASSET_ENUMS[key];
             fileObj.fileInfo = f;
             userAccreditationDetails.assetsUpload.push(fileObj);
@@ -619,8 +624,6 @@ export class AccreditationStore {
       userAccreditationDetails = {};
       userAccreditationDetails.filingStatus = this.FILLING_STATUS_FORM.fields.method.value;
       userAccreditationDetails.isPartialProfile = true;
-    } else if (this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocumentLatter') {
-      userAccreditationDetails.isPartialProfile = false;
     } else {
       userAccreditationDetails.isPartialProfile = true;
     }

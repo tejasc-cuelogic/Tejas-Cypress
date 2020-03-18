@@ -26,13 +26,14 @@ export default class IncomeEvidence extends Component {
     } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h4">{this.props.isEntity ? 'Provide evidence of status' : ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'Income' : 'Net Worth'}</Header>
+        <Header as="h4">How would you prefer to verify your income?</Header>
+        {/* <Header as="h4">{this.props.isEntity ? 'Provide evidence of status' : ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'Income' : 'Net Worth'}</Header>
         <p>
           {this.props.isEntity ? 'How would you like to confirm your status as an accredited investor?' : ACCREDITATION_FORM.fields.method.value === 'INCOME'
             ? 'You can provide evidence of your status as an accredited investor either by verification from a professional advisor or by uploading documentation evidencing your income for the prior two years.'
             : 'You can provide evidence of your status as an accredited investor either by verification from a professional advisor or by uploading documentation evidencing your net worth.          '
           }
-        </p>
+        </p> */}
         <Form error className="account-type-tab">
           {/* <Grid columns={1}>
             {incEvidenceMethods.map(method => (
