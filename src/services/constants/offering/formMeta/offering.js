@@ -157,5 +157,18 @@ export const TOMBSTONE_HEADER_META = {
       placeHolder: 'e.g. $100',
       tooltip: 'Please use {{var}} to replace with variable selected.',
     },
+    isHighlight: {
+      value: false,
+      values: [
+        {
+          label: 'Highlight',
+          value: 'TRUE',
+        },
+      ],
+      error: undefined,
+      rule: 'optional',
+      placeHolder: '',
+      skipField: true,
+    },
   }],
 };

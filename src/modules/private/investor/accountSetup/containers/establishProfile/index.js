@@ -21,11 +21,6 @@ export default class EstablishProfile extends Component {
     this.props.history.push('/dashboard/setup/establish-profile');
   }
 
-  handleFormSubmit = () => {
-    this.props.investorProfileStore.submitFieldsForm();
-    this.props.history.push('/dashboard/setup/establish-profile');
-  }
-
   render() {
     return (
       <div>

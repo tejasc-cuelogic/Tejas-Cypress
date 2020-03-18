@@ -51,20 +51,6 @@ function formHoc(WrappedComponent, metaInfo) {
       );
     }
 
-    RadioGroup = (name, props) => {
-      const fieldData = this.fieldData[name];
-      return (
-        <FormRadioGroup
-          fielddata={fieldData}
-          name={name}
-          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
-          containerclassname="button-radio center-align"
-          showerror={fieldData.showError}
-          {...props}
-        />
-      );
-    }
-
     CodeInput = (name, props) => {
       const fieldData = this.fieldData[name];
       return (

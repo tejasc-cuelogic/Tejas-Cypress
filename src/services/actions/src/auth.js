@@ -457,7 +457,7 @@ export class Auth {
     authStore.resetStoreData();
     accountStore.resetStoreData();
     identityStore.resetStoreData();
-    investorProfileStore.resetStoreData();
+    investorProfileStore.resetAll();
     userDetailsStore.resetStoreData();
     iraAccountStore.resetStoreData();
     entityAccountStore.resetStoreData();
