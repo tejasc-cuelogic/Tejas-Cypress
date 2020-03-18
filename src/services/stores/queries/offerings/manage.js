@@ -107,6 +107,7 @@ const common = {
       keyType
       keyValue
       keyFormat
+      isHighlight
     }
     customTag
     toggleMeta
@@ -117,6 +118,7 @@ const common = {
       keyType
       keyValue
       keyFormat
+      isHighlight
     }
     toggleMeta
   }
@@ -135,6 +137,7 @@ const common = {
       keyType
       keyValue
       keyFormat
+      isHighlight
     }
     toggleMeta
   }

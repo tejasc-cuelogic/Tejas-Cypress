@@ -40,6 +40,7 @@ const offeringTemplate2 = {
       keyType
       keyValue
       keyFormat
+      isHighlight
     }
     customTag
     toggleMeta
@@ -59,6 +60,7 @@ const offeringTemplate2 = {
       keyType
       keyValue
       keyFormat
+      isHighlight
     }
     toggleMeta
   }`,
@@ -68,6 +70,7 @@ const offeringTemplate2 = {
       keyType
       keyValue
       keyFormat
+      isHighlight
     }
     toggleMeta
   }`,

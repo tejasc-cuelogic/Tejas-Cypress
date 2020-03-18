@@ -188,7 +188,7 @@ export default class CampaignList extends Component {
                                         {get(offering, 'tombstone.meta[0]') && get(offering, 'tombstone.meta').map(row => (
                                           <Table.Row verticalAlign="top">
                                             <Table.Cell collapsing>{row.keyLabel}</Table.Cell>
-                                            <Table.Cell className="highlight-text right-align">
+                                            <Table.Cell className={`${row.isHighlight ? 'highlight-text' : ''} right-align`}>
                                               <b>{row.keyType === 'custom' ? row.keyValue : Helper.formatValue(row.keyFormat, Helper.enumToText(row.keyValue, get(offering, row.keyValue)))}</b>
                                             </Table.Cell>
                                           </Table.Row>

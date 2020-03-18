@@ -159,6 +159,7 @@ export const TOMBSTONE_HEADER_META = {
     },
     isHighlight: {
       value: false,
+      defaultValue: false,
       values: [
         {
           label: 'Highlight',
@@ -168,7 +169,7 @@ export const TOMBSTONE_HEADER_META = {
       error: undefined,
       rule: 'optional',
       placeHolder: '',
-      skipField: true,
+      // skipField: true,
     },
   }],
 };

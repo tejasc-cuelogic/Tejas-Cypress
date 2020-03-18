@@ -28,7 +28,7 @@ function TombstoneHeaderMeta(props) {
             <Table basic compact className="form-table">
               <Table.Body>
                 <Table.Cell>
-                  {smartElement.FormCheckBox('isHighlight', { containerwidth: 2, multiForm: [metaInfo.form, 'meta', i], defaults: true, toggle: true })}
+                  {smartElement.FormCheckBox('isHighlight', { multiForm: [metaInfo.form, 'meta', i], toggle: true, defaults: true })}
                 </Table.Cell>
                 <Table.Cell>
                   {smartElement.Input('keyLabel', { multiForm: [metaInfo.form, 'meta', i] })}
