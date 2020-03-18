@@ -55,7 +55,7 @@ export default class UploadDocument extends Component {
                 changed={(e, result) => formChange(e, result, 'ASSETS_UPLOAD_DOC_FORM')}
                 defaults
                 disabled={ASSETS_UPLOAD_DOC_FORM.fields.statementDoc.value.length === 0}
-                containerclassname="ui relaxed list mt-40"
+                containerclassname="ui relaxed list mt-40 neutral-text"
               />
             )
           }
