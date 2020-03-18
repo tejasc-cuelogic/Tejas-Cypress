@@ -266,8 +266,8 @@ export class IdentityStore {
       redirectUrl = INVESTOR_URLS.cipHardFail;
     }
 
-    if (resData.step === 'OFFLINE') {
-      userDetailsStore.updateUserDetails('legalDetails', { status: 'OFFLINE' });
+    if (res.data.verifyCip.step === 'OFFLINE') {
+      userDetailsStore.mergeUserData('legalDetails', { status: 'OFFLINE' });
       window.sessionStorage.setItem('cipErrorMessage',
         JSON.stringify(resData.errorMessage));
     }
@@ -279,8 +279,8 @@ export class IdentityStore {
     if (userDetailsStore.signupStatus.phoneVerification !== 'DONE') {
       await this.startPhoneVerification();
     }
-    userDetailsStore.updateUserDetails('legalDetails', this.formattedUserInfoForCip.user);
-    userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
+    userDetailsStore.mergeUserData('legalDetails', this.formattedUserInfoForCip.user);
+    userDetailsStore.mergeUserData('phone', this.formattedUserInfoForCip.phoneDetails);
   }
 
   @action
@@ -335,7 +335,7 @@ export class IdentityStore {
     };
     this.setFieldValue('userCipStatus', 'MANUAL_VERIFICATION_PENDING');
     const { res, url } = await this.cipWrapper(payLoad);
-    userDetailsStore.updateUserDetails('legalDetails', { verificationDocs: this.verificationDocs() });
+    userDetailsStore.mergeUserData('legalDetails', { verificationDocs: this.verificationDocs() });
 
     return { res, url };
   }
@@ -525,23 +525,23 @@ export class IdentityStore {
         .then((result) => {
           if (result.data.verifyOtp) {
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
+              uiStore.setProgress(false);
               resolve();
             });
           } else {
             const error = {
               message: 'Invalid verification code.',
             };
+            uiStore.setProgress(false);
             uiStore.setErrors(error);
             reject();
           }
         })
         .catch(action((err) => {
           uiStore.setErrors(JSON.stringify(err.message));
-          reject(err);
-        }))
-        .finally(() => {
           uiStore.setProgress(false);
-        });
+          reject(err);
+        }));
     });
   }
 
@@ -558,7 +558,7 @@ export class IdentityStore {
         })
         .then((result) => {
           if (result.data.verifyOtp) {
-            userDetailsStore.updateUserDetails('phone', {
+            userDetailsStore.mergeUserData('phone', {
               ...this.formattedUserInfoForCip.phoneDetails,
               verified: moment().tz('America/Chicago').toISOString(),
             });

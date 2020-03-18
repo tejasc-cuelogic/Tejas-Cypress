@@ -74,6 +74,8 @@ export class UserDetailsStore {
 
   @observable emailListArr = [];
 
+  userPayLoad = {};
+
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
@@ -250,14 +252,15 @@ export class UserDetailsStore {
   }
 
   @action
-  updateUserDetails = (key, payload, path) => {
-    const tempData = { ...this.currentUser };
-    if (path) {
-      tempData.data.user[key] = set({ ...tempData.data.user[key], ...payload }, path, payload);
+  mergeUserData = (key, payload, objName = 'currentUser', path = false) => {
+    const oldData = { ...this[objName] };
+    if (objName === 'currentUser') {
+      oldData.data.user[key] = path ? set({ ...oldData.data.user[key], ...payload }, path, payload)
+        : { ...oldData.data.user[key], ...payload };
     } else {
-      tempData.data.user[key] = { ...tempData.data.user[key], ...payload };
+      oldData[key] = path ? set({ ...oldData[key], ...payload }, path, payload) : { ...oldData[key], ...payload };
     }
-    this.currentUser = { ...tempData };
+    this[objName] = { ...oldData };
   }
 
   @action
@@ -477,7 +480,7 @@ export class UserDetailsStore {
             freeze,
             reason: message,
           },
-          refetchQueries: [{ query: userDetailsQuery, variables: { userId } }],
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId, includePrefInfo: false } }],
         })
         .then(() => {
           resolve();
@@ -718,7 +721,7 @@ export class UserDetailsStore {
           return true;
         });
       }
-      this.USER_INVESTOR_PROFILE.fields.investorProfileType = get(details, 'investorProfileData.annualIncome') || '';
+      this.USER_INVESTOR_PROFILE.fields.taxFilingAs = get(details, 'investorProfileData.taxFilingAs') || '';
     }
     return false;
   }
@@ -901,7 +904,7 @@ export class UserDetailsStore {
             capabilities,
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
-          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id'), includePrefInfo: true } }],
         })
         .then(() => {
           Helper.toast('Profile has been updated.', 'success');
@@ -935,7 +938,7 @@ export class UserDetailsStore {
             capabilities: [...capabilities],
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
-          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id'), includePrefInfo: false } }],
         })
         .then(() => {
           Helper.toast('Profile has been updated.', 'success');

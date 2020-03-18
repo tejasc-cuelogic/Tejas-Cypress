@@ -77,7 +77,7 @@ export default class ConfirmEmailAddress extends Component {
       const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
       if (isMigratedUser) {
         this.props.identityStore.confirmEmailAddress().then(() => {
-          this.props.userDetailsStore.updateUserDetails('email', { verified: moment().tz('America/Chicago').toISOString() });
+          this.props.userDetailsStore.mergeUserData('email', { verified: moment().tz('America/Chicago').toISOString() });
           uiStore.setProgress(false);
           const { roles } = this.props.userStore.currentUser;
           if (roles.includes('investor')) {

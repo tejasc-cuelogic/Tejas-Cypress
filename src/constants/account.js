@@ -523,7 +523,6 @@ export const BROKERAGE_EMPLOYMENT = {
     value: '',
     label: 'Firm Name',
     error: undefined,
-    // rule: 'alphaBrokerage|required_if:brokerageEmployment,yes',
     rule: 'optional',
     placeHolder: 'Enter here',
     customErrors: {
@@ -554,15 +553,16 @@ export const PUBLIC_COMPANY_REL = {
     value: '',
     label: 'Ticker Symbol or Company Name',
     error: undefined,
-    rule: 'alphaPublicCompanyRel|required_if:publicCompanyRel,yes',
+    showError: true,
     placeHolder: 'E.g. GOOG',
+    rule: 'optional',
     customErrors: {
       required_if: 'required',
     },
   },
 };
 
-export const EMPLOYMENT = {
+export const EMPLOYMENT_STATUS = {
   status: {
     key: 'status',
     value: '',
@@ -585,6 +585,7 @@ export const EMPLOYMENT = {
         },
       ],
     error: undefined,
+    showError: true,
     rule: 'required',
     objRef: 'employment',
     objRefOutput: 'employment',
@@ -594,6 +595,7 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Employer',
     error: undefined,
+    showError: true,
     rule: 'required_if:status,EMPLOYED',
     placeHolder: 'Enter employer name',
     objRef: 'employment',
@@ -607,6 +609,7 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Position',
     error: undefined,
+    showError: true,
     rule: 'required_if:status,EMPLOYED',
     placeHolder: 'e.g. Manager',
     objRef: 'employment',
@@ -632,10 +635,11 @@ export const INVESTOR_PROFILE = {
 };
 
 export const FINANCES = {
-  investorProfileType: {
+  taxFilingAs: {
     value: '',
     values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
     error: undefined,
+    showError: true,
     rule: 'required',
     customErrors: {
       required: 'required',
@@ -645,8 +649,10 @@ export const FINANCES = {
     value: '',
     label: 'Net Worth',
     error: undefined,
+    showError: true,
     rule: 'required|min:1',
     placeHolder: 'Enter here',
+    fieldType: 'integer',
     customErrors: {
       required: 'required',
       min: 'Please enter a valid amount to deposit',
@@ -656,9 +662,11 @@ export const FINANCES = {
     value: '',
     label: `Annual Income ${Helper.getLastThreeYearsLabel().annualIncomePreviousYear}`,
     error: undefined,
+    showError: true,
     rule: 'required|min:1|max:2147483647',
     year: Helper.getLastThreeYearsLabel().annualIncomePreviousYear,
     placeHolder: 'Enter here',
+    fieldType: 'integer',
     objRefOutput: 'annualIncome',
     customErrors: {
       required: 'required',
@@ -673,7 +681,13 @@ export const INVESTMENT_EXPERIENCE = {
     value: '',
     values: [{ label: 'No experience', value: 'NONE' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
+    showError: true,
     rule: 'required',
+  },
+  isPartialProfile: {
+    value: false,
+    error: undefined,
+    rule: 'optional',
   },
   isComfortable: {
     value: [],
@@ -684,6 +698,7 @@ export const INVESTMENT_EXPERIENCE = {
       },
     ],
     error: undefined,
+    showError: true,
     rule: 'optional',
   },
   isRiskTaker: {
@@ -695,12 +710,13 @@ export const INVESTMENT_EXPERIENCE = {
       },
     ],
     error: undefined,
+    showError: true,
     rule: 'optional',
   },
 };
 
 export const INV_PROFILE = {
-  ...EMPLOYMENT,
+  ...EMPLOYMENT_STATUS,
   ...INVESTOR_PROFILE,
   ...FINANCES,
   ...INVESTMENT_EXPERIENCE,
@@ -716,9 +732,9 @@ export const VARIFY_ROLES = [
 
 export const INVESTOR_PROFILE_FULL_META = {
   ...INVESTMENT_EXPERIENCE,
-  ...EMPLOYMENT,
+  ...EMPLOYMENT_STATUS,
   ...BROKERAGE_EMPLOYMENT,
-  taxFilingAs: FINANCES.investorProfileType,
+  taxFilingAs: FINANCES.taxFilingAs,
   netWorth: FINANCES.netWorth,
   annualIncomeCurrentYear: FINANCES.annualIncomeCurrentYear,
   ...PUBLIC_COMPANY_REL,

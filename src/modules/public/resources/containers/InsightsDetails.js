@@ -39,7 +39,7 @@ export default class InsightsDetails extends Component {
             <Grid>
               <Grid.Column computer={12} tablet={16} mobile={16}>
                 <Header as="h2">{ArticlesDetails.title}</Header>
-                <pre className="migrated-content justify-text">
+                <pre className="migrated-content">
                   <HtmlEditor
                     readOnly
                     content={(ArticlesDetails.content || '')}
