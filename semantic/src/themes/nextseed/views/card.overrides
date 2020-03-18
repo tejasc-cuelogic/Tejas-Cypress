@@ -168,6 +168,10 @@
                     @media only screen and (max-width : @monitorBreakpoint){
                         min-height: auto;
                     }
+                    .ui.table tbody tr td{
+                        line-height: 26px;
+                        font-size: @14px;
+                    }
                 }
                 p{
                     font-size: @13px;
