@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { Responsive, Sidebar, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -11,7 +12,7 @@ import NavBarMobile from './NavBarMobile';
 
 const progressMap = ['viewLoanAgreement', 'portfolio'];
 
-@inject('uiStore', 'navStore', 'userStore')
+@inject('uiStore', 'navStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
 class SidebarLeftPush extends Component {
@@ -95,7 +96,10 @@ const MySidebar = observer(props => (
                 )
                 : <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
               }
-              <p>{props.UserInfo.firstName} {props.UserInfo.lastName}</p>
+              {
+                get(props, 'userDetailsStore.userDetails.legalDetails.legalName')
+                && <p>{props.UserInfo.firstName} {props.UserInfo.lastName}</p>
+              }
             </div>
             <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} {...props} />
           </Scrollbars>
