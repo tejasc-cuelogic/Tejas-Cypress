@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { Responsive, Sidebar, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -11,7 +12,7 @@ import NavBarMobile from './NavBarMobile';
 
 const progressMap = ['viewLoanAgreement', 'portfolio'];
 
-@inject('uiStore', 'navStore', 'userStore')
+@inject('uiStore', 'navStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
 class SidebarLeftPush extends Component {
@@ -83,20 +84,28 @@ const MySidebar = observer(props => (
             renderView={p => <div {...p} className="view" />}
           >
             {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
-            <div className="user-picture">
-              {props.UserInfo.avatarUrl
-                ? (
-                  <Image64
-                    avatar
-                    size={!props.layoutState.leftPanel ? 'mini' : 'huge'}
-                    circular
-                    srcUrl={props.UserInfo.avatarUrl}
-                  />
-                )
-                : <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
-              }
-              <p>{props.UserInfo.firstName} {props.UserInfo.lastName}</p>
-            </div>
+            {
+              <div className={get(props, 'userDetailsStore.userDetails.legalDetails.legalName') ? 'user-picture' : 'mt-80'}>
+                {
+                  get(props, 'userDetailsStore.userDetails.legalDetails.legalName') && (
+                    <>
+                      {props.UserInfo.avatarUrl
+                        ? (
+                          <Image64
+                            avatar
+                            size={!props.layoutState.leftPanel ? 'mini' : 'huge'}
+                            circular
+                            srcUrl={props.UserInfo.avatarUrl}
+                          />
+                        )
+                        : <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
+                      }
+                      <p>{props.UserInfo.firstName} {props.UserInfo.lastName}</p>
+                    </>
+                  )
+                }
+              </div>
+            }
             <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} {...props} />
           </Scrollbars>
         </Sidebar>
