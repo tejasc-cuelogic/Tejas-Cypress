@@ -68,7 +68,7 @@ class CampaignHeader extends Component {
               {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Header Toggle Meta' })}
             </Grid.Column>
           </Grid>
-          <TombstoneHeaderMeta title="Header Meta" />
+          <TombstoneHeaderMeta hideHighlight title="Header Meta" />
           <Divider section />
           <OfferingButtonGroup
             updateOffer={this.handleFormSubmit}

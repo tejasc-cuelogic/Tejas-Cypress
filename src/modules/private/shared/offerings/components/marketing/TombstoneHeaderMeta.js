@@ -12,7 +12,7 @@ const metaInfo = {
   };
 
 function TombstoneHeaderMeta(props) {
-  const { smartElement, manageOfferingStore, offeringsStore, title, noAddMore } = props;
+  const { smartElement, manageOfferingStore, offeringsStore, title, noAddMore, hideHighlight } = props;
   const { offer } = offeringsStore;
   const { TOMBSTONE_HEADER_META_FRM, removeOne, addMore } = manageOfferingStore;
   return (
@@ -27,9 +27,12 @@ function TombstoneHeaderMeta(props) {
         <Form.Group>
             <Table basic compact className="form-table">
               <Table.Body>
+                {!hideHighlight
+                && (
                 <Table.Cell>
                   {smartElement.FormCheckBox('isHighlight', { multiForm: [metaInfo.form, 'meta', i], toggle: true, defaults: true })}
                 </Table.Cell>
+                )}
                 <Table.Cell>
                   {smartElement.Input('keyLabel', { multiForm: [metaInfo.form, 'meta', i] })}
                 </Table.Cell>
