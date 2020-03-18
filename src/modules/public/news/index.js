@@ -83,7 +83,7 @@ class News extends Component {
           givenName: givenName.value,
         });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
-          this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
+          this.props.identityStore.sendOtpEmail(isMobile).then(() => {
             this.props.history.push('/confirm-email');
           });
         }

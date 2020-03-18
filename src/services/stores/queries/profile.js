@@ -101,19 +101,19 @@ export const verifyOtp = gql`
   }
 `;
 
-export const requestOtpWrapper = gql`
-  mutation requestOTPWrapper($address: String!, $firstName: String, $tags: tagsInput){
-    requestOTPWrapper(
-      address: $address
+export const sendOtpEmail = gql`
+  mutation sendOtpEmail($email: String!, $firstName: String, $tags: tagsInput){
+    sendOtpEmail(
+      email: $email
       firstName: $firstName
       tags: $tags
     )
   }
 `;
 
-export const verifyOTPWrapper = gql`
-  mutation verifyOTPWrapper($verifyOTPData: VerifyOTPInput!){
-    verifyOTPWrapper(
+export const verifyOtpEmail = gql`
+  mutation verifyOtpEmail($verifyOTPData: VerifyOTPEmailInput!){
+    verifyOtpEmail(
       verifyOTPData: $verifyOTPData
     )
   }

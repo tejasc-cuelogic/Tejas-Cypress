@@ -89,7 +89,7 @@ export default class ConfirmEmailAddress extends Component {
           }
         });
       } else {
-        this.props.identityStore.verifyOTPWrapper().then(() => {
+        this.props.identityStore.verifyOtpEmail().then(() => {
           authActions.register(isMobile)
             .then(() => {
               uiStore.setProgress(false);
@@ -146,7 +146,7 @@ export default class ConfirmEmailAddress extends Component {
       if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
         await this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
       } else {
-        this.props.identityStore.requestOtpWrapper(isMobile);
+        this.props.identityStore.sendOtpEmail(isMobile);
       }
       this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
       this.props.uiStore.clearErrors();

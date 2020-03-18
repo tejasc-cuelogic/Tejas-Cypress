@@ -6,7 +6,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, cipLegalDocUploads, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
+import { sendOtpEmail, verifyOtpEmail, verifyOtp, requestOtp, isUniqueSSN, cipLegalDocUploads, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
@@ -801,25 +801,25 @@ export class IdentityStore {
     }
   }
 
-  requestOtpWrapper = () => {
+  sendOtpEmail = () => {
     uiStore.setProgress();
-    const { email, givenName } = authStore.SIGNUP_FRM.fields;
+    const { email, givenName } = FormValidator.ExtractValues(authStore.SIGNUP_FRM.fields);
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
     const firstNameInCookie = authStore.CONFIRM_FRM.fields.givenName.value;
     let payload = {
-      address: (email.value || emailInCookie).toLowerCase(),
-      firstName: givenName.value || firstNameInCookie,
+      email: (email || emailInCookie).toLowerCase(),
+      firstName: givenName || firstNameInCookie,
     };
     const tags = JSON.parse(window.localStorage.getItem('tags'));
     payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
     return new Promise((resolve, reject) => {
       publicClient
         .mutate({
-          mutation: requestOtpWrapper,
+          mutation: sendOtpEmail,
           variables: payload,
         })
         .then((result) => {
-          this.setRequestOtpResponse(result.data.requestOTPWrapper);
+          this.setRequestOtpResponse(result.data.sendOtpEmail);
           // if (!isMobile) {
           //   Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
           // }
@@ -836,24 +836,24 @@ export class IdentityStore {
     });
   }
 
-  verifyOTPWrapper = () => {
+  verifyOtpEmail = () => {
     uiStore.setProgress();
     const { email, code, givenName } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
     const verifyOTPData = {
-      confirmationCode: code,
-      address: email,
+      verificationCode: code,
+      email,
       firstName: givenName,
     };
     return new Promise((resolve, reject) => {
       publicClient
         .mutate({
-          mutation: verifyOTPWrapper,
+          mutation: verifyOtpEmail,
           variables: {
             verifyOTPData,
           },
         })
         .then((result) => {
-          if (result.data.verifyOTPWrapper) {
+          if (result.data.verifyOtpEmail) {
             resolve();
           } else {
             const error = {
