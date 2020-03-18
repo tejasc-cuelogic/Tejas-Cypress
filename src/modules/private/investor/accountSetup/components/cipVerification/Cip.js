@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button, Divider, Form, Message, Grid, Header } from 'semantic-ui-react';
+import { Button, Divider, Form, Message, Grid, Header, Responsive } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
 import { FormSelect, AutoComplete } from '../../../../../../theme/form';
@@ -13,8 +13,8 @@ const headerSiblingsContent = (
     <Header as="h3">Let’s create your NextSeed investment account.</Header>
     {!isMobile && <Divider hidden />}
     <p className="mt-20">
-      Federal regulations require us to verify your legal{!isMobile && <br />} identity.
-      We use state-of-the-art security measures{!isMobile && <br />} to protect your information.
+      Federal regulations require us to verify your legal <Responsive minWidth={992} as="br" />identity.
+      We use state-of-the-art security measures<Responsive minWidth={992} as="br" /> to protect your information.
     </p>
   </>
 );
@@ -56,11 +56,11 @@ class Cip extends React.Component {
         {...this.props}
       >
         <Grid stackable className={isMobile ? 'full-width' : ''}>
-          <Grid.Column width="7">
+          <Grid.Column mobile={16} tablet={16} computer={7}>
             <Header as="h3" className="highlight-text">Hello {givenName}!</Header>
             {headerSiblingsContent}
           </Grid.Column>
-          <Grid.Column width="9">
+          <Grid.Column mobile={16} tablet={16} computer={9}>
             <Form error onSubmit={() => cipUtility.handleCip(false)}>
               <Form.Group widths="equal">
                 <FormSelect

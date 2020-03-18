@@ -11,7 +11,11 @@ export default class AccountType extends Component {
   handleSubmitAccount = () => {
     const { createAccount, stepToBeRendered } = this.props.entityAccountStore;
     const { multiSteps } = this.props.uiStore;
-    createAccount(multiSteps[stepToBeRendered]);
+    createAccount(multiSteps[stepToBeRendered]).then(() => {
+      if (this.props.uiStore.inProgressArray && this.props.uiStore.inProgressArray.length) {
+        this.props.uiStore.setFieldvalue('inProgressArray', []);
+      }
+    });
   }
 
   handleOnClick = (e, { value }) => {

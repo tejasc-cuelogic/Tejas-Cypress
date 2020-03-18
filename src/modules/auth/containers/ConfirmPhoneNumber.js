@@ -150,7 +150,7 @@ export default class ConfirmPhoneNumber extends Component {
         isLoading={inProgress || signUpLoading}
       >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
-          <Grid.Column width="8" className="pt-0">
+          <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
             <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your phone number</Header>
             <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
               We use Multi-Factor Authentication (MFA) to increase the security of your NextSeed

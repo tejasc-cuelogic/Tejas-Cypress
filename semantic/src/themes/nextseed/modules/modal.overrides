@@ -897,6 +897,9 @@
     padding:@28px 0 @14px;
     position:relative;
     min-height:362px;
+    @media only screen and (min-width:@tabletBreakpoint) and (max-width:@largestTabletScreen){
+        min-height: 262px;
+    }
     a.bank-link{
         height:100%;
         width:100%;

@@ -44,7 +44,7 @@ export default class AccountTypes extends React.Component {
             className={isMobile && 'mt-14'}
             stackable
           >
-            <Grid.Column width="8">
+            <Grid.Column mobile={16} tablet={10} computer={8}>
               <Header as="h4">Which type of investment account would you like to open?</Header>
               <Form error className={isMobile ? '' : 'account-type-tab'}>
                 <FormArrowButton
