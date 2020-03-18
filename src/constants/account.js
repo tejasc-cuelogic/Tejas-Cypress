@@ -94,7 +94,7 @@ export const US_STATES = [
   { key: '1V', value: '1V', text: 'NORTHERN MARIANA ISLANDS' },
 ];
 
-export const US_STATES_FOR_INVESTOR = US_STATES.map(s => ({ ...s, ...{ value: Helper.caseify(s.text) } }));
+export const US_STATES_FOR_INVESTOR = US_STATES.map(s => ({ ...s, ...{ value: Helper.caseify(s.text), text: Helper.caseify(s.text) } }));
 
 export const FILE_UPLOAD_STEPS = {
   photoId: 'PROFILE_CIP_LICENSE',

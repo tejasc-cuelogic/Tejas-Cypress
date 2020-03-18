@@ -69,28 +69,21 @@ export const CONFIRM = {
 
 export const SIGNUP = {
   givenName: {
-    value: '',
+    value: 'New Signup',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     label: 'First Name',
     placeHolder: 'First Name',
-    customErrors: {
-      required: '* required field.',
-    },
   },
   familyName: {
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     label: 'Last Name',
     placeHolder: 'Last Name',
-    customErrors: {
-      required: '* required field.',
-    },
   },
   email: { ...COMMON.email },
   password: { ...COMMON.password },
-  verify: { ...COMMON.verify },
   role: {
     value: '',
     values: [

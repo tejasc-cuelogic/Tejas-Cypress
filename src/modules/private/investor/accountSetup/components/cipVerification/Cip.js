@@ -46,7 +46,6 @@ class Cip extends React.Component {
     const { cipUtility, NsModal, elements, errors } = this.props;
     const { MaskedInput, FormInput } = elements;
     const { ID_VERIFICATION_FRM, personalInfoChange, signUpLoading, personalInfoMaskedChange, setAddressFieldsForUserVerification } = this.props.identityStore;
-    const { givenName } = this.props.userStore.currentUser;
 
     return (
       <NsModal
@@ -57,7 +56,7 @@ class Cip extends React.Component {
       >
         <Grid stackable className={isMobile ? 'full-width' : ''}>
           <Grid.Column mobile={16} tablet={16} computer={7}>
-            <Header as="h3" className="highlight-text">Hello {givenName}!</Header>
+            <Header as="h3" className="highlight-text">Welcome</Header>
             {headerSiblingsContent}
           </Grid.Column>
           <Grid.Column mobile={16} tablet={16} computer={9}>
