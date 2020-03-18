@@ -38,26 +38,35 @@ export default class Basic extends Component {
     this.setState({ displayMode: !val });
   }
 
-  updateUserData = (e) => {
+  updateUserData = async (e) => {
     e.preventDefault();
-    const ssnValue = this.props.userDetailsStore.USER_BASIC.fields.ssn.value;
-    this.props.uiStore.setProgress();
-    this.props.identityStore.isSsnExist(ssnValue)
-      .then((isSSNPresent) => {
-        if (isSSNPresent) {
-          this.props.userDetailsStore.setSSNErrorMessage('The SSN entered is already in use.');
-        } else {
-          this.props.uiStore.setProgress();
-          this.props.userDetailsStore.updateUserProfileForSelectedUser().then(() => {
+    const { userDetailsStore, identityStore, uiStore } = this.props;
+    const { getDetailsOfUser, USER_BASIC, setSSNErrorMessage, checkEmailExists, updateUserProfileForSelectedUser } = userDetailsStore;
+    const ssnValue = USER_BASIC.fields.ssn.value;
+    uiStore.setProgress();
+    try {
+      const isSSNPresent = ssnValue ? await identityStore.isSsnExist(ssnValue) : false;
+      if (isSSNPresent) {
+        setSSNErrorMessage('The SSN entered is already in use.');
+      } else {
+        const userEmail = get(getDetailsOfUser, 'email.address');
+        const email = USER_BASIC.fields.address.value;
+        const isEmailExist = email !== userEmail ? await checkEmailExists(email) : false;
+        if (!isEmailExist) {
+          uiStore.setProgress();
+          updateUserProfileForSelectedUser(email !== userEmail ? email : '').then(() => {
             this.setState({ displayMode: true });
+            uiStore.setProgress(false);
           })
-            .catch(() => this.setState({ displayMode: true }))
-            .finally(() => {
-              this.props.uiStore.setProgress(false);
+            .catch(() => {
+              this.setState({ displayMode: true });
+              uiStore.setProgress(false);
             });
+        } else {
+          uiStore.setProgress(false);
         }
-        this.props.uiStore.setProgress(false);
-      }).catch(() => { });
+      }
+    } catch (err) { throw err; }
   }
 
   adminSkipAddressOrPhoneValidationCheck = (type) => {
@@ -130,7 +139,7 @@ export default class Basic extends Component {
             name="address"
             fielddata={USER_BASIC.fields.address}
             changed={(e, result) => formChange(e, result, formName)}
-            displayMode
+            displayMode={displayMode}
           />
         </Form.Group>
         <Form.Group widths={2}>
@@ -310,9 +319,9 @@ export default class Basic extends Component {
         <Divider />
         <OtherInformation details={details} />
         {!isEmpty(tags)
-        && (
-          <TagsInformation tags={tags} />
-        )
+          && (
+            <TagsInformation tags={tags} />
+          )
         }
         <Divider />
         <UserInvestorDetails isAdmin refLink={this.props.match.url} />
