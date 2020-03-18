@@ -5,7 +5,8 @@ import cookie from 'react-cookies';
 import moment from 'moment';
 import { mapValues, map, concat, set, isEmpty, difference, pick, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator } from '../../../../helper';
+import { GqlClient as clientPublic } from '../../../../api/publicApi';
+import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM, USER_PROFILE_PREFERRED_INFO } from '../../../constants/user';
 import {
   identityStore,
@@ -21,12 +22,14 @@ import {
   userStore,
 } from '../../index';
 import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminUserHardDelete, adminUpdateUserStatus, adminSkipAddressOrPhoneValidationCheck, frozenAccountActivityDetected, adminFreezeAccount, adminFetchEmails } from '../../queries/users';
-import { updateUserProfileData } from '../../queries/profile';
+import { updateUserProfileData, checkEmailExistsPresignup } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
+
+  @observable checkEmail = null;
 
   @observable userFirstLoad = false;
 
@@ -867,7 +870,7 @@ export class UserDetailsStore {
   }
 
   @action
-  updateUserProfileForSelectedUser = () => {
+  updateUserProfileForSelectedUser = (email = '') => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
     const preferredInfo = Validator.evaluateFormData(toJS(this.USER_PROFILE_PREFERRED_INFO_FRM.fields));
@@ -888,7 +891,9 @@ export class UserDetailsStore {
     if (String(basicData.ssn).length === 9) {
       legalDetails.ssn = basicData.ssn;
     }
-
+    if (email) {
+      profileDetails.address = email;
+    }
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -916,6 +921,40 @@ export class UserDetailsStore {
         });
     });
   }
+
+  @action
+  checkEmailExists = email => new Promise((res) => {
+    if (DataFormatter.validateEmail(email)) {
+      this.checkEmail = graphql({
+        client: clientPublic,
+        query: checkEmailExistsPresignup,
+        variables: {
+          email: email.toLowerCase(),
+        },
+        onFetch: (data) => {
+          if (!this.checkEmail.loading && get(data, 'checkEmailExistsPresignup.isEmailExits')) {
+              this.USER_BASIC.fields.address.error = 'Email already exists, please use different email.';
+              this.USER_BASIC.meta.isValid = false;
+              res(true);
+            uiStore.setProgress(false);
+          } else if (!this.checkEmail.loading && !get(data, 'checkEmailExistsPresignup.isEmailExits')) {
+            this.USER_BASIC.fields.address.error = '';
+            uiStore.setProgress(false);
+            res(false);
+          }
+        },
+        onError: () => {
+          uiStore.setProgress(false);
+        },
+        fetchPolicy: 'network-only',
+      });
+    } else {
+      this.USER_BASIC.fields.address.error = 'Enter valid email address.';
+      this.USER_BASIC.meta.isValid = false;
+      uiStore.setProgress(false);
+      res(true);
+    }
+  });
 
   @action
   updateUserBasicInfo = () => {
