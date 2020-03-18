@@ -84,6 +84,7 @@ export const SIGNUP = {
   },
   email: { ...COMMON.email },
   password: { ...COMMON.password },
+  verify: { ...COMMON.verify },
   role: {
     value: '',
     values: [
