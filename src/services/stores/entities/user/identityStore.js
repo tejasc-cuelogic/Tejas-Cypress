@@ -380,7 +380,7 @@ export class IdentityStore {
             lastName: this.ID_VERIFICATION_FRM.fields.lastLegalName.value,
           },
         };
-        Object.keys(userObj).forEach(key => userDetailsStore.updateUserDetails(key, userObj[key]));
+        Object.keys(userObj).forEach(key => userDetailsStore.mergeUserData(key, userObj[key]));
       }
 
       this.setFieldValue('signUpLoading', false);
