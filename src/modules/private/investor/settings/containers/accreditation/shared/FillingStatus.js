@@ -10,7 +10,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class FillingStatus extends Component {
   render() {
     const { FILLING_STATUS_FORM, accreditationMethodChange } = this.props.accreditationStore;
-    const { responsiveVars } = this.props.uiStore;
+    // const { responsiveVars } = this.props.uiStore;
     return (
       <div>
         <Header as="h4">Filing Status</Header>
@@ -23,16 +23,16 @@ export default class FillingStatus extends Component {
               <Button
                 basic
                 fluid={isMobile}
-                onClick={e => accreditationMethodChange(e, 'FILLING_STATUS_FORM', { name: 'method', value: method.value })}
+                onClick={(e) => { accreditationMethodChange(e, 'FILLING_STATUS_FORM', { name: 'method', value: method.value }); this.props.submitStep(); }}
                 className={`primary-hover user-type ${(FILLING_STATUS_FORM.fields.method.value === method.value ? 'active' : '')} ${isMobile ? 'mb-10' : ''}`}
               >
                   {method.label}
               </Button>
             ))}
           </Button.Group>
-          <div>
+          {/* <div>
             <Button disabled={!FILLING_STATUS_FORM.meta.isValid} onClick={() => this.props.submitStep()} primary size="large" fluid={responsiveVars.isMobile} className="mt-40 relaxed" content="Continue" />
-          </div>
+          </div> */}
         </Form>
       </div>
     );

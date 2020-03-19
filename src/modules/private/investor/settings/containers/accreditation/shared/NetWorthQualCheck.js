@@ -14,12 +14,12 @@ export default class NetWorthQualCheck extends Component {
     const { NETWORTH_QAL_FORM, accreditationMethodChange } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h4">How are you an accredited investor?</Header>
-        <p>
+        <Header as="h4">Does your net worth qualify you as an accredited investor?</Header>
+        {/* <p>
           To invest in Regulation D offerings on the NextSeed platform, we are required to
           verify your status as an accredited investor using standards put into place by the SEC.
         </p>
-        <p><b>Does your net worth qualify you as an accredited investor?</b></p>
+        <p><b>Does your net worth qualify you as an accredited investor?</b></p> */}
         <Form error className="account-type-tab">
           <FormArrowButton
             fielddata={NETWORTH_QAL_FORM.fields.method}

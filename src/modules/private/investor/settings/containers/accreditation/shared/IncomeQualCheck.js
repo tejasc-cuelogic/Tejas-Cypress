@@ -9,6 +9,11 @@ import { FormArrowButton } from '../../../../../../../theme/form';
 @inject('accreditationStore')
 @observer
 export default class IncomeQualificationCheck extends Component {
+  constructor(props) {
+    super(props);
+    this.accreditationStore.setFieldValue('accreditationInitialStep', true, 'open');
+  }
+
   componentDidUpdate() {
     const {
       INCOME_UPLOAD_DOC_FORM, ASSETS_UPLOAD_DOC_FORM,
@@ -21,12 +26,12 @@ export default class IncomeQualificationCheck extends Component {
     const { ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h4">How are you an accredited investor?</Header>
-        <p>
+        <Header as="h4">Does your annual income qualify you as an accredited investor?</Header>
+        {/* <p>
           To invest in Regulation D offerings on the NextSeed platform, we are required to
           verify your status as an accredited investor using standards put into place by the SEC.
         </p>
-        <p><b>Does your annual income qualify you as an accredited investor?</b></p>
+        <p><b>Does your annual income qualify you as an accredited investor?</b></p> */}
         <Form error className="account-type-tab">
           <FormArrowButton
             fielddata={ACCREDITATION_FORM.fields.method}

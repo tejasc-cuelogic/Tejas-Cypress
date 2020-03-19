@@ -111,6 +111,12 @@ export class AccreditationStore {
 
   @observable isAccreditationFlowInProgress = { open: false, accountSelectedType: null };
 
+  @observable accreditationInitialStep = {
+    isAccreditedFlow: false,
+    open: false,
+    accountType: null,
+  }
+
   @action
   setFieldValue = (field, value, objRef = false) => {
     if (objRef) {
