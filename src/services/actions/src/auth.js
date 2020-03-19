@@ -247,8 +247,8 @@ export class Auth {
     const signupFields = authStore.CONFIRM_FRM.fields;
     const attributeList = {
       'custom:roles': JSON.stringify([fields.role.value]),
-      given_name: fields.givenName.value,
-      family_name: fields.familyName.value,
+      given_name: fields.givenName.value || 'New Signup',
+      family_name: fields.email.value,
     };
     try {
       const user = await AmplifyAuth.signUp({
@@ -457,7 +457,7 @@ export class Auth {
     authStore.resetStoreData();
     accountStore.resetStoreData();
     identityStore.resetStoreData();
-    investorProfileStore.resetStoreData();
+    investorProfileStore.resetAll();
     userDetailsStore.resetStoreData();
     iraAccountStore.resetStoreData();
     entityAccountStore.resetStoreData();

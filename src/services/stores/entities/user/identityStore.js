@@ -266,8 +266,8 @@ export class IdentityStore {
       redirectUrl = INVESTOR_URLS.cipHardFail;
     }
 
-    if (resData.step === 'OFFLINE') {
-      userDetailsStore.updateUserDetails('legalDetails', { status: 'OFFLINE' });
+    if (res.data.verifyCip.step === 'OFFLINE') {
+      userDetailsStore.mergeUserData('legalDetails', { status: 'OFFLINE' });
       window.sessionStorage.setItem('cipErrorMessage',
         JSON.stringify(resData.errorMessage));
     }
@@ -279,8 +279,8 @@ export class IdentityStore {
     if (userDetailsStore.signupStatus.phoneVerification !== 'DONE') {
       await this.startPhoneVerification();
     }
-    userDetailsStore.updateUserDetails('legalDetails', this.formattedUserInfoForCip.user);
-    userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
+    userDetailsStore.mergeUserData('legalDetails', this.formattedUserInfoForCip.user);
+    userDetailsStore.mergeUserData('phone', this.formattedUserInfoForCip.phoneDetails);
   }
 
   @action
@@ -335,7 +335,7 @@ export class IdentityStore {
     };
     this.setFieldValue('userCipStatus', 'MANUAL_VERIFICATION_PENDING');
     const { res, url } = await this.cipWrapper(payLoad);
-    userDetailsStore.updateUserDetails('legalDetails', { verificationDocs: this.verificationDocs() });
+    userDetailsStore.mergeUserData('legalDetails', { verificationDocs: this.verificationDocs() });
 
     return { res, url };
   }
@@ -368,12 +368,20 @@ export class IdentityStore {
       }
 
       if (stepName !== 'cip' && get(this.cipStepUrlMapping[stepName], 'status')) {
-        userDetailsStore.updateUserDetails('legalDetails', {
-          status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
-        });
-        userDetailsStore.updateUserDetails('cip', {
-          expiration: Helper.getDaysfromNow(21),
-        });
+        const userObj = {
+          legalDetails: {
+            status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
+          },
+          cip: {
+            expiration: Helper.getDaysfromNow(21),
+          },
+          info: {
+            firstName: this.ID_VERIFICATION_FRM.fields.firstLegalName.value,
+            lastName: this.ID_VERIFICATION_FRM.fields.lastLegalName.value,
+          },
+        };
+        Object.keys(userObj).forEach(key => userDetailsStore.mergeUserData(key, userObj[key]));
+        this.setProfileInfo(userDetailsStore.userDetails);
       }
 
       this.setFieldValue('signUpLoading', false);
@@ -518,23 +526,23 @@ export class IdentityStore {
         .then((result) => {
           if (result.data.verifyOtp) {
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
+              uiStore.setProgress(false);
               resolve();
             });
           } else {
             const error = {
               message: 'Invalid verification code.',
             };
+            uiStore.setProgress(false);
             uiStore.setErrors(error);
             reject();
           }
         })
         .catch(action((err) => {
           uiStore.setErrors(JSON.stringify(err.message));
-          reject(err);
-        }))
-        .finally(() => {
           uiStore.setProgress(false);
-        });
+          reject(err);
+        }));
     });
   }
 
@@ -551,7 +559,7 @@ export class IdentityStore {
         })
         .then((result) => {
           if (result.data.verifyOtp) {
-            userDetailsStore.updateUserDetails('phone', {
+            userDetailsStore.mergeUserData('phone', {
               ...this.formattedUserInfoForCip.phoneDetails,
               verified: moment().tz('America/Chicago').toISOString(),
             });
@@ -803,12 +811,10 @@ export class IdentityStore {
 
   requestOtpWrapper = () => {
     uiStore.setProgress();
-    const { email, givenName } = authStore.SIGNUP_FRM.fields;
+    const { email } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
-    const firstNameInCookie = authStore.CONFIRM_FRM.fields.givenName.value;
     let payload = {
       address: (email.value || emailInCookie).toLowerCase(),
-      firstName: givenName.value || firstNameInCookie,
     };
     const tags = JSON.parse(window.localStorage.getItem('tags'));
     payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
@@ -838,11 +844,10 @@ export class IdentityStore {
 
   verifyOTPWrapper = () => {
     uiStore.setProgress();
-    const { email, code, givenName } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
     const verifyOTPData = {
       confirmationCode: code,
       address: email,
-      firstName: givenName,
     };
     return new Promise((resolve, reject) => {
       publicClient

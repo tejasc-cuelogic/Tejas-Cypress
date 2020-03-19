@@ -28,12 +28,17 @@ class InvestorSignup extends Component {
     this.props.authStore.checkEmailExistsPresignup(email);
   }
 
+  handlePassword = (e, result) => {
+    this.props.authStore.signupChange(e, result);
+    this.props.authStore.setVerifyPassword(e);
+  }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     if (this.props.authStore.newPasswordRequired) {
       this.props.history.push('/change-password');
     } else {
-      const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
+      const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
       this.props.uiStore.setProgress();
       this.props.authStore.checkEmailExistsPresignup(email.value).then((res) => {
         if (res) {
@@ -41,7 +46,6 @@ class InvestorSignup extends Component {
           this.props.authStore.setCredentials({
             email: email.value,
             password: password.value,
-            givenName: givenName.value,
           });
           if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
             this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
@@ -55,9 +59,9 @@ class InvestorSignup extends Component {
 
   render() {
     const {
-      SIGNUP_FRM, signupChange, pwdInputType, currentScore,
+      SIGNUP_FRM, signupChange, currentScore,
     } = this.props.authStore;
-    const { errors, inProgress, responsiveVars } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
     const isDisabled = !([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !SIGNUP_FRM.meta.isValid || !currentScore;
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
@@ -83,21 +87,6 @@ class InvestorSignup extends Component {
               {/* <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link> */}
             </Header>
             <Form error onSubmit={this.handleSubmitForm}>
-              <Form.Group widths="equal">
-                {
-                  ['givenName', 'familyName'].map(field => (
-                    <FormInput
-                      key={field}
-                      type="text"
-                      autoFocus={!responsiveVars.isMobile && field === 'givenName'}
-                      name={field}
-                      fielddata={SIGNUP_FRM.fields[field]}
-                      changed={signupChange}
-                    />
-                  ))
-                }
-
-              </Form.Group>
               <FormInput
                 type="email"
                 name="email"
@@ -118,19 +107,11 @@ class InvestorSignup extends Component {
                   name: 'password', autoComplete: 'off', placeholder: 'Password',
                 }}
                 userInputs={
-                  [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
-                  SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value]
+                  [SIGNUP_FRM.fields.email.value]
                 }
-                changed={signupChange}
+                changed={(e, result) => this.handlePassword(e, result)}
                 fielddata={SIGNUP_FRM.fields.password}
                 showRequiredError
-              />
-              <FormInput
-                key="verify"
-                name="verify"
-                type={pwdInputType}
-                fielddata={SIGNUP_FRM.fields.verify}
-                changed={signupChange}
               />
               {errors
                 && (
