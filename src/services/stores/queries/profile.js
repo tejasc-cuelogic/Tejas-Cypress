@@ -102,10 +102,9 @@ export const verifyOtp = gql`
 `;
 
 export const requestOtpWrapper = gql`
-  mutation requestOTPWrapper($address: String!, $firstName: String, $tags: tagsInput){
+  mutation requestOTPWrapper($address: String!, $tags: tagsInput){
     requestOTPWrapper(
       address: $address
-      firstName: $firstName
       tags: $tags
     )
   }
