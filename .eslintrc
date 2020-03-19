@@ -44,7 +44,7 @@
     "react/no-this-in-sfc": [0],
     "template-curly-spacing" : "off",
     "indent" : "off",
-    "quotes": [1, "single"]
+    "quotes": ["error", "single"]
   },
   "parserOptions": {
     "ecmaFeatures": {
