@@ -140,6 +140,14 @@ export class AuthStore {
   };
 
   @action
+  setVerifyPassword = (e) => {
+    this.SIGNUP_FRM = Validator.onChange(
+      this.SIGNUP_FRM,
+      { name: 'verify', value: e.password },
+    );
+  };
+
+  @action
   changePassChange = (e, res) => {
     if (e.password || e.password === '') {
       const ojbNew = {
