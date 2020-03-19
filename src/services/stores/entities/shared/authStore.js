@@ -113,14 +113,8 @@ export class AuthStore {
     if (result && result.name && result.name === 'role') {
       cookie.save('ROLE_VALUE', result.value, { maxAge: 1200 });
     }
-    if (e.password || e.password === '') {
-      this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
-      if (this.SIGNUP_FRM.fields.password.value === this.SIGNUP_FRM.fields.verify.value) {
-        this.SIGNUP_FRM.fields.verify.error = undefined;
-      }
-    } else {
-      this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValues(e, result));
-    }
+    const values = (e.password || e.password === '') ? Validator.pullValuesForPassword(e, result) : Validator.pullValues(e, result);
+    this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, values);
     if (e.score !== undefined) {
       this.currentScore = e.score;
     }
