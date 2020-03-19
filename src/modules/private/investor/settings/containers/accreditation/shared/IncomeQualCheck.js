@@ -11,7 +11,7 @@ import { FormArrowButton } from '../../../../../../../theme/form';
 export default class IncomeQualificationCheck extends Component {
   constructor(props) {
     super(props);
-    this.props.accreditationStore.setFieldValue('accreditationInitialStep', true, 'open');
+    this.props.accreditationStore.setAccreditationInialStepState({ openState: true });
   }
 
   componentDidUpdate() {

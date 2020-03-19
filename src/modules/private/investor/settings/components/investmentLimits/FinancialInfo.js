@@ -28,6 +28,14 @@ export default class FinancialInfo extends Component {
     }
   }
 
+  componentDidMount() {
+    const { isAccreditationFlowInProgress } = this.props.accreditationStore;
+    const reflectedURL = this.props.history.location.pathname;
+    if (isAccreditationFlowInProgress.open && !reflectedURL.includes('verify-accreditation')) {
+      this.setState({ open: true, accountSelectedType: isAccreditationFlowInProgress.accountSelectedType });
+    }
+  }
+
   // eslint-disable-next-line react/sort-comp
   submit = (e) => {
     e.preventDefault();
@@ -44,7 +52,7 @@ export default class FinancialInfo extends Component {
     e.preventDefault();
     console.log(accountType);
     this.setState({ open: true, accountSelectedType: accountType });
-    this.props.accreditationStore.setFieldVal('isAccreditationFlowInProgress', { open: true, accountSelectedType: accountType });
+    this.props.accreditationStore.setAccreditationInialStepState({ openState: true, accountSelected: accountType });
     // if (this.props.userDetailsStore.isEntityTrust && accountType === 'entity') {
     //   this.props.history.push(`${this.props.match.url}/verify-trust-entity-accreditation/${accountType}`);
     // } else {
@@ -76,7 +84,7 @@ export default class FinancialInfo extends Component {
   handleCloseModal = () => {
     this.setState({ open: false, accountSelectedType: null });
     this.props.history.push('/dashboard/account-settings/investment-limits');
-    this.props.accreditationStore.setFieldVal('isAccreditationFlowInProgress', { open: false, accountSelectedType: null });
+    this.props.accreditationStore.setAccreditationInialStepState({ openState: false, accountSelected: null });
   }
 
   render() {
