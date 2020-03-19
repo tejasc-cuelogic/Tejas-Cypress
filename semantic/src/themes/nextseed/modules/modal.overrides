@@ -118,6 +118,9 @@
     .ui.modal.link-bank-modal>.icon:first-child+.dimmer{
         border-radius: 0;
     }
+    &[class*="top aligned"] .ui.modal.scrolling.multistep-modal{
+        margin: 5vh auto !important;
+    }
 }
 //  Public pages Starts
 .ui.modal{
