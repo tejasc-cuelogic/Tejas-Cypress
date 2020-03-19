@@ -28,6 +28,14 @@ export default class FinancialInfo extends Component {
     }
   }
 
+  componentDidMount() {
+    const { isAccreditationFlowInProgress } = this.props.accreditationStore;
+    const reflectedURL = this.props.history.location.pathname;
+    if (isAccreditationFlowInProgress.open && !reflectedURL.includes('verify-accreditation')) {
+      this.setState({ open: true, accountSelectedType: isAccreditationFlowInProgress.accountSelectedType });
+    }
+  }
+
   // eslint-disable-next-line react/sort-comp
   submit = (e) => {
     e.preventDefault();
@@ -44,7 +52,7 @@ export default class FinancialInfo extends Component {
     e.preventDefault();
     console.log(accountType);
     this.setState({ open: true, accountSelectedType: accountType });
-    this.props.accreditationStore.setFieldVal('isAccreditationFlowInProgress', { open: true, accountSelectedType: accountType });
+    this.props.accreditationStore.setAccreditationInialStepState({ openState: true, accountSelected: accountType });
     // if (this.props.userDetailsStore.isEntityTrust && accountType === 'entity') {
     //   this.props.history.push(`${this.props.match.url}/verify-trust-entity-accreditation/${accountType}`);
     // } else {
@@ -76,7 +84,7 @@ export default class FinancialInfo extends Component {
   handleCloseModal = () => {
     this.setState({ open: false, accountSelectedType: null });
     this.props.history.push('/dashboard/account-settings/investment-limits');
-    this.props.accreditationStore.setFieldVal('isAccreditationFlowInProgress', { open: false, accountSelectedType: null });
+    this.props.accreditationStore.setAccreditationInialStepState({ openState: false, accountSelected: null });
   }
 
   render() {
@@ -103,13 +111,13 @@ export default class FinancialInfo extends Component {
         >
           <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
             <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
-            <Header as="h5" className={isMobile ? 'plr-0' : ''}>Verify your Accredited Investor Status</Header>
-            <p>
-              To invest in Regulation D offering on the NextSeed platform,
-               we are required to verify your status as an accredited investor
+              <Header as="h5" className={isMobile ? 'plr-0' : ''}>Verify your Accredited Investor Status</Header>
+              <p>
+                To invest in Regulation D offering on the NextSeed platform,
+                we are required to verify your status as an accredited investor
                 using standards put into place by the SEC.
             </p>
-            <Button onClick={this.handleVerifyAccreditationSteps} primary content="Continue" />
+              <Button onClick={this.handleVerifyAccreditationSteps} primary content="Continue" />
             </Grid.Column>
           </Grid>
         </NsModal>

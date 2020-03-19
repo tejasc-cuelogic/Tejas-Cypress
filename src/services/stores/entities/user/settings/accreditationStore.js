@@ -111,12 +111,6 @@ export class AccreditationStore {
 
   @observable isAccreditationFlowInProgress = { open: false, accountSelectedType: null };
 
-  @observable accreditationInitialStep = {
-    isAccreditedFlow: false,
-    open: false,
-    accountType: null,
-  }
-
   @action
   setFieldValue = (field, value, objRef = false) => {
     if (objRef) {
@@ -125,6 +119,13 @@ export class AccreditationStore {
     } else {
       this[field] = value;
     }
+  }
+
+  @action
+  setAccreditationInialStepState = ({ openState, accountSelected }) => {
+    const { open, accountSelectedType } = this.isAccreditationFlowInProgress;
+    this.setFieldValue('isAccreditationFlowInProgress', (openState || openState === false) ? openState : open, 'open');
+    this.setFieldValue('isAccreditationFlowInProgress', (accountSelected || accountSelected === null) ? accountSelected : accountSelectedType, 'accountSelectedType');
   }
 
   @action
