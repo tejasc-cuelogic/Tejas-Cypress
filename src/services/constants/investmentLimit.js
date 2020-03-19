@@ -230,7 +230,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
   },
   previousEstimateIncome: {
     value: '',
-    label: `What is your estimated income in ${CURR_YEAR - 1}`,
+    label: `Your estimated income in ${CURR_YEAR - 1}`,
     error: undefined,
     rule: 'required',
     placeHolder: '$',
@@ -240,7 +240,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
   },
   estimateIncome: {
     value: '',
-    label: `What is your estimated income in ${CURR_YEAR}`,
+    label: `Your estimated income in ${CURR_YEAR}`,
     error: undefined,
     rule: 'required',
     placeHolder: '$',

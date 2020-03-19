@@ -222,6 +222,7 @@
         }
     }
     .content{
+        font-size: 15px;
         &.scrolling {
             .ui.image.large {
                 min-width: 400px;
@@ -874,6 +875,16 @@
     }
     .signup-modal.multistep.content{
         padding:@50px @64px !important;
+    }
+    .content {
+        p{
+            line-height: 24px;
+        }
+    }
+    .file-uploader-wrap label{
+        font-size: @15px;
+        line-height: 24px;
+        font-weight: @normal;
     }
 }
 .field-wrap{

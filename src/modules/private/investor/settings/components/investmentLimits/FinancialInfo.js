@@ -111,13 +111,13 @@ export default class FinancialInfo extends Component {
         >
           <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
             <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
-              <Header as="h5" className={isMobile ? 'plr-0' : ''}>Verify your Accredited Investor Status</Header>
+              <Header as="h4" className={isMobile ? 'plr-0' : ''}>Verify your Accredited Investor Status</Header>
               <p>
                 To invest in Regulation D offering on the NextSeed platform,
                 we are required to verify your status as an accredited investor
-                using standards put into place by the SEC.
-            </p>
-              <Button onClick={this.handleVerifyAccreditationSteps} primary content="Continue" />
+                  using standards put into place by the SEC.
+              </p>
+              <Button className="mt-30" onClick={this.handleVerifyAccreditationSteps} primary content="Continue" />
             </Grid.Column>
           </Grid>
         </NsModal>

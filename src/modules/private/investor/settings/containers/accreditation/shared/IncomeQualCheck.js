@@ -32,7 +32,7 @@ export default class IncomeQualificationCheck extends Component {
           verify your status as an accredited investor using standards put into place by the SEC.
         </p>
         <p><b>Does your annual income qualify you as an accredited investor?</b></p> */}
-        <Form error className="account-type-tab">
+        <Form error className="mt-30">
           <FormArrowButton
             fielddata={ACCREDITATION_FORM.fields.method}
             name="method"
