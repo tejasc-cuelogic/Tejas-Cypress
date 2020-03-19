@@ -118,7 +118,7 @@ export class Utility {
   }
 
   encryptNumberWithX = (number) => {
-    if (!number) return null;
+    if (!number) { return null; }
     const encryptedNumber = number.replace(/.(?=.{4,}$)/g, 'X');
     return encryptedNumber;
   }
