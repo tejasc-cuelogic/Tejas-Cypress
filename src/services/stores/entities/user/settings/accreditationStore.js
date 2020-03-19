@@ -364,7 +364,7 @@ export class AccreditationStore {
     if (index != null) {
       const fileId = this[form].fields[field].fileId.splice(index, 1);
       this[form].fields[field].value.splice(index, 1);
-      removeFileId = fileId;
+      removeFileId = get(fileId, '[0]');
     } else {
       const { fileId } = this[form].fields[field];
       removeFileId = fileId;
@@ -600,19 +600,19 @@ export class AccreditationStore {
       });
       const fileUploadData = userAccreditationDetails.assetsUpload;
       userAccreditationDetails.assetsUpload = [];
-      // const isIncomeUpdateLatter = !!(['INCOME'].includes(this.ACCREDITATION_FORM.fields.method.value) && ['uploaddocumentLatter'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value));
+      const isIncomeUpdateLatter = !!(['INCOME'].includes(this.ACCREDITATION_FORM.fields.method.value) && ['uploaddocumentLatter'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value));
       forEach(fileUploadData, (file, key) => {
         if (key === 'statementDoc' || (file.fileId && file.fileName)) {
           const fileObj = {};
-          // fileObj.type = isIncomeUpdateLatter ? 'INCOME' : UPLOAD_ASSET_ENUMS[key];
-          fileObj.type = UPLOAD_ASSET_ENUMS[key];
+          fileObj.type = isIncomeUpdateLatter ? 'INCOME' : UPLOAD_ASSET_ENUMS[key];
+          // fileObj.type = UPLOAD_ASSET_ENUMS[key];
           fileObj.fileInfo = file;
           userAccreditationDetails.assetsUpload.push(fileObj);
         } else if (Array.isArray(file)) {
           file.forEach((f) => {
             const fileObj = {};
-            // fileObj.type = isIncomeUpdateLatter ? 'INCOME' : UPLOAD_ASSET_ENUMS[key];
-            fileObj.type = UPLOAD_ASSET_ENUMS[key];
+            fileObj.type = isIncomeUpdateLatter ? 'INCOME' : UPLOAD_ASSET_ENUMS[key];
+            // fileObj.type = UPLOAD_ASSET_ENUMS[key];
             fileObj.fileInfo = f;
             userAccreditationDetails.assetsUpload.push(fileObj);
           });
