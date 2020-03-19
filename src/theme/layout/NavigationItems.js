@@ -85,7 +85,7 @@ export class NavItems extends Component {
     if (path) {
       this.props.history.push(path);
     } else {
-      console.log('nothing');
+      window.logger('nothing');
     }
   }
 

@@ -80,7 +80,7 @@ class IndividualAccountStore {
             resolve();
           }
         }).catch((err) => {
-          console.log('Error', err);
+          window.logger('Error', err);
           reject(err);
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
             if (this.retry < 1) {

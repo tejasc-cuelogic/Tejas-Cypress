@@ -77,7 +77,7 @@ export class OfferingsStore {
       },
       onError: (err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
+        window.logger(err);
       },
     });
   }

@@ -160,13 +160,13 @@ class IraAccountStore {
       this.submitMutation().then(() => {
         resolve();
       }).catch((e) => {
-        console.log(e);
+        window.logger(e);
       });
     } else {
       this.submitMutation().then(() => {
         resolve();
       }).catch((e) => {
-        console.log(e);
+        window.logger(e);
       });
     }
   });
@@ -222,7 +222,7 @@ class IraAccountStore {
         resolve();
       }).catch((e) => {
         this.setFieldValue('apiCall', false);
-        console.log(e);
+        window.logger(e);
       });
     }
   })

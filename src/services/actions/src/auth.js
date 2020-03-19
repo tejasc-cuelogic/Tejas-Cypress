@@ -65,7 +65,7 @@ export class Auth {
       this.cognitoUser = await AmplifyAuth.currentSession();
       return this.cognitoUser;
     } catch (err) {
-      console.log('error in getUserSession', err);
+      window.logger('error in getUserSession', err);
       return null;
     } finally {
       uiStore.setProgress(false);
@@ -99,7 +99,7 @@ export class Auth {
               }
               return res({ attributes, session: signInUserSession });
             }).catch((err) => {
-              console.log('error in verifysession', err);
+              window.logger('error in verifysession', err);
               rej(err);
             })
               .finally(() => {
@@ -109,7 +109,7 @@ export class Auth {
               });
           }
         }).catch((err) => {
-          console.log('error in verifysession', err);
+          window.logger('error in verifysession', err);
           rej(err);
         }).finally(() => {
           commonStore.setAppLoaded();
@@ -211,7 +211,7 @@ export class Auth {
         if (window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') && window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') !== undefined) {
           window.localStorage.removeItem('SAASQUATCH_REFERRAL_CODE');
         }
-        if (window.analytics) { // && false
+        if (window.analytics) {
           window.analytics.identify(userStore.currentUser.sub, {
             name: `${get(data, 'user.info.firstName')} ${get(data, 'user.info.lastName')}`,
             email: get(data, 'user.email.address'),
@@ -404,9 +404,9 @@ export class Auth {
       if (window.Intercom) {
         window.Intercom('shutdown');
       }
-      console.log('Intercom Shutdown time:', new Date());
+      window.logger('Intercom Shutdown time:', new Date());
     } catch (e) {
-      console.log(e);
+      window.logger(e);
     }
   }
 
@@ -447,7 +447,7 @@ export class Auth {
         AWS.config.clear();
         res();
       } catch (err) {
-        console.log('Error occured while logout', err);
+        window.logger('Error occured while logout', err);
         rej();
       }
     })

@@ -328,7 +328,7 @@ export class PaymentStore extends DataModelStore {
   }
 
   manageActionDropdown = (actionStep) => {
-    console.log('adminPaymentSendGoldStarDraftInstructions', actionStep);
+    window.logger('adminPaymentSendGoldStarDraftInstructions', actionStep);
     const actionDropdownValues = [...this.ACTION_FRM.fields.scope.values];
     if (actionStep === 'adminPaymentSendGoldStarDraftInstructions') {
       remove(actionDropdownValues, o => o.key === 'ISSUER');

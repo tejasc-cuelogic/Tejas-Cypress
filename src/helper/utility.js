@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Some generally used function definations being used at multiple places
  */
@@ -201,7 +202,7 @@ export class Utility {
         });
       }
     } catch (e) {
-      console.log(e);
+      window.logger(e);
     }
   }
 
@@ -259,7 +260,7 @@ export class Utility {
     try {
       document.getElementsByName('ssn')[0].value = '';
     } catch (e) {
-      console.log(e);
+      window.logger(e);
     }
   }
 
@@ -303,7 +304,7 @@ export class Utility {
       type === 'info' ? console.info(params)
         : type === 'warn' ? console.warn(params)
           : type === 'clear' ? console.clear()
-            : console.log(params);
+            : window.logger(params);
       if (email) {
         this.sendAlertEmail(params, type, error);
       }
@@ -340,7 +341,7 @@ export class Utility {
     try {
       return sanitizeHtml(c);
     } catch (e) {
-      console.log(e);
+      window.logger(e);
       return '';
     }
   };
