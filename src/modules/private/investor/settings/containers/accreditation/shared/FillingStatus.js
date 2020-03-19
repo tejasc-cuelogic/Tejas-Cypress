@@ -17,7 +17,7 @@ export default class FillingStatus extends Component {
         <p>
         Do you have documentation to verify your income for 2019?
         </p>
-        <Form error className="account-type-tab">
+        <Form error className="mt-30">
           <Button.Group>
             {FILLING_STATUS_FORM.fields.method.values.map(method => (
               <Button

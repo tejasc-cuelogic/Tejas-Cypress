@@ -75,7 +75,7 @@ export default class UploadDocument extends Component {
             )
           }
           <Divider hidden />
-          <Button onClick={() => this.props.clicked('ASSETS_UPLOAD_DOC_FORM')} primary size="large" disabled={!ASSETS_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
+          <Button onClick={() => this.props.clicked('ASSETS_UPLOAD_DOC_FORM')} primary disabled={!ASSETS_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
         </Form>
       </div>
     );
