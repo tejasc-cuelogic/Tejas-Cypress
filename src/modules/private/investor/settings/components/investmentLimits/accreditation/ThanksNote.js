@@ -15,7 +15,7 @@ const ThanksNote = props => (
         <p>
           We are processing your request and we will notify you about status changes.
         </p>
-        <Button fluid={isMobile} primary>Explore Campaigns</Button>
+        <Button onClick={() => props.handleExploreCampaigns()} fluid={isMobile} primary>Explore Campaigns</Button>
       </Grid.Column>
     </Grid>
   </NsModal>

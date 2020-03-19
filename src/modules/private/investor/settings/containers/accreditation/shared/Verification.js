@@ -18,8 +18,12 @@ export default class Verification extends Component {
         this.props.type || 0,
       )
       .then(() => {
+        this.props.accreditationStore.setAccreditationInialStepState({ openState: false, accountSelected: null });
         this.props.history.push(`${this.props.refLink}/success`);
-      }).catch(() => this.props.accreditationStore.setStepToBeRendered(this.props.step));
+      })
+      .catch(() => {
+        this.props.accreditationStore.setStepToBeRendered(this.props.step);
+      });
   }
 
   render() {

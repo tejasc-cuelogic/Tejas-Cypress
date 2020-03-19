@@ -24,9 +24,10 @@ export default class IncomeEvidence extends Component {
       EVIDENCE_FORM_META,
       incomeEvidenceChange,
     } = this.props.accreditationStore;
+    const acrreditationType = ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'income' : 'net worth';
     return (
       <div>
-        <Header as="h4">How would you prefer to verify your income?</Header>
+        <Header as="h4">{this.props.isEntity ? 'Provide evidence of status' : `How would you prefer to verify your ${acrreditationType}?`}</Header>
         {/* <Header as="h4">{this.props.isEntity ? 'Provide evidence of status' : ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'Income' : 'Net Worth'}</Header>
         <p>
           {this.props.isEntity ? 'How would you like to confirm your status as an accredited investor?' : ACCREDITATION_FORM.fields.method.value === 'INCOME'

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Header, Form, Grid, Button } from 'semantic-ui-react';
+import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { FormArrowButton } from '../../../../../../../theme/form';
 
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 @inject('accreditationStore')
 @withRouter
 @observer
@@ -19,7 +20,14 @@ export default class TrustEntityAccreditationMethod extends Component {
         <p>To invest in Reg D offerings on the NextSeed platform, we are required to verify your trust`s status as an accredited investor. </p>
         <p><b>Please confirm which of the following is applicable to your trust.</b></p>
         <Form error className="account-type-tab">
-          <Grid columns={1}>
+          <FormArrowButton
+            fielddata={TRUST_ENTITY_ACCREDITATION_FRM.fields.method}
+            name="method"
+            formName="TRUST_ENTITY_ACCREDITATION_FRM"
+            changed={accreditationMethodChange}
+            action={this.props.submitStep}
+          />
+          {/* <Grid columns={1}>
             {TRUST_ENTITY_ACCREDITATION_FRM.fields.method.values.map(method => (
               <Grid.Column
                 onClick={e => accreditationMethodChange(e, 'TRUST_ENTITY_ACCREDITATION_FRM', { name: 'method', value: method.value })}
@@ -33,10 +41,10 @@ export default class TrustEntityAccreditationMethod extends Component {
             ))}
           </Grid>
           {isMobile
-          && (
-            <Button onClick={this.props.submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
-          )
-          }
+            && (
+              <Button onClick={this.props.submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+            )
+          } */}
         </Form>
       </div>
     );
