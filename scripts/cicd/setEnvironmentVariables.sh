@@ -53,7 +53,7 @@ settingEnv()
 	sed -i.bak "s#^\(REACT_APP_FROALA_API_KEY_NEW=\).*#\1${REACT_APP_FROALA_API_KEY_NEW}#" .envTEMPLATE
 
 	#GOOGLEMAPAPI
-	REACT_APP_GOOGLE_PLACE_API_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/googleplace\/apiKey/ { print $3 }')
+	REACT_APP_GOOGLE_PLACE_API_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/googlePlace\/apiKey/ { print $3 }')
 	sed -i.bak "s#^\(REACT_APP_GOOGLE_PLACE_API_KEY=\).*#\1${REACT_APP_GOOGLE_PLACE_API_KEY}#" .envTEMPLATE
 
 	#HONEYPOT URL
