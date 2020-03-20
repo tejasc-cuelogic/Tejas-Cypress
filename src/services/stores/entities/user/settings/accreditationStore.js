@@ -748,7 +748,7 @@ export class AccreditationStore {
   @action
   setIncomeEvidenceData = (data) => {
     if (data) {
-      this.this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value = (data.assetsUpload && data.assetsUpload.length) ? 'uploaddocument' : (data.verifier && data.verifier.role) ? 'verificationrequest' : '';
+      this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value = (data.assetsUpload && data.assetsUpload.length) ? 'uploaddocument' : (data.verifier && data.verifier.role) ? 'verificationrequest' : '';
     }
   }
 
@@ -1205,7 +1205,7 @@ export class AccreditationStore {
       const valueObj = {};
       valueObj.label = isEntity ? method.header2 : method.value === 'uploaddocumentLatter' ? method.header : method.value === 'uploaddocument' ? `Upload proof of ${uploadTitle}` : method.header1;
       if (method.value === 'uploaddocument') {
-        valueObj.labelDescription = isTrust ? method.desc4 : isEntity ? method.desc3 : this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' ? method.desc2 : method.desc1;
+        valueObj.labelDescription = isTrust ? method.desc4 : isEntity ? method.desc3 : this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' ? method.desc1 : method.desc1;
       } else if (method.value === 'verificationrequest') {
         valueObj.labelDescription = isTrust ? method.desc3 : isEntity ? method.desc2 : method.desc1;
       } else if (method.value === 'uploaddocumentLatter') {
