@@ -2,22 +2,26 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Message, Divider, Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { MaskedInput, FormRadioGroup } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
+import formHOC from '../../../../../../theme/form/formHOC';
+
+const metaInfo = {
+  store: 'investorProfileStore',
+  form: 'FINANCIAL_INFO_FRM',
+};
 
 const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('investorProfileStore', 'uiStore')
 @withRouter
 @observer
-export default class Finances extends Component {
+class Finances extends Component {
   render() {
+    const { smartElement, investorProfileStore, uiStore } = this.props;
     const {
-      FINANCES_FORM, stepToBeRendered,
-      financesChange, investorProfileChange,
-      updateInvestorProfileData,
-    } = this.props.investorProfileStore;
-    const { errors, multiSteps } = this.props.uiStore;
+      stepToBeRendered, formChange, FINANCIAL_INFO_FRM, upsertInvestorProfile,
+    } = investorProfileStore;
+    const { errors, multiSteps } = uiStore;
     return (
       <>
         <Header as="h4">What is your household{"'"}s annual income and net worth?</Header>
@@ -27,31 +31,19 @@ export default class Finances extends Component {
         </p>
         {!isMobile && <Divider hidden />}
         <Form error>
-          <FormRadioGroup
-            fielddata={FINANCES_FORM.fields.investorProfileType}
-            name="investorProfileType"
-            changed={(e, result) => {
-              investorProfileChange(e, result);
-              this.props.uiStore.scrollIntoActiveInputFields();
-            }}
-            containerclassname="two wide button-radio center-align"
-            showerror
-          />
+          {
+            smartElement.RadioGroup('taxFilingAs', {
+              changed: (e, result) => {
+                formChange(e, result, 'FINANCIAL_INFO_FRM');
+                this.props.uiStore.scrollIntoActiveInputFields();
+              },
+              containerclassname: 'three wide button-radio center-align',
+            })
+          }
           <Divider hidden />
           <Form.Group widths={2} className="mt-40">
             {['netWorth', 'annualIncomeCurrentYear'].map(field => (
-              <MaskedInput
-                key={field}
-                name={field}
-                type="tel"
-                currency
-                fielddata={FINANCES_FORM.fields[field]}
-                changed={financesChange}
-                prefix="$ "
-                number
-                disableDecimal
-                maxlength={13}
-              />
+              smartElement.Masked(field, { currency: true })
             ))}
           </Form.Group>
           {errors
@@ -65,8 +57,9 @@ export default class Finances extends Component {
         <p className="tertiary-text note mt-30 mb-40">
           We will never share your personal information with third parties without your consent
         </p>
-       <Button primary onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className="relaxed" disabled={!FINANCES_FORM.meta.isValid} content="Continue" />
+       <Button primary onClick={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className="relaxed" disabled={!FINANCIAL_INFO_FRM.meta.isValid} content="Continue" />
       </>
     );
   }
 }
+export default formHOC(Finances, metaInfo);

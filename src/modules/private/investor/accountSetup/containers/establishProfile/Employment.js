@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Message, Button } from 'semantic-ui-react';
-import { FormInput, FormArrowButton } from '../../../../../../theme/form';
+import { FormArrowButton } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
+import formHOC from '../../../../../../theme/form/formHOC';
+
+const metaInfo = {
+  store: 'investorProfileStore',
+  form: 'EMPLOYMENT_STATUS_FRM',
+};
 
 const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('investorProfileStore', 'uiStore')
 @observer
-export default class Employment extends Component {
+class Employment extends Component {
   componentWillMount() {
-    // const { EMPLOYMENT_FORM } = this.props.investorProfileStore;
-    // if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED') {
+    // const { EMPLOYMENT_STATUS_FRM } = this.props.investorProfileStore;
+    // if (EMPLOYMENT_STATUS_FRM.fields.status.value === 'EMPLOYED') {
     //   this.props.uiStore.addMoreInProgressArray('EMPLOYED');
     // }
   }
@@ -20,40 +26,36 @@ export default class Employment extends Component {
     this.props.uiStore.setFieldvalue('inProgressArray', []);
   }
 
-  handleUpdateInvestorProfileData = () => {
-    const { updateInvestorProfileData, stepToBeRendered, EMPLOYMENT_FORM } = this.props.investorProfileStore;
+  handleupsertInvestorProfile = () => {
+    const { upsertInvestorProfile, stepToBeRendered, EMPLOYMENT_STATUS_FRM } = this.props.investorProfileStore;
     const { multiSteps } = this.props.uiStore;
-    if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' && isMobile) {
+    if (EMPLOYMENT_STATUS_FRM.fields.status.value === 'EMPLOYED' && isMobile) {
       this.props.uiStore.addMoreInProgressArray('EMPLOYED');
       return;
     }
-    updateInvestorProfileData(multiSteps[stepToBeRendered]);
+    upsertInvestorProfile(multiSteps[stepToBeRendered]);
   }
 
   toggleInputFields = () => {
-    const { EMPLOYMENT_FORM } = this.props.investorProfileStore;
-    if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED') {
+    const { EMPLOYMENT_STATUS_FRM } = this.props.investorProfileStore;
+    if (EMPLOYMENT_STATUS_FRM.fields.status.value === 'EMPLOYED') {
       this.props.uiStore.addMoreInProgressArray('EMPLOYED');
     }
   }
 
 
   render() {
-    const { EMPLOYMENT_FORM, employmentChange, updateInvestorProfileData, stepToBeRendered } = this.props.investorProfileStore;
-    const { errors, inProgressArray, multiSteps } = this.props.uiStore;
+    const { smartElement, investorProfileStore, uiStore } = this.props;
+    const { upsertInvestorProfile, stepToBeRendered, EMPLOYMENT_STATUS_FRM, formChange } = investorProfileStore;
+    const { errors, inProgressArray, multiSteps } = uiStore;
     if (inProgressArray.includes('EMPLOYED')) {
       return (
-        <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className="mb-40">
+        <Form onSubmit={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} error className="mb-40">
           {
           ['employer', 'position'].map(field => (
-            <FormInput
-              key={field}
-              fielddata={EMPLOYMENT_FORM.fields[field]}
-              name={field}
-              changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
-            />
+            smartElement.Input(field)
           ))}
-          <Button primary fluid={isMobile} className="mt-30 relaxed" content="Continue" disabled={!EMPLOYMENT_FORM.meta.isValid} />
+          <Button primary fluid={isMobile} className="mt-30 relaxed" content="Continue" disabled={!EMPLOYMENT_STATUS_FRM.meta.isValid} />
         </Form>
       );
     }
@@ -63,16 +65,16 @@ export default class Employment extends Component {
         {/* {!isMobile && <p className="mb-40">Please indicate your current employment status</p>} */}
         <Form error className={isMobile ? 'mb-40' : ''}>
           <FormArrowButton
-            fielddata={EMPLOYMENT_FORM.fields.status}
+            fielddata={EMPLOYMENT_STATUS_FRM.fields.status}
             name="status"
             changed={
               (e, result) => {
-                employmentChange(e, 'EMPLOYMENT_FORM', result);
+                formChange(e, result, 'EMPLOYMENT_STATUS_FRM');
                 this.toggleInputFields();
                 // this.props.uiStore.scrollIntoActiveInputFields();
               }
             }
-            action={this.handleUpdateInvestorProfileData}
+            action={this.handleupsertInvestorProfile}
           />
           {errors
           && (
@@ -86,3 +88,5 @@ export default class Employment extends Component {
     );
   }
 }
+
+export default formHOC(Employment, metaInfo);

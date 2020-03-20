@@ -279,12 +279,15 @@ export class BankAccountStore {
       }
       accountAttributes = { ...plaidBankDetails };
     } else {
-      const { accountNumber, routingNumber, accountType } = this.formLinkBankManually.fields;
+      const { accountNumber, routingNumber, accountType, bankName } = Validator.ExtractValues(this.formLinkBankManually.fields);
       plaidBankDetails.linkedBank = {
-        accountNumber: accountNumber.value,
-        routingNumber: routingNumber.value,
-        accountType: accountType.value.toUpperCase(),
+        accountNumber,
+        routingNumber,
+        accountType: accountType.toUpperCase(),
       };
+      if (bankName) {
+        plaidBankDetails.linkedBank.bankName = bankName;
+      }
       accountAttributes = { ...plaidBankDetails };
     }
     const { value } = this.addFundsByAccType.fields.value;
@@ -309,7 +312,7 @@ export class BankAccountStore {
   }
 
   @action
-  accountTypeChange = (e, result) => {
+  linkBankManualFormChange = (e, result) => {
     this.formChange(e, result, 'formLinkBankManually');
   }
 
@@ -352,8 +355,8 @@ export class BankAccountStore {
   }
 
   @computed get isAccountPresent() {
-    const { accountNumber, routingNumber, bankName } = this.plaidAccDetails;
-    return !isEmpty(accountNumber) && !isEmpty(routingNumber) && !isEmpty(bankName);
+    const { accountNumber, routingNumber } = this.plaidAccDetails;
+    return !isEmpty(accountNumber) && !isEmpty(routingNumber);
   }
 
   @action
@@ -573,6 +576,9 @@ export class BankAccountStore {
       accountId: this.CurrentAccountId,
       accountType: data.accountType,
     };
+    if (data.bankName) {
+      updatedData.bankName = data.bankName;
+    }
     return new Promise((resolve, reject) => {
       client
         .mutate({

@@ -70,14 +70,14 @@ export default class ConfirmEmailAddress extends Component {
         sessionStorage.removeItem('changedEmail');
       })
         .catch(() => { });
-    } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''
+    } else if (this.props.authStore.SIGNUP_FRM.fields.email.value === ''
       && !this.props.userStore.currentUser) {
       this.props.history.push('/register-investor');
     } else {
       const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
       if (isMigratedUser) {
         this.props.identityStore.confirmEmailAddress().then(() => {
-          this.props.userDetailsStore.updateUserDetails('email', { verified: moment().tz('America/Chicago').toISOString() });
+          this.props.userDetailsStore.mergeUserData('email', { verified: moment().tz('America/Chicago').toISOString() });
           uiStore.setProgress(false);
           const { roles } = this.props.userStore.currentUser;
           if (roles.includes('investor')) {

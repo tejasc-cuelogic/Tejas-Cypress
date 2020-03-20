@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
-import { FormCheckbox, FormArrowButton } from '../../../../../../theme/form';
+import { FormArrowButton } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
+import formHOC from '../../../../../../theme/form/formHOC';
+
+const metaInfo = {
+  store: 'investorProfileStore',
+  form: 'INVESTMENT_EXP_FRM',
+};
 
 const isMobile = document.documentElement.clientWidth < 768;
 const loaderMsg = (
@@ -12,7 +18,7 @@ const loaderMsg = (
 @inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
-export default class Experience extends Component {
+class Experience extends Component {
   state = {
     errorMessage: '',
     ctaErrors: { for: '', errorMsg: '' },
@@ -20,21 +26,21 @@ export default class Experience extends Component {
 
   handleSubmitInvestmentExperience = () => {
     const {
-      INVESTMENT_EXP_FORM,
-      updateInvestorProfileData,
+      INVESTMENT_EXP_FRM,
+      upsertInvestorProfile,
       isValidInvestorProfileForm,
     } = this.props.investorProfileStore;
-    if (INVESTMENT_EXP_FORM.meta.isValid
+    if (INVESTMENT_EXP_FRM.meta.isValid
       && this.props.investorProfileStore.isInvExperienceValid) {
       if (isValidInvestorProfileForm) {
         this.props.uiStore.setErrors(undefined);
         const currentStep = {
           name: 'Investment Experience',
-          form: 'INVESTMENT_EXP_FORM',
+          form: 'INVESTMENT_EXP_FRM',
           stepToBeRendered: 6,
         };
         this.props.uiStore.setFieldvalue('loaderMessage', loaderMsg);
-        updateInvestorProfileData(currentStep).then(() => {
+        upsertInvestorProfile(currentStep).then(() => {
           const { signupStatus, userStatus, hasAnyAccount, getInvestorAccountsRoute } = this.props.userDetailsStore;
           this.props.uiStore.setFieldvalue('loaderMessage', '');
           if (signupStatus.isMigratedFullAccount
@@ -67,25 +73,20 @@ export default class Experience extends Component {
   }
 
   render() {
+    const { smartElement, investorProfileStore, uiStore } = this.props;
     const {
-      INVESTMENT_EXP_FORM,
+      INVESTMENT_EXP_FRM,
       isInvExperienceValid,
-      experiencesChange,
-    } = this.props.investorProfileStore;
-    const { inProgressArray, errors } = this.props.uiStore;
+      formChange,
+    } = investorProfileStore;
+    const { inProgressArray, errors } = uiStore;
     const { errorMessage } = this.state;
-    const noExperience = INVESTMENT_EXP_FORM.fields.experienceLevel.value === 'NONE';
+    const noExperience = INVESTMENT_EXP_FRM.fields.experienceLevel.value === 'NONE';
     const isExperiencedTypeSelected = inProgressArray.includes('EXPERIENCED'); // only for mobile screen
     const CheckBoxes = () => (
       <>
         {['isRiskTaker', 'isComfortable'].map(field => (
-          <FormCheckbox
-            fielddata={INVESTMENT_EXP_FORM.fields[field]}
-            name={field}
-            changed={experiencesChange}
-            defaults
-            containerclassname="ui relaxed list"
-          />
+          smartElement.FormCheckBox(field)
         ))}
       </>
     );
@@ -117,11 +118,11 @@ export default class Experience extends Component {
           )
             : (
               <FormArrowButton
-                fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
+                fielddata={INVESTMENT_EXP_FRM.fields.experienceLevel}
                 name="experienceLevel"
                 changed={
                   (e, result) => {
-                    experiencesChange(e, result);
+                    formChange(e, result, 'INVESTMENT_EXP_FRM');
                     this.handleOnClick(e, result);
                   }
                 }
@@ -139,13 +140,13 @@ export default class Experience extends Component {
           {isExperiencedTypeSelected ? (
             <div className="mt-40">
               <div className={isMobile ? 'center-align' : ''}>
-                <Button primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FORM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
+                <Button primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FRM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
               </div>
               {!isInvExperienceValid && noExperience
                 && (
-                <p className="negative-text mt-20">
-                  Otherwise, please reference our{' '}
-                  <Link to="/resources/education-center/investor">Education Center </Link> to learn more about investing on NextSeed.
+                  <p className="negative-text mt-20">
+                    Otherwise, please reference our{' '}
+                    <Link to="/resources/education-center/investor">Education Center </Link> to learn more about investing on NextSeed.
                 </p>
                 )}
             </div>
@@ -153,17 +154,18 @@ export default class Experience extends Component {
               <>
                 {isExperiencedTypeSelected && (
                   <div className="mt-20">
-                    <Button fluid primary className="relaxed" content="Create Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FORM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
+                    <Button fluid primary className="relaxed" content="Create Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FRM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
                   </div>
                 )}
                 {isExperiencedTypeSelected && !isInvExperienceValid
                   && (<RequestMsg />)
                 }
               </>
-          )
+            )
           }
         </Form>
       </>
     );
   }
 }
+export default formHOC(Experience, metaInfo);
