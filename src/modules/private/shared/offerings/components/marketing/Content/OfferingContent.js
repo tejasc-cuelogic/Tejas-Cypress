@@ -66,11 +66,11 @@ class OfferingContent extends Component {
             {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
           </Form.Group>
           <Divider hidden />
-          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM'
+          {['CUSTOM', 'ISSUER_STATEMENT'].includes(OFFERING_CONTENT_FRM.fields.content[index].contentType.value)
             && (
               <Form.Group widths={1}>
                 <Form.Field>
-                  <Header as="h6">{OFFERING_CONTENT_FRM.fields.content[index].customValue.label}</Header>
+                  <Header as="h6">{OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM' ? OFFERING_CONTENT_FRM.fields.content[index].customValue.label : 'Issuer Statement'}</Header>
                   {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: isReadonly, imageUploadPath: `offerings/${currentOfferingId}` })}
                 </Form.Field>
               </Form.Group>

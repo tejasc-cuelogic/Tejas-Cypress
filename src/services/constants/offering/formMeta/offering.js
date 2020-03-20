@@ -94,6 +94,7 @@ export const OFFERING_CONTENT = {
         { key: 'GALLERY', value: 'GALLERY', text: 'Gallery' },
         { key: 'COMMENTS', value: 'COMMENTS', text: 'Comments' },
         { key: 'UPDATES', value: 'UPDATES', text: 'Updates' },
+        { key: 'ISSUER_STATEMENT', value: 'ISSUER_STATEMENT', text: 'Issuer Statement' },
       ],
       placeHolder: 'Enter here',
     },

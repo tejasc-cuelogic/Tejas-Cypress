@@ -98,7 +98,7 @@ class CampaignTemplate2 extends Component {
                             <Divider hidden section />
                           </>
                         ))
-                      : c.contentType === 'CUSTOM'
+                      : ['CUSTOM', 'ISSUER_STATEMENT'].includes(c.contentType)
                         ? <CustomContent title={c.title} content={c.customValue} isTablet={isTablet} />
                         : null
         ))}
