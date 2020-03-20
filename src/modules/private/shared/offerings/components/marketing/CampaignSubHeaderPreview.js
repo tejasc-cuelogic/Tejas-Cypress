@@ -62,7 +62,7 @@ export default class CampaignSubHeaderPreview extends Component {
               )}
               {subHeaderMeta.map(row => (
                 <List.Item>
-                  {row.keyLabel.value ? `${row.keyLabel.value}:` : ''} {row.keyType.value === 'custom' ? row.keyValue.value : Helper.formatValue(row.keyFormat.value, Helper.enumToText(row.keyValue.value, get(offer, row.keyValue.value)))}
+                  {row.keyLabel.value ? `${row.keyLabel.value}:` : ''} {row.keyType.value === 'custom' ? row.keyValue.value : Helper.formatValue(row.keyFormat.value, Helper.enumToText(row.keyValue.value, get(offer, row.keyValue.value), true))}
                 </List.Item>
               ))}
             </List>

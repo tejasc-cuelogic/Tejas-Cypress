@@ -13,7 +13,7 @@ import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLO
 import authStore from '../services/stores/entities/shared/authStore';
 import userStore from '../services/stores/entities/userStore';
 import DataFormatter from './utilities/DataFormatter';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL } from '../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL, CAMPAIGN_KEYTERMS_REGULATION } from '../constants/offering';
 
 export class Utility {
   // Default options for the toast
@@ -388,7 +388,8 @@ export class Utility {
 
   formatValue = (format, value) => {
     if (format && format.search('{{var}}') > -1) {
-      return format.replace('{{var}}', value);
+      const d = format.replace('{{var}}', value);
+      return d;
     }
     return value;
   };
@@ -409,7 +410,7 @@ export class Utility {
     return regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
   }
 
-  enumToText = (valKey = '', value) => {
+  enumToText = (valKey = '', value, fullText = false) => {
     let val = value;
     if (valKey) {
       let key = valKey.split('.');
@@ -418,7 +419,7 @@ export class Utility {
         if (key === 'securities') {
           val = CAMPAIGN_KEYTERMS_SECURITIES[value];
         } else if (key === 'regulation') {
-          val = CAMPAIGN_KEYTERMS_REGULATION_PARALLEL[value];
+          val = fullText ? CAMPAIGN_KEYTERMS_REGULATION[value] : CAMPAIGN_KEYTERMS_REGULATION_PARALLEL[value];
         }
       }
     }

@@ -75,7 +75,7 @@ export default class CampaignSecondaryMenu extends Component {
               }
               {isTemplate2 && get(campaign, 'subHeader.meta[0]') && get(campaign, 'subHeader.meta').map(row => (
                 <List.Item>
-                  {row.keyLabel ? `${row.keyLabel}:` : ''} {row.keyType === 'custom' ? row.keyValue : Helper.formatValue(row.keyFormat, Helper.enumToText(row.keyValue, get(campaign, row.keyValue)))}
+                  {row.keyLabel ? `${row.keyLabel}:` : ''} {row.keyType === 'custom' ? row.keyValue : Helper.formatValue(row.keyFormat, Helper.enumToText(row.keyValue, get(campaign, row.keyValue), true))}
                 </List.Item>
               ))
               }

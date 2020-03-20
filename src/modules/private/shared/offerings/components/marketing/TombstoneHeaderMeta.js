@@ -56,7 +56,7 @@ function TombstoneHeaderMeta(props) {
                 )}
                 {TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
                   <Table.Cell>
-                    {<div className="field">{TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyLabel.value ? TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyLabel.value : 'N/A'}:  {get(offer, TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyValue.value) ? Helper.formatValue(TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyFormat.value, Helper.enumToText(TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyValue.value, get(offer, TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyValue.value))) : 'N/A'}</div>}
+                    {<div className="field">{TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyLabel.value ? TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyLabel.value : 'N/A'}:  {get(offer, TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyValue.value) ? Helper.formatValue(TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyFormat.value, Helper.enumToText(TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyValue.value, get(offer, TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyValue.value), true)) : 'N/A'}</div>}
                   </Table.Cell>
                 )}
                 {TOMBSTONE_HEADER_META_FRM.fields.meta.length > 1 && (
