@@ -368,12 +368,20 @@ export class IdentityStore {
       }
 
       if (stepName !== 'cip' && get(this.cipStepUrlMapping[stepName], 'status')) {
-        userDetailsStore.mergeUserData('legalDetails', {
-          status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
-        });
-        userDetailsStore.mergeUserData('cip', {
-          expiration: Helper.getDaysfromNow(21),
-        });
+        const userObj = {
+          legalDetails: {
+            status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
+          },
+          cip: {
+            expiration: Helper.getDaysfromNow(21),
+          },
+          info: {
+            firstName: this.ID_VERIFICATION_FRM.fields.firstLegalName.value,
+            lastName: this.ID_VERIFICATION_FRM.fields.lastLegalName.value,
+          },
+        };
+        Object.keys(userObj).forEach(key => userDetailsStore.mergeUserData(key, userObj[key]));
+        this.setProfileInfo(userDetailsStore.userDetails);
       }
 
       this.setFieldValue('signUpLoading', false);
@@ -803,12 +811,10 @@ export class IdentityStore {
 
   requestOtpWrapper = () => {
     uiStore.setProgress();
-    const { email, givenName } = authStore.SIGNUP_FRM.fields;
+    const { email } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
-    const firstNameInCookie = authStore.CONFIRM_FRM.fields.givenName.value;
     let payload = {
       address: (email.value || emailInCookie).toLowerCase(),
-      firstName: givenName.value || firstNameInCookie,
     };
     const tags = JSON.parse(window.localStorage.getItem('tags'));
     payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
@@ -838,11 +844,10 @@ export class IdentityStore {
 
   verifyOTPWrapper = () => {
     uiStore.setProgress();
-    const { email, code, givenName } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
     const verifyOTPData = {
       confirmationCode: code,
       address: email,
-      firstName: givenName,
     };
     return new Promise((resolve, reject) => {
       publicClient

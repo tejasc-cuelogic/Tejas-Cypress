@@ -895,7 +895,7 @@ export class UserDetailsStore {
       legalDetails.ssn = basicData.ssn;
     }
     if (email) {
-      profileDetails.address = email;
+      profileDetails.emailAddress = email;
     }
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
