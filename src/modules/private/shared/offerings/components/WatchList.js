@@ -17,7 +17,7 @@ const watchListMeta = [
 export default class WatchList extends Component {
   state = {
     INVESTOR: false,
-    WATCHING: false,
+    WATCHING: true,
     DELETED: false,
   }
 
@@ -37,16 +37,29 @@ export default class WatchList extends Component {
     this.setState({ [field]: !this.state[field] });
   }
 
+  exportButton = () => (
+    <Button
+      primary
+      className="relaxed"
+      content="Export"
+      // onClick={this.populateCsvData}
+      // // loading={inProgress}
+      // disabled={!investorLists.length}
+    />
+  )
+
   watchListTable = ({ WatchersList, hasUsersAccess }) => (
     <Card fluid>
         <div className="table-wrapper">
-          <Table unstackable singleLine className="investment-details">
+          <Table unstackable singleline className="investment-details">
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell collapsing>Investor&#39;s Name</Table.HeaderCell>
-                <Table.HeaderCell>Email</Table.HeaderCell>
-                <Table.HeaderCell>Date</Table.HeaderCell>
-                <Table.HeaderCell />
+                <Table.HeaderCell collapsing>Date</Table.HeaderCell>
+                <Table.HeaderCell>Time</Table.HeaderCell>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>City</Table.HeaderCell>
+                <Table.HeaderCell>State</Table.HeaderCell>
+                <Table.HeaderCell># of Prior Investments</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -59,29 +72,30 @@ export default class WatchList extends Component {
                 {WatchersList.map(user => (
                   <Table.Row key={user.userId} className={`${this.props.nsUiStore.loadingArray.includes(`removing-${user.userId}`) ? 'disabled' : ''}`}>
                     <Table.Cell collapsing>
+                      {get(user, 'lastUpdated') ? DataFormatter.getDateAsPerTimeZone(get(user, 'lastUpdated'), true, false, false) : '-'}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {get(user, 'lastUpdated') ? DataFormatter.getDateAsPerTimeZone(get(user, 'lastUpdated'), true, false, false, false, undefined, false, false, true) : '-'}
+                    </Table.Cell>
+                    <Table.Cell>
                       {hasUsersAccess
                         ? (
-                    <Link onClick={() => sessionStorage.setItem('userDetailsRefUrl', this.props.match.url)} to={`/dashboard/users/${user.userId}/profile-data`}>
-                      {`${get(user, 'userInfo.info.firstName')} ${get(user, 'userInfo.info.lastName')}`}
-                    </Link>
+                          <Link onClick={() => sessionStorage.setItem('userDetailsRefUrl', this.props.match.url)} to={`/dashboard/users/${user.userId}/profile-data`}>
+                            {`${get(user, 'userInfo.info.firstName')} ${get(user, 'userInfo.info.lastName')}`}
+                          </Link>
                         ) : (
-                        <>{`${get(user, 'userInfo.info.firstName')} ${get(user, 'userInfo.info.lastName')}`}</>
+                          <>{`${get(user, 'userInfo.info.firstName')} ${get(user, 'userInfo.info.lastName')}`}</>
                         )
                       }
                     </Table.Cell>
                     <Table.Cell>
-                    {get(user, 'userInfo.email.address')}
+                    {get(user, 'userInfo.info.mailingAddress.city')}
                     </Table.Cell>
                     <Table.Cell>
-                    {get(user, 'lastUpdated') ? DataFormatter.getDateAsPerTimeZone(get(user, 'lastUpdated'), true, false, false) : '-'}
+                    {get(user, 'userInfo.info.mailingAddress.state')}
                     </Table.Cell>
-                    <Table.Cell collapsing textAlign="center">
-                    {user.status !== 'DELETED'
-                    && (
-                    <Button onClick={() => this.handleDelete({ offeringId: user.offeringId, userId: user.userId, status: user.status })} icon className="link-button">
-                                <Icon className="trash" />
-                              </Button>
-                    )}
+                    <Table.Cell>
+                    {get(user, 'investmentCount')}
                     </Table.Cell>
                   </Table.Row>
                 ))
@@ -107,7 +121,8 @@ export default class WatchList extends Component {
         {watchListMeta.map(watcherType => (
           watcherType.status !== 'INVESTOR' && (
           <>
-            <Header as="h4">{`${watcherType.headerText} (${allWatchList[watcherType.status].length}) `} <Icon onClick={() => this.toggleVisibilityStatus(watcherType.status)} className={`ns-chevron-${this.state[watcherType.status] === true ? 'up' : 'down'}-compact right`} color="blue" /></Header>
+            <Header as="h4" floated="left">{`${watcherType.headerText} (${allWatchList[watcherType.status].length}) `} <Icon onClick={() => this.toggleVisibilityStatus(watcherType.status)} className={`ns-chevron-${this.state[watcherType.status] === true ? 'up' : 'down'}-compact right`} color="blue" /></Header>
+            <Header floated="right"><this.exportButton /></Header>
             {this.state[watcherType.status] && <this.watchListTable hasUsersAccess={hasUsersAccess} WatchersList={allWatchList[watcherType.status]} />}
             <Divider section />
           </>
