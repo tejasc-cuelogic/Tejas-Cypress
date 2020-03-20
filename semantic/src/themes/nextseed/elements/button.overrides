@@ -43,6 +43,7 @@
     &.user-type{
         font-size: @15px;
         line-height: 20px;
+        min-width: 70px;
     }
 }
 //  Public Page Ends
