@@ -65,39 +65,39 @@ const PaymentsList = ({ calculateFormula, headerTitle, type, sortOrder, repaymen
                         {repaymentMeta.map(h => h.applicable.includes(type) && (
                           <Table.Cell key={`${h.title}${h.key}`}>
                             {(type !== 'IN_REPAYMENT' && h.calculation)
-                            ? calculateFormula(
-                              type,
-                              h.title,
-                              {
-                                hardCloseDate: get(record, 'offering.closureSummary.hardCloseDate'),
-                                firstPaymentDate: get(record, 'offering.closureSummary.repayment.firstPaymentDate'),
-                                startupPeriod: get(record, 'offering.closureSummary.startupPeriod'),
-                                anticipatedOpenDate: get(record, 'offering.closureSummary.anticipatedOpenDate'),
-                                actualOpeningDate: get(record, 'offering.closureSummary.operationsDate'),
-                                term: get(record, 'offering.keyTerms.maturity'),
-                              },
+                              ? calculateFormula(
+                                type,
+                                h.title,
+                                {
+                                  hardCloseDate: get(record, 'offering.closureSummary.hardCloseDate'),
+                                  firstPaymentDate: get(record, 'offering.closureSummary.repayment.firstPaymentDate'),
+                                  startupPeriod: get(record, 'offering.closureSummary.startupPeriod'),
+                                  anticipatedOpenDate: get(record, 'offering.closureSummary.anticipatedOpenDate'),
+                                  actualOpeningDate: get(record, 'offering.closureSummary.operationsDate'),
+                                  term: get(record, 'offering.keyTerms.maturity'),
+                                },
                               )
-                            : h.link
-                              ? (
-                                <>
-                                  <Link to={getLink(record.offering.offeringSlug, record.offering.stage)}>
-                                    <b>{get(record, h.key)}</b>
-                                  </Link>
-                                  {get(record, 'offering.contact.payments')
-                                    && (
-                                      <Popup
-                                        trigger={<span> @</span>}
-                                        content={get(record, 'offering.contact.payments').split(',').map(p => (<div>{p}</div>))}
-                                        hoverable
-                                        position="top center"
-                                      />
-                                    )}
-                                </>
-                              ) : h.options ? (get(record, h.key) ? 'Y' : 'N')
-                                : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
-                                  : h.validate ? validDate(record, h.key)
-                                    : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months') >= 0 ? moment(moment(get(record, h.key))).diff(moment(), 'months') : '0'})` : ''
-                                      : h.currency ? Helper.CurrencyFormat(get(record, h.key) || 0) : (get(record, h.key) || 'N/A')
+                              : h.link
+                                ? (
+                                  <>
+                                    <Link to={getLink(record.offering.offeringSlug, record.offering.stage)}>
+                                      <b>{get(record, h.key)}</b>
+                                    </Link>
+                                    {get(record, 'offering.contact.payments')
+                                      && (
+                                        <Popup
+                                          trigger={<span> @</span>}
+                                          content={get(record, 'offering.contact.payments').split(',').map(p => (<div>{p}</div>))}
+                                          hoverable
+                                          position="top center"
+                                        />
+                                      )}
+                                  </>
+                                ) : h.options ? (get(record, h.key) ? 'Y' : 'N')
+                                  : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
+                                    : h.validate ? validDate(record, h.key)
+                                      : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months') >= 0 ? moment(moment(get(record, h.key))).diff(moment(), 'months') : '0'})` : ''
+                                        : h.currency ? Helper.CurrencyFormat(get(record, h.key) || 0) : (get(record, h.key) || 'N/A')
                             }
                           </Table.Cell>
                         ))}
@@ -187,7 +187,8 @@ export default class AllRepayments extends PureComponent {
                 placeholder="Search by keyword or phrase"
                 more="no"
                 addon={(
-                  <Grid.Column width={11} textAlign="right">
+                  <>
+                    <Grid.Column width={11} textAlign="right">
                       <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentGenerateAdminSummary')}>
                         Generate Admin Summary
                       </Button>
@@ -198,7 +199,16 @@ export default class AllRepayments extends PureComponent {
                         Send Issuer Draft Notice
                       </Button>
                     </Grid.Column>
-                  )}
+                    <Grid.Column width={12} textAlign="right">
+                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerFirstNotice')}>
+                        Send First Notice Emails
+                      </Button>
+                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerSecondNotice')}>
+                        Send Second Notice Emails
+                      </Button>
+                    </Grid.Column>
+                  </>
+                )}
               />
             </Grid.Row>
           </Grid>
@@ -233,9 +243,9 @@ export default class AllRepayments extends PureComponent {
                 stateToggle={IN_REPAYMENT}
               />
             </>
-            )
-            : (
-              <>
+          )
+          : (
+            <>
               <PaymentsList
                 calculateFormula={calculateFormula}
                 headerTitle="Term Note"
