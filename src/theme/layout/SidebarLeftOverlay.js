@@ -85,9 +85,12 @@ const MySidebar = observer(props => (
           >
             {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
             {
-              <div className={get(props, 'userDetailsStore.userDetails.legalDetails.legalName') ? 'user-picture' : 'mt-80'}>
+              <div className={(get(props, 'userDetailsStore.userDetails.legalDetails.legalName')
+                || props.userStore.isAdmin || props.userStore.isIssuer) ? 'user-picture' : 'mt-80'}
+              >
                 {
-                  get(props, 'userDetailsStore.userDetails.legalDetails.legalName') && (
+                  (get(props, 'userDetailsStore.userDetails.legalDetails.legalName')
+                    || props.userStore.isAdmin || props.userStore.isIssuer) && (
                     <>
                       {props.UserInfo.avatarUrl
                         ? (
