@@ -42,7 +42,7 @@ export default class CampaignSecondaryMenu extends Component {
               {!isMobile
                 && (
                   <>
-                    {(showInvestorCount && (!isTemplate2 && !campaignStatus.isFund)) && <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>}
+                    {(showInvestorCount || (!isTemplate2 && !campaignStatus.isFund)) && <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>}
                     {((showDaysLeft || !isClosed) && diffForProcessing.value > 0)
                       && <List.Item>{countDown.valueToShow} {' '} {countDown.labelToShow}</List.Item>
                     }

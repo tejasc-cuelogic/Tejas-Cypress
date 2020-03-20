@@ -5,6 +5,7 @@ import { Form, Divider, Grid } from 'semantic-ui-react';
 import OfferingButtonGroup from '../OfferingButtonGroup';
 import formHOC from '../../../../../../theme/form/formHOC';
 import TombstoneHeaderMeta from './TombstoneHeaderMeta';
+import CampaignSubHeaderPreview from './CampaignSubHeaderPreview';
 
 const metaInfo = {
   store: 'manageOfferingStore',
@@ -44,6 +45,7 @@ class CampaignSubHeader extends Component {
       <div className="inner-content-spacer">
         <Form>
           <Divider hidden />
+          <CampaignSubHeaderPreview />
           <Divider section />
           <Grid columns="1">
             <Grid.Column>

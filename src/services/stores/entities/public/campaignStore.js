@@ -282,7 +282,7 @@ export class CampaignStore {
   loadMoreRecord = (type) => {
     const offeringsList = type === 'completedToDisplay' ? this.completedList : type === 'activeToDisplay' ? this.orderedActiveList : this.creationList;
     if (offeringsList.length > this[type]) {
-      this[type] = this[type] + (type === 'creationToDisplay' ? 6 : this.RECORDS_TO_DISPLAY);
+      this[type] += (type === 'creationToDisplay' ? 6 : this.RECORDS_TO_DISPLAY);
     }
   }
 
