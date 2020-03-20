@@ -25,7 +25,7 @@ export default class CampaignSubHeaderPreview extends Component {
     const showRaisedAmount = toggleMeta.includes('RAISED_AMOUNT');
     const subHeaderMeta = TOMBSTONE_HEADER_META_FRM.fields.meta;
     return (
-      <Visibility offset={[72, 10]} continuous className="campaign-secondary-header">
+      <Visibility offset={[72, 10]} continuous className="campaign-secondary-header menu-secondary-fixed bg-offwhite pt-0 pb-0 plr-0">
         <div className="active">
           <Container fluid={!isMobile}>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
