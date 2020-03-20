@@ -264,7 +264,7 @@ export class ManageOfferingStore extends DataModelStore {
     return metaDataMapping[formName][getField];
   }
 
-  reOrderHandle = (orderedForm = 'OFFERING_CONTENT_FRM', form, arrayName = 'content') => {
+  reOrderHandle = (orderedForm, form, arrayName) => {
     const content = toJS(orderedForm).map((d, index) => ({ ...d, order: { ...d.order, value: index + 1 } }));
     this.setFieldValue(form, content, `fields.${arrayName}`);
   }
