@@ -26,7 +26,7 @@ export default class CampaignSubHeaderPreview extends Component {
     const subHeaderMeta = TOMBSTONE_HEADER_META_FRM.fields.meta;
     return (
       <Visibility offset={[72, 10]} continuous className="campaign-secondary-header">
-        <div className="menu-secondary-fixed active">
+        <div className="active">
           <Container fluid={!isMobile}>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
               {!isMobile

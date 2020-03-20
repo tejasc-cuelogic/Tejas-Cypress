@@ -312,6 +312,7 @@ decorate(ManageOfferingStore, {
   TOMBSTONE_HEADER_META_FRM: observable,
   HEADER_BASIC_FRM: observable,
   OFFERING_MISC_FRM: observable,
+  SUB_HEADER_BASIC_FRM: observable,
   uploadFileToS3: action,
   campaignStatus: computed,
   INVEST_NOW_TOC_FRM: observable,
