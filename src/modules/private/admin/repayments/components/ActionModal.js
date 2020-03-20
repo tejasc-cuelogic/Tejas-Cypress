@@ -22,6 +22,7 @@ function ActionModal(props) {
     return () => {
       props.paymentStore.resetActionForm('ACTION_FRM');
       props.paymentStore.setFieldValue('sendEmailOptionVisibility', false);
+      props.paymentStore.resetLoader(null, props.showActionModal);
     };
   }, []);
   useEffect(() => {
@@ -76,7 +77,7 @@ function ActionModal(props) {
           </Form.Field>
           <div className="center-align mt-30">
             <Button className="relaxed red" content="Cancel" onClick={() => props.updateState('showActionModal', false)} />
-            <Button color="green relaxed" loading={loadingArray.includes(props.showActionModal)} disabled={!ACTION_FRM.meta.isValid || loadingArray.includes(props.showActionModal)} onClick={paymentCtaHandlers}>
+            <Button color="green relaxed" loading={loadingArray.includes(props.showActionModal) && !showError} disabled={!ACTION_FRM.meta.isValid || (loadingArray.includes(props.showActionModal) && !showError)} onClick={paymentCtaHandlers}>
               Submit
             </Button>
           </div>
