@@ -69,7 +69,7 @@ export const CONFIRM = {
 
 export const SIGNUP = {
   givenName: {
-    value: 'New Signup',
+    value: '',
     error: undefined,
     rule: 'optional',
     label: 'First Name',

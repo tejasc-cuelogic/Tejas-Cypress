@@ -80,7 +80,7 @@ export class PaymentStore extends DataModelStore {
       const resp = {};
       if (mutation === 'adminPaymentSendIssuerFirstNotice') {
         resp.error = 'Date should be the 1st business day.';
-      } else if (mutation === 'adminPaymentSendIssuerFirstNotice') {
+      } else if (mutation === 'adminPaymentSendIssuerSecondNotice') {
         resp.error = 'Date should be the 3rd business day.';
       }
       resolve(resp);
