@@ -183,27 +183,27 @@ export default class AllRepayments extends PureComponent {
             <Grid.Row>
               <ByKeyword
                 change={this.executeSearch}
-                w={[5]}
+                w={[7]}
                 placeholder="Search by keyword or phrase"
                 more="no"
                 addon={(
                   <>
-                    <Grid.Column width={11} textAlign="right">
-                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentGenerateAdminSummary')}>
+                    <Grid.Column width={9} className="right-align">
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentGenerateAdminSummary')}>
                         Generate Admin Summary
                       </Button>
-                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentSendGoldStarDraftInstructions')}>
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendGoldStarDraftInstructions')}>
                         Send GoldStar Draft Instructions
                       </Button>
-                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerDraftNotice')}>
+                    </Grid.Column>
+                    <Grid.Column width={16} className="mt-20 right-align">
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerDraftNotice')}>
                         Send Issuer Draft Notice
                       </Button>
-                    </Grid.Column>
-                    <Grid.Column width={12} textAlign="right">
-                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerFirstNotice')}>
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerFirstNotice')}>
                         Send First Notice Emails
                       </Button>
-                      <Button color="green" size="small" floated="right" onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerSecondNotice')}>
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerSecondNotice')}>
                         Send Second Notice Emails
                       </Button>
                     </Grid.Column>
