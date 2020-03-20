@@ -381,6 +381,7 @@ export class IdentityStore {
           },
         };
         Object.keys(userObj).forEach(key => userDetailsStore.mergeUserData(key, userObj[key]));
+        this.setProfileInfo(userDetailsStore.userDetails);
       }
 
       this.setFieldValue('signUpLoading', false);
