@@ -353,7 +353,7 @@ export class AccreditationStore {
     if (index != null) {
       const fileId = this[form].fields[field].fileId.splice(index, 1);
       this[form].fields[field].value.splice(index, 1);
-      removeFileId = fileId;
+      removeFileId = get(fileId, '[0]');
     } else {
       const { fileId } = this[form].fields[field];
       removeFileId = fileId;
