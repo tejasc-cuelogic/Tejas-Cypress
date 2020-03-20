@@ -19,7 +19,7 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, tocIndex, pageIndex }) => (
   <div className="row-wrap striped-table">
     <div className="balance first-column break-text">
-      <DragHandle />
+      {!isReadOnly && <DragHandle />}
       <div>
       {preview(get(toc, 'label'))}
       </div>
@@ -27,24 +27,22 @@ const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, 
     <div className="balance width-100">
       {get(toc, 'account') ? accountTitle[get(toc, 'account')] : 'N/A'}
     </div>
-    <div className="action right-align width-100">
-      <Button.Group>
-        {!isReadOnly
-          && (
-            <>
-              <Button color="green" className="link-button" onClick={e => handleAction(e, { action: 'REQUIRED', tocIndex, pageIndex })}>
-                <Icon name="asterisk" color={get(toc, 'required') ? 'green' : ''} />
-              </Button>
-              <Button icon className="link-button" onClick={e => handleAction(e, { action: 'EDIT', tocIndex, pageIndex })}>
-                <Icon className="ns-pencil" />
-              </Button>
-              <Button color="red" icon className="link-button" onClick={e => handleAction(e, { action: 'DELETE', tocIndex, pageIndex })}>
-                <Icon className="ns-trash" color="red" />
-              </Button>
-            </>
-          )
+    <div className={`action ${isReadOnly ? '' : 'right-align'} width-100`}>
+      {!isReadOnly
+        ? (
+          <Button.Group>
+            <Button color="green" className="link-button" onClick={e => handleAction(e, { action: 'REQUIRED', tocIndex, pageIndex })}>
+              <Icon name="asterisk" color={get(toc, 'required') ? 'green' : ''} />
+            </Button>
+            <Button icon className="link-button" onClick={e => handleAction(e, { action: 'EDIT', tocIndex, pageIndex })}>
+              <Icon className="ns-pencil" />
+            </Button>
+            <Button color="red" icon className="link-button" onClick={e => handleAction(e, { action: 'DELETE', tocIndex, pageIndex })}>
+              <Icon className="ns-trash" color="red" />
+            </Button>
+          </Button.Group>
+          ) : get(toc, 'required') ? 'Yes' : 'No'
         }
-      </Button.Group>
     </div>
   </div>
 ));
@@ -73,7 +71,7 @@ const ToCList = ({ toc, title, regulation, isReadOnly, onSortEnd, handleAction, 
       <div className="row-wrap striped-table thead">
         <div className="balance first-column">Label</div>
         <div className="balance width-100">Account</div>
-        <div className="action right-align width-100" />
+        {isReadOnly ? <div className="balance width-100">Required</div> : <div className="action right-align width-100" />}
       </div>
       <SortableList
         pageIndex={toc.page}
