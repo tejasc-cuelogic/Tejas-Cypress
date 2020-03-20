@@ -126,15 +126,11 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
   const [active, setActive] = useState(false);
   const toggleAccordion = () => setActive(!active);
   const mobileMeta = INVESTMENT_CARD_MOBILE.filter(i => (listOf === 'active' ? i.for.includes(listOf)
-                                  && (
-                                      (
-                                        i.securityType === 'ALL' || i.securityType.includes(get(data, 'offering.keyTerms.securities'))
-                                      )
-                                      || (
-                                        i.equityClass.length === 0 || i.equityClass.includes(get(data, 'offering.keyTerms.equityClass'))
-                                      )
-                                     )
-                                  : i.for.includes(listOf)));
+    && (
+        (i.securityType && (i.securityType === 'ALL' || i.securityType.includes(get(data, 'offering.keyTerms.securities'))))
+        || (i.equityClass && (i.equityClass.length === 0 || i.equityClass.includes(get(data, 'offering.keyTerms.equityClass'))))
+      )
+    : i.for.includes(listOf)));
   return (
     <Accordion fluid styled>
       <Accordion.Title className="text-capitalize">

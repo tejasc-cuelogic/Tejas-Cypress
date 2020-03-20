@@ -70,7 +70,7 @@ export default class ConfirmEmailAddress extends Component {
         sessionStorage.removeItem('changedEmail');
       })
         .catch(() => { });
-    } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''
+    } else if (this.props.authStore.SIGNUP_FRM.fields.email.value === ''
       && !this.props.userStore.currentUser) {
       this.props.history.push('/register-investor');
     } else {

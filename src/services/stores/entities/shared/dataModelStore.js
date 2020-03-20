@@ -69,7 +69,8 @@ export default class DataModelStore {
     const payLoad = { ...this.defaultParams, ...params };
     const apolloClient = payLoad.clientType === 'PUBLIC' ? publicClient : client;
     payLoad.removeLoader = get(payLoad, 'setLoader');
-    nsUiStore.setLoader(payLoad.setLoader || payLoad.mutation);
+    const loader = payLoad.setLoader || payLoad.mutation;
+    nsUiStore.setLoader(loader);
     this.loading = true;
     this.auStatus = 1;
     let result = {};
@@ -79,7 +80,7 @@ export default class DataModelStore {
         variables: payLoad.variables,
         refetchQueries: payLoad.refetchQueries || [],
       });
-      nsUiStore.filterLoaderByOperation(payLoad.mutation);
+      nsUiStore.filterLoaderByOperation(loader);
       if (get(payLoad, 'message') !== false && get(payLoad, 'message.success')) {
         Utils.toast(payLoad.message && payLoad.message.success, 'success');
       }
@@ -106,7 +107,8 @@ export default class DataModelStore {
     payLoad.removeLoader = payLoad.setLoader;
     const apolloClient = payLoad.clientType === 'PUBLIC' ? publicClient : client;
     payLoad.removeLoader = get(payLoad, 'setLoader');
-    nsUiStore.setLoader(payLoad.setLoader || payLoad.query);
+    const loader = payLoad.setLoader || payLoad.query;
+    nsUiStore.setLoader(loader);
     this.loading = true;
     this.auStatus = 1;
     // need to accept fetch policy from parameter
@@ -120,7 +122,7 @@ export default class DataModelStore {
           this.auStatus = 2;
           this.loading = false;
           res(data);
-          nsUiStore.filterLoaderByOperation(payLoad.query);
+          nsUiStore.filterLoaderByOperation(loader);
         }
         this.currTime = +new Date();
       },
