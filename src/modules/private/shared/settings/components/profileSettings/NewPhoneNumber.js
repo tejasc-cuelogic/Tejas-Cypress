@@ -30,12 +30,10 @@ export default class NewPhoneNumber extends Component {
   }
 
   handleChangePhoneNumber = async () => {
-    const { resetFormData, ID_VERIFICATION_FRM } = this.props.identityStore;
+    const { resetFormData } = this.props.identityStore;
     resetFormData('ID_PHONE_VERIFICATION');
-    const { phoneNumber, mfaMethod } = ID_VERIFICATION_FRM.fields;
-    const phoneNumberValue = phoneNumber.value;
-    const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
-    const res = await this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile);
+    const res = await this.props.identityStore.sendOtp('PHONE_CHANGE', isMobile);
+
     if (res) {
       this.props.identityStore.setIsOptConfirmed(false);
       this.props.uiStore.clearErrors();

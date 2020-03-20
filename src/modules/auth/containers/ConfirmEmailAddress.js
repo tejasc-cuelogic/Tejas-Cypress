@@ -34,6 +34,7 @@ export default class ConfirmEmailAddress extends Component {
       this.props.history.push(this.props.refLink || '/login');
     }
     this.props.authStore.setUserCredentiansConfirmEmail();
+    this.sendOtpForMigratedUser();
   }
 
   componentDidMount() {
@@ -42,7 +43,7 @@ export default class ConfirmEmailAddress extends Component {
 
   componentDidUpdate() {
     this.props.authStore.setUserCredentiansConfirmEmail();
-    this.startPhoneVerification();
+    this.sendOtpForMigratedUser();
   }
 
   componentWillUnmount() {
@@ -50,12 +51,13 @@ export default class ConfirmEmailAddress extends Component {
     this.props.uiStore.clearErrors();
   }
 
-  startPhoneVerification = async () => {
+  sendOtpForMigratedUser = async () => {
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
       && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
       && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')
+      && isEmpty(this.props.uiStore.errors)
       && !this.props.identityStore.signUpLoading) {
-      await this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
+      await this.props.identityStore.sendOtp('EMAIL_CONFIGURATION', undefined, isMobile);
     }
   }
 
@@ -144,7 +146,7 @@ export default class ConfirmEmailAddress extends Component {
         .catch(() => { });
     } else {
       if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
-        await this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
+        await this.props.identityStore.sendOtp('EMAIL_CONFIGURATION', undefined, isMobile);
       } else {
         this.props.identityStore.sendOtpEmail(isMobile);
       }

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
@@ -6,7 +7,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { sendOtpEmail, verifyOtpEmail, verifyOtp, requestOtp, isUniqueSSN, cipLegalDocUploads, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
+import { sendOtpEmail, verifyOtpEmail, verifyOtp, requestOtp, sendOtp, isUniqueSSN, cipLegalDocUploads, verifyOtpPhone, verifyOtpEmailPrivate, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
@@ -488,6 +489,49 @@ export class IdentityStore {
     }
   }
 
+  @action
+  sendOtp = async (type, isMobile = false) => {
+    try {
+      const { user } = userDetailsStore.currentUser.data;
+      const { mfaMethod, phoneNumber } = this.ID_VERIFICATION_FRM.fields;
+      const phone = phoneNumber.value || get(user, 'phone.number');
+      const emailAddress = authStore.CONFIRM_FRM.fields.email.value || get(user, 'email.address');
+      const to = type.startsWith('EMAIL') || mfaMethod.value === 'EMAIL' ? emailAddress.toLowerCase() : phone;
+      const method = (mfaMethod.value === '' || type.startsWith('EMAIL')) ? 'EMAIL' : mfaMethod.value;
+      uiStore.clearErrors();
+      uiStore.setProgress();
+      this.setFieldValue('signUpLoading', true);
+      const res = await client
+        .mutate({
+          mutation: sendOtp,
+          variables: {
+            type,
+            method,
+            to,
+          },
+        });
+      const requestMode = method === 'EMAIL' ? `code sent to ${emailAddress}` : (method === 'CALL' ? `call to ${phone}` : `code texted to ${phone}`);
+      if (method === 'EMAIL') {
+        this.setSendOtpToMigratedUser('EMAIL');
+      } else {
+        this.setConfirmMigratedUserPhoneNumber(true);
+        this.setSendOtpToMigratedUser('PHONE');
+      }
+      this.setRequestOtpResponse(res.data.sendOtp);
+      if (!isMobile && !userStore.isInvestor) {
+        Helper.toast(`Verification ${requestMode}.`, 'success');
+      }
+      this.setFieldValue('signUpLoading', false);
+      uiStore.setProgress(false);
+      return true;
+    } catch (err) {
+      this.setFieldValue('signUpLoading', false);
+      uiStore.setProgress(false);
+      uiStore.setErrors(toJS(DataFormatter.getSimpleErr(err)));
+      return false;
+    }
+  }
+
   @computed get isUserCipOffline() {
     return this.userCipStatus === 'OFFLINE';
   }
@@ -546,34 +590,29 @@ export class IdentityStore {
     });
   }
 
-  confirmPhoneNumber = () => {
+  verifyOtpPhone = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: verifyOtp,
+          mutation: verifyOtpPhone,
           variables: {
             resourceId: this.requestOtpResponse,
             verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
+            phone: this.ID_VERIFICATION_FRM.fields.phoneNumber.value,
           },
         })
         .then((result) => {
-          if (result.data.verifyOtp) {
+          if (result.data.verifyOtpPhone) {
             userDetailsStore.mergeUserData('phone', {
               ...this.formattedUserInfoForCip.phoneDetails,
               verified: moment().tz('America/Chicago').toISOString(),
             });
             resolve();
-          } else {
-            const error = {
-              message: 'Invalid verification code.',
-            };
-            uiStore.setErrors(error);
-            reject();
           }
         })
         .catch(action((err) => {
-          uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         }))
         .finally(() => {
@@ -863,13 +902,6 @@ export class IdentityStore {
         .then((result) => {
           if (result.data.verifyOtpEmail) {
             resolve();
-          } else {
-            const error = {
-              message: 'Invalid verification code.',
-            };
-            uiStore.setErrors(error);
-            uiStore.setProgress(false);
-            reject();
           }
         })
         .catch((err) => {
@@ -886,27 +918,20 @@ export class IdentityStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: verifyOtp,
+          mutation: verifyOtpEmailPrivate,
           variables: {
             resourceId: this.requestOtpResponse,
             verificationCode: authStore.CONFIRM_FRM.fields.code.value,
-            isEmailVerify: true,
+            email: get(userDetailsStore, 'currentUser.data.user.email.address'),
           },
         })
         .then((result) => {
-          if (result.data.verifyOtp) {
+          if (result.data.verifyOtpEmail) {
             resolve();
-          } else {
-            const error = {
-              message: 'Invalid verification code.',
-            };
-            uiStore.setProgress(false);
-            uiStore.setErrors(error);
-            reject();
           }
         })
         .catch(action((err) => {
-          uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
           uiStore.setProgress(false);
           reject(err);
         }));

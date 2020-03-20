@@ -90,6 +90,16 @@ export const requestOtp = gql`
     )
   }`;
 
+  export const sendOtp = gql`
+  mutation sendOtp($type: OtpTypeEnum!, $method: MFAMethodEnum!, $to: String!){
+    sendOtp(
+      type: $type
+      method: $method
+      to: $to
+    )
+  }`;
+
+
 export const verifyOtp = gql`
   mutation verifyOtp($resourceId: String! $verificationCode: String!, $isEmailVerify: Boolean, $isPhoneNumberUpdated: Boolean){
     verifyOtp(
@@ -97,6 +107,25 @@ export const verifyOtp = gql`
       verificationCode: $verificationCode
       isEmailVerify: $isEmailVerify
       isPhoneNumberUpdated: $isPhoneNumberUpdated
+    )
+  }
+`;
+
+export const verifyOtpPhone = gql`
+  mutation verifyOtpPhone($resourceId: String! $verificationCode: String!, $phone: String!){
+    verifyOtpPhone(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+      phone: $phone
+    )
+  }
+`;
+export const verifyOtpEmailPrivate = gql`
+  mutation verifyOtpEmail($resourceId: String! $verificationCode: String!, $email: String!){
+    verifyOtpEmail(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+      email: $email
     )
   }
 `;
