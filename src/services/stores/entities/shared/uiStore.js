@@ -40,7 +40,7 @@ export class UiStore {
 
   @observable devBanner = !['production', 'prod', 'master', 'localhost', 'infosec'].includes(REACT_APP_DEPLOY_ENV);
 
-  @observable topBanner = true;
+  @observable topBanner = ['production', 'prod', 'master', 'localhost', 'infosec'].includes(REACT_APP_DEPLOY_ENV);
 
   @observable confirmBox = {
     entity: '',
