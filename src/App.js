@@ -8,7 +8,7 @@ import queryString from 'query-string';
 import IdleTimer from 'react-idle-timer';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
-import { DevBanner, Spinner, NotifyVersionUpdate } from './theme/shared';
+import { DevBanner, TopBanner, Spinner, NotifyVersionUpdate } from './theme/shared';
 import Layout from './theme/layout/Layout';
 import Private from './modules/private';
 import Public from './modules/public';
@@ -258,6 +258,8 @@ class App extends Component {
 
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
 
+  playTopBanner = () => this.props.uiStore.toggleTopBanner();
+
   render() {
     const { location, uiStore, userStore, authStore } = this.props;
     const { authChecked } = this.state;
@@ -275,6 +277,9 @@ class App extends Component {
     const { isInvestor } = userStore;
     return (
       <div className={(isInvestor || !matchPath(location.pathname, { path: '/dashboard' })) ? 'public-pages' : ''}>
+        {uiStore.topBanner
+          && <TopBanner toggle={this.playTopBanner} />
+        }
         {authStore.isUserLoggedIn
           && (
             <IdleTimer
