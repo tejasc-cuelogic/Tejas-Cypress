@@ -308,29 +308,36 @@ export class CampaignStore {
       content: null,
       action: null,
     };
+
     const { campaign, campaignStatus } = this;
     const { isInvestorAccreditated, signupStatus } = userDetailsStore;
     const { activeAccounts, frozenAccounts } = signupStatus;
     const { stepInRoute } = navStore;
+
     const loggedInAsInvestor = authStore.isUserLoggedIn && userStore.currentUser.roles.includes('investor');
     const passedProcessingDate = get(campaignStatus, 'diffForProcessing.value') <= 0;
     const validCampaignStage = ['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(get(campaign, 'stage'));
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
+    const isOfferingRegD = ['BD_506C', 'BD_506B'].includes(offeringRegulation);
+
     if (!loggedInAsInvestor || !authStore.isUserLoggedIn) {
-      if (['BD_506C', 'BD_506B'].includes(offeringRegulation)) {
+      // User is Not logged in, require them to authenticate
+      if (isOfferingRegD) {
         commentMeta.content = (<p>In order to leave a comment, please {get(stepInRoute, 'word')} and verify your status as an <br />accredited investor.</p>);
       } else {
         commentMeta.content = (<p>In order to leave comments, please {get(stepInRoute, 'word')} and verify your identity.</p>);
       }
       commentMeta.action = handleLogin => (<Link onClick={e => handleLogin(e, true)} to="/" className="ui button primary">{get(stepInRoute, 'title')}</Link>);
     } else if (activeAccounts.length === 0) {
-      if (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status) {
+      // TODO: need to add additional validation in, CAN post if USER !== FULL || CIP !== PASS
+      // User does not have an active account, have them finish signup
+      if (isOfferingRegD && !isInvestorAccreditated.status) {
         commentMeta.content = (<p>In order to leave a comment, please complete your account setup and verify your status as an accredited investor.</p>);
       } else {
         commentMeta.content = (<p>In order to leave a comment, please complete your account setup.</p>);
       }
-    commentMeta.action = () => (<Link to="/dashboard/setup" className="ui button primary">Complete Account Setup</Link>);
-    } else if (activeAccounts.length && ['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status) {
+      commentMeta.action = () => (<Link to="/dashboard/setup" className="ui button primary">Complete Account Setup</Link>);
+    } else if (activeAccounts.length && isOfferingRegD && !isInvestorAccreditated.status) {
       commentMeta.content = (<p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>);
       commentMeta.action = () => (isInvestorAccreditated.accreditation !== 'REQUESTED' ? (
         <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>

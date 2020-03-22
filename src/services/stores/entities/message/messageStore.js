@@ -114,6 +114,7 @@ export class NewMessage {
         if (!offeringCreationStore.currentOfferingId) {
           campaignStore.getCampaignDetails(campaignSlug, false);
         } else {
+          // TODO:  Dynamically update the Comments UI with the new comments vs reinitalizating the whole component
           this.initRequest();
         }
         this.resetMessageForm();
