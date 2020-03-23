@@ -155,6 +155,7 @@ class Comments extends Component {
     if (!this.state.visiblePost) {
       this.setState({ visiblePost: true });
     }
+    this.setState({ commentId: null });
   }
 
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }

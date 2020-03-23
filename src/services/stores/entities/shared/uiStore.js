@@ -40,6 +40,8 @@ export class UiStore {
 
   @observable devBanner = !['production', 'prod', 'master', 'localhost', 'infosec'].includes(REACT_APP_DEPLOY_ENV);
 
+  @observable topBanner = ['production', 'prod', 'master', 'localhost', 'infosec'].includes(REACT_APP_DEPLOY_ENV);
+
   @observable confirmBox = {
     entity: '',
     refId: '',
@@ -142,6 +144,11 @@ export class UiStore {
   }
 
   @action
+  toggleTopBanner() {
+    this.topBanner = !this.topBanner;
+  }
+
+  @action
   setProgress(progress = true) {
     this.inProgress = progress;
   }
@@ -218,7 +225,7 @@ export class UiStore {
 
   @action
   setcreateAccountMessage= () => {
-    this.createAccountMessage = 'Please wait...<br /><br /> We are finalizing your account. This can take up to a minute.';
+    this.createAccountMessage = 'Please wait...<br /><br /> This could take up to a minute.';
   }
 
   @action

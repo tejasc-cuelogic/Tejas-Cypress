@@ -56,8 +56,16 @@ export const verifyCipSoftFail = gql`
   }`;
 
 export const verifyCipHardFail = gql`
-mutation verifyCipHardFail($license: String!, $residence: String!) {
+  mutation verifyCipHardFail($license: String!, $residence: String!) {
     verifyCipHardFail(
+      license: $license
+      residence: $residence
+    )
+  }`;
+
+export const cipLegalDocUploads = gql`
+  mutation cipLegalDocUploads($license: String!, $residence: String!) {
+    cipLegalDocUploads(
       license: $license
       residence: $residence
     )
@@ -94,10 +102,9 @@ export const verifyOtp = gql`
 `;
 
 export const requestOtpWrapper = gql`
-  mutation requestOTPWrapper($address: String!, $firstName: String, $tags: tagsInput){
+  mutation requestOTPWrapper($address: String!, $tags: tagsInput){
     requestOTPWrapper(
       address: $address
-      firstName: $firstName
       tags: $tags
     )
   }

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Header, Form, Divider, Icon, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { startsWith } from 'lodash';
-import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES, NS_FEE_PERCENTAGE } from '../../../../../services/constants/admin/offerings';
+import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES, NS_FEE_PERCENTAGE } from '../../../../../services/constants/admin/offerings';
 import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
+import { InlineLoader } from '../../../../../theme/shared';
 import ButtonGroupType2 from './ButtonGroupType2';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
@@ -52,12 +52,15 @@ export default class KeyTerms extends Component {
     (field, value, form, index) => this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
 
   render() {
+    const { offer, offerDataLoading } = this.props.offeringsStore;
+    if (offerDataLoading) {
+      return <InlineLoader />;
+    }
     const {
       KEY_TERMS_FRM, CLOSURE_SUMMARY_FRM, formArrayChange, maskArrayChange,
       confirmModal, confirmModalName, removeData, currentOfferingId,
     } = this.props.offeringCreationStore;
     const formName = 'KEY_TERMS_FRM';
-    const { offer, offerData } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const submitted = (offer && offer.keyTerms && offer.keyTerms.submitted)
@@ -65,13 +68,6 @@ export default class KeyTerms extends Component {
     const approved = (offer && offer.keyTerms && offer.keyTerms.approved)
       ? offer.keyTerms.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
-    let MODIFIED_REGULATION_VALUES = null;
-    if (KEY_TERMS_FRM && KEY_TERMS_FRM.fields && KEY_TERMS_FRM.fields.regulation
-      && KEY_TERMS_FRM.fields.regulation.value) {
-      MODIFIED_REGULATION_VALUES = startsWith(KEY_TERMS_FRM.fields.regulation.value, 'BD_') ? BD_REGULATION_VALUES : FP_REGULATION_VALUES;
-    } else {
-      MODIFIED_REGULATION_VALUES = REGULATION_VALUES;
-    }
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -107,17 +103,27 @@ export default class KeyTerms extends Component {
                 changed={(e, result) => formArrayChange(e, result, formName)}
               />
             ))}
-            <FormDropDown
-              containerclassname={isReadonly ? 'display-only' : ''}
-              className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
-              fielddata={KEY_TERMS_FRM.fields.securities}
-              selection
-              value={KEY_TERMS_FRM.fields.securities.value}
-              placeholder={isReadonly ? 'N/A' : 'Choose here'}
-              name="securities"
-              options={SECURITIES_VALUES}
-              onChange={(e, result) => formArrayChange(e, result, formName)}
+            {['securities', 'equityClass', 'equityUnitType'].map(field => (
+              <FormDropDown
+                containerclassname={isReadonly ? 'display-only' : ''}
+                className={isReadonly ? 'display-only' : ''}
+                disabled={isReadonly}
+                fielddata={KEY_TERMS_FRM.fields[field]}
+                selection
+                value={KEY_TERMS_FRM.fields[field].value}
+                name={field}
+                placeholder={isReadonly ? 'N/A' : 'Choose here'}
+                options={field === 'securities' ? SECURITIES_VALUES : KEY_TERMS_FRM.fields[field].values}
+                onChange={(e, result) => formArrayChange(e, result, formName)}
+              />
+            ))}
+            <MaskedInput
+              displayMode={isReadonly}
+              name="classThreshold"
+              fielddata={KEY_TERMS_FRM.fields.classThreshold}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
+              currency
+              prefix="$"
             />
             {['minOfferingAmountCF', 'maxOfferingAmountCF'].map(field => (
               <MaskedInput
@@ -178,7 +184,7 @@ export default class KeyTerms extends Component {
               value={KEY_TERMS_FRM.fields.regulation.value}
               name="regulation"
               placeholder={isReadonly ? 'N/A' : 'Choose here'}
-              options={MODIFIED_REGULATION_VALUES}
+              options={REGULATION_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             />
             <FormInput
@@ -277,7 +283,7 @@ export default class KeyTerms extends Component {
               prefix="$"
             />
             {
-              ['valuationCap', 'discount', 'equityClass'].map(field => (
+              ['valuationCap', 'discount'].map(field => (
                 <FormInput
                   displayMode={isReadonly}
                   name={field}
@@ -286,18 +292,6 @@ export default class KeyTerms extends Component {
                 />
               ))
             }
-            <FormDropDown
-              containerclassname={isReadonly ? 'display-only' : ''}
-              className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
-              fielddata={KEY_TERMS_FRM.fields.equityUnitType}
-              selection
-              value={KEY_TERMS_FRM.fields.equityUnitType.value}
-              name="equityUnitType"
-              placeholder={isReadonly ? 'N/A' : 'Choose here'}
-              options={KEY_TERMS_FRM.fields.equityUnitType.values}
-              onChange={(e, result) => formArrayChange(e, result, formName)}
-            />
             {
               ['offeringSize', 'preferredReturn', 'targetInvestmentPeriod'].map(field => (
                 <MaskedInput
@@ -472,7 +466,7 @@ export default class KeyTerms extends Component {
             submitted={submitted}
             isManager={isManager}
             approved={approved}
-            loading={offerData.loading}
+            loading={offerDataLoading}
             updateOffer={this.handleFormSubmit}
           />
         </Form>

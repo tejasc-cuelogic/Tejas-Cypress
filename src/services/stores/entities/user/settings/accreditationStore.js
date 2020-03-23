@@ -353,7 +353,7 @@ export class AccreditationStore {
     if (index != null) {
       const fileId = this[form].fields[field].fileId.splice(index, 1);
       this[form].fields[field].value.splice(index, 1);
-      removeFileId = fileId;
+      removeFileId = get(fileId, '[0]');
     } else {
       const { fileId } = this[form].fields[field];
       removeFileId = fileId;
@@ -750,7 +750,7 @@ export class AccreditationStore {
       client,
       query: userAccreditationQuery,
       fetchPolicy: 'network-only',
-      variables: userId ? { userId } : { },
+      variables: userId ? { userId } : {},
       onFetch: () => {
         if (!this.userData.loading) {
           if (setInProgressArray) {
@@ -833,6 +833,10 @@ export class AccreditationStore {
       && userDetails.roles.find(role => role.name === accountType);
     const appData = accountType === 'entity' ? entityAccreditation && entityAccreditation.details : userDetails;
 
+    if (form === 'ACCREDITATION_FORM' && ref === 'accreditation') {
+      this[form] = Validator.setFormData(this[form], appData, ref);
+    }
+
     if (!appData || ['INVALID', 'EXPIRED', null].includes(get(userDetails, 'accreditation.status'))) {
       return false;
     }
@@ -904,7 +908,7 @@ export class AccreditationStore {
       : accountSelected || userDetailsStore.currentActiveAccountDetails.name;
     const intialAccountStatus = this.userSelectedAccountStatus(currentSelectedAccount);
     this.setUserSelectedAccountStatus(intialAccountStatus);
-    let investmentType = 'CF';
+    let investmentType = 'BD_CF';
     if (intialAccountStatus === 'FULL' && regulationCheck) {
       let currentAcitveObject = {};
       if (aggreditationDetails) {
@@ -914,7 +918,7 @@ export class AccreditationStore {
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration
         ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
           === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
-      investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'CF';
+      investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'BD_CF';
       this.setFieldVal('accountAccreditationStatus', accountStatus);
       switch (accountStatus) {
         case 'REQUESTED':
@@ -1078,9 +1082,8 @@ export class AccreditationStore {
             headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'Please confirm your accredited investor status to invest in this offering.';
             break;
           case 'EXPIRED':
-            // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}
             headerSubheaderTextObj.header = 'Accredited Status Expired';
-            headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
+            // headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
             break;
           case 'PROCESSING':
             headerSubheaderTextObj.header = 'Your account is being processed.';

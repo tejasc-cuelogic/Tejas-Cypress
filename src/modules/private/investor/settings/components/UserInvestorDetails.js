@@ -10,10 +10,6 @@ import { FormInput, MaskedInput, FormDropDown, FormCheckbox } from '../../../../
 @inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @observer
 export default class UserInvestorDetails extends Component {
-  state = {
-    displayOnly: true,
-  }
-
   constructor(props) {
     super(props);
     const { investorProfileData } = this.props;
@@ -24,6 +20,18 @@ export default class UserInvestorDetails extends Component {
     } else {
       setInvestorDetailInfo(investorProfileData);
     }
+    this.state = {
+      displayOnly: true,
+    };
+  }
+
+  handleBrokerageOrPublicRelationChange = (e, result, formName, key) => {
+    e.preventDefault();
+    const { setFieldValue, formChange } = this.props.investorProfileStore;
+    if (result.value === 'no') {
+      setFieldValue(formName, '', `fields.${key}.value`);
+    }
+    formChange(e, result, formName);
   }
 
   toogleField = (e) => {
@@ -31,7 +39,6 @@ export default class UserInvestorDetails extends Component {
     const { investorProfileData } = this.props;
     const {
       setInvestorDetailInfo,
-      setIsInvestmentExperienceValidStatus,
     } = this.props.investorProfileStore;
     if (this.props.isAdmin) {
       const investorProfileDataAdmin = get(this.props.userDetailsStore, 'getDetailsOfUser.investorProfileData');
@@ -39,7 +46,6 @@ export default class UserInvestorDetails extends Component {
     } else {
       setInvestorDetailInfo(investorProfileData);
     }
-    setIsInvestmentExperienceValidStatus(true);
     this.setState({ displayOnly: !this.state.displayOnly });
   }
 
@@ -67,16 +73,16 @@ export default class UserInvestorDetails extends Component {
             {!this.props.isAdmin && (this.state.displayOnly
               ? <Link to={`${this.props.match.url}`} className="link pull-right regular-text" onClick={this.toogleField}><small>Edit information</small></Link>
               : (
-<Button.Group floated="right" size="mini" compact>
-                <Button as={Link} content="Cancel" to={`${this.props.match.url}`} onClick={this.toogleField} />
-                <Button
-                  primary
-                  onClick={this.handleSubmit}
-                  disabled={!(INVESTOR_PROFILE_FULL.meta.isValid && isInvestmentExperienceValid)}
-                >
-                  Update
+                <Button.Group floated="right" size="mini" compact>
+                  <Button as={Link} content="Cancel" to={`${this.props.match.url}`} onClick={this.toogleField} />
+                  <Button
+                    primary
+                    onClick={this.handleSubmit}
+                    disabled={!(INVESTOR_PROFILE_FULL.meta.isValid && isInvestmentExperienceValid)}
+                  >
+                    Update
                 </Button>
-              </Button.Group>
+                </Button.Group>
               ))
             }
           </Header>
@@ -144,7 +150,7 @@ export default class UserInvestorDetails extends Component {
                 value={INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value}
                 name="brokerageEmployment"
                 options={BROKERAGE_EMPLOYMENT_LIST}
-                onChange={(e, result) => formChange(e, result, formName)}
+                onChange={(e, result) => this.handleBrokerageOrPublicRelationChange(e, result, formName, 'brokerageFirmName')}
               />
             </dd>
             {INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value === 'yes'
@@ -181,7 +187,7 @@ export default class UserInvestorDetails extends Component {
                 value={INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value}
                 name="publicCompanyRel"
                 options={PUBLIC_COMPANY_REL_LIST}
-                onChange={(e, result) => formChange(e, result, formName)}
+                onChange={(e, result) => this.handleBrokerageOrPublicRelationChange(e, result, formName, 'publicCompanyTicker')}
               />
             </dd>
             {INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value === 'yes'
@@ -228,7 +234,7 @@ export default class UserInvestorDetails extends Component {
                 name="netWorth"
                 wrapperClass="ui input compact"
                 fielddata={INVESTOR_PROFILE_FULL.fields.netWorth}
-                changed={(values, name) => maskChange(values, formName, name)}
+                changed={(values, name) => maskChange(values, name, formName)}
                 currency
                 prefix="$"
                 hidelabel
@@ -243,7 +249,7 @@ export default class UserInvestorDetails extends Component {
                     name={key}
                     wrapperClass="ui input compact"
                     fielddata={INVESTOR_PROFILE_FULL.fields[key]}
-                    changed={(values, name) => maskChange(values, formName, name)}
+                    changed={(values, name) => maskChange(values, name, formName)}
                     currency
                     prefix="$"
                     hidelabel
@@ -283,18 +289,18 @@ export default class UserInvestorDetails extends Component {
           }
           {!this.state.displayOnly && !isInvestmentExperienceValid
             && (
-<p className="negative-text">
-              NextSeed investments are suitable for experienced investors
-              are comfortable with long-term risk.
-              Please confirm that you fit this profile in order to proceed.
+              <p className="negative-text">
+                NextSeed investments are suitable for experienced investors
+                are comfortable with long-term risk.
+                Please confirm that you fit this profile in order to proceed.
             </p>
             )
           }
           {!this.state.displayOnly && !isInvestmentExperienceValid
             && (
-<p className="negative-text">
-              Otherwise, please reference our <Link to="/resources/education-center/investor">Education Center </Link>
-              to learn more about investing on NextSeed.
+              <p className="negative-text">
+                Otherwise, please reference our <Link to="/resources/education-center/investor">Education Center </Link>
+                to learn more about investing on NextSeed.
             </p>
             )
           }

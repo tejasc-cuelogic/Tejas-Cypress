@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Icon, Table, Accordion, Button, Card, Header, Popup } from 'semantic-ui-react';
+import { Icon, Table, Accordion, Button, Card, Header } from 'semantic-ui-react';
 import { get, includes } from 'lodash';
+import money from 'money-math';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
 import { STAGES } from '../../../../../../services/constants/admin/offerings';
-import { INDUSTRY_TYPES_ICONS, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import { INDUSTRY_TYPES_ICONS, CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_EQUITY_CLASS } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader, PopUpModal } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -54,7 +55,7 @@ const handleActions = (data) => {
       {((!get(data, 'tranche') || get(data, 'tranche') < 1) && !investmentProps.isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0))))
         && <Button onClick={e => handleInvestNowClick(e, data.offering.offeringSlug, data.offering.id)} primary content="Change" />
       }
-      {((!get(data, 'tranche') || get(data, 'tranche') < 1) && (isAdmin || (get(data, 'offering.keyTerms.securities') !== 'REAL_ESTATE' && (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))))
+      {((!get(data, 'tranche') || get(data, 'tranche') < 1) && (isAdmin || ((!(get(data, 'offering.keyTerms.securities') === 'EQUITY' && get(data, 'offering.keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS')) && (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))))
         && <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} basic content="Cancel" />
       }
       {(!isAdmin && (get(data.offering, 'closureSummary.processingDate') && (DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0 || (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)))
@@ -71,13 +72,32 @@ const handleActions = (data) => {
   ));
 };
 
+const getSecurityTitle = (securities, equityClass, investorInvestedAmount, classThreshold = 0) => {
+  let text = CAMPAIGN_KEYTERMS_SECURITIES[securities] || 'N/A';
+  if (securities === 'EQUITY' && equityClass === 'PREFERRED') {
+    text = CAMPAIGN_KEYTERMS_SECURITIES.PREFERRED_EQUITY_506C;
+  } else if (securities === 'EQUITY' && equityClass === 'LLC_MEMBERSHIP_UNITS') {
+    text = CAMPAIGN_KEYTERMS_SECURITIES.REAL_ESTATE;
+  } else if (securities === 'EQUITY' && equityClass === 'PARALLEL_CLASS_SHARES') {
+    // check conditions
+    if (money.cmp(investorInvestedAmount, money.floatToAmount(classThreshold)) < 0) {
+      text = CAMPAIGN_KEYTERMS_EQUITY_CLASS.CLASS_B_SHARES;
+    } else {
+      text = CAMPAIGN_KEYTERMS_EQUITY_CLASS.CLASS_A_SHARES;
+    }
+  } else if (securities === 'EQUITY' && ['CLASS_A_SHARES', 'CLASS_B_SHARES'].includes(equityClass)) {
+    text = CAMPAIGN_KEYTERMS_EQUITY_CLASS[equityClass] || 'N/A';
+  }
+  return text;
+};
+
 const INVESTMENT_CARD_META = [
   { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, className: 'collapsing', isMobile: false, isDesktop: true, securityType: [] },
   { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], children: data => offeringName(data), isMobile: true, isDesktop: true, securityType: [] },
-  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: isMobile ? ['pending'] : ['pending', 'completed'], isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: (value, equityClass, investorInvestedAmount, classThreshold) => getSecurityTitle(value, equityClass, investorInvestedAmount, classThreshold), for: isMobile ? ['pending'] : ['pending', 'completed'], isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Investment Amount', key: 'investedAmount', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], getRowValue: value => Helper.CurrencyFormat(value), children: data => investedAmount(data), isMobile: true, isDesktop: true, className: 'text-capitalize', securityType: [] },
   { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], children: data => closeDate(data), isMobile: true, isDesktop: true, securityType: [] },
-  { label: 'Investment Multiple', key: 'offering.closureSummary.keyTerms.multiple', for: ['active'], getRowValue: value => `${value}x`, isMobile: true, isDesktop: true, securityType: ['Revenue Sharing Note'] },
+  { label: 'Investment Multiple', key: 'offering.closureSummary.keyTerms.multiple', for: ['active'], getRowValue: value => `${value}x`, isMobile: true, isDesktop: true, securityType: ['REVENUE_SHARING_NOTE'] },
   { label: 'Status', key: 'offering.stage', for: isMobile ? ['pending', 'completed'] : ['pending', 'completed'], getRowValue: value => STAGES[value].label, children: data => stageLabel(data), isMobile: true, isDesktop: true, securityType: [] },
   {
     label: 'Days to close',
@@ -88,12 +108,12 @@ const INVESTMENT_CARD_META = [
     securityType: [],
     getRowValue: value => ((DataFormatter.diffDays(value, false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label}` : DataFormatter.diffInDaysHoursMin(value).diffText)) || 'N/A',
   },
-  { label: 'Annualized Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%`, isMobile: true, isDesktop: true, securityType: ['Term Note'] },
-  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months`, isMobile: true, isDesktop: true, securityType: [] },
-  { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: [] },
-  { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['Term Note'] }, // pending
-  { label: 'Realized Multiple', key: 'realizedMultiple', getRowValue: value => `${value}x`, for: ['completed', 'active'], isMobile: true, isDesktop: true, securityType: ['Preferred Equity'] },
-  { label: 'Payments Remaining', key: 'remainingPayment', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['Revenue Sharing Note'] },
+  { label: 'Annualized Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%`, isMobile: true, isDesktop: true, securityType: ['TERM_NOTE'] },
+  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months`, isMobile: true, isDesktop: true, securityType: ['ALL'] },
+  { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['ALL'] },
+  { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['TERM_NOTE'] }, // pending
+  { label: 'Realized Multiple', key: 'realizedMultiple', getRowValue: value => `${value}x`, for: ['completed', 'active'], isMobile: true, isDesktop: true, securityType: [], equityClass: ['PREFERRED'] },
+  { label: 'Payments Remaining', key: 'remainingPayment', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['REVENUE_SHARING_NOTE'] },
   {
     label: '', for: ['pending'], children: data => handleActions(data), isMobile: false, isDesktop: true, securityType: [],
   },
@@ -105,14 +125,19 @@ const INVESTMENT_CARD_MOBILE = INVESTMENT_CARD_META.filter(meta => meta.isMobile
 const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleInvestNowClick, isAdmin, match }) => {
   const [active, setActive] = useState(false);
   const toggleAccordion = () => setActive(!active);
-  const mobileMeta = INVESTMENT_CARD_MOBILE.filter(i => (listOf === 'active' ? i.for.includes(listOf) && (i.securityType.length === 0 || i.securityType.includes(CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')])) : i.for.includes(listOf)));
+  const mobileMeta = INVESTMENT_CARD_MOBILE.filter(i => (listOf === 'active' ? i.for.includes(listOf)
+    && (
+        (i.securityType && (i.securityType === 'ALL' || i.securityType.includes(get(data, 'offering.keyTerms.securities'))))
+        || (i.equityClass && (i.equityClass.length === 0 || i.equityClass.includes(get(data, 'offering.keyTerms.equityClass'))))
+      )
+    : i.for.includes(listOf)));
   return (
     <Accordion fluid styled>
       <Accordion.Title className="text-capitalize">
         <Header as="h6" className="mt-0" onClick={toggleAccordion}>
           <Icon className={`ns-chevron-${active ? 'down' : 'right'}`} color="green" />
           {get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}
-          <Header.Subheader>{CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] || 'N/A'}</Header.Subheader>
+          <Header.Subheader>{getSecurityTitle(get(data, 'offering.keyTerms.securities'), get(data, 'offering.keyTerms.equityClass'), get(data, 'investedAmount'), get(data, 'offering.keyTerms.classThreshold'))}</Header.Subheader>
         </Header>
         {Helper.CurrencyFormat(data.investedAmount)}
       </Accordion.Title>
@@ -123,7 +148,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
               <Table.Row>
                 <Table.Cell collapsing>{row.label}</Table.Cell>
                 <Table.Cell className="grey-header right-align">
-                  {row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key)) : 'N/A'
+                  {row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key), get(data, 'offering.keyTerms.equityClass'), get(data, 'investedAmount'), get(data, 'offering.keyTerms.classThreshold')) : 'N/A'
                     : get(data, row.key) || 'N/A'
                   }
                 </Table.Cell>
@@ -140,7 +165,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
               )
             }
             {((!get(data, 'tranche') || get(data, 'tranche') < 1) && !isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0))))
-              && <Button className="mt-20" primary fluid onClick={e => handleInvestNowClick(e, data.offering.offeringSlug)} content="Change Investment Amount" />
+              && <Button className="mt-20" primary fluid onClick={e => handleInvestNowClick(e, data.offering.offeringSlug, data.offering.id)} content="Change Investment Amount" />
             }
             {((!get(data, 'tranche') || get(data, 'tranche') < 1) && (isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)))))
               && <Button className="mt-20 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
@@ -183,7 +208,7 @@ const InvestmentList = (props) => {
                 {header.map(row => (
                   <Table.Cell verticalAlign="middle" className={row.className}>
                     {row.children ? row.children(data)
-                      : row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key)) : 'N/A'
+                      : row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key), get(data, 'offering.keyTerms.equityClass'), get(data, 'investedAmount'), get(data, 'offering.keyTerms.classThreshold')) : 'N/A'
                         : get(data, row.key) || 'N/A'
                     }
                   </Table.Cell>
@@ -214,11 +239,11 @@ const InvestmentList = (props) => {
   const listAsPerSecurityType = {};
   const listHeaderAsPerSecurityType = {};
   const listMetaByType = INVESTMENT_CARD_META.filter(i => i.for.includes(listOf) && i.isDesktop);
-  const keytermsSecurityTypes = Object.keys(CAMPAIGN_KEYTERMS_SECURITIES);
+  const keytermsSecurityTypes = Object.keys(CAMPAIGN_KEYTERMS_SECURITIES_ENUM);
   if (props.listOf === 'active') {
     keytermsSecurityTypes.forEach((type) => {
       listAsPerSecurityType[type] = props.investments.filter(i => get(i, 'offering.keyTerms.securities') === type);
-      listHeaderAsPerSecurityType[type] = listMetaByType.filter(i => i.securityType.length === 0 || i.securityType.includes(CAMPAIGN_KEYTERMS_SECURITIES[type]));
+      listHeaderAsPerSecurityType[type] = listMetaByType.filter(i => i.securityType.length === 0 || i.securityType.includes(type));
     });
   }
   return (
@@ -226,17 +251,23 @@ const InvestmentList = (props) => {
       {isMobile ? (
         <>
           <Card className="investment-summary investment-card">
-            <Card.Header className="text-capitalize">{`${props.listOf} (${props.listOfCount})`}
             {props.listOf === 'pending'
-              && (
-                <PopUpModal content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed." customTrigger={<Icon className="ns-help-circle ml-10" />} />
-              )}
-            </Card.Header>
+              ? (
+                <Card.Header className="text-capitalize">
+                  <PopUpModal
+                    customTrigger={<span className="popup-label">{`${props.listOf} (${props.listOfCount})`}</span>}
+                    content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed."
+                    position="top center"
+                  />
+                </Card.Header>
+              ) : (
+                <Card.Header className="text-capitalize"><span>{`${props.listOf} (${props.listOfCount})`}</span></Card.Header>
+              )
+            }
             <Card.Content>
               {investments.map(data => (
                 <InvestmentCard data={data} {...props} />
-              ))
-              }
+              ))}
               <p className="right-align neutral-text">Total: <b>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0)}</b></p>
             </Card.Content>
           </Card>
@@ -245,16 +276,18 @@ const InvestmentList = (props) => {
           <Accordion fluid styled className="card-style portfolio-list">
             <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active={isActive} className="text-capitalize">
               <Icon className={`ns-chevron-${isActive ? 'up' : 'right'}`} />
-              {`${props.listOf} (${props.listOfCount})`}
               {props.listOf === 'pending'
-              && (
-                <Popup
-                  trigger={<Icon color="grey" className="ns-help-circle ml-10" />}
+              ? (
+                <PopUpModal
+                  customTrigger={<span className="popup-label">{`${props.listOf} (${props.listOfCount})`}</span>}
                   content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed."
                   position="top center"
-                  className="center-align"
+                  showOnlyPopup={!isMobile}
                 />
-              )}
+              ) : (
+                <span>{`${props.listOf} (${props.listOfCount})`}</span>
+              )
+            }
             </Accordion.Title>
             <Accordion.Content className="bg-offwhite" active={!props.inActiveItems.includes(props.listOf)}>
               {!investments || !investments.length

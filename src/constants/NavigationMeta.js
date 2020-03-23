@@ -306,7 +306,7 @@ export const PRIVATE_NAV = [
   //     },
   //     { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
   //     {
-  //       title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop', 'dev'],
+  //       title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'dev'],
   //     },
   //   ],
   // },
@@ -334,7 +334,7 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin'],
     subPanel: 0,
     subNavigations: [
-      { title: 'Overview', to: 'overview', env: ['localhost', 'develop', 'dev'] },
+      { title: 'Overview', to: 'overview', env: ['localhost', 'dev'] },
       { title: 'Creation', to: 'creation' },
       { title: 'Live', to: 'live' },
       { title: 'ᕕ( ᐛ )ᕗ', to: 'completed' },
@@ -817,4 +817,27 @@ export const FOOTER_NAV = [
   //     { title: 'Legal Documents', to: 'legal-documents' },
   //   ],
   // },
+];
+
+export const CIP_ROUTES = [
+  {
+    path: 'cip',
+    component: 'Cip',
+  },
+  {
+    path: 'cip/uploads',
+    component: 'CipHardFail',
+  },
+  {
+    path: 'cip/questions',
+    component: 'CipSoftFail',
+  },
+  {
+    path: 'cip/address-verification',
+    component: 'CipAddressVerification',
+  },
+  {
+    path: 'cip/phone-verification',
+    component: 'CipPhoneVerification',
+  },
 ];

@@ -4,7 +4,7 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import moment from 'moment';
-import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get, isUndefined, pickBy, identity } from 'lodash';
+import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get, isUndefined, pickBy, identity, isEmpty } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
@@ -246,14 +246,14 @@ class FormValidator {
           const fieldKeys = Object.keys(currentForm.fields[field][index]);
           fieldKeys.map((f) => {
             if (Array.isArray(toJS(currentForm.fields[field][index][f].value))) {
-              currentForm.fields[field][index][f].value = [];
+              currentForm.fields[field][index][f].value = currentForm.fields[field][index][f].defaultValue || [];
               if (currentForm.fields[field][index][f].objType === 'FileObjectType') {
                 currentForm.fields[field][index][f].fileId = [];
                 currentForm.fields[field][index][f].fileData = [];
                 currentForm.fields[field][index][f].preSignedUrl = [];
               }
             } else {
-              currentForm.fields[field][index][f].value = '';
+              currentForm.fields[field][index][f].value = currentForm.fields[field][index][f].defaultValue || '';
               if (currentForm.fields[field][index][f].objType === 'FileObjectType') {
                 currentForm.fields[field][index][f].fileId = '';
                 currentForm.fields[field][index][f].fileData = '';
@@ -266,7 +266,7 @@ class FormValidator {
         });
         currentForm.fields[field].splice(1);
       } else {
-        currentForm.fields[field].value = '';
+        currentForm.fields[field].value = currentForm.fields[field].defaultValue || '';
         if (currentForm.fields[field].objType === 'FileObjectType') {
           currentForm.fields[field].fileId = '';
           currentForm.fields[field].fileData = '';
@@ -285,6 +285,9 @@ class FormValidator {
   setAddressFields = (place, form) => {
     const currentForm = form;
     const data = Helper.gAddressClean(place);
+    if (isEmpty(data)) {
+      return false;
+    }
     if (currentForm.fields.street) {
       this.onChange(currentForm, { name: 'street', value: data.residentalStreet });
     } else {
@@ -292,7 +295,7 @@ class FormValidator {
     }
     this.onChange(currentForm, { name: 'state', value: data.state || '' });
     this.onChange(currentForm, { name: 'city', value: data.city || '' });
-    this.onChange(currentForm, { name: 'zipCode', value: data.zipCode || '' });
+    return this.onChange(currentForm, { name: 'zipCode', value: data.zipCode || '' });
   }
 
   setAddressFieldsIndex = (place, form, formName, subForm = 'data', index, action = false, US_STATES = false) => {
@@ -371,9 +374,9 @@ class FormValidator {
           },
         };
       } else {
-        fields[key].value = fields[key].hasOwnProperty('default') ? fields[key].default : '';
+        fields[key].value = fields[key].hasOwnProperty('defaultValue') ? fields[key].defaultValue : '';
         // fields[key].value = typeof fields[key].value === 'number' ? '' :
-        // fields[key].hasOwnProperty('default') ? fields[key].default : '';
+        // fields[key].hasOwnProperty('defaultValue') ? fields[key].defaultValue : '';
       }
     });
     return fields;

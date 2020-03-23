@@ -242,17 +242,33 @@
             font-size:@14px;
         }
         > input{
-            max-width:30px;
+            max-width:55px;
             margin:0 @3px;
-            font-size:@22px;
+            font-size:@15px;
+            line-height: 24px;
             padding:@12px 0;
             text-align:center;
-            border-width:2px !important;
-            background-color:@neutral-offwhite !important;
+            border: 1px solid @neutral-offdark !important;
+            background-color:@white !important;
+            border-radius: 4px;
+            @media only screen and (max-width:@largestMobileScreen){
+                max-width: @46px;
+            }
             &[type=number]{
                 -webkit-appearance:none;
                 -moz-appearance:textfield;
             }
+            &:focus, &:active{
+                border-radius: 4px;
+                border-color: @primary-one !important;
+                box-shadow: 0px 1px 2px rgba(49, 51, 61, 0.25) !important;
+            }
+            &:first-child{
+                margin-left: 0;
+            }
+        }
+        ~.ui.button.link-button{
+            font-weight: @normal;
         }
     }
     .fields{
@@ -906,4 +922,10 @@ textarea{
 
 .ui.icon.input>i.icon.ns-view.active{
     color:@link-color;
+}
+.field .display-only.disabled.no-border, .field.display-only.no-border{
+    opacity: 1;
+    input{
+        border: 0;
+    }
 }

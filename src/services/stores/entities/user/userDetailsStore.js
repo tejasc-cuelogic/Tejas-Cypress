@@ -5,7 +5,8 @@ import cookie from 'react-cookies';
 import moment from 'moment';
 import { mapValues, map, concat, set, isEmpty, difference, pick, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator } from '../../../../helper';
+import { GqlClient as clientPublic } from '../../../../api/publicApi';
+import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM, USER_PROFILE_PREFERRED_INFO } from '../../../constants/user';
 import {
   identityStore,
@@ -21,12 +22,14 @@ import {
   userStore,
 } from '../../index';
 import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminUserHardDelete, adminUpdateUserStatus, adminSkipAddressOrPhoneValidationCheck, frozenAccountActivityDetected, adminFreezeAccount, adminFetchEmails } from '../../queries/users';
-import { updateUserProfileData } from '../../queries/profile';
+import { updateUserProfileData, checkEmailExistsPresignup } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
+
+  @observable checkEmail = null;
 
   @observable userFirstLoad = false;
 
@@ -73,6 +76,8 @@ export class UserDetailsStore {
   @observable displayMode = true;
 
   @observable emailListArr = [];
+
+  userPayLoad = {};
 
   @action
   setFieldValue = (field, value) => {
@@ -243,20 +248,22 @@ export class UserDetailsStore {
         individualAccountStore.populateData(this.userDetails);
       } else if (investmentAccType === 'entity') {
         entityAccountStore.populateData(this.userDetails);
+      } else if (investmentAccType === 'investorProfile') {
+        investorProfileStore.populateData(this.userDetails);
       }
-      investorProfileStore.populateData(this.userDetails);
     }
   }
 
   @action
-  updateUserDetails = (key, payload, path) => {
-    const tempData = { ...this.currentUser };
-    if (path) {
-      tempData.data.user[key] = set({ ...tempData.data.user[key], ...payload }, path, payload);
+  mergeUserData = (key, payload, objName = 'currentUser', path = false) => {
+    const oldData = { ...this[objName] };
+    if (objName === 'currentUser') {
+      oldData.data.user[key] = path ? set({ ...oldData.data.user[key], ...payload }, path, payload)
+        : { ...oldData.data.user[key], ...payload };
     } else {
-      tempData.data.user[key] = { ...tempData.data.user[key], ...payload };
+      oldData[key] = path ? set({ ...oldData[key], ...payload }, path, payload) : { ...oldData[key], ...payload };
     }
-    this.currentUser = { ...tempData };
+    this[objName] = { ...oldData };
   }
 
   @action
@@ -306,6 +313,13 @@ export class UserDetailsStore {
   });
 
   @action
+  setUserEmail = (newEmail) => {
+    if (newEmail) {
+      this.currentUser.data.user.email.address = newEmail;
+    }
+  }
+
+  @action
   getUser = () => new Promise((res) => {
     this.currentUser = graphql({
       client,
@@ -352,7 +366,8 @@ export class UserDetailsStore {
     let accreditation = get(this.currentUser, 'data.user.accreditation.status');
     accreditation = accreditation === 'CONFIRMED' ? Helper.checkAccreditationExpiryStatus(get(this.currentUser, 'data.user.accreditation.expiration')) === 'ACTIVE' ? 'CONFIRMED' : 'EXPIRED' : accreditation;
     const status = (accreditation === 'CONFIRMED' || entityAccreditation === 'CONFIRMED');
-    return { accreditation: accreditation || entityAccreditation, status, dataRoomStatus: (status || (accreditation === 'REQUESTED' || entityAccreditation === 'REQUESTED')) };
+    const requestedStatus = (accreditation === 'REQUESTED' || entityAccreditation === 'REQUESTED');
+    return { status, dataRoomStatus: (status || (accreditation === 'REQUESTED' || entityAccreditation === 'REQUESTED')), requestedStatus };
   }
 
   @computed
@@ -468,7 +483,7 @@ export class UserDetailsStore {
             freeze,
             reason: message,
           },
-          refetchQueries: [{ query: userDetailsQuery, variables: { userId } }],
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId, includePrefInfo: false } }],
         })
         .then(() => {
           resolve();
@@ -633,10 +648,10 @@ export class UserDetailsStore {
         this.setSignUpDataForMigratedUser(this.userDetails);
         routingUrl = '/welcome-email';
       } else if (!this.signupStatus.isMigratedFullAccount && !get(this.userDetails, 'cip.requestId')) {
-        routingUrl = '/dashboard/setup/identity-verification/0';
+        routingUrl = '/dashboard/setup/cip';
       } else if ((get(this.userDetails, 'cip.requestId'))) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
-          routingUrl = '/dashboard/setup/identity-verification/3';
+          routingUrl = '/dashboard/setup/phone-verification';
         } else if (!this.signupStatus.investorProfileCompleted) {
           routingUrl = '/dashboard/setup/establish-profile';
         }
@@ -647,9 +662,9 @@ export class UserDetailsStore {
       && this.signupStatus.idVerification !== 'OFFLINE'
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
-      routingUrl = '/dashboard/setup/identity-verification/0';
+      routingUrl = '/dashboard/setup/cip';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
-      routingUrl = '/dashboard/setup/identity-verification/3';
+      routingUrl = '/dashboard/setup/phone-verification';
     } else if (!this.signupStatus.investorProfileCompleted) {
       routingUrl = '/dashboard/setup/establish-profile';
     } else if (isEmpty(investorAccountCreatedList)) {
@@ -709,7 +724,7 @@ export class UserDetailsStore {
           return true;
         });
       }
-      this.USER_INVESTOR_PROFILE.fields.investorProfileType = get(details, 'investorProfileData.annualIncome') || '';
+      this.USER_INVESTOR_PROFILE.fields.taxFilingAs = get(details, 'investorProfileData.taxFilingAs') || '';
     }
     return false;
   }
@@ -858,7 +873,7 @@ export class UserDetailsStore {
   }
 
   @action
-  updateUserProfileForSelectedUser = () => {
+  updateUserProfileForSelectedUser = (email = '') => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
     const preferredInfo = Validator.evaluateFormData(toJS(this.USER_PROFILE_PREFERRED_INFO_FRM.fields));
@@ -879,7 +894,9 @@ export class UserDetailsStore {
     if (String(basicData.ssn).length === 9) {
       legalDetails.ssn = basicData.ssn;
     }
-
+    if (email) {
+      profileDetails.emailAddress = email;
+    }
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -892,7 +909,7 @@ export class UserDetailsStore {
             capabilities,
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
-          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id'), includePrefInfo: true } }],
         })
         .then(() => {
           Helper.toast('Profile has been updated.', 'success');
@@ -907,6 +924,40 @@ export class UserDetailsStore {
         });
     });
   }
+
+  @action
+  checkEmailExists = email => new Promise((res) => {
+    if (DataFormatter.validateEmail(email)) {
+      this.checkEmail = graphql({
+        client: clientPublic,
+        query: checkEmailExistsPresignup,
+        variables: {
+          email: email.toLowerCase(),
+        },
+        onFetch: (data) => {
+          if (!this.checkEmail.loading && get(data, 'checkEmailExistsPresignup.isEmailExits')) {
+              this.USER_BASIC.fields.address.error = 'Email already exists, please use different email.';
+              this.USER_BASIC.meta.isValid = false;
+              res(true);
+            uiStore.setProgress(false);
+          } else if (!this.checkEmail.loading && !get(data, 'checkEmailExistsPresignup.isEmailExits')) {
+            this.USER_BASIC.fields.address.error = '';
+            uiStore.setProgress(false);
+            res(false);
+          }
+        },
+        onError: () => {
+          uiStore.setProgress(false);
+        },
+        fetchPolicy: 'network-only',
+      });
+    } else {
+      this.USER_BASIC.fields.address.error = 'Enter valid email address.';
+      this.USER_BASIC.meta.isValid = false;
+      uiStore.setProgress(false);
+      res(true);
+    }
+  });
 
   @action
   updateUserBasicInfo = () => {
@@ -926,7 +977,7 @@ export class UserDetailsStore {
             capabilities: [...capabilities],
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
-          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id'), includePrefInfo: false } }],
         })
         .then(() => {
           Helper.toast('Profile has been updated.', 'success');

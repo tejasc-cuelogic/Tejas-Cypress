@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Dimmer, Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
+import { MaskedInput, FormRadioGroup, FormInput } from '../../../../../theme/form';
 import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
@@ -66,7 +66,7 @@ export default class ManualForm extends Component {
       isEncrypted,
       formLinkBankManually,
       linkBankManuallyChange,
-      accountTypeChange,
+      linkBankManualFormChange,
       linkbankSummary,
     } = this.props.bankAccountStore;
     if (showAddFunds) {
@@ -79,16 +79,16 @@ export default class ManualForm extends Component {
       return (
         <Dimmer className="fullscreen" active={inProgress}>
           <Loader active={inProgress}>
-          Please wait...
+            Please wait...
           </Loader>
         </Dimmer>
       );
     }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
-      <div className={isMobile ? '' : 'center-align'}>
-        <Header as="h3">
-        Enter your bank account and routing number
+      <div>
+        <Header as="h4">
+          Enter your bank account and routing number
         </Header>
         <Form error={!!errors} onSubmit={this.handleSubmitForm}>
           <Form.Field className={isMobile ? 'mb-40' : 'mb-50'}>
@@ -96,15 +96,15 @@ export default class ManualForm extends Component {
               {
                 <FormRadioGroup
                   fielddata={formLinkBankManually.fields.accountType}
-                  changed={accountTypeChange}
+                  changed={linkBankManualFormChange}
                   name="accountType"
                   value={formLinkBankManually.fields.value}
-                  containerclassname={`${isMobile ? 'horizontal' : ''} button-radio center-align`}
+                  containerclassname={`${isMobile ? 'horizontal no-flex-wrap' : 'two wide'} button-radio`}
                 />
               }
             </>
           </Form.Field>
-          <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
+          <div className="left-align">
             <MaskedInput
               name="accountNumber"
               type="tel"
@@ -123,19 +123,28 @@ export default class ManualForm extends Component {
               routingNumber
               className="fs-block"
             />
+            <FormInput
+              name="bankName"
+              type="tel"
+              fielddata={formLinkBankManually.fields.bankName}
+              changed={linkBankManualFormChange}
+              value={formLinkBankManually.fields.bankName.value}
+              routingNumber
+              className="fs-block"
+            />
           </div>
           {errors
             && (
-            <p className="error mb-30">
-              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />
-              {' '}
-              {/* <ListErrors errors={[errors.message]} /> */}
-            </p>
+              <p className="error mb-30">
+                <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />
+                {' '}
+                {/* <ListErrors errors={[errors.message]} /> */}
+              </p>
             )
           }
-          <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
+          <Button primary size="large" fluid={isMobile} className="mt-30 relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
         </Form>
-        <div className="center-align">
+        <div className={isMobile && 'center-align'}>
           <Button color="green" className="link-button mt-30" content="Link bank account automatically" onClick={this.linkAccountDirectly} />
         </div>
       </div>

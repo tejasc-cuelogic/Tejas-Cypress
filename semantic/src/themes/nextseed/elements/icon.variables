@@ -124,6 +124,8 @@
 @ns-bell: "\e909";
 @ns-box: "\e90a";
 @ns-business: "\e90b";
+@ns-business-circle: "\e9ab";
+@ns-building-circle: "\e9ac";
 @ns-calculator-icon: "\e9a1";
 @ns-calendar: "\e90c";
 @ns-campaign-dashboard: "\e994";
@@ -217,6 +219,7 @@
 @ns-minus: "\e99e";
 @ns-minus-circle: "\e9a0";
 @ns-minus-square: "\e986";
+@ns-money-circle: "\e9aa";
 @ns-new-business: "\e95d";
 @ns-new-location: "\e95e";
 @ns-new-product: "\e95f";

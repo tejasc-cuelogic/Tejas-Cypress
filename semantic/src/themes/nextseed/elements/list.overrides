@@ -78,6 +78,17 @@
     &.capital-list{
         column-count: 2;
     }
+    &.agreement-list{
+        column-count:2;
+        column-gap: 30px;
+        @media only screen and (max-width : @largestMobileScreen){
+            column-count: 1;
+        }
+        >.item{
+            padding:0 !important;
+            margin:0 0 @20px !important;
+        }
+    }
     &.job-list>.item{
         .header, .content{
             line-height: 26px;
@@ -94,6 +105,34 @@
             padding-top: 0;
             >i.icon{
                 margin-left: -@30px;
+            }
+        }
+    }
+    &.summary-term-list>.item>.content{
+        padding: @17px @30px;
+        @media only screen and (max-width : @largestMobileScreen){
+            padding: @15px @35px;
+        }
+        font-size: @15px;
+        line-height: 24px;
+        .description{
+            color: @neutral;
+        }
+        >.list{
+            padding: @7px 0 0 @30px;
+            @media only screen and (max-width : @largestMobileScreen){
+                padding: @7px 0;
+            }
+            >.item{
+                padding: 0;
+                >.content{
+                    padding: 0;
+                    .header, .description{
+                        line-height: 24px;
+                        font-weight: @normal;
+                        color: @neutral-middark;
+                    }
+                }
             }
         }
     }

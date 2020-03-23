@@ -72,7 +72,7 @@ export default class Contingency extends Component {
     const fields = { ...LAUNCH_CONTITNGENCIES_FRM.fields, ...CLOSING_CONTITNGENCIES_FRM.fields };
     updateOffering(currentOfferingId, fields, 'contingencies');
     this.props.history.push(this.props.refLink);
-  }
+    }
 
   removeData = () => {
     const { confirmModalName } = this.props.offeringCreationStore;

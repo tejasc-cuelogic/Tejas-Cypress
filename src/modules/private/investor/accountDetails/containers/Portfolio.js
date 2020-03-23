@@ -15,6 +15,7 @@ import CancelInvestment from '../components/portfolio/CancelInvestment';
 import { InlineLoader, IframeModal } from '../../../../../theme/shared';
 import InvestNow from '../../../../public/offering/components/investNow/InvestNow';
 import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
+import AgreementTemplate from '../../../../shared/campaign/AgreementTemplate';
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
@@ -105,19 +106,20 @@ export default class Portfolio extends PureComponent {
   }
 
   routesList = () => {
-    const { match } = this.props;
+    const { match, campaignStore } = this.props;
+    const AgreementComponent = campaignStore.campaignStatus.isAgreementTemplate ? AgreementTemplate : Agreement;
     return (
       <Switch>
         <Route
           path={`${match.url}/investment-details/:offeringSlug`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}
         />
-        <Route exact path={`${match.url}/:offeringId/invest-now/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={match.params.offeringId} refLink={match.url} {...props} />} />
+        <Route exact path={`${match.url}/:offeringId/invest-now/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment offeringId={match.params.offeringId} refLink={match.url} {...props} />} />
         <Route
           path={`${match.url}/:offeringId/invest-now`}
           render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
         />
-        <Route exact path={`${match.url}/:offeringId/agreement`} render={() => <Agreement changeInvestment refLink={match.url} />} />
+        <Route exact path={`${match.url}/:offeringId/agreement`} render={() => <AgreementComponent changeInvestment refLink={match.url} />} />
         <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}`} {...props} />} />
         <Route path={`${match.url}/:offeringId/congratulation`} render={() => <Congratulation changeInvestment />} />
         <Route
@@ -136,6 +138,7 @@ export default class Portfolio extends PureComponent {
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
     const { referralData } = this.props.referralsStore;
     const { getActiveAccounts } = userDetailsStore;
+
     if (portfolioStore.loading) {
       return (
         <>

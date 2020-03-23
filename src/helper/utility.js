@@ -366,6 +366,17 @@ export class Utility {
     modal.classList.add(addClass);
   }
 
+  customModalWrapper = () => {
+    const mountNode = document.getElementsByClassName('custom-modal-wrapper');
+    if (mountNode) {
+      return mountNode[0];
+    }
+    const node = document.createElement('div');
+    node.className = 'custom-modal-wrapper';
+    document.body.appendChild(node);
+    return node;
+  }
+
   pageTitle = (t = '') => {
     try {
       return (!['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV) ? `[${REACT_APP_DEPLOY_ENV}] | ${t}` : t);
@@ -389,6 +400,8 @@ export class Utility {
     const regulationType = _.get(offeringRegulationArr, '[0]');
     return regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
   }
+
+  cleanMsg = msg => (msg ? msg.replace('GraphQL error: ', '').replace('Error: ', '') : '');
 }
 
 export default new Utility();

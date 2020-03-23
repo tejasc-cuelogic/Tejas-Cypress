@@ -1,5 +1,5 @@
 import { toJS, observable, computed, action } from 'mobx';
-import { filter, uniqBy, get, has, reduce } from 'lodash';
+import { filter, uniqBy, get, has, reduce, find } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -110,12 +110,12 @@ export class NewMessage {
         mutation: this.editMessageId ? updateOfferingCommentsInfo : createOfferingComments,
         variables: payload,
       })
-      .then(() => {
+      .then((result) => {
         if (!offeringCreationStore.currentOfferingId) {
           campaignStore.getCampaignDetails(campaignSlug, false);
-        } else {
-          // TODO:  Dynamically update the Comments UI with the new comments vs reinitalizating the whole component
+        } else if (get(result, 'data.createOfferingComments')) {
           this.initRequest();
+          // this.updateCommentThread(get(result, 'data.createOfferingComments'), currentMessageId);
         }
         this.resetMessageForm();
         Helper.toast('Message sent.', 'success');
@@ -224,6 +224,15 @@ export class NewMessage {
       coampaignDetails.id = offeringId;
       campaignStore.concatOfferingComments(coampaignDetails);
     }
+  }
+
+  updateCommentThread = (commentResponse, commentID) => {
+    const { campaign } = campaignStore;
+    const comments = get(campaign, 'comments');
+    const currentComment = find(comments, o => o.id === commentID);
+    const threadArray = currentComment.threadComments;
+    console.log('threadArray ==>', threadArray);
+    console.log(commentResponse);
   }
 }
 

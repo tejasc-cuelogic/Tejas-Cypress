@@ -36,6 +36,20 @@ export default class GenerateDocs extends Component {
     this.props.offeringCreationStore.adminCreateBusinessFiling();
   }
 
+  generateDocList = (securities, equityClass) => {
+    let documentLists = ['escrow', 'resolutionOfBorrowing', 'formC', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'];
+    if ([CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE, CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE].includes(securities)) {
+      documentLists = [...documentLists, 'npa'];
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && ['PREFERRED', 'CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(equityClass)) {
+      documentLists = [...documentLists, 'purchaseAgreement', 'proxyAgreement'];
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && ['LLC_MEMBERSHIP_UNITS'].includes(equityClass)) {
+      documentLists = [...documentLists, 'llcAgreement', 'subscriptionAgreement', 'specialPurposeEntityAgreement'];
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE) {
+      documentLists = [...documentLists, 'safeNote'];
+    }
+    return documentLists;
+  }
+
   render() {
     const { inProgress } = this.props.uiStore;
     const {
@@ -45,11 +59,8 @@ export default class GenerateDocs extends Component {
     const { offer } = this.props.offeringsStore;
     const { match } = this.props;
     const securities = get(offer, 'keyTerms.securities');
-    let documentLists = ['escrow', 'resolutionOfBorrowing', 'formC', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'];
-    documentLists = [CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE, CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE].includes(securities) ? [...documentLists, 'npa'] : [...documentLists];
-    documentLists = securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? [...documentLists, 'purchaseAgreement', 'proxyAgreement'] : [...documentLists];
-    documentLists = securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE ? [...documentLists, 'llcAgreement', 'subscriptionAgreement', 'specialPurposeEntityAgreement'] : [...documentLists];
-    documentLists = securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE ? [...documentLists, 'safeNote'] : [...documentLists];
+    const equityClass = get(offer, 'keyTerms.equityClass');
+    const documentLists = this.generateDocList(securities, equityClass);
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Form>
