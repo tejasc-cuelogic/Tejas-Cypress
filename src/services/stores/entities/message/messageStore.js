@@ -115,6 +115,7 @@ export class NewMessage {
           campaignStore.getCampaignDetails(campaignSlug, false);
         } else if (get(result, 'data.createOfferingComments')) {
           // this.initRequest();
+          // TODO
           this.updateCommentThread(get(result, 'data.createOfferingComments'), currentMessageId);
         }
         this.resetMessageForm();
