@@ -6,7 +6,7 @@ import omitDeep from 'omit-deep';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
 import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC, SUB_HEADER_BASIC } from '../../../../constants/offering/formMeta/offering';
-import { INVEST_NOW_TOC, INVEST_NOW_PAGE } from '../../../../constants/offering/formMeta';
+import { INVEST_NOW_TOC, INVEST_NOW_PAGE, INVEST_NOW_TOC_TEMPLATE } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore } from '../../../index';
@@ -26,11 +26,13 @@ export class ManageOfferingStore extends DataModelStore {
 
   OFFERING_MISC_FRM = Validator.prepareFormObject(OFFERING_MISC);
 
-  onDragSaveEnable = false;
+  INVEST_NOW_TOC_TEMPLATE_FRM = Validator.prepareFormObject(INVEST_NOW_TOC_TEMPLATE);
 
   INVEST_NOW_TOC_FRM = Validator.prepareFormObject(INVEST_NOW_TOC);
 
   INVEST_NOW_PAGE_FRM = Validator.prepareFormObject(INVEST_NOW_PAGE);
+
+  onDragSaveEnable = false;
 
   initLoad = [];
 
@@ -203,7 +205,7 @@ export class ManageOfferingStore extends DataModelStore {
     }
     if (keyName) {
       offeringDetails[keyName] = data;
-      if (keyName !== 'misc' && forms.includes('OFFERING_MISC_FRM')) {
+      if (keyName !== 'misc' && forms && forms.includes('OFFERING_MISC_FRM')) {
         offeringDetails.misc = miscData;
       }
     } else {
@@ -260,6 +262,7 @@ export class ManageOfferingStore extends DataModelStore {
       OFFERING_CONTENT_FRM: { isMultiForm: true },
       OFFERING_MISC_FRM: { isMultiForm: false },
       INVEST_NOW_TOC_FRM: { isMultiForm: true },
+      INVEST_NOW_TOC_TEMPLATE_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
