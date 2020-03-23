@@ -75,6 +75,7 @@ export default class UploadDocument extends Component {
                       fielddata={INCOME_UPLOAD_DOC_FORM.fields[field]}
                       changed={(values, name) => maskChange(values, 'INCOME_UPLOAD_DOC_FORM', name)}
                       currency
+                      type="tel"
                       showerror
                       prefix="$"
                       fluid
