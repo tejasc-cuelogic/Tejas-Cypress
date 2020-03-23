@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { INCOME_EVIDENCE_META } from '../../../../../../../services/constants/investmentLimit';
 import { FormArrowButton } from '../../../../../../../theme/form';
 
-// const isMobile = document.documentElement.clientWidth < 768;
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('accreditationStore')
 @withRouter
 @observer
@@ -35,7 +35,7 @@ export default class IncomeEvidence extends Component {
             : 'You can provide evidence of your status as an accredited investor either by verification from a professional advisor or by uploading documentation evidencing your net worth.          '
           }
         </p> */}
-        <Form error className="account-type-tab">
+        <Form error className={isMobile ? '' : 'account-type-tab'}>
           {/* <Grid columns={1}>
             {incEvidenceMethods.map(method => (
               <Grid.Column

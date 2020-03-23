@@ -23,8 +23,9 @@ export default class FillingStatus extends Component {
               <Button
                 basic
                 fluid={isMobile}
+                primary
                 onClick={(e) => { accreditationMethodChange(e, 'FILLING_STATUS_FORM', { name: 'method', value: method.value }); this.props.submitStep(); }}
-                className={`primary-hover user-type ${(FILLING_STATUS_FORM.fields.method.value === method.value ? 'active' : '')} ${isMobile ? 'mb-10' : ''}`}
+                className={`primary-hover ${(FILLING_STATUS_FORM.fields.method.value === method.value ? 'active' : '')} ${isMobile ? 'mb-10 mr-10' : ' user-type'}`}
               >
                   {method.label}
               </Button>

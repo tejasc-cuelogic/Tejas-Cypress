@@ -167,6 +167,7 @@ export default class PopulateAccreditationSteps extends React.Component {
           isdynamicSteps
           setUiStorevalue={setFieldvalue}
           {...this.props}
+          modalContentClass="signup-content"
         />
       </div>
     );

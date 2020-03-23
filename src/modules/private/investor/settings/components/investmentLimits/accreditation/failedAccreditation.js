@@ -18,6 +18,9 @@ export default class failedAccreditation extends Component {
         headerLogo
         percent={100}
         back={`${this.props.refLink}/${redirectUrl}`}
+        borderedHeader
+        isProgressHeaderDisable
+        modalContentClass="signup-content"
       >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
           <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
