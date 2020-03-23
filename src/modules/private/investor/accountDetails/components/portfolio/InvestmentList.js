@@ -32,7 +32,8 @@ const offeringName = (data) => {
 const getCOllapseCount = (maxLabel, minLabel, header) => {
   const max = header.findIndex(i => i.label === maxLabel);
   const min = header.findIndex(i => i.label === minLabel);
-  return (max - min) - 1;
+  const count = ((max - min) - 1);
+  return count.toString();
 };
 
 const investedAmount = data => (
@@ -133,9 +134,9 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
   const toggleAccordion = () => setActive(!active);
   const mobileMeta = INVESTMENT_CARD_MOBILE.filter(i => (listOf === 'active' ? i.for.includes(listOf)
     && (
-        (i.securityType && (i.securityType.includes('ALL') || i.securityType.includes(get(data, 'offering.keyTerms.securities'))))
-        || (i.equityClass && (i.equityClass.length === 0 || i.equityClass.includes(get(data, 'offering.keyTerms.equityClass'))))
-      )
+      (i.securityType && (i.securityType.includes('ALL') || i.securityType.includes(get(data, 'offering.keyTerms.securities'))))
+      || (i.equityClass && (i.equityClass.length === 0 || i.equityClass.includes(get(data, 'offering.keyTerms.equityClass'))))
+    )
     : i.for.includes(listOf)));
   return (
     <Accordion fluid styled>
@@ -228,20 +229,14 @@ const InvestmentList = (props) => {
 
         <Table.Footer>
           <Table.Row>
-            <Table.HeaderCell colSpan="2" />
-            <Table.HeaderCell>Total:</Table.HeaderCell>
+            <Table.HeaderCell colSpan={props.listOf === 'active' ? '1' : '2'} />
+            <Table.HeaderCell textAlign="right">Total:</Table.HeaderCell>
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
-<<<<<<< HEAD
             <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : props.listOf === 'active' ? getCOllapseCount('Net Payments Received', 'Investment Amount', header) : '3'} />
-=======
-            {props.listOf === 'completed' && <Table.HeaderCell colSpan="2" />}
->>>>>>> a43e1003eeb893071dc2c1330d18ab9e7e3303a9
             {props.listOf !== 'pending'
               && (
                 <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
               )}
-            {props.listOf === 'pending' && <Table.HeaderCell colSpan="3" />}
-            {props.listOf === 'completed' && <Table.HeaderCell colSpan="1" />}
           </Table.Row>
         </Table.Footer>
       </Table>
@@ -288,17 +283,17 @@ const InvestmentList = (props) => {
             <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active={isActive} className="text-capitalize">
               <Icon className={`ns-chevron-${isActive ? 'up' : 'right'}`} />
               {props.listOf === 'pending'
-              ? (
-                <PopUpModal
-                  customTrigger={<span className="popup-label">{`${props.listOf} (${props.listOfCount})`}</span>}
-                  content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed."
-                  position="top center"
-                  showOnlyPopup={!isMobile}
-                />
-              ) : (
-                <span>{`${props.listOf} (${props.listOfCount})`}</span>
-              )
-            }
+                ? (
+                  <PopUpModal
+                    customTrigger={<span className="popup-label">{`${props.listOf} (${props.listOfCount})`}</span>}
+                    content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed."
+                    position="top center"
+                    showOnlyPopup={!isMobile}
+                  />
+                ) : (
+                  <span>{`${props.listOf} (${props.listOfCount})`}</span>
+                )
+              }
             </Accordion.Title>
             <Accordion.Content className="bg-offwhite" active={!props.inActiveItems.includes(props.listOf)}>
               {!investments || !investments.length
