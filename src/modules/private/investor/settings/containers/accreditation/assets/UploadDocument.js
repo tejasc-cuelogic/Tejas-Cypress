@@ -53,6 +53,7 @@ export default class UploadDocument extends Component {
             ondrop={this.onFileDrop}
             onremove={this.handleDelDoc}
             containerclassname="fluid"
+            uploadtitle="Choose a File"
           />
           {!this.props.isEntity && !this.props.isUploadLater
             && (

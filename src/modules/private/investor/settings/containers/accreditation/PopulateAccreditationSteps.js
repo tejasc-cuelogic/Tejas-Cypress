@@ -37,8 +37,8 @@ export default class PopulateAccreditationSteps extends React.Component {
       isHideLabel: true,
       formName: 'ACCREDITATION_FORM',
       isDirty: true,
-      // disablePrevButton: true,
-      backUrl: this.props.refLink,
+      disablePrevButton: true,
+      // backUrl: this.props.refLink,
     },
     NETWORTH_QAL_FORM: {
       name: 'Verify your status',
