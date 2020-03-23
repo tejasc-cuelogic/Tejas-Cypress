@@ -10,10 +10,14 @@ import { INVEST_NOW_TOC, INVEST_NOW_PAGE, INVEST_NOW_TOC_TEMPLATE } from '../../
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore } from '../../../index';
-import { offeringUpsert } from '../../../queries/offerings/manageOffering';
+import { offeringUpsert, adminLockOrUnlockOffering } from '../../../queries/offerings/manageOffering';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 
 export class ManageOfferingStore extends DataModelStore {
+  constructor() {
+    super({ adminLockOrUnlockOffering });
+  }
+
   TOMBSTONE_BASIC_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
 
   TOMBSTONE_HEADER_META_FRM = Validator.prepareFormObject(TOMBSTONE_HEADER_META);
@@ -251,6 +255,25 @@ export class ManageOfferingStore extends DataModelStore {
         Helper.toast('Something went wrong.', 'error');
         uiStore.setProgress(false);
       });
+  };
+
+  adminLockOrUnlockOffering = async (offeringId, offeringAction) => {
+    const variables = {
+      offeringId,
+      action: offeringAction,
+    };
+    try {
+      await this.executeMutation({
+        mutation: 'adminLockOrUnlockOffering',
+        clientType: 'PRIVATE',
+        variables,
+      });
+      Helper.toast('Offering updated successfully.', 'success');
+      Promise.resolve();
+    } catch (error) {
+      Helper.toast('Something went wrong. Please try again in some time.', 'error');
+      Promise.reject();
+    }
   };
 
   getActionType = (formName, getField = 'actionType') => {

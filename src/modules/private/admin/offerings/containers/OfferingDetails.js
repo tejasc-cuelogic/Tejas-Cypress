@@ -14,6 +14,7 @@ import EditPoc from '../components/EditPocModal';
 import { REACT_APP_DEPLOY_ENV, NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Helper from '../../../../../helper/utility';
 import { STAGES } from '../../../../../services/constants/admin/offerings';
+import LockUnlockOffering from '../components/LockUnlockOffering';
 
 
 @inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore', 'businessAppStore')
@@ -107,6 +108,7 @@ export default class OfferingDetails extends Component {
     const offeringState = !['CREATION'].includes(offer.stage) ? 'OTHER' : offer.stage;
     navItems = navStore.manageNavigationOrder(navItems, offeringState);
     const { responsiveVars } = this.props.uiStore;
+    // const isLocked = true;
     return (
       <>
         <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
@@ -130,6 +132,7 @@ export default class OfferingDetails extends Component {
                 </Header.Subheader>
               </Header>
             </CopyToClipboard>
+            <LockUnlockOffering />
             {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
               <SecondaryMenu isBonusReward bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
