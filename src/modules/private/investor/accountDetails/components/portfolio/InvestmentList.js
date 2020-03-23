@@ -96,7 +96,7 @@ const INVESTMENT_CARD_META = [
   { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], children: data => offeringName(data), isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: (value, equityClass, investorInvestedAmount, classThreshold) => getSecurityTitle(value, equityClass, investorInvestedAmount, classThreshold), for: isMobile ? ['pending'] : ['pending', 'completed'], isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Investment Amount', key: 'investedAmount', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], getRowValue: value => Helper.CurrencyFormat(value), children: data => investedAmount(data), isMobile: true, isDesktop: true, className: 'text-capitalize', securityType: [] },
-  { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], children: data => closeDate(data), isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], children: data => closeDate(data), isMobile: true, isDesktop: true, securityType: ['ALL'] },
   { label: 'Investment Multiple', key: 'offering.closureSummary.keyTerms.multiple', for: ['active'], getRowValue: value => `${value}x`, isMobile: true, isDesktop: true, securityType: ['REVENUE_SHARING_NOTE'] },
   { label: 'Status', key: 'offering.stage', for: isMobile ? ['pending', 'completed'] : ['pending', 'completed'], getRowValue: value => STAGES[value].label, children: data => stageLabel(data), isMobile: true, isDesktop: true, securityType: [] },
   {
@@ -127,7 +127,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
   const toggleAccordion = () => setActive(!active);
   const mobileMeta = INVESTMENT_CARD_MOBILE.filter(i => (listOf === 'active' ? i.for.includes(listOf)
     && (
-        (i.securityType && (i.securityType === 'ALL' || i.securityType.includes(get(data, 'offering.keyTerms.securities'))))
+        (i.securityType && (i.securityType.includes('ALL') || i.securityType.includes(get(data, 'offering.keyTerms.securities'))))
         || (i.equityClass && (i.equityClass.length === 0 || i.equityClass.includes(get(data, 'offering.keyTerms.equityClass'))))
       )
     : i.for.includes(listOf)));
@@ -222,7 +222,7 @@ const InvestmentList = (props) => {
 
         <Table.Footer>
           <Table.Row>
-            <Table.HeaderCell colSpan={['active', 'completed'].includes(props.listOf) ? '1' : '2'} />
+            <Table.HeaderCell colSpan={['active'].includes(props.listOf) ? '1' : '2'} />
             <Table.HeaderCell>Total:</Table.HeaderCell>
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
             <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : '3'} />
@@ -238,12 +238,12 @@ const InvestmentList = (props) => {
   );
   const listAsPerSecurityType = {};
   const listHeaderAsPerSecurityType = {};
-  const listMetaByType = INVESTMENT_CARD_META.filter(i => i.for.includes(listOf) && i.isDesktop);
+  const listMetaByType = INVESTMENT_CARD_META.filter(i => ((i.for.includes(listOf) && i.isDesktop)));
   const keytermsSecurityTypes = Object.keys(CAMPAIGN_KEYTERMS_SECURITIES_ENUM);
   if (props.listOf === 'active') {
     keytermsSecurityTypes.forEach((type) => {
       listAsPerSecurityType[type] = props.investments.filter(i => get(i, 'offering.keyTerms.securities') === type);
-      listHeaderAsPerSecurityType[type] = listMetaByType.filter(i => i.securityType.length === 0 || i.securityType.includes(type));
+      listHeaderAsPerSecurityType[type] = listMetaByType.filter(i => i.securityType.includes('ALL') || i.securityType.includes(type));
     });
   }
   return (
