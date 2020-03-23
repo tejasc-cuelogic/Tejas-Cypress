@@ -58,6 +58,7 @@ export default class UploadDocument extends Component {
                     ondrop={this.onFileDrop}
                     onremove={this.handleDelDoc}
                     containerclassname="fluid"
+                    uploadtitle="Choose a File"
                   />
                 </Grid.Column>
               ))
