@@ -114,8 +114,8 @@ export class NewMessage {
         if (!offeringCreationStore.currentOfferingId) {
           campaignStore.getCampaignDetails(campaignSlug, false);
         } else if (get(result, 'data.createOfferingComments')) {
-          this.initRequest();
-          // this.updateCommentThread(get(result, 'data.createOfferingComments'), currentMessageId);
+          // this.initRequest();
+          this.updateCommentThread(get(result, 'data.createOfferingComments'), currentMessageId);
         }
         this.resetMessageForm();
         Helper.toast('Message sent.', 'success');
@@ -229,10 +229,13 @@ export class NewMessage {
   updateCommentThread = (commentResponse, commentID) => {
     const { campaign } = campaignStore;
     const comments = get(campaign, 'comments');
-    const currentComment = find(comments, o => o.id === commentID);
-    const threadArray = currentComment.threadComments;
-    console.log('threadArray ==>', threadArray);
-    console.log(commentResponse);
+    if (commentID) {
+      const currentComment = find(comments, o => o.id === commentID);
+      const threadArray = currentComment.threadComments;      
+      threadArray.push(commentResponse);
+    } else {
+      comments.push(commentResponse);
+    }
   }
 }
 
