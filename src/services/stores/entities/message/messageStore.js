@@ -232,7 +232,7 @@ export class NewMessage {
     const comments = get(campaign, 'comments');
     if (commentID) {
       const currentComment = find(comments, o => o.id === commentID);
-      const threadArray = currentComment.threadComments;      
+      const threadArray = currentComment.threadComments;
       threadArray.push(commentResponse);
     } else {
       comments.push(commentResponse);
