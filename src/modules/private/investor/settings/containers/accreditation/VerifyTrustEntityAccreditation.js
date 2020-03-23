@@ -33,6 +33,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
     const { accountType } = this.props;
     if (step.formName === 'TRUST_ENTITY_ACCREDITATION_FRM' && this.props.accreditationStore[step.formName].fields.method.value !== 'ASSETS') {
       this.props.accreditationStore.setFieldVal('accType', 'trust');
+      this.props.accreditationStore.setAccreditationInialStepState({ openState: false });
       this.props.history.push(`${this.props.refLink}/falied`);
       return;
     }
