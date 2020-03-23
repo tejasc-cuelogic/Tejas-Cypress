@@ -34,6 +34,7 @@ export default class Accreditation extends React.Component {
   multiClickHandler = (step) => {
     const { accountType } = this.props;
     if (step.formName === 'NETWORTH_QAL_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'NONETWORTH') {
+      this.props.accreditationStore.setAccreditationInialStepState({ openState: false });
       this.props.history.push(`${this.props.refLink}/falied`);
       return;
     }
