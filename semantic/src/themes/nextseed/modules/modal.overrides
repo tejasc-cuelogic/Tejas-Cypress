@@ -118,12 +118,12 @@
     .ui.modal.link-bank-modal>.icon:first-child+.dimmer{
         border-radius: 0;
     }
-    // &[class*="top aligned"] .ui.modal.scrolling.multistep-modal{
-    //     margin: 5vh auto !important;
-    //     @media only screen and (max-width:@largestMobileScreen){
-    //         margin: 0 !important;
-    //     }
-    // }
+    &[class*="top aligned"] .ui.modal.scrolling.multistep-modal{
+        margin: 5vh auto !important;
+        @media only screen and (max-width:@largestMobileScreen){
+            margin: 0 !important;
+        }
+    }
 }
 //  Public pages Starts
 .ui.modal{

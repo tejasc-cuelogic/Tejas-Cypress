@@ -337,7 +337,7 @@ export default class MultiStep extends React.Component {
               {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
             </Loader>
           </Dimmer>
-          <Modal.Content className={this.props.modalContentClass || 'multistep'}>
+          <Modal.Content className="multistep">
             {!isMobile
               ? (
                 <>
