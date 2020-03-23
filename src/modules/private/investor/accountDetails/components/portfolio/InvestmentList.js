@@ -29,6 +29,12 @@ const offeringName = (data) => {
   );
 };
 
+const getCOllapseCount = (maxLabel, minLabel, header) => {
+  const max = header.findIndex(i => i.label === maxLabel);
+  const min = header.findIndex(i => i.label === minLabel);
+  return (max - min) - 1;
+};
+
 const investedAmount = data => (
   <>
     {Helper.CurrencyFormat(data.investedAmount)}
@@ -225,7 +231,7 @@ const InvestmentList = (props) => {
             <Table.HeaderCell colSpan={['active'].includes(props.listOf) ? '1' : '2'} />
             <Table.HeaderCell>Total:</Table.HeaderCell>
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
-            <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : '3'} />
+            <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : props.listOf === 'active' ? getCOllapseCount('Net Payments Received', 'Investment Amount', header) : '3'} />
             {props.listOf !== 'pending'
               && (
                 <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
