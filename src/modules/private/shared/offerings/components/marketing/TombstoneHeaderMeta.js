@@ -14,12 +14,13 @@ const metaInfo = {
 function TombstoneHeaderMeta(props) {
   const { smartElement, manageOfferingStore, offeringsStore, title, noAddMore, hideHighlight } = props;
   const { offer } = offeringsStore;
-  const { TOMBSTONE_HEADER_META_FRM, removeOne, addMore } = manageOfferingStore;
+  const { TOMBSTONE_HEADER_META_FRM, removeOne, addMore, campaignStatus } = manageOfferingStore;
+  const isReadOnly = campaignStatus.lock;
   return (
     <>
       <Header as="h4">
         {title || 'Tombstone Meta'}
-        {!noAddMore && TOMBSTONE_HEADER_META_FRM.fields.meta.length < 5
+        {(!isReadOnly && !noAddMore && TOMBSTONE_HEADER_META_FRM.fields.meta.length < 5)
         && <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMore('TOMBSTONE_HEADER_META_FRM', 'meta')}>+ Add another section</Button>
         }
       </Header>
@@ -30,28 +31,28 @@ function TombstoneHeaderMeta(props) {
                 {!hideHighlight
                 && (
                 <Table.Cell collapsing>
-                  {smartElement.FormCheckBox('isHighlight', { multiForm: [metaInfo.form, 'meta', i], toggle: true, defaults: true })}
+                  {smartElement.FormCheckBox('isHighlight', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', i], toggle: true, defaults: true })}
                 </Table.Cell>
                 )}
                 <Table.Cell>
-                  {smartElement.Input('keyLabel', { multiForm: [metaInfo.form, 'meta', i] })}
+                  {smartElement.Input('keyLabel', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', i] })}
                 </Table.Cell>
                 <Table.Cell>
-                  {smartElement.FormSelect('keyType', { multiForm: [metaInfo.form, 'meta', i] })}
+                  {smartElement.FormSelect('keyType', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', i] })}
                 </Table.Cell>
                 {TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyType.value === 'custom' && (
                   <Table.Cell>
-                    {smartElement.Input('keyValue', { label: 'Custom Value', multiForm: [metaInfo.form, 'meta', i] })}
+                    {smartElement.Input('keyValue', { label: 'Custom Value', displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', i] })}
                   </Table.Cell>
                 )}
                 {TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
                   <Table.Cell>
-                    {smartElement.FormSelect('keyValue', { label: 'Key List', multiForm: [metaInfo.form, 'meta', i] })}
+                    {smartElement.FormSelect('keyValue', { label: 'Key List', displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', i] })}
                   </Table.Cell>
                 )}
                 {TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
                   <Table.Cell>
-                    {smartElement.Input('keyFormat', { multiForm: [metaInfo.form, 'meta', i] })}
+                    {smartElement.Input('keyFormat', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', i] })}
                   </Table.Cell>
                 )}
                 {TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
@@ -59,7 +60,7 @@ function TombstoneHeaderMeta(props) {
                     {<div className="field">{TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyLabel.value ? TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyLabel.value : 'N/A'}:  {get(offer, TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyValue.value) ? Helper.formatValue(TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyFormat.value, Helper.enumToText(TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyValue.value, get(offer, TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyValue.value), true)) : 'N/A'}</div>}
                   </Table.Cell>
                 )}
-                {TOMBSTONE_HEADER_META_FRM.fields.meta.length > 1 && (
+                {!isReadOnly && TOMBSTONE_HEADER_META_FRM.fields.meta.length > 1 && (
                   <Table.Cell collapsing>
                     <Button icon circular floated="right" className="link-button">
                       <Icon className="ns-trash" onClick={e => removeOne(metaInfo.form, 'meta', i, e)} />

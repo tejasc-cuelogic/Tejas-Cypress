@@ -40,9 +40,9 @@ class CampaignHeader extends Component {
 
   render() {
     const { manageOfferingStore, offeringCreationStore, smartElement } = this.props;
-    const { HEADER_BASIC_FRM } = manageOfferingStore;
+    const { HEADER_BASIC_FRM, campaignStatus } = manageOfferingStore;
     const { currentOfferingId } = offeringCreationStore;
-    const isReadonly = false;
+    const isReadOnly = campaignStatus.lock;
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -52,18 +52,18 @@ class CampaignHeader extends Component {
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{HEADER_BASIC_FRM.fields.heroImage.label}</Header>
-              {smartElement.ImageCropper('heroImage', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
+              {smartElement.ImageCropper('heroImage', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
             <Header as="h4">{HEADER_BASIC_FRM.fields.heroBackgroundImage.label}</Header>
-              {smartElement.ImageCropper('heroBackgroundImage', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
+              {smartElement.ImageCropper('heroBackgroundImage', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
               <Divider hidden />
             </Grid.Column>
           </Grid>
           <Grid columns="2">
             <Grid.Column>
-              {smartElement.Input('heroVideoURL', { readOnly: isReadonly })}
+              {smartElement.Input('heroVideoURL', { displayMode: isReadOnly })}
             </Grid.Column>
             <Grid.Column>
               {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Header Toggle Meta' })}

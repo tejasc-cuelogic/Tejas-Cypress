@@ -35,9 +35,9 @@ class Tombstone extends Component {
 
   render() {
     const { manageOfferingStore, offeringCreationStore, smartElement } = this.props;
-    const { TOMBSTONE_BASIC_FRM } = manageOfferingStore;
+    const { TOMBSTONE_BASIC_FRM, campaignStatus } = manageOfferingStore;
     const { currentOfferingId } = offeringCreationStore;
-    const isReadonly = false;
+    const isReadOnly = campaignStatus.lock;
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -45,13 +45,13 @@ class Tombstone extends Component {
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.image.label}</Header>
-              {smartElement.ImageCropper('image', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
+              {smartElement.ImageCropper('image', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
               <Header as="h4">Tombstone</Header>
-              {smartElement.Input('customTag', { readOnly: isReadonly })}
-              {smartElement.FormTextarea('description', { readOnly: isReadonly, containerclassname: 'secondary' })}
+              {smartElement.Input('customTag', { readOnly: isReadOnly })}
+              {smartElement.FormTextarea('description', { readOnly: isReadOnly, containerclassname: 'secondary' })}
               {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Tombstone Toggle Meta' })}
             </Grid.Column>
           </Grid>

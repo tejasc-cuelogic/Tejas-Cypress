@@ -26,11 +26,11 @@ class InvestNowToc extends Component {
 
   render() {
     const { smartElement, match, manageOfferingStore, uiStore, offeringsStore } = this.props;
-    const { getAgreementTocList } = manageOfferingStore;
+    const { getAgreementTocList, campaignStatus } = manageOfferingStore;
     const { offer } = offeringsStore;
     const regulation = get(offer, 'regulation');
     const { inProgress } = uiStore;
-    const isReadOnly = false;
+    const isReadOnly = campaignStatus.lock;
     const panes = Object.keys(getAgreementTocList).map(key => ({
       menuItem: CAMPAIGN_KEYTERMS_REGULATION[key], render: () => (<InvestNowTocList regulation={key} refLink={match.url} data={getAgreementTocList[key]} />),
     }));

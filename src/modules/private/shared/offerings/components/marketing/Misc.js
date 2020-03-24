@@ -34,24 +34,24 @@ class Misc extends Component {
   render() {
     const { smartElement, manageOfferingStore, offeringCreationStore } = this.props;
     const { currentOfferingId } = offeringCreationStore;
-    const { OFFERING_MISC_FRM } = manageOfferingStore;
-    const isReadonly = false;
+    const { OFFERING_MISC_FRM, campaignStatus } = manageOfferingStore;
+    const isReadOnly = campaignStatus.lock;
     return (
       <div className="inner-content-spacer">
         <Form>
           <Grid columns="2">
             <Grid.Column>
             <Header as="h4">{OFFERING_MISC_FRM.fields.logo.label}</Header>
-            {smartElement.ImageCropper('logo', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
+            {smartElement.ImageCropper('logo', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
             <Header as="h4">{OFFERING_MISC_FRM.fields.avatar.label}</Header>
-            {smartElement.ImageCropper('avatar', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}            </Grid.Column>
+            {smartElement.ImageCropper('avatar', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}            </Grid.Column>
           </Grid>
           <Form.Field>
             <Header as="h6">{OFFERING_MISC_FRM.fields.issuerStatement.label}</Header>
-            {smartElement.HtmlEditor('issuerStatement', { readOnly: isReadonly, imageUploadPath: `offerings/${currentOfferingId}` })}
+            {smartElement.HtmlEditor('issuerStatement', { readOnly: isReadOnly, imageUploadPath: `offerings/${currentOfferingId}` })}
           </Form.Field>
           {/* <Header as="h4">Social Media
             <Header.Subheader>
@@ -60,7 +60,7 @@ class Misc extends Component {
           </Header>
           {
             ['facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url', 'yelp_url'].map(field => (
-              smartElement.Input(field, { displayMode: isReadonly, key: field })
+              smartElement.Input(field, { displayMode: isReadOnly, key: field })
             ))
           }
           <Divider section /> */}
@@ -74,10 +74,10 @@ class Misc extends Component {
               <>
                 <Header as="h6">{capitalize(field)}</Header>
                 <Form.Group>
-                  {smartElement.Input(`${field}_shareLink`, { displayMode: isReadonly, key: field, containerwidth: '10' })}
-                  {smartElement.DropZone(`${field}_featuredImageUpload`, { S3Upload: true, uploadPath: `offerings/${currentOfferingId}`, displayMode: isReadonly, key: field, uploadtitle: 'Choose a file or drag it here', containerclassname: 'field six wide' })}
+                  {smartElement.Input(`${field}_shareLink`, { displayMode: isReadOnly, key: field, containerwidth: '10' })}
+                  {smartElement.DropZone(`${field}_featuredImageUpload`, { S3Upload: true, uploadPath: `offerings/${currentOfferingId}`, displayMode: isReadOnly, key: field, uploadtitle: 'Choose a file or drag it here', containerclassname: 'field six wide' })}
                 </Form.Group>
-                {smartElement.FormTextarea(`${field}_blurb`, { readOnly: isReadonly, containerclassname: 'secondary' })}
+                {smartElement.FormTextarea(`${field}_blurb`, { readOnly: isReadOnly, containerclassname: 'secondary' })}
               </>
             ))
           }

@@ -291,6 +291,11 @@ export const getOfferingDetails = gql`
         isInvestedInOffering
         tranche
       }
+      lock {
+        userId
+        user
+        date
+      }
       offeringSlug
       referralCode
       previewPassword

@@ -47,8 +47,8 @@ class OfferingContent extends Component {
   render() {
     const { smartElement, index, offeringCreationStore, manageOfferingStore } = this.props;
     const { currentOfferingId } = offeringCreationStore;
-    const { OFFERING_CONTENT_FRM, onDragSaveEnable } = manageOfferingStore;
-    const isReadonly = false;
+    const { OFFERING_CONTENT_FRM, onDragSaveEnable, campaignStatus } = manageOfferingStore;
+    const isReadOnly = campaignStatus.lock;
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -71,7 +71,7 @@ class OfferingContent extends Component {
               <Form.Group widths={1}>
                 <Form.Field>
                   <Header as="h6">{OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM' ? OFFERING_CONTENT_FRM.fields.content[index].customValue.label : 'Issuer Statement'}</Header>
-                  {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: isReadonly, imageUploadPath: `offerings/${currentOfferingId}` })}
+                  {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: isReadOnly, imageUploadPath: `offerings/${currentOfferingId}` })}
                 </Form.Field>
               </Form.Group>
             )}

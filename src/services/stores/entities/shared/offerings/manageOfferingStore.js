@@ -9,7 +9,7 @@ import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT,
 import { INVEST_NOW_TOC, INVEST_NOW_PAGE, INVEST_NOW_TOC_TEMPLATE } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { offeringCreationStore, offeringsStore, uiStore } from '../../../index';
+import { offeringCreationStore, offeringsStore, uiStore, userDetailsStore } from '../../../index';
 import { offeringUpsert, adminLockOrUnlockOffering } from '../../../queries/offerings/manageOffering';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 
@@ -117,10 +117,12 @@ export class ManageOfferingStore extends DataModelStore {
   }
 
   get campaignStatus() {
+    const { currentUserId } = userDetailsStore;
     console.log(this.TOMBSTONE_BASIC_FRM);
     const { offer } = offeringsStore;
     const campaignStatus = {};
     const closingDate = get(offer, 'closureSummary.processingDate') && get(offer, 'closureSummary.processingDate') !== 'Invalid date' ? get(offer, 'closureSummary.processingDate') : null;
+    campaignStatus.lock = get(offer, 'lock.userId') && currentUserId !== get(offer, 'lock.userId');
     campaignStatus.diff = DataFormatter.diffDays(closingDate || null, false, true);
     campaignStatus.diffForProcessing = DataFormatter.getDateDifferenceInHoursOrMinutes(closingDate, true, true);
     campaignStatus.countDown = (includes(['Minute Left', 'Minutes Left'], campaignStatus.diffForProcessing.label) && campaignStatus.diffForProcessing.value > 0) || campaignStatus.diffForProcessing.value <= 48 ? { valueToShow: campaignStatus.diffForProcessing.value, labelToShow: campaignStatus.diffForProcessing.label } : { valueToShow: campaignStatus.diff, labelToShow: campaignStatus.diff === 1 ? 'Day Left' : 'Days Left' };
@@ -252,14 +254,18 @@ export class ManageOfferingStore extends DataModelStore {
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
+        if (get(err, 'message') && get(err, 'message').includes('has locked the offering')) {
+          Helper.toast(get(err, 'message'), 'error');
+        } else {
+          Helper.toast('Something went wrong.', 'error');
+        }
         uiStore.setProgress(false);
       });
   };
 
-  adminLockOrUnlockOffering = async (offeringId, offeringAction) => {
+  adminLockOrUnlockOffering = offeringAction => new Promise(async (res, rej) => {
     const variables = {
-      offeringId,
+      offeringId: offeringCreationStore.currentOfferingId,
       action: offeringAction,
     };
     try {
@@ -268,13 +274,11 @@ export class ManageOfferingStore extends DataModelStore {
         clientType: 'PRIVATE',
         variables,
       });
-      Helper.toast('Offering updated successfully.', 'success');
-      Promise.resolve();
+      res();
     } catch (error) {
-      Helper.toast('Something went wrong. Please try again in some time.', 'error');
-      Promise.reject();
+      rej(error);
     }
-  };
+  });
 
   getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {

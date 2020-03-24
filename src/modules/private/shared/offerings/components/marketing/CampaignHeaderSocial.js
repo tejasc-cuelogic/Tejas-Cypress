@@ -10,8 +10,9 @@ const metaInfo = {
   };
 
 function CampaignHeaderSocial(props) {
-  const { smartElement } = props;
-  const isReadonly = false;
+  const { smartElement, manageOfferingStore } = props;
+  const { campaignStatus } = manageOfferingStore;
+  const isReadOnly = campaignStatus.lock;
   return (
     <>
       <Header as="h4">Social Media
@@ -21,7 +22,7 @@ function CampaignHeaderSocial(props) {
           </Header>
           {
             ['facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url', 'yelp_url'].map(field => (
-              smartElement.Input(field, { displayMode: isReadonly, key: field })
+              smartElement.Input(field, { displayMode: isReadOnly, key: field })
             ))
           }
           <Divider section />
