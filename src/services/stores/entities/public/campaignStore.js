@@ -76,6 +76,8 @@ export class CampaignStore {
     closingBinder: { selectedDoc: null, accordionActive: true },
   };
 
+  @observable isPostedNewComment = false;
+
   @action
   setFieldValue = (field, val, path = false) => {
     if (path) {

@@ -88,7 +88,7 @@ export class NewMessage {
   }
 
   @action
-  createNewComment = (scope, campaignSlug, currentMessageId, campaignId = null) => {
+  createNewComment = (scope, campaignSlug, currentMessageId, campaignId = null) => new Promise((resolve) => {
     this.setDataValue('buttonLoader', scope);
     this.currentMessageId = currentMessageId;
     const data = Validator.ExtractValues(this.MESSAGE_FRM.fields);
@@ -120,13 +120,15 @@ export class NewMessage {
         }
         this.resetMessageForm();
         Helper.toast('Message sent.', 'success');
+        resolve(true);
       })
       .catch((error) => {
         Helper.toast('Something went wrong please try again after sometime.', 'error');
         uiStore.setErrors(error.message);
+        resolve(false);
       })
       .finally(() => this.setDataValue('buttonLoader', false));
-  }
+  });
 
   @action
   approveComment = (e, id) => {
@@ -228,15 +230,16 @@ export class NewMessage {
   }
 
   updateCommentThread = (commentResponse, commentID) => {
-    const { campaign } = campaignStore;
+    const { campaign, setFieldValue } = campaignStore;
     const comments = get(campaign, 'comments');
     if (commentID) {
       const currentComment = find(comments, o => o.id === commentID);
       const threadArray = currentComment.threadComments;
       threadArray.push(commentResponse);
     } else {
-      comments.push(commentResponse);
+      comments.unshift(commentResponse);
     }
+    setFieldValue('isPostedNewComment', true);
   }
 }
 

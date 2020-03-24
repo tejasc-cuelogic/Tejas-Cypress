@@ -131,8 +131,15 @@ class Comments extends Component {
     }
   }
 
-  send = (scope, campaignSlug, currentMessage, campaignId) => {
-    this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage, campaignId);
+  send = async (scope, campaignSlug, currentMessage, campaignId) => {
+    const response = await this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage, campaignId);
+    if (response) {
+      if (currentMessage) {
+        this.closeTextBox(currentMessage);
+      } else {
+        this.props.messageStore.resetMessageForm();
+      }
+    }
   }
 
   toggleVisibility = (comment = null) => {
@@ -165,13 +172,13 @@ class Comments extends Component {
     const { showOnlyOne, newLayout, messageStore, campaignStore, uiStore, match } = this.props;
     const { errors } = uiStore;
     const { MESSAGE_FRM, msgEleChange, buttonLoader } = messageStore;
-    const { campaign, commentsMainThreadCount, campaignCommentsMeta } = campaignStore;
+    const { campaign, commentsMainThreadCount, campaignCommentsMeta, isPostedNewComment } = campaignStore;
 
     const campaignId = get(campaign, 'id');
     const campaignSlug = get(campaign, 'offeringSlug');
     const issuerId = get(campaign, 'issuerId');
     let comments = get(campaign, 'comments');
-    comments = showOnlyOne ? [get(commentsMainThreadCount, '[0]')] : comments;
+    comments = showOnlyOne ? isPostedNewComment ? [get(comments, '[0]')] : [get(commentsMainThreadCount, '[0]')] : comments;
     messageStore.setDataValue('currentOfferingId', campaignId);
 
     const isNsAdmin = comment => get(comment, 'createdUserInfo.roles[0].name') === 'admin';
@@ -208,7 +215,7 @@ class Comments extends Component {
             </>
           )
         }
-        {(comments && commentsMainThreadCount.length)
+        {(comments && commentsMainThreadCount.length) || (isPostedNewComment && comments.length)
           ? (
             <>
               <div color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>
