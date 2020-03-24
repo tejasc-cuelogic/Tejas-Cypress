@@ -16,6 +16,8 @@ export class UiStore {
     notificationPanel: false,
   };
 
+  @observable leftPanelMobileMenu = false;
+
   @observable submitButtonDisabled = false;
 
   @observable inProgress = false;
@@ -216,6 +218,11 @@ export class UiStore {
   @action
   toggleSubmitButton() {
     this.submitButtonDisabled = !this.submitButtonDisabled;
+  }
+
+  @action
+  setLeftPanelMobileMenu(menuFlag) {
+    this.leftPanelMobileMenu = menuFlag;
   }
 
   @action

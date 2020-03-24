@@ -1,3 +1,4 @@
+import React from 'react';
 import { CURR_YEAR } from '../../constants/common';
 
 export const ACCREDITATION_STATUS_LABEL = {
@@ -75,23 +76,38 @@ export const ENTITY_ACCREDITATION_METHODS = {
 
 export const INCOME_EVIDENCE_META = [
   {
-    header1: 'Send verification request to my personal lawyer, CPA, registered investment adviser or broker dealer',
-    header2: 'Send verification request to my lawyer, CPA, registered investment adviser or broker dealer',
-    value: 'verificationrequest',
-    desc1: 'They`ll be asked to confirm in writing that they have reviewed and confirmed evidence of your accredited investor status.',
-    desc2: 'They`ll be asked to confirm in writing that they have reviewed and confirmed evidence of your entity`s accredited investor status',
-    desc3: 'They`ll be asked to confirm in writing that they have reviewed and confirmed evidence of your trust`s accredited investor status.',
-  },
-  {
     header1: 'Upload documentation',
     header2: 'Upload verification letter',
     value: 'uploaddocument',
-    desc1: 'Documentation could include tax returns, W-2s, or other official IRS or foreign tax authority documents containing salary information for the past 2 years, or a letter from your personal lawyer, CPA, registered investment advisor or broker-dealer.',
-    desc2: 'Documentation could include a signed letter from a professional advisor, personal financial statements, bank statements, brokerage statements that show value of accounts, etc. We may also check your credit to verify any liabilities affecting your net worth. This will not affect your credit score.',
-    desc3: 'Upload a signed letter from your lawyer, CPA, registered investment advisor or broker-dealer confirming your entity`s accredited investor status.',
-    desc4: 'Upload a signed letter from your lawyer, CPA, registered investment advisor or broker-dealer confirming your trust`s accredited investor status.',
+    // desc1: <p>Documentation could include tax returns, W-2s, or other official IRS or foreign tax authority documents containing salary information for the past 2 years, or a letter from your personal lawyer, CPA, registered investment advisor or broker-dealer.</p>,
+    desc1: <p>Documentation could include tax returns, W-2s, or other official IRS or foreign tax authority documents containing salary information for the past 2 years.</p>,
+    desc2: <p>Documentation could include a signed letter from a professional advisor, personal financial statements, bank statements, brokerage statements that show value of accounts, etc. We may also check your credit to verify any liabilities affecting your net worth. This will not affect your credit score.</p>,
+    desc3: <p>Upload a signed letter from your lawyer, CPA, registered investment advisor or broker-dealer confirming your entity`s accredited investor status.</p>,
+    desc4: <p>Upload a signed letter from your lawyer, CPA, registered investment advisor or broker-dealer confirming your trust`s accredited investor status.</p>,
+  },
+  {
+    header: 'Upload a current verification letter',
+    value: 'uploaddocumentLatter',
+    desc: <p>Upload an existing letter from a personal lawyer, CPA, registered investment advisor or broker-dealer that verifies that they have reviewed and confirmed evidence of your accredited investor status.</p>,
+  },
+  {
+    header1: 'Send verification request to my personal lawyer, CPA, registered investment adviser or broker dealer',
+    header2: 'Send verification request to my lawyer, CPA, registered investment adviser or broker dealer',
+    value: 'verificationrequest',
+    desc1: <p>They`ll be asked to confirm in writing that they have reviewed and confirmed evidence of your accredited investor status.</p>,
+    desc2: <p>They`ll be asked to confirm in writing that they have reviewed and confirmed evidence of your entity`s accredited investor status</p>,
+    desc3: <p>They`ll be asked to confirm in writing that they have reviewed and confirmed evidence of your trust`s accredited investor status.</p>,
   },
 ];
+
+export const EVIDENCE_META = {
+  method: {
+    value: '',
+    values: [],
+    error: undefined,
+    rule: 'required',
+  },
+};
 
 export const TRUST_ENTITY_ACCREDITATION = {
   method: {
@@ -214,7 +230,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
   },
   previousEstimateIncome: {
     value: '',
-    label: `What is your estimated income in ${CURR_YEAR - 1}`,
+    label: `Your estimated income in ${CURR_YEAR - 1}`,
     error: undefined,
     rule: 'required',
     placeHolder: '$',
@@ -224,7 +240,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
   },
   estimateIncome: {
     value: '',
-    label: `What is your estimated income in ${CURR_YEAR}`,
+    label: `Your estimated income in ${CURR_YEAR}`,
     error: undefined,
     rule: 'required',
     placeHolder: '$',

@@ -19,6 +19,17 @@ export const INVEST_NOW_TOC = FormHelper.generateMeta([
   asIn: true }],
 ]);
 
+export const INVEST_NOW_TOC_TEMPLATE = FormHelper.generateMeta([
+  ['template', 'Template', 1, 'required', 'Template', { props: {
+    options: [
+      { key: 'Static', value: 1, text: 'Static' },
+      { key: 'Dynamic', value: 2, text: 'Dynamic' },
+    ],
+    defaultValue: 1,
+  },
+  asIn: true }],
+]);
+
 export const INVEST_NOW_PAGE = FormHelper.generateMeta([
   ['title', 'Description (optional)', '', 'optional', 'Description (optional)'],
   // ['page', 'Page no.', '', 'optional', 'Page no.'],

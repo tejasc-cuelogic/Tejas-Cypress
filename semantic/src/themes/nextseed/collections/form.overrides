@@ -914,6 +914,9 @@ textarea{
             display:block;
         }
     }
+    > .file-uploader-child span{
+        color: @primary-one;
+    }
 }
 
 .field.error .ui.labeled .ui.label{

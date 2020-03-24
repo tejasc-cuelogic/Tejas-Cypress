@@ -76,6 +76,8 @@ export class AgreementsStore {
 
   @observable tocRequiredArray = [];
 
+  @observable tocOptional = { array: [], labels: [] };
+
   @observable agreementPage = 0;
 
   @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_TEMPLATE_DETAILS_INFO);
@@ -280,11 +282,15 @@ export class AgreementsStore {
     investNowTocs = groupBy(investNowTocs, 'page');
     investNowTocs = map(investNowTocs, page => page.map(t => ({ ...t, toc: t.toc && t.toc.length ? orderBy(t.toc.filter(toc => checkAccountValidation(toc.account)), ['order'], ['asc']) : [] })));
     const requiredArray = [];
+    const optionalArray = [];
+    const optionalLabels = [];
     if (investNowTocs.length > 1) {
       this.AGREEMENT_DETAILS_FORM = Validator.addMoreRecordToSubSection(this.AGREEMENT_DETAILS_FORM, 'page', investNowTocs.length - 1, true);
     }
     forEach(investNowTocs, (tocs, index) => {
       const pageRequiredArray = [];
+      const pageOptionalArray = [];
+      const pageOptionalLabels = [];
       const valuesArray = [];
       forEach(get(tocs, '[0].toc'), (data) => {
         const valueObj = {};
@@ -294,13 +300,20 @@ export class AgreementsStore {
         valuesArray.push(valueObj);
         if (data.required) {
           pageRequiredArray.push(data.order);
+        } else {
+          pageOptionalArray.push(data.order);
+          pageOptionalLabels.push(data.label);
         }
       });
       requiredArray.push(pageRequiredArray);
+      optionalArray.push(pageOptionalArray);
+      optionalLabels.push(pageOptionalLabels);
       this.AGREEMENT_DETAILS_FORM.fields.page[index].title.value = get(tocs, '[0].title');
       this.AGREEMENT_DETAILS_FORM.fields.page[index].toc.values = valuesArray;
     });
     this.tocRequiredArray = requiredArray;
+    this.tocOptional.array = optionalArray;
+    this.tocOptional.labels = optionalLabels;
   }
 
   @action
@@ -325,6 +338,30 @@ export class AgreementsStore {
     this.AGREEMENT_DETAILS_FORM.fields.page[0].title.value = get(investNowTocs, 'title');
     this.AGREEMENT_DETAILS_FORM.fields.page[0].toc.values = valuesArray;
     this.tocRequiredArray = requiredArray;
+  }
+
+  @computed get getUncheckedOptionalToc() {
+    const uncheckedTocs = [];
+    // const page = toJS(this.AGREEMENT_DETAILS_FORM.fields.page);
+    const page = toJS(this.AGREEMENT_DETAILS_FORM.fields.page[this.agreementPage]);
+    const optionalArray = toJS(this.tocOptional.array) || [];
+    const optionalLabels = toJS(this.tocOptional.labels) || [];
+    // page.forEach((p, index) => {
+    optionalArray[this.agreementPage].forEach((optional, oi) => {
+      if (!(page.toc.value || []).includes(optional)) {
+        uncheckedTocs.push(optionalLabels[this.agreementPage][oi]);
+      }
+    });
+    // });
+// multipage support
+    // page.forEach((p, index) => {
+    //   optionalArray[index].forEach((optional, oi) => {
+    //     if (!(p.toc.value || []).includes(optional)) {
+    //       uncheckedTocs.push(optionalLabels[index][oi]);
+    //     }
+    //   });
+    // });
+    return uncheckedTocs;
   }
 
   @computed get isAgreementFormValid() {
