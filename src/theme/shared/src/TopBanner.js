@@ -4,7 +4,7 @@ import { Button, Icon } from 'semantic-ui-react';
 const TopBanner = props => (
   <div className={(props.leftMenu) ? 'sticky-message hide' : 'sticky-message'}>
     <b>
-      <a target="_blank" rel="noopener noreferrer" href="https://www.nextseed.com/insights/businesses-affected-by-coronavirus">
+      <a target="_blank" rel="noopener noreferrer" href="https://charity.gofundme.com/o/en/campaign/life-fund">
         Click here
       </a>
     </b>
