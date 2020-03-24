@@ -278,7 +278,7 @@ class App extends Component {
     return (
       <div className={(isInvestor || !matchPath(location.pathname, { path: '/dashboard' })) ? 'public-pages' : ''}>
         {uiStore.topBanner
-          && <TopBanner toggle={this.playTopBanner} />
+          && <TopBanner toggle={this.playTopBanner} leftMenu={this.props.uiStore.leftPanelMobileMenu} />
         }
         {authStore.isUserLoggedIn
           && (
