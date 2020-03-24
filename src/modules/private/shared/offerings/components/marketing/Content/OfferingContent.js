@@ -4,6 +4,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../OfferingButtonGroup';
 import BonusRewards from '../../BonusRewards';
+import Misc from '../../offering/Misc';
 // import Comments from '../../Comments';
 // import Updates from '../../Updates';
 import DataRoom from '../../legal/DataRoom';
@@ -83,7 +84,13 @@ class OfferingContent extends Component {
             />
           )}
           <Divider section />
-          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'BONUS_REWARDS' && <BonusRewards {...this.props} />}
+          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'BONUS_REWARDS'
+          && (
+            <>
+              <BonusRewards {...this.props} />
+              <Misc />
+            </>
+          )}
           {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'DATA_ROOM' && <DataRoom {...this.props} />}
           {/* {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'COMMENTS' && <Comments {...this.props} />}
           {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'UPDATES' && <Updates {...this.props} />} */}
