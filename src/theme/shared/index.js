@@ -3,6 +3,7 @@ export { default as AccTypeTitle } from './src/AccTypeTitle';
 export { default as CipErrors } from './src/CipErrors';
 export { default as DateTimeFormat } from './src/DateTimeFormat';
 export { default as DevBanner } from './src/DevBanner';
+export { default as TopBanner } from './src/TopBanner';
 export { default as FieldError } from './src/FieldError';
 export { default as FormErrors } from './src/FormErrors';
 export { default as ListErrors } from './src/ListErrors';

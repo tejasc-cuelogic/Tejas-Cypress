@@ -3,7 +3,7 @@ import { forEach, isArray, find, forOwn, filter, capitalize, findKey, includes, 
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
-import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY, FILLING_STATUS } from '../../../../constants/investmentLimit';
+import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY, FILLING_STATUS, EVIDENCE_META } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -45,6 +45,8 @@ export class AccreditationStore {
   @observable NET_WORTH_FORM = Validator.prepareFormObject(NET_WORTH);
 
   @observable ACCREDITATION_EXPIRY_FORM = Validator.prepareFormObject(ACCREDITATION_EXPIRY);
+
+  @observable EVIDENCE_FORM_META = Validator.prepareFormObject(EVIDENCE_META);
 
   @observable removeFileIdsList = [];
 
@@ -107,6 +109,8 @@ export class AccreditationStore {
 
   @observable docReference = null;
 
+  @observable isAccreditationFlowInProgress = { open: false, accountSelectedType: null };
+
   @action
   setFieldValue = (field, value, objRef = false) => {
     if (objRef) {
@@ -115,6 +119,13 @@ export class AccreditationStore {
     } else {
       this[field] = value;
     }
+  }
+
+  @action
+  setAccreditationInialStepState = ({ openState, accountSelected }) => {
+    const { open, accountSelectedType } = this.isAccreditationFlowInProgress;
+    this.setFieldValue('isAccreditationFlowInProgress', (openState || openState === false) ? openState : open, 'open');
+    this.setFieldValue('isAccreditationFlowInProgress', (accountSelected || accountSelected === null) ? accountSelected : accountSelectedType, 'accountSelectedType');
   }
 
   @action
@@ -256,10 +267,10 @@ export class AccreditationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '') => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '', isIncomeUploadLater = false) => {
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
-    if (accreditationMethod === 'Income') {
+    if (accreditationMethod === 'Income' && !isIncomeUploadLater) {
       tags.push(this.getFileUploadEnum(field, 'IncomeDoc'));
     }
     if (typeof files !== 'undefined' && files.length) {
@@ -353,7 +364,7 @@ export class AccreditationStore {
     if (index != null) {
       const fileId = this[form].fields[field].fileId.splice(index, 1);
       this[form].fields[field].value.splice(index, 1);
-      removeFileId = fileId;
+      removeFileId = get(fileId, '[0]');
     } else {
       const { fileId } = this[form].fields[field];
       removeFileId = fileId;
@@ -496,11 +507,11 @@ export class AccreditationStore {
 
   isAllFormValidCheck = (type) => {
     const forms = {
-      ACCREDITATION_FORM: [1, 2, 3, 4, 5, 6, 9, 10, 11, 12],
+      ACCREDITATION_FORM: [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13],
       // NET_WORTH_FORM: [3, 4, 7, 8, 11, 12],
-      INCOME_EVIDENCE_FORM: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      INCOME_EVIDENCE_FORM: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
       VERIFICATION_REQUEST_FORM: [1, 3, 5, 7, 9, 11],
-      ASSETS_UPLOAD_DOC_FORM: [4, 6, 8, 10],
+      ASSETS_UPLOAD_DOC_FORM: [4, 6, 8, 10, 13],
       INCOME_UPLOAD_DOC_FORM: [2, 12],
       ENTITY_ACCREDITATION_FORM: [],
       FILLING_STATUS_FORM: [],
@@ -524,7 +535,7 @@ export class AccreditationStore {
       } else if (accreditationType === 3) {
         formType = 11;
       }
-    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'INCOME') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
+    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'INCOME') && ['uploaddocument'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value)) {
       if (accreditationType === 1) {
         formType = 2;
       } else if (accreditationType === 3) {
@@ -542,7 +553,7 @@ export class AccreditationStore {
           formType = 9;
         }
       }
-    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'ASSETS') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
+    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'ASSETS') && ['uploaddocument'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value)) {
       if (accreditationType === 1) {
         formType = 4;
       } else if (accreditationType === 2) {
@@ -560,6 +571,8 @@ export class AccreditationStore {
       } else if (this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
         formType = 6;
       }
+    } else if (['INCOME', 'ASSETS'].includes(this.ACCREDITATION_FORM.fields.method.value) && ['uploaddocumentLatter'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value)) {
+      formType = 13;
     }
     return formType;
   }
@@ -587,16 +600,19 @@ export class AccreditationStore {
       });
       const fileUploadData = userAccreditationDetails.assetsUpload;
       userAccreditationDetails.assetsUpload = [];
+      const isIncomeUpdateLatter = !!(['INCOME'].includes(this.ACCREDITATION_FORM.fields.method.value) && ['uploaddocumentLatter'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value));
       forEach(fileUploadData, (file, key) => {
         if (key === 'statementDoc' || (file.fileId && file.fileName)) {
           const fileObj = {};
-          fileObj.type = UPLOAD_ASSET_ENUMS[key];
+          fileObj.type = isIncomeUpdateLatter ? 'INCOME' : UPLOAD_ASSET_ENUMS[key];
+          // fileObj.type = UPLOAD_ASSET_ENUMS[key];
           fileObj.fileInfo = file;
           userAccreditationDetails.assetsUpload.push(fileObj);
         } else if (Array.isArray(file)) {
           file.forEach((f) => {
             const fileObj = {};
-            fileObj.type = UPLOAD_ASSET_ENUMS[key];
+            fileObj.type = isIncomeUpdateLatter ? 'INCOME' : UPLOAD_ASSET_ENUMS[key];
+            // fileObj.type = UPLOAD_ASSET_ENUMS[key];
             fileObj.fileInfo = f;
             userAccreditationDetails.assetsUpload.push(fileObj);
           });
@@ -629,6 +645,7 @@ export class AccreditationStore {
     const refetchQueries = formType ? [{
       query: userAccreditationQuery,
     }] : [];
+    console.log(payLoad);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -1178,6 +1195,28 @@ export class AccreditationStore {
     });
 
     this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
+  }
+
+  @action
+  calculateEvidenceMethod = (incEvidenceMethods, isEntity, isTrust) => {
+    const evidenceMethodArr = [];
+    const uploadTitle = this.ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'income' : 'net worth';
+    forEach(incEvidenceMethods, (method) => {
+      const valueObj = {};
+      valueObj.label = isEntity ? method.header2 : method.value === 'uploaddocumentLatter' ? method.header : method.value === 'uploaddocument' ? `Upload proof of ${uploadTitle}` : method.header1;
+      if (method.value === 'uploaddocument') {
+        valueObj.labelDescription = isTrust ? method.desc4 : isEntity ? method.desc3 : this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' ? method.desc1 : method.desc1;
+      } else if (method.value === 'verificationrequest') {
+        valueObj.labelDescription = isTrust ? method.desc3 : isEntity ? method.desc2 : method.desc1;
+      } else if (method.value === 'uploaddocumentLatter') {
+        valueObj.labelDescription = method.desc;
+      } else {
+        valueObj.labelDescription = '';
+      }
+      valueObj.value = method.value;
+      evidenceMethodArr.push(valueObj);
+    });
+    this.EVIDENCE_FORM_META.fields.method.values = evidenceMethodArr;
   }
 }
 export default new AccreditationStore();

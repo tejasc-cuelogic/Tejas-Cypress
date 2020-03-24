@@ -28,6 +28,11 @@ class InvestorSignup extends Component {
     this.props.authStore.checkEmailExistsPresignup(email);
   }
 
+  handlePassword = (e, result) => {
+    this.props.authStore.signupChange(e, result);
+    this.props.authStore.setVerifyPassword(e);
+  }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     if (this.props.authStore.newPasswordRequired) {
@@ -104,7 +109,7 @@ class InvestorSignup extends Component {
                 userInputs={
                   [SIGNUP_FRM.fields.email.value]
                 }
-                changed={signupChange}
+                changed={(e, result) => this.handlePassword(e, result)}
                 fielddata={SIGNUP_FRM.fields.password}
                 showRequiredError
               />
