@@ -136,6 +136,12 @@
             }
         }
     }
+    &.small-font{
+        .item .ui.checkbox label{
+            font-size: 12px;
+            line-height: 18px;
+        }
+    }
 }
 //  Public page Ends
 

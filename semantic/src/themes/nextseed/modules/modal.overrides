@@ -118,6 +118,12 @@
     .ui.modal.link-bank-modal>.icon:first-child+.dimmer{
         border-radius: 0;
     }
+    &[class*="top aligned"] .ui.modal.scrolling.multistep-modal{
+        margin: 5vh auto !important;
+        @media only screen and (max-width:@largestMobileScreen){
+            margin: 0 !important;
+        }
+    }
 }
 //  Public pages Starts
 .ui.modal{
@@ -222,6 +228,7 @@
         }
     }
     .content{
+        font-size: 15px;
         &.scrolling {
             .ui.image.large {
                 min-width: 400px;
@@ -874,6 +881,16 @@
     }
     .signup-modal.multistep.content{
         padding:@50px @64px !important;
+    }
+    .content {
+        p{
+            line-height: 24px;
+        }
+    }
+    .file-uploader-wrap label{
+        font-size: @15px;
+        line-height: 24px;
+        font-weight: @normal;
     }
 }
 .field-wrap{

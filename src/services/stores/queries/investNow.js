@@ -19,13 +19,14 @@ export const getInvestorAvailableCash = gql`
 `;
 
 export const investNowSubmit = gql`
-  mutation investNowSubmit($accountId: String!, $offeringId: String!, $investmentAmount: String!, $agreementId: Int!, $transferAmount: String){
+  mutation investNowSubmit($accountId: String!, $offeringId: String!, $investmentAmount: String!, $agreementId: Int!, $transferAmount: String, $uncheckedToc: [String]){
     investNowSubmit(
       accountId: $accountId
       offeringId: $offeringId
       investmentAmount: $investmentAmount
       agreementId: $agreementId
       transferAmount: $transferAmount
+      uncheckedToc: $uncheckedToc
     )
     {
       status

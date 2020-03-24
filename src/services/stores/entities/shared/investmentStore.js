@@ -419,7 +419,7 @@ export class InvestmentStore {
   }
 
   @action
-  investNowSubmit = () => {
+  investNowSubmit = (addUncheckedToc = false) => {
     const offeringIdToUpdate = campaignStore.getOfferingId
       ? campaignStore.getOfferingId : portfolioStore.currentOfferingId;
     if (this.agreementDetails && offeringIdToUpdate) {
@@ -430,6 +430,9 @@ export class InvestmentStore {
         agreementId: this.agreementDetails.agreementId,
         transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
       };
+      if (addUncheckedToc) {
+        variables.uncheckedToc = agreementsStore.getUncheckedOptionalToc || [];
+      }
       uiStore.setProgress();
       return new Promise((resolve) => {
         client
