@@ -39,6 +39,7 @@ export default class NavBarMobile extends Component {
       navStatus, currentUser, stepInRoute,
       hasHeader, userDetailsStore,
     } = this.props;
+    this.props.uiStore.setLeftPanelMobileMenu(visible);
     const isNewCampaign = location.pathname.startsWith('/offerings');
     const nav = GetNavMeta(location.pathname, [], true);
     let navTitle = nav ? nav.title : '';
