@@ -71,6 +71,9 @@
 			}
 		}
 	}
+	.neutral-text .ui.checkbox.disabled label{
+		opacity: 1;
+	}
 }
 .button-radio, .button-checkbox{
 	.ui.radio.checkbox, .ui.checkbox{
