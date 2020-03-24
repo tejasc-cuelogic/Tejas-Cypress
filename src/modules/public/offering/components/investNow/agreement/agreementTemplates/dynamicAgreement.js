@@ -28,7 +28,7 @@ function DynamicAgreement(props) {
         </Grid.Row>
       </Grid>
       <div className="mt-30">
-        <Button primary content="Invest" disabled={inProgress || !isAgreementFormValid} loading={inProgress} onClick={submit} />
+        <Button primary content="Invest" disabled={inProgress || !isAgreementFormValid} loading={inProgress} onClick={() => submit('DYNAMIC')} />
       </div>
       {!showError && investmentFlowErrorMessage
         && (
