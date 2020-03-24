@@ -31,7 +31,7 @@ function TombstoneHeaderMeta(props) {
                 {!hideHighlight
                 && (
                 <Table.Cell collapsing>
-                  {smartElement.FormCheckBox('isHighlight', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', i], toggle: true, defaults: true })}
+                  {smartElement.FormCheckBox('isHighlight', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', i], toggle: true, defaults: true })}
                 </Table.Cell>
                 )}
                 <Table.Cell>

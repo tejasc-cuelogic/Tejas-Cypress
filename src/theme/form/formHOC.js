@@ -131,7 +131,7 @@ function formHoc(WrappedComponent, metaInfo) {
           name={name}
           fielddata={fieldData}
           changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form), '', get(props, 'toggle') ? { value: result.checked } : false)}
-          containerclassname="ui relaxed list mr-10"
+          containerclassname={`ui relaxed list mr-10 ${get(props.customClass)}`}
           {...props}
         />
       );
