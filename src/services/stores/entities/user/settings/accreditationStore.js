@@ -645,7 +645,6 @@ export class AccreditationStore {
     const refetchQueries = formType ? [{
       query: userAccreditationQuery,
     }] : [];
-    console.log(payLoad);
     return new Promise((resolve, reject) => {
       client
         .mutate({
