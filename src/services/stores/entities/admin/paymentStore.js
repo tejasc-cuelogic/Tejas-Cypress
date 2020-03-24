@@ -3,7 +3,7 @@ import { orderBy, get, findIndex, pick, forEach, remove } from 'lodash';
 import moment from 'moment';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary } from '../../queries/Repayment';
+import { adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary, adminPaymentSendIssuerFirstNotice, adminPaymentSendIssuerSecondNotice } from '../../queries/Repayment';
 import { PAYMENT, ACTION } from '../../../constants/payment';
 import { uiStore } from '../../index';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
@@ -11,7 +11,7 @@ import Helper from '../../../../helper/utility';
 
 export class PaymentStore extends DataModelStore {
   constructor() {
-    super({ adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary });
+    super({ adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary, adminPaymentSendIssuerFirstNotice, adminPaymentSendIssuerSecondNotice });
   }
 
   data = [];
@@ -76,6 +76,14 @@ export class PaymentStore extends DataModelStore {
       variables,
     }).then((res) => {
       resolve(res);
+    }).catch(() => {
+      const resp = {};
+      if (mutation === 'adminPaymentSendIssuerFirstNotice') {
+        resp.error = 'Date should be the 1st business day.';
+      } else if (mutation === 'adminPaymentSendIssuerSecondNotice') {
+        resp.error = 'Date should be the 3rd business day.';
+      }
+      resolve(resp);
     });
   });
 

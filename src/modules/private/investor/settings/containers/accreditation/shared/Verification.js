@@ -18,8 +18,12 @@ export default class Verification extends Component {
         this.props.type || 0,
       )
       .then(() => {
+        this.props.accreditationStore.setAccreditationInialStepState({ openState: false, accountSelected: null });
         this.props.history.push(`${this.props.refLink}/success`);
-      }).catch(() => this.props.accreditationStore.setStepToBeRendered(this.props.step));
+      })
+      .catch(() => {
+        this.props.accreditationStore.setStepToBeRendered(this.props.step);
+      });
   }
 
   render() {
@@ -35,16 +39,19 @@ export default class Verification extends Component {
               accountType={accountType}
               clicked={this.submit}
               isEntity={isEntity}
+              isUploadLater={INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocumentLatter'}
               {...this.props}
             />
           )
-          : (ACCREDITATION_FORM.fields.method.value === 'INCOME')
+          : (ACCREDITATION_FORM.fields.method.value === 'INCOME' && INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value !== 'uploaddocumentLatter')
             ? <IncomeUploadDocument accountType={accountType} clicked={this.submit} {...this.props} />
             : (
               <AssetsUploadDocument
                 accountType={accountType}
                 clicked={this.submit}
                 isEntity={isEntity}
+                isUploadLater={INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocumentLatter'}
+                isIncome={ACCREDITATION_FORM.fields.method.value === 'INCOME'}
                 {...this.props}
               />
             )

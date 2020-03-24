@@ -245,11 +245,13 @@ export class Auth {
 
     const { fields } = authStore.SIGNUP_FRM;
     const signupFields = authStore.CONFIRM_FRM.fields;
+    const signUpRole = authStore.SIGNUP_FRM.fields.role.value;
     const attributeList = {
       'custom:roles': JSON.stringify([fields.role.value]),
-      given_name: fields.givenName.value || 'New Signup',
-      family_name: fields.email.value,
+      given_name: signUpRole === 'investor' ? 'New Signup' : fields.givenName.value,
+      family_name: signUpRole === 'investor' ? fields.email.value : fields.familyName.value,
     };
+
     try {
       const user = await AmplifyAuth.signUp({
         username: (fields.email.value || signupFields.email.value).toLowerCase(),
@@ -259,7 +261,6 @@ export class Auth {
 
       if (user && user.userConfirmed) {
         authStore.setUserId(user.userSub);
-        const signUpRole = authStore.SIGNUP_FRM.fields.role.value;
         if (!isMobile) {
           if (signUpRole === 'investor') {
             // Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
