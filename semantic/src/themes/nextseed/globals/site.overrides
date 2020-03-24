@@ -3353,12 +3353,16 @@ h3.ui.header.error-2{
 	top: 72px;
 	left: 0;
 	right: 0;
-	z-index: 1;
+	z-index: 3;
 	@media only screen and (max-width : @largestMobileScreen){
 		position: relative;
 		top: 58px;
 		text-align: left;
 		padding-right: @30px;
+		&.hide{
+			z-index: 0;
+			position: absolute;
+		}
 	}
 	.ui.button.close-button{
 		padding: 0 @5px;
