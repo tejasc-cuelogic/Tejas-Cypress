@@ -174,3 +174,39 @@ export const TOMBSTONE_HEADER_META = {
     },
   }],
 };
+
+export const GALLERY = {
+  gallery: [{
+    caption: {
+      label: 'Caption',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. Hero Image',
+    },
+    image: {
+      fileName: '', value: '', base64String: '', objType: 's3File', confirmModal: false, src: '', meta: {}, label: 'Image', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: '', fileId: '', fileData: '',
+    },
+    order: {
+      label: 'Order',
+      value: 1,
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. 1',
+      defaultValue: 1,
+    },
+    isVisible: {
+      value: false,
+      defaultValue: false,
+      values: [
+        {
+          label: 'Is Visible',
+          value: 'TRUE',
+        },
+      ],
+      error: undefined,
+      rule: 'optional',
+      placeHolder: '',
+    },
+  }],
+};

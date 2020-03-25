@@ -5,6 +5,7 @@ import { Form, Divider, Header, Icon, Confirm } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../OfferingButtonGroup';
 import BonusRewards from '../../BonusRewards';
 import Misc from '../../offering/Misc';
+import Gallery from './Gallery';
 // import Comments from '../../Comments';
 // import Updates from '../../Updates';
 import DataRoom from '../../legal/DataRoom';
@@ -22,6 +23,11 @@ class OfferingContent extends Component {
   state = {
     editable: false,
     showConfirm: false,
+  }
+
+  constructor(props) {
+    super(props);
+    this.props.manageOfferingStore.setFormData('GALLERY_FRM', '');
   }
 
   updateState = (val, key = 'editable') => {
@@ -92,8 +98,8 @@ class OfferingContent extends Component {
             </>
           )}
           {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'DATA_ROOM' && <DataRoom {...this.props} />}
-          {/* {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'COMMENTS' && <Comments {...this.props} />}
-          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'UPDATES' && <Updates {...this.props} />} */}
+          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'GALLERY' && <Gallery {...this.props} />}
+          {/* {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'UPDATES' && <Updates {...this.props} />} */}
           <Divider hidden />
         </Form>
         <Confirm

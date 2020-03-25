@@ -5,7 +5,9 @@ import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
-import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC, SUB_HEADER_BASIC } from '../../../../constants/offering/formMeta/offering';
+import {
+  TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC, SUB_HEADER_BASIC, GALLERY,
+} from '../../../../constants/offering/formMeta/offering';
 import { INVEST_NOW_TOC, INVEST_NOW_PAGE, INVEST_NOW_TOC_TEMPLATE } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -21,6 +23,8 @@ export class ManageOfferingStore extends DataModelStore {
   TOMBSTONE_BASIC_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
 
   TOMBSTONE_HEADER_META_FRM = Validator.prepareFormObject(TOMBSTONE_HEADER_META);
+
+  GALLERY_FRM = Validator.prepareFormObject(GALLERY);
 
   HEADER_BASIC_FRM = Validator.prepareFormObject(HEADER_BASIC);
 
@@ -290,6 +294,7 @@ export class ManageOfferingStore extends DataModelStore {
       OFFERING_MISC_FRM: { isMultiForm: false },
       INVEST_NOW_TOC_FRM: { isMultiForm: true },
       INVEST_NOW_TOC_TEMPLATE_FRM: { isMultiForm: false },
+      GALLERY_FRM: { isMultiForm: true },
     };
     return metaDataMapping[formName][getField];
   }
@@ -340,6 +345,7 @@ decorate(ManageOfferingStore, {
   onDragSaveEnable: observable,
   OFFERING_CONTENT_FRM: observable,
   TOMBSTONE_HEADER_META_FRM: observable,
+  GALLERY_FRM: observable,
   HEADER_BASIC_FRM: observable,
   OFFERING_MISC_FRM: observable,
   SUB_HEADER_BASIC_FRM: observable,

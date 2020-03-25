@@ -215,15 +215,26 @@ export default class DataModelStore {
     FormValidator.setAddressFields(place, this[form]);
   }
 
-  setMediaAttribute = (form, attr, value, field) => {
-    this[form].fields[field][attr] = value;
+  setMediaAttribute = (form, attr, value, field, index = -1, arrayName) => {
+    if (index > -1) {
+      this[form].fields[arrayName][index][field][attr] = value;
+    } else {
+      this[form].fields[field][attr] = value;
+    }
   }
 
-  resetImageCropper = (form, field) => {
+  resetImageCropper = (form, field, index = -1, arrayName) => {
     const attributes = ['src', 'error', 'meta', 'base64String', 'responseUrl', 'value', 'preSignedUrl', 'confirmModal'];
     attributes.forEach((val) => {
-      if ((typeof this[form].fields[field][val] === 'object') && (this[form].fields[field][val] !== null)) {
-        this[form].fields[field][val] = {};
+      const typeCheck = index > -1 ? this[form].fields[arrayName][index][field][val] : this[form].fields[field][val];
+      if ((typeof typeCheck === 'object') && (typeCheck !== null)) {
+        if (index > -1) {
+          this[form].fields[arrayName][index][field][val] = {};
+        } else {
+          this[form].fields[field][val] = {};
+        }
+      } else if (index > -1) {
+          this[form].fields[arrayName][index][field][val] = val === 'confirmModal' ? false : '';
       } else {
         this[form].fields[field][val] = val === 'confirmModal' ? false : '';
       }
@@ -260,21 +271,24 @@ export default class DataModelStore {
   }
 
   uploadMedia = (name, form, path, files = false) => {
+    const formName = Array.isArray(form) ? form[0] : form;
+    const arrayName = Array.isArray(form) ? form[1] : false;
+    const index = Array.isArray(form) ? form[2] : -1;
     const fileObj = {
-      obj: files ? files[0] : this[form].fields[name].base64String,
-      name: Helper.sanitize(files ? files[0].name : this[form].fields[name].fileName),
+      obj: files ? files[0] : index > -1 ? this[formName].fields[arrayName][index][name].base64String : this[formName].fields[name].base64String,
+      name: Helper.sanitize(files ? files[0].name : index > -1 ? this[formName].fields[arrayName][index][name].fileName : this[formName].fields[name].fileName),
     };
-    this.setMediaAttribute(form, 'showLoader', true, name);
+    this.setMediaAttribute(formName, 'showLoader', true, name, index, arrayName);
     fileUpload.uploadToS3(fileObj, path)
       .then((res) => {
         window.logger(res);
         const url = res.split('/');
-        this.setMediaAttribute(form, 'value', url[url.length - 1], name);
-        this.setMediaAttribute(form, 'preSignedUrl', res, name);
-        this.setMediaAttribute(form, 'showLoader', false, name);
+        this.setMediaAttribute(formName, 'value', url[url.length - 1], name, index, arrayName);
+        this.setMediaAttribute(formName, 'preSignedUrl', res, name, index, arrayName);
+        this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
       })
       .catch((err) => {
-        this.setMediaAttribute(form, 'showLoader', false, name);
+        this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
         window.logger(err);
       });
   };

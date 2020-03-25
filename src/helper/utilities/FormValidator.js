@@ -373,6 +373,13 @@ class FormValidator {
             value: '', fileId: '', preSignedUrl: '', fileData: '',
           },
         };
+      } else if (fields[key].objType === 's3File') {
+        fields[key] = {
+          ...fields[key],
+          ...{
+            value: '', fileId: '', preSignedUrl: '', fileData: '', fileName: '', base64String: '', src: '',
+          },
+        };
       } else {
         fields[key].value = fields[key].hasOwnProperty('defaultValue') ? fields[key].defaultValue : '';
         // fields[key].value = typeof fields[key].value === 'number' ? '' :
