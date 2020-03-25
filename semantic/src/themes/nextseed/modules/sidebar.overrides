@@ -10,7 +10,7 @@
 		&.private-pushable{
 			transform: translate3d(0,0,0);
 			height: calc(100vh - 72px); // original
-			&.large-header{
+			&.top-banner-visible{
 				height: calc(100vh - 110px); // reduced height for sticky banner of covid-19
 			}
 			overflow: hidden;
@@ -45,7 +45,8 @@
 	}
 	>.sidebar ~ .pusher{
 		transition:all .5s ease;
-		&.large-header{
+		height: calc(100vh - 72px);
+		&.top-banner-visible{
 			height: calc(100vh - 110px); // reduced height for sticky banner of covid-19
 		}
 		overflow-y:auto;
