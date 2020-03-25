@@ -9,7 +9,10 @@
 		position: relative;
 		&.private-pushable{
 			transform: translate3d(0,0,0);
-			height: calc(100vh - 72px);
+			height: calc(100vh - 72px); // original
+			&.large-header{
+				height: calc(100vh - 110px); // reduced height for sticky banner of covid-19
+			}
 			overflow: hidden;
 			@media only screen and (max-width : @largestTabletScreen){
 				transform: none;
@@ -42,7 +45,9 @@
 	}
 	>.sidebar ~ .pusher{
 		transition:all .5s ease;
-		height: calc(100vh - 72px);
+		&.large-header{
+			height: calc(100vh - 110px); // reduced height for sticky banner of covid-19
+		}
 		overflow-y:auto;
 		background-color:@neutral-offwhite;
 		@media only screen and (max-width : @largestMobileScreen){
@@ -59,7 +64,10 @@
 			height:~"calc(100vh - 34px)";
 		}
 		&.public-pusher {
-			padding-top: 58px;
+			padding-top: 58px; //original
+			&.large-header{
+				padding-top: 140px; // increased padding for sticky banner of covid-19
+			}
 			min-height:auto;
 			height:auto;
 			background-color: transparent;
@@ -111,7 +119,9 @@
 		transition:all .5s ease;
 		position: fixed;
 		// margin-top: 72px !important;
-		height: calc(100vh - 72px) !important;
+		&.large-header{
+			height: calc(100vh - 110px); // reduced height for sticky banner of covid-19
+		}
 		@media only screen and (max-width : @largestTabletScreen) {
 			margin-top: 0 !important;
 			height: auto !important;
