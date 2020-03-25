@@ -230,5 +230,8 @@ dl.dl-horizontal dd .ui.selection.dropdown.display-only{
 	~.page-header-section {
         margin-top: @58px;
         background: @neutral-offwhite;
-	}
+    }
+    &.large-header{
+        top: 140px;
+    }
 }
