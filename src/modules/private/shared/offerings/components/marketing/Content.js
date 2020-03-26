@@ -41,7 +41,7 @@ export default class Content extends Component {
     const docs = [...this.props.manageOfferingStore.OFFERING_CONTENT_FRM.fields.content];
     this.props.manageOfferingStore.reOrderHandle(arrayMove(docs, oldIndex, newIndex), 'OFFERING_CONTENT_FRM', 'content');
     this.props.manageOfferingStore.setFieldValue('onDragSaveEnable', true);
-};
+  };
 
   render() {
     const { match } = this.props;

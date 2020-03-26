@@ -40,7 +40,7 @@ class OfferingContent extends Component {
       forms: ['OFFERING_CONTENT_FRM'],
     };
     if (reOrder) {
-      this.props.manageOfferingStore.reOrderHandle(this.props.manageOfferingStore.OFFERING_CONTENT_FRM.fields.content);
+      this.props.manageOfferingStore.reOrderHandle(this.props.manageOfferingStore.OFFERING_CONTENT_FRM.fields.content, 'OFFERING_CONTENT_FRM', 'content');
     }
     this.props.manageOfferingStore.updateOffering(params);
   }

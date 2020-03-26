@@ -304,6 +304,16 @@ export class ManageOfferingStore extends DataModelStore {
     this.setFieldValue(form, content, `fields.${arrayName}`);
   }
 
+  toggleVisible = (index) => {
+    this.GALLERY_FRM = Validator.onArrayFieldChange(
+      this.GALLERY_FRM,
+      { name: 'isVisible', value: !this.GALLERY_FRM.fields.gallery[index].isVisible.value },
+      'gallery',
+      index,
+    );
+    this.currTime = +new Date();
+  }
+
   setFormData = (form, ref, keepAtLeastOne) => {
     Validator.resetFormData(this[form]);
     this.initLoad.push(form);
@@ -358,6 +368,7 @@ decorate(ManageOfferingStore, {
   reOrderHandle: action,
   resetInitLoad: action,
   updateOffering: action,
+  toggleVisible: action,
   updateOfferingMutation: action,
   setFormData: action,
   setFormDataV2: action,

@@ -75,6 +75,17 @@ const common = {
     scope
     customValue
   }
+  gallery {
+    caption
+    isVisible
+    order
+    image {
+      id
+      url
+      isPublic
+      fileName
+    }
+  }
   misc {
     issuerStatement
     logo {
