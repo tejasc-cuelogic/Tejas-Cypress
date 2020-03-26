@@ -108,7 +108,7 @@ export class BankAccount {
       },
       onExit: (err) => {
         // The user exited the Link flow.
-        if (err != null) {
+        if (err !== null) {
           // The user encountered a Plaid API error prior to exiting.
           Helper.toast('Something went wrong.', 'error');
         }

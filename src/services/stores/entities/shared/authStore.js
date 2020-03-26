@@ -531,7 +531,7 @@ export class AuthStore {
       emailContent: JSON.stringify(errors),
     };
     this.notifyApplicationError(params).then(() => { }).catch((e) => {
-      console.log('Error while calling notifyApplicationError', e);
+      window.logger('Error while calling notifyApplicationError', e);
     });
   }
 

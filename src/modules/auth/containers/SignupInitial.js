@@ -17,7 +17,7 @@ class signupInitial extends Component {
     super(props);
     this.props.uiStore.clearErrors();
     this.props.authStore.resetForm('SIGNUP_FRM');
-    console.log(this.props.uiStore.authRef);
+    window.logger(this.props.uiStore.authRef);
   }
 
   handleCloseModal = (e) => {
@@ -53,6 +53,7 @@ class signupInitial extends Component {
                 fielddata={SIGNUP_FRM.fields.role}
                 changed={(e, result) => this.handleSignupChange(e, result)}
                 classname="icon-arrow-button"
+                ignoreValues={(this.props.uiStore.authRef === '/business') ? ['investor'] : ''}
               />
             </Form>
             <Divider hidden />

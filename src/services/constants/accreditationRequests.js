@@ -83,7 +83,7 @@ export const CONFIRM_ACCREDITATION = {
     rule: 'futureDate|required|date',
     customErrors: {
       date: 'Date format is invalid.',
-      futureDate: "You've entered a past Expiration Date",
+      futureDate: 'You\'ve entered a past Expiration Date',
     },
   },
   adminJustificationDocs: {

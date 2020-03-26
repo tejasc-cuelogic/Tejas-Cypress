@@ -101,7 +101,7 @@ export default class HtmlEditor extends React.Component {
                 return false;
               }).catch((error) => {
                 editor.edit.on();
-                console.log(error);
+                window.logger(error);
                 this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
                 return false;
               });
@@ -114,7 +114,7 @@ export default class HtmlEditor extends React.Component {
           editor.edit.off();
         },
         'froalaEditor.image.error': (e, editor, error) => {
-          console.log(error);
+          window.logger(error);
         },
       },
     };
