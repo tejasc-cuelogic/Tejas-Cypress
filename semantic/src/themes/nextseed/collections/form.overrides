@@ -252,7 +252,7 @@
             background-color:@white !important;
             border-radius: 4px;
             @media only screen and (max-width:@largestMobileScreen){
-                max-width: @46px;
+                max-width: @36px;
             }
             &[type=number]{
                 -webkit-appearance:none;
@@ -913,6 +913,9 @@ textarea{
         &.attached{
             display:block;
         }
+    }
+    > .file-uploader-child span{
+        color: @primary-one;
     }
 }
 

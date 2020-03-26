@@ -4,7 +4,7 @@ import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
-import { INVEST_NOW_TOC, INVEST_NOW_PAGE } from '../../../../constants/offering/formMeta';
+import { INVEST_NOW_TOC, INVEST_NOW_PAGE, INVEST_NOW_TOC_TEMPLATE } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore } from '../../../index';
@@ -13,6 +13,8 @@ import { offeringUpsert } from '../../../queries/offerings/manageOffering';
 
 export class ManageOfferingStore extends DataModelStore {
   INVEST_NOW_TOC_FRM = Validator.prepareFormObject(INVEST_NOW_TOC);
+
+  INVEST_NOW_TOC_TEMPLATE_FRM = Validator.prepareFormObject(INVEST_NOW_TOC_TEMPLATE);
 
   INVEST_NOW_PAGE_FRM = Validator.prepareFormObject(INVEST_NOW_PAGE);
 
@@ -166,6 +168,7 @@ export class ManageOfferingStore extends DataModelStore {
   getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {
       INVEST_NOW_TOC_FRM: { isMultiForm: true },
+      INVEST_NOW_TOC_TEMPLATE_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }

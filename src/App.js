@@ -258,6 +258,8 @@ class App extends Component {
 
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
 
+  playTopBanner = () => this.props.uiStore.toggleTopBanner();
+
   render() {
     const { location, uiStore, userStore, authStore } = this.props;
     const { authChecked } = this.state;
