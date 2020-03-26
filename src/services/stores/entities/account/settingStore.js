@@ -19,7 +19,7 @@ export class SettingStore {
   @observable
   entityInfo = [
     { key: 'netAssets', label: 'Entity net assets', value: '' },
-    { key: 'name', label: "Entity's name", value: '' },
+    { key: 'name', label: 'Entity\'s name', value: '' },
     { key: 'taxId', label: 'Tax ID', value: '' },
   ];
 

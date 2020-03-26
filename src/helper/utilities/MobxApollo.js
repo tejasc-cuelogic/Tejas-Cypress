@@ -22,14 +22,14 @@ class MobxApollo {
         this.observableQuery.loading = value.loading;
         this.observableQuery.data = value.data;
         this.loading = false;
-        if (onFetch) onFetch(value.data);
+        if (onFetch) { onFetch(value.data); }
       }),
       error: action((error) => {
         this.observableQuery.error = error;
         this.observableQuery.loading = false;
         this.observableQuery.data = undefined;
         this.loading = false;
-        if (onError) onError(error);
+        if (onError) { onError(error); }
       }),
     });
 

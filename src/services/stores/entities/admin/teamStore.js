@@ -242,7 +242,7 @@ export class TeamStore {
           resolve(res);
         }))
         .catch((err) => {
-          console.log(err);
+          window.logger(err);
           uiStore.setFieldvalue('inProgress', false);
           reject(err);
         });

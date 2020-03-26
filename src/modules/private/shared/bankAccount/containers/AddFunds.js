@@ -80,7 +80,7 @@ export default class AddFunds extends Component {
     return (
       <>
         <Header as="h4">How much would you like to deposit?</Header>
-        <p>We{"'"}ll transfer funds directly from the bank account you just linked.</p>
+        <p>We{'\''}ll transfer funds directly from the bank account you just linked.</p>
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="mt-40 left-align">
             <MaskedInput

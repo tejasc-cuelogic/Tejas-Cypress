@@ -79,13 +79,13 @@ export class NewBusinessStore {
   @action
   businessLendioPreQual = () => {
     const data = Validator.ExtractValues(this.LENDIO_QUAL_FRM.fields);
-    console.log(data);
+    window.logger(data);
   }
 
   @action
   businessPreQualification = () => {
     const data = toJS(Validator.ExtractValues(this.BUSINESS_APP_FRM.fields));
-    console.log(data);
+    window.logger(data);
     if (data.businessName === 'SUCCESS') {
       this.BUSINESS_APP_STATUS = 'success';
     } else {

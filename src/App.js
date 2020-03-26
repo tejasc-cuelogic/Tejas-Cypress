@@ -8,7 +8,7 @@ import queryString from 'query-string';
 import IdleTimer from 'react-idle-timer';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
-import { DevBanner, TopBanner, Spinner, NotifyVersionUpdate } from './theme/shared';
+import { DevBanner, Spinner, NotifyVersionUpdate } from './theme/shared';
 import Layout from './theme/layout/Layout';
 import Private from './modules/private';
 import Public from './modules/public';
@@ -96,7 +96,7 @@ class App extends Component {
         }
       })
       .catch((err) => {
-        console.log('Catch error in app.js verifySession. ', err);
+        window.logger('Catch error in app.js verifySession. ', err);
       }).finally(() => {
         this.setState({ authChecked: true });
       });
@@ -124,7 +124,7 @@ class App extends Component {
       }
       this.props.authStore.setUserLoggedIn(false);
       localStorage.removeItem('lastActiveTime');
-      console.log('error in app.js - getUserSession', err);
+      window.logger('error in app.js - getUserSession', err);
     });
     if (this.props.location !== prevProps.location) {
       this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
@@ -277,9 +277,6 @@ class App extends Component {
     const { isInvestor } = userStore;
     return (
       <div className={(isInvestor || !matchPath(location.pathname, { path: '/dashboard' })) ? 'public-pages' : ''}>
-        {uiStore.topBanner
-          && <TopBanner toggle={this.playTopBanner} leftMenu={this.props.uiStore.leftPanelMobileMenu} />
-        }
         {authStore.isUserLoggedIn
           && (
             <IdleTimer

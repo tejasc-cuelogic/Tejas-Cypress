@@ -62,7 +62,7 @@ class SidebarLeftPush extends Component {
 export default SidebarLeftPush;
 
 const MySidebar = observer(props => (
-  <Sidebar.Pushable className={`${props.match.url.includes('/business-application') ? 'business-app' : ''} ${props.userStore.isInvestor ? 'investor' : ''} private-pushable`}>
+  <Sidebar.Pushable className={`${props.match.url.includes('/business-application') ? 'business-app' : ''} ${props.userStore.isInvestor ? 'investor' : ''} ${props.uiStore.topBanner ? 'top-banner-visible' : ''} private-pushable`}>
     {!props.match.url.includes('/business-application') ? (
       <>
         <Sidebar
@@ -119,7 +119,7 @@ const MySidebar = observer(props => (
       dimmed={props.mobile && props.layoutState.leftPanelMobile}
       onClick={(props.mobile && props.layoutState.leftPanelMobile) ? props.toggle : undefined}
       className={`${props.match.url.includes('/business-application')
-        ? 'business-application' : ''} ${props.uiStore.devBanner ? 'banner' : ''}`}
+        ? 'business-application' : ''} ${props.uiStore.devBanner ? 'banner' : ''} ${props.uiStore.topBanner ? 'top-banner-visible' : ''}`}
     >
       {props.mobile && <Icon onClick={props.toggle} className="ns-hamburger" />}
       {props.children}

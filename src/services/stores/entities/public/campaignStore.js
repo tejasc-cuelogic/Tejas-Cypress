@@ -115,7 +115,7 @@ export class CampaignStore {
           }
         },
         onError: (err) => {
-          console.log(err);
+          window.logger(err);
           reject();
         },
       });

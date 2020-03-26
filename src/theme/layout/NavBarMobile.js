@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
 import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { Logo } from '../shared';
+import { Logo, TopBanner } from '../shared';
 import { NavItems } from './NavigationItems';
 import Footer from './Footer';
 import { GetNavMeta } from './SidebarNav';
@@ -32,12 +32,14 @@ export default class NavBarMobile extends Component {
     this.props.uiStore.setAuthRef(this.props.location.pathname, this.props.location.hash);
   }
 
+  playTopBanner = () => this.props.uiStore.toggleTopBanner();
+
   render() {
     const {
       onPusherClick, onToggle, visible,
       publicContent, location, isMobile,
       navStatus, currentUser, stepInRoute,
-      hasHeader, userDetailsStore,
+      hasHeader, userDetailsStore, uiStore,
     } = this.props;
     this.props.uiStore.setLeftPanelMobileMenu(visible);
     const isNewCampaign = location.pathname.startsWith('/offerings');
@@ -66,6 +68,7 @@ export default class NavBarMobile extends Component {
     const loggedInNavs = this.props.navStore.myMobileRoutes.filter(e => (e.isLoggedIn && this.props.userStore.isInvestor && (e.title !== 'Add New Account' || (e.title === 'Add New Account' && isAddNewAccount))));
     const publicNav = this.props.navStore.myMobileRoutes.filter(e => !e.isLoggedIn || (!this.props.userStore.isInvestor && e.to === 'offerings'));
     // const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
+    const { topBanner } = uiStore;
     return (
       <>
         <Sidebar.Pushable className={visible && 'show-pushable'}>
@@ -119,6 +122,9 @@ export default class NavBarMobile extends Component {
                         Dashboard
                     </Link>
                     ) : null
+                    }
+                    {topBanner
+                      && <TopBanner toggle={this.playTopBanner} leftMenu={this.props.uiStore.leftPanelMobileMenu} />
                     }
                   </div>
                 {/* )
@@ -208,7 +214,7 @@ export default class NavBarMobile extends Component {
           <Sidebar.Pusher
             dimmed={visible}
             onClick={onPusherClick}
-            className={`public-pusher ${isNewCampaign ? 'public-pusher-v2' : ''} ${!hasHeader && 'noheader'} ${location.pathname.startsWith('/dashboard') ? 'private-pusher' : ''}`}
+            className={`public-pusher ${isNewCampaign ? 'public-pusher-v2' : ''} ${!hasHeader && 'noheader'} ${location.pathname.startsWith('/dashboard') ? 'private-pusher' : ''} ${topBanner ? 'large-header' : ''}`}
           >
             {publicContent}
             {this.props.userStore.isInvestor && this.props.children}
