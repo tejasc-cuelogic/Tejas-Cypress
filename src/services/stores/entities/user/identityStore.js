@@ -7,7 +7,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO, VERIFY_OTP } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { sendOtpEmail, verifyOtpEmail, verifyOtp, requestOtp, sendOtp, isUniqueSSN, cipLegalDocUploads, verifyOtpPhone, changeLinkedBankRequest, changePhoneRequest, changeEmailRequest, verifyOtpEmailPrivate, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
+import { sendOtpEmail, verifyOtpEmail, verifyOtp, sendOtp, isUniqueSSN, cipLegalDocUploads, verifyOtpPhone, changeLinkedBankRequest, changePhoneRequest, changeEmailRequest, verifyOtpEmailPrivate, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
@@ -281,7 +281,7 @@ export class IdentityStore {
 
   updateUserDataAndSendOtp = async () => {
     if (userDetailsStore.signupStatus.phoneVerification !== 'DONE') {
-      await this.startPhoneVerification();
+      await this.sendOtp('PHONE_CONFIGURATION');
     }
     userDetailsStore.mergeUserData('legalDetails', this.formattedUserInfoForCip.user);
     userDetailsStore.mergeUserData('phone', this.formattedUserInfoForCip.phoneDetails);
@@ -449,47 +449,6 @@ export class IdentityStore {
       this.ID_VERIFICATION_DOCS_FRM.fields[field].preSignedUrl = '';
     }))
       .catch(() => { });
-  }
-
-  @action
-  startPhoneVerification = async (type, address = undefined, isMobile = false) => {
-    try {
-      const { user } = userDetailsStore.currentUser.data;
-      const { mfaMethod, phoneNumber } = this.ID_VERIFICATION_FRM.fields;
-      const phone = address || get(user, 'phone.number') || phoneNumber.value;
-      const emailAddress = get(user, 'email.address');
-      const userAddress = type === 'EMAIL' ? emailAddress.toLowerCase() : phone;
-      uiStore.clearErrors();
-      uiStore.setProgress();
-      this.setFieldValue('signUpLoading', true);
-      const res = await client
-        .mutate({
-          mutation: requestOtp,
-          variables: {
-            type: type || (mfaMethod.value !== '' ? mfaMethod.value : 'NEW'),
-            address: userAddress,
-          },
-        });
-      const requestMode = type === 'EMAIL' ? `code sent to ${emailAddress}` : (type === 'CALL' ? `call to ${phone}` : `code texted to ${phone}`);
-      if (type === 'EMAIL') {
-        this.setSendOtpToMigratedUser('EMAIL');
-      } else {
-        this.setConfirmMigratedUserPhoneNumber(true);
-        this.setSendOtpToMigratedUser('PHONE');
-      }
-      this.setRequestOtpResponse(res.data.requestOtp);
-      if (!isMobile && !userStore.isInvestor) {
-        Helper.toast(`Verification ${requestMode}.`, 'success');
-      }
-      this.setFieldValue('signUpLoading', false);
-      uiStore.setProgress(false);
-      return true;
-    } catch (err) {
-      this.setFieldValue('signUpLoading', false);
-      uiStore.setProgress(false);
-      uiStore.setErrors(toJS(DataFormatter.getSimpleErr(err)));
-      return false;
-    }
   }
 
   @action

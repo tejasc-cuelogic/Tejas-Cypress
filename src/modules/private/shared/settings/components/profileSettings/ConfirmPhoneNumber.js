@@ -68,7 +68,7 @@ export default class ConfirmPhoneNumber extends Component {
     }
   }
 
-  startPhoneVerification = async () => {
+  sendOtp = async () => {
     this.props.identityStore.setReSendVerificationCode(true);
     const res = await this.props.identityStore.sendOtp(this.getOtpType(), isMobile);
 
@@ -140,7 +140,7 @@ export default class ConfirmPhoneNumber extends Component {
               phoneNumberDisplayMode
             />
             {editMode
-              ? <Link color="green" to={this.props.match.url} onClick={this.startPhoneVerification}>Confirm Phone number</Link>
+              ? <Link color="green" to={this.props.match.url} onClick={this.sendOtp}>Confirm Phone number</Link>
               : <Link color="green" to="/dashboard/account-settings/profile-data/new-phone-number" onClick={this.handleChangePhoneNumber}>Change phone number</Link>
             }
             <Form error onSubmit={this.handleConfirmPhoneNumber}>
@@ -157,7 +157,7 @@ export default class ConfirmPhoneNumber extends Component {
                   fielddata={ID_PHONE_VERIFICATION.fields.code}
                   onChange={phoneVerificationChange}
                 />
-                <Button type="button" size="small" color="green" className="link-button mt-20" content="Resend the code to my phone" loading={this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
+                <Button type="button" size="small" color="green" className="link-button mt-20" content="Resend the code to my phone" loading={this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.sendOtp()} />
               </Form.Field>
               {errors
                 && (

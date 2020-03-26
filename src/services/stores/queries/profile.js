@@ -81,14 +81,6 @@ export const portPrequalDataToApplication = gql`
     }
   }`;
 
-export const requestOtp = gql`
-  mutation requestOtp($type: MFAModeEnum, $isLinkedBankChange: Boolean, $address: String){
-    requestOtp(
-      type: $type
-      isLinkedBankChange: $isLinkedBankChange
-      address: $address
-    )
-  }`;
 
   export const sendOtp = gql`
   mutation sendOtp($type: OtpTypeEnum!, $method: MFAMethodEnum!, $to: String!){

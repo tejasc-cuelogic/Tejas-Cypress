@@ -23,11 +23,7 @@ export default class MigratedUserPhoneNumber extends Component {
   }
 
   handlePhoneNumberConfirmation = async () => {
-    const { ID_VERIFICATION_FRM } = this.props.identityStore;
-    // this.props.identityStore.setConfirmMigratedUserPhoneNumber(true);
-    const { phoneNumber } = ID_VERIFICATION_FRM.fields;
-    const phoneNumberValue = phoneNumber.value;
-    await this.props.identityStore.startPhoneVerification('NEW', phoneNumberValue, isMobile);
+    await this.props.identityStore.sendOtp('PHONE_CONFIGURATION', isMobile);
   }
 
   handleCloseModal = () => {
