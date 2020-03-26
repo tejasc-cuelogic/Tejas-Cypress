@@ -11,25 +11,25 @@ const metaInfo = {
   form: 'GALLERY_FRM',
 };
 
-const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
+const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({ toggleVisible, GALLERY_FRM, isReadOnly, fieldIndex, smartElement, removeOne, currentOfferingId, removeMedia }) => (
   <div className="row-wrap striped-table">
     {!isReadOnly && <DragHandle />}
     <Form.Group>
-      <Table basic compact className="form-table">
+      <Table verticalAlign="top" basic compact className="form-table">
         <Table.Body>
-          <Table.Cell collapsing>
-            <Button className="link-button">
-              <Icon onClick={() => toggleVisible(fieldIndex)} color="blue" name={GALLERY_FRM.fields.gallery[fieldIndex].isVisible.value ? 'ns-view' : 'ns-no-view'} />
-            </Button>
-            {/* {smartElement.FormCheckBox('isVisible', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], toggle: true, defaults: true })} */}
-          </Table.Cell>
           <Table.Cell>
             {smartElement.Input('caption', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex] })}
           </Table.Cell>
           <Table.Cell>
             <Header as="h4">{GALLERY_FRM.fields.gallery[fieldIndex].image.label}</Header>
             {smartElement.ImageCropper('image', { style: { height: '125px' }, disabled: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], uploadPath: `offerings/${currentOfferingId}`, removeMedia })}
+          </Table.Cell>
+          <Table.Cell collapsing>
+            <Button className="link-button">
+              <Icon onClick={() => toggleVisible(fieldIndex)} color="blue" name={GALLERY_FRM.fields.gallery[fieldIndex].isVisible.value ? 'ns-view' : 'ns-no-view'} />
+            </Button>
+            {/* {smartElement.FormCheckBox('isVisible', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], toggle: true, defaults: true })} */}
           </Table.Cell>
           {!isReadOnly && GALLERY_FRM.fields.gallery.length > 1 && (
             <Table.Cell collapsing>
