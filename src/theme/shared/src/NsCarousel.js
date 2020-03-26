@@ -1,6 +1,7 @@
 /* eslint-disable react/no-did-mount-set-state, no-return-assign */
 import React, { Component } from 'react';
 import Slider from 'react-slick';
+import { get } from 'lodash';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Image64 } from '..';
@@ -75,7 +76,7 @@ export default class NsCarousel extends Component {
             variableWidth
           >
             {this.props.refItems.map(i => (
-              <Image64 bg className="carousel-bg-thumb" srcUrl={i.url} />
+              <Image64 bg className="carousel-bg-thumb" srcUrl={this.props.isTemplate2 ? get(i, 'image.url') : i.url} />
             ))}
           </Slider>
         </>

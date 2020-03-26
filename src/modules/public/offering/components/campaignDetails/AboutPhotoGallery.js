@@ -56,6 +56,7 @@ class AboutPhotoGallery extends Component {
                 refItems={galleryArray}
                 handlePaginationFun={this.handlePagination}
                 fade={!isTablet}
+                isTemplate2={isTemplate2}
               >
                 {galleryArray.length ? galleryArray.map(data => (
                   <div className="about-carousel">

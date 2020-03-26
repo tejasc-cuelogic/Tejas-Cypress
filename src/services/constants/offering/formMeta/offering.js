@@ -75,8 +75,8 @@ export const OFFERING_CONTENT = {
       rule: 'required',
       options: [
         { key: 'PUBLIC', value: 'PUBLIC', text: 'Public' },
-        { key: 'ACCREDITED_HIDDEN', value: 'ACCREDITED_HIDDEN', text: 'Accredited Hidden' },
-        { key: 'ACCREDITED_REQUIRED', value: 'ACCREDITED_REQUIRED', text: 'Accredited Required' },
+        // { key: 'ACCREDITED_HIDDEN', value: 'ACCREDITED_HIDDEN', text: 'Accredited Hidden' },
+        // { key: 'ACCREDITED_REQUIRED', value: 'ACCREDITED_REQUIRED', text: 'Accredited Required' },
         { key: 'HIDDEN', value: 'HIDDEN', text: 'Hidden' },
       ],
       placeHolder: 'Enter here',
