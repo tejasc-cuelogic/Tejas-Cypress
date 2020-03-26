@@ -76,16 +76,17 @@ class News extends Component {
       this.props.history.push('/change-password');
     } else {
       const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
-      this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
+      this.props.authStore.checkEmailExistsPresignup(email.value).then(async () => {
         this.props.authStore.setCredentials({
           email: email.value,
           password: password.value,
           givenName: givenName.value,
         });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
-          this.props.identityStore.sendOtpEmail(isMobile).then(() => {
+          const result = await this.props.identityStore.sendOtpEmail(isMobile);
+          if (result) {
             this.props.history.push('/confirm-email');
-          });
+          }
         }
       });
     }
@@ -113,18 +114,18 @@ class News extends Component {
                 <Grid.Column mobile={16} tablet={8} computer={7}>
                   <Item.Group relaxed="very" className={isMobile && 'horizontal-items'}>
                     {
-                    highlights.map(h => (
-                      <Item className="mb-40">
-                        <div className="ui mini image">
-                          <NSImage path={h.icon} />
-                        </div>
-                        <Item.Content>
-                          <Item.Header as="h5">{h.title}</Item.Header>
-                          <Item.Meta>{h.meta}</Item.Meta>
-                        </Item.Content>
-                      </Item>
-                    ))
-                  }
+                      highlights.map(h => (
+                        <Item className="mb-40">
+                          <div className="ui mini image">
+                            <NSImage path={h.icon} />
+                          </div>
+                          <Item.Content>
+                            <Item.Header as="h5">{h.title}</Item.Header>
+                            <Item.Meta>{h.meta}</Item.Meta>
+                          </Item.Content>
+                        </Item>
+                      ))
+                    }
                   </Item.Group>
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={8} computer={7}>
@@ -170,7 +171,7 @@ class News extends Component {
                         }}
                         userInputs={
                           [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
-                            SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value]
+                          SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value]
                         }
                         changed={signupChange}
                         fielddata={SIGNUP_FRM.fields.password}
@@ -188,9 +189,9 @@ class News extends Component {
                       />
                       {errors
                         && (
-<Message error textAlign="left" className="mt-30">
-                          <ListErrors errors={[customError]} />
-                        </Message>
+                          <Message error textAlign="left" className="mt-30">
+                            <ListErrors errors={[customError]} />
+                          </Message>
                         )
                       }
                       <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid || !currentScore} />
@@ -214,13 +215,13 @@ class News extends Component {
                 <Grid.Column>
                   <Header as="h5">Invest</Header>
                   <p>
-                Set up an investment account for free on NextSeed and invest in businesses directly.
+                    Set up an investment account for free on NextSeed and invest in businesses directly.
                   </p>
                 </Grid.Column>
                 <Grid.Column>
                   <Header as="h5">Receive</Header>
                   <p>NextSeed collects and processes payments directly
-                      into your investment account.
+                  into your investment account.
                   </p>
                 </Grid.Column>
               </Grid>
@@ -230,50 +231,50 @@ class News extends Component {
         <section className="bg-offwhite">
           <Container textAlign={isMobile ? 'left' : 'center'} className="mt-30">
             <Header as="h2" className="mb-30">
-            Build an investment portfolio{' '}
+              Build an investment portfolio{' '}
               <Responsive as={React.Fragment} minWidth={1199}><br /></Responsive>
             you care about.
             </Header>
             <p className={isMobile ? 'mb-40' : 'mb-50'}>
-            NextSeed offers the opportunity to invest in restaurants, fitness studios,
+              NextSeed offers the opportunity to invest in restaurants, fitness studios,
               {!isMobile && <br />}
             craft breweries and a variety of growing concepts.
             </p>
           </Container>
           {!isMobile
             ? (
-<Container className="mb-30">
-              <Grid centered stackable className="vertical-gutter">
-                {businesses.map(b => (
-                  <Grid.Column textAlign="center" width={5}>
-                    <NSImage path={b.image} centered />
-                    <Header as="h5">{b.title}</Header>
-                    <p>{b.description}</p>
-                  </Grid.Column>
-                ))
-              }
-              </Grid>
-            </Container>
+              <Container className="mb-30">
+                <Grid centered stackable className="vertical-gutter">
+                  {businesses.map(b => (
+                    <Grid.Column textAlign="center" width={5}>
+                      <NSImage path={b.image} centered />
+                      <Header as="h5">{b.title}</Header>
+                      <p>{b.description}</p>
+                    </Grid.Column>
+                  ))
+                  }
+                </Grid>
+              </Container>
             )
             : (
-<>
-              <Container className="mb-30">
-                <NsCarousel {...settings}>
-                  {businesses.map(b => (
-                    <Grid.Row>
-                      <Grid.Column className="center-align">
-                        <NSImage path={b.image} centered />
-                        <Header as="h5">{b.title}</Header>
-                        <p>{b.description}</p>
-                      </Grid.Column>
-                    </Grid.Row>
-                  ))
-                }
-                </NsCarousel>
-              </Container>
-            </>
+              <>
+                <Container className="mb-30">
+                  <NsCarousel {...settings}>
+                    {businesses.map(b => (
+                      <Grid.Row>
+                        <Grid.Column className="center-align">
+                          <NSImage path={b.image} centered />
+                          <Header as="h5">{b.title}</Header>
+                          <p>{b.description}</p>
+                        </Grid.Column>
+                      </Grid.Row>
+                    ))
+                    }
+                  </NsCarousel>
+                </Container>
+              </>
             )
-        }
+          }
         </section>
         <section>
           <Container>

@@ -17,7 +17,7 @@ export default class ConfirmPhoneNumber extends Component {
   constructor(props) {
     super(props);
     const { userDetailsStore } = this.props;
-    const { phoneNumberChange, phoneTypeChange, requestOtpResponse, ID_VERIFICATION_FRM, startPhoneVerification } = this.props.identityStore;
+    const { phoneNumberChange, phoneTypeChange, requestOtpResponse, ID_VERIFICATION_FRM, sendOtp } = this.props.identityStore;
     if (ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       if (userDetailsStore.userDetails && userDetailsStore.userDetails.phone
         && userDetailsStore.userDetails.phone.number) {
@@ -31,7 +31,7 @@ export default class ConfirmPhoneNumber extends Component {
     }
 
     if (Object.keys(requestOtpResponse).length === 0 && !isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)) {
-      startPhoneVerification();
+      sendOtp(this.getOtpType(), isMobile);
     }
   }
 
@@ -39,27 +39,24 @@ export default class ConfirmPhoneNumber extends Component {
     Helper.otpShield();
   }
 
-  handleConfirmPhoneNumber = (e) => {
+  getOtpType = () => (this.props.refLink ? 'PHONE_CHANGE' : 'PHONE_CONFIGURATION')
+
+
+  handleConfirmPhoneNumber = async (e) => {
     e.preventDefault();
-    const setMfaMode = !this.props.userDetailsStore.userDetails.phone;
     this.props.identityStore.setReSendVerificationCode(false);
     if (this.props.refLink) {
-      this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
-        if (setMfaMode) {
-          this.props.multiFactorAuthStore.updateUserMFA();
-        }
-        // Helper.toast('Thank you for confirming your phone number', 'success');
+      const res = await this.props.identityStore.changePhoneRequest();
+      if (res) {
         this.props.identityStore.setIsOptConfirmed(true);
         this.props.uiStore.clearErrors();
         this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
-      })
-        .catch(() => { });
+      }
     } else {
-      this.props.identityStore.confirmPhoneNumber().then(() => {
-        // Helper.toast('Thank you for confirming your phone number', 'success');
+      const res = await this.props.identityStore.verifyOtpPhone();
+      if (res) {
         this.props.setDashboardWizardStep('InvestmentChooseType');
-      })
-        .catch(() => { });
+      }
     }
   }
 
@@ -73,7 +70,8 @@ export default class ConfirmPhoneNumber extends Component {
 
   startPhoneVerification = async () => {
     this.props.identityStore.setReSendVerificationCode(true);
-    const res = await this.props.identityStore.startPhoneVerification('', undefined, isMobile);
+    const res = await this.props.identityStore.sendOtp(this.getOtpType(), isMobile);
+
     if (res && !this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }

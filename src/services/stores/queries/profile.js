@@ -120,6 +120,55 @@ export const verifyOtpPhone = gql`
     )
   }
 `;
+
+export const changeLinkedBankRequest = gql`
+  mutation changeLinkedBankRequest(
+    $resourceId: String!
+    $verificationCode: String!
+    $accountId: String!
+    $plaidPublicToken: String
+    $plaidAccountId: String
+    $bankRoutingNumber: String
+    $bankAccountNumber: String
+    $accountType: accountTypeEnum
+    $bankName: String
+    ){
+    changeLinkedBankRequest(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+      accountId: $accountId
+      plaidPublicToken: $plaidPublicToken
+      plaidAccountId: $plaidAccountId
+      bankRoutingNumber: $bankRoutingNumber
+      accountType: $accountType
+      bankName: $bankName
+
+    ) {
+      lastDigits
+      dateRequested
+      status
+    }
+  }
+`;
+
+export const changeEmailRequest = gql`
+  mutation changeEmailRequest($resourceId: String! $verificationCode: String!){
+    changeEmailRequest(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+    )
+  }
+`;
+
+export const changePhoneRequest = gql`
+  mutation changePhoneRequest($resourceId: String! $verificationCode: String!, $phone: String!){
+    changePhoneRequest(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+    )
+  }
+`;
+
 export const verifyOtpEmailPrivate = gql`
   mutation verifyOtpEmail($resourceId: String! $verificationCode: String!, $email: String!){
     verifyOtpEmail(
@@ -131,10 +180,9 @@ export const verifyOtpEmailPrivate = gql`
 `;
 
 export const sendOtpEmail = gql`
-  mutation sendOtpEmail($email: String!, $firstName: String, $tags: tagsInput){
+  mutation sendOtpEmail($email: String!, $tags: tagsInput){
     sendOtpEmail(
       email: $email
-      firstName: $firstName
       tags: $tags
     )
   }

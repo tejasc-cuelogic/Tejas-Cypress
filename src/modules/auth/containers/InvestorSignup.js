@@ -33,14 +33,14 @@ class InvestorSignup extends Component {
     this.props.authStore.setVerifyPassword(e);
   }
 
-  handleSubmitForm = (e) => {
+  handleSubmitForm = async (e) => {
     e.preventDefault();
     if (this.props.authStore.newPasswordRequired) {
       this.props.history.push('/change-password');
     } else {
       const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
       this.props.uiStore.setProgress();
-      this.props.authStore.checkEmailExistsPresignup(email.value).then((res) => {
+      this.props.authStore.checkEmailExistsPresignup(email.value).then(async (res) => {
         if (res) {
           this.props.uiStore.setProgress(false);
           this.props.authStore.setCredentials({
@@ -48,9 +48,10 @@ class InvestorSignup extends Component {
             password: password.value,
           });
           if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
-            this.props.identityStore.sendOtpEmail(isMobile).then(() => {
+            const result = await this.props.identityStore.sendOtpEmail(isMobile);
+            if (result) {
               this.props.history.push('/confirm-email');
-            });
+            }
           }
         }
       });

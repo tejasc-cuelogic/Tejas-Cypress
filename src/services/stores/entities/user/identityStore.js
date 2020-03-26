@@ -4,10 +4,10 @@ import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import { mapValues, keyBy, find, flatMap, map, get, isEmpty, intersection } from 'lodash';
 import Validator from 'validatorjs';
-import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
+import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO, VERIFY_OTP } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { sendOtpEmail, verifyOtpEmail, verifyOtp, requestOtp, sendOtp, isUniqueSSN, cipLegalDocUploads, verifyOtpPhone, verifyOtpEmailPrivate, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
+import { sendOtpEmail, verifyOtpEmail, verifyOtp, requestOtp, sendOtp, isUniqueSSN, cipLegalDocUploads, verifyOtpPhone, changeLinkedBankRequest, changePhoneRequest, changeEmailRequest, verifyOtpEmailPrivate, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
@@ -17,6 +17,7 @@ import { INVESTOR_URLS } from '../../../constants/url';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/cipVerification/helper/index';
 import { US_STATES, FILE_UPLOAD_STEPS, US_STATES_FOR_INVESTOR } from '../../../../constants/account';
 import commonStore from '../commonStore';
+import bankAccountStore from '../shared/bankAccountStore';
 
 export class IdentityStore {
   @observable ID_VERIFICATION_FRM = FormValidator.prepareFormObject(USER_IDENTITY);
@@ -26,6 +27,8 @@ export class IdentityStore {
   @observable ID_VERIFICATION_QUESTIONS = FormValidator.prepareFormObject([]);
 
   @observable ID_PHONE_VERIFICATION = FormValidator.prepareFormObject(PHONE_VERIFICATION);
+
+  @observable OTP_VERIFY_META = FormValidator.prepareFormObject(VERIFY_OTP);
 
   @observable ID_PROFILE_INFO = FormValidator.prepareFormObject(UPDATE_PROFILE_INFO);
 
@@ -497,7 +500,10 @@ export class IdentityStore {
       const phone = phoneNumber.value || get(user, 'phone.number');
       const emailAddress = authStore.CONFIRM_FRM.fields.email.value || get(user, 'email.address');
       const to = type.startsWith('EMAIL') || mfaMethod.value === 'EMAIL' ? emailAddress.toLowerCase() : phone;
-      const method = (mfaMethod.value === '' || type.startsWith('EMAIL')) ? 'EMAIL' : mfaMethod.value;
+      let method = (mfaMethod.value === '' || type.startsWith('EMAIL')) ? 'EMAIL' : mfaMethod.value;
+      if (type === 'BANK_CHANGE') {
+        method = get(user, 'mfaMode');
+      }
       uiStore.clearErrors();
       uiStore.setProgress();
       this.setFieldValue('signUpLoading', true);
@@ -590,36 +596,36 @@ export class IdentityStore {
     });
   }
 
-  verifyOtpPhone = () => {
+  verifyOtpPhone = async () => {
     uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: verifyOtpPhone,
-          variables: {
-            resourceId: this.requestOtpResponse,
-            verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
-            phone: this.ID_VERIFICATION_FRM.fields.phoneNumber.value,
-          },
-        })
-        .then((result) => {
-          if (result.data.verifyOtpPhone) {
-            userDetailsStore.mergeUserData('phone', {
-              ...this.formattedUserInfoForCip.phoneDetails,
-              verified: moment().tz('America/Chicago').toISOString(),
-            });
-            resolve();
-          }
-        })
-        .catch(action((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        }))
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
+    const payLoad = {
+      mutation: verifyOtpPhone,
+      mutationName: 'verifyOtpPhone',
+      variables: {
+        resourceId: this.requestOtpResponse,
+        verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
+        phone: this.ID_VERIFICATION_FRM.fields.phoneNumber.value,
+      },
+    };
+    const res = await this.otpWrapper(payLoad);
+
+    if (res) {
+      userDetailsStore.mergeUserData('phone', {
+        ...this.formattedUserInfoForCip.phoneDetails,
+        verified: moment().tz('America/Chicago').toISOString(),
+      });
+    }
+
+    return res;
   }
+
+  @action
+  verifyVerificationCodeChange = (value) => {
+    this.OTP_VERIFY_META = FormValidator.onChange(
+      this.OTP_VERIFY_META,
+      { name: 'code', value },
+    );
+  };
 
   uploadProfilePhoto = () => {
     uiStore.setProgress();
@@ -848,94 +854,157 @@ export class IdentityStore {
     }
   }
 
-  sendOtpEmail = () => {
+  @action
+  sendOtpEmail = async () => {
     uiStore.setProgress();
-    const { email, givenName } = FormValidator.ExtractValues(authStore.SIGNUP_FRM.fields);
+    const { email } = FormValidator.ExtractValues(authStore.SIGNUP_FRM.fields);
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
-    const firstNameInCookie = authStore.CONFIRM_FRM.fields.givenName.value;
-    let payload = {
+    let variables = {
       email: (email || emailInCookie).toLowerCase(),
-      firstName: givenName || firstNameInCookie,
     };
     const tags = JSON.parse(window.localStorage.getItem('tags'));
-    payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
-    return new Promise((resolve, reject) => {
-      publicClient
-        .mutate({
-          mutation: sendOtpEmail,
-          variables: payload,
-        })
-        .then((result) => {
-          this.setRequestOtpResponse(result.data.sendOtpEmail);
-          // if (!isMobile) {
-          //   Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
-          // }
-          commonStore.removeLocalStorage(['tags']);
-          resolve();
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
-
-  verifyOtpEmail = () => {
-    uiStore.setProgress();
-    const { email, code, givenName } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
-    const verifyOTPData = {
-      verificationCode: code,
-      email,
-      firstName: givenName,
+    variables = !isEmpty(tags) ? { ...variables, tags } : { ...variables };
+    const payLoad = {
+      mutation: sendOtpEmail,
+      mutationName: 'sendOtpEmail',
+      variables,
     };
-    return new Promise((resolve, reject) => {
-      publicClient
-        .mutate({
-          mutation: verifyOtpEmail,
-          variables: {
-            verifyOTPData,
-          },
-        })
-        .then((result) => {
-          if (result.data.verifyOtpEmail) {
-            resolve();
-          }
-        })
-        .catch((err) => {
-          uiStore.setProgress(false);
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        });
-    });
+    const res = await this.otpWrapper(payLoad, true);
+    commonStore.removeLocalStorage(['tags']);
+    this.setRequestOtpResponse(res);
+    return res;
   }
 
   @action
-  confirmEmailAddress = () => {
+  verifyOtpEmail = async () => {
     uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: verifyOtpEmailPrivate,
-          variables: {
-            resourceId: this.requestOtpResponse,
-            verificationCode: authStore.CONFIRM_FRM.fields.code.value,
-            email: get(userDetailsStore, 'currentUser.data.user.email.address'),
-          },
-        })
-        .then((result) => {
-          if (result.data.verifyOtpEmail) {
-            resolve();
-          }
-        })
-        .catch(action((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          uiStore.setProgress(false);
-          reject(err);
-        }));
-    });
+    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const verifyOTPData = {
+      verificationCode: code,
+      email,
+    };
+
+    const payLoad = {
+      mutation: verifyOtpEmail,
+      mutationName: 'verifyOtpEmail',
+      variables: { verifyOTPData },
+    };
+
+    const res = await this.otpWrapper(payLoad, true);
+    return res;
+  }
+
+  @action
+  changeLinkedBankRequest = async () => {
+    uiStore.setProgress();
+    const bankAttributes = bankAccountStore.accountAttributes.linkedBank;
+    const payLoad = {
+      mutation: changeLinkedBankRequest,
+      mutationName: 'changeLinkedBankRequest',
+      variables: {
+        resourceId: this.requestOtpResponse,
+        verificationCode: this.OTP_VERIFY_META.fields.code.value,
+        accountId: bankAccountStore.CurrentAccountId,
+        ...bankAttributes,
+      },
+    };
+    const res = await this.otpWrapper(payLoad);
+    if (res) {
+      await userDetailsStore.getUser(userStore.currentUser.sub);
+    }
+    return res;
+  }
+
+  @action
+  changeEmailRequest = async () => {
+    uiStore.setProgress();
+    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const payLoad = {
+      mutation: changeEmailRequest,
+      mutationName: 'changeEmailRequest',
+      variables: {
+        resourceId: this.requestOtpResponse,
+        verificationCode: code,
+      },
+    };
+    const res = await this.otpWrapper(payLoad);
+    if (res) {
+      this.props.userDetailsStore.mergeUserData('email', { address: email });
+    }
+    return res;
+  }
+
+  @action
+  changeEmailRequest = async () => {
+    uiStore.setProgress();
+    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const payLoad = {
+      mutation: changeEmailRequest,
+      mutationName: 'changeEmailRequest',
+      variables: {
+        resourceId: this.requestOtpResponse,
+        verificationCode: code,
+      },
+    };
+    const res = await this.otpWrapper(payLoad);
+    if (res) {
+      userDetailsStore.mergeUserData('email', { address: email });
+    }
+    return res;
+  }
+
+  @action
+  changePhoneRequest = async () => {
+    uiStore.setProgress();
+    const { phoneNumber } = FormValidator.ExtractValues(this.ID_VERIFICATION_FRM.fields);
+    const payLoad = {
+      mutation: changePhoneRequest,
+      mutationName: 'changePhoneRequest',
+      variables: {
+        resourceId: this.requestOtpResponse,
+        verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
+        phone: phoneNumber,
+      },
+    };
+    const res = await this.otpWrapper(payLoad);
+    if (res) {
+      userDetailsStore.mergeUserData('phone', { address: phoneNumber });
+    }
+    return res;
+  }
+
+  @action
+  otpWrapper = async (payLoad, isPublicClient = false) => {
+    try {
+      const apolloClient = isPublicClient ? publicClient : client;
+      const res = await apolloClient.mutate({
+        mutation: payLoad.mutation,
+        variables: payLoad.variables,
+      });
+      uiStore.setProgress(false);
+      return res.data[`${payLoad.mutationName}`];
+    } catch (err) {
+      uiStore.setProgress(false);
+      uiStore.setErrors(DataFormatter.getSimpleErr(err));
+      return false;
+    }
+  }
+
+  @action
+  confirmEmailAddress = async () => {
+    uiStore.setProgress();
+    const payLoad = {
+      mutation: verifyOtpEmailPrivate,
+      mutationName: 'verifyOtpEmail',
+      variables: {
+        resourceId: this.requestOtpResponse,
+        verificationCode: authStore.CONFIRM_FRM.fields.code.value,
+        email: get(userDetailsStore, 'currentUser.data.user.email.address'),
+      },
+    };
+
+    const res = await this.otpWrapper(payLoad);
+    return res;
   }
 
   @action

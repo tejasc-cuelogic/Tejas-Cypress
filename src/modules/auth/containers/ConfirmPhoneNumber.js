@@ -51,23 +51,16 @@ export default class ConfirmPhoneNumber extends Component {
     }
   }
 
-  handleConfirmPhoneNumber = (e) => {
+  handleConfirmPhoneNumber = async (e) => {
     e.preventDefault();
     this.props.identityStore.setReSendVerificationCode(false);
-    if (this.props.refLink) {
-      this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
-        // Helper.toast('Thank you for confirming your phone number', 'success');
-        this.props.history.replace('/dashboard/account-settings/profile-data');
-        this.props.uiStore.clearErrors();
-        this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
-      })
-        .catch(() => { });
-    } else {
-      this.props.identityStore.verifyOtpPhone().then(() => {
-        // Helper.toast('Thank you for confirming your phone number', 'success');
-        this.props.identityStore.setIsOptConfirmed(true);
-      })
-        .catch(() => { });
+    const res = await this.props.identityStore.verifyOtpPhone();
+    if (res && this.props.refLink) {
+      this.props.history.replace('/dashboard/account-settings/profile-data');
+      this.props.uiStore.clearErrors();
+      this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
+    } else if (res) {
+      this.props.identityStore.setIsOptConfirmed(true);
     }
   }
 
@@ -81,7 +74,6 @@ export default class ConfirmPhoneNumber extends Component {
 
   sendOtp = async () => {
     this.props.identityStore.setReSendVerificationCode(true);
-    this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
     this.props.uiStore.clearErrors();
     const res = await this.props.identityStore.sendOtp(this.getOtpType(), isMobile);
     if (res && !this.props.refLink) {
