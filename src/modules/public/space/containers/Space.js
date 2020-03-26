@@ -126,7 +126,7 @@ class Space extends Component {
                 </Grid.Column>
                 <Grid.Column width="11" verticalAlign="middle" textAlign="center">
                   <Header as="h3" className="space-header">The Chicken & Rice Guys</Header>
-                  <p>Boston{"'"}s original Halal-style street<br /> food has arrived in Houston</p>
+                  <p>Boston{'\''}s original Halal-style street<br /> food has arrived in Houston</p>
                   <Button fluid={responsiveVars.isMobile} className={`${responsiveVars.isMobile ? 'mb-30 mt-20 space-visit-btn' : ' mt-30'} hoverable`} basic secondary as={Link} to="/space/chicken-and-rice">Visit at Greenway Plaza</Button>
                 </Grid.Column>
               </Grid>

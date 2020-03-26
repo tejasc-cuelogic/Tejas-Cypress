@@ -330,7 +330,7 @@ export class InvestmentLimitStore {
   updateInvestmentLimits = (
     data, accountId, resetProgress = true, offeringId = undefined,
   ) => {
-    console.log(resetProgress);
+    window.logger(resetProgress);
     uiStore.setProgress();
     const { campaign } = campaignStore;
     const offeringDetailId = offeringId || campaign.id;
@@ -355,7 +355,7 @@ export class InvestmentLimitStore {
                 uiStore.setProgress(false);
                 resolve();
               }).catch((err) => {
-                console.log('Error :: getInvestNowHealthCheck', err);
+                window.logger('Error :: getInvestNowHealthCheck', err);
                 uiStore.setProgress(false);
                 resolve();
               });

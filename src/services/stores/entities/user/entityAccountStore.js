@@ -407,7 +407,7 @@ class EntityAccountStore {
                   .then(() => res()).catch(() => rej());
               }
             }).catch((e) => {
-              console.log(e);
+              window.logger(e);
             });
           } else {
             this.submitForm(currentStep, accountAttributes)
@@ -690,10 +690,10 @@ class EntityAccountStore {
               };
             if (isPersonalForm || this.formationDocUploadCount() >= 3) {
               this.createAccount(currentStep, false).then(() => {
-                console.log();
+                window.logger();
                 uiStore.setProgress(false);
               }).catch((e) => {
-                console.log(e);
+                window.logger(e);
               });
             } else {
               uiStore.setProgress(false);

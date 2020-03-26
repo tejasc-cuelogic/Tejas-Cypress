@@ -12,7 +12,7 @@ Validator.register(
   'dob', (value, attribute) => {
     return moment(value, 'MM/DD/YYYY').isBefore(moment());
   },
-  "The :attribute should be less than today's date.",
+  'The :attribute should be less than today\'s date.',
 );
 Validator.register(
   'afterDate', (value, attribute) => {

@@ -22,7 +22,7 @@ class Footer extends Component {
   render() {
     const { path } = this.props;
     const OfferFooter = ['/offerings/:id/:section?'];
-    const isCampaign = matchPath(path, { path: OfferFooter }) != null;
+    const isCampaign = matchPath(path, { path: OfferFooter }) !== null;
     const isNewCampaign = this.props.location.pathname.startsWith('/offerings');
     return (
       <footer id="site-footer" className={`${isCampaign ? 'offering-footer' : ''} ${isNewCampaign && isTablet ? 'offering-footer-v2' : ''}`}>

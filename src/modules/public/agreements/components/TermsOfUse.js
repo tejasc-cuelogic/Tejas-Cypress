@@ -57,7 +57,7 @@ const TermsOfUse = () => (
         such entities, is intended solely for authorized representatives of entities that are
         in good standing in each jurisdiction in which such entity is registered to conduct
         business, and persons otherwise authorized by such entities to act in furtherance of
-        such entity{"'"}s use of the Website or Service. By using the Service or the Website
+        such entity{'\''}s use of the Website or Service. By using the Service or the Website
         on behalf of an entity, you represent and warrant that you are duly authorized in
         accordance with the foregoing by the entity on behalf of which you are acting, that
         you have the power and authority to enter into binding agreements on behalf of such
@@ -100,16 +100,16 @@ const TermsOfUse = () => (
         agree to (a) provide accurate, current and complete information about the entity,
         yourself and any other principals or authorized representatives of such entity as may
         be prompted by any registration forms on the Website or otherwise requested by
-        NextSeed (<b>“Entity Registration Data”</b>), including the entity{"'"}s full legal name,
+        NextSeed (<b>“Entity Registration Data”</b>), including the entity{'\''}s full legal name,
         (b) provide such materials as NextSeed may request to establish or verify your or any other
-        person{"'"}s identity or authority to enter into binding agreements on behalf of the
-        entity, or to establish or verify the entity{"'"}s legal existence, good standing, and
+        person{'\''}s identity or authority to enter into binding agreements on behalf of the
+        entity, or to establish or verify the entity{'\''}s legal existence, good standing, and
         eligibility to use the Website or Service, (c) maintain the security of any Credentials
         issued for use by or on behalf of the entity, (d) maintain and promptly update the Entity
         Registration Data, and any other information provided to NextSeed by you or anyone else
         acting on behalf of the entity, to keep it accurate, current, and complete, (e) promptly
         notify NextSeed regarding any material changes to information or circumstances impacting
-        the entity{"'"}s legal existence, good standing, or eligibility for continued use of the
+        the entity{'\''}s legal existence, good standing, or eligibility for continued use of the
         Website or any Service, and (f) be fully responsible for all use of any Account opened on
         behalf of the entity and for any actions that take place using such Account.
       </p>
@@ -141,7 +141,7 @@ const TermsOfUse = () => (
         reserved. Except as otherwise expressly provided otherwise in these Terms, no Website
         Content may be modified, copied, distributed, framed, reproduced, republished, downloaded,
         displayed, posted, transmitted, or sold in any form or by any means, in whole or in part,
-        without NextSeed{"'"}s express prior written consent; provided, however, that the foregoing
+        without NextSeed{'\''}s express prior written consent; provided, however, that the foregoing
         shall not apply to your own User Content (as defined below) that you legally post on the
         Website. Provided that you are eligible for use of the Website, you are granted a limited,
         revocable, non-exclusive, non-transferrable license to access and use the Website and to
@@ -264,7 +264,7 @@ const TermsOfUse = () => (
         Investment overviews on the Website contain summaries of the purpose and principal
         business terms of the investment opportunities. Such summaries are intended for
         informational purposes only and do not purport to be comprehensive. The information
-        contained on the Website has been prepared without reference to any particular User{"'"}s
+        contained on the Website has been prepared without reference to any particular User{'\''}s
         investment requirements or financial situation
       </p>
       <Header as="h5">ISSUER CONTENT</Header>
@@ -405,7 +405,7 @@ const TermsOfUse = () => (
         any telephone network or lines, computer online systems, servers or providers, computer
         equipment, software, failure of email or players on account of technical problems or
         traffic congestion on the internet or on the Website or combination thereof, including
-        injury or damage to Users or to any other person{"'"}s or entity’s computer related to or
+        injury or damage to Users or to any other person{'\''}s or entity’s computer related to or
         resulting from participating or downloading materials in connection with the Website or
         the Service.
       </p>
@@ -586,7 +586,7 @@ const TermsOfUse = () => (
       </p>
       <p>
         In accordance with the Digital Millennium Copyright Act and other applicable law, NextSeed
-        has adopted a policy of terminating, in appropriate circumstances and at NextSeed{"'"}s
+        has adopted a policy of terminating, in appropriate circumstances and at NextSeed{'\''}s
         sole discretion, the memberships of Users who are deemed to be repeat infringers.
         NextSeed may also at its sole  discretion limit access to the Website or terminate the
         memberships of any Users who infringe any intellectual property rights of others, whether
@@ -629,7 +629,7 @@ const TermsOfUse = () => (
       <p>
         Notwithstanding the foregoing, you agree that the following matters shall not, at the
         election of NextSeed, be subject to binding arbitration: (a) any Dispute related to, or
-        arising from allegations of criminal activity; (b) any Dispute concerning NextSeed{"'"}s
+        arising from allegations of criminal activity; (b) any Dispute concerning NextSeed{'\''}s
         intellectual property rights; and (c) any claim for injunctive relief.
       </p>
       <p>
