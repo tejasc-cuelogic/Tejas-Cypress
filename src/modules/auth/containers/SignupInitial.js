@@ -53,6 +53,7 @@ class signupInitial extends Component {
                 fielddata={SIGNUP_FRM.fields.role}
                 changed={(e, result) => this.handleSignupChange(e, result)}
                 classname="icon-arrow-button"
+                ignoreValues={(this.props.uiStore.authRef === '/business') ? ['investor'] : ''}
               />
             </Form>
             <Divider hidden />
