@@ -7,7 +7,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO, VERIFY_OTP } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { sendOtpEmail, verifyOtpEmail, verifyOtp, sendOtp, isUniqueSSN, cipLegalDocUploads, verifyOtpPhone, changeLinkedBankRequest, changePhoneRequest, changeEmailRequest, verifyOtpEmailPrivate, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
+import { sendOtpEmail, verifyOtpEmail, sendOtp, isUniqueSSN, cipLegalDocUploads, verifyOtpPhone, changeLinkedBankRequest, changePhoneRequest, changeEmailRequest, verifyOtpEmailPrivate, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
@@ -518,41 +518,6 @@ export class IdentityStore {
   get formattedIdentityQuestionsAnswers() {
     const formattedIdentityQuestionsAnswers = flatMap(this.ID_VERIFICATION_QUESTIONS.fields, n => [{ type: n.key, text: n.value }]);
     return formattedIdentityQuestionsAnswers;
-  }
-
-  verifyAndUpdatePhoneNumber = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: verifyOtp,
-          variables: {
-            resourceId: this.requestOtpResponse,
-            verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
-            isPhoneNumberUpdated: true,
-          },
-        })
-        .then((result) => {
-          if (result.data.verifyOtp) {
-            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
-              uiStore.setProgress(false);
-              resolve();
-            });
-          } else {
-            const error = {
-              message: 'Invalid verification code.',
-            };
-            uiStore.setProgress(false);
-            uiStore.setErrors(error);
-            reject();
-          }
-        })
-        .catch(action((err) => {
-          uiStore.setErrors(JSON.stringify(err.message));
-          uiStore.setProgress(false);
-          reject(err);
-        }));
-    });
   }
 
   verifyOtpPhone = async () => {

@@ -91,18 +91,6 @@ export const portPrequalDataToApplication = gql`
     )
   }`;
 
-
-export const verifyOtp = gql`
-  mutation verifyOtp($resourceId: String! $verificationCode: String!, $isEmailVerify: Boolean, $isPhoneNumberUpdated: Boolean){
-    verifyOtp(
-      resourceId: $resourceId
-      verificationCode: $verificationCode
-      isEmailVerify: $isEmailVerify
-      isPhoneNumberUpdated: $isPhoneNumberUpdated
-    )
-  }
-`;
-
 export const verifyOtpPhone = gql`
   mutation verifyOtpPhone($resourceId: String! $verificationCode: String!, $phone: String!){
     verifyOtpPhone(
