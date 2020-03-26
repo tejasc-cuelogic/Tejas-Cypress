@@ -13,11 +13,13 @@ const metaInfo = {
 
 const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({ toggleVisible, GALLERY_FRM, isReadOnly, fieldIndex, smartElement, removeOne, currentOfferingId, removeMedia }) => (
-  <div className="row-wrap striped-table">
-    {!isReadOnly && <DragHandle />}
-    <Form.Group>
-      <Table verticalAlign="top" basic compact className="form-table">
-        <Table.Body>
+  <Form.Group className="mlr-0">
+    <Table basic compact>
+      <Table.Body>
+        <Table.Row className={GALLERY_FRM.fields.gallery[fieldIndex].isVisible.value ? '' : 'bg-offwhite'}>
+          <Table.Cell collapsing>
+            {!isReadOnly && <DragHandle />}
+          </Table.Cell>
           <Table.Cell>
             {smartElement.Input('caption', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex] })}
           </Table.Cell>
@@ -38,10 +40,10 @@ const SortableItem = SortableElement(({ toggleVisible, GALLERY_FRM, isReadOnly, 
               </Button>
             </Table.Cell>
           )}
-        </Table.Body>
-      </Table>
-    </Form.Group>
-  </div>
+        </Table.Row>
+      </Table.Body>
+    </Table>
+  </Form.Group>
 ));
 const SortableList = SortableContainer(({ toggleVisible, GALLERY_FRM, isReadOnly, smartElement, currentOfferingId, removeMedia, removeOne }) => (
   <div className="tbody">
