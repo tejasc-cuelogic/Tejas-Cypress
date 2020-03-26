@@ -10,11 +10,9 @@ import { FormTextarea } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { DataFormatter } from '../../../../../helper';
 
-// TODO: remove this from static, use Store
-const isMobile = document.documentElement.clientWidth < 768;
 const readMoreLength = 250;
 
-const CommentHeader = ({ newLayout, refLink }) => (
+const CommentHeader = ({ newLayout, refLink, isMobile }) => (
   <>
     <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
       Comments
@@ -38,7 +36,7 @@ const CommentHeader = ({ newLayout, refLink }) => (
   </>
 );
 
-const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHandler, showButton, showCopy, match, errors }) => (
+const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHandler, showButton, showCopy, match, errors, isMobile }) => (
   <>
     <Form className="public-form mt-30 clearfix" reply>
       <FormTextarea
@@ -78,21 +76,6 @@ const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHan
   </>
 );
 
-// const validationMeta = {
-//   frozenAccounts: {
-//     content: '',
-//   },
-//   atLeastOneFullAccount: {
-//     content: '',
-//   },
-//   isInvestorAccreditated: {
-//     content: '',
-//   },
-//   regDORregB: {
-//     content: '',
-//   },
-// };
-
 // TODO: create a HOC for NsOvserverComponent
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'messageStore')
 @withRouter
@@ -105,17 +88,6 @@ class Comments extends Component {
   constructor(props) {
     super(props);
     this.props.messageStore.resetMessageForm();
-  }
-
-  componentDidMount() {
-    // TODO: Remove this, it's no longer relevant
-    // Template 1 (way old, we no longer suppor this anymore)
-    // Template 2 (currently in production, we're looking to deperecate)
-    // Template 3 (the new offering creation revamp work)
-    if (!this.props.newLayout && !isMobile) {
-      const sel = 'anchor';
-      document.querySelector(`.${sel}`).scrollIntoView(true);
-    }
   }
 
   handleLogin = (e) => {
@@ -170,7 +142,8 @@ class Comments extends Component {
   render() {
     const { visible, visiblePost } = this.state;
     const { showOnlyOne, newLayout, messageStore, campaignStore, uiStore, match } = this.props;
-    const { errors } = uiStore;
+    const { errors, responsiveVars } = uiStore;
+    const { isMobile } = responsiveVars;
     const { MESSAGE_FRM, msgEleChange, buttonLoader } = messageStore;
     const { campaign, commentsMainThreadCount, campaignCommentsMeta, isPostedNewComment } = campaignStore;
 
@@ -186,7 +159,7 @@ class Comments extends Component {
 
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
-        <CommentHeader refLink={match.url} newLayout={newLayout} />
+        <CommentHeader refLink={match.url} newLayout={newLayout} isMobile={isMobile} />
         {/* action will trigger requirements users need to filfill prior to posting a comment:
             Log In, Verify Accreidted Status, Complete Account Setup (pass CIP), or if CIP Failed, FULL status on User */}
         {campaignCommentsMeta.action
@@ -209,6 +182,7 @@ class Comments extends Component {
                     showButton
                     btnHandler={() => this.send('PUBLIC', campaignSlug, null, campaignId)}
                     errors={errors}
+                    isMobile={isMobile}
                   />
                 ) : ''
               }
@@ -283,6 +257,7 @@ class Comments extends Component {
                                               showCopy
                                               match={match}
                                               errors={errors}
+                                              isMobile={isMobile}
                                             />
                                           ) : ''}
                                         </Comment.Content>
@@ -308,6 +283,7 @@ class Comments extends Component {
                                 showCopy
                                 btnHandler={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)}
                                 errors={errors}
+                                isMobile={isMobile}
                               />
                             ) : ''}
                           </Comment.Content>
