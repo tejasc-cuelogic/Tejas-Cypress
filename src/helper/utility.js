@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Some generally used function definations being used at multiple places
  */
@@ -99,7 +100,7 @@ export class Utility {
   }).format(amount)
 
   formattedSSNNumber = (ssnNumber) => {
-    if (!ssnNumber) return null;
+    if (!ssnNumber) { return null; }
     // const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, 'X');
     const cyrptedSSNNumber = ssnNumber;
     const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
@@ -107,17 +108,17 @@ export class Utility {
   }
 
   isUuid = value => value
-  .match(new RegExp(/([a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}){1}/)) !== null
+  .match(new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/)) !== null
 
   encryptNumber = (number) => {
-    if (!number) return null;
+    if (!number) { return null; }
     let encryptedNumber = number.replace(/.(?=.{4,}$)/g, '...');
     encryptedNumber = encryptedNumber.slice(-7);
     return encryptedNumber;
   }
 
   encryptNumberWithX = (number) => {
-    if (!number) return null;
+    if (!number) { return null; }
     const encryptedNumber = number.replace(/.(?=.{4,}$)/g, 'X');
     return encryptedNumber;
   }
@@ -201,7 +202,7 @@ export class Utility {
         });
       }
     } catch (e) {
-      console.log(e);
+      window.logger(e);
     }
   }
 
@@ -259,7 +260,7 @@ export class Utility {
     try {
       document.getElementsByName('ssn')[0].value = '';
     } catch (e) {
-      console.log(e);
+      window.logger(e);
     }
   }
 
@@ -340,7 +341,7 @@ export class Utility {
     try {
       return sanitizeHtml(c);
     } catch (e) {
-      console.log(e);
+      window.logger(e);
       return '';
     }
   };

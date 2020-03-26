@@ -219,7 +219,7 @@ export class BusinessAppReviewStore {
             this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
-            this.checkFormValid(form, (index != null) || (form === 'OFFERS_FRM'), false);
+            this.checkFormValid(form, (index !== null) || (form === 'OFFERS_FRM'), false);
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           }).catch((error) => {
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
@@ -248,7 +248,7 @@ export class BusinessAppReviewStore {
 
   @action
   setFormFileArray = (formName, arrayName, field, getField, value, index) => {
-    if (index != null) {
+    if (index !== null) {
       this[formName].fields[arrayName][index][field][getField] = value;
     } else {
       this[formName].fields[field][getField] = value;
@@ -258,7 +258,7 @@ export class BusinessAppReviewStore {
   @action
   removeUploadedData = (form, field, index = null, arrayName) => {
     let removeFileIds = '';
-    if (index != null) {
+    if (index !== null) {
       const { fileId } = this[form].fields[arrayName][index][field];
       removeFileIds = fileId;
     } else {
@@ -272,7 +272,7 @@ export class BusinessAppReviewStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    this.checkFormValid(form, (index != null) || (form === 'OFFERS_FRM'), false);
+    this.checkFormValid(form, (index !== null) || (form === 'OFFERS_FRM'), false);
   }
 
   @action

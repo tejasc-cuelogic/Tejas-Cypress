@@ -24,7 +24,7 @@ class Finances extends Component {
     const { errors, multiSteps } = uiStore;
     return (
       <>
-        <Header as="h4">What is your household{"'"}s annual income and net worth?</Header>
+        <Header as="h4">What is your household{'\''}s annual income and net worth?</Header>
         <p className={`${isMobile ? 'mb-30' : ''} tertiary-text`}>
           SEC rules and regulations require broker-dealers to collect this information
           to determine investor suitability for private offerings.

@@ -17,7 +17,7 @@ class signupInitial extends Component {
     super(props);
     this.props.uiStore.clearErrors();
     this.props.authStore.resetForm('SIGNUP_FRM');
-    console.log(this.props.uiStore.authRef);
+    window.logger(this.props.uiStore.authRef);
   }
 
   handleCloseModal = (e) => {
