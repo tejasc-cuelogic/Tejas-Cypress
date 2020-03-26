@@ -122,7 +122,7 @@ export class ManageOfferingStore extends DataModelStore {
 
   get campaignStatus() {
     const { currentUserId } = userDetailsStore;
-    console.log(this.TOMBSTONE_BASIC_FRM);
+    window.logger(this.TOMBSTONE_BASIC_FRM);
     const { offer } = offeringsStore;
     const campaignStatus = {};
     const closingDate = get(offer, 'closureSummary.processingDate') && get(offer, 'closureSummary.processingDate') !== 'Invalid date' ? get(offer, 'closureSummary.processingDate') : null;

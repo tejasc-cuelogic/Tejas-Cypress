@@ -26,7 +26,7 @@ class CampaignSubHeader extends Component {
   }
 
   removeMedia = (form, name) => {
-    console.log(form, name);
+    window.logger(form, name);
   }
 
   handleFormSubmit = () => {

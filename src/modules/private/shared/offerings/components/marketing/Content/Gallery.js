@@ -68,21 +68,19 @@ const SortableList = SortableContainer(({ toggleVisible, GALLERY_FRM, isReadOnly
 
 const GalleryList = ({ toggleVisible, GALLERY_FRM, isReadOnly, onSortEnd, smartElement, currentOfferingId, removeMedia, removeOne }) => (
   <div className="ui card fluid">
-    {/* <div className="ui basic table"> */}
-      <SortableList
-        GALLERY_FRM={GALLERY_FRM}
-        pressDelay={100}
-        onSortEnd={onSortEnd}
-        lockAxis="y"
-        useDragHandle
-        isReadOnly={isReadOnly}
-        smartElement={smartElement}
-        currentOfferingId={currentOfferingId}
-        removeMedia={removeMedia}
-        removeOne={removeOne}
-        toggleVisible={toggleVisible}
-      />
-    {/* </div> */}
+    <SortableList
+      GALLERY_FRM={GALLERY_FRM}
+      pressDelay={100}
+      onSortEnd={onSortEnd}
+      lockAxis="y"
+      useDragHandle
+      isReadOnly={isReadOnly}
+      smartElement={smartElement}
+      currentOfferingId={currentOfferingId}
+      removeMedia={removeMedia}
+      removeOne={removeOne}
+      toggleVisible={toggleVisible}
+    />
   </div>
 );
 
@@ -92,7 +90,7 @@ function Gallery(props) {
   const { currentOfferingId } = offeringCreationStore;
   const isReadOnly = campaignStatus.lock;
   const removeMedia = (form, name) => {
-    console.log(form, name);
+    window.logger(form, name);
   };
   const handleFormSubmit = () => {
     const params = {
@@ -105,7 +103,6 @@ function Gallery(props) {
     props.manageOfferingStore.reOrderHandle(arrayMove(gallery, oldIndex, newIndex), 'GALLERY_FRM', 'gallery');
     props.manageOfferingStore.setFieldValue('onDragSaveEnable', true);
   };
-  // console.log(currTime);
   return (
     <>
       <Header as="h4">
