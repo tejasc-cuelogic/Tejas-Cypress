@@ -250,6 +250,7 @@
             border-color: transparent;
             padding: @14px;
             width: auto;
+            height: 100%;
             &:hover {
                 border-color: @neutral-darkwhite;
             }
