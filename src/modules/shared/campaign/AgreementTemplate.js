@@ -49,7 +49,7 @@ function AgreementTemplate(props) {
     } = agreementsStore;
     if (!alreadySet) {
       getLegalDocsFileIds().then(() => {
-        // console.log('successfully doc get.');
+        // window.logger('successfully doc get.');
       });
     }
     resetAggrementForm();

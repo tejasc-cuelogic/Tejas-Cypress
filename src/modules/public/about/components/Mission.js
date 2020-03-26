@@ -79,7 +79,7 @@ class Mission extends Component {
         <Divider fitted as={Container} />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
           <Container>
-            <Header as="h2" className={responsiveVars.isMobile ? 'mb-30' : 'mb-80 center-align'}>We{"'"}ve built our brand and our platform<Responsive minWidth={768} as="br" /> on three core values</Header>
+            <Header as="h2" className={responsiveVars.isMobile ? 'mb-30' : 'mb-80 center-align'}>We{'\''}ve built our brand and our platform<Responsive minWidth={768} as="br" /> on three core values</Header>
             <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : 3} className="statistic-section proven-result-section" doubling>
               <Card className={`${responsiveVars.isMobile ? 'mlr-0' : ''} bordered`}>
                 <Card.Content extra>
@@ -133,8 +133,8 @@ class Mission extends Component {
             {!isMobile && <Divider hidden section />}
             <p className={`${responsiveVars.isMobile ? 'mt-40' : 'center-align mt-30'} note`}>
               <sup>1</sup> This calculates the percent of businesses that began the application
-              process, passed NextSeed{"'"}s objective diligence <Responsive minWidth={992} as="br" />
-              criteria, and launched an offering on the platform since NextSeed{"'"}s inception.
+              process, passed NextSeed{'\''}s objective diligence <Responsive minWidth={992} as="br" />
+              criteria, and launched an offering on the platform since NextSeed{'\''}s inception.
             </p>
             <p className={`${responsiveVars.isMobile ? '' : 'center-align'} note`}>
               <sup>2</sup> Historical figures only. Past performance of one business is not a
@@ -152,7 +152,7 @@ class Mission extends Component {
               <Grid.Column textAlign={responsiveVars.isMobile ? 'left' : 'center'} computer={15} tablet={14} mobile={16}>
                 <Header as="h2" className={responsiveVars.isMobile ? 'mb-10' : 'mb-30'}>Meet our team</Header>
                 <p className={`${responsiveVars.isMobile ? 'mb-40' : 'mb-60'} neutral-text`}>
-                  We{"'"}re a team of entrepreneurs with backgrounds in business, finance, law, marketing and technology.<Responsive minWidth={992} as="br" /> We{"'"}re here to empower business owners and everyday people to invest in one another.
+                  We{'\''}re a team of entrepreneurs with backgrounds in business, finance, law, marketing and technology.<Responsive minWidth={992} as="br" /> We{'\''}re here to empower business owners and everyday people to invest in one another.
                 </p>
                 {loading ? (<InlineLoader />)
                   : teamMembers.length === 0 ? <section className="center-align"><h3 style={{ color: '#31333d' }}>No Records to Display</h3></section>

@@ -31,7 +31,7 @@ export default class FinancialInformation extends Component {
       <>
         <Header as="h4">Calculating your investment limit</Header>
         <p>
-          Your entity{"'"}s net assets and annual revenue are used to determine your 12-month investment limit under Regulation Crowdfunding.
+          Your entity{'\''}s net assets and annual revenue are used to determine your 12-month investment limit under Regulation Crowdfunding.
         </p>
         <Form error>
           {['netAssets', 'annualIncome'].map(field => (
