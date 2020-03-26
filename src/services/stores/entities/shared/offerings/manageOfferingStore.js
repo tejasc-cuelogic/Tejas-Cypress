@@ -166,7 +166,7 @@ export class ManageOfferingStore extends DataModelStore {
         && offer.offering.overview.highlight);
     campaignStatus.hasTopThingToKnow = elevatorPitch;
     campaignStatus.dataRooms = [];
-    campaignStatus.gallary = get(offer, 'media.gallery') ? get(offer, 'media.gallery').length : 0;
+    campaignStatus.gallery = get(offer, 'media.gallery') ? get(offer, 'media.gallery').length : 0;
     campaignStatus.keyTerms = get(offer, 'keyTerms');
     campaignStatus.issuerStatement = get(offer, 'keyTerms.offeringDisclaimer');
     campaignStatus.companyDescription = get(offer, 'offering.about.theCompany');

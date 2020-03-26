@@ -9,6 +9,7 @@ import Updates from './Updates';
 import BonusRewards from './BonusRewards';
 import Documents from './documents';
 import Comments from './Comments';
+import Gallery from './AboutCompany/Gallery';
 import CustomContent from './CustomContent';
 
 @inject('campaignStore')
@@ -25,7 +26,7 @@ class CampaignTemplate2 extends Component {
   }
 
   render() {
-    const { isTabletLand, isTablet, refLink } = this.props;
+    const { isTabletLand, isTablet, refLink, processScroll } = this.props;
     const { campaign, campaignStatus, dataRoomDocs } = this.props.campaignStore;
     let updates = campaign && campaign.updates;
     updates = orderBy(updates, o => get(o, 'updatedDate') && moment(new Date(o.updatedDate)).unix(), ['asc']);
@@ -53,8 +54,13 @@ class CampaignTemplate2 extends Component {
                     </>
                   ) : null)
                 : c.contentType === 'GALLERY'
-                  ? <span>Gallery</span>
-                  : c.contentType === 'COMMENTS'
+                  ? (
+                    <Gallery
+                      processScroll={processScroll}
+                      newLayout
+                      galleryUrl={refLink}
+                    />
+                  ) : c.contentType === 'COMMENTS'
                     ? (
                       <>
                         <>{!campaignStatus.isFund && <Comments title={c.title} refLink={refLink} newLayout showOnlyOne={!this.state.expandComments} />}</>

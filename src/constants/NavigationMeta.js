@@ -77,7 +77,7 @@ const NEW_OFFERING_LAYOUT = [
     title: 'Bonus Rewards', to: '#bonus-rewards', useRefLink: true, key: 'isBonusReward',
   },
   {
-    title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallary',
+    title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallery',
   },
   {
     title: 'Documents', to: '#data-room', useRefLink: true, key: 'dataRooms',
@@ -630,7 +630,7 @@ export const PUBLIC_NAV = [
             title: 'Updates', to: '#updates', useRefLink: true, key: 'updates',
           },
           {
-            title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallary',
+            title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallery',
           },
           {
             title: 'Issuer Statement', to: '#issuer-statement', useRefLink: true, key: 'issuerStatement',

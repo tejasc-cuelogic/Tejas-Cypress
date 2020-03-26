@@ -251,13 +251,13 @@ class offerDetails extends Component {
           && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
         {!isMobile
-          && (get(campaign, 'template') === 2 ? <CampaignHeaderV2 followBtn={followBtn} {...this.props} /> : <CampaignHeader followBtn={followBtn} {...this.props} />)
+          && (campaignStatus.campaignTemplate === 2 ? <CampaignHeaderV2 followBtn={followBtn} {...this.props} /> : <CampaignHeader followBtn={followBtn} {...this.props} />)
         }
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu newLayout={newLayout} {...this.props} />
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
-              {get(campaign, 'template') === 2 ? <CampaignHeaderV2 followBtn={followBtn} {...this.props} /> : mobileHeaderAndSideBar}
+              {campaignStatus.campaignTemplate === 2 ? <CampaignHeaderV2 followBtn={followBtn} {...this.props} /> : mobileHeaderAndSideBar}
               <MobileDropDownNav
                 inverted
                 refMatch={match}

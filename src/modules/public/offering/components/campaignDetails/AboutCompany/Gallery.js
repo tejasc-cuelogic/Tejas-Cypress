@@ -17,14 +17,16 @@ class Gallery extends Component {
     }, 10);
   }
 
-  handleViewGallary = (e, index) => {
+  handleViewGallery = (e, index) => {
     e.preventDefault();
     this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', index);
     this.props.history.push(`${this.props.galleryUrl.replace(/\/$/, '')}/photogallery`);
   }
 
   render() {
-    const { campaign, newLayout } = this.props;
+    const { campaignStore, newLayout } = this.props;
+    const { campaignStatus } = campaignStore;
+    const isTemplate2 = campaignStatus.campaignTemplate === 2;
     return (
       <>
         <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
@@ -32,23 +34,23 @@ class Gallery extends Component {
           <span className="anchor" id="gallery" />
         </Header>
         <div className="gallery-preview">
-          {get(campaign, 'media.gallery')
-            ? campaign.media.gallery.map((data, index) => (
+          {campaignStatus.galleryImages && campaignStatus.galleryImages.length
+            ? campaignStatus.galleryImages.map((data, index) => (
               <>
                 {index < (newLayout ? 1 : 3)
-                  && <Image64 onClick={e => this.handleViewGallary(e, index)} fluid={!newLayout} className="about-gallery-bg" srcUrl={data.url} />
+                  && <Image64 onClick={e => this.handleViewGallery(e, index)} fluid={!newLayout} className="about-gallery-bg" srcUrl={isTemplate2 ? get(data, 'image.url') : data.url} />
                 }
               </>
             ))
             : <NSImage fluid={!newLayout} className="about-gallery-bg" path="gallery-placeholder-16-9.jpg" />
           }
         </div>
-        {get(campaign, 'media.gallery')
+        {campaignStatus.galleryImages && campaignStatus.galleryImages.length
           && (
-<Button fluid={!newLayout && isTablet} onClick={e => this.handleViewGallary(e, null)} basic={!newLayout} compact={!newLayout} className={`${newLayout ? 'link-button' : ''} highlight-text mt-40`}>
-            View Gallery
-            <Icon size={newLayout ? '' : 'small'} className={`${newLayout ? 'ns-caret-down' : 'ns-chevron-right'} right`} color="white" />
-          </Button>
+            <Button fluid={!newLayout && isTablet} onClick={e => this.handleViewGallery(e, null)} basic={!newLayout} compact={!newLayout} className={`${newLayout ? 'link-button' : ''} highlight-text mt-40`}>
+              View Gallery
+              <Icon size={newLayout ? '' : 'small'} className={`${newLayout ? 'ns-caret-down' : 'ns-chevron-right'} right`} color="white" />
+            </Button>
           )
         }
       </>

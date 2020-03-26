@@ -345,9 +345,10 @@ export class CampaignStore {
         && campaign.offering.overview.highlight);
     campaignStatus.hasTopThingToKnow = elevatorPitch;
     campaignStatus.dataRooms = this.dataRoomDocs.length;
-    campaignStatus.gallary = get(campaign, 'media.gallery') ? get(campaign, 'media.gallery').length : 0;
-    campaignStatus.keyTerms = get(campaign, 'keyTerms');
     campaignStatus.campaignTemplate = get(campaign, 'template');
+    campaignStatus.galleryImages = this.getGalleryImagesTemplate(campaignStatus.campaignTemplate, campaign);
+    campaignStatus.gallery = get(campaign, 'media.gallery') ? get(campaign, 'media.gallery').length : 0;
+    campaignStatus.keyTerms = get(campaign, 'keyTerms');
     campaignStatus.issuerStatement = campaignStatus.campaignTemplate === 2 ? get(campaign, 'misc.issuerStatement') : get(campaign, 'keyTerms.offeringDisclaimer');
     const templateNavs = [];
     if (campaignStatus.campaignTemplate === 2 && get(campaign, 'content[0]')) {
@@ -377,6 +378,17 @@ export class CampaignStore {
     campaignStatus.isAgreementTemplate = (get(campaign, 'investNow.template') && get(campaign, 'investNow.template') === 2);
     campaignStatus.investNowToc = get(campaign, 'investNow.page');
     return campaignStatus;
+  }
+
+  getGalleryImagesTemplate = (campaignTemplate, campaign) => {
+    let gallery = [];
+    if (campaignTemplate === 2) {
+      const galleryObj = get(campaign, 'gallery') || [];
+      gallery = orderBy(galleryObj.filter(i => i.isVisible), ['order'], ['asc']);
+    } else {
+      gallery = get(campaign, 'media.gallery') || [];
+    }
+    return gallery;
   }
 
   @computed get getOfferingId() {

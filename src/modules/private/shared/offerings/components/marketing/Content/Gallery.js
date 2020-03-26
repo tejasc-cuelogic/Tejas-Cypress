@@ -66,7 +66,7 @@ const SortableList = SortableContainer(({ toggleVisible, GALLERY_FRM, isReadOnly
 
 const GalleryList = ({ toggleVisible, GALLERY_FRM, isReadOnly, onSortEnd, smartElement, currentOfferingId, removeMedia, removeOne }) => (
   <div className="ui card fluid">
-    <div className="ui basic table">
+    {/* <div className="ui basic table"> */}
       <SortableList
         GALLERY_FRM={GALLERY_FRM}
         pressDelay={100}
@@ -80,7 +80,7 @@ const GalleryList = ({ toggleVisible, GALLERY_FRM, isReadOnly, onSortEnd, smartE
         removeOne={removeOne}
         toggleVisible={toggleVisible}
       />
-    </div>
+    {/* </div> */}
   </div>
 );
 

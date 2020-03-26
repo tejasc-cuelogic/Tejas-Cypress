@@ -8,6 +8,15 @@ const offeringTemplate2 = {
     scope
     customValue
   }`,
+  gallery: `gallery {
+    caption
+    order
+    image {
+      url
+      fileName
+    }
+    isVisible
+  }`,
   misc: `misc {
     issuerStatement
     logo {
@@ -229,6 +238,7 @@ export const campaignDetailsQuery = gql`
     ${offeringTemplate2.subHeader}
     ${offeringTemplate2.content}
     ${offeringTemplate2.misc}
+    ${offeringTemplate2.gallery}
     investmentSummary {
       isInvestedInOffering
       tranche

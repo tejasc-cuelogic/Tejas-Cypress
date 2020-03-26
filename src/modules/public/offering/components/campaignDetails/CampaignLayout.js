@@ -200,6 +200,7 @@ class CampaignLayout extends Component {
               refLink={this.props.match.url}
               isTablet={isTablet}
               isTabletLand={isTabletLand}
+              processScroll={this.processScroll}
               handleCollapseExpand={this.handleCollapseExpand}
             />
 )
@@ -251,13 +252,12 @@ class CampaignLayout extends Component {
               </>
             ) : null
           }
-          {campaignStatus.gallary !== 0 && !campaignStatus.isFund ? (
+          {campaignStatus.gallery !== 0 && !campaignStatus.isFund ? (
             <>
               <Gallery
                 processScroll={this.processScroll}
                 newLayout
                 galleryUrl={this.props.match.url}
-                campaign={campaign}
               />
               <Divider hidden section />
             </>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { Modal, Container } from 'semantic-ui-react';
 import { NsCarousel, Image64 } from '../../../../../theme/shared';
 import NSImage from '../../../../shared/NSImage';
@@ -25,7 +26,7 @@ class AboutPhotoGallery extends Component {
   }
 
   render() {
-    const { campaign, gallarySelectedImageIndex } = this.props.campaignStore;
+    const { campaignStatus, gallarySelectedImageIndex } = this.props.campaignStore;
     const settings = {
       dots: false,
       infinite: false,
@@ -34,8 +35,8 @@ class AboutPhotoGallery extends Component {
       arrows: true,
       adaptiveHeight: true,
     };
-    const galleryArray = campaign && campaign.media && campaign.media.gallery
-      && campaign.media.gallery.length ? campaign.media.gallery : [];
+    const isTemplate2 = campaignStatus.campaignTemplate === 2;
+    const galleryArray = campaignStatus.galleryImages || [];
     return (
       <Modal
         open
@@ -59,7 +60,7 @@ class AboutPhotoGallery extends Component {
                 {galleryArray.length ? galleryArray.map(data => (
                   <div className="about-carousel">
                     <div className="carousel-counter">{gallarySelectedImageIndex !== null ? (gallarySelectedImageIndex + 1) : (this.state.activeSlide + 1)}/{galleryArray.length}</div>
-                    <Image64 srcUrl={data.url} />
+                    <Image64 srcUrl={isTemplate2 ? get(data, 'image.url') : data.url} />
                   </div>
                 ))
                   : <NSImage path="gallery-placeholder-16-9.jpg" />
