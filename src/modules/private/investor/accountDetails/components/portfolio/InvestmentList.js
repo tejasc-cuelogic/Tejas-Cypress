@@ -230,12 +230,16 @@ const InvestmentList = (props) => {
         <Table.Footer>
           <Table.Row>
             <Table.HeaderCell colSpan={props.listOf === 'active' ? '1' : '2'} />
-            <Table.HeaderCell textAlign="right">Total:</Table.HeaderCell>
+            <Table.HeaderCell>Total:</Table.HeaderCell>
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
             <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : props.listOf === 'active' ? getCOllapseCount('Net Payments Received', 'Investment Amount', header) : '3'} />
             {props.listOf !== 'pending'
               && (
                 <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
+              )}
+              {props.listOf !== 'pending'
+              && (
+                <Table.HeaderCell colSpan="1" />
               )}
           </Table.Row>
         </Table.Footer>
