@@ -19,25 +19,6 @@ export const updateUserProfileData = gql`
     }
   }`;
 
-export const requestEmailChnage = gql`
-  mutation requestEmailChange($newEmail: String!) {
-    requestEmailChange(
-      newEmail: $newEmail
-    )
-  }`;
-
-export const verifyAndUpdateEmail = gql`
-  mutation verifyAndUpdateEmail($confirmationCode: String! $resourceId: String!) {
-    verifyAndUpdateEmail(
-      confirmationCode: $confirmationCode
-      resourceId: $resourceId
-    ){
-      email {
-        address
-      }
-    }
-  }`;
-
 export const isUniqueSSN = gql`
   query isUniqueSSN($ssn: String!) {
     isUniqueSSN(ssn: $ssn) {

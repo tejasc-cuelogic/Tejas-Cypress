@@ -140,12 +140,11 @@ export default class ConfirmEmailAddress extends Component {
   handleResendCode = async () => {
     this.props.authStore.setProgress('resend');
     if (this.props.refLink) {
-      this.props.authStore.requestEmailChange().then(() => {
-        // Helper.toast('Re-sent the verification code', 'success');
+      const res = await this.props.identityStore.sendOtp('EMAIL_CHANGE', isMobile);
+      if (res) {
         this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
         this.props.uiStore.clearErrors();
-      })
-        .catch(() => { });
+      }
     } else {
       if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
         await this.props.identityStore.sendOtp('EMAIL_CONFIGURATION', undefined, isMobile);
