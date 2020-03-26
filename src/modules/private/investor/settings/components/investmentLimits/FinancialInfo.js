@@ -31,7 +31,7 @@ export default class FinancialInfo extends Component {
   componentDidMount() {
     const { isAccreditationFlowInProgress } = this.props.accreditationStore;
     const reflectedURL = this.props.history.location.pathname;
-    if (isAccreditationFlowInProgress.open && !reflectedURL.includes('verify-accreditation')) {
+    if (isAccreditationFlowInProgress.open && !reflectedURL.includes('verify-accreditation') && !reflectedURL.includes('verify-trust-entity-accreditation')) {
       this.setState({ open: true, accountSelectedType: isAccreditationFlowInProgress.accountSelectedType });
     }
   }
