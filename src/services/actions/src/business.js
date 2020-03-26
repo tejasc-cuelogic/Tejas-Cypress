@@ -346,7 +346,7 @@ export class Business {
         }
       },
       onError: (err) => {
-        console.log(err);
+        window.logger(err);
         uiStore.removeOneFromProgressArray('fetchEdgarDetails');
         uiStore.clearActionLoader();
       },
@@ -357,7 +357,7 @@ export class Business {
     // };
     // ApiService.post(GRAPHQL, payload)
     //   .then(data => businessStore.setTemplateVariable(data.body.data.adminBusinessFiling.filingPayload))
-    //   .catch(err => console.log(err))
+    //   .catch(err => window.logger(err))
     //   .finally(() => {
     //     uiStore.removeOneFromProgressArray('fetchEdgarDetails');
     //     uiStore.clearActionLoader();
@@ -403,7 +403,7 @@ export class Business {
         }
       },
       onError: (err) => {
-        console.log(err);
+        window.logger(err);
         uiStore.setProgress(false);
         uiStore.clearLoaderMessage();
         rej(err);
@@ -453,7 +453,7 @@ export class Business {
       },
       onError: (err) => {
         uiStore.removeOneFromProgressArray('fetchXmlDetails');
-        console.log('ERROR: ', err);
+        window.logger('ERROR: ', err);
       },
     });
   }

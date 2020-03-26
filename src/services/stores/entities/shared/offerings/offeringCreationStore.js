@@ -372,7 +372,7 @@ export class OfferingCreationStore extends DataModelStore {
       .catch((err) => {
         this.resetFormField('MEDIA_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
-        console.log(err);
+        window.logger(err);
       });
   }
 
@@ -393,7 +393,7 @@ export class OfferingCreationStore extends DataModelStore {
       .catch((err) => {
         this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
-        console.log(err);
+        window.logger(err);
       });
   }
 
@@ -431,7 +431,7 @@ export class OfferingCreationStore extends DataModelStore {
       })
       .catch((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
+        window.logger(err);
       });
   }
 
@@ -1112,7 +1112,7 @@ export class OfferingCreationStore extends DataModelStore {
           });
         }
       } catch (e) {
-        console.log(e);
+        window.logger(e);
       }
     });
     const socialData = includeHighlight ? { social, highlight } : { social };
@@ -1204,7 +1204,7 @@ export class OfferingCreationStore extends DataModelStore {
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        console.log('Error', err);
+        window.logger('Error', err);
         Helper.toast('Something went wrong.', 'error');
         rej();
       })
@@ -1508,7 +1508,7 @@ export class OfferingCreationStore extends DataModelStore {
       }
       payloadData.agreements = [...finalDataRoomDocs, ...removedDataFooms];
       payloadData.agreements = cleanDeep(payloadData.agreements);
-      console.log('agreement payload==>', payloadData);
+      window.logger('agreement payload==>', payloadData);
       this.updateDcoumentForApplication(payloadData)
         .then(() => {
           this.removeUploadedFiles(fromS3);
@@ -1516,7 +1516,7 @@ export class OfferingCreationStore extends DataModelStore {
           uiStore.setProgress(false);
         });
     }).catch(action((error) => {
-      console.log(error);
+      window.logger(error);
       uiStore.setProgress(false);
     }));
   }
@@ -2201,7 +2201,7 @@ export class OfferingCreationStore extends DataModelStore {
         funcArray.push(this.uploadFiles(form, arrayName, field, file, stepName, fileData, file.currentIndex));
       });
       Promise.all(funcArray).then((responseArr) => {
-        console.log(responseArr);
+        window.logger(responseArr);
         this.isUploadingFile = false;
         resolve();
       }).catch((err) => {

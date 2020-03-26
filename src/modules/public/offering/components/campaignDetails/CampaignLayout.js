@@ -60,7 +60,7 @@ class CampaignLayout extends Component {
         });
       });
     } catch (err) {
-      console.log(err);
+      window.logger(err);
       window.logger('soft failed for lazyload image', 'warn', true, err);
     }
     this.processScroll();

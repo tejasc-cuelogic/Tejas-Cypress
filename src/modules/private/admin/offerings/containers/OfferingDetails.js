@@ -115,7 +115,7 @@ export default class OfferingDetails extends Component {
           <Modal.Content className="transaction-details">
             <CopyToClipboard
               text={currentOfferingId}
-              onCopy={() => console.log('copied')}
+              onCopy={() => window.logger('copied')}
             >
               <Header as="h3">
                 {((offer.keyTerms && offer.keyTerms.shorthandBusinessName)

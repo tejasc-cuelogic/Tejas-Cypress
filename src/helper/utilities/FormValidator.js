@@ -667,7 +667,7 @@ class FormValidator {
           }
         }
       } catch (e) {
-        console.log(e);
+        window.logger(e);
       }
     });
     return inputData;
