@@ -915,7 +915,7 @@ export class IdentityStore {
   }
 
   @action
-  confirmEmailAddress = async () => {
+  confirmEmailForMigratedUser = async () => {
     uiStore.setProgress();
     const payLoad = {
       mutation: verifyOtpEmailPrivate,
