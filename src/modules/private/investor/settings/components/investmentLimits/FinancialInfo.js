@@ -50,7 +50,6 @@ export default class FinancialInfo extends Component {
 
   handleVerifyAccreditation = (e, accountType) => {
     e.preventDefault();
-    console.log(accountType);
     this.setState({ open: true, accountSelectedType: accountType });
     this.props.accreditationStore.setAccreditationInialStepState({ openState: true, accountSelected: accountType });
     // if (this.props.userDetailsStore.isEntityTrust && accountType === 'entity') {

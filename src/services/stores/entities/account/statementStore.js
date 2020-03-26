@@ -34,7 +34,7 @@ export class StatementStore {
 
   @action
   handlePdfDownload = (fileId) => {
-    console.log(fileId);
+    window.logger(fileId);
     return new Promise((resolve, reject) => {
       this.pdfLinkData = graphql({
         client,

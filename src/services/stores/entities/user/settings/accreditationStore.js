@@ -361,7 +361,7 @@ export class AccreditationStore {
   removeUploadedData = (form, field, index = null, accountType) => {
     const accountId = userDetailsStore.getIdByAccountType(accountType.toLowerCase());
     let removeFileId = '';
-    if (index != null) {
+    if (index !== null) {
       const fileId = this[form].fields[field].fileId.splice(index, 1);
       this[form].fields[field].value.splice(index, 1);
       removeFileId = get(fileId, '[0]');
@@ -651,7 +651,6 @@ export class AccreditationStore {
     const refetchQueries = formType ? [{
       query: userAccreditationQuery,
     }] : [];
-    console.log(payLoad);
     return new Promise((resolve, reject) => {
       client
         .mutate({

@@ -5,7 +5,7 @@ import AllTransactions from '../components/AllTransactions';
 
 export default class ManageTransactions extends Component {
   search = (e) => {
-    if (e.charCode === 13 && false) {
+    if (e.charCode === 13) {
       // search goes here..
     }
   }

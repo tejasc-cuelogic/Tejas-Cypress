@@ -26,7 +26,7 @@ export default class CreateNew extends Component {
         this.props.history.push('/dashboard/users');
       })
       .catch((err) => {
-        console.log(err, 'Error:');
+        window.logger(err, 'Error:');
       });
   }
 

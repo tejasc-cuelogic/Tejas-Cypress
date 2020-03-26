@@ -30,7 +30,7 @@ export default class ChangePassword extends Component {
         });
       })
       .catch((err) => {
-        console.log(err);
+        window.logger(err);
       });
   }
 
