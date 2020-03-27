@@ -4,6 +4,7 @@ import { Container, Button, Visibility, List } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
@@ -16,14 +17,19 @@ export default class CampaignSubHeaderPreview extends Component {
     const { offer } = offeringsStore;
     const { SUB_HEADER_BASIC_FRM, TOMBSTONE_HEADER_META_FRM, campaignStatus } = manageOfferingStore;
     const {
-      isClosed, isInProcessing, collected, maxFlagStatus,
-      countDown, diffForProcessing, investmentSummary,
+      isClosed, isInProcessing, maxFlagStatus,
+      investmentSummary,
+      // countDown, diffForProcessing
     } = campaignStatus;
-    const toggleMeta = SUB_HEADER_BASIC_FRM.fields.toggleMeta.value;
+    const subHeaderBasicFields = SUB_HEADER_BASIC_FRM.fields;
+    const toggleMeta = subHeaderBasicFields.toggleMeta.value;
     const showInvestorCount = toggleMeta.includes('INVESTOR_COUNT');
     const showDaysLeft = toggleMeta.includes('DAYS_LEFT');
     const showRaisedAmount = toggleMeta.includes('RAISED_AMOUNT');
+    const showRepaymentMade = toggleMeta.includes('REPAYMENT_COUNT');
     const subHeaderMeta = TOMBSTONE_HEADER_META_FRM.fields.meta;
+    const diffForProcessingText = DataFormatter.getDateDifferenceInHoursOrMinutes(subHeaderBasicFields.closeDate.value, true, true);
+    const countDown = (['Minute Left', 'Minutes Left'].includes(diffForProcessingText.label) && diffForProcessingText.value > 0) || diffForProcessingText.value <= 48 ? { valueToShow: diffForProcessingText.value, labelToShow: diffForProcessingText.label } : { valueToShow: campaignStatus.diff, labelToShow: campaignStatus.diff === 1 ? 'Day Left' : 'Days Left' };
     return (
       <Visibility offset={[72, 10]} continuous className="campaign-secondary-header menu-secondary-fixed bg-offwhite pt-0 pb-0 plr-0">
         <div className="active">
@@ -32,13 +38,12 @@ export default class CampaignSubHeaderPreview extends Component {
               {!isMobile
                 && (
                   <>
-                    {showInvestorCount && <List.Item>{get(offer, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>}
-                    {(showDaysLeft && diffForProcessing.value > 0)
-                      && <List.Item>{countDown.valueToShow} {' '} {countDown.labelToShow}</List.Item>
+                    {showInvestorCount && <List.Item>{subHeaderBasicFields.investorCount.value || 0} Investors</List.Item>}
+                    {(showDaysLeft)
+                      && <List.Item>{countDown.valueToShow || 'X'} {' '} {countDown.labelToShow || 'Days Left'}</List.Item>
                     }
-                    {isClosed && get(offer, 'closureSummary.repayment.count')
-                      ? <List.Item>{get(offer, 'closureSummary.repayment.count')} Payments made</List.Item>
-                      : (get(offer, 'closureSummary.hardCloseDate') && get(offer, 'closureSummary.hardCloseDate') !== 'Invalid date' && get(offer, 'closureSummary.repayment.count') === 0) ? <List.Item><b>Funded</b></List.Item> : ''
+                    {showRepaymentMade
+                      && <List.Item>{subHeaderBasicFields.repaymentCount.value || 0} Payments made</List.Item>
                     }
                   </>
                 )
@@ -55,7 +60,7 @@ export default class CampaignSubHeaderPreview extends Component {
               && (
               <List.Item>
                 <List.Header>
-                  <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span>
+                  <span className="highlight-text">{subHeaderBasicFields.raisedAmount.value || '$ 0'}</span>
                   {!isClosed && (campaignStatus.isTermNote || maxFlagStatus || get(offer, 'stage') === 'LIVE' || get(offer, 'stage') === 'PROCESSING' || get(offer, 'stage') === 'LOCK') ? ' raised' : ' invested'}
                 </List.Header>
               </List.Item>

@@ -26,11 +26,15 @@ export const TOMBSTONE_BASIC = FormHelper.generateMeta([
 ]);
 
 export const SUB_HEADER_BASIC = FormHelper.generateMeta([
+  ['closeDate', 'Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
+  ['raisedAmount', 'Close Date', '', 'optional', 'e.g $ 100', { asIn: true, props: { maskFormattedChange: 'formatted', skipField: true } }],
+  ['investorCount', 'Investor Count', '', 'optional', 'e.g 3', { asIn: true, props: { skipField: true } }],
+  ['repaymentCount', 'Repayment Count', '', 'optional', 'e.g 2', { asIn: true, props: { skipField: true } }],
   ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { defaultValue: [], values: SUB_HEADER_TOGGLE_META } }],
   ]);
 
 export const HEADER_BASIC = FormHelper.generateMeta([
-  ['closeDate', 'Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { skipField: true } }],
+  ['closeDate', 'Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
   ['investorCount', 'Investor Count', '', 'optional', 'e.g 3', { asIn: true, props: { skipField: true } }],
   ['repaymentCount', 'Repayment Count', '', 'optional', 'e.g 2', { asIn: true, props: { skipField: true } }],
   ['earlyBird', 'Early Bird Available', '', 'optional', 'e.g 4', { asIn: true, props: { skipField: true } }],

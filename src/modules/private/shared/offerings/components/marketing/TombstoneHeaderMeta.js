@@ -14,56 +14,56 @@ const metaInfo = {
 
 const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({ offer, TOMBSTONE_HEADER_META_FRM, isReadOnly, fieldIndex, smartElement, removeOne, hideHighlight }) => (
-  <div className="row-wrap">
-  <Form.Group>
+  <Form.Group className="mlr-0">
     <Table basic compact className="form-table">
       <Table.Body>
-        <Table.Cell collapsing>
-          {!isReadOnly && <DragHandle />}
-        </Table.Cell>
-        {!hideHighlight
-        && (
-        <Table.Cell collapsing>
-          {smartElement.FormCheckBox('isHighlight', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex], toggle: true, defaults: true })}
-        </Table.Cell>
-        )}
-        <Table.Cell>
-          {smartElement.Input('keyLabel', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex] })}
-        </Table.Cell>
-        <Table.Cell>
-          {smartElement.FormSelect('keyType', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex] })}
-        </Table.Cell>
-        {TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyType.value === 'custom' && (
-          <Table.Cell>
-            {smartElement.Input('keyValue', { label: 'Custom Value', displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex] })}
-          </Table.Cell>
-        )}
-        {TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyType.value === 'mapped' && (
-          <Table.Cell>
-            {smartElement.FormSelect('keyValue', { label: 'Key List', displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex] })}
-          </Table.Cell>
-        )}
-        {TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyType.value === 'mapped' && (
-          <Table.Cell>
-            {smartElement.Input('keyFormat', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex] })}
-          </Table.Cell>
-        )}
-        {TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyType.value === 'mapped' && (
-          <Table.Cell>
-            {<div className="field">{TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyLabel.value ? TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyLabel.value : 'N/A'}:  {get(offer, TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyValue.value) ? Helper.formatValue(TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyFormat.value, Helper.enumToText(TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyValue.value, get(offer, TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyValue.value), true)) : 'N/A'}</div>}
-          </Table.Cell>
-        )}
-        {!isReadOnly && TOMBSTONE_HEADER_META_FRM.fields.meta.length > 1 && (
+        <Table.Row>
           <Table.Cell collapsing>
-            <Button icon circular floated="right" className="link-button">
-              <Icon className="ns-trash" onClick={e => removeOne(metaInfo.form, 'meta', fieldIndex, e)} />
-            </Button>
+            {!isReadOnly && <DragHandle />}
           </Table.Cell>
-        )}
+          {!hideHighlight
+          && (
+          <Table.Cell collapsing>
+            {smartElement.FormCheckBox('isHighlight', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex], toggle: true, defaults: true })}
+          </Table.Cell>
+          )}
+          <Table.Cell>
+            {smartElement.Input('keyLabel', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex] })}
+          </Table.Cell>
+          <Table.Cell>
+            {smartElement.FormSelect('keyType', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex] })}
+          </Table.Cell>
+          {TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyType.value === 'custom' && (
+            <Table.Cell>
+              {smartElement.Input('keyValue', { label: 'Custom Value', displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex] })}
+            </Table.Cell>
+          )}
+          {TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyType.value === 'mapped' && (
+            <Table.Cell>
+              {smartElement.FormSelect('keyValue', { label: 'Key List', displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex] })}
+            </Table.Cell>
+          )}
+          {TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyType.value === 'mapped' && (
+            <Table.Cell>
+              {smartElement.Input('keyFormat', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex] })}
+            </Table.Cell>
+          )}
+          {TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyType.value === 'mapped' && (
+            <Table.Cell>
+              {<div className="field">{TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyLabel.value ? TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyLabel.value : 'N/A'}:  {get(offer, TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyValue.value) ? Helper.formatValue(TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyFormat.value, Helper.enumToText(TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyValue.value, get(offer, TOMBSTONE_HEADER_META_FRM.fields.meta[fieldIndex].keyValue.value), true)) : 'N/A'}</div>}
+            </Table.Cell>
+          )}
+          {!isReadOnly && TOMBSTONE_HEADER_META_FRM.fields.meta.length > 1 && (
+            <Table.Cell collapsing>
+              <Button icon circular floated="right" className="link-button">
+                <Icon className="ns-trash" onClick={e => removeOne(metaInfo.form, 'meta', fieldIndex, e)} />
+              </Button>
+            </Table.Cell>
+          )}
+        </Table.Row>
       </Table.Body>
     </Table>
   </Form.Group>
-  </div>
 ));
 const SortableList = SortableContainer(({ hideHighlight, offer, TOMBSTONE_HEADER_META_FRM, isReadOnly, smartElement, removeOne }) => (
   <div className="tbody">

@@ -40,10 +40,18 @@ class CampaignSubHeader extends Component {
 
   render() {
     const { smartElement, manageOfferingStore } = this.props;
-    const { SUB_HEADER_BASIC_FRM } = manageOfferingStore;
+    const { SUB_HEADER_BASIC_FRM, campaignStatus } = manageOfferingStore;
+    const isReadOnly = campaignStatus.lock;
     return (
       <div className="inner-content-spacer">
         <Form>
+          <Grid columns="4">
+            {['closeDate', 'raisedAmount', 'investorCount', 'repaymentCount'].map(field => (
+              <Grid.Column>
+                {smartElement.Masked(field, { dateOfBirth: field === 'closeDate', displayMode: isReadOnly })}
+              </Grid.Column>
+            ))}
+          </Grid>
           <Divider hidden />
           <CampaignSubHeaderPreview />
           <Divider section />
