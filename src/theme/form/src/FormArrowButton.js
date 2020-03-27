@@ -19,7 +19,7 @@ const FormArrowButton = observer((props) => {
     return (
 <Button.Group fluid vertical>{values.map(field => (
   <>
-  {(!ignoreValues.includes(field.value) || ignoreValues.length === 0) ? (
+  {(!ignoreValues || ignoreValues.length === 0 || !ignoreValues.includes(field.value)) ? (
     <Button
       onClick={(e) => {
         if (formName) {
