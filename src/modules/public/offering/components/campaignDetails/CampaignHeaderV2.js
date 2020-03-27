@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get } from 'lodash';
+import { get, sortBy } from 'lodash';
 import { withRouter, Link, Route } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button, Divider, Menu } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
@@ -29,6 +29,7 @@ export default class CampaignHeaderV2 extends Component {
       percentBefore, diffForProcessing, countDown, investmentSummary, isBonusReward,
       // dataRooms,
     } = campaignStatus;
+    const headerMeta = get(campaign, 'header.meta[0]') ? sortBy(get(campaign, 'header.meta'), ['order', 'asc']) : [];
     return (
       <>
         {!isMobile
@@ -178,7 +179,7 @@ export default class CampaignHeaderV2 extends Component {
                             </p>
                           </>
                         )}
-                      {get(campaign, 'header.meta[0]') && get(campaign, 'header.meta').map(row => (
+                      {headerMeta.map(row => (
                         <>
                           {(
                             <p className="mb-0">
@@ -360,7 +361,7 @@ export default class CampaignHeaderV2 extends Component {
                         </Statistic.Group>
                       </div>
                     ) : null}
-                  {get(campaign, 'header.meta[0]') && get(campaign, 'header.meta').map((row, i) => (
+                  {headerMeta.map((row, i) => (
                     <>
                       {(
                         <p className={`${i === 0 ? 'mt-20' : ''} mb-0`}>

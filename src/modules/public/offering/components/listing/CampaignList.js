@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { get, capitalize } from 'lodash';
+import { get, capitalize, sortBy } from 'lodash';
 import { Container, Card, Grid, Label, Icon, Button, Divider, Table } from 'semantic-ui-react';
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
@@ -185,7 +185,7 @@ export default class CampaignList extends Component {
                                       </Table.Body>
                                     ) : (
                                       <Table.Body>
-                                        {get(offering, 'tombstone.meta[0]') && get(offering, 'tombstone.meta').map(row => (
+                                        {get(offering, 'tombstone.meta[0]') && sortBy(get(offering, 'tombstone.meta'), ['order', 'asc']).map(row => (
                                           <Table.Row verticalAlign="top">
                                             <Table.Cell collapsing>{row.keyLabel}</Table.Cell>
                                             <Table.Cell className={`${row.isHighlight ? 'highlight-text' : ''} right-align`}>

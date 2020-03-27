@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Container, Button, Visibility, List } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, sortBy } from 'lodash';
 import Helper from '../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 992;
@@ -73,7 +73,7 @@ export default class CampaignSecondaryMenu extends Component {
               {!isTemplate2 && !isMobile && !campaignStatus.isFund
                 && <List.Item>{campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isSafe ? `${get(campaign, 'keyTerms.valuationCap') || ''} Valuation Cap` : campaignStatus.isTermNote ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : campaignStatus.isPreferredEquity ? `${get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : ''} Pre-Money Valuation` : `${get(campaign, 'keyTerms.investmentMultiple') || ''} Investment Multiple`}</List.Item>
               }
-              {isTemplate2 && get(campaign, 'subHeader.meta[0]') && get(campaign, 'subHeader.meta').map(row => (
+              {isTemplate2 && get(campaign, 'subHeader.meta[0]') && sortBy(get(campaign, 'subHeader.meta'), ['order'], ['asc']).map(row => (
                 <List.Item>
                   {row.keyLabel ? `${row.keyLabel}:` : ''} {row.keyType === 'custom' ? row.keyValue : Helper.formatValue(row.keyFormat, Helper.enumToText(row.keyValue, get(campaign, row.keyValue), true))}
                 </List.Item>
