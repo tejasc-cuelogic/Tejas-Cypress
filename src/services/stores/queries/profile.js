@@ -126,6 +126,7 @@ export const changePhoneRequest = gql`
     changePhoneRequest(
       resourceId: $resourceId
       verificationCode: $verificationCode
+      phone: $phone
     )
   }
 `;
