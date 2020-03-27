@@ -2944,8 +2944,14 @@ input[type='range']::-webkit-slider-thumb {
 	z-index: 100;
 	&.counter {
 		min-width: 30px;
-		right:10px;
-		bottom: 10px;
+		left: 10px;
+		top: 10px;
+		&.template2{
+			right:10px;
+			bottom: 10px;
+			left: auto;
+			top: auto;
+		}
 	}
 	&.caption{
 		max-width: calc(100% - 70px);
