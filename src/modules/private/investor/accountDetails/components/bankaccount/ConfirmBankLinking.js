@@ -27,13 +27,13 @@ export default class ConfirmBankLinking extends Component {
 
     submit = async (e) => {
       e.preventDefault();
-      const res = await this.props.identityStore.changeLinkedBankRequest();
+      const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+      const res = await this.props.identityStore.changeLinkedBankRequest(accountType);
       if (res) {
         const {
           declineBankChangeRequest,
           isLinkedBankCancelRequest,
         } = this.props.bankAccountStore;
-        const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
         const redirectUrl = `/dashboard/account-details/${accountType}/bank-accounts/link-bank-account/verify-update`;
         if (isLinkedBankCancelRequest) {
           declineBankChangeRequest().then(() => {

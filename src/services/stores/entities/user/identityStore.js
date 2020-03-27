@@ -811,7 +811,7 @@ export class IdentityStore {
   }
 
   @action
-  changeLinkedBankRequest = async () => {
+  changeLinkedBankRequest = async (investorAccountType) => {
     uiStore.setProgress();
     const { bankLinkInterface, formLinkBankManually, newPlaidAccDetails } = bankAccountStore;
     const { accountNumber, routingNumber, accountType, bankName } = FormValidator.ExtractValues(formLinkBankManually.fields);
@@ -822,7 +822,7 @@ export class IdentityStore {
     };
 
     if (bankLinkInterface === 'form') {
-      variables = { ...variables, accountNumber, routingNumber, accountType, bankName };
+      variables = { ...variables, bankAccountNumber: accountNumber, bankRoutingNumber: routingNumber, accountType, bankName };
     } else {
       variables = { ...variables, plaidAccountId: newPlaidAccDetails.account_id, plaidPublicToken: newPlaidAccDetails.public_token };
     }
@@ -833,9 +833,15 @@ export class IdentityStore {
       variables,
     };
     const res = await this.otpWrapper(payLoad);
-
+    uiStore.setProgress();
     if (res) {
-      await userDetailsStore.getUser(userStore.currentUser.sub);
+      const result = await userDetailsStore.bankChangeRequestQuery(investorAccountType);
+      if (result) {
+        bankAccountStore.setCurrentAccount(investorAccountType);
+      }
+      uiStore.setProgress(false);
+    } else {
+      uiStore.setProgress(false);
     }
 
     return res;
