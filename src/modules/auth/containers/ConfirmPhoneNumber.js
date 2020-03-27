@@ -27,7 +27,9 @@ export default class ConfirmPhoneNumber extends Component {
       identityStore.phoneTypeChange(fieldValue);
     }
 
-    if (Object.keys(this.props.identityStore.requestOtpResponse).length === 0 && !isEmpty(this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value)) {
+    if (Object.keys(this.props.identityStore.requestOtpResponse).length === 0
+      && !isEmpty(this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value)
+      && !this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
       this.props.identityStore.sendOtp(this.getOtpType(), isMobile);
     }
   }
@@ -60,7 +62,11 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.uiStore.clearErrors();
       this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
     } else if (res) {
-      this.props.identityStore.setIsOptConfirmed(true);
+      if (this.props.userDetailsStore.signupStatus.investorProfileCompleted) {
+        this.props.history.push('/dashboard/setup');
+      } else {
+        this.props.identityStore.setIsOptConfirmed(true);
+      }
     }
   }
 

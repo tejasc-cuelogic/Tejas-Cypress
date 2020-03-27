@@ -81,6 +81,7 @@ export default class ConfirmBankLinking extends Component {
           otpConfirmemailAddress={userDetails.email.address}
           resendVerification={this.resendVerification}
           formSubmit={this.submit}
+          mfaType="BANK_CHANGE"
           actionToPerform="updating you're linked bank"
           mfaMode={userDetails.mfaMode}
         />

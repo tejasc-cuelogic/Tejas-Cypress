@@ -6,7 +6,7 @@ import { mapValues, keyBy, find, flatMap, map, get, isEmpty, intersection } from
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO, VERIFY_OTP } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
-import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
+import { uiStore, authStore, userStore, userDetailsStore, multiFactorAuthStore } from '../../index';
 import { sendOtpEmail, verifyOtpEmail, sendOtp, isUniqueSSN, cipLegalDocUploads, verifyOtpPhone, changeLinkedBankRequest, changePhoneRequest, changeEmailRequest, verifyOtpEmailPrivate, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
@@ -461,7 +461,7 @@ export class IdentityStore {
       const to = type.startsWith('EMAIL') || mfaMethod.value === 'EMAIL' ? emailAddress.toLowerCase() : phone;
       let method = (mfaMethod.value === '' || type.startsWith('EMAIL')) ? 'EMAIL' : mfaMethod.value;
       if (type === 'BANK_CHANGE') {
-        method = get(user, 'mfaMode');
+        method = multiFactorAuthStore.MFA_MODE_TYPE_META.fields.mfaModeTypes.value;
       }
       uiStore.clearErrors();
       uiStore.setProgress();
@@ -821,21 +821,31 @@ export class IdentityStore {
   @action
   changeLinkedBankRequest = async () => {
     uiStore.setProgress();
-    const bankAttributes = bankAccountStore.accountAttributes.linkedBank;
+    const { bankLinkInterface, formLinkBankManually, newPlaidAccDetails } = bankAccountStore;
+    const { accountNumber, routingNumber, accountType, bankName } = FormValidator.ExtractValues(formLinkBankManually.fields);
+    let variables = {
+      resourceId: this.requestOtpResponse,
+      verificationCode: this.OTP_VERIFY_META.fields.code.value,
+      accountId: bankAccountStore.CurrentAccountId,
+    };
+
+    if (bankLinkInterface === 'form') {
+      variables = { ...variables, accountNumber, routingNumber, accountType, bankName };
+    } else {
+      variables = { ...variables, plaidAccountId: newPlaidAccDetails.account_id, plaidPublicToken: newPlaidAccDetails.public_token };
+    }
+
     const payLoad = {
       mutation: changeLinkedBankRequest,
       mutationName: 'changeLinkedBankRequest',
-      variables: {
-        resourceId: this.requestOtpResponse,
-        verificationCode: this.OTP_VERIFY_META.fields.code.value,
-        accountId: bankAccountStore.CurrentAccountId,
-        ...bankAttributes,
-      },
+      variables,
     };
     const res = await this.otpWrapper(payLoad);
+
     if (res) {
       await userDetailsStore.getUser(userStore.currentUser.sub);
     }
+
     return res;
   }
 

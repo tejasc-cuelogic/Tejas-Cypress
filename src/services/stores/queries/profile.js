@@ -101,9 +101,9 @@ export const changeLinkedBankRequest = gql`
       plaidPublicToken: $plaidPublicToken
       plaidAccountId: $plaidAccountId
       bankRoutingNumber: $bankRoutingNumber
+      bankAccountNumber: $bankAccountNumber
       accountType: $accountType
       bankName: $bankName
-
     ) {
       lastDigits
       dateRequested
