@@ -14,6 +14,7 @@ const metaInfo = {
 
 const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({ offer, TOMBSTONE_HEADER_META_FRM, isReadOnly, fieldIndex, smartElement, removeOne, hideHighlight }) => (
+  <div className="row-wrap">
   <Form.Group>
     <Table basic compact className="form-table">
       <Table.Body>
@@ -62,6 +63,7 @@ const SortableItem = SortableElement(({ offer, TOMBSTONE_HEADER_META_FRM, isRead
       </Table.Body>
     </Table>
   </Form.Group>
+  </div>
 ));
 const SortableList = SortableContainer(({ hideHighlight, offer, TOMBSTONE_HEADER_META_FRM, isReadOnly, smartElement, removeOne }) => (
   <div className="tbody">

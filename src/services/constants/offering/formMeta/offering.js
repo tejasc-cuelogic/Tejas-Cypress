@@ -8,12 +8,14 @@ const HEADER_TOGGLE_META = [
   { label: 'Days Left', value: 'DAYS_LEFT' },
   { label: 'Investor Count', value: 'INVESTOR_COUNT' },
   { label: 'Early Bird', value: 'EARLY_BIRD' },
+  { label: 'Payments Made', value: 'REPAYMENT_COUNT' },
 ];
 
 const SUB_HEADER_TOGGLE_META = [
   { label: 'Investor Count', value: 'INVESTOR_COUNT' },
   { label: 'Raised Amount', value: 'RAISED_AMOUNT' },
   { label: 'Days Left', value: 'DAYS_LEFT' },
+  { label: 'Payments Made', value: 'REPAYMENT_COUNT' },
 ];
 
 export const TOMBSTONE_BASIC = FormHelper.generateMeta([
@@ -28,6 +30,10 @@ export const SUB_HEADER_BASIC = FormHelper.generateMeta([
   ]);
 
 export const HEADER_BASIC = FormHelper.generateMeta([
+  ['closeDate', 'Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { skipField: true } }],
+  ['investorCount', 'Investor Count', '', 'optional', 'e.g 3', { asIn: true, props: { skipField: true } }],
+  ['repaymentCount', 'Repayment Count', '', 'optional', 'e.g 2', { asIn: true, props: { skipField: true } }],
+  ['earlyBird', 'Early Bird Available', '', 'optional', 'e.g 4', { asIn: true, props: { skipField: true } }],
   ['heroVideoURL', 'Hero Video URL', '', 'optional', 'Enter here...'],
   ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { defaultValue: [], values: HEADER_TOGGLE_META } }],
   ['heroImage', 'Hero Image', '', 'optional', '', { s3Upload: true }],

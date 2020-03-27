@@ -3,9 +3,9 @@ import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button } from 'semantic-ui-react';
-// import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 import { Image64 } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 992;
 @inject('manageOfferingStore', 'offeringsStore')
@@ -17,11 +17,13 @@ export default class CampaignHeaderPreview extends Component {
     const { offer } = offeringsStore;
     const { HEADER_BASIC_FRM, TOMBSTONE_HEADER_META_FRM, OFFERING_MISC_FRM, campaignStatus } = manageOfferingStore;
     const {
-      isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
-      minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
-      percentBefore, diffForProcessing, countDown, investmentSummary,
+      isClosed, isCreation, isInProcessing, collected, minFlagStatus,
+      minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing, investmentSummary,
+      // isEarlyBirdRewards, earlyBird, bonusRewards,
     } = campaignStatus;
     const headerBasicFields = HEADER_BASIC_FRM.fields;
+    const diffForProcessingText = DataFormatter.getDateDifferenceInHoursOrMinutes(headerBasicFields.closeDate.value, true, true);
+    const countDown = (['Minute Left', 'Minutes Left'].includes(diffForProcessingText.label) && diffForProcessingText.value > 0) || diffForProcessingText.value <= 48 ? { valueToShow: diffForProcessingText.value, labelToShow: diffForProcessingText.label } : { valueToShow: campaignStatus.diff, labelToShow: campaignStatus.diff === 1 ? 'Day Left' : 'Days Left' };
     const headerMetaFields = TOMBSTONE_HEADER_META_FRM.fields;
     const miscFields = OFFERING_MISC_FRM.fields;
     return (
@@ -72,29 +74,31 @@ export default class CampaignHeaderPreview extends Component {
                             && (
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>
-                                {get(offer, 'closureSummary.totalInvestorCount') || 0}
+                                {headerBasicFields.investorCount.value || 0}
                               </Statistic.Value>
                               <Statistic.Label>Investors</Statistic.Label>
                             </Statistic>
                             )}
                           </>
-                          {headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT') && isClosed && get(offer, 'closureSummary.repayment.count') > 0
+                          {headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT')
+                          // && isClosed && get(offer, 'closureSummary.repayment.count') > 0
                             && (
                               <Statistic size="mini" className="basic">
                                 <Statistic.Value>
-                                  {get(offer, 'closureSummary.repayment.count') || 0}
+                                  {headerBasicFields.repaymentCount.value || 0}
                                 </Statistic.Value>
                                 <Statistic.Label>Payments made</Statistic.Label>
                               </Statistic>
                             )
                           }
-                          {headerBasicFields.toggleMeta.value.includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
-                            && isEarlyBirdRewards && !isClosed
-                            && bonusRewards
+                          {headerBasicFields.toggleMeta.value.includes('EARLY_BIRD')
+                          // && earlyBird && earlyBird.available > 0
+                          //   && isEarlyBirdRewards && !isClosed
+                          //   && bonusRewards
                             ? (
                               <Statistic size="mini" className="basic">
                                 <Statistic.Value>
-                                  {get(offer, 'earlyBird.available') || 0}
+                                  {headerBasicFields.earlyBird.value || 0}
                                 </Statistic.Value>
                                 <Statistic.Label>Early Bird Rewards</Statistic.Label>
                               </Statistic>
