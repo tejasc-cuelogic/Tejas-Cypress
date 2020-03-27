@@ -13,37 +13,39 @@ const metaInfo = {
 
 const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({ toggleVisible, GALLERY_FRM, isReadOnly, fieldIndex, smartElement, removeOne, currentOfferingId, removeMedia }) => (
-  <Form.Group className="mlr-0">
-    <Table basic compact>
-      <Table.Body>
-        <Table.Row className={GALLERY_FRM.fields.gallery[fieldIndex].isVisible.value ? '' : 'bg-offwhite'}>
-          <Table.Cell collapsing>
-            {!isReadOnly && <DragHandle />}
-          </Table.Cell>
-          <Table.Cell>
-            {smartElement.Input('caption', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex] })}
-          </Table.Cell>
-          <Table.Cell>
-            <Header as="h4">{GALLERY_FRM.fields.gallery[fieldIndex].image.label}</Header>
-            {smartElement.ImageCropper('image', { style: { height: '125px' }, disabled: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], uploadPath: `offerings/${currentOfferingId}`, removeMedia })}
-          </Table.Cell>
-          <Table.Cell collapsing>
-            <Button className="link-button">
-              <Icon onClick={() => toggleVisible(fieldIndex)} color="blue" name={GALLERY_FRM.fields.gallery[fieldIndex].isVisible.value ? 'ns-view' : 'ns-no-view'} />
-            </Button>
-            {/* {smartElement.FormCheckBox('isVisible', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], toggle: true, defaults: true })} */}
-          </Table.Cell>
-          {!isReadOnly && GALLERY_FRM.fields.gallery.length > 1 && (
+  <div className="row-wrap">
+    <Form.Group className="mlr-0 plr-0 pt-0 pb-0">
+      <Table basic compact className="form-table bg-white">
+        <Table.Body>
+          <Table.Row className={GALLERY_FRM.fields.gallery[fieldIndex].isVisible.value ? '' : 'bg-offwhite'}>
             <Table.Cell collapsing>
-              <Button icon circular floated="right" className="link-button">
-                <Icon className="ns-trash" onClick={e => removeOne(metaInfo.form, 'gallery', fieldIndex, e)} />
-              </Button>
+              {!isReadOnly && <DragHandle />}
             </Table.Cell>
-          )}
-        </Table.Row>
-      </Table.Body>
-    </Table>
-  </Form.Group>
+            <Table.Cell>
+              {smartElement.Input('caption', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex] })}
+            </Table.Cell>
+            <Table.Cell>
+              <Header as="h4">{GALLERY_FRM.fields.gallery[fieldIndex].image.label}</Header>
+              {smartElement.ImageCropper('image', { style: { height: '125px' }, disabled: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], uploadPath: `offerings/${currentOfferingId}`, removeMedia })}
+            </Table.Cell>
+            <Table.Cell collapsing>
+              <Button className="link-button">
+                <Icon onClick={() => toggleVisible(fieldIndex)} color="blue" name={GALLERY_FRM.fields.gallery[fieldIndex].isVisible.value ? 'ns-view' : 'ns-no-view'} />
+              </Button>
+              {/* {smartElement.FormCheckBox('isVisible', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], toggle: true, defaults: true })} */}
+            </Table.Cell>
+            {!isReadOnly && GALLERY_FRM.fields.gallery.length > 1 && (
+              <Table.Cell collapsing>
+                <Button icon circular floated="right" className="link-button">
+                  <Icon className="ns-trash" onClick={e => removeOne(metaInfo.form, 'gallery', fieldIndex, e)} />
+                </Button>
+              </Table.Cell>
+            )}
+          </Table.Row>
+        </Table.Body>
+      </Table>
+    </Form.Group>
+  </div>
 ));
 const SortableList = SortableContainer(({ toggleVisible, GALLERY_FRM, isReadOnly, smartElement, currentOfferingId, removeMedia, removeOne }) => (
   <div className="tbody">
