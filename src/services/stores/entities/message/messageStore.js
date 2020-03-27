@@ -114,8 +114,6 @@ export class NewMessage {
         if (!offeringCreationStore.currentOfferingId) {
           campaignStore.getCampaignDetails(campaignSlug, false);
         } else if (get(result, 'data.createOfferingComments')) {
-          // this.initRequest();
-          // TODO
           campaignStore.updateCommentThread(get(result, 'data.createOfferingComments'), currentMessageId);
         }
         this.resetMessageForm();
@@ -228,19 +226,6 @@ export class NewMessage {
       campaignStore.concatOfferingComments(coampaignDetails);
     }
   }
-
-  // updateCommentThread = (commentResponse, commentID) => {
-  //   const { campaign, setFieldValue } = campaignStore;
-  //   const comments = get(campaign, 'comments');
-  //   if (commentID) {
-  //     const currentComment = find(comments, o => o.id === commentID);
-  //     const threadArray = currentComment.threadComments;
-  //     threadArray.push(commentResponse);
-  //   } else {
-  //     comments.unshift(commentResponse);
-  //   }
-  //   setFieldValue('isPostedNewComment', true);
-  // }
 }
 
 export default new NewMessage();

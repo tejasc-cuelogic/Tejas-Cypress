@@ -78,7 +78,7 @@ export class CampaignStore {
 
   @observable isPostedNewComment = false;
 
-  @observable postNavCount = { updates: 0, comments: 0 };
+  // @observable postNavCount = { updates: 0, comments: 0 };
 
   @action
   setFieldValue = (field, val, path = false) => {
@@ -202,9 +202,9 @@ export class CampaignStore {
       this.details = campaignData;
     }
     this.setFieldValue('isPostedNewComment', true);
-    const commentCount = this.navCountData;
-    this.postNavCount.comments = get(commentCount, 'comments') + 1;
-    this.postNavCount.updates = get(commentCount, 'updates');
+    // const commentCount = this.navCountData;
+    // this.setFieldValue('postNavCount', get(commentCount, 'comments') + 1, 'comments');
+    // this.setFieldValue('postNavCount', get(commentCount, 'updates'), 'updates');
   }
 
   @action

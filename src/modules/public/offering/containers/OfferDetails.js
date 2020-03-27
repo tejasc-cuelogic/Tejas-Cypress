@@ -201,7 +201,7 @@ class offerDetails extends Component {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, campaign, navCountData, modifySubNavs, campaignStatus, isPostedNewComment, postNavCount,
+      details, campaign, navCountData, modifySubNavs, campaignStatus,
     } = campaignStore;
     const { isWatching } = this.props.watchListStore;
     let navItems = [];
@@ -256,7 +256,7 @@ class offerDetails extends Component {
               <MobileDropDownNav
                 inverted
                 refMatch={match}
-                navCountData={isPostedNewComment ? postNavCount : navCountData}
+                navCountData={navCountData}
                 navItems={navItems}
                 location={location}
                 isBonusReward={isBonusReward}
