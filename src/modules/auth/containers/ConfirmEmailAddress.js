@@ -69,7 +69,11 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.refLink) {
       const res = await this.props.identityStore.changeEmailRequest();
       if (res) {
-        this.props.identityStore.setIsOptConfirmed(true);
+        if (this.props.userStore.isInvestor) {
+          this.props.identityStore.setIsOptConfirmed(true);
+        } else {
+          this.props.history.push('/dashboard/account-settings');
+        }
         sessionStorage.removeItem('changedEmail');
       }
     } else if (this.props.authStore.SIGNUP_FRM.fields.email.value === ''
