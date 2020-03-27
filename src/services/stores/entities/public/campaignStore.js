@@ -1,7 +1,7 @@
 import React from 'react';
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce, isArray } from 'lodash';
+import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce, isArray, find } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
@@ -185,6 +185,25 @@ export class CampaignStore {
       campaignData.data.getOfferingDetailsBySlug.comments = get(newData, 'comments');
       this.details = campaignData;
     }
+  }
+
+  @action
+  updateCommentThread = (commentResponse, commentID) => {
+    if (commentID) {
+      // const currentComment = findIndex(comments, o => o.id === commentID);
+      // const threadArray = currentComment.threadComments;
+      // threadArray.push(commentResponse);
+      // this.details.data.getOfferingDetailsBySlug.comments[currentComment].threadComments.push(commentResponse);
+      const comments = get(this.campaign, 'comments');
+      const currentComment = find(comments, o => o.id === commentID);
+      const threadArray = currentComment.threadComments;
+      threadArray.push(commentResponse);
+    } else {
+      const campaignData = toJS(this.details);
+      campaignData.data.getOfferingDetailsBySlug.comments.unshift(commentResponse);
+      this.details = campaignData;
+    }
+    this.setFieldValue('isPostedNewComment', true);
   }
 
   @action

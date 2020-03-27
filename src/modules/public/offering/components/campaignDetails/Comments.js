@@ -36,7 +36,7 @@ const CommentHeader = ({ newLayout, refLink, isMobile }) => (
   </>
 );
 
-const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHandler, showButton, showCopy, match, errors, isMobile }) => (
+const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHandler, showButton, showCopy, match, errors, isMobile, showCancelButton, closeBtnHandler }) => (
   <>
     <Form className="public-form mt-30 clearfix" reply>
       <FormTextarea
@@ -45,7 +45,10 @@ const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHan
         changed={msgEleChange}
         containerclassname="secondary"
       />
-      {showButton && <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC'} onClick={btnHandler} disabled={!isFormValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />}
+      {showButton
+        && <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC'} onClick={btnHandler} disabled={!isFormValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />}
+      {showCancelButton
+        && <Button fluid={isMobile} className={isMobile && 'mlr-0 mt-20 mb-30'} onClick={closeBtnHandler} disabled={buttonLoader === 'PUBLIC'} basic>Cancel</Button>}
     </Form>
     {errors
       && (
@@ -282,6 +285,8 @@ class Comments extends Component {
                                 match={match}
                                 showCopy
                                 btnHandler={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)}
+                                showCancelButton
+                                closeBtnHandler={() => this.closeTextBox(c.id)}
                                 errors={errors}
                                 isMobile={isMobile}
                               />
