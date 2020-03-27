@@ -1061,7 +1061,15 @@ export class AccreditationStore {
     this.showAccountList = statusValue;
   }
 
-  pendingStepForAccreditation = selectedAccountName => (`/dashboard/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`);
+  pendingStepForAccreditation = (selectedAccountName) => {
+    let redirectUrl = '';
+    if (userDetailsStore.isEntityTrust && selectedAccountName === 'entity') {
+      redirectUrl = `/dashboard/account-settings/investment-limits/verify-trust-entity-accreditation/${selectedAccountName}`;
+    } else {
+      redirectUrl = `/dashboard/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`;
+    }
+    return redirectUrl;
+  }
 
   offeringAccreditatoinStatusMessage = (
     currentStatus, accreditedStatus, isRegulationCheck = false,
