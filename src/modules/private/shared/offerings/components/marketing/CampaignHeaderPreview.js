@@ -23,7 +23,8 @@ export default class CampaignHeaderPreview extends Component {
     } = campaignStatus;
     const headerBasicFields = HEADER_BASIC_FRM.fields;
     const diffForProcessingText = DataFormatter.getDateDifferenceInHoursOrMinutes(headerBasicFields.closeDate.value, true, true);
-    const countDown = (['Minute Left', 'Minutes Left'].includes(diffForProcessingText.label) && diffForProcessingText.value > 0) || diffForProcessingText.value <= 48 ? { valueToShow: diffForProcessingText.value, labelToShow: diffForProcessingText.label } : { valueToShow: campaignStatus.diff, labelToShow: campaignStatus.diff === 1 ? 'Day Left' : 'Days Left' };
+    const diff = DataFormatter.diffDays(headerBasicFields.closeDate.value || null, false, true);
+    const countDown = (['Minute Left', 'Minutes Left'].includes(diffForProcessingText.label) && diffForProcessingText.value > 0) || diffForProcessingText.value <= 48 ? { valueToShow: diffForProcessingText.value, labelToShow: diffForProcessingText.label } : { valueToShow: diff, labelToShow: diff === 1 ? 'Day Left' : 'Days Left' };
     const headerMetaFields = TOMBSTONE_HEADER_META_FRM.fields;
     const miscFields = OFFERING_MISC_FRM.fields;
     return (
