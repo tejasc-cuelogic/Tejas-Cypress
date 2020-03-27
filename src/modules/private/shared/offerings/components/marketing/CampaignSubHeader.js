@@ -48,7 +48,7 @@ class CampaignSubHeader extends Component {
           <Grid columns="4">
             {['closeDate', 'raisedAmount', 'investorCount', 'repaymentCount'].map(field => (
               <Grid.Column>
-                {smartElement.Masked(field, { dateOfBirth: field === 'closeDate', displayMode: isReadOnly })}
+                {smartElement.Masked(field, { prefix: field === 'raisedAmount' ? '$' : false, currency: field === 'raisedAmount', dateOfBirth: field === 'closeDate', displayMode: isReadOnly })}
               </Grid.Column>
             ))}
           </Grid>
