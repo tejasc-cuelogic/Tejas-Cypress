@@ -46,6 +46,7 @@ const offeringTemplate2 = {
     description
     meta {
       keyLabel
+      order
       keyType
       keyValue
       keyFormat
@@ -66,6 +67,7 @@ const offeringTemplate2 = {
     heroVideoURL
     meta {
       keyLabel
+      order
       keyType
       keyValue
       keyFormat
@@ -76,6 +78,7 @@ const offeringTemplate2 = {
   subHeader: `subHeader {
     meta {
       keyLabel
+      order
       keyType
       keyValue
       keyFormat

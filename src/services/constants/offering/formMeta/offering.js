@@ -117,6 +117,14 @@ export const TOMBSTONE_HEADER_META = {
       rule: 'optional',
       placeHolder: 'e.g. Multiple',
     },
+    order: {
+      label: 'Order',
+      value: 1,
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. 1',
+      defaultValue: 1,
+    },
     keyType: {
       label: 'Key Type',
       value: '',
