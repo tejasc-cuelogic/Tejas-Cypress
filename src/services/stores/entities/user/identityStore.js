@@ -131,14 +131,6 @@ export class IdentityStore {
   }
 
   @action
-  phoneTypeChange = (value) => {
-    this.ID_VERIFICATION_FRM = FormValidator.onChange(
-      this.ID_VERIFICATION_FRM,
-      { name: 'mfaMethod', value },
-    );
-  }
-
-  @action
   profileInfoChange = (e, result) => {
     this.ID_PROFILE_INFO = FormValidator.onChange(
       this.ID_PROFILE_INFO,
@@ -459,7 +451,7 @@ export class IdentityStore {
       const phone = phoneNumber.value || get(user, 'phone.number');
       const emailAddress = authStore.CONFIRM_FRM.fields.email.value || get(user, 'email.address');
       const to = type.startsWith('EMAIL') || mfaMethod.value === 'EMAIL' ? emailAddress.toLowerCase() : phone;
-      let method = (mfaMethod.value === '' || type.startsWith('EMAIL')) ? 'EMAIL' : mfaMethod.value;
+      let method = type.startsWith('EMAIL') ? 'EMAIL' : mfaMethod.value === '' ? 'TEXT' : mfaMethod.value;
       if (type === 'BANK_CHANGE') {
         method = multiFactorAuthStore.MFA_MODE_TYPE_META.fields.mfaModeTypes.value;
       }

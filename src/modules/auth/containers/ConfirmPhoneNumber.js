@@ -18,13 +18,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class ConfirmPhoneNumber extends Component {
   constructor(props) {
     super(props);
-    const { userDetailsStore, identityStore } = this.props;
     if (this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       this.setConfirmPhoneFormData();
-    }
-    if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
-      const fieldValue = userDetailsStore.userDetails.phone.type;
-      identityStore.phoneTypeChange(fieldValue);
     }
 
     if (Object.keys(this.props.identityStore.requestOtpResponse).length === 0

@@ -12,16 +12,6 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class NewPhoneNumber extends Component {
-  constructor(props) {
-    super(props);
-    const { userDetailsStore, identityStore } = this.props;
-    if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
-      identityStore.phoneTypeChange(userDetailsStore.userDetails.phone.type);
-    } else {
-      identityStore.phoneTypeChange('TEXT');
-    }
-  }
-
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.refLink);

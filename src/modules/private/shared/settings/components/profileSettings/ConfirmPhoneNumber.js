@@ -17,17 +17,13 @@ export default class ConfirmPhoneNumber extends Component {
   constructor(props) {
     super(props);
     const { userDetailsStore } = this.props;
-    const { phoneNumberChange, phoneTypeChange, requestOtpResponse, ID_VERIFICATION_FRM, sendOtp } = this.props.identityStore;
+    const { phoneNumberChange, requestOtpResponse, ID_VERIFICATION_FRM, sendOtp } = this.props.identityStore;
     if (ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       if (userDetailsStore.userDetails && userDetailsStore.userDetails.phone
         && userDetailsStore.userDetails.phone.number) {
         const fieldValue = Helper.maskPhoneNumber(userDetailsStore.userDetails.phone.number);
         phoneNumberChange(fieldValue);
       }
-    }
-    if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
-      const fieldValue = userDetailsStore.userDetails.phone.type;
-      phoneTypeChange(fieldValue);
     }
 
     if (Object.keys(requestOtpResponse).length === 0 && !isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)) {
