@@ -1214,7 +1214,7 @@ export class AccreditationStore {
   calculateEvidenceMethod = (incEvidenceMethods, isEntity, isTrust) => {
     const evidenceMethodArr = [];
     const uploadTitle = this.ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'income' : 'net worth';
-    if (isEntity) {
+    if (isEntity || isTrust) {
       remove(incEvidenceMethods, o => o.value === 'uploaddocumentLatter');
     }
     forEach(incEvidenceMethods, (method) => {
@@ -1225,7 +1225,7 @@ export class AccreditationStore {
         valueObj.labelDescription = isTrust ? method.desc4 : isEntity ? method.desc3 : this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' ? method.desc1 : method.desc1;
       } else if (method.value === 'verificationrequest') {
         valueObj.labelDescription = isTrust ? method.desc3 : isEntity ? method.desc2 : method.desc1;
-      } else if (method.value === 'uploaddocumentLatter' && !isEntity) {
+      } else if (method.value === 'uploaddocumentLatter') {
         valueObj.labelDescription = method.desc;
       } else {
         valueObj.labelDescription = '';
