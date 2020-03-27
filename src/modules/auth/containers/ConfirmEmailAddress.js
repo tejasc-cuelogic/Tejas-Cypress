@@ -12,7 +12,7 @@ import { ListErrors, NsModal } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 import ConfirmCreateOrCancel from './ConfirmCreateOrCancel';
-//  import SuccessScreen on line 11 from /theme/shared
+
 const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore', 'referralsStore', 'authStore')
