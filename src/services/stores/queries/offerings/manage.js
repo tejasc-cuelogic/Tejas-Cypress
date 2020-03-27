@@ -115,6 +115,7 @@ const common = {
     description
     meta {
       keyLabel
+      order
       keyType
       keyValue
       keyFormat
@@ -126,6 +127,7 @@ const common = {
   subHeader {
     meta {
       keyLabel
+      order
       keyType
       keyValue
       keyFormat
@@ -145,6 +147,7 @@ const common = {
     heroVideoURL
     meta {
       keyLabel
+      order
       keyType
       keyValue
       keyFormat
