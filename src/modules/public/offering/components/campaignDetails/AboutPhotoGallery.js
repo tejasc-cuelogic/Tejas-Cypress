@@ -60,8 +60,9 @@ class AboutPhotoGallery extends Component {
               >
                 {galleryArray.length ? galleryArray.map(data => (
                   <div className="about-carousel">
-                    <div className="carousel-counter">{gallarySelectedImageIndex !== null ? (gallarySelectedImageIndex + 1) : (this.state.activeSlide + 1)}/{galleryArray.length}</div>
+                    <div className="carousel-details counter">{gallarySelectedImageIndex !== null ? (gallarySelectedImageIndex + 1) : (this.state.activeSlide + 1)}/{galleryArray.length}</div>
                     <Image64 srcUrl={isTemplate2 ? get(data, 'image.url') : data.url} />
+                    <div className="carousel-details caption">Lorem ipsum dolor sit amet, consectetur adipiscing elit</div>
                   </div>
                 ))
                   : <NSImage path="gallery-placeholder-16-9.jpg" />

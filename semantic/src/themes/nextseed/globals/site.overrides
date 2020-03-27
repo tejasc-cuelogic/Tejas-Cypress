@@ -2933,18 +2933,25 @@ input[type='range']::-webkit-slider-thumb {
 	width: auto;
 	margin: auto;
 }
-.carousel-counter {
+.carousel-details{
 	position: absolute;
-    display: inline-block;
-    left:10px;
-    top: 10px;
-    min-width: 30px;
-    border-radius: 3px;
-    padding: 5px 9px;
-    opacity: .8;
-    color: @neutral-darkwhite;
-    background: fade(@fullBlack, 60%);
-    z-index: 100;
+	display: inline-block;
+	border-radius: 3px;
+	padding: @5px @9px;
+	opacity: .8;
+	color: @neutral-darkwhite;
+	background: fade(@fullBlack, 60%);
+	z-index: 100;
+	&.counter {
+		min-width: 30px;
+		right:10px;
+		bottom: 10px;
+	}
+	&.caption{
+		max-width: calc(100% - 70px);
+		left: 10px;
+		bottom: 10px;
+	}
 }
 //	Careers Banner
 .careers-banner {
