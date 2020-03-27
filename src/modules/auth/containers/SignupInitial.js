@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Divider, Form, Grid } from 'semantic-ui-react';
+import { Header, Form, Grid } from 'semantic-ui-react';
 import { NsModal } from '../../../theme/shared';
 import { FormArrowButton } from '../../../theme/form';
 
@@ -53,9 +54,10 @@ class signupInitial extends Component {
                 fielddata={SIGNUP_FRM.fields.role}
                 changed={(e, result) => this.handleSignupChange(e, result)}
                 classname="icon-arrow-button"
+                ignoreValues={(this.props.uiStore.authRef === '/business') ? ['investor'] : ''}
               />
             </Form>
-            <Divider hidden />
+            <p className="mt-40">Already have an account? <Link to="/login">Log in</Link></p>
           </Grid.Column>
         </Grid>
       </NsModal>
