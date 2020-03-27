@@ -78,6 +78,8 @@ export class CampaignStore {
 
   @observable isPostedNewComment = false;
 
+  @observable postNavCount = { updates: 0, comments: 0 };
+
   @action
   setFieldValue = (field, val, path = false) => {
     if (path) {
@@ -190,10 +192,6 @@ export class CampaignStore {
   @action
   updateCommentThread = (commentResponse, commentID) => {
     if (commentID) {
-      // const currentComment = findIndex(comments, o => o.id === commentID);
-      // const threadArray = currentComment.threadComments;
-      // threadArray.push(commentResponse);
-      // this.details.data.getOfferingDetailsBySlug.comments[currentComment].threadComments.push(commentResponse);
       const comments = get(this.campaign, 'comments');
       const currentComment = find(comments, o => o.id === commentID);
       const threadArray = currentComment.threadComments;
@@ -204,6 +202,9 @@ export class CampaignStore {
       this.details = campaignData;
     }
     this.setFieldValue('isPostedNewComment', true);
+    const commentCount = this.navCountData;
+    this.postNavCount.comments = get(commentCount, 'comments') + 1;
+    this.postNavCount.updates = get(commentCount, 'updates');
   }
 
   @action
