@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Container, Button, Visibility, List } from 'semantic-ui-react';
+import { Container, Visibility, List } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import Helper from '../../../../../../helper/utility';
@@ -17,8 +17,8 @@ export default class CampaignSubHeaderPreview extends Component {
     const { offer } = offeringsStore;
     const { SUB_HEADER_BASIC_FRM, TOMBSTONE_HEADER_META_FRM, campaignStatus } = manageOfferingStore;
     const {
-      isClosed, isInProcessing, maxFlagStatus,
-      investmentSummary,
+      isClosed, maxFlagStatus,
+      // investmentSummary, isInProcessing,
       // countDown, diffForProcessing
     } = campaignStatus;
     const subHeaderBasicFields = SUB_HEADER_BASIC_FRM.fields;
@@ -49,9 +49,9 @@ export default class CampaignSubHeaderPreview extends Component {
                   </>
                 )
               }
-              {!isClosed && (!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
+              {/* {!isClosed && (!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
                 && <Button compact primary={!isInProcessing} content={`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
-              }
+              } */}
             </List>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>
               <List.Item>

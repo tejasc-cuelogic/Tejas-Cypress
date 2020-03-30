@@ -14,11 +14,44 @@ import { DataFormatter } from '../../../../../../helper';
 @withRouter
 @observer
 export default class TombstonePreview extends Component {
-  renderBanner = content => (
-    <Label.Group size="small">
-      <Label color="grey">{content}</Label>
-    </Label.Group>
-  );
+  renderBanner = (content) => {
+    const offering = this.props.manageOfferingStore.generateBanner();
+    const resultFound = get(offering, 'isBannerShow');
+    const realEstateBanner = get(offering, 'realEstateBanner');
+    const customTag = content ? (<Label color="grey">{content}</Label>) : null;
+    if (resultFound) {
+      const bannerFirst = get(offering, 'datesBanner');
+      const bannerSecond = get(offering, 'amountsBanner');
+      return (
+        <Label.Group size="small">
+          {customTag}
+          {realEstateBanner
+            && <Label color="grey">{realEstateBanner}</Label>
+          }
+          {bannerFirst
+            && <Label color={bannerFirst === 'Processing' ? 'grey' : bannerFirst === 'NEW' ? 'blue' : 'green'}>{bannerFirst}</Label>
+          }
+          {bannerSecond
+            && <Label color={bannerFirst === 'Processing' ? 'grey' : 'green'}>{bannerSecond}</Label>
+          }
+        </Label.Group>
+      );
+    } if (realEstateBanner) {
+      return (
+        <Label.Group size="small">
+          {customTag}
+          <Label color="grey">{realEstateBanner}</Label>
+        </Label.Group>
+      );
+    } if (customTag) {
+      return (
+      <Label.Group size="small">
+        {customTag}
+      </Label.Group>
+      );
+    }
+    return null;
+  }
 
   render() {
     const { manageOfferingStore, offeringsStore } = this.props;
@@ -96,7 +129,7 @@ export default class TombstonePreview extends Component {
                 {TOMBSTONE_BASIC_FRM.fields.toggleMeta.value.includes('INVESTOR_COUNT')
                 && (
                 <>
-                <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount') || 0, 0)} from {get(offer, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
+                <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(TOMBSTONE_BASIC_FRM.fields.raisedAmount.value || 0, 0)} from {TOMBSTONE_BASIC_FRM.fields.investorCount.value || 0} investors</b></p>
                 {isFunded
                   && (
                     <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offer, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>

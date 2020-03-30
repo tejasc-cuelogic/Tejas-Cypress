@@ -1,6 +1,7 @@
 import { decorate, observable, action, computed, toJS } from 'mobx';
 import { startCase, get, includes, filter, orderBy } from 'lodash';
 import money from 'money-math';
+import moment from 'moment';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
@@ -131,7 +132,7 @@ export class ManageOfferingStore extends DataModelStore {
     campaignStatus.diffForProcessing = DataFormatter.getDateDifferenceInHoursOrMinutes(closingDate, true, true);
     campaignStatus.countDown = (includes(['Minute Left', 'Minutes Left'], campaignStatus.diffForProcessing.label) && campaignStatus.diffForProcessing.value > 0) || campaignStatus.diffForProcessing.value <= 48 ? { valueToShow: campaignStatus.diffForProcessing.value, labelToShow: campaignStatus.diffForProcessing.label } : { valueToShow: campaignStatus.diff, labelToShow: campaignStatus.diff === 1 ? 'Day Left' : 'Days Left' };
     campaignStatus.isInProcessing = campaignStatus.diffForProcessing.value <= 0 && (!get(offer, 'closureSummary.hardCloseDate') || get(offer, 'closureSummary.hardCloseDate') === 'Invalid date');
-    campaignStatus.collected = get(offer, 'closureSummary.totalInvestmentAmount') || 0;
+    campaignStatus.collected = this.HEADER_BASIC_FRM.fields.raisedAmount.value || 0;
     const offeringRegulation = get(offer, 'keyTerms.regulation');
     const minOffering = get(offer, 'keyTerms.minOfferingAmountCF') || 0;
     const minOfferingD = get(offer, 'keyTerms.minOfferingAmount506') && get(offer, 'keyTerms.minOfferingAmount506') !== '0.00' ? get(offer, 'keyTerms.minOfferingAmount506') : get(offer, 'keyTerms.minOfferingAmount506C') ? get(offer, 'keyTerms.minOfferingAmount506C') : '0.00';
@@ -154,7 +155,7 @@ export class ManageOfferingStore extends DataModelStore {
       || money.isPositive(formatedReachedMaxCompairAmountValue));
     campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
     campaignStatus.address = get(offer, 'keyTerms.city') || get(offer, 'keyTerms.state') ? `${get(offer, 'keyTerms.city') || 'Houston'}, ${get(offer, 'keyTerms.state') || 'Texas'}` : 'Houston, Texas';
-    campaignStatus.isClosed = get(offer, 'stage') !== 'LIVE';
+    campaignStatus.isClosed = !['LIVE', 'CREATION'].includes(get(offer, 'stage'));
     campaignStatus.isCreation = get(offer, 'stage') === 'CREATION';
     campaignStatus.earlyBird = get(offer, 'earlyBird') || null;
     campaignStatus.bonusRewards = get(offer, 'bonusRewards') || [];
@@ -185,6 +186,104 @@ export class ManageOfferingStore extends DataModelStore {
     campaignStatus.isRealEstate = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE;
     campaignStatus.isPreferredEquity = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C;
     return campaignStatus;
+  }
+
+  generateBanner = () => {
+    const { offer } = offeringsStore;
+    const resultObject = {};
+    const offeringKeyTermDetails = get(offer, 'keyTerms');
+    const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
+    const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506') && get(offeringKeyTermDetails, 'minOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'minOfferingAmount506') : get(offeringKeyTermDetails, 'minOfferingAmount506C') ? get(offeringKeyTermDetails, 'minOfferingAmount506C') : '0.00';
+    const maxOfferingAmountCF = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
+    const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506') && get(offeringKeyTermDetails, 'maxOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'maxOfferingAmount506') : get(offeringKeyTermDetails, 'maxOfferingAmount506C') ? get(offeringKeyTermDetails, 'maxOfferingAmount506C') : '0.00';
+    const regulation = get(offeringKeyTermDetails, 'regulation');
+    const securities = get(offeringKeyTermDetails, 'securities');
+    const isRealEstate = (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(offeringKeyTermDetails, 'equityClass') === 'LLC_MEMBERSHIP_UNITS');
+    const minimumOfferingAmount = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
+    const launchDate = this.TOMBSTONE_BASIC_FRM.fields.launchDate.value || null;
+    const closingDate = this.TOMBSTONE_BASIC_FRM.fields.closeDate.value || null;
+    const maxOfferingAmount = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], regulation) ? maxOfferingAmountRegD : maxOfferingAmountCF;
+    const raisedAmount = money.floatToAmount(this.TOMBSTONE_BASIC_FRM.fields.raisedAmount.value || 0);
+    const divResult = money.div(raisedAmount, minimumOfferingAmount);
+    const percent = money.mul(divResult, '100.00');
+    const customAddinggDaysDateObj = {
+      number: 7,
+      format: 'days',
+    };
+    const launchDaysToRemainsForNewLable = DataFormatter.diffDaysForLauch(
+      launchDate || null,
+      false, true, true, customAddinggDaysDateObj,
+    );
+    const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
+    const closeDaysToRemainsInHours = DataFormatter.getDateDifferenceInHoursOrMinutes(closingDate, true, true);
+    const isInProcessing = closeDaysToRemainsInHours.value <= 0 && (!this.TOMBSTONE_BASIC_FRM.fields.hardCloseDate.value || this.TOMBSTONE_BASIC_FRM.fields.hardCloseDate.value === 'Invalid date');
+    const percentageCompairResult = money.cmp(percent, '50.00').toString();
+    const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
+    let isReachedMax = false;
+    if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
+      isReachedMax = true;
+    }
+    if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
+      || closeDaysToRemains === null)
+      && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
+      resultObject.isBannerShow = true;
+      resultObject.datesBanner = 'NEW';
+      resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, isRealEstate);
+      if (isRealEstate) {
+        resultObject.realEstateBanner = 'Real Estate';
+      }
+      resultObject.launchDate = moment(launchDate).unix() || null;
+      resultObject.processingDate = moment(closingDate).unix() || null;
+      resultObject.category = 'newOffering';
+      return resultObject;
+    } if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7 && !isInProcessing) {
+      const labelBannerFirst = ((includes(['Minute Left', 'Minutes Left'], closeDaysToRemainsInHours.label) && closeDaysToRemainsInHours.value > 0) || closeDaysToRemainsInHours.value <= 48) ? `${closeDaysToRemainsInHours.value} ${closeDaysToRemainsInHours.label}` : closeDaysToRemains === 1 ? `${closeDaysToRemains} Day Left` : `${closeDaysToRemains} Days Left`;
+      resultObject.isBannerShow = !!labelBannerFirst;
+      resultObject.datesBanner = labelBannerFirst;
+      resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, isRealEstate);
+      if (isRealEstate) {
+        resultObject.realEstateBanner = 'Real Estate';
+      }
+      resultObject.launchDate = moment(launchDate).unix() || null;
+      resultObject.processingDate = moment(closingDate).unix() || null;
+      resultObject.category = 'closingSoon';
+      if (!isReachedMax) {
+        return resultObject;
+      }
+    } if (isInProcessing) {
+      resultObject.isBannerShow = true;
+      resultObject.datesBanner = 'Processing';
+      if (isRealEstate) {
+        resultObject.realEstateBanner = 'Real Estate';
+      }
+      resultObject.launchDate = moment(launchDate).unix() || null;
+      resultObject.processingDate = moment(closingDate).unix() || null;
+      resultObject.category = 'processing';
+      return resultObject;
+    }
+    resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, isRealEstate);
+    if (isRealEstate) {
+      resultObject.realEstateBanner = 'Real Estate';
+    }
+    resultObject.isBannerShow = !!(resultObject.datesBanner || resultObject.amountsBanner);
+    resultObject.launchDate = moment(launchDate).unix() || null;
+    resultObject.processingDate = moment(closingDate).unix() || null;
+    if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
+      resultObject.category = 'reachedMax';
+      return resultObject;
+    }
+    return resultObject;
+  }
+
+  generateLabelBannerSecond = (amountCompairResult, percentageCompairResult, percent, isRealEstate) => {
+    let labelBannerSecond = null;
+    if (money.isNegative(amountCompairResult)
+      && !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult) && !isRealEstate) {
+      labelBannerSecond = `${Math.round(percent)}% Funded`;
+    } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
+      labelBannerSecond = 'Reached Max';
+    }
+    return labelBannerSecond;
   }
 
   updateOffering = params => new Promise((res) => {
