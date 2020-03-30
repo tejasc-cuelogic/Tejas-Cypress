@@ -304,10 +304,10 @@ export class CampaignStore {
 
   checkValidContent = (content) => {
     const { isUserLoggedIn } = authStore;
-    const { isAdmin } = userStore;
-    // const access = myAccessForModule('OFFERINGS');
-    const access = true;
-    return ((get(content, 'scope') === 'PUBLIC') || (get(content, 'scope') === 'HIDDEN' && isUserLoggedIn && isAdmin && get(access, 'level')));
+    const { isAdmin, myCapabilities } = userStore;
+    window.logger(myCapabilities);
+    const access = myCapabilities.includes('OFFERINGS_FULL');
+    return ((get(content, 'scope') === 'PUBLIC') || (get(content, 'scope') === 'HIDDEN' && isUserLoggedIn && isAdmin && access));
   }
 
   @computed get campaignStatus() {
@@ -362,7 +362,7 @@ export class CampaignStore {
     if (campaignStatus.campaignTemplate === 2 && get(campaign, 'content[0]')) {
       let content = get(campaign, 'content').filter(c => this.checkValidContent(c));
       content = orderBy(content, c => c.order, ['ASC']);
-      content.forEach((c, i) => templateNavs.push({ title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
+      content.forEach((c, i) => templateNavs.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }
     campaignStatus.templateNavs = templateNavs;
     campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
