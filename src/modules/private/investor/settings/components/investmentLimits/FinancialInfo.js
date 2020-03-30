@@ -31,7 +31,7 @@ export default class FinancialInfo extends Component {
   componentDidMount() {
     const { isAccreditationFlowInProgress } = this.props.accreditationStore;
     const reflectedURL = this.props.history.location.pathname;
-    if (isAccreditationFlowInProgress.open && !reflectedURL.includes('verify-accreditation')) {
+    if (isAccreditationFlowInProgress.open && !reflectedURL.includes('verify-accreditation') && !reflectedURL.includes('verify-trust-entity-accreditation')) {
       this.setState({ open: true, accountSelectedType: isAccreditationFlowInProgress.accountSelectedType });
     }
   }
@@ -50,7 +50,6 @@ export default class FinancialInfo extends Component {
 
   handleVerifyAccreditation = (e, accountType) => {
     e.preventDefault();
-    console.log(accountType);
     this.setState({ open: true, accountSelectedType: accountType });
     this.props.accreditationStore.setAccreditationInialStepState({ openState: true, accountSelected: accountType });
     // if (this.props.userDetailsStore.isEntityTrust && accountType === 'entity') {

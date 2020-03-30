@@ -5,7 +5,7 @@ import AllMessages from '../components/AllMessages';
 
 export default class ManageMessages extends Component {
   search = (e) => {
-    if (e.charCode === 13 && false) {
+    if (e.charCode === 13) {
       // search goes here..
     }
   }

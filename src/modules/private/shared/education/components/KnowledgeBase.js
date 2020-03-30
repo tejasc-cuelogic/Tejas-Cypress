@@ -25,6 +25,10 @@ export default class KnowledgeBase extends Component {
     this.props.educationStore.initRequest('KnowledgeBase', params, categoryType);
   }
 
+  componentWillUnmount() {
+    this.props.educationStore.setSrchParam();
+  }
+
   search = (e) => {
     this.props.educationStore.setSrchParam(e.target.value);
     if (this.props.location.pathname !== '/dashboard/resources/knowledge-base') {
