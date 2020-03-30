@@ -17,9 +17,9 @@ export default class CampaignHeaderPreview extends Component {
     const { offer } = offeringsStore;
     const { HEADER_BASIC_FRM, TOMBSTONE_HEADER_META_FRM, OFFERING_MISC_FRM, campaignStatus } = manageOfferingStore;
     const {
-      isClosed, isCreation, isInProcessing, collected, minFlagStatus,
-      minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing, investmentSummary,
-      // isEarlyBirdRewards, earlyBird, bonusRewards,
+      isClosed, isInProcessing, collected, minFlagStatus,
+      minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, investmentSummary,
+      // isEarlyBirdRewards, earlyBird, bonusRewards, isCreation, diffForProcessing,
     } = campaignStatus;
     const headerBasicFields = HEADER_BASIC_FRM.fields;
     const diffForProcessingText = DataFormatter.getDateDifferenceInHoursOrMinutes(headerBasicFields.closeDate.value, true, true);
@@ -187,10 +187,10 @@ export default class CampaignHeaderPreview extends Component {
                   ))
                   }
                   <div className="mt-20">
-                    {isCreation
+                    {/* {isCreation
                       ? <Button fluid secondary={diffForProcessing.value !== 0} content="Coming Soon" disabled />
                       : ''
-                    }
+                    } */}
                     {!isClosed
                       && (
                         <>

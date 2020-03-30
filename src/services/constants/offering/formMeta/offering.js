@@ -19,6 +19,11 @@ const SUB_HEADER_TOGGLE_META = [
 ];
 
 export const TOMBSTONE_BASIC = FormHelper.generateMeta([
+  ['closeDate', 'Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
+  ['launchDate', 'Launch Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
+  ['hardCloseDate', 'Hard Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
+  ['raisedAmount', 'Raised Amount', '', 'optional', 'e.g $ 100', { asIn: true, props: { maskFormattedChange: 'float', skipField: true } }],
+  ['investorCount', 'Investor Count', '', 'optional', 'e.g 3', { asIn: true, props: { skipField: true } }],
   ['description', 'Tombstone Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
   ['customTag', 'Tombstone Custom Tag', '', 'optional', 'Enter here...'],
   ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { defaultValue: [], values: TOMBSTONE_TOGGLE_META } }],
@@ -35,6 +40,7 @@ export const SUB_HEADER_BASIC = FormHelper.generateMeta([
 
 export const HEADER_BASIC = FormHelper.generateMeta([
   ['closeDate', 'Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
+  ['raisedAmount', 'Raised Amount', '', 'optional', 'e.g $ 100', { asIn: true, props: { maskFormattedChange: 'float', skipField: true } }],
   ['investorCount', 'Investor Count', '', 'optional', 'e.g 3', { asIn: true, props: { skipField: true } }],
   ['repaymentCount', 'Repayment Count', '', 'optional', 'e.g 2', { asIn: true, props: { skipField: true } }],
   ['earlyBird', 'Early Bird Available', '', 'optional', 'e.g 4', { asIn: true, props: { skipField: true } }],
