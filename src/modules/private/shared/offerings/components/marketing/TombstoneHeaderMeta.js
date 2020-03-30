@@ -25,7 +25,7 @@ const SortableItem = SortableElement(({ offer, TOMBSTONE_HEADER_META_FRM, isRead
             {!hideHighlight
             && (
             <Table.Cell collapsing>
-              {smartElement.FormCheckBox('isHighlight', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex], toggle: true, defaults: true })}
+              {smartElement.FormCheckBox('isHighlight', { customClass: 'custom-toggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'meta', fieldIndex], toggle: true, defaults: true })}
             </Table.Cell>
             )}
             <Table.Cell>
