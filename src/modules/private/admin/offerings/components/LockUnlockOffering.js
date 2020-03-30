@@ -47,6 +47,7 @@ function LockUnlockOffering(props) {
         checked={lockStatus}
         label={loadingArray.includes('adminLockOrUnlockOffering') ? 'Loading...' : lockStatus ? 'Unlock Offering' : 'Lock Offering'}
         toggle
+        className="negative-toggle"
       />
       {get(lock, 'user') && currentUserId !== get(lock, 'userId')
       ? (
