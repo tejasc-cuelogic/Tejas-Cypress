@@ -147,7 +147,7 @@
             padding-left: 0;
             &:before{
                 position: unset;
-                margin-bottom: 4px;
+                margin-bottom: -46px;
             }
             &:after{
                 top: @2px;
