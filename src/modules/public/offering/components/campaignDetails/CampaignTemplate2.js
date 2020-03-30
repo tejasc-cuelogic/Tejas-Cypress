@@ -31,7 +31,7 @@ class CampaignTemplate2 extends Component {
     let updates = campaign && campaign.updates;
     updates = orderBy(updates, o => get(o, 'updatedDate') && moment(new Date(o.updatedDate)).unix(), ['asc']);
     const postedComments = get(campaign, 'comments') || [];
-    const content = orderBy(get(campaign, 'content'), c => c.order, ['ASC']);
+    const content = campaignStatus.templateNavs || [];
     return (
       <>
         {content.map(c => (
@@ -59,6 +59,7 @@ class CampaignTemplate2 extends Component {
                       processScroll={processScroll}
                       newLayout
                       galleryUrl={refLink}
+                      title={c.title}
                     />
                   ) : c.contentType === 'COMMENTS'
                     ? (

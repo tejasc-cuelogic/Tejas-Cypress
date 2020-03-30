@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Button, Icon } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, camelCase } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Image64 } from '../../../../../../theme/shared';
 import NSImage from '../../../../../shared/NSImage';
@@ -30,8 +30,8 @@ class Gallery extends Component {
     return (
       <>
         <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
-          Gallery
-          <span className="anchor" id="gallery" />
+          <span className="anchor" id={this.props.title ? camelCase(this.props.title) : 'gallery'} />
+          {this.props.title || 'Documents'}
         </Header>
         <div className="gallery-preview">
           {campaignStatus.galleryImages && campaignStatus.galleryImages.length

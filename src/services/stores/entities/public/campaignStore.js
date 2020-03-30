@@ -302,6 +302,14 @@ export class CampaignStore {
     return {};
   }
 
+  checkValidContent = (content) => {
+    const { isUserLoggedIn } = authStore;
+    const { isAdmin } = userStore;
+    // const access = myAccessForModule('OFFERINGS');
+    const access = true;
+    return ((get(content, 'scope') === 'PUBLIC') || (get(content, 'scope') === 'HIDDEN' && isUserLoggedIn && isAdmin && get(access, 'level')));
+  }
+
   @computed get campaignStatus() {
     const { campaign } = this;
     const campaignStatus = {};
@@ -352,7 +360,8 @@ export class CampaignStore {
     campaignStatus.issuerStatement = campaignStatus.campaignTemplate === 2 ? get(campaign, 'misc.issuerStatement') : get(campaign, 'keyTerms.offeringDisclaimer');
     const templateNavs = [];
     if (campaignStatus.campaignTemplate === 2 && get(campaign, 'content[0]')) {
-      const content = orderBy(get(campaign, 'content'), c => c.order, ['ASC']);
+      let content = get(campaign, 'content').filter(c => this.checkValidContent(c));
+      content = orderBy(content, c => c.order, ['ASC']);
       content.forEach((c, i) => templateNavs.push({ title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }
     campaignStatus.templateNavs = templateNavs;
