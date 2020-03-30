@@ -24,7 +24,7 @@ export default class CampaignSideBar extends Component {
   render() {
     const { campaignStore, newLayout, followBtn } = this.props;
     const {
-      campaign, navCountData, campaignSideBarShow, offerStructure, campaignStatus,
+      campaign, postNavCount, campaignSideBarShow, offerStructure, campaignStatus,
     } = campaignStore;
     const {
       isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
@@ -264,7 +264,7 @@ export default class CampaignSideBar extends Component {
             && (
               <>
                 <Menu vertical>
-                  <NavItems needNavLink sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={isBonusReward} isBonusReward={isBonusReward} />
+                  <NavItems needNavLink sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={postNavCount} bonusRewards={isBonusReward} isBonusReward={isBonusReward} />
                 </Menu>
               </>
             )}

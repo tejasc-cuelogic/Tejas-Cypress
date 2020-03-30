@@ -78,7 +78,9 @@ export class CampaignStore {
 
   @observable isPostedNewComment = false;
 
-  // @observable postNavCount = { updates: 0, comments: 0 };
+  @observable postNavCount = { updates: 0, comments: 0 };
+
+  @observable postedCommentCount = 0;
 
   @action
   setFieldValue = (field, val, path = false) => {
@@ -177,6 +179,7 @@ export class CampaignStore {
       campaignData.data.getOfferingDetailsBySlug.updates = get(newData, 'updates');
       campaignData.data.getOfferingDetailsBySlug.comments = get(newData, 'comments');
       this.details = campaignData;
+      this.navCountData();
     }
   }
 
@@ -191,20 +194,20 @@ export class CampaignStore {
 
   @action
   updateCommentThread = (commentResponse, commentID) => {
+    const comments = get(this.campaign, 'comments');
     if (commentID) {
-      const comments = get(this.campaign, 'comments');
       const currentComment = find(comments, o => o.id === commentID);
       const threadArray = currentComment.threadComments;
       threadArray.push(commentResponse);
     } else {
-      const campaignData = toJS(this.details);
-      campaignData.data.getOfferingDetailsBySlug.comments.unshift(commentResponse);
-      this.details = campaignData;
+      // const campaignData = toJS(this.details);
+      // campaignData.data.getOfferingDetailsBySlug.comments.unshift(commentResponse);
+      // this.details = campaignData;
+      comments.unshift(commentResponse);
     }
     this.setFieldValue('isPostedNewComment', true);
     // const commentCount = this.navCountData;
-    // this.setFieldValue('postNavCount', get(commentCount, 'comments') + 1, 'comments');
-    // this.setFieldValue('postNavCount', get(commentCount, 'updates'), 'updates');
+    this.navCountData();
   }
 
   @action
@@ -357,10 +360,12 @@ export class CampaignStore {
       // User does not have an active account, have them finish signup
       if (isOfferingRegD && !isInvestorAccreditated.status) {
         commentMeta.content = (<p>In order to leave a comment, please complete your account setup and verify your status as an accredited investor.</p>);
-      } else {
+      } else if (!frozenAccounts.length) {
         commentMeta.content = (<p>In order to leave a comment, please complete your account setup.</p>);
       }
-      commentMeta.action = () => (<Link to="/dashboard/setup" className="ui button primary">Complete Account Setup</Link>);
+      if (!frozenAccounts.length) {
+        commentMeta.action = () => (<Link to="/dashboard/setup" className="ui button primary">Complete Account Setup</Link>);
+      }
     } else if (activeAccounts.length && isOfferingRegD && !isInvestorAccreditated.status) {
       commentMeta.content = (<p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>);
       if (isInvestorAccreditated.requestedStatus) {
@@ -369,7 +374,7 @@ export class CampaignStore {
           approval status, please contact <a href="mailto: support@nextseed.com">support@nextseed.com</a>.</p>
         );
       }
-      commentMeta.action = () => (isInvestorAccreditated.accreditation !== 'REQUESTED' ? (
+      commentMeta.action = () => (!isInvestorAccreditated.requestedStatus ? (
         <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
       ) : true);
     } else if (!validCampaignStage || frozenAccounts.length || passedProcessingDate) {
@@ -575,12 +580,35 @@ export class CampaignStore {
     });
   });
 
-  @computed get navCountData() {
-    const res = { updates: 0, comments: 0 };
+  // @computed get navCountData() {
+  //   const res = { updates: 0, comments: 0 };
+  //   let sum = 0;
+  //   if (this.campaign) {
+  //     const { updates, comments } = this.campaign;
+  //     res.updates = updates && updates.length ? updates.length : 0;
+  //     if (comments) {
+  //       comments.map((c) => {
+  //         if (c.scope === 'PUBLIC'
+  //           && ((['admin', 'investor'].includes(get(c, 'createdUserInfo.roles[0].name')))
+  //             || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
+  //           const cnt = reduce(get(c, 'threadComments'), (tcSum, tc) => (tc.scope === 'PUBLIC' && ((['admin', 'investor'].includes(get(tc, 'createdUserInfo.roles[0].name'))) || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
+  //           sum = sum + 1 + (cnt || 0);
+  //         }
+  //         return null;
+  //       });
+  //     }
+  //   }
+  //   res.comments = sum;
+  //   return res;
+  // }
+
+  @action
+  navCountData = () => {
     let sum = 0;
     if (this.campaign) {
       const { updates, comments } = this.campaign;
-      res.updates = updates && updates.length ? updates.length : 0;
+      const updatesCnt = updates && updates.length ? updates.length : 0;
+      this.setFieldValue('postNavCount', updatesCnt, 'updates');
       if (comments) {
         comments.map((c) => {
           if (c.scope === 'PUBLIC'
@@ -593,8 +621,9 @@ export class CampaignStore {
         });
       }
     }
-    res.comments = sum;
-    return res;
+    const postedCommentCount = get(this.campaign, 'comments') || [];
+    this.setFieldValue('postNavCount', sum, 'comments');
+    this.setFieldValue('postedCommentCount', postedCommentCount.length);
   }
 
   @computed get offerStructure() {

@@ -29,10 +29,10 @@ const CommentHeader = ({ newLayout, refLink, isMobile }) => (
       time.
       </p>
     <p>See our <Link to={`${refLink}/community-guidelines`}>community guidelines</Link> on posting.</p>
-    <p>
+    {/* <p>
       If you have any technical questions or questions about NextSeed, please
         email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
-      </p>
+        </p> */}
   </>
 );
 
@@ -98,8 +98,8 @@ class Comments extends Component {
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
     if (!isUserLoggedIn) {
-      this.props.uiStore.setAuthRef(`${this.props.refLink}${this.props.newLayout ? '' : '/comments'}`);
-      this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}${this.props.newLayout ? '' : '/comments'}` });
+      this.props.uiStore.setAuthRef(`${this.props.refLink}${this.props.newLayout ? '#comments' : '/comments'}`);
+      this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}${this.props.newLayout ? '#comments' : '/comments'}` });
       this.props.history.push('/login');
     } else if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
       this.props.history.push(`${this.props.refLink}/confirm-comment-login`);
@@ -204,7 +204,7 @@ class Comments extends Component {
                         <Comment key={c.id} className={`${((isIssuerComment(c)) || isNsAdmin(c)) ? 'issuer-co mment' : ''}`}>
                           <Comment.Content>
                             <Comment.Author>
-                              {(isIssuerComment(c)) ? get(campaign, 'keyTerms.shorthandBusinessName') : isNsAdmin ? 'NextSeed' : get(c, 'createdUserInfo.info.firstName')}
+                              {(isIssuerComment(c)) ? get(campaign, 'keyTerms.shorthandBusinessName') : isNsAdmin(c) ? 'NextSeed' : get(c, 'createdUserInfo.info.firstName')}
                               {((isIssuerComment(c)) || isNsAdmin(c)) && <Label color={(isIssuerComment(c)) ? 'green' : 'blue'} size="mini">{(isIssuerComment(c)) ? 'ISSUER' : 'ADMIN'}</Label>}
                             </Comment.Author>
                             <Comment.Metadata><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date'), true, true)}</span></Comment.Metadata>
