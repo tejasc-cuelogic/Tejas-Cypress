@@ -900,7 +900,7 @@ export class IdentityStore {
     };
     const res = await this.otpWrapper(payLoad);
     if (res) {
-      userDetailsStore.mergeUserData('phone', { address: phoneNumber });
+      userDetailsStore.mergeUserData('phone', { number: phoneNumber });
     }
     return res;
   }
