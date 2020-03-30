@@ -1,5 +1,5 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, forOwn, filter, capitalize, findKey, includes, get, set } from 'lodash';
+import { forEach, isArray, find, forOwn, filter, capitalize, findKey, includes, get, set, remove } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
@@ -361,7 +361,7 @@ export class AccreditationStore {
   removeUploadedData = (form, field, index = null, accountType) => {
     const accountId = userDetailsStore.getIdByAccountType(accountType.toLowerCase());
     let removeFileId = '';
-    if (index != null) {
+    if (index !== null) {
       const fileId = this[form].fields[field].fileId.splice(index, 1);
       this[form].fields[field].value.splice(index, 1);
       removeFileId = get(fileId, '[0]');
@@ -509,13 +509,13 @@ export class AccreditationStore {
     const forms = {
       ACCREDITATION_FORM: [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13],
       // NET_WORTH_FORM: [3, 4, 7, 8, 11, 12],
-      INCOME_EVIDENCE_FORM: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+      INCOME_EVIDENCE_FORM: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
       VERIFICATION_REQUEST_FORM: [1, 3, 5, 7, 9, 11],
-      ASSETS_UPLOAD_DOC_FORM: [4, 6, 8, 10, 13],
+      ASSETS_UPLOAD_DOC_FORM: [4, 6, 8, 10, 13, 14],
       INCOME_UPLOAD_DOC_FORM: [2, 12],
       ENTITY_ACCREDITATION_FORM: [],
       FILLING_STATUS_FORM: [],
-      TRUST_ENTITY_ACCREDITATION_FRM: [7, 8, 9, 10, 11, 12],
+      TRUST_ENTITY_ACCREDITATION_FRM: [7, 8, 9, 10, 11, 12, 14],
     };
     const formList = [];
     forEach(forms, (form, key) => {
@@ -571,8 +571,14 @@ export class AccreditationStore {
       } else if (this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
         formType = 6;
       }
-    } else if (['INCOME', 'ASSETS'].includes(this.ACCREDITATION_FORM.fields.method.value) && ['uploaddocumentLatter'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value)) {
-      formType = 13;
+    } else if (['INCOME', 'ASSETS'].includes(this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value) && ['uploaddocument'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value)) {
+      formType = 14;
+    } else if ((['INCOME', 'ASSETS'].includes(this.ACCREDITATION_FORM.fields.method.value) || ['INCOME', 'ASSETS'].includes(this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value)) && ['uploaddocumentLatter'].includes(this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value)) {
+      if (accreditationType === 3) {
+        formType = 14;
+      } else {
+        formType = 13;
+      }
     }
     return formType;
   }
@@ -645,7 +651,6 @@ export class AccreditationStore {
     const refetchQueries = formType ? [{
       query: userAccreditationQuery,
     }] : [];
-    console.log(payLoad);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -1056,7 +1061,15 @@ export class AccreditationStore {
     this.showAccountList = statusValue;
   }
 
-  pendingStepForAccreditation = selectedAccountName => (`/dashboard/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`);
+  pendingStepForAccreditation = (selectedAccountName) => {
+    let redirectUrl = '';
+    if (userDetailsStore.isEntityTrust && selectedAccountName === 'entity') {
+      redirectUrl = `/dashboard/account-settings/investment-limits/verify-trust-entity-accreditation/${selectedAccountName}`;
+    } else {
+      redirectUrl = `/dashboard/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`;
+    }
+    return redirectUrl;
+  }
 
   offeringAccreditatoinStatusMessage = (
     currentStatus, accreditedStatus, isRegulationCheck = false,
@@ -1201,8 +1214,12 @@ export class AccreditationStore {
   calculateEvidenceMethod = (incEvidenceMethods, isEntity, isTrust) => {
     const evidenceMethodArr = [];
     const uploadTitle = this.ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'income' : 'net worth';
+    if (isEntity || isTrust) {
+      remove(incEvidenceMethods, o => o.value === 'uploaddocumentLatter');
+    }
     forEach(incEvidenceMethods, (method) => {
       const valueObj = {};
+      // valueObj.label = isEntity ? method.value === 'uploaddocumentLatter' ? method.header : method.header2 : method.value === 'uploaddocumentLatter' ? method.header : method.value === 'uploaddocument' ? `Upload proof of ${uploadTitle}` : method.header1;
       valueObj.label = isEntity ? method.header2 : method.value === 'uploaddocumentLatter' ? method.header : method.value === 'uploaddocument' ? `Upload proof of ${uploadTitle}` : method.header1;
       if (method.value === 'uploaddocument') {
         valueObj.labelDescription = isTrust ? method.desc4 : isEntity ? method.desc3 : this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' ? method.desc1 : method.desc1;

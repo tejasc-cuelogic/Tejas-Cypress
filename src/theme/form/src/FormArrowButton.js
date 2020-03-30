@@ -14,11 +14,12 @@ const FormArrowButton = observer((props) => {
     // error,
     // placeHolder,
   } = props.fielddata;
-  const { name, changed, action, ctaErrors, classname, formName, activeClass } = props;
+  const { name, changed, action, ctaErrors, classname, formName, activeClass, ignoreValues } = props;
   if (values && Array.isArray(toJS(values))) {
     return (
 <Button.Group fluid vertical>{values.map(field => (
   <>
+  {(!ignoreValues || ignoreValues.length === 0 || !ignoreValues.includes(field.value)) ? (
     <Button
       onClick={(e) => {
         if (formName) {
@@ -46,7 +47,9 @@ const FormArrowButton = observer((props) => {
       }
     </div>
     <Icon className="ns-chevron-right" color="grey" />
-  </Button>
+    </Button>
+    ) : null
+    }
   {(ctaErrors && ctaErrors.for === field.value) ? (
     <p className="negative-text mt-14 mb-14 more-info">
       {ctaErrors.errorMsg}

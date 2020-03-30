@@ -113,7 +113,7 @@ export class NavStore {
       const uKey = _.get(userStore, 'currentUser.sub') || 'public';
       return this.filterRoutes(uKey, false);
     } catch (err) {
-      console.log(err);
+      window.logger(err);
       return [];
     }
   }
@@ -123,7 +123,7 @@ export class NavStore {
       const uKey = _.get(userStore, 'currentUser.sub') || 'public';
       return this.filterRoutes(uKey, true);
     } catch (err) {
-      console.log(err);
+      window.logger(err);
       return [];
     }
   }

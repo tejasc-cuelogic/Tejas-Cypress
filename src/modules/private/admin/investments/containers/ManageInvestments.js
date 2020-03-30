@@ -5,7 +5,7 @@ import AllInvestments from '../components/AllInvestments';
 
 export default class ManageInvestments extends Component {
   search = (e) => {
-    if (e.charCode === 13 && false) {
+    if (e.charCode === 13) {
       // search goes here..
     }
   }

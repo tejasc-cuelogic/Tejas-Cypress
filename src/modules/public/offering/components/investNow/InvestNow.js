@@ -78,7 +78,7 @@ export default class InvestNow extends React.Component {
   }
 
   handleIframeTask = (e) => {
-    console.log(e.data);
+    window.logger(e.data);
   };
 
   handleMultiStepModalclose = () => {
