@@ -43,7 +43,7 @@ class AboutPhotoGallery extends Component {
         onClose={this.handleClose}
         size="fullscreen"
         closeIcon
-        className="about-modal"
+        className={`${isTemplate2 ? 'about-modal-2' : ''} about-modal`}
       >
         <Modal.Content>
           <div className="carousel">
@@ -59,10 +59,10 @@ class AboutPhotoGallery extends Component {
                 isTemplate2={isTemplate2}
               >
                 {galleryArray.length ? galleryArray.map(data => (
-                  <div className="about-carousel">
+                  <div className={`${isTemplate2 ? 'about-carousel-2' : ''} about-carousel`}>
                     <div className={`carousel-details counter ${isTemplate2 ? 'template2' : ''}`}>{gallarySelectedImageIndex !== null ? (gallarySelectedImageIndex + 1) : (this.state.activeSlide + 1)}/{galleryArray.length}</div>
                     <Image64 srcUrl={isTemplate2 ? get(data, 'image.url') : data.url} />
-                    {isTemplate2 && get(data, 'caption') && <div className="carousel-details caption">{get(data, 'caption')}</div>}
+                    {isTemplate2 && get(data, 'caption') && <div className={`carousel-details caption ${isTemplate2 ? 'template2' : ''}`}>{get(data, 'caption')}</div>}
                   </div>
                 ))
                   : <NSImage path="gallery-placeholder-16-9.jpg" />

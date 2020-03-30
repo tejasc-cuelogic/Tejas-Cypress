@@ -2942,21 +2942,26 @@ input[type='range']::-webkit-slider-thumb {
 	color: @neutral-darkwhite;
 	background: fade(@fullBlack, 60%);
 	z-index: 100;
-	&.counter {
-		min-width: 30px;
-		left: 10px;
-		top: 10px;
-		&.template2{
+	&.template2{
+		color: @white;
+		background: fade(@neutral-middark, 50%);
+		border: 1px solid @white;
+		&.counter {
 			right:10px;
 			bottom: 10px;
 			left: auto;
 			top: auto;
 		}
+		&.caption{
+			max-width: calc(100% - 70px);
+			left: 10px;
+			bottom: 10px;
+		}
 	}
-	&.caption{
-		max-width: calc(100% - 70px);
+	&.counter {
+		min-width: 30px;
 		left: 10px;
-		bottom: 10px;
+		top: 10px;
 	}
 }
 //	Careers Banner

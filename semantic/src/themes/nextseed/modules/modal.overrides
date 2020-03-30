@@ -294,6 +294,9 @@
                     .about-carousel {
                         position: relative;
                         display:block !important;
+                        &.about-carousel-2{
+                            position: static;
+                        }
                     }
                     .ui.image{
                         max-height:~"calc(100vh - 30px)";
@@ -332,6 +335,9 @@
             @media only screen and (max-width : @largestMobileScreen){
                 right: 0px;
             }
+        }
+        &.about-modal-2 .slick-slider .slick-arrow.slick-disabled{
+            display: none !important;
         }
     }
     &.video-modal{
