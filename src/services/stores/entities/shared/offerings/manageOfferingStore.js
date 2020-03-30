@@ -119,7 +119,11 @@ export class ManageOfferingStore extends DataModelStore {
       data = omitDeep(data, ['__typename', 'fileHandle']);
     }
     if (keyName) {
-      offeringDetails[keyName] = data;
+      if (keyName === 'investNow' && forms === 'INVEST_NOW_TOC_TEMPLATE_FRM' && data.template === 3) {
+        offeringDetails[keyName] = data;
+      } else {
+        offeringDetails[keyName] = data;
+      }
     } else {
       offeringDetails = { ...data };
     }
