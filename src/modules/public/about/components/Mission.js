@@ -68,9 +68,6 @@ class Mission extends Component {
                   <p>
                     We are a fast-growing fintech company that empowers everyday investors to invest directly in local businesses, enabling private companies across the US to raise capital directly from their community. The Next Seed, Inc. operates NextSeed Services LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.
                   </p>
-                  <p>
-                    We recently acquired Collaboration Capital, an SEC-registered investment adviser that focuses on impact and ESG investing strategies. Collaboration Capital was established in 2017 and has since become an industry leader in the impact/ESG investing space, currently with over $175 million AUM. Together, we aim to build a leading technology-driven impact investment firm open to everyone, furthering our mission to democratize finance.
-                  </p>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
