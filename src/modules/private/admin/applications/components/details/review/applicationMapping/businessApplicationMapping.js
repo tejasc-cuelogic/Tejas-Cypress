@@ -59,7 +59,7 @@ export default class BusinessApplicationMapping extends Component {
 
   toggleConfirmModal = (e, formName) => {
     e.preventDefault();
-    console.log(formName);
+    window.logger(formName);
     this.props.businessAppReviewStore.toggleConfirmModal(null, 'APPLICATION_MAPPED_OFFERING_FORM');
   }
 

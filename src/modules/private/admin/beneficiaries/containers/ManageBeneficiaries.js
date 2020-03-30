@@ -5,7 +5,7 @@ import AllBeneficiaries from '../components/AllBeneficiaries';
 
 export default class ManageBeneficiaries extends Component {
   search = (e) => {
-    if (e.charCode === 13 && false) {
+    if (e.charCode === 13) {
       // search goes here..
     }
   }

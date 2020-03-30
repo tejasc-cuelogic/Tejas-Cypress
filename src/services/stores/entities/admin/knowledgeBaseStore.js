@@ -441,7 +441,7 @@ export class KnowledgeBaseStore {
   }
 
   @computed get selectedRecordsCount() {
-    console.log('inside selectedRecordsCount');
+    window.logger('inside selectedRecordsCount');
     return this.selectedRecords.length || 0;
   }
 

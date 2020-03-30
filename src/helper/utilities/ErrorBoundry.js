@@ -45,8 +45,8 @@ class ErrorBoundary extends React.Component {
         redirectToHome();
       }
     } else {
-      console.log('Error payload:: ', error, typeof error);
-      console.log('Error info:: ', info);
+      window.logger('Error payload:: ', error, typeof error);
+      window.logger('Error info:: ', info);
     }
   }
 

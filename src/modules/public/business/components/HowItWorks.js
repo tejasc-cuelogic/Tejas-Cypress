@@ -139,7 +139,7 @@ class HowItWorks extends Component {
                   <div>
                     <Header as="h2">Raise exactly the type<Responsive as="br" minWidth={1200} /> of capital you need</Header>
                     <p className={responsiveVars.isMobile ? 'mb-30 mt-10' : 'mb-60 mt-40'}>
-                      Whether you{"'"}re raising capital for an expansion, a new venture, or to improve your current capacity, our investment banking team will find the right capital solution to keep you in control of your business.
+                      Whether you{'\''}re raising capital for an expansion, a new venture, or to improve your current capacity, our investment banking team will find the right capital solution to keep you in control of your business.
                   </p>
                     {!userStore.isIssuer && !responsiveVars.isMobile
                       && (
@@ -464,7 +464,7 @@ class HowItWorks extends Component {
               <Grid.Column width={11}>
                 <Header as="h2" className="mb-20">Let us know how we can help</Header>
                 <p className={`${responsiveVars.isMobile ? 'mb-10' : ''} neutral-text`}>
-                  Have questions about how we can help your business achieve your goals? We{"'"}re here to help.
+                  Have questions about how we can help your business achieve your goals? We{'\''}re here to help.
                 </p>
               </Grid.Column>
               <Grid.Column width={5} verticalAlign="middle" className="center-align">

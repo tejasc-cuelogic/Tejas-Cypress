@@ -21,7 +21,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 const summaryDetails = ({
   totalInvested, pendingInvestments, paidToDate, tnar,
 }) => {
-  console.log(tnar);
+  window.logger(tnar);
   return {
     accountType: 'individual',
     title: false,

@@ -39,7 +39,7 @@ export default class Agreement extends React.Component {
     if (!alreadySet) {
       getLegalDocsFileIds().then(() => {
         // getBoxEmbedLink(doc.to, doc.id);
-        // console.log('successfully doc get');
+        // window.logger('successfully doc get');
       });
     }
     resetAggrementForm();

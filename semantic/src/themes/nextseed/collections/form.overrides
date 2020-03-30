@@ -237,6 +237,8 @@
         display: block !important;
         @media only screen and (max-width:@largestMobileScreen){
             min-width:100%;
+            text-align:center;
+
         }
         label{
             font-size:@14px;
@@ -252,7 +254,8 @@
             background-color:@white !important;
             border-radius: 4px;
             @media only screen and (max-width:@largestMobileScreen){
-                max-width: @46px;
+                max-width: @36px;
+                padding:@7px 0;
             }
             &[type=number]{
                 -webkit-appearance:none;

@@ -69,6 +69,7 @@ export default class Private extends React.Component {
     const { myRoutes } = this.props.navStore;
     const { info } = userDetails;
     const { match } = this.props;
+    const { topBanner } = this.props.uiStore;
     const UserInfo = {
       firstName: get(userDetails, 'info.firstName'),
       lastName: get(userDetails, 'info.lastName'),
@@ -92,6 +93,7 @@ export default class Private extends React.Component {
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
             handleLogOut={this.handleLogOut}
+            headerclass={topBanner ? 'large-header' : ''}
             // canSubmitApp={isValid}
             // isPrequalQulify={isPrequalQulify}
             // preQualSubmit={this.preQualSubmit}

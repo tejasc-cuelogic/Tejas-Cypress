@@ -34,7 +34,7 @@ export default class General extends Component {
       <>
         <Header as="h4">General information</Header>
         <p className="mb-20">
-          Let{"'"}s create your Entity Investment Account. Get started by providing your entity information.
+          Let{'\''}s create your Entity Investment Account. Get started by providing your entity information.
         </p>
         <Form error>
           <FormInput
