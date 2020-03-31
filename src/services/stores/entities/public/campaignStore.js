@@ -352,7 +352,7 @@ export class CampaignStore {
       if (isOfferingRegD) {
         commentMeta.content = (<p>In order to leave a comment, please {get(stepInRoute, 'word')} and verify your status as an <br />accredited investor.</p>);
       } else {
-        commentMeta.content = (<p>In order to leave comments, please {get(stepInRoute, 'word')} and verify your identity.</p>);
+        commentMeta.content = (<p>In order to leave comments, please {get(stepInRoute, 'word')}.</p>);
       }
       commentMeta.action = handleLogin => (<Link onClick={e => handleLogin(e, true)} to="/" className="ui button primary">{get(stepInRoute, 'title')}</Link>);
     } else if (activeAccounts.length === 0) {
