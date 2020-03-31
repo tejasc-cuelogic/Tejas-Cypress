@@ -18,7 +18,7 @@ export default class CampaignSubHeaderPreview extends Component {
     const { SUB_HEADER_BASIC_FRM, TOMBSTONE_HEADER_META_FRM, campaignStatus } = manageOfferingStore;
     const { maxFlagStatus } = campaignStatus;
     const subHeaderBasicFields = SUB_HEADER_BASIC_FRM.fields;
-    const isClosed = subHeaderBasicFields.stage.value === 'COMPLETED';
+    const isClosed = subHeaderBasicFields.stage.value === 'COMPLETE';
     const isLive = subHeaderBasicFields.stage.value === 'LIVE';
     const toggleMeta = subHeaderBasicFields.toggleMeta.value;
     const showInvestorCount = toggleMeta.includes('INVESTOR_COUNT');

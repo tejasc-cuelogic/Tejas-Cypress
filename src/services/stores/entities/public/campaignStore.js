@@ -302,12 +302,13 @@ export class CampaignStore {
     return {};
   }
 
-  checkValidContent = (content) => {
+  checkValidContent = (content, stage) => {
     const { isUserLoggedIn } = authStore;
     const { isAdmin, myCapabilities } = userStore;
     window.logger(myCapabilities);
     const access = myCapabilities.includes('OFFERINGS_FULL');
-    return ((get(content, 'scope') === 'PUBLIC') || (get(content, 'scope') === 'HIDDEN' && isUserLoggedIn && isAdmin && access));
+    const stageCondition = stage !== 'COMPLETE' || (stage === 'COMPLETE' && (get(content, 'contentType') !== 'DATA_ROOM'));
+    return (stageCondition && ((get(content, 'scope') === 'PUBLIC') || (get(content, 'scope') === 'HIDDEN' && isUserLoggedIn && isAdmin && access)));
   }
 
   @computed get campaignStatus() {
@@ -322,23 +323,20 @@ export class CampaignStore {
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     const minOfferingD = get(campaign, 'keyTerms.minOfferingAmount506') && get(campaign, 'keyTerms.minOfferingAmount506') !== '0.00' ? get(campaign, 'keyTerms.minOfferingAmount506') : get(campaign, 'keyTerms.minOfferingAmount506C') ? get(campaign, 'keyTerms.minOfferingAmount506C') : '0.00';
-    // campaignStatus.minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(minOfferingD, minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
     campaignStatus.minOffering = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const maxOfferingD = get(campaign, 'keyTerms.maxOfferingAmount506') && get(campaign, 'keyTerms.maxOfferingAmount506') !== '0.00' ? get(campaign, 'keyTerms.maxOfferingAmount506') : get(campaign, 'keyTerms.maxOfferingAmount506C') ? get(campaign, 'keyTerms.maxOfferingAmount506C') : '0.00';
-    // campaignStatus.maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(maxOfferingD, maxOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
     campaignStatus.maxOffering = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
     campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering;
     campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
-    const formatedRaisedAmount = money.floatToAmount(campaignStatus.collected);
-    // const formatedMaxOfferingAmount = money.floatToAmount(maxOffering);
-    const formatedMaxOfferingAmount = money.floatToAmount(campaignStatus.maxOffering);
-    const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
-    const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
+    const formattedRaisedAmount = money.floatToAmount(campaignStatus.collected);
+    const formattedMaxOfferingAmount = money.floatToAmount(campaignStatus.maxOffering);
+    const maxReachedComparedAmount = money.cmp(formattedRaisedAmount, formattedMaxOfferingAmount);
+    const formattedReachedMaxCompareAmountValue = money.floatToAmount(maxReachedComparedAmount);
     const minMaxOffering = campaignStatus.minFlagStatus
       ? campaignStatus.maxOffering : campaignStatus.minOffering;
-    campaignStatus.maxFlagStatus = !!(money.isZero(formatedReachedMaxCompairAmountValue)
-      || money.isPositive(formatedReachedMaxCompairAmountValue));
+    campaignStatus.maxFlagStatus = !!(money.isZero(formattedReachedMaxCompareAmountValue)
+      || money.isPositive(formattedReachedMaxCompareAmountValue));
     campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
     campaignStatus.address = get(campaign, 'keyTerms.city') || get(campaign, 'keyTerms.state') ? `${get(campaign, 'keyTerms.city') || ''}${get(campaign, 'keyTerms.city') && get(campaign, 'keyTerms.state') ? ',' : ''} ${get(campaign, 'keyTerms.state') || ''}` : null;
     campaignStatus.isClosed = get(campaign, 'stage') !== 'LIVE';
@@ -360,7 +358,7 @@ export class CampaignStore {
     campaignStatus.issuerStatement = campaignStatus.campaignTemplate === 2 ? get(campaign, 'misc.issuerStatement') : get(campaign, 'keyTerms.offeringDisclaimer');
     const templateNavs = [];
     if (campaignStatus.campaignTemplate === 2 && get(campaign, 'content[0]')) {
-      let content = get(campaign, 'content').filter(c => this.checkValidContent(c));
+      let content = get(campaign, 'content').filter(c => this.checkValidContent(c, get(campaign, 'stage')));
       content = orderBy(content, c => c.order, ['ASC']);
       content.forEach((c, i) => templateNavs.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }

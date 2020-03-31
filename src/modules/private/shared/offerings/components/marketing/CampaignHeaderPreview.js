@@ -22,7 +22,7 @@ export default class CampaignHeaderPreview extends Component {
       // isEarlyBirdRewards, earlyBird, bonusRewards,
     } = campaignStatus;
     const headerBasicFields = HEADER_BASIC_FRM.fields;
-    const isClosed = headerBasicFields.stage.value === 'COMPLETED';
+    const isClosed = headerBasicFields.stage.value === 'COMPLETE';
     const isCreation = headerBasicFields.stage.value === 'CREATION';
     const isLive = headerBasicFields.stage.value === 'LIVE';
     const diffForProcessingText = DataFormatter.getDateDifferenceInHoursOrMinutes(headerBasicFields.closeDate.value, true, true);
