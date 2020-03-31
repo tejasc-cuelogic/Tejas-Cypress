@@ -7,7 +7,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
-@inject('watchListStore', 'offeringCreationStore', 'nsUiStore', 'userStore')
+@inject('watchListStore', 'offeringCreationStore', 'nsUiStore', 'userStore', 'offeringsStore')
 @withRouter
 @observer
 export default class WatchList extends Component {
@@ -48,11 +48,12 @@ export default class WatchList extends Component {
 
   populateCsvData = (watcherStatus) => {
     const { watchListForCsv } = this.props.watchListStore;
+    const { offer } = this.props.offeringsStore;
     const fields = this.props.watchListStore.watchListDataMappingMeta.map(w => w.field);
     const params = {
       fields,
       data: watchListForCsv[watcherStatus],
-      fileName: 'watchlist',
+      fileName: `${get(offer, 'keyTerms.shorthandBusinessName')}-watchList`,
     };
     Helper.downloadCSV(params);
   }

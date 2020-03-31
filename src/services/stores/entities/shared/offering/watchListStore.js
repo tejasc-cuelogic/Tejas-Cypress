@@ -3,6 +3,7 @@ import { get, remove, orderBy } from 'lodash';
 import DataModelStore, { decorateDefault } from '../dataModelStore';
 import { offeringWatchList, removeUserFromOfferingWatchlist, addUserToOfferingWatchlist } from '../../../queries/campagin';
 import campaignStore from '../../public/campaignStore';
+import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
 export class WatchListStore extends DataModelStore {
@@ -23,9 +24,12 @@ export class WatchListStore extends DataModelStore {
   ];
 
   watchListDataMappingMeta = [
-    { field: 'email', key: 'userInfo.email.address' }, { field: 'uuid', key: 'userId' }, { field: 'date', key: 'lastUpdated' },
-    { field: 'time', key: 'lastUpdated' }, { field: 'name', key: 'userInfo.info', getDataValue: obj => (obj ? `${obj.firstName} ${obj.lastName}` : 'NA') }, { field: 'city', key: 'userInfo.info.mailingAddress.city' },
-    { field: 'state', key: 'userInfo.info.mailingAddress.state' }, { field: 'investmentCount', key: 'investmentCount' },
+    { field: 'firstName', key: 'userInfo.info.firstName' }, { field: 'lastName', key: 'userInfo.info.lastName' },
+    { field: 'userEmail', key: 'userInfo.email.address' }, { field: 'city', key: 'userInfo.info.mailingAddress.city' },
+    { field: 'state', key: 'userInfo.info.mailingAddress.state' },
+    { field: 'date', key: 'lastUpdated', getDataValue: obj => (obj ? `${DataFormatter.getDateAsPerTimeZone(obj, true, false, false)}` : '') },
+    { field: 'time', key: 'lastUpdated', getDataValue: obj => (obj ? `${DataFormatter.getDateAsPerTimeZone(obj, true, false, false, false, undefined, false, false, true)}` : '') },
+    { field: 'investmentCount', key: 'investmentCount' }, { field: 'uuid', key: 'userId' },
   ];
 
   isWatching = false;
