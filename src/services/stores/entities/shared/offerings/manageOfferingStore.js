@@ -8,6 +8,7 @@ import { INVEST_NOW_TOC, INVEST_NOW_PAGE, INVEST_NOW_TOC_TEMPLATE } from '../../
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore } from '../../../index';
+import * as investNowTocDefaults from '../../../../constants/offering/InvestNowToc';
 import { offeringUpsert } from '../../../queries/offerings/manageOffering';
 
 
@@ -22,11 +23,23 @@ export class ManageOfferingStore extends DataModelStore {
 
   initLoad = [];
 
+  getInvestNowTocDefaults = () => {
+    const nsDefaultData = get(investNowTocDefaults.TERM_NOTE_PARALLEL, 'investNow.page') || [];
+    return nsDefaultData;
+  }
+
   // eslint-disable-next-line class-methods-use-this
   get getAgreementTocList() {
     const { offer } = offeringsStore;
     const regulation = get(offer, 'regulation');
-    const investNow = get(offer, 'investNow.page') || [];
+    const selectedTemplate = this.INVEST_NOW_TOC_TEMPLATE_FRM.fields.template.value;
+    const nsDefaultData = this.getInvestNowTocDefaults();
+    let investNow = [];
+    if (selectedTemplate === 2 && get(offer, 'investNow.page[0]')) {
+      investNow = get(offer, 'investNow.page');
+    } else {
+      investNow = nsDefaultData;
+    }
     const investNowTocs = {};
     if (regulation === 'BD_CF_506C') {
       investNowTocs.BD_506C = orderBy(filter(investNow, i => i.regulation === 'BD_506C'), ['page'], ['asc']);
@@ -99,7 +112,7 @@ export class ManageOfferingStore extends DataModelStore {
   }
 
   updateOffering = params => new Promise((res) => {
-    const { keyName, forms, cleanData, offeringData } = params;
+    const { keyName, forms, cleanData, offeringData, tocAction } = params;
     let offeringDetails = {};
     let data;
     if (offeringData) {
@@ -119,8 +132,13 @@ export class ManageOfferingStore extends DataModelStore {
       data = omitDeep(data, ['__typename', 'fileHandle']);
     }
     if (keyName) {
-      if (keyName === 'investNow' && forms === 'INVEST_NOW_TOC_TEMPLATE_FRM' && data.template === 3) {
-        offeringDetails[keyName] = data;
+      if (keyName === 'investNow' && forms === 'INVEST_NOW_TOC_TEMPLATE_FRM') {
+        const { offer } = offeringsStore;
+        if (data.template === 2 && (!get(offer, 'investNow.page') || tocAction === 'RESET')) {
+          offeringDetails[keyName] = { ...data, page: this.getInvestNowTocDefaults() };
+        } else {
+          offeringDetails[keyName] = data;
+        }
       } else {
         offeringDetails[keyName] = data;
       }
@@ -221,6 +239,7 @@ export class ManageOfferingStore extends DataModelStore {
     ...dataModelStore.decorateDefault,
     INVEST_NOW_TOC_FRM: observable,
     INVEST_NOW_PAGE_FRM: observable,
+    INVEST_NOW_TOC_TEMPLATE_FRM: observable,
     initLoad: observable,
     onDragSaveEnable: observable,
     getAgreementTocList: computed,
