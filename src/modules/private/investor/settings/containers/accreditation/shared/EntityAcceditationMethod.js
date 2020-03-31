@@ -2,35 +2,42 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Header, Grid, Form, Button } from 'semantic-ui-react';
+import { Header, Form } from 'semantic-ui-react';
+import { FormArrowButton } from '../../../../../../../theme/form';
 
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 @inject('uiStore', 'accreditationStore')
 @withRouter
 @observer
 export default class VerifyEntityAccreditation extends Component {
-  constructor(props) {
-    super(props);
-    const { accountType } = this.props;
-    this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
-  }
-
+  // constructor(props) {
+  //   super(props);
+  //   const { accountType } = this.props;
+  //   this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
+  // }
   render() {
     const {
       ENTITY_ACCREDITATION_FORM,
-      ACCREDITATION_FORM,
+      // ACCREDITATION_FORM,
       accreditationMethodChange,
     } = this.props.accreditationStore;
     return (
       <div>
         <Header as="h3" className="center-align">Is your entity an accredited investor?</Header>
         <p className="center-align">
-        To invest in Reg D offerings on the NextSeed platform, we are required to verify your
-        entity's status as an accredited investor.
+          To invest in Reg D offerings on the NextSeed platform, we are required to verify your
+          entity's status as an accredited investor.
         </p>
         <p className="center-align"><b>Please confirm which of the following is applicable to your entity.</b></p>
         <Form error className="account-type-tab">
-          <Grid columns={1}>
+          <FormArrowButton
+            fielddata={ENTITY_ACCREDITATION_FORM.fields.method}
+            name="method"
+            formName="ENTITY_ACCREDITATION_FORM"
+            changed={accreditationMethodChange}
+            action={this.props.submitStep}
+          />
+          {/* <Grid columns={1}>
             {ENTITY_ACCREDITATION_FORM.fields.method.values.map(method => (
               <Grid.Column
                 onClick={(e) => {
@@ -47,10 +54,10 @@ export default class VerifyEntityAccreditation extends Component {
             ))}
           </Grid>
           {isMobile
-          && (
-            <Button onClick={this.props.submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
-          )
-          }
+            && (
+              <Button onClick={this.props.submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+            )
+          } */}
         </Form>
       </div>
     );

@@ -105,7 +105,7 @@ export default class Public extends React.Component {
     const { location, match } = this.props;
     const { BUSINESS_APP_FRM, isPrequalQulify, appSubmitLoading } = this.props.businessAppStore;
     const { isValid } = BUSINESS_APP_FRM.meta;
-    const { inProgress } = this.props.uiStore;
+    const { inProgress, topBanner } = this.props.uiStore;
     // const NoFooter = [
     //   '/offerings/:id/:section?', '/business-application', '/auth/:section',
     // ];
@@ -133,6 +133,7 @@ export default class Public extends React.Component {
               isPrequalQulify={isPrequalQulify}
               preQualSubmit={this.preQualSubmit}
               loading={inProgress || appSubmitLoading}
+              headerclass={topBanner ? 'large-header' : ''}
             />
           )}
           {this.getRoutes(isAuthLocation, location)}

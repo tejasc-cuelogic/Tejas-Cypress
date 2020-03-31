@@ -5,7 +5,7 @@ import AllAmbassadors from '../components/AllAmbassadors';
 
 export default class ManageAmbassadors extends Component {
   search = (e) => {
-    if (e.charCode === 13 && false) {
+    if (e.charCode === 13) {
       // search goes here..
     }
   }

@@ -14,14 +14,19 @@ const FormArrowButton = observer((props) => {
     // error,
     // placeHolder,
   } = props.fielddata;
-  const { name, changed, action, ctaErrors, classname } = props;
+  const { name, changed, action, ctaErrors, classname, formName, activeClass, ignoreValues } = props;
   if (values && Array.isArray(toJS(values))) {
     return (
 <Button.Group fluid vertical>{values.map(field => (
   <>
+  {(!ignoreValues || ignoreValues.length === 0 || !ignoreValues.includes(field.value)) ? (
     <Button
       onClick={(e) => {
+        if (formName) {
+        changed(e, formName, { name, value: field.value });
+        } else {
         changed(e, { name, value: field.value });
+        }
         if (action) {
           action();
         }
@@ -42,7 +47,9 @@ const FormArrowButton = observer((props) => {
       }
     </div>
     <Icon className="ns-chevron-right" color="grey" />
-  </Button>
+    </Button>
+    ) : null
+    }
   {(ctaErrors && ctaErrors.for === field.value) ? (
     <p className="negative-text mt-14 mb-14 more-info">
       {ctaErrors.errorMsg}
@@ -54,7 +61,7 @@ const FormArrowButton = observer((props) => {
     );
   }
   return (
-    <Button onClick={e => changed(e, { name, value })} basic fluid labelPosition="left" className="arrow-button">
+    <Button onClick={e => changed(e, { name, value })} basic fluid labelPosition="left" className={`arrow-button ${activeClass ? 'active' : ''}`}>
       <div className="details">
         {label && labelDescription
           ? (

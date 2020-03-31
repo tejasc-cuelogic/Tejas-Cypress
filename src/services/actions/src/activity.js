@@ -7,8 +7,8 @@ export class Activity {
   log = (payload) => {
     const params = { ...commonParams, ...payload, aditionalInfo: {} };
     ApiService.post(`${REACT_APP_PROTECTION_API}/log`, params)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+      .then(res => window.logger(res))
+      .catch(err => window.logger(err));
   }
 
   devAppLogin = (payload) => {

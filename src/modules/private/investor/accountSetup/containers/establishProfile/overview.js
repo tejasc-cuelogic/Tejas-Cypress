@@ -21,7 +21,7 @@ export default class Overview extends Component {
         <Header as="h4">
           {signupStatus.isMigratedFullAccount
             ? <>Please establish your<Responsive minWidth={992}><br /></Responsive>investor profile</>
-            : <>Let{"'"}s get started</>
+            : <>Let{'\''}s get started</>
           }
         </Header>
         {!isMobile && <Divider hidden />}

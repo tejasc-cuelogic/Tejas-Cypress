@@ -34,6 +34,10 @@ export default class InvestmentLimits extends Component {
     }
   }
 
+  handleExploreCampaigns = () => {
+    this.props.history.push('/offerings');
+  }
+
   render() {
     return (
       <div>
@@ -42,8 +46,8 @@ export default class InvestmentLimits extends Component {
           ['individual', 'ira'].map(accountType => <Route exact path={`${this.props.match.url}/verify-accreditation/${accountType}`} render={() => <VerifyAccreditation accountType={accountType} refLink={this.props.match.url} />} />)
         }
         <Route exact path={`${this.props.match.url}/verify-trust-entity-accreditation/entity`} render={() => <VerifyTrustEntityAccreditation accountType="entity" refLink={this.props.match.url} />} />
-        <Route exact path={`${this.props.match.url}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
-        <Route exact path={`${this.props.match.url}/falied`} render={() => <FailedAccreditation closeModal={this.closeModal} />} />
+        <Route exact path={`${this.props.match.url}/success`} render={() => <ThanksNote closeModal={this.closeModal} handleExploreCampaigns={this.handleExploreCampaigns} />} />
+        <Route exact path={`${this.props.match.url}/falied`} render={() => <FailedAccreditation refLink={this.props.match.url} closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/update`} render={() => <UpdateInvestmentLimits refLink={this.props.match.url} />} />
         <FinancialInfo />
       </div>

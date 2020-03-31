@@ -49,7 +49,7 @@ function AgreementTemplate(props) {
     } = agreementsStore;
     if (!alreadySet) {
       getLegalDocsFileIds().then(() => {
-        // console.log('successfully doc get.');
+        // window.logger('successfully doc get.');
       });
     }
     resetAggrementForm();
@@ -76,7 +76,7 @@ function AgreementTemplate(props) {
     if (isFormValid) {
       setShowError(false);
       props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
-      props.investmentStore.investNowSubmit().then((investmentStatus) => {
+      props.investmentStore.investNowSubmit(currentAction === 'DYNAMIC').then((investmentStatus) => {
         if (investmentStatus) {
           props.history.push('congratulation');
         }

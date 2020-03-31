@@ -254,7 +254,7 @@ h6{
 .note{
 	color:@neutral-middark !important;
 	font-size: @12px;
-	line-height: 18px;
+	line-height: 18px !important;
 }
 .justify-text {
 	text-align: justify;
@@ -3339,4 +3339,35 @@ h3.ui.header.error-2{
 	justify-content: space-between;
 	margin: @24px 0;
 	clear: both;
+}
+
+/* Sticky message */
+.sticky-message{
+	font-size: @16px;
+	min-height: @38px;
+	color: @white;
+	text-align: center;
+	background: @neutral-middark;
+	padding: @5px @20px;
+	position: absolute;
+	top: 72px;
+	left: 0;
+	right: 0;
+	z-index: 3;
+	@media only screen and (max-width : @largestMobileScreen){
+		top: 58px;
+		text-align: left;
+		padding-right: @30px;
+	}
+	.ui.button.close-button{
+		padding: 0 @5px;
+		position: absolute;
+		color: @white;
+		background: @neutral-middark;
+		right: @10px;
+		top: @10px;
+		height: @18px;
+		min-height: auto;
+		line-height: .75;
+	}
 }

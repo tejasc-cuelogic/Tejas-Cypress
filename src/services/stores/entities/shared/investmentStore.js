@@ -278,7 +278,7 @@ export class InvestmentStore {
   @action
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
     uiStore.setProgress();
-    if (this.investmentAmount) {
+    if (this.investmentAmount && !money.isZero(this.investmentAmount)) {
       const { campaignStatus } = campaignStore;
       if (campaignStatus.isRealEstate && this.realEstateValidation()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
@@ -373,6 +373,7 @@ export class InvestmentStore {
       }
     } else {
       resolve();
+      uiStore.setProgress(false);
     }
   });
 
@@ -419,7 +420,7 @@ export class InvestmentStore {
   }
 
   @action
-  investNowSubmit = () => {
+  investNowSubmit = (addUncheckedToc = false) => {
     const offeringIdToUpdate = campaignStore.getOfferingId
       ? campaignStore.getOfferingId : portfolioStore.currentOfferingId;
     if (this.agreementDetails && offeringIdToUpdate) {
@@ -430,6 +431,9 @@ export class InvestmentStore {
         agreementId: this.agreementDetails.agreementId,
         transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
       };
+      if (addUncheckedToc) {
+        variables.uncheckedToc = agreementsStore.getUncheckedOptionalToc || [];
+      }
       uiStore.setProgress();
       return new Promise((resolve) => {
         client

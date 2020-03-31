@@ -12,9 +12,9 @@ const GeneralConditions = () => (
     <List relaxed bulleted className="mt-40 mb-30">
       <List.Item>
         <List.Content>
-          <b>Escrow Account Setup</b> — there is a one-time $500 fee payable to NextSeed{"'"}s
+          <b>Escrow Account Setup</b> — there is a one-time $500 fee payable to NextSeed{'\''}s
             banking partner, <b className="primary-two-text">GoIdStar Trust Company</b>  to open an escrow account for you to
-            receive investor{"'"}s funds; and control persons. We perform a Bad Actor Check to
+            receive investor{'\''}s funds; and control persons. We perform a Bad Actor Check to
             verify your eligibility to launch a crowdfunding campaign.
         </List.Content>
       </List.Item>
