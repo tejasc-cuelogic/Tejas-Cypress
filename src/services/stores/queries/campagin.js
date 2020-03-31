@@ -108,6 +108,9 @@ query offeringWatchList($offeringId: String){
     activity
     investmentCount
     userInfo {
+      email {
+        address
+      }
       info {
         firstName
         lastName

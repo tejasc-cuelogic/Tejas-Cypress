@@ -1,5 +1,5 @@
 import { observable, computed, action, decorate, toJS } from 'mobx';
-import { get, remove } from 'lodash';
+import { get, remove, orderBy } from 'lodash';
 import DataModelStore, { decorateDefault } from '../dataModelStore';
 import { offeringWatchList, removeUserFromOfferingWatchlist, addUserToOfferingWatchlist } from '../../../queries/campagin';
 import campaignStore from '../../public/campaignStore';
@@ -15,6 +15,18 @@ export class WatchListStore extends DataModelStore {
     WATCHING: [],
     DELETED: [],
   };
+
+  watchListMeta = [
+    { headerText: 'Investors Watchers', status: 'INVESTOR' },
+    { headerText: 'Public Watchers', status: 'WATCHING' },
+    { headerText: 'Deleted Watchers', status: 'DELETED' },
+  ];
+
+  watchListDataMappingMeta = [
+    { field: 'email', key: 'userInfo.email.address' }, { field: 'uuid', key: 'userId' }, { field: 'date', key: 'lastUpdated' },
+    { field: 'time', key: 'lastUpdated' }, { field: 'name', key: 'userInfo.info', getDataValue: obj => (obj ? `${obj.firstName} ${obj.lastName}` : 'NA') }, { field: 'city', key: 'userInfo.info.mailingAddress.city' },
+    { field: 'state', key: 'userInfo.info.mailingAddress.state' }, { field: 'investmentCount', key: 'investmentCount' },
+  ];
 
   isWatching = false;
 
@@ -35,8 +47,10 @@ export class WatchListStore extends DataModelStore {
 
   setWatchListData = (res) => {
     const watchList = get(toJS(res), 'offeringWatchList') || [];
+    const dateSortedList = orderBy(watchList, ['lastUpdated'], ['desc']);
     const tempWatchList = this.watchList;
-    watchList.forEach((watcher) => {
+
+    dateSortedList.forEach((watcher) => {
       if (tempWatchList[watcher.status]) {
         tempWatchList[watcher.status].push(watcher);
       }
@@ -79,6 +93,23 @@ export class WatchListStore extends DataModelStore {
       Helper.toast('Something went wrong. Please try again in some time.', 'error');
     }
   }
+
+  get watchListForCsv() {
+    const listObj = {};
+    this.watchListMeta.filter(type => type.status !== 'DELETED').forEach((listType) => {
+      // eslint-disable-next-line implicit-arrow-linebreak
+      const watchListByType = this.allWatchList[listType.status].map((data) => {
+        const dataObj = {};
+        this.watchListDataMappingMeta.map((watchMeta) => {
+          dataObj[watchMeta.field] = watchMeta.getDataValue ? watchMeta.getDataValue(get(data, watchMeta.key)) : get(data, watchMeta.key);
+          return false;
+        });
+        return dataObj;
+      });
+      listObj[listType.status] = watchListByType;
+    });
+    return listObj;
+  }
 }
 
 decorate(WatchListStore, {
@@ -92,6 +123,7 @@ decorate(WatchListStore, {
   setWatchListData: action,
   resetWatchList: action,
   allWatchList: computed,
+  watchListForCsv: computed,
 });
 
 
