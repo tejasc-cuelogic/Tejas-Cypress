@@ -28,6 +28,7 @@ class OfferingContent extends Component {
   constructor(props) {
     super(props);
     this.props.manageOfferingStore.setFormData('GALLERY_FRM', '');
+    this.props.offeringCreationStore.setFormData('DATA_ROOM_FRM', 'legal.dataroom');
   }
 
   updateState = (val, key = 'editable') => {
