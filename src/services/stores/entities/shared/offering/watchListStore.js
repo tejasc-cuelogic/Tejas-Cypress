@@ -100,7 +100,7 @@ export class WatchListStore extends DataModelStore {
 
   get watchListForCsv() {
     const listObj = {};
-    this.watchListMeta.filter(type => type.status !== 'DELETED').forEach((listType) => {
+    this.watchListMeta.forEach((listType) => {
       // eslint-disable-next-line implicit-arrow-linebreak
       const watchListByType = this.allWatchList[listType.status].map((data) => {
         const dataObj = {};

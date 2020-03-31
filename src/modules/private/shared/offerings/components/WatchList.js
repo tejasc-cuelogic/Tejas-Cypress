@@ -40,10 +40,9 @@ export default class WatchList extends Component {
         className="relaxed"
         content="Export"
         onClick={() => this.populateCsvData(watcherStatus)}
-        // loading={inProgress}
-        // disabled={!this.props.watchListStore.watchListForCsv[watcherStatus]}
+        disabled={!this.props.watchListStore.allWatchList[watcherStatus].length}
       />
-)
+    )
   )
 
   populateCsvData = (watcherStatus) => {
