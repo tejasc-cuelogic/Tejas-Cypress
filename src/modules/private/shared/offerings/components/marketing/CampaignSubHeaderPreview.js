@@ -16,12 +16,10 @@ export default class CampaignSubHeaderPreview extends Component {
     const { manageOfferingStore, offeringsStore } = this.props;
     const { offer } = offeringsStore;
     const { SUB_HEADER_BASIC_FRM, TOMBSTONE_HEADER_META_FRM, campaignStatus } = manageOfferingStore;
-    const {
-      isClosed, maxFlagStatus,
-      // investmentSummary, isInProcessing,
-      // countDown, diffForProcessing
-    } = campaignStatus;
+    const { maxFlagStatus } = campaignStatus;
     const subHeaderBasicFields = SUB_HEADER_BASIC_FRM.fields;
+    const isClosed = subHeaderBasicFields.stage.value === 'COMPLETED';
+    const isLive = subHeaderBasicFields.stage.value === 'LIVE';
     const toggleMeta = subHeaderBasicFields.toggleMeta.value;
     const showInvestorCount = toggleMeta.includes('INVESTOR_COUNT');
     const showDaysLeft = toggleMeta.includes('DAYS_LEFT');
@@ -62,7 +60,7 @@ export default class CampaignSubHeaderPreview extends Component {
               <List.Item>
                 <List.Header>
                   <span className="highlight-text">{subHeaderBasicFields.raisedAmount.value || '$ 0'}</span>
-                  {!isClosed && (campaignStatus.isTermNote || maxFlagStatus || get(offer, 'stage') === 'LIVE' || get(offer, 'stage') === 'PROCESSING' || get(offer, 'stage') === 'LOCK') ? ' raised' : ' invested'}
+                  {!isClosed && (campaignStatus.isTermNote || maxFlagStatus || isLive) ? ' raised' : ' invested'}
                 </List.Header>
               </List.Item>
               )}

@@ -46,6 +46,9 @@ class CampaignHeader extends Component {
     return (
       <div className="inner-content-spacer">
         <Form>
+          <Grid>
+            {smartElement.RadioGroup('stage', { displayMode: isReadOnly })}
+          </Grid>
           <Grid columns="5">
             {['closeDate', 'raisedAmount', 'investorCount', 'repaymentCount', 'earlyBird'].map(field => (
               <Grid.Column>

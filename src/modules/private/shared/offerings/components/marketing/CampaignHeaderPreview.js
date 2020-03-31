@@ -17,11 +17,14 @@ export default class CampaignHeaderPreview extends Component {
     const { offer } = offeringsStore;
     const { HEADER_BASIC_FRM, TOMBSTONE_HEADER_META_FRM, OFFERING_MISC_FRM, campaignStatus } = manageOfferingStore;
     const {
-      isClosed, isInProcessing, collected, minFlagStatus,
-      minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, investmentSummary,
-      // isEarlyBirdRewards, earlyBird, bonusRewards, isCreation, diffForProcessing,
+      isInProcessing, collected, minFlagStatus,
+      minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, investmentSummary, diffForProcessing,
+      // isEarlyBirdRewards, earlyBird, bonusRewards,
     } = campaignStatus;
     const headerBasicFields = HEADER_BASIC_FRM.fields;
+    const isClosed = headerBasicFields.stage.value === 'COMPLETED';
+    const isCreation = headerBasicFields.stage.value === 'CREATION';
+    const isLive = headerBasicFields.stage.value === 'LIVE';
     const diffForProcessingText = DataFormatter.getDateDifferenceInHoursOrMinutes(headerBasicFields.closeDate.value, true, true);
     const diff = DataFormatter.diffDays(headerBasicFields.closeDate.value || null, false, true);
     const countDown = (['Minute Left', 'Minutes Left'].includes(diffForProcessingText.label) && diffForProcessingText.value > 0) || diffForProcessingText.value <= 48 ? { valueToShow: diffForProcessingText.value, labelToShow: diffForProcessingText.label } : { valueToShow: diff, labelToShow: diff === 1 ? 'Day Left' : 'Days Left' };
@@ -64,14 +67,14 @@ export default class CampaignHeaderPreview extends Component {
                       <div className="offer-stats">
                         <Statistic.Group>
                           <>
-                          {headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
+                          {isLive && headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
                             && (
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>{countDown.valueToShow || 'X'}</Statistic.Value>
                               <Statistic.Label>{countDown.labelToShow || 'Days Left'}</Statistic.Label>
                             </Statistic>
                             )}
-                            {headerBasicFields.toggleMeta.value.includes('INVESTOR_COUNT')
+                            {headerBasicFields.toggleMeta.value.includes('INVESTOR_COUNT') && headerBasicFields.investorCount.value > 0
                             && (
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>
@@ -81,8 +84,7 @@ export default class CampaignHeaderPreview extends Component {
                             </Statistic>
                             )}
                           </>
-                          {headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT')
-                          // && isClosed && get(offer, 'closureSummary.repayment.count') > 0
+                          {isClosed && headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT') && headerBasicFields.repaymentCount.value > 0
                             && (
                               <Statistic size="mini" className="basic">
                                 <Statistic.Value>
@@ -92,10 +94,7 @@ export default class CampaignHeaderPreview extends Component {
                               </Statistic>
                             )
                           }
-                          {headerBasicFields.toggleMeta.value.includes('EARLY_BIRD')
-                          // && earlyBird && earlyBird.available > 0
-                          //   && isEarlyBirdRewards && !isClosed
-                          //   && bonusRewards
+                          {!isClosed && headerBasicFields.toggleMeta.value.includes('EARLY_BIRD') && headerBasicFields.earlyBird.value > 0
                             ? (
                               <Statistic size="mini" className="basic">
                                 <Statistic.Value>
@@ -187,11 +186,11 @@ export default class CampaignHeaderPreview extends Component {
                   ))
                   }
                   <div className="mt-20">
-                    {/* {isCreation
+                    {isCreation
                       ? <Button fluid secondary={diffForProcessing.value !== 0} content="Coming Soon" disabled />
                       : ''
-                    } */}
-                    {!isClosed
+                    }
+                    {isLive
                       && (
                         <>
                           <Grid>

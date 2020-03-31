@@ -41,6 +41,9 @@ class Tombstone extends Component {
     return (
       <div className="inner-content-spacer">
         <Form>
+          <Grid>
+            {smartElement.RadioGroup('stage', { displayMode: isReadOnly })}
+          </Grid>
           <Grid columns="5">
             {['launchDate', 'closeDate', 'hardCloseDate', 'raisedAmount', 'investorCount'].map(field => (
               <Grid.Column>

@@ -132,7 +132,7 @@ export class ManageOfferingStore extends DataModelStore {
     campaignStatus.diffForProcessing = DataFormatter.getDateDifferenceInHoursOrMinutes(closingDate, true, true);
     campaignStatus.countDown = (includes(['Minute Left', 'Minutes Left'], campaignStatus.diffForProcessing.label) && campaignStatus.diffForProcessing.value > 0) || campaignStatus.diffForProcessing.value <= 48 ? { valueToShow: campaignStatus.diffForProcessing.value, labelToShow: campaignStatus.diffForProcessing.label } : { valueToShow: campaignStatus.diff, labelToShow: campaignStatus.diff === 1 ? 'Day Left' : 'Days Left' };
     campaignStatus.isInProcessing = campaignStatus.diffForProcessing.value <= 0 && (!get(offer, 'closureSummary.hardCloseDate') || get(offer, 'closureSummary.hardCloseDate') === 'Invalid date');
-    campaignStatus.collected = this.HEADER_BASIC_FRM.fields.raisedAmount.value || 0;
+    campaignStatus.collected = this.HEADER_BASIC_FRM.fields.raisedAmount.value || this.SUB_HEADER_BASIC_FRM.fields.raisedAmount.value || 0;
     const offeringRegulation = get(offer, 'keyTerms.regulation');
     const minOffering = get(offer, 'keyTerms.minOfferingAmountCF') || 0;
     const minOfferingD = get(offer, 'keyTerms.minOfferingAmount506') && get(offer, 'keyTerms.minOfferingAmount506') !== '0.00' ? get(offer, 'keyTerms.minOfferingAmount506') : get(offer, 'keyTerms.minOfferingAmount506C') ? get(offer, 'keyTerms.minOfferingAmount506C') : '0.00';
@@ -155,8 +155,6 @@ export class ManageOfferingStore extends DataModelStore {
       || money.isPositive(formatedReachedMaxCompairAmountValue));
     campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
     campaignStatus.address = get(offer, 'keyTerms.city') || get(offer, 'keyTerms.state') ? `${get(offer, 'keyTerms.city') || 'Houston'}, ${get(offer, 'keyTerms.state') || 'Texas'}` : 'Houston, Texas';
-    campaignStatus.isClosed = !['LIVE', 'CREATION'].includes(get(offer, 'stage'));
-    campaignStatus.isCreation = get(offer, 'stage') === 'CREATION';
     campaignStatus.earlyBird = get(offer, 'earlyBird') || null;
     campaignStatus.bonusRewards = get(offer, 'bonusRewards') || [];
     campaignStatus.isEarlyBirdRewards = campaignStatus.bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;

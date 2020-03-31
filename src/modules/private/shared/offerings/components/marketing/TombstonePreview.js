@@ -75,7 +75,7 @@ export default class TombstonePreview extends Component {
                   />
                 </div>
               </div>
-              {TOMBSTONE_BASIC_FRM.fields.customTag.value ? this.renderBanner(TOMBSTONE_BASIC_FRM.fields.customTag.value) : null}
+              {TOMBSTONE_BASIC_FRM.fields.stage.value === 'LIVE' && TOMBSTONE_BASIC_FRM.fields.customTag.value ? this.renderBanner(TOMBSTONE_BASIC_FRM.fields.customTag.value) : null}
               {(['INVESTOR', 'WATCHING'].includes(offer.watchListStatus))
                 && (
                   <Icon name="heart" />
@@ -143,7 +143,7 @@ export default class TombstonePreview extends Component {
                     : get(offer, 'keyTerms.regulation') && CAMPAIGN_OFFERED_BY[get(offer, 'keyTerms.regulation')]}
                 </p>
               </Card.Content>
-              {offer.stage === 'LOCK' && (
+              {TOMBSTONE_BASIC_FRM.fields.stage.value === 'LOCK' && (
                 <Card.Content className="card-hidden">
                   <div className="lock-image">
                     <NSImage mini path="icon_lock.png" />

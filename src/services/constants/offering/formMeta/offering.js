@@ -18,7 +18,15 @@ const SUB_HEADER_TOGGLE_META = [
   { label: 'Payments Made', value: 'REPAYMENT_COUNT' },
 ];
 
+const STAGE_COMMON = ['stage', 'Stage', 'CREATION', '', 'Stage', { props: {
+  values: [{ label: 'Creation', value: 'CREATION' }, { label: 'Live', value: 'LIVE' }, { label: 'Completed', value: 'COMPLETED' }],
+  defaultValue: 'CREATION',
+  skipField: true,
+},
+asIn: true }];
+
 export const TOMBSTONE_BASIC = FormHelper.generateMeta([
+  STAGE_COMMON,
   ['closeDate', 'Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
   ['launchDate', 'Launch Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
   ['hardCloseDate', 'Hard Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
@@ -31,6 +39,7 @@ export const TOMBSTONE_BASIC = FormHelper.generateMeta([
 ]);
 
 export const SUB_HEADER_BASIC = FormHelper.generateMeta([
+  STAGE_COMMON,
   ['closeDate', 'Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
   ['raisedAmount', 'Raised Amount', '', 'optional', 'e.g $ 100', { asIn: true, props: { maskFormattedChange: 'formatted', skipField: true } }],
   ['investorCount', 'Investor Count', '', 'optional', 'e.g 3', { asIn: true, props: { skipField: true } }],
@@ -38,7 +47,9 @@ export const SUB_HEADER_BASIC = FormHelper.generateMeta([
   ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { defaultValue: [], values: SUB_HEADER_TOGGLE_META } }],
   ]);
 
+
 export const HEADER_BASIC = FormHelper.generateMeta([
+  STAGE_COMMON,
   ['closeDate', 'Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
   ['raisedAmount', 'Raised Amount', '', 'optional', 'e.g $ 100', { asIn: true, props: { maskFormattedChange: 'float', skipField: true } }],
   ['investorCount', 'Investor Count', '', 'optional', 'e.g 3', { asIn: true, props: { skipField: true } }],
