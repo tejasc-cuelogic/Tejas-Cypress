@@ -28,6 +28,7 @@ export class WatchListStore extends DataModelStore {
     { field: 'userEmail', key: 'userInfo.email.address' }, { field: 'city', key: 'userInfo.info.mailingAddress.city' },
     { field: 'state', key: 'userInfo.info.mailingAddress.state' },
     { field: 'date', key: 'lastUpdated', getDataValue: obj => (obj ? `${DataFormatter.getDateAsPerTimeZone(obj, true, false, false)}` : '') },
+    // eslint-disable-next-line no-undefined
     { field: 'time', key: 'lastUpdated', getDataValue: obj => (obj ? `${DataFormatter.getDateAsPerTimeZone(obj, true, false, false, false, undefined, false, false, true)}` : '') },
     { field: 'investmentCount', key: 'investmentCount' }, { field: 'uuid', key: 'userId' },
   ];
