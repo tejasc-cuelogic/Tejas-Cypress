@@ -40,6 +40,7 @@ const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHan
   <>
     <Form className="public-form mt-30 clearfix" reply>
       <FormTextarea
+        clear
         fielddata={MESSAGE_FRM.fields.comment}
         name="comment"
         changed={msgEleChange}
@@ -156,7 +157,6 @@ class Comments extends Component {
     let comments = get(campaign, 'comments');
     comments = showOnlyOne ? isPostedNewComment ? [get(comments, '[0]')] : [get(commentsMainThreadCount, '[0]')] : comments;
     messageStore.setDataValue('currentOfferingId', campaignId);
-
     const isNsAdmin = comment => get(comment, 'createdUserInfo.roles[0].name') === 'admin';
     const isIssuerComment = comment => get(comment, 'createdUserInfo.id') === issuerId;
 

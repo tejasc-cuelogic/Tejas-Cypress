@@ -35,44 +35,44 @@ export default class FormTextarea extends Component {
       <Form.Field className={classes} error={(!!error && this.state.showError)}>
         {!props.hidelabel && label !== ''
           && (
-<label>
-            {props.label || label}
-            {tooltip
-              && (
-<Popup
-  trigger={<Icon className="ns-help-circle" />}
-  content={tooltip}
-  position="top center"
-  className="center-align"
-  wide
-/>
-              )
-            }
-            {props.removed
-              && (
-<Link to={props.linkto} onClick={e => props.removed(e)}>
-                <Icon className="ns-close-circle" color="grey" />
-              </Link>
-              )
-            }
-          </label>
+            <label>
+              {props.label || label}
+              {tooltip
+                && (
+                  <Popup
+                    trigger={<Icon className="ns-help-circle" />}
+                    content={tooltip}
+                    position="top center"
+                    className="center-align"
+                    wide
+                  />
+                )
+              }
+              {props.removed
+                && (
+                  <Link to={props.linkto} onClick={e => props.removed(e)}>
+                    <Icon className="ns-close-circle" color="grey" />
+                  </Link>
+                )
+              }
+            </label>
           )
         }
         {props.readOnly
           ? <p className={value ? 'commet-area' : 'not-applicable'}>{value || 'N/A'}</p>
           : (
-<TextArea
-  value={value === '' ? props.clear ? '' : undefined : value}
-  label={label}
-  placeholder={(displayMode || readOnly) ? '' : placeHolder}
-  defaultValue={props.defaultValue ? props.defaultValue : defaultValue}
-  onChange={(e) => {
-    props.changed(e, { name: e.target.name, value: e.target.value });
-    this.triggerError(false);
-  }}
-  onBlur={() => this.triggerError(true)}
-  {...props}
-/>
+            <TextArea
+              value={value === '' ? props.clear ? '' : undefined : value}
+              label={label}
+              placeholder={(displayMode || readOnly) ? '' : placeHolder}
+              defaultValue={props.defaultValue ? props.defaultValue : defaultValue}
+              onChange={(e) => {
+                props.changed(e, { name: e.target.name, value: e.target.value });
+                this.triggerError(false);
+              }}
+              onBlur={() => this.triggerError(true)}
+              {...props}
+            />
           )
         }
         {error && this.state.showError
