@@ -278,7 +278,7 @@ export class InvestmentStore {
   @action
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
     uiStore.setProgress();
-    if (this.investmentAmount) {
+    if (this.investmentAmount && !money.isZero(this.investmentAmount)) {
       const { campaignStatus } = campaignStore;
       if (campaignStatus.isRealEstate && this.realEstateValidation()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
@@ -373,6 +373,7 @@ export class InvestmentStore {
       }
     } else {
       resolve();
+      uiStore.setProgress(false);
     }
   });
 
