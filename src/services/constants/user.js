@@ -1,6 +1,8 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
 import React from 'react';
+import { COMMON } from './auth';
+
 // import { Popup } from 'semantic-ui-react';
 
 /* eslint-disable no-unused-vars */
@@ -36,7 +38,7 @@ Validator.register(
 export const securitySections = [
   {
     title: 'Password',
-    description: 'We strongly recommend that you update your password regularly.',
+    description: 'We strongly reONend that you update your password regularly.',
     action: ['change-password', 'Change Password'],
   },
   // {
@@ -440,3 +442,7 @@ export const DATE_RANGES = [
   { text: 'Last 60 days', value: '60' },
   { text: 'Last 90 days', value: '90' },
 ];
+
+export const VERIFY_OTP = {
+  code: { ...COMMON.code },
+};

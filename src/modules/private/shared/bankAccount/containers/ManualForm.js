@@ -10,7 +10,7 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
+@inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'identityStore')
 @withRouter
 @observer
 export default class ManualForm extends Component {
@@ -25,7 +25,7 @@ export default class ManualForm extends Component {
     }
   }
 
-  handleSubmitForm = (e) => {
+  handleSubmitForm = async (e) => {
     e.preventDefault();
     this.props.bankAccountStore.resetAddFundsForm();
     this.props.bankAccountStore.setIsManualLinkBankSubmitted();
@@ -34,12 +34,13 @@ export default class ManualForm extends Component {
     const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 6, linkBankStepValue: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5, linkBankStepValue: 4 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1, linkBankStepValue: 0 };
     if (this.props.action === 'change') {
       this.props.uiStore.setProgress();
-      this.props.bankAccountStore.validateManualAccount(investmentAccType).then(() => {
-        this.props.transactionStore.requestOtpForManageTransactions(true).then(() => {
-          const confirmUrl = `${this.props.refLink}/confirm`;
-          this.props.history.push(confirmUrl);
-        });
-      });
+      this.props.bankAccountStore.validateManualAccount(investmentAccType).then(async () => {
+      const res = await this.props.identityStore.sendOtp('BANK_CHANGE', isMobile);
+      if (res) {
+        const confirmUrl = `${this.props.refLink}/confirm`;
+        this.props.history.push(confirmUrl);
+      }
+    });
     } else {
       store.createAccount(currentStep).then(() => {
         if (this.props.bankAccountStore.isAccountPresent) {

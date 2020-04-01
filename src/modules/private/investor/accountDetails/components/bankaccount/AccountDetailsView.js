@@ -28,7 +28,8 @@ export default class AccountDetailsView extends Component {
       this.props.bankAccountStore.setFieldValue('loadingState', true);
       bankAccountActions.getById(activeBankInstutationId, accountType).then(() => {
         this.props.bankAccountStore.setFieldValue('loadingState', false);
-      });
+      })
+      .catch(() => {});
     } else if (accountType === 'active') {
       this.props.bankAccountStore.setActiveBankPlaidLogo(null);
     } else if (accountType === 'pending') {
