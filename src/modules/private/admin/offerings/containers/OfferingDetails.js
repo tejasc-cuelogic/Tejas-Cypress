@@ -132,6 +132,7 @@ export default class OfferingDetails extends Component {
                 </Header.Subheader>
               </Header>
             </CopyToClipboard>
+            {/* Lock unlock component */}
             <LockUnlockOffering />
             {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
