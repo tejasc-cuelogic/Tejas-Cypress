@@ -18,18 +18,17 @@ export default class ManageMultiFactorAuth extends Component {
     }
   }
 
-  submit = (e) => {
+  submit = async (e) => {
     e.preventDefault();
-    this.props.multiFactorAuthStore.updateUserMFA().then(async () => {
-      if (this.props.mfaType) {
-        const res = await this.props.identityStore.sendOtp(this.props.mfaType);
-        if (res) {
-          this.props.history.push(this.props.refLink);
-        }
-      } else {
+    await this.props.multiFactorAuthStore.updateUserMFA();
+    if (this.props.mfaType) {
+      const res = await this.props.identityStore.sendOtp(this.props.mfaType);
+      if (res) {
         this.props.history.push(this.props.refLink);
       }
-    });
+    } else {
+      this.props.history.push(this.props.refLink);
+    }
   }
 
   handleCloseModal = (e) => {
