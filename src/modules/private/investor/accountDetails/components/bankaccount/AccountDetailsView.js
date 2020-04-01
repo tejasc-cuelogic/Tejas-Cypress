@@ -9,6 +9,7 @@ import { bankAccountActions } from '../../../../../../services/actions';
 import FrozenAccountModal from '../../FrozenAccountModal';
 import NSImage from '../../../../../shared/NSImage';
 import { DataFormatter } from '../../../../../../helper';
+import { InlineLoader } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('bankAccountStore', 'transactionStore', 'uiStore', 'userDetailsStore', 'accountStore')
@@ -63,7 +64,7 @@ export default class AccountDetailsView extends Component {
         ? LINKED_ACCOUND_STATUS[accountDetails.status] : null;
     }
     if (loadingState) {
-      return null;
+      return <InlineLoader />;
     }
 
     if (accountStore.showAccountFrozenModal) {
