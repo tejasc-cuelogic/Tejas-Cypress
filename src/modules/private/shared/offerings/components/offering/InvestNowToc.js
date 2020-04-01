@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import { Grid, Tab, Form, Button, Icon } from 'semantic-ui-react';
+import { Grid, Tab, Form, Button, Icon, Confirm } from 'semantic-ui-react';
 import InvestNowTocList from './toc/InvestNowTocList';
 import { CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -18,6 +18,10 @@ const metaInfo = {
 @withRouter
 @observer
 class InvestNowToc extends Component {
+  state = {
+    showConfirm: false,
+  };
+
   handleFormSubmit = (type) => {
     const { manageOfferingStore } = this.props;
     const { updateOffering } = manageOfferingStore;
@@ -25,6 +29,7 @@ class InvestNowToc extends Component {
   };
 
   render() {
+    const { showConfirm } = this.state;
     const { smartElement, match, manageOfferingStore, uiStore, offeringsStore } = this.props;
     const { getAgreementTocList, INVEST_NOW_TOC_TEMPLATE_FRM, campaignStatus } = manageOfferingStore;
     const { offer } = offeringsStore;
@@ -61,7 +66,7 @@ class InvestNowToc extends Component {
             && (
             <Grid.Row>
               <Grid.Column textAlign="right" floated="right">
-                <Button icon className="link-button" onClick={() => this.handleFormSubmit('RESET')}>
+                <Button icon className="link-button" onClick={() => this.setState({ showConfirm: true })}>
                   <Icon color="green" size="large" className="ns-reload-circle" />
                 </Button>
               </Grid.Column>
@@ -75,6 +80,15 @@ class InvestNowToc extends Component {
             : <Tab className="offering-creation-tab" panes={panes} />}
           </Grid.Column>
         </Grid>
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to reset invest now toc with ns-default values?"
+          open={showConfirm}
+          onCancel={() => this.setState({ showConfirm: false })}
+          onConfirm={() => this.handleFormSubmit('RESET')}
+          size="mini"
+          className="deletion"
+        />
       </div>
     );
   }
