@@ -194,10 +194,8 @@ export default class ConfirmEmailAddress extends Component {
             closeLink="/dashboard/account-settings"
           />
         );
-      }
-      else {
-      this.handleContinue();
     }
+      this.handleContinue();
   }
     return (
       <NsModal
