@@ -114,11 +114,11 @@ class ConfirmEmailAddress extends Component {
         }
         sessionStorage.removeItem('changedEmail');
       }
-    } else if (authStore.SIGNUP_FRM.fields.givenName.value === '' && !userStore.currentUser) {
+    } else if (authStore.SIGNUP_FRM.fields.email.value === '' && !userStore.currentUser) {
       history.push('/register-investor');
     } else {
       const { isMigratedUser } = userDetailsStore.signupStatus;
-      this.confirmUser(isMigratedUser);
+      await this.confirmUser(isMigratedUser);
       sessionStorage.removeItem('changedEmail');
     }
   }

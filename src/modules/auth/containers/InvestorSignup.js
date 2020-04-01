@@ -64,10 +64,10 @@ class InvestorSignup extends Component {
   render() {
     const { smartElement } = this.props;
     const {
-      SIGNUP_FRM, signupChange, currentScore,
+      SIGNUP_FRM,
     } = this.props.authStore;
-    const { errors, inProgress, pwdInputType, responsiveVars } = this.props.uiStore;
-    const isDisabled = !([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !SIGNUP_FRM.meta.isValid || !currentScore;
+    const { errors, inProgress } = this.props.uiStore;
+    const isDisabled = !([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !SIGNUP_FRM.meta.isValid;
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
@@ -93,21 +93,13 @@ class InvestorSignup extends Component {
             </Header>
             <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
-              {
-                ['givenName', 'familyName'].map(field => (
-                  smartElement.Input(field, { autoFocus: !responsiveVars.isMobile && field === 'givenName' })
-                ))
-              }
-
             </Form.Group>
             {smartElement.Input('email')}
             {smartElement.FormPasswordStrength('password',
               {
-                changed: signupChange,
-                userInputs: [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
-                SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value],
+                changed: (e, result) => this.handlePassword(e, result),
+                userInputs: [SIGNUP_FRM.fields.givenName.value],
               })}
-            {smartElement.Input('verify', { type: pwdInputType })}
             {errors
               && (
                 <Message error textAlign="left" className="mt-30">

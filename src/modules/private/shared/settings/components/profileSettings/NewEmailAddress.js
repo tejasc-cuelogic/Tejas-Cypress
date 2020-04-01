@@ -15,8 +15,9 @@ const metaInfo = {
 };
 function NewEmailAddress(props) {
   const { authStore, identityStore, uiStore, history, refLink } = props;
-  const handleChangeEmailAddress = () => {
-    authStore.requestEmailChange().then(() => {
+  const handleChangeEmailAddress = async () => {
+    const res = await identityStore.sendOtp('EMAIL_CHANGE', isMobile);
+    if (res) {
       uiStore.clearErrors();
       identityStore.setIsOptConfirmed(false);
       Helper.toast('Email Change request has been accepted', 'success');
@@ -26,8 +27,7 @@ function NewEmailAddress(props) {
         email: email.value.toLowerCase(), password: password.value,
       });
       history.push(`${refLink}/confirm-email-address`);
-    })
-      .catch(() => { });
+    }
   };
 
   const handleCloseModal = (e) => {
