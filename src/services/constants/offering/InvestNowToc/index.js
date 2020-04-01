@@ -932,7 +932,7 @@ export const SAFE = {
   },
 };
 
-export const REV_SHARE = {
+export const REVENUE_SHARING_NOTE = {
   investNow: {
     page: [{
       page: 1,

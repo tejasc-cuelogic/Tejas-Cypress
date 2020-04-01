@@ -47,12 +47,15 @@ class InvestNowToc extends Component {
               <Grid.Column width={6}>
                 {smartElement.FormDropDown('template', { containerclassname: 'dropdown-field', displayMode: isReadOnly })}
               </Grid.Column>
+              {!isReadOnly
+              && (
               <Grid.Column width={5} textAlign="right" floated="right">
                 <OfferingButtonGroup
                   buttonTitle="Update"
                   updateOffer={this.handleFormSubmit}
                 />
               </Grid.Column>
+              )}
             </Grid.Row>
             {showReset
             && (

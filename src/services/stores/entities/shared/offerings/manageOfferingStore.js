@@ -10,6 +10,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore } from '../../../index';
 import * as investNowTocDefaults from '../../../../constants/offering/InvestNowToc';
 import { offeringUpsert } from '../../../queries/offerings/manageOffering';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM } from '../../../../../constants/offering';
 
 
 export class ManageOfferingStore extends DataModelStore {
@@ -24,8 +25,29 @@ export class ManageOfferingStore extends DataModelStore {
   initLoad = [];
 
   getInvestNowTocDefaults = () => {
-    const nsDefaultData = get(investNowTocDefaults.TERM_NOTE_PARALLEL, 'investNow.page') || [];
-    return nsDefaultData;
+    const { offer } = offeringsStore;
+    const regulation = get(offer, 'regulation');
+    const securities = get(offer, 'keyTerms.securities');
+    const equityClass = get(offer, 'keyTerms.equityClass');
+    let nsDefaultData = [];
+    if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY) {
+      if (equityClass === CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM.LLC_MEMBERSHIP_UNITS) {
+        nsDefaultData = get(investNowTocDefaults.REAL_ESTATE_EQUITY, 'investNow.page');
+      } else if (equityClass === CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM.PREFERRED) {
+        nsDefaultData = get(investNowTocDefaults.PREFERRED_EQUITY, 'investNow.page');
+      } else {
+        nsDefaultData = get(investNowTocDefaults.CLASS_EQUITY, 'investNow.page');
+      }
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
+      nsDefaultData = get(investNowTocDefaults.TERM_NOTE, 'investNow.page');
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
+      nsDefaultData = get(investNowTocDefaults.REVENUE_SHARING_NOTE, 'investNow.page');
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE) {
+      nsDefaultData = get(investNowTocDefaults.SAFE, 'investNow.page');
+    }
+    const regCheck = regulation === 'BD_CF_506C' ? ['BD_506C', 'BD_CF'] : [regulation];
+    nsDefaultData = nsDefaultData.filter(t => regCheck.includes(t.regulation));
+    return nsDefaultData || [];
   }
 
   // eslint-disable-next-line class-methods-use-this
