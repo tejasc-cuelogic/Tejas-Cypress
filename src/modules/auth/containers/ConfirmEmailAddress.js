@@ -8,7 +8,7 @@ import { Button, Header, Form, Message, Divider, Grid } from 'semantic-ui-react'
 import { isEmpty } from 'lodash';
 import { authActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
-import { ListErrors, NsModal } from '../../../theme/shared';
+import { ListErrors, NsModal, SuccessScreen } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 import ConfirmCreateOrCancel from './ConfirmCreateOrCancel';
@@ -186,8 +186,19 @@ export default class ConfirmEmailAddress extends Component {
     if (errors && errors.code === 'NotAuthorizedException') {
       this.props.history.push('/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
+      if (this.props.refLink) {
+        return (
+          <SuccessScreen
+            successMsg="Your e-mail address has been updated."
+            handleContinue={this.handleContinue}
+            closeLink="/dashboard/account-settings"
+          />
+        );
+      }
+      else {
       this.handleContinue();
     }
+  }
     return (
       <NsModal
         closeOnDimmerClick={false}
