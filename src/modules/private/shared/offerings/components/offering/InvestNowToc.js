@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import { Grid, Tab, Form } from 'semantic-ui-react';
+import { Grid, Tab, Form, Button, Icon } from 'semantic-ui-react';
 import InvestNowTocList from './toc/InvestNowTocList';
 import { CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -18,19 +18,21 @@ const metaInfo = {
 @withRouter
 @observer
 class InvestNowToc extends Component {
-  handleFormSubmit = () => {
+  handleFormSubmit = (type) => {
     const { manageOfferingStore } = this.props;
     const { updateOffering } = manageOfferingStore;
-    updateOffering({ keyName: 'investNow', forms: 'INVEST_NOW_TOC_TEMPLATE_FRM' });
+    updateOffering({ keyName: 'investNow', forms: 'INVEST_NOW_TOC_TEMPLATE_FRM', tocAction: type });
   };
 
   render() {
     const { smartElement, match, manageOfferingStore, uiStore, offeringsStore } = this.props;
-    const { getAgreementTocList, campaignStatus } = manageOfferingStore;
+    const { getAgreementTocList, INVEST_NOW_TOC_TEMPLATE_FRM, campaignStatus } = manageOfferingStore;
     const { offer } = offeringsStore;
     const regulation = get(offer, 'regulation');
     const { inProgress } = uiStore;
-    const isReadOnly = campaignStatus.lock;
+    const isReadOnly = get(offer, 'stage') !== 'CREATION' || campaignStatus.lock;
+    const tocTemplate = INVEST_NOW_TOC_TEMPLATE_FRM.fields.template.value;
+    const showReset = (get(offer, 'stage') === 'CREATION' && tocTemplate === 2 && !!get(offer, 'investNow.page'));
     const panes = Object.keys(getAgreementTocList).map(key => ({
       menuItem: CAMPAIGN_KEYTERMS_REGULATION[key], render: () => (<InvestNowTocList regulation={key} refLink={match.url} data={getAgreementTocList[key]} />),
     }));
@@ -40,19 +42,32 @@ class InvestNowToc extends Component {
     return (
       <div className="inner-content-spacer">
         <Form>
-        <Grid stackable>
+          <Grid stackable>
             <Grid.Row>
-            <Grid.Column width={6}>
-            {smartElement.FormDropDown('template', { containerclassname: 'dropdown-field', displayMode: isReadOnly })}
-          </Grid.Column>
-          <Grid.Column width={5} textAlign="right" floated="right">
-          <OfferingButtonGroup
-            buttonTitle="Update"
-            updateOffer={this.handleFormSubmit}
-          />
-          </Grid.Column>
-          </Grid.Row>
-            </Grid>
+              <Grid.Column width={6}>
+                {smartElement.FormDropDown('template', { containerclassname: 'dropdown-field', displayMode: isReadOnly })}
+              </Grid.Column>
+              {!isReadOnly
+              && (
+              <Grid.Column width={5} textAlign="right" floated="right">
+                <OfferingButtonGroup
+                  buttonTitle="Update"
+                  updateOffer={this.handleFormSubmit}
+                />
+              </Grid.Column>
+              )}
+            </Grid.Row>
+            {showReset
+            && (
+            <Grid.Row>
+              <Grid.Column textAlign="right" floated="right">
+                <Button icon className="link-button" onClick={() => this.handleFormSubmit('RESET')}>
+                  <Icon color="green" size="large" className="ns-reload-circle" />
+                </Button>
+              </Grid.Column>
+            </Grid.Row>
+            )}
+          </Grid>
         </Form>
         <Grid>
           <Grid.Column widescreen={16} computer={16}>

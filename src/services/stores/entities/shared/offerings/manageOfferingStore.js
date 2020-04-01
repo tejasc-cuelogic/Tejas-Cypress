@@ -13,8 +13,10 @@ import { INVEST_NOW_TOC, INVEST_NOW_PAGE, INVEST_NOW_TOC_TEMPLATE } from '../../
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore, userDetailsStore } from '../../../index';
+import * as investNowTocDefaults from '../../../../constants/offering/InvestNowToc';
 import { offeringUpsert, adminLockOrUnlockOffering } from '../../../queries/offerings/manageOffering';
-import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM } from '../../../../../constants/offering';
+
 
 export class ManageOfferingStore extends DataModelStore {
   constructor() {
@@ -45,11 +47,44 @@ export class ManageOfferingStore extends DataModelStore {
 
   initLoad = [];
 
+  getInvestNowTocDefaults = () => {
+    const { offer } = offeringsStore;
+    const regulation = get(offer, 'regulation');
+    const securities = get(offer, 'keyTerms.securities');
+    const equityClass = get(offer, 'keyTerms.equityClass');
+    let nsDefaultData = [];
+    if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY) {
+      if (equityClass === CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM.LLC_MEMBERSHIP_UNITS) {
+        nsDefaultData = get(investNowTocDefaults.REAL_ESTATE_EQUITY, 'investNow.page');
+      } else if (equityClass === CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM.PREFERRED) {
+        nsDefaultData = get(investNowTocDefaults.PREFERRED_EQUITY, 'investNow.page');
+      } else {
+        nsDefaultData = get(investNowTocDefaults.CLASS_EQUITY, 'investNow.page');
+      }
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
+      nsDefaultData = get(investNowTocDefaults.TERM_NOTE, 'investNow.page');
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
+      nsDefaultData = get(investNowTocDefaults.REVENUE_SHARING_NOTE, 'investNow.page');
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE) {
+      nsDefaultData = get(investNowTocDefaults.SAFE, 'investNow.page');
+    }
+    const regCheck = regulation === 'BD_CF_506C' ? ['BD_506C', 'BD_CF'] : [regulation];
+    nsDefaultData = nsDefaultData.filter(t => regCheck.includes(t.regulation));
+    return nsDefaultData || [];
+  }
+
   // eslint-disable-next-line class-methods-use-this
   get getAgreementTocList() {
     const { offer } = offeringsStore;
     const regulation = get(offer, 'regulation');
-    const investNow = get(offer, 'investNow.page') || [];
+    const selectedTemplate = this.INVEST_NOW_TOC_TEMPLATE_FRM.fields.template.value;
+    const nsDefaultData = this.getInvestNowTocDefaults();
+    let investNow = [];
+    if (selectedTemplate === 2 && get(offer, 'investNow.page[0]')) {
+      investNow = get(offer, 'investNow.page');
+    } else {
+      investNow = nsDefaultData;
+    }
     const investNowTocs = {};
     if (regulation === 'BD_CF_506C') {
       investNowTocs.BD_506C = orderBy(filter(investNow, i => i.regulation === 'BD_506C'), ['page'], ['asc']);
@@ -282,7 +317,7 @@ export class ManageOfferingStore extends DataModelStore {
   }
 
   updateOffering = params => new Promise((res) => {
-    const { keyName, forms, cleanData, offeringData } = params;
+    const { keyName, forms, cleanData, offeringData, tocAction } = params;
     let offeringDetails = {};
     let data;
     let miscData;
@@ -308,9 +343,18 @@ export class ManageOfferingStore extends DataModelStore {
       data = omitDeep(data, ['__typename', 'fileHandle']);
     }
     if (keyName) {
-      offeringDetails[keyName] = data;
-      if (keyName !== 'misc' && forms && forms.includes('OFFERING_MISC_FRM')) {
-        offeringDetails.misc = miscData;
+      if (keyName === 'investNow' && forms === 'INVEST_NOW_TOC_TEMPLATE_FRM') {
+        const { offer } = offeringsStore;
+        if (data.template === 2 && (!get(offer, 'investNow.page') || tocAction === 'RESET')) {
+          offeringDetails[keyName] = { ...data, page: this.getInvestNowTocDefaults() };
+        } else {
+          offeringDetails[keyName] = data;
+        }
+      } else {
+        offeringDetails[keyName] = data;
+        if (keyName !== 'misc' && forms && forms.includes('OFFERING_MISC_FRM')) {
+          offeringDetails.misc = miscData;
+        }
       }
     } else {
       offeringDetails = { ...data };
@@ -457,6 +501,7 @@ decorate(ManageOfferingStore, {
   campaignStatus: computed,
   INVEST_NOW_TOC_FRM: observable,
   INVEST_NOW_PAGE_FRM: observable,
+  INVEST_NOW_TOC_TEMPLATE_FRM: observable,
   initLoad: observable,
   getAgreementTocList: computed,
   reOrderHandle: action,
