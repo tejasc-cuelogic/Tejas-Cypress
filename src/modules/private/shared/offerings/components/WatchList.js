@@ -41,6 +41,7 @@ export default class WatchList extends Component {
         content="Export"
         onClick={() => this.populateCsvData(watcherStatus)}
         disabled={!this.props.watchListStore.allWatchList[watcherStatus].length}
+        floated="right"
       />
     )
   )
@@ -130,8 +131,10 @@ export default class WatchList extends Component {
         {watchListMeta.map(watcherType => (
           watcherType.status !== 'INVESTOR' && (
             <>
-              <Header as="h4" floated="left">{`${watcherType.headerText} (${allWatchList[watcherType.status].length}) `} <Icon onClick={() => this.toggleVisibilityStatus(watcherType.status)} className={`ns-chevron-${this.state[watcherType.status] === true ? 'up' : 'down'}-compact right`} color="blue" /></Header>
-              <Header floated="right">{this.exportButton(watcherType.status)}</Header>
+              <Header as="h4" className="clearfix">
+                {`${watcherType.headerText} (${allWatchList[watcherType.status].length}) `} <Icon onClick={() => this.toggleVisibilityStatus(watcherType.status)} className={`ns-chevron-${this.state[watcherType.status] === true ? 'up' : 'down'}-compact right`} color="blue" />
+                {this.exportButton(watcherType.status)}
+              </Header>
               {this.state[watcherType.status] && <this.watchListTable hasUsersAccess={hasUsersAccess} WatchersList={allWatchList[watcherType.status]} />}
               <Divider section />
             </>
