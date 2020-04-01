@@ -9,7 +9,6 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { ClientDb, FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
-import { requestOtp, verifyOtp } from '../../queries/profile';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 import { TRANSFER_FUND, VERIFY_OTP, ADD_WITHDRAW_FUND } from '../../../constants/transaction';
 import { uiStore, userDetailsStore, offeringCreationStore } from '../../index';
@@ -405,76 +404,6 @@ export class TransactionStore {
   @action
   setReSendVerificationCode(value) {
     this.reSendVerificationCode = value;
-  }
-
-  @action
-  requestOtpForManageTransactions = (isLinkedBankChange = false) => {
-    uiStore.setProgress();
-    const { userDetails } = userDetailsStore;
-    const otpType = ['TEXT', 'CALL', 'PHONE'].includes(userDetails.mfaMode) ? userDetails.mfaMode === 'PHONE' ? 'TEXT' : userDetails.mfaMode : 'EMAIL';
-    const { number } = userDetails.phone;
-    const { address } = userDetails.email;
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: requestOtp,
-          variables: {
-            type: otpType,
-            isLinkedBankChange,
-            address: otpType === 'EMAIL' ? address : number,
-          },
-        })
-        .then((result) => {
-          const requestMode = otpType === 'EMAIL' ? `code sent to ${address}` : (otpType === 'CALL' ? `call to ${Helper.phoneNumberFormatter(number)}` : `code texted to ${Helper.phoneNumberFormatter(number)}`);
-          this.transactionOtpRequestId = result.data.requestOtp;
-          if (userDetails.mfaMode === 'PHONE') {
-            this.setPhoneNumber(number);
-          } else {
-            this.setConfirmEmailAddress(address);
-          }
-          Helper.toast(`Verification ${requestMode}.`, 'success');
-          resolve();
-        })
-        .catch((error) => {
-          uiStore.setErrors(error.message);
-          reject(error);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
-
-  confirmAccountLinking = (setProgress = true) => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: verifyOtp,
-          variables: {
-            resourceId: this.transactionOtpRequestId,
-            verificationCode: this.OTP_VERIFY_META.fields.code.value,
-          },
-        })
-        .then((response) => {
-          if (response.data.verifyOtp) {
-            resolve();
-          } else {
-            uiStore.setErrors('OTP verificaton failed.');
-            uiStore.setProgress(false);
-            reject();
-          }
-        })
-        .catch(action((err) => {
-          uiStore.setErrors(JSON.stringify(err.message));
-          reject(err);
-        }))
-        .finally(() => {
-          if (setProgress) {
-            uiStore.setProgress(false);
-          }
-        });
-    });
   }
 
   @action

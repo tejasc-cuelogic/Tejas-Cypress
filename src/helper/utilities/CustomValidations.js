@@ -64,7 +64,7 @@ class CustomValidations extends Component {
     }, 'Invalid ticker symbol, please verify and enter again.');
 
     Validator.register('futureDate', value => moment(value, 'MM/DD/YYYY').isSameOrAfter(moment().format('MM/DD/YYYY')),
-      "The :attribute should not be less than today's date.");
+      'The :attribute should not be less than today\'s date.');
   }
 }
 

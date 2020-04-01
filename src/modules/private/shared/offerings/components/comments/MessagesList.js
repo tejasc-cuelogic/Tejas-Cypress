@@ -6,7 +6,7 @@ import { DateTimeFormat, UserAvatar } from '../../../../../../theme/shared';
 import { DataFormatter } from '../../../../../../helper';
 
 const MessagesList = (props) => {
-  const showResponseNeeded = msg => (props.threadUsersList(msg.threadComments).length === 0 || (!get(msg, `threadComments[${msg.threadComments.length - 1}].approved`) && (get(msg, `threadComments[${msg.threadComments.length - 1}].createdUserInfo.roles[0].scope`) !== 'admin') && !props.isIssuer));
+  const showResponseNeeded = msg => (props.threadUsersList(msg.threadComments).length === 0 || (!props.isIssuer && !get(msg, `threadComments[${msg.threadComments.length - 1}].approved`) && (get(msg, `threadComments[${msg.threadComments.length - 1}].createdUserInfo.roles[0].scope`) !== 'admin')) || (props.isIssuer && (get(msg, `threadComments[${msg.threadComments.length - 1}].createdUserInfo.roles[0].scope`) !== 'issuer')));
   return (
     <List divided selection relaxed="very" verticalAlign="middle">
       {

@@ -216,7 +216,7 @@ export class BeneficiaryStore {
           resolve();
         })
         .catch((error) => {
-          console.log(toJS(error.message));
+          window.logger(toJS(error.message));
           uiStore.setErrors(error.message);
           reject(error);
         })

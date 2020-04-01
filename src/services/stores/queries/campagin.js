@@ -324,6 +324,20 @@ export const campaignDetailsQuery = gql`
         }
       }
     }
+    investNow {
+      template
+      page {
+        title
+        page
+        regulation
+        toc {
+          label
+          order
+          account
+          required
+        }
+      }
+    }
     closureSummary {
       processingDate
       hardCloseDate
@@ -432,6 +446,20 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     offeringSlug
     isAvailablePublicly
     stage
+    investNow {
+      template
+      page {
+        title
+        page
+        regulation
+        toc {
+          label
+          order
+          account
+          required
+        }
+      }
+    }
     closureSummary {
       processingDate
       hardCloseDate

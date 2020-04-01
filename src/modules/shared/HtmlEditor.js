@@ -101,7 +101,7 @@ export default class HtmlEditor extends React.Component {
                 return false;
               }).catch((error) => {
                 editor.edit.on();
-                console.log(error);
+                window.logger(error);
                 this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
                 return false;
               });
@@ -114,7 +114,7 @@ export default class HtmlEditor extends React.Component {
           editor.edit.off();
         },
         'froalaEditor.image.error': (e, editor, error) => {
-          console.log(error);
+          window.logger(error);
         },
       },
     };
@@ -126,9 +126,10 @@ export default class HtmlEditor extends React.Component {
   }
 
   render() {
-    const { keyStart, readOnly } = this.props;
+    const { keyStart, readOnly, tag, noDivWrap } = this.props;
     if (readOnly) {
-      return <div className="parsed-data"><FroalaEditorView model={this.props.content} /></div>;
+    const FroalaView = <FroalaEditorView tag={tag} model={this.props.content} />;
+    return noDivWrap ? FroalaView : <div className="parsed-data">{FroalaView}</div>;
     }
     return (
       <div>

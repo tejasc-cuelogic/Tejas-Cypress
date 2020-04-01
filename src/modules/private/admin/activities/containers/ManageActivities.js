@@ -5,7 +5,7 @@ import AllActivities from '../components/AllActivities';
 
 export default class ManageActivities extends Component {
   search = (e) => {
-    if (e.charCode === 13 && false) {
+    if (e.charCode === 13) {
       // search goes here..
     }
   }

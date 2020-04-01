@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Header, Form, Accordion, Icon, Button, Confirm, Divider } from 'semantic-ui-react';
 import { FormInput, FormDropDown, MaskedInput } from '../../../../../../../../theme/form';
-import { BD_REGULATION_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../../../../services/constants/admin/offerings';
+import { REGULATION_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../../../../services/constants/admin/offerings';
 import Helper from '../../../../../../../../helper/utility';
 import Contingencies from '../Contingencies';
 
@@ -59,7 +59,7 @@ export default class BusinessApplicationMapping extends Component {
 
   toggleConfirmModal = (e, formName) => {
     e.preventDefault();
-    console.log(formName);
+    window.logger(formName);
     this.props.businessAppReviewStore.toggleConfirmModal(null, 'APPLICATION_MAPPED_OFFERING_FORM');
   }
 
@@ -80,13 +80,6 @@ export default class BusinessApplicationMapping extends Component {
       confirmModalForApplication,
     } = this.props.businessAppReviewStore;
     const { currentApplicationType } = this.props.businessAppStore;
-    let MODIFIED_REGULATION_VALUES = null;
-    if (APPLICATION_MAPPED_OFFERING_FORM && APPLICATION_MAPPED_OFFERING_FORM.fields && APPLICATION_MAPPED_OFFERING_FORM.fields.regulation
-      && APPLICATION_MAPPED_OFFERING_FORM.fields.regulation.value) {
-      MODIFIED_REGULATION_VALUES = BD_REGULATION_VALUES;
-    } else {
-      MODIFIED_REGULATION_VALUES = BD_REGULATION_VALUES;
-    }
     const isReadonly = this.props.isReadOnlyFlag;
     if (isReadonly) {
        return null;
@@ -127,7 +120,7 @@ export default class BusinessApplicationMapping extends Component {
                   value={APPLICATION_MAPPED_OFFERING_FORM.fields.regulation.value}
                   name="regulation"
                   placeholder="Choose here"
-                  options={MODIFIED_REGULATION_VALUES}
+                  options={REGULATION_VALUES}
                   onChange={(e, result) => formArrayChange(e, result, formName)}
                 />
               </Form.Group>

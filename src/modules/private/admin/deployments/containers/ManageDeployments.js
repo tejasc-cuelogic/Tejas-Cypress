@@ -5,7 +5,7 @@ import AllDeployments from '../components/AllDeployments';
 
 export default class ManageDeployments extends Component {
   search = (e) => {
-    if (e.charCode === 13 && false) {
+    if (e.charCode === 13) {
       // search goes here..
     }
   }

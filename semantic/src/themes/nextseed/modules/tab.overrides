@@ -128,3 +128,13 @@
     border: 0;
     border-radius: 0;
 }
+.offering-creation-tab .ui.tabular.menu{
+		border-color: @neutral-midwhite;
+    .item{
+        &:active,&.active,&:hover,&:focus{
+            background: @neutral-midwhite;
+            color: @primary-one;
+            border-color: @neutral-midwhite;
+        }
+    }
+}

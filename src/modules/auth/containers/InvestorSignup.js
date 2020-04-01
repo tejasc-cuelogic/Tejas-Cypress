@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
-import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
-import { ListErrors } from '../../../theme/shared';
+import { Button, Header, Grid, Form, Message } from 'semantic-ui-react';
+import { ListErrors, NsModal } from '../../../theme/shared';
 import formHOC from '../../../theme/form/formHOC';
 import { FormValidator as Validator } from '../../../helper';
 
@@ -30,6 +30,11 @@ class InvestorSignup extends Component {
     this.props.authStore.checkEmailExistsPresignup(email);
   }
 
+  handlePassword = (e, result) => {
+    this.props.authStore.signupChange(e, result);
+    this.props.authStore.setVerifyPassword(e);
+  }
+
   handleSubmitForm = async (e) => {
     e.preventDefault();
     const { authStore, uiStore, history, identityStore } = this.props;
@@ -47,9 +52,10 @@ class InvestorSignup extends Component {
           givenName,
         });
         if (authStore.SIGNUP_FRM.meta.isValid) {
-          identityStore.requestOtpWrapper(isMobile).then(() => {
+          const result = await identityStore.sendOtpEmail(isMobile);
+          if (result) {
             history.push('/confirm-email');
-          });
+          }
         }
       }
     }
@@ -65,8 +71,7 @@ class InvestorSignup extends Component {
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
-      <Modal
-        size="mini"
+      <NsModal
         open
         closeOnDimmerClick={false}
         onClose={
@@ -75,15 +80,18 @@ class InvestorSignup extends Component {
             this.props.history.push(this.props.uiStore.authRef || '/');
           }
         }
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+        back="/register"
       >
-        <Modal.Header className="center-align signup-header">
-          <Header as="h3" className="mb-0">
-            Sign up as an Investor
-          </Header>
-          <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link>
-        </Modal.Header>
-        <Modal.Content className="signup-content">
-          <Form error onSubmit={this.handleSubmitForm}>
+        <Grid centered stackable className={isMobile ? 'full-width' : ''}>
+          <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
+            <Header as="h3" className="mb-40">
+              Sign up as an investor
+              {/* <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link> */}
+            </Header>
+            <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
               {
                 ['givenName', 'familyName'].map(field => (
@@ -110,12 +118,12 @@ class InvestorSignup extends Component {
             <div className="center-align mt-30">
               <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
             </div>
+            <p className="mt-40">Already have an account? <Link to="/login">Log in</Link></p>
+
           </Form>
-        </Modal.Content>
-        <Modal.Actions className="signup-actions">
-          <p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>
-        </Modal.Actions>
-      </Modal>
+          </Grid.Column>
+        </Grid>
+      </NsModal>
     );
   }
 }

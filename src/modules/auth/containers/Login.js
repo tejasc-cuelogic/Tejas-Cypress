@@ -78,7 +78,7 @@ class Login extends Component {
           }
         }
       }).catch((err) => {
-        console.log(err);
+        window.logger(err);
       });
   };
 

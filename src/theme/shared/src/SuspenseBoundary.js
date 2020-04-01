@@ -21,11 +21,11 @@ class SuspenseBoundary extends Component {
   componentDidCatch(error, info) {
     let operationName = 'Lazy loading';
     if (sessionStorage.getItem('crashed') && sessionStorage.getItem('crashed') === window.location.href) {
-      console.log('SuspenseBoundary crashed more than once');
+      window.logger('SuspenseBoundary crashed more than once');
       sessionStorage.removeItem('crashed');
       operationName = 'Lazy loading - hard fail';
     } else {
-      console.log('SuspenseBoundary crashed once');
+      window.logger('SuspenseBoundary crashed once');
       sessionStorage.setItem('crashed', window.location.href);
       operationName = 'Lazy loading - soft fail';
     }
@@ -48,15 +48,15 @@ class SuspenseBoundary extends Component {
           emailContent: JSON.stringify(emailContent),
         };
         this.props.authStore.notifyApplicationError(params).then(() => {
-          console.log('Error logging');
+          window.logger('Error logging');
         }).catch(() => {
-          console.log('Error logging');
+          window.logger('Error logging');
         });
       } catch (e) {
-        console.log('Error logging', e);
+        window.logger('Error logging', e);
       }
     } else {
-      console.log(`Error logging for ${REACT_APP_DEPLOY_ENV}, it would have triggered notifyApplicationError otherwise`, error, info);
+      window.logger(`Error logging for ${REACT_APP_DEPLOY_ENV}, it would have triggered notifyApplicationError otherwise`, error, info);
     }
   }
 

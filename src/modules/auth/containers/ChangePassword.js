@@ -32,7 +32,7 @@ function ChangePassword(props) {
         });
       })
       .catch((err) => {
-        console.log(err);
+        window.logger(err);
       });
   };
 

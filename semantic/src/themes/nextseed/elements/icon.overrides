@@ -1775,6 +1775,12 @@ i.icon[class*="ns-"]{
 .ns-business:before{
     content:@ns-business;
 }
+.ns-business-circle:before {
+    content: @ns-business-circle; 
+}
+.ns-building-circle:before {
+    content: @ns-building-circle; 
+}
 .ns-calculator-icon:before{
     content:@ns-calculator-icon;
 }
@@ -2053,6 +2059,9 @@ i.icon[class*="ns-"]{
 }
 .ns-minus-square:before{
     content:@ns-minus-square;
+}
+.ns-money-circle:before {
+    content: @ns-money-circle; 
 }
 .ns-new-business:before{
     content:@ns-new-business;

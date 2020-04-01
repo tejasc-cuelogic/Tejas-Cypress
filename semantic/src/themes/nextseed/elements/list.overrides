@@ -78,6 +78,17 @@
     &.capital-list{
         column-count: 2;
     }
+    &.agreement-list{
+        column-count:2;
+        column-gap: 30px;
+        @media only screen and (max-width : @largestMobileScreen){
+            column-count: 1;
+        }
+        >.item{
+            padding:0 !important;
+            margin:0 0 @20px !important;
+        }
+    }
     &.job-list>.item{
         .header, .content{
             line-height: 26px;
@@ -123,6 +134,12 @@
                     }
                 }
             }
+        }
+    }
+    &.small-font{
+        .item .ui.checkbox label{
+            font-size: 12px;
+            line-height: 18px;
         }
     }
 }

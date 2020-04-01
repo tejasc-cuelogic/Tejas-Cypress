@@ -14,10 +14,12 @@ import {
   OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES, OFFERING_DEFAULT,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
+import DataModelStore from '../dataModelStore';
 import { deleteBonusReward, updateOffering,
-  getOfferingDetails, getOfferingBac, createBac, updateBac, adminOfferingClose, deleteBac, upsertBonusReward,
+  getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
-  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted } from '../../../queries/offerings/manage';
+  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted, getOfferingClosureProcess } from '../../../queries/offerings/manage';
+import { adminInvokeProcessorDriver } from '../../../queries/data';
 import { updateBusinessApplicationInformation, adminBusinessApplicationsDetails } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -28,7 +30,7 @@ import { INDUSTRY_TYPES } from '../../../../../constants/offering';
 import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../../constants/common';
 import { US_STATES } from '../../../../../constants/account';
 
-export class OfferingCreationStore {
+export class OfferingCreationStore extends DataModelStore {
   @observable NEW_OFFER_FRM = Validator.prepareFormObject(NEW_OFFER);
 
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
@@ -175,6 +177,10 @@ export class OfferingCreationStore {
   };
 
   @observable oldFormDetails = {}
+
+  constructor() {
+    super({ adminInvokeProcessorDriver });
+  }
 
   @action
   setFieldValue = (field, value, field2 = false, objRef = false) => {
@@ -366,7 +372,7 @@ export class OfferingCreationStore {
       .catch((err) => {
         this.resetFormField('MEDIA_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
-        console.log(err);
+        window.logger(err);
       });
   }
 
@@ -387,7 +393,7 @@ export class OfferingCreationStore {
       .catch((err) => {
         this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
-        console.log(err);
+        window.logger(err);
       });
   }
 
@@ -425,7 +431,7 @@ export class OfferingCreationStore {
       })
       .catch((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
+        window.logger(err);
       });
   }
 
@@ -1106,7 +1112,7 @@ export class OfferingCreationStore {
           });
         }
       } catch (e) {
-        console.log(e);
+        window.logger(e);
       }
     });
     return { social, highlight };
@@ -1197,7 +1203,7 @@ export class OfferingCreationStore {
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        console.log('Error', err);
+        window.logger('Error', err);
         Helper.toast('Something went wrong.', 'error');
         rej();
       })
@@ -1501,7 +1507,7 @@ export class OfferingCreationStore {
       }
       payloadData.agreements = [...finalDataRoomDocs, ...removedDataFooms];
       payloadData.agreements = cleanDeep(payloadData.agreements);
-      console.log('agreement payload==>', payloadData);
+      window.logger('agreement payload==>', payloadData);
       this.updateDcoumentForApplication(payloadData)
         .then(() => {
           this.removeUploadedFiles(fromS3);
@@ -1509,7 +1515,7 @@ export class OfferingCreationStore {
           uiStore.setProgress(false);
         });
     }).catch(action((error) => {
-      console.log(error);
+      window.logger(error);
       uiStore.setProgress(false);
     }));
   }
@@ -1786,7 +1792,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  offeringClose = (params, step, scope) => new Promise((res, rej) => {
+  offeringClose = (params, step, scope) => new Promise(async (res, rej) => {
     uiStore.setProgress(params.process);
     this.setFieldValue('outputMsg', null);
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
@@ -1807,21 +1813,29 @@ export class OfferingCreationStore {
     } else if (!formData.payload && scope) {
       formData.payload = { scope };
     }
-    client
-      .mutate({
-        mutation: adminOfferingClose,
-        variables: { ...params, ...formData },
-      }).then((data) => {
-        uiStore.setProgress(false);
-        this.setFieldValue('outputMsg', { type: 'success', data: get(data, 'data.offeringClose') });
-        res(get(data, 'data.offeringClose'));
-      }).catch((err) => {
-        uiStore.setProgress(false);
-        this.setFieldValue('outputMsg', { type: 'error', data: get(err, 'message') });
-        console.log(err);
-        Helper.toast('Something went wrong.', 'error');
-        rej();
-      });
+
+    let requestVariable = {
+      offeringId: params.offeringId,
+      process: params.process,
+      payload: formData.payload,
+      waitingTime: 0,
+      concurrency: formData.concurrency,
+      queueLimit: (formData.queueLimit === '') ? 0 : formData.queueLimit,
+    };
+    requestVariable = JSON.stringify(requestVariable);
+    const result = await this.executeMutation({
+      mutation: 'adminInvokeProcessorDriver',
+      variables: {
+                    method: 'OFFERING_CLOSE',
+                    payload: requestVariable,
+                 },
+      setLoader: adminInvokeProcessorDriver,
+      message: {
+                success: 'Your request is processed.',
+                error: 'Error while performing operation.',
+              },
+    });
+    uiStore.setProgress(false);
   });
 
   updateBonusRewardTier = (isDelete = false, amount = 0, earlyBirdQuantity = 0) => {
@@ -2186,7 +2200,7 @@ export class OfferingCreationStore {
         funcArray.push(this.uploadFiles(form, arrayName, field, file, stepName, fileData, file.currentIndex));
       });
       Promise.all(funcArray).then((responseArr) => {
-        console.log(responseArr);
+        window.logger(responseArr);
         this.isUploadingFile = false;
         resolve();
       }).catch((err) => {
@@ -2246,6 +2260,23 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   })
+
+  getOfferingClosureProcessMeta = id => new Promise((resolve) => {
+    graphql({
+        client,
+        query: getOfferingClosureProcess,
+        fetchPolicy: 'no-cache',
+        variables: { id },
+        onFetch: (res) => {
+          if (res !== undefined) {
+            resolve(res.getOfferingDetailsBySlug.closureProcess);
+          }
+        },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+        },
+      });
+  });
 }
 
 export default new OfferingCreationStore();

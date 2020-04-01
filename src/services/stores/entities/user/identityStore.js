@@ -1,21 +1,23 @@
+/* eslint-disable no-unused-expressions */
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import { mapValues, keyBy, find, flatMap, map, get, isEmpty, intersection } from 'lodash';
 import Validator from 'validatorjs';
-import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
+import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO, VERIFY_OTP } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
-import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
+import { uiStore, authStore, userStore, userDetailsStore, multiFactorAuthStore } from '../../index';
+import { sendOtpEmail, verifyOtpEmail, sendOtp, isUniqueSSN, cipLegalDocUploads, verifyOtpPhone, changeLinkedBankRequest, changePhoneRequest, changeEmailRequest, verifyOtpEmailPrivate, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
 import { INVESTOR_URLS } from '../../../constants/url';
-import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
+import identityHelper from '../../../../modules/private/investor/accountSetup/containers/cipVerification/helper/index';
 import { US_STATES, FILE_UPLOAD_STEPS, US_STATES_FOR_INVESTOR } from '../../../../constants/account';
 import commonStore from '../commonStore';
+import bankAccountStore from '../shared/bankAccountStore';
 
 export class IdentityStore {
   @observable ID_VERIFICATION_FRM = FormValidator.prepareFormObject(USER_IDENTITY);
@@ -25,6 +27,8 @@ export class IdentityStore {
   @observable ID_VERIFICATION_QUESTIONS = FormValidator.prepareFormObject([]);
 
   @observable ID_PHONE_VERIFICATION = FormValidator.prepareFormObject(PHONE_VERIFICATION);
+
+  @observable OTP_VERIFY_META = FormValidator.prepareFormObject(VERIFY_OTP);
 
   @observable ID_PROFILE_INFO = FormValidator.prepareFormObject(UPDATE_PROFILE_INFO);
 
@@ -40,6 +44,14 @@ export class IdentityStore {
 
   @observable isOptConfirmed = false;
 
+  @observable isAddressFailed = false;
+
+  @observable isPhoneFailed = false;
+
+  @observable cipBackUrl = [INVESTOR_URLS.cipForm];
+
+  @observable cipErrors = undefined;
+
   @observable sendOtpToMigratedUser = [];
 
   @observable signUpLoading = false;
@@ -50,7 +62,9 @@ export class IdentityStore {
     ciphardFail: { steps: ['userCIPHardFail', 'userCIPFail'], url: INVESTOR_URLS.cipHardFail, status: 'HARD_FAIL' },
     cipSoftFail: { steps: ['userCIPSoftFail'], url: INVESTOR_URLS.cipSoftFail, status: 'SOFT_FAIL' },
     cipPass: { steps: ['userCIPPass', 'OFFLINE', 'phoneMfa'], url: INVESTOR_URLS.phoneVerification, status: 'PASS' },
-    cip: { steps: ['UNIQUE_SSN', 'ADDRESS_VERIFICATION', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
+    cip: { steps: ['UNIQUE_SSN'], url: INVESTOR_URLS.cipForm },
+    cipAddressFail: { steps: ['ADDRESS_VERIFICATION'], url: INVESTOR_URLS.cipAddressFail },
+    cipPhoneFail: { steps: ['PHONE_VERIFICATION'], url: INVESTOR_URLS.cipPhoneFail },
   }
 
   @action
@@ -92,18 +106,18 @@ export class IdentityStore {
   }
 
   @action
-  personalInfoChange = (e, result) => {
-    this.ID_VERIFICATION_FRM = FormValidator.onChange(
-      this.ID_VERIFICATION_FRM,
+  personalInfoChange = (e, result, form) => {
+    this[form] = FormValidator.onChange(
+      this[form],
       FormValidator.pullValues(e, result),
     );
   };
 
   @action
-  personalInfoMaskedChange = (values, field) => {
+  personalInfoMaskedChange = (values, field, form) => {
     const finalValue = (field === 'dateOfBirth') ? values.formattedValue : values.value;
-    this.ID_VERIFICATION_FRM = FormValidator.onChange(
-      this.ID_VERIFICATION_FRM,
+    this[form] = FormValidator.onChange(
+      this[form],
       { name: field, value: finalValue },
     );
   }
@@ -113,14 +127,6 @@ export class IdentityStore {
     this.ID_VERIFICATION_FRM = FormValidator.onChange(
       this.ID_VERIFICATION_FRM,
       { name: 'phoneNumber', value },
-    );
-  }
-
-  @action
-  phoneTypeChange = (value) => {
-    this.ID_VERIFICATION_FRM = FormValidator.onChange(
-      this.ID_VERIFICATION_FRM,
-      { name: 'mfaMethod', value },
     );
   }
 
@@ -142,17 +148,17 @@ export class IdentityStore {
   }
 
   @action
-  setAddressFieldsForUserVerification = (place) => {
+  setAddressFieldsForUserVerification = (place, form) => {
     if (this.isStreetCodeExistInAutoComplete(place)) {
-      FormValidator.setAddressFields(place, this.ID_VERIFICATION_FRM);
-      const state = US_STATES.find(s => s.text === this.ID_VERIFICATION_FRM.fields.state.value.toUpperCase());
-      this.ID_VERIFICATION_FRM.fields.state.value = state ? state.key : '';
+      FormValidator.setAddressFields(place, this[form]);
+      const state = US_STATES.find(s => s.text === this[form].fields.state.value.toUpperCase());
+      this[form].fields.state.value = state ? state.key : '';
     } else {
-      this.ID_VERIFICATION_FRM = FormValidator.onChange(
-        this.ID_VERIFICATION_FRM,
+      this[form] = FormValidator.onChange(
+        this[form],
         { name: 'street', value: Helper.gAddressClean(place).residentalStreet },
       );
-      ['city', 'state', 'zipCode'].forEach((field) => { this.ID_VERIFICATION_FRM.fields[field].value = ''; });
+      ['city', 'state', 'zipCode'].forEach((field) => { this[form].fields[field].value = ''; });
     }
   }
 
@@ -189,6 +195,7 @@ export class IdentityStore {
   get formattedUserInfoForCip() {
     const { fields } = this.ID_VERIFICATION_FRM;
     const user = FormValidator.evaluateFormData(fields);
+
     if (userDetailsStore.isLegalDocsPresent) {
       user.verificationDocs = this.verificationDocs();
     }
@@ -235,6 +242,7 @@ export class IdentityStore {
   verifyCip = async (isAdmin = false) => {
     this.setFieldValue('isAdmin', isAdmin);
     this.setCipDetails();
+    delete this.formattedUserInfoForCip.user.verificationDocs;
     let variables = { isCipOffline: false, ...this.formattedUserInfoForCip };
     variables = isAdmin ? { ...variables, userId: userDetailsStore.selectedUserId } : { ...variables };
     const payLoad = {
@@ -243,27 +251,32 @@ export class IdentityStore {
       variables,
     };
     const { res, url } = await this.cipWrapper(payLoad);
+    let redirectUrl = url;
+    const resData = res.data.verifyCip;
 
-    if (res.data.verifyCip.questions) {
-      this.setIdentityQuestions(res.data.verifyCip.questions);
+    if (resData.questions) {
+      this.setIdentityQuestions(resData.questions);
+    }
+
+    if (resData.step === 'ADDRESS_VERIFICATION' && this.isAddressFailed) {
+      redirectUrl = INVESTOR_URLS.cipHardFail;
     }
 
     if (res.data.verifyCip.step === 'OFFLINE') {
-      userDetailsStore.updateUserDetails('legalDetails', { status: 'OFFLINE' });
+      userDetailsStore.mergeUserData('legalDetails', { status: 'OFFLINE' });
       window.sessionStorage.setItem('cipErrorMessage',
-        JSON.stringify(res.data.verifyCip.errorMessage));
+        JSON.stringify(resData.errorMessage));
     }
-
-    this.setVerifyIdentityResponse(res.data.verifyCip);
-    return { res, url };
+    this.setVerifyIdentityResponse(resData);
+    return { res, url: redirectUrl };
   }
 
   updateUserDataAndSendOtp = async () => {
     if (userDetailsStore.signupStatus.phoneVerification !== 'DONE') {
-      await this.startPhoneVerification();
+      await this.sendOtp('PHONE_CONFIGURATION');
     }
-    userDetailsStore.updateUserDetails('legalDetails', this.formattedUserInfoForCip.user);
-    userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
+    userDetailsStore.mergeUserData('legalDetails', this.formattedUserInfoForCip.user);
+    userDetailsStore.mergeUserData('phone', this.formattedUserInfoForCip.phoneDetails);
   }
 
   @action
@@ -281,28 +294,52 @@ export class IdentityStore {
 
 
   @action
+  cipLegalDocUploads = async () => {
+    const payLoad = {
+      mutation: cipLegalDocUploads,
+      mutationName: 'cipLegalDocUploads',
+      variables: {
+        license: this.verificationDocs().idProof.fileId,
+        residence: this.verificationDocs().addressProof.fileId,
+      },
+    };
+    const { res: response } = await this.cipWrapper(payLoad);
+    if (response.data.cipLegalDocUploads) {
+      const { res, url } = await this.verifyCip();
+      this.setFieldValue('isAddressFailed', false);
+      this.setFieldValue('cipBackUrl', [...this.cipBackUrl, ...[INVESTOR_URLS.cipForm]]);
+      return { res, url };
+    }
+    return false;
+  }
+
+  @action
+  changeSsnRules = (isRequired = false) => {
+    this.ID_VERIFICATION_FRM.fields.ssn.rule = this.ID_VERIFICATION_FRM.fields.ssn.value.includes('X') && !isRequired ? 'optional|maskedSSN' : 'required|maskedSSN';
+  }
+
+  @action
   verifyCipHardFail = async () => {
-    const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
     const payLoad = {
       mutation: verifyCipHardFail,
       mutationName: 'verifyCipHardFail',
       variables: {
-        license: photoId.fileId,
-        residence: proofOfResidence.fileId,
+        license: this.verificationDocs().idProof.fileId,
+        residence: this.verificationDocs().addressProof.fileId,
       },
       cipPassStatus: 'MANUAL_VERIFICATION_PENDING',
     };
     this.setFieldValue('userCipStatus', 'MANUAL_VERIFICATION_PENDING');
     const { res, url } = await this.cipWrapper(payLoad);
-    userDetailsStore.updateUserDetails('legalDetails', { verificationDocs: this.verificationDocs() });
+    userDetailsStore.mergeUserData('legalDetails', { verificationDocs: this.verificationDocs() });
 
     return { res, url };
   }
 
   cipWrapper = async (payLoad) => {
     try {
-      let url;
       this.setFieldValue('signUpLoading', true);
+      this.setFieldValue('cipErrors', null);
       const res = await client
         .mutate({
           mutation: payLoad.mutation,
@@ -312,33 +349,42 @@ export class IdentityStore {
         this.cipStepUrlMapping[key].steps.includes(get(res, `data.${payLoad.mutationName}.step`))
       )));
       // eslint-disable-next-line prefer-destructuring
-      url = get(this.cipStepUrlMapping[stepName], 'url');
+      const url = get(this.cipStepUrlMapping[stepName], 'url');
+      const { message } = !get(res, `data.${payLoad.mutationName}.status`) && res.data[`${payLoad.mutationName}`];
 
       if (stepName === 'cipPass') {
         await this.updateUserDataAndSendOtp();
-      } else if (!get(res, `data.${payLoad.mutationName}.status`)
-        && res.data[`${payLoad.mutationName}`].message) {
-        url = undefined;
-        uiStore.setFieldvalue('errors',
+      }
+
+      if ((stepName === 'cip' && message) || (stepName === 'cipPhoneFail' && this.isPhoneFailed && message)) {
+        this.setFieldValue('cipErrors',
           DataFormatter.getSimpleErr({
-            message: res.data[`${payLoad.mutationName}`].message,
+            message,
           }));
       }
 
       if (stepName !== 'cip' && get(this.cipStepUrlMapping[stepName], 'status')) {
-        userDetailsStore.updateUserDetails('legalDetails', {
-          status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
-        });
-        userDetailsStore.updateUserDetails('cip', {
-          expiration: Helper.getDaysfromNow(21),
-        });
+        const userObj = {
+          legalDetails: {
+            status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
+          },
+          cip: {
+            expiration: Helper.getDaysfromNow(21),
+          },
+          info: {
+            firstName: this.ID_VERIFICATION_FRM.fields.firstLegalName.value,
+            lastName: this.ID_VERIFICATION_FRM.fields.lastLegalName.value,
+          },
+        };
+        Object.keys(userObj).forEach(key => userDetailsStore.mergeUserData(key, userObj[key]));
+        this.setProfileInfo(userDetailsStore.userDetails);
       }
 
       this.setFieldValue('signUpLoading', false);
 
       return { res, url };
     } catch (err) {
-      uiStore.setFieldvalue('errors', DataFormatter.getSimpleErr(err));
+      this.setFieldValue('cipErrors', DataFormatter.getSimpleErr(err));
       this.setFieldValue('signUpLoading', false);
       return Promise.reject(err);
     }
@@ -398,32 +444,37 @@ export class IdentityStore {
   }
 
   @action
-  startPhoneVerification = async (type, address = undefined, isMobile = false) => {
+  sendOtp = async (type, isMobile = false) => {
     try {
       const { user } = userDetailsStore.currentUser.data;
       const { mfaMethod, phoneNumber } = this.ID_VERIFICATION_FRM.fields;
-      const phone = address || get(user, 'phone.number') || phoneNumber.value;
-      const emailAddress = get(user, 'email.address');
-      const userAddress = type === 'EMAIL' ? emailAddress.toLowerCase() : phone;
+      const phone = phoneNumber.value || get(user, 'phone.number');
+      const emailAddress = authStore.CONFIRM_FRM.fields.email.value || get(user, 'email.address');
+      const to = type.startsWith('EMAIL') || mfaMethod.value === 'EMAIL' ? emailAddress.toLowerCase() : phone;
+      let method = type.startsWith('EMAIL') ? 'EMAIL' : mfaMethod.value === '' ? 'TEXT' : mfaMethod.value;
+      if (type === 'BANK_CHANGE') {
+        method = multiFactorAuthStore.MFA_MODE_TYPE_META.fields.mfaModeTypes.value;
+      }
       uiStore.clearErrors();
       uiStore.setProgress();
       this.setFieldValue('signUpLoading', true);
       const res = await client
         .mutate({
-          mutation: requestOtp,
+          mutation: sendOtp,
           variables: {
-            type: type || (mfaMethod.value !== '' ? mfaMethod.value : 'NEW'),
-            address: userAddress,
+            type,
+            method,
+            to,
           },
         });
-      const requestMode = type === 'EMAIL' ? `code sent to ${emailAddress}` : (type === 'CALL' ? `call to ${phone}` : `code texted to ${phone}`);
-      if (type === 'EMAIL') {
+      const requestMode = method === 'EMAIL' ? `code sent to ${emailAddress}` : (method === 'CALL' ? `call to ${phone}` : `code texted to ${phone}`);
+      if (method === 'EMAIL') {
         this.setSendOtpToMigratedUser('EMAIL');
       } else {
         this.setConfirmMigratedUserPhoneNumber(true);
         this.setSendOtpToMigratedUser('PHONE');
       }
-      this.setRequestOtpResponse(res.data.requestOtp);
+      this.setRequestOtpResponse(res.data.sendOtp);
       if (!isMobile && !userStore.isInvestor) {
         Helper.toast(`Verification ${requestMode}.`, 'success');
       }
@@ -461,76 +512,36 @@ export class IdentityStore {
     return formattedIdentityQuestionsAnswers;
   }
 
-  verifyAndUpdatePhoneNumber = () => {
+  verifyOtpPhone = async () => {
     uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: verifyOtp,
-          variables: {
-            resourceId: this.requestOtpResponse,
-            verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
-            isPhoneNumberUpdated: true,
-          },
-        })
-        .then((result) => {
-          if (result.data.verifyOtp) {
-            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
-              resolve();
-            });
-          } else {
-            const error = {
-              message: 'Please enter correct verification code.',
-            };
-            uiStore.setErrors(error);
-            reject();
-          }
-        })
-        .catch(action((err) => {
-          uiStore.setErrors(JSON.stringify(err.message));
-          reject(err);
-        }))
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
+    const payLoad = {
+      mutation: verifyOtpPhone,
+      mutationName: 'verifyOtpPhone',
+      variables: {
+        resourceId: this.requestOtpResponse,
+        verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
+        phone: this.ID_VERIFICATION_FRM.fields.phoneNumber.value,
+      },
+    };
+    const res = await this.otpWrapper(payLoad);
+
+    if (res) {
+      userDetailsStore.mergeUserData('phone', {
+        ...this.formattedUserInfoForCip.phoneDetails,
+        verified: moment().tz('America/Chicago').toISOString(),
+      });
+    }
+
+    return res;
   }
 
-  confirmPhoneNumber = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: verifyOtp,
-          variables: {
-            resourceId: this.requestOtpResponse,
-            verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
-          },
-        })
-        .then((result) => {
-          if (result.data.verifyOtp) {
-            userDetailsStore.updateUserDetails('phone', {
-              ...this.formattedUserInfoForCip.phoneDetails,
-              verified: moment().tz('America/Chicago').toISOString(),
-            });
-            resolve();
-          } else {
-            const error = {
-              message: 'Please enter correct verification code.',
-            };
-            uiStore.setErrors(error);
-            reject();
-          }
-        })
-        .catch(action((err) => {
-          uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
-          reject(err);
-        }))
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
+  @action
+  verifyVerificationCodeChange = (value) => {
+    this.OTP_VERIFY_META = FormValidator.onChange(
+      this.OTP_VERIFY_META,
+      { name: 'code', value },
+    );
+  };
 
   uploadProfilePhoto = () => {
     uiStore.setProgress();
@@ -729,142 +740,215 @@ export class IdentityStore {
   @action
   setCipDetails = () => {
     const { legalDetails, phone } = this.isAdmin ? userDetailsStore.detailsOfUser.data.user : userDetailsStore.userDetails;
-    const { fields } = this.ID_VERIFICATION_FRM;
-    if (legalDetails && legalDetails.legalName) {
-      fields.salutation.value = legalDetails.legalName.salutation;
-      fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
-      fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
-    }
-    if (legalDetails && legalDetails.legalAddress) {
-      fields.city.value = legalDetails.legalAddress.city;
-      const state = US_STATES.find(s => s.key === legalDetails.legalAddress.state);
-      const selectedState = state ? state.key : fields.state.value;
-      if (selectedState) {
-        fields.state.value = selectedState;
+    const { fields, meta } = this.ID_VERIFICATION_FRM;
+    if (!meta.isValid && get(legalDetails, 'legalAddress')) {
+      if (get(legalDetails, 'legalName')) {
+        fields.salutation.value = legalDetails.legalName.salutation;
+        fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
+        fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
       }
-      fields.street.value = legalDetails.legalAddress.street;
-      fields.streetTwo.value = legalDetails.legalAddress.streetTwo;
-      fields.zipCode.value = legalDetails.legalAddress.zipCode;
+      if (get(legalDetails, 'legalAddress')) {
+        fields.city.value = legalDetails.legalAddress.city;
+        const state = US_STATES.find(s => s.key === legalDetails.legalAddress.state);
+        const selectedState = state ? state.key : fields.state.value;
+        if (selectedState) {
+          fields.state.value = selectedState;
+        }
+        fields.street.value = legalDetails.legalAddress.street;
+        fields.streetTwo.value = legalDetails.legalAddress.streetTwo;
+        fields.zipCode.value = legalDetails.legalAddress.zipCode;
+      }
+      if (get(legalDetails, 'dateOfBirth')) {
+        fields.dateOfBirth.value = legalDetails.dateOfBirth;
+      }
+      if (get(legalDetails, 'ssn')) {
+        fields.ssn.value = legalDetails.ssn;
+      }
+      if (legalDetails && phone && phone.number) {
+        fields.phoneNumber.value = get(fields, 'phoneNumber.value') && !this.isAdmin ? fields.phoneNumber.value : phone.number;
+      }
     }
-    if (legalDetails && legalDetails.dateOfBirth) {
-      fields.dateOfBirth.value = legalDetails.dateOfBirth;
-    }
-
-    if (legalDetails && legalDetails.ssn) {
-      fields.ssn.value = legalDetails.ssn;
-    }
-    if (legalDetails && phone && phone.number) {
-      fields.phoneNumber.value = get(fields, 'phoneNumber.value') && !this.isAdmin ? fields.phoneNumber.value : phone.number;
-    }
-  }
-
-  requestOtpWrapper = (isMobile = false) => {
-    uiStore.setProgress();
-    const { email, givenName } = authStore.SIGNUP_FRM.fields;
-    const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
-    const firstNameInCookie = authStore.CONFIRM_FRM.fields.givenName.value;
-    let payload = {
-      address: (email.value || emailInCookie).toLowerCase(),
-      firstName: givenName.value || firstNameInCookie,
-    };
-    const tags = JSON.parse(window.localStorage.getItem('tags'));
-    payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
-    return new Promise((resolve, reject) => {
-      publicClient
-        .mutate({
-          mutation: requestOtpWrapper,
-          variables: payload,
-        })
-        .then((result) => {
-          this.setRequestOtpResponse(result.data.requestOTPWrapper);
-          if (!isMobile) {
-            Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
-          }
-          commonStore.removeLocalStorage(['tags']);
-          resolve();
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
-
-  verifyOTPWrapper = () => {
-    uiStore.setProgress();
-    const { email, code, givenName } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
-    const verifyOTPData = {
-      confirmationCode: code,
-      address: email,
-      firstName: givenName,
-    };
-    return new Promise((resolve, reject) => {
-      publicClient
-        .mutate({
-          mutation: verifyOTPWrapper,
-          variables: {
-            verifyOTPData,
-          },
-        })
-        .then((result) => {
-          if (result.data.verifyOTPWrapper) {
-            resolve();
-          } else {
-            const error = {
-              message: 'Please enter correct verification code.',
-            };
-            uiStore.setErrors(error);
-            uiStore.setProgress(false);
-            reject();
-          }
-        })
-        .catch((err) => {
-          uiStore.setProgress(false);
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        });
-    });
   }
 
   @action
-  confirmEmailAddress = () => {
+  sendOtpEmail = async () => {
     uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: verifyOtp,
-          variables: {
-            resourceId: this.requestOtpResponse,
-            verificationCode: authStore.CONFIRM_FRM.fields.code.value,
-            isEmailVerify: true,
-          },
-        })
-        .then((result) => {
-          if (result.data.verifyOtp) {
-            resolve();
-          } else {
-            const error = {
-              message: 'Please enter correct verification code.',
-            };
-            uiStore.setProgress(false);
-            uiStore.setErrors(error);
-            reject();
-          }
-        })
-        .catch(action((err) => {
-          uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
-          uiStore.setProgress(false);
-          reject(err);
-        }));
-    });
+    const { email } = FormValidator.ExtractValues(authStore.SIGNUP_FRM.fields);
+    const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
+    let variables = {
+      email: (email || emailInCookie).toLowerCase(),
+    };
+    const tags = JSON.parse(window.localStorage.getItem('tags'));
+    variables = !isEmpty(tags) ? { ...variables, tags } : { ...variables };
+    const payLoad = {
+      mutation: sendOtpEmail,
+      mutationName: 'sendOtpEmail',
+      variables,
+    };
+    const res = await this.otpWrapper(payLoad, true);
+    commonStore.removeLocalStorage(['tags']);
+    this.setRequestOtpResponse(res);
+    return res;
+  }
+
+  @action
+  verifyOtpEmail = async () => {
+    uiStore.setProgress();
+    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const verifyOTPData = {
+      verificationCode: code,
+      email,
+    };
+
+    const payLoad = {
+      mutation: verifyOtpEmail,
+      mutationName: 'verifyOtpEmail',
+      variables: { verifyOTPData },
+    };
+
+    const res = await this.otpWrapper(payLoad, true);
+    return res;
+  }
+
+  @action
+  changeLinkedBankRequest = async (investorAccountType) => {
+    uiStore.setProgress();
+    const { bankLinkInterface, formLinkBankManually, newPlaidAccDetails } = bankAccountStore;
+    const { accountNumber, routingNumber, accountType, bankName } = FormValidator.ExtractValues(formLinkBankManually.fields);
+    let variables = {
+      resourceId: this.requestOtpResponse,
+      verificationCode: this.OTP_VERIFY_META.fields.code.value,
+      accountId: bankAccountStore.CurrentAccountId,
+    };
+
+    if (bankLinkInterface === 'form') {
+      variables = { ...variables, bankAccountNumber: accountNumber, bankRoutingNumber: routingNumber, accountType, bankName };
+    } else {
+      variables = { ...variables, plaidAccountId: newPlaidAccDetails.account_id, plaidPublicToken: newPlaidAccDetails.public_token };
+    }
+
+    const payLoad = {
+      mutation: changeLinkedBankRequest,
+      mutationName: 'changeLinkedBankRequest',
+      variables,
+    };
+    const res = await this.otpWrapper(payLoad);
+    uiStore.setProgress();
+    if (res) {
+      const result = await userDetailsStore.bankChangeRequestQuery(investorAccountType);
+      if (result) {
+        bankAccountStore.setCurrentAccount(investorAccountType);
+      }
+      uiStore.setProgress(false);
+    } else {
+      uiStore.setProgress(false);
+    }
+
+    return res;
+  }
+
+  @action
+  changeEmailRequest = async () => {
+    uiStore.setProgress();
+    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const payLoad = {
+      mutation: changeEmailRequest,
+      mutationName: 'changeEmailRequest',
+      variables: {
+        resourceId: this.requestOtpResponse,
+        verificationCode: code,
+      },
+    };
+    const res = await this.otpWrapper(payLoad);
+    if (res) {
+      this.props.userDetailsStore.mergeUserData('email', { address: email });
+    }
+    return res;
+  }
+
+  @action
+  changeEmailRequest = async () => {
+    uiStore.setProgress();
+    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const payLoad = {
+      mutation: changeEmailRequest,
+      mutationName: 'changeEmailRequest',
+      variables: {
+        resourceId: this.requestOtpResponse,
+        verificationCode: code,
+      },
+    };
+    const res = await this.otpWrapper(payLoad);
+    if (res) {
+      userDetailsStore.mergeUserData('email', { address: email });
+    }
+    return res;
+  }
+
+  @action
+  changePhoneRequest = async () => {
+    uiStore.setProgress();
+    const { phoneNumber } = FormValidator.ExtractValues(this.ID_VERIFICATION_FRM.fields);
+    const payLoad = {
+      mutation: changePhoneRequest,
+      mutationName: 'changePhoneRequest',
+      variables: {
+        resourceId: this.requestOtpResponse,
+        verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
+        phone: phoneNumber,
+      },
+    };
+    const res = await this.otpWrapper(payLoad);
+    if (res) {
+      userDetailsStore.mergeUserData('phone', { number: phoneNumber });
+    }
+    return res;
+  }
+
+  @action
+  otpWrapper = async (payLoad, isPublicClient = false) => {
+    try {
+      const apolloClient = isPublicClient ? publicClient : client;
+      const res = await apolloClient.mutate({
+        mutation: payLoad.mutation,
+        variables: payLoad.variables,
+      });
+      uiStore.setProgress(false);
+      return res.data[`${payLoad.mutationName}`];
+    } catch (err) {
+      uiStore.setProgress(false);
+      uiStore.setErrors(DataFormatter.getSimpleErr(err));
+      return false;
+    }
+  }
+
+  @action
+  confirmEmailForMigratedUser = async () => {
+    uiStore.setProgress();
+    const payLoad = {
+      mutation: verifyOtpEmailPrivate,
+      mutationName: 'verifyOtpEmail',
+      variables: {
+        resourceId: this.requestOtpResponse,
+        verificationCode: authStore.CONFIRM_FRM.fields.code.value,
+        email: get(userDetailsStore, 'currentUser.data.user.email.address'),
+      },
+    };
+
+    const res = await this.otpWrapper(payLoad);
+    return res;
   }
 
   @action
   validateForm = (form) => {
     FormValidator.validateForm(this[form], false, true);
+  }
+
+  resetCipData = () => {
+    this.changeSsnRules(true);
+    this.setFieldValue('cipBackUrl', [INVESTOR_URLS.cipForm]);
+    this.isAddressFailed = false;
+    this.isPhoneFailed = false;
   }
 }
 

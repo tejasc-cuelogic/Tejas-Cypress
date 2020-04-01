@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Grid, Button } from 'semantic-ui-react';
+import { Form, Header } from 'semantic-ui-react';
+import { FormArrowButton } from '../../../../../../../theme/form';
 
-const isMobile = document.documentElement.clientWidth < 768;
-
+// const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @inject('accreditationStore')
 @observer
 export default class IncomeQualificationCheck extends Component {
+  constructor(props) {
+    super(props);
+    this.props.accreditationStore.setAccreditationInialStepState({ openState: true });
+  }
+
   componentDidUpdate() {
     const {
       INCOME_UPLOAD_DOC_FORM, ASSETS_UPLOAD_DOC_FORM,
@@ -18,18 +23,24 @@ export default class IncomeQualificationCheck extends Component {
   }
 
   render() {
-    // const incomeQualChecks = INCOME_QUALIFICATION_CHECK_META.slice();
     const { ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">How are you an accredited investor?</Header>
-        <p className="center-align">
+        <Header as="h4">Does your annual income qualify you as an accredited investor?</Header>
+        {/* <p>
           To invest in Regulation D offerings on the NextSeed platform, we are required to
           verify your status as an accredited investor using standards put into place by the SEC.
         </p>
-        <p className="center-align"><b>Does your annual income qualify you as an accredited investor?</b></p>
-        <Form error className="account-type-tab">
-          <Grid columns={1}>
+        <p><b>Does your annual income qualify you as an accredited investor?</b></p> */}
+        <Form error className="mt-30">
+          <FormArrowButton
+            fielddata={ACCREDITATION_FORM.fields.method}
+            name="method"
+            formName="ACCREDITATION_FORM"
+            changed={accreditationMethodChange}
+            action={this.props.submitStep}
+          />
+          {/* <Grid columns={1}>
             {ACCREDITATION_FORM.fields.method.values.map(method => (
               <Grid.Column
                 key={method.value}
@@ -43,11 +54,7 @@ export default class IncomeQualificationCheck extends Component {
               </Grid.Column>
             ))}
           </Grid>
-          {isMobile
-          && (
-            <Button onClick={this.props.submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
-          )
-          }
+          <Button onClick={this.props.submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" /> */}
         </Form>
       </div>
     );

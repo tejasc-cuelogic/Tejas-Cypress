@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, uniq } from 'lodash';
 import money from 'money-math';
 import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
@@ -9,7 +9,7 @@ import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
 // import Helper from '../../../../../helper/utility';
 
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 
 @withRouter
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'accountStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
@@ -22,6 +22,7 @@ export default class InvestNow extends React.Component {
     if (!this.props.campaignStore.isInvestBtnClicked) {
       this.props.history.push(this.props.refLink);
     }
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', true);
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.investmentStore.resetData();
     this.props.uiStore.setProgress(false);
@@ -57,6 +58,9 @@ export default class InvestNow extends React.Component {
     const isUpdateScreen = changeInvest;
     const reflectedURL = this.props.history.location.pathname;
     const matchURL = this.props.match.url;
+    if (matchURL.includes('portfolio')) {
+      this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
+    }
     if (!isUpdateScreen || (isUpdateScreen && !reflectedURL.includes('invest-now'))) {
       if (!matchURL.includes('portfolio')) {
         this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
@@ -66,13 +70,15 @@ export default class InvestNow extends React.Component {
       if (!reflectedURL.includes('agreement')) {
         this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
         this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+        this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
       }
       this.props.campaignStore.setFieldValue('offeringUUID', null);
     }
+    window.removeEventListener('message', this.handleIframeTask);
   }
 
   handleIframeTask = (e) => {
-    console.log(e.data);
+    window.logger(e.data);
   };
 
   handleMultiStepModalclose = () => {
@@ -223,6 +229,13 @@ export default class InvestNow extends React.Component {
       this.setState({ isInvestmentUpdate: true });
     }
     const {
+      activeAccounts,
+      inprogressAccounts,
+    } = this.props.userDetailsStore.signupStatus;
+    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0)
+      ? [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0)
+        ? activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
+    const {
       inProgress, setFieldvalue,
       isEnterPressed,
       resetIsEnterPressed,
@@ -259,6 +272,7 @@ export default class InvestNow extends React.Component {
         isValid: '',
         stepToBeRendered: 2,
         isDirty: true,
+        disablePrevButton: changeInvest || !(accountToConsider.length > 1),
       },
       {
         name: 'TransferRequest',
@@ -275,7 +289,7 @@ export default class InvestNow extends React.Component {
     ];
     const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;
     const closeOnDimmerClickAction = false;
-    this.props.investmentStore.setFieldValue('disablePrevButton', true);
+    // this.props.investmentStore.setFieldValue('disablePrevButton', true);
     return (
       <div className="step-progress">
         {
@@ -289,7 +303,7 @@ export default class InvestNow extends React.Component {
             disableNxtbtn={this.props.investmentStore.disableNextbtn}
             isEnterPressed={isEnterPressed}
             resetEnterPressed={resetIsEnterPressed}
-            hideHeader={!isMobile}
+            // hideHeader={!isMobile}
             setStepTobeRendered={this.handleStepChange}
             setStepTobeRenderedForAlert={this.handleStepChnageOnPreviousForAlert}
             stepToBeRendered={this.props.investmentStore.stepToBeRendered}

@@ -21,7 +21,7 @@ const ChickenAndRice = ({ history, uiStore }) => {
         <Modal.Description>
           <Header as="h2">The Chicken<br /> & Rice Guys</Header>
           {!uiStore.responsiveVars.uptoTablet
-          ? <Header as="h3" className="mb-0">Boston{"'"}s hit food truck,<br /> now in Houston!</Header>
+          ? <Header as="h3" className="mb-0">Boston{'\''}s hit food truck,<br /> now in Houston!</Header>
           : <p><b>The first Houston Location</b></p>
           }
           <Divider section={!uiStore.responsiveVars.isMobile} />

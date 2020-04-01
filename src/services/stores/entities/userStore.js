@@ -67,7 +67,7 @@ export class UserStore {
   });
 
   @computed get capabilitiesMeta() {
-    console.log(this.opt);
+    window.logger(this.opt);
     const prepareOpt = (meta, tail) => {
       const opt = { key: `${meta}_${tail}`, value: `${meta}_${tail}`, text: `${meta}_${tail}` };
       return opt;
@@ -99,7 +99,7 @@ export class UserStore {
   }
 
   @computed get myCapabilities() {
-    console.log(this.opt);
+    window.logger(this.opt);
     return authStore.capabilities ? toJS(authStore.capabilities) : [];
   }
 

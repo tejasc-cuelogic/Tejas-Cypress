@@ -1,5 +1,5 @@
 import { observable, action, toJS } from 'mobx';
-import { set, forEach, isEmpty } from 'lodash';
+import { set, forEach, isEmpty, get } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
@@ -23,6 +23,8 @@ export default class DataModelStore {
   client = publicClient;
 
   currentScore = 0;
+
+  stepToBeRendered = 0;
 
   removeFileIdsList = [];
 
@@ -64,9 +66,11 @@ export default class DataModelStore {
   }
 
   executeMutation = async (params) => {
-    const payLoad = { message: false, clientType: false, setLoader: undefined, respBack: false, ...params };
+    const payLoad = { ...this.defaultParams, ...params };
     const apolloClient = payLoad.clientType === 'PUBLIC' ? publicClient : client;
-    this.setLoader(payLoad.setLoader);
+    payLoad.removeLoader = get(payLoad, 'setLoader');
+    const loader = payLoad.setLoader || payLoad.mutation;
+    nsUiStore.setLoader(loader);
     this.loading = true;
     this.auStatus = 1;
     let result = {};
@@ -76,8 +80,8 @@ export default class DataModelStore {
         variables: payLoad.variables,
         refetchQueries: payLoad.refetchQueries || [],
       });
-      nsUiStore.filterLoaderByOperation(payLoad.setLoader);
-      if (payLoad.message && payLoad.message !== false && payLoad.message && payLoad.message.success) {
+      nsUiStore.filterLoaderByOperation(loader);
+      if (get(payLoad, 'message') !== false && get(payLoad, 'message.success')) {
         Utils.toast(payLoad.message && payLoad.message.success, 'success');
       }
       this.auStatus = 2;
@@ -85,40 +89,48 @@ export default class DataModelStore {
       return result || true;
     } catch (err) {
       this.loading = false;
-      nsUiStore.filterLoaderByOperation(payLoad.setLoader);
+      // remove only loaders who are set exlplicity
+      this.resetLoader(payLoad.removeLoader, payLoad.mutation);
       this.auStatus = 0;
-      if (payLoad.message !== false) {
-        Utils.toast(payLoad.message && (payLoad.message.error || 'Error while performing operation.'), 'error');
+      const errorMessage = { message: get(payLoad, 'message.error') || err.message };
+      if (get(payLoad, 'message') && payLoad.showToastError) {
+        Utils.toast(get(payLoad, 'message.error') || 'Error while performing operation.', 'error');
+      } else if (!payLoad.showToastError && get(errorMessage, 'message')) {
+        nsUiStore.setFieldValue('errors', DataFormatter.getSimpleErr(errorMessage));
       }
-      nsUiStore.setFieldValue('errors', DataFormatter.getSimpleErr(err));
-      return payLoad.respBack ? ({ error: Utils.cleanMsg(err.toString()) }) : false;
+      return Promise.reject(errorMessage);
     }
   }
 
   executeQuery = params => new Promise((res, rej) => {
-    const payLoad = { clientType: false, setLoader: undefined, ...params };
+    const payLoad = { clientType: false, setLoader: undefined, removeLoader: undefined, ...params };
+    payLoad.removeLoader = payLoad.setLoader;
     const apolloClient = payLoad.clientType === 'PUBLIC' ? publicClient : client;
-    this.setLoader(payLoad.setLoader);
-    this.auStatus = 1;
+    payLoad.removeLoader = get(payLoad, 'setLoader');
+    const loader = payLoad.setLoader || payLoad.query;
+    nsUiStore.setLoader(loader);
     this.loading = true;
+    this.auStatus = 1;
+    // need to accept fetch policy from parameter
     MobxApollo.graphql({
       client: apolloClient,
       query: this.gqlRef[payLoad.query],
-      fetchPolicy: payLoad.fetchPolicy || 'network-only',
-      variables: { ...params.variables },
+      fetchPolicy: 'network-only',
+      variables: payLoad.variables,
       onFetch: (data) => {
         if (data) {
           this.auStatus = 2;
           this.loading = false;
           res(data);
-          nsUiStore.filterLoaderByOperation(payLoad.setLoader);
+          nsUiStore.filterLoaderByOperation(loader);
         }
         this.currTime = +new Date();
       },
       onError: (e) => {
         this.auStatus = 0;
         this.loading = false;
-        nsUiStore.filterLoaderByOperation(payLoad.setLoader);
+        // remove only loaders who are set exlplicity
+        this.resetLoader(payLoad.removeLoader, payLoad.query);
         rej(e);
       },
     });
@@ -127,6 +139,14 @@ export default class DataModelStore {
   setLoader = (setLoader) => {
     if (setLoader) {
       nsUiStore.setFieldValue('loadingArray', setLoader, false, true);
+    }
+  }
+
+  resetLoader = (removeLoader, operation) => {
+    if (removeLoader) {
+      removeLoader.map(item => (nsUiStore.filterLoaderByOperation(item)));
+    } else {
+      nsUiStore.filterLoaderByOperation(operation);
     }
   }
 
@@ -248,6 +268,17 @@ export default class DataModelStore {
     this[form] = FormValidator.resetFormData(this[form], targetedFields);
   }
 
+  addMore = (form, key, count = 1) => {
+    this[form] = FormValidator.addMoreRecordToSubSection(this[form], key, count, true);
+  }
+
+  removeOne = (form, arrayName, index, e = undefined) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this[form].fields[arrayName].splice(index, 1);
+  }
+
   resetAll = () => {
     this.client.clearStore();
   }
@@ -294,6 +325,10 @@ export default class DataModelStore {
     }
   }
 
+  setStepToBeRendered = (step) => {
+    this.setFieldValue('stepToBeRendered', step);
+  }
+
   resetFilters = () => {
     this.requestState = {
       lek: { 'page-1': null },
@@ -305,6 +340,10 @@ export default class DataModelStore {
       },
     };
   }
+
+  resetInitLoad = () => {
+    this.initLoad = [];
+  }
 }
 
 export const decorateDefault = {
@@ -312,7 +351,9 @@ export const decorateDefault = {
   removeFileIdsList: observable,
   currTime: observable,
   currentScore: observable,
+  stepToBeRendered: observable,
   removeUploadedFiles: action,
+  resetInitLoad: action,
   setFieldValue: action,
   formChange: action,
   maskChange: action,
@@ -333,4 +374,6 @@ export const decorateDefault = {
   setInitiateSrch: action,
   setFormData: action,
   resetFilters: action,
+  addMore: action,
+  removeOne: action,
 };

@@ -250,12 +250,13 @@
             border-color: transparent;
             padding: @14px;
             width: auto;
+            height: 100%;
             &:hover {
                 border-color: @neutral-darkwhite;
             }
             .content {
                 border: 0;
-                padding: 0 @28px;
+                padding: 0 @28px @14px;
                 .description {
                     font-size: @15px;
                     margin: 0 0 @30px;

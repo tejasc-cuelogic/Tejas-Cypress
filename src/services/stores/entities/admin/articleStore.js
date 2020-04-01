@@ -480,7 +480,7 @@ export class ArticleStore {
         })
         .catch((err) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
-          console.log(err);
+          window.logger(err);
         });
     }
 
@@ -490,7 +490,7 @@ export class ArticleStore {
       filename = this.ARTICLE_FRM.fields[name].value;
       commonStore.deleteCdnS3File(`insights/${id}/${filename}`)
         .then((res) => {
-          console.log(res);
+          window.logger(res);
           Helper.toast(`${this.ARTICLE_FRM.fields[name].label} removed successfully.`, 'success');
           this.resetFormField('ARTICLE_FRM', name, undefined);
         })
@@ -498,7 +498,7 @@ export class ArticleStore {
           // force record deletion from db;
           this.resetFormField('ARTICLE_FRM', name, undefined);
           this.updateOffering(this.currentOfferingId, this.ARTICLE_FRM.fields, 'media', false, false);
-          console.log(err);
+          window.logger(err);
         });
     }
 
