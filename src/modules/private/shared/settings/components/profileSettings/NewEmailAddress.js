@@ -13,8 +13,9 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class NewEmailAddress extends Component {
-  handleChangeEmailAddress = () => {
-    this.props.authStore.requestEmailChange().then(() => {
+  handleChangeEmailAddress = async () => {
+    const res = await this.props.identityStore.sendOtp('EMAIL_CHANGE', isMobile);
+    if (res) {
       this.props.uiStore.clearErrors();
       this.props.identityStore.setIsOptConfirmed(false);
       Helper.toast('Email Change request has been accepted', 'success');
@@ -24,8 +25,7 @@ export default class NewEmailAddress extends Component {
         email: email.value.toLowerCase(), password: password.value,
       });
       this.props.history.push(`${this.props.refLink}/confirm-email-address`);
-    })
-      .catch(() => { });
+    }
   }
 
   handleCloseModal = (e) => {

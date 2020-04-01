@@ -12,16 +12,6 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class NewPhoneNumber extends Component {
-  constructor(props) {
-    super(props);
-    const { userDetailsStore, identityStore } = this.props;
-    if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
-      identityStore.phoneTypeChange(userDetailsStore.userDetails.phone.type);
-    } else {
-      identityStore.phoneTypeChange('TEXT');
-    }
-  }
-
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.refLink);
@@ -30,12 +20,10 @@ export default class NewPhoneNumber extends Component {
   }
 
   handleChangePhoneNumber = async () => {
-    const { resetFormData, ID_VERIFICATION_FRM } = this.props.identityStore;
+    const { resetFormData } = this.props.identityStore;
     resetFormData('ID_PHONE_VERIFICATION');
-    const { phoneNumber, mfaMethod } = ID_VERIFICATION_FRM.fields;
-    const phoneNumberValue = phoneNumber.value;
-    const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
-    const res = await this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile);
+    const res = await this.props.identityStore.sendOtp('PHONE_CHANGE', isMobile);
+
     if (res) {
       this.props.identityStore.setIsOptConfirmed(false);
       this.props.uiStore.clearErrors();

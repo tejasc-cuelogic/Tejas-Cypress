@@ -18,17 +18,14 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class ConfirmPhoneNumber extends Component {
   constructor(props) {
     super(props);
-    const { userDetailsStore, identityStore } = this.props;
     if (this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       this.setConfirmPhoneFormData();
     }
-    if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
-      const fieldValue = userDetailsStore.userDetails.phone.type;
-      identityStore.phoneTypeChange(fieldValue);
-    }
 
-    if (Object.keys(this.props.identityStore.requestOtpResponse).length === 0 && !isEmpty(this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value)) {
-      this.props.identityStore.startPhoneVerification();
+    if (Object.keys(this.props.identityStore.requestOtpResponse).length === 0
+      && !isEmpty(this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value)
+      && !this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
+      this.props.identityStore.sendOtp(this.getOtpType(), isMobile);
     }
   }
 
@@ -40,6 +37,8 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.uiStore.clearErrors();
   }
 
+  getOtpType = () => (this.props.refLink ? 'PHONE_CHANGE' : 'PHONE_CONFIGURATION')
+
   setConfirmPhoneFormData = () => {
     const { userDetailsStore, identityStore } = this.props;
     if (userDetailsStore.userDetails.phone
@@ -49,23 +48,20 @@ export default class ConfirmPhoneNumber extends Component {
     }
   }
 
-  handleConfirmPhoneNumber = (e) => {
+  handleConfirmPhoneNumber = async (e) => {
     e.preventDefault();
     this.props.identityStore.setReSendVerificationCode(false);
-    if (this.props.refLink) {
-      this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
-        // Helper.toast('Thank you for confirming your phone number', 'success');
-        this.props.history.replace('/dashboard/account-settings/profile-data');
-        this.props.uiStore.clearErrors();
-        this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
-      })
-        .catch(() => { });
-    } else {
-      this.props.identityStore.confirmPhoneNumber().then(() => {
-        // Helper.toast('Thank you for confirming your phone number', 'success');
+    const res = await this.props.identityStore.verifyOtpPhone();
+    if (res && this.props.refLink) {
+      this.props.history.replace('/dashboard/account-settings/profile-data');
+      this.props.uiStore.clearErrors();
+      this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
+    } else if (res) {
+      if (this.props.userDetailsStore.signupStatus.investorProfileCompleted) {
+        this.props.history.push('/dashboard/setup');
+      } else {
         this.props.identityStore.setIsOptConfirmed(true);
-      })
-        .catch(() => { });
+      }
     }
   }
 
@@ -77,14 +73,10 @@ export default class ConfirmPhoneNumber extends Component {
     }
   }
 
-  startPhoneVerification = async () => {
+  sendOtp = async () => {
     this.props.identityStore.setReSendVerificationCode(true);
-    this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
     this.props.uiStore.clearErrors();
-    const { mfaMethod, phoneNumber } = this.props.identityStore.ID_VERIFICATION_FRM.fields;
-    const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
-    const phoneNumberValue = phoneNumber.value;
-    const res = await this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile);
+    const res = await this.props.identityStore.sendOtp(this.getOtpType(), isMobile);
     if (res && !this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
@@ -198,7 +190,7 @@ export default class ConfirmPhoneNumber extends Component {
                       fielddata={ID_PHONE_VERIFICATION.fields.code}
                       onChange={phoneVerificationChange}
                     />
-                    <Button type="button" size="small" color="green" className="link-button  mt-20" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
+                    <Button type="button" size="small" color="green" className="link-button  mt-20" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.sendOtp()} />
                   </Form.Field>
                 )
               }
@@ -227,14 +219,14 @@ export default class ConfirmPhoneNumber extends Component {
                 : (
                   <Button.Group widths={isMobile ? '1' : '2'} className="inline">
                     <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
-                    <Button type="button" loading={reSendVerificationCode && (this.props.uiStore.inProgress || signUpLoading)} disabled={!ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
+                    <Button type="button" loading={reSendVerificationCode && (this.props.uiStore.inProgress || signUpLoading)} disabled={!ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.sendOtp()} />
                   </Button.Group>
                 )
               }
             </Form>
-            </Grid.Column>
+          </Grid.Column>
         </Grid>
       </NsModal>
-        );
-      }
-    }
+    );
+  }
+}
