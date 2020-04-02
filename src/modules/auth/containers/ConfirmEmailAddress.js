@@ -34,6 +34,7 @@ export default class ConfirmEmailAddress extends Component {
       this.props.history.push(this.props.refLink || '/login');
     }
     this.props.authStore.setUserCredentiansConfirmEmail();
+    this.sendOtpForMigratedUser();
   }
 
   componentDidMount() {
@@ -42,7 +43,7 @@ export default class ConfirmEmailAddress extends Component {
 
   componentDidUpdate() {
     this.props.authStore.setUserCredentiansConfirmEmail();
-    this.startPhoneVerification();
+    this.sendOtpForMigratedUser();
   }
 
   componentWillUnmount() {
@@ -50,33 +51,39 @@ export default class ConfirmEmailAddress extends Component {
     this.props.uiStore.clearErrors();
   }
 
-  startPhoneVerification = async () => {
+  sendOtpForMigratedUser = async () => {
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
       && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
       && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')
+      && isEmpty(this.props.uiStore.errors)
       && !this.props.identityStore.signUpLoading) {
-      await this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
+      await this.props.identityStore.sendOtp('EMAIL_CONFIGURATION', undefined, isMobile);
     }
   }
 
-  handleSubmitForm = (e) => {
+  handleSubmitForm = async (e) => {
     e.preventDefault();
     const { uiStore } = this.props;
     this.props.authStore.setProgress('confirm');
     uiStore.setProgress();
     if (this.props.refLink) {
-      this.props.authStore.verifyAndUpdateEmail().then(() => {
-        this.props.identityStore.setIsOptConfirmed(true);
+      const res = await this.props.identityStore.changeEmailRequest();
+      if (res) {
+        if (this.props.userStore.isInvestor) {
+          this.props.identityStore.setIsOptConfirmed(true);
+        } else {
+          this.props.history.push('/dashboard/account-settings');
+        }
         sessionStorage.removeItem('changedEmail');
-      })
-        .catch(() => { });
+      }
     } else if (this.props.authStore.SIGNUP_FRM.fields.email.value === ''
       && !this.props.userStore.currentUser) {
       this.props.history.push('/register-investor');
     } else {
       const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
       if (isMigratedUser) {
-        this.props.identityStore.confirmEmailAddress().then(() => {
+        const res = await this.props.identityStore.confirmEmailForMigratedUser();
+        if (res) {
           this.props.userDetailsStore.mergeUserData('email', { verified: moment().tz('America/Chicago').toISOString() });
           uiStore.setProgress(false);
           const { roles } = this.props.userStore.currentUser;
@@ -87,9 +94,10 @@ export default class ConfirmEmailAddress extends Component {
               : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
             this.props.history.replace(redirectUrl);
           }
-        });
+        }
       } else {
-        this.props.identityStore.verifyOTPWrapper().then(() => {
+        const res = await this.props.identityStore.verifyOtpEmail();
+        if (res) {
           authActions.register(isMobile)
             .then(() => {
               uiStore.setProgress(false);
@@ -112,7 +120,7 @@ export default class ConfirmEmailAddress extends Component {
               }
             })
             .catch(() => { });
-        });
+        }
       }
       sessionStorage.removeItem('changedEmail');
     }
@@ -136,17 +144,16 @@ export default class ConfirmEmailAddress extends Component {
   handleResendCode = async () => {
     this.props.authStore.setProgress('resend');
     if (this.props.refLink) {
-      this.props.authStore.requestEmailChange().then(() => {
-        // Helper.toast('Re-sent the verification code', 'success');
+      const res = await this.props.identityStore.sendOtp('EMAIL_CHANGE', isMobile);
+      if (res) {
         this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
         this.props.uiStore.clearErrors();
-      })
-        .catch(() => { });
+      }
     } else {
       if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
-        await this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
+        await this.props.identityStore.sendOtp('EMAIL_CONFIGURATION', undefined, isMobile);
       } else {
-        this.props.identityStore.requestOtpWrapper(isMobile);
+        await this.props.identityStore.sendOtpEmail(isMobile);
       }
       this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
       this.props.uiStore.clearErrors();
@@ -180,12 +187,12 @@ export default class ConfirmEmailAddress extends Component {
       this.props.history.push('/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
       return (
-      <SuccessScreen
-        successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Thank  you! Your email address has been confirmed.'}`}
-        handleContinue={this.handleContinue}
-        closeLink={this.props.refLink ? '/dashboard/account-settings' : '/'}
-      />
-);
+        <SuccessScreen
+          successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Thank  you! Your email address has been confirmed.'}`}
+          handleContinue={this.handleContinue}
+          closeLink={this.props.refLink ? '/dashboard/account-settings' : '/'}
+        />
+      );
     }
     return (
       <NsModal

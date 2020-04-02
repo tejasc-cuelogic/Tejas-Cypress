@@ -17,6 +17,7 @@ const termNote = {
     { title: 'Principal Paid', field: 'principalGrossAmount' },
     { title: 'Service Fees', field: 'feeTotalAmount' },
     { title: 'Net Payment Received', field: 'netTotalAmount' },
+    { title: 'Type', field: 'paymentType' },
     { title: 'Remaining Principal Due', field: 'remainingPrincipalDue', containsComma: true },
   ],
 };
@@ -27,6 +28,7 @@ const revShare = {
     { title: 'Payment Received', field: 'grossTotalAmount', className: 'positive-text' },
     { title: 'Service Fees', field: 'feeTotalAmount' },
     { title: 'Net Payment Received', field: 'netTotalAmount' },
+    { title: 'Type', field: 'paymentType' },
     { title: 'Remaining Amount Due', field: 'remainingAmountDue', containsComma: true },
   ],
 };
@@ -200,6 +202,7 @@ export default class Transactions extends Component {
                                     </Table.Cell>
                                     <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
                                     <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
+                                    <Table.Cell>{row.paymentType}</Table.Cell>
                                     <Table.Cell>
                                       {`$${row.remainingPrincipalDue}`}
                                     </Table.Cell>
@@ -209,6 +212,7 @@ export default class Transactions extends Component {
                                   <>
                                     <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
                                     <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
+                                    <Table.Cell>{row.paymentType}</Table.Cell>
                                     <Table.Cell>
                                       {`$${row.remainingAmountDue}`}
                                     </Table.Cell>
