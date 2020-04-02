@@ -12,7 +12,7 @@ import {
 import { INVEST_NOW_TOC, INVEST_NOW_PAGE, INVEST_NOW_TOC_TEMPLATE } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { offeringCreationStore, offeringsStore, uiStore, userDetailsStore } from '../../../index';
+import { offeringCreationStore, offeringsStore, uiStore, userDetailsStore, campaignStore } from '../../../index';
 import * as investNowTocDefaults from '../../../../constants/offering/InvestNowToc';
 import { offeringUpsert, adminLockOrUnlockOffering } from '../../../queries/offerings/manageOffering';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM } from '../../../../../constants/offering';
@@ -47,11 +47,13 @@ export class ManageOfferingStore extends DataModelStore {
 
   initLoad = [];
 
-  getInvestNowTocDefaults = () => {
+  getInvestNowTocDefaults = (isPublic = false) => {
     const { offer } = offeringsStore;
-    const regulation = get(offer, 'regulation');
-    const securities = get(offer, 'keyTerms.securities');
-    const equityClass = get(offer, 'keyTerms.equityClass');
+    const { campaign } = campaignStore;
+    const offerDetails = isPublic ? campaign : offer;
+    const regulation = isPublic ? get(offerDetails, 'keyTerms.regulation') : get(offerDetails, 'regulation');
+    const securities = get(offerDetails, 'keyTerms.securities');
+    const equityClass = get(offerDetails, 'keyTerms.equityClass');
     let nsDefaultData = [];
     if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY) {
       if (equityClass === CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM.LLC_MEMBERSHIP_UNITS) {
