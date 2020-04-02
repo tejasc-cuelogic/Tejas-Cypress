@@ -4,7 +4,6 @@ import { Grid, Card, Button, Statistic } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import AddWithdrawFund from './AddWithdrawFund';
 import FrozenAccountModal from '../../FrozenAccountModal';
-import TransferFundVerifyModal from './previewModel/TransferFundVerifyModal';
 import { PopUpModal } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -88,17 +87,6 @@ class AvailableCashTransfer extends Component {
           exact
           path={`${props.match.url}/:action`}
           render={params => <AddWithdrawFund refLink={props.match.url} {...params} {...props} />}
-        />
-        <Route
-          exact
-          path={`${this.props.match.url}/:action/verify`}
-          render={() => (
-            <TransferFundVerifyModal
-              refLink={this.props.refLink}
-              refLinkList={this.props.match.url}
-            />
-          )
-          }
         />
       </>
     );

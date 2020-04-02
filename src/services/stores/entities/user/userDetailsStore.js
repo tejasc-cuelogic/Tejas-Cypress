@@ -21,7 +21,7 @@ import {
   userListingStore,
   userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminUserHardDelete, adminUpdateUserStatus, adminSkipAddressOrPhoneValidationCheck, frozenAccountActivityDetected, adminFreezeAccount, adminFetchEmails } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, bankChangeRequestQuery, userDetailsQueryForBoxFolder, deleteProfile, adminUserHardDelete, adminUpdateUserStatus, adminSkipAddressOrPhoneValidationCheck, frozenAccountActivityDetected, adminFreezeAccount, adminFetchEmails } from '../../queries/users';
 import { updateUserProfileData, checkEmailExistsPresignup } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -155,7 +155,7 @@ export class UserDetailsStore {
       accDetails = filter(this.userDetails.roles, account => account.name !== 'investor'
         && account.details
         && (account.details.accountStatus === 'FULL'
-        || accountStore.isAccFrozen(account.details.accountStatus)));
+          || accountStore.isAccFrozen(account.details.accountStatus)));
     }
     return accDetails;
   }
@@ -349,8 +349,25 @@ export class UserDetailsStore {
     });
   })
 
+  @action
+  bankChangeRequestQuery = accountType => new Promise((res) => {
+    graphql({
+      client,
+      query: bankChangeRequestQuery,
+      fetchPolicy: 'network-only',
+      onFetch: (result) => {
+        if (result) {
+          for (let index = 0; index < result.user.roles.length; index++) {
+            if (result.user.roles[index].details !== null) {
+              this.currentUser.data.user.roles[index].linkedBank = result.user.roles[index].details.linkedBank;
+            }
+          }
+          res(this.currentUser.data.user.roles.find(r => r.name === accountType));
+        }
+      },
+    });
+  });
 
-  // Requested / Confirmed & Not expired
   @computed
   get isInvestorAccreditated() {
     let entityAccreditation = null;
@@ -633,7 +650,7 @@ export class UserDetailsStore {
 
   @computed get isCipExpirationInProgress() {
     return get(this.userDetails, 'cip.expiration')
-    && this.signupStatus.investorProfileCompleted && !this.isUserVerified && !this.isLegalDocsPresent && this.signupStatus.partialAccounts.length;
+      && this.signupStatus.investorProfileCompleted && !this.isUserVerified && !this.isLegalDocsPresent && this.signupStatus.partialAccounts.length;
   }
 
   @computed
@@ -936,9 +953,9 @@ export class UserDetailsStore {
         },
         onFetch: (data) => {
           if (!this.checkEmail.loading && get(data, 'checkEmailExistsPresignup.isEmailExits')) {
-              this.USER_BASIC.fields.address.error = 'Email already exists, please use different email.';
-              this.USER_BASIC.meta.isValid = false;
-              res(true);
+            this.USER_BASIC.fields.address.error = 'Email already exists, please use different email.';
+            this.USER_BASIC.meta.isValid = false;
+            res(true);
             uiStore.setProgress(false);
           } else if (!this.checkEmail.loading && !get(data, 'checkEmailExistsPresignup.isEmailExits')) {
             this.USER_BASIC.fields.address.error = '';
