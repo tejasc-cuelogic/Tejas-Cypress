@@ -201,7 +201,7 @@ class offerDetails extends Component {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, campaign, navCountData, modifySubNavs, campaignStatus,
+      details, campaign, modifySubNavs, campaignStatus,
     } = campaignStore;
     const { isWatching } = this.props.watchListStore;
     let navItems = [];
@@ -256,7 +256,7 @@ class offerDetails extends Component {
               <MobileDropDownNav
                 inverted
                 refMatch={match}
-                navCountData={navCountData}
+                // navCountData={navCountData}
                 navItems={navItems}
                 location={location}
                 isBonusReward={isBonusReward}
