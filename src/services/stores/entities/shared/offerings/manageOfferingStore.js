@@ -77,7 +77,7 @@ export class ManageOfferingStore extends DataModelStore {
   get getAgreementTocList() {
     const { offer } = offeringsStore;
     const regulation = get(offer, 'regulation');
-    const selectedTemplate = this.INVEST_NOW_TOC_TEMPLATE_FRM.fields.template.value;
+    const selectedTemplate = get(offer, 'template');
     const nsDefaultData = this.getInvestNowTocDefaults();
     let investNow = [];
     if (selectedTemplate === 2 && get(offer, 'investNow.page[0]')) {
@@ -343,12 +343,10 @@ export class ManageOfferingStore extends DataModelStore {
       data = omitDeep(data, ['__typename', 'fileHandle']);
     }
     if (keyName) {
-      if (keyName === 'investNow' && forms === 'INVEST_NOW_TOC_TEMPLATE_FRM') {
+      if (keyName === 'investNow' && tocAction) {
         const { offer } = offeringsStore;
         if (data.template === 2 && (!get(offer, 'investNow.page') || tocAction === 'RESET')) {
           offeringDetails[keyName] = { ...data, page: this.getInvestNowTocDefaults() };
-        } else {
-          offeringDetails[keyName] = data;
         }
       } else {
         offeringDetails[keyName] = data;
