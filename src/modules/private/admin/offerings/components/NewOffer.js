@@ -63,7 +63,7 @@ export default class NewOffer extends Component {
               />
             ))}
             <div className="center-align">
-              <Button primary content="Add new offering" disabled={!NEW_OFFER_FRM.meta.isValid} />
+              <Button primary content="Create Offering" disabled={!NEW_OFFER_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>

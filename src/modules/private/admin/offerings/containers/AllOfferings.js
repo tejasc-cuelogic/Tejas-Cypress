@@ -75,7 +75,7 @@ export default class Offerings extends Component {
                         {stage === 'creation'
                           && <Button color="green" as={Link} to={`${match.url}/new`} loading={inProgressArray.includes('upsert')} content="Create New Offering" />
                         }
-                        {isDev
+                        {isDev && stage !== 'creation'
                           && <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
                         }
                       </Button.Group>
