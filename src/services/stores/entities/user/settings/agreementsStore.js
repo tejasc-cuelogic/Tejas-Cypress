@@ -275,7 +275,7 @@ export class AgreementsStore {
     const { campaignStatus } = campaignStore;
     const { currentActiveAccount } = userDetailsStore;
     const currentSelectedAccount = ['individual', 'ira'].includes(currentActiveAccount) ? 'INDIVIDUAL' : 'ENTITY';
-    let investNowTocs = campaignStatus.investNowToc;
+    let investNowTocs = campaignStatus.isAgreementTemplate ? campaignStatus.investNowToc : manageOfferingStore.getInvestNowTocDefaults(true);
     const checkAccountValidation = acc => (!acc || acc === 'ALL' || acc === currentSelectedAccount);
     const checkRegulationValidation = reg => (!reg || reg === currentRegulation);
     investNowTocs = filter(investNowTocs, i => (checkRegulationValidation(i.regulation)));
