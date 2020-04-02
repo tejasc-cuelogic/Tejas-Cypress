@@ -444,20 +444,34 @@ export class IdentityStore {
       .catch(() => { });
   }
 
+  sendOtpAttributes = (type) => {
+    let to;
+    let method;
+    const { user } = userDetailsStore.currentUser.data;
+    const { mfaMethod, phoneNumber } = this.ID_VERIFICATION_FRM.fields;
+    const phone = phoneNumber.value || get(user, 'phone.number');
+    const { value: multiFactorMfaValue } = multiFactorAuthStore.MFA_MODE_TYPE_META.fields.mfaModeTypes;
+    const emailAddress = authStore.CONFIRM_FRM.fields.email.value || get(user, 'email.address');
+    if (type.startsWith('EMAIL') || [mfaMethod.value, multiFactorMfaValue].includes('EMAIL')) {
+      to = emailAddress.toLowerCase();
+      method = 'EMAIL';
+    } else if (type === 'BANK_CHANGE') {
+      to = phone;
+      method = multiFactorMfaValue;
+    } else {
+      to = phone;
+      method = mfaMethod.value === '' ? 'TEXT' : mfaMethod.value;
+    }
+    return { to, method, emailAddress, phone };
+  }
+
   @action
   sendOtp = async (type, isMobile = false) => {
     try {
-      const { user } = userDetailsStore.currentUser.data;
-      const { mfaMethod, phoneNumber } = this.ID_VERIFICATION_FRM.fields;
-      const phone = phoneNumber.value || get(user, 'phone.number');
-      const emailAddress = authStore.CONFIRM_FRM.fields.email.value || get(user, 'email.address');
-      const to = type.startsWith('EMAIL') || mfaMethod.value === 'EMAIL' ? emailAddress.toLowerCase() : phone;
-      let method = type.startsWith('EMAIL') ? 'EMAIL' : mfaMethod.value === '' ? 'TEXT' : mfaMethod.value;
-      if (type === 'BANK_CHANGE') {
-        method = multiFactorAuthStore.MFA_MODE_TYPE_META.fields.mfaModeTypes.value;
-      }
+      const { method, to, emailAddress, phone } = this.sendOtpAttributes(type);
       uiStore.clearErrors();
       uiStore.setProgress();
+      this.setReSendVerificationCode(true);
       this.setFieldValue('signUpLoading', true);
       const res = await client
         .mutate({
@@ -481,10 +495,12 @@ export class IdentityStore {
       }
       this.setFieldValue('signUpLoading', false);
       uiStore.setProgress(false);
+      this.setReSendVerificationCode(false);
       return true;
     } catch (err) {
       this.setFieldValue('signUpLoading', false);
       uiStore.setProgress(false);
+      this.setReSendVerificationCode(false);
       uiStore.setErrors(toJS(DataFormatter.getSimpleErr(err)));
       return false;
     }

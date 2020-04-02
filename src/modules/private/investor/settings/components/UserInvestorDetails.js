@@ -90,7 +90,7 @@ export default class UserInvestorDetails extends Component {
             <dt className="neutral-text">Employment status</dt>
             <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
               <FormDropDown
-                readOnly={this.state.displayOnly}
+                displayMode={this.state.displayOnly}
                 fielddata={INVESTOR_PROFILE_FULL.fields.status}
                 compact
                 selection
@@ -140,7 +140,7 @@ export default class UserInvestorDetails extends Component {
             <dt className="neutral-text">Brokerage employment</dt>
             <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
               <FormDropDown
-                readOnly={this.state.displayOnly}
+                displayMode={this.state.displayOnly}
                 fielddata={INVESTOR_PROFILE_FULL.fields.brokerageEmployment}
                 compact
                 selection
@@ -177,7 +177,7 @@ export default class UserInvestorDetails extends Component {
             <dt className="neutral-text">Public Company Relations</dt>
             <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
               <FormDropDown
-                readOnly={this.state.displayOnly}
+                displayMode={this.state.displayOnly}
                 fielddata={INVESTOR_PROFILE_FULL.fields.publicCompanyRel}
                 compact
                 selection
@@ -214,7 +214,7 @@ export default class UserInvestorDetails extends Component {
             <dt className="neutral-text">Financial status</dt>
             <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
               <FormDropDown
-                readOnly={this.state.displayOnly}
+                displayMode={this.state.displayOnly}
                 fielddata={INVESTOR_PROFILE_FULL.fields.taxFilingAs}
                 selection
                 compact
@@ -262,7 +262,7 @@ export default class UserInvestorDetails extends Component {
             <dt className="neutral-text">Investment experience</dt>
             <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
               <FormDropDown
-                readOnly={this.state.displayOnly}
+                displayMode={this.state.displayOnly}
                 fielddata={INVESTOR_PROFILE_FULL.fields.experienceLevel}
                 compact
                 selection
