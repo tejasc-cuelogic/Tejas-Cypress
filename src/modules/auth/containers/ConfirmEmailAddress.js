@@ -134,18 +134,13 @@ class ConfirmEmailAddress extends Component {
     const { authStore, uiStore, identityStore, userDetailsStore, refLink } = this.props;
     authStore.setProgress('resend');
     if (refLink) {
-      const res = await identityStore.sendOtp('EMAIL_CHANGE', isMobile);
-      if (res) {
-        authStore.resetForm('CONFIRM_FRM', ['code']);
-        uiStore.clearErrors();
-      }
+      await identityStore.sendOtp('EMAIL_CHANGE', isMobile);
     } else {
       if (userDetailsStore.signupStatus.isMigratedUser) {
         await identityStore.sendOtp('EMAIL_CONFIGURATION', undefined, isMobile);
       } else {
         await identityStore.sendOtpEmail(isMobile);
       }
-      authStore.resetForm('CONFIRM_FRM', ['code']);
       uiStore.clearErrors();
     }
   }
@@ -208,7 +203,7 @@ class ConfirmEmailAddress extends Component {
             <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
               Please confirm the 6-digit verification code sent to your email
           </p>
-            {smartElement.Input('email')}
+            {smartElement.Input('email', { className: `${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only no-border`, disabled: true })}
             {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value))
               && <Link to={changeEmailAddressLink} color="green">Change email address</Link>
             }
