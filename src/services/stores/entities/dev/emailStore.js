@@ -92,7 +92,7 @@ export class EmailStore extends DataModelStore {
       this.setFieldValue('listEmailTypes', listEmailType);
       this.setFieldValue('listEmailIdentifiers', listEmailIdentifiers);
     } catch (error) {
-      console.log(error);
+      window.logger(error);
       Helper.toast('Something went wrong, please try again later.', 'error');
     }
   }

@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { MultiStep } from '../../../../../../../helper';
 import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
+import { ThankYouStep } from '../../../components/confirmModal';
 
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'individualAccountStore', 'userStore', 'userDetailsStore')
 @observer
@@ -13,13 +14,14 @@ export default class AccountCreation extends React.Component {
     if (!this.props.individualAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('individual');
-      this.props.accountStore.setAccTypeChange(0);
     }
+    this.props.accountStore.setAccTypeChange(0);
   }
 
   checkIfAccountIsAlreadyPresent = (accountType) => {
     const { checkIfAccountIsAlreadyPresent, getInvestorAccountsRoute } = this.props.userDetailsStore;
-    if (checkIfAccountIsAlreadyPresent(accountType)) {
+    const { isThankYouStep } = this.props.individualAccountStore;
+    if (checkIfAccountIsAlreadyPresent(accountType) && !isThankYouStep) {
       const route = getInvestorAccountsRoute('individual');
       this.props.history.push(`/dashboard/account-details/${route}/portfolio`);
     }
@@ -80,6 +82,7 @@ export default class AccountCreation extends React.Component {
         isDirty: isPlaidDirty,
         stepToBeRendered: 1,
         disableNextButton: !linkbankSummary,
+        backUrl: '/dashboard/setup/account-creation',
         validForm: isAccountPresent,
       },
       {
@@ -102,11 +105,15 @@ export default class AccountCreation extends React.Component {
         disableNextButton: true,
         isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 2 ? 'error' : '',
       },
+      {
+        ...ThankYouStep,
+        stepToBeRendered: 3,
+      },
     ];
     return (
       <>
       <div className="step-progress">
-        <MultiStep isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} loaderMsg={createAccountMessage} setLinkbankSummary={setLinkBankSummary} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} loaderMsg={createAccountMessage} setLinkbankSummary={setLinkBankSummary} page setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
       </>
     );

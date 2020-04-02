@@ -57,7 +57,7 @@ class App extends Component {
     window.addEventListener('resize', this.handleResize);
     this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
     const urlParameter = queryString.parse(this.props.location.search);
-    if (urlParameter) {
+    if (!isEmpty(urlParameter)) {
       let tags = DataFormatter.createEligibleTagsObj(urlParameter);
       if (!isEmpty(tags)) {
         const existingTags = JSON.parse(window.localStorage.getItem('tags'));
@@ -81,8 +81,8 @@ class App extends Component {
   componentDidMount() {
     const { location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
-    if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue.
-      history.push(location.pathname.replace(/\/+$/, ''));
+    if (location.pathname.endsWith('/') && !location.hash) { // resolved trailing slash issue.
+      history.push(location.pathname.replace(/\/+$/, location.search));
     }
     this.checkForPasswordProtect();
     authActions.verifySession()
@@ -96,7 +96,7 @@ class App extends Component {
         }
       })
       .catch((err) => {
-        console.log('Catch error in app.js verifySession. ', err);
+        window.logger('Catch error in app.js verifySession. ', err);
       }).finally(() => {
         this.setState({ authChecked: true });
       });
@@ -124,7 +124,7 @@ class App extends Component {
       }
       this.props.authStore.setUserLoggedIn(false);
       localStorage.removeItem('lastActiveTime');
-      console.log('error in app.js - getUserSession', err);
+      window.logger('error in app.js - getUserSession', err);
     });
     if (this.props.location !== prevProps.location) {
       this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
@@ -258,6 +258,8 @@ class App extends Component {
 
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
 
+  playTopBanner = () => this.props.uiStore.toggleTopBanner();
+
   render() {
     const { location, uiStore, userStore, authStore } = this.props;
     const { authChecked } = this.state;
@@ -302,8 +304,7 @@ class App extends Component {
             <Layout>
               <Switch>
                 <Redirect from="/app/*" to="/dashboard/*" />
-                <Route exact path="/dashboard/*" component={Private} />
-                <Route exact path="/dashboard" component={Private} />
+                <Route exact path={['/dashboard', '/dashboard/*']} component={Private} />
                 <Route path="/" component={Public} />
               </Switch>
             </Layout>
@@ -313,6 +314,7 @@ class App extends Component {
         {uiStore.devBanner
           && <DevBanner toggle={this.playDevBanner} />
         }
+        <div className="custom-modal-wrapper" />
       </div>
     );
   }

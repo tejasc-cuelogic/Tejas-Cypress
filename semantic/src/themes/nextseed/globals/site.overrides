@@ -179,6 +179,9 @@ h6{
 .pt-0{
 	padding-top:0 !important;
 }
+.pt-half{
+	padding-top: @7px !important;
+}
 .pt-10{
 	padding-top:10px !important;
 }
@@ -193,6 +196,9 @@ h6{
 }
 .pb-0{
 	padding-bottom:0 !important;
+}
+.pb-half{
+	padding-bottom: @7px !important;
 }
 .pb-20{
 	padding-bottom: @20px !important;
@@ -248,7 +254,7 @@ h6{
 .note{
 	color:@neutral-middark !important;
 	font-size: @12px;
-	line-height: 18px;
+	line-height: 18px !important;
 }
 .justify-text {
 	text-align: justify;
@@ -330,6 +336,9 @@ h6{
 .no-wrap{
 	word-break: normal !important;
 }
+.no-flex-wrap{
+	flex-wrap: nowrap !important;
+}
 .full-width{
 	width: 100% !important;
 }
@@ -342,7 +351,7 @@ h6{
 .mobile-bottom-notes{
 	position: absolute;
 	width: calc(100% - 30px);
-    top: 90%;
+    top: 79%;
 	left: 50%;
     transform: translate(-50%, 0);
 	padding-bottom: @30px;
@@ -352,6 +361,12 @@ h6{
 }
 .overflow-visible{
 	overflow: visible !important;
+}
+.text-ellipsis{
+	white-space: nowrap; 
+	width: 100%; 
+	overflow: hidden;
+	text-overflow: ellipsis; 
 }
 //	normal link styles
 a:not(.item), a:not(.ui.button){
@@ -3317,3 +3332,42 @@ h3.ui.header.error-2{
 	}
 }
 /* Message Modal End */
+
+.toc-header{
+    display: flex;
+    flex-direction: row;
+	justify-content: space-between;
+	margin: @24px 0;
+	clear: both;
+}
+
+/* Sticky message */
+.sticky-message{
+	font-size: @16px;
+	min-height: @38px;
+	color: @white;
+	text-align: center;
+	background: @neutral-middark;
+	padding: @5px @20px;
+	position: absolute;
+	top: 72px;
+	left: 0;
+	right: 0;
+	z-index: 3;
+	@media only screen and (max-width : @largestMobileScreen){
+		top: 58px;
+		text-align: left;
+		padding-right: @30px;
+	}
+	.ui.button.close-button{
+		padding: 0 @5px;
+		position: absolute;
+		color: @white;
+		background: @neutral-middark;
+		right: @10px;
+		top: @10px;
+		height: @18px;
+		min-height: auto;
+		line-height: .75;
+	}
+}

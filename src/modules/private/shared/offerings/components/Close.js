@@ -17,14 +17,14 @@ import ClosingBinder from './close/ClosingBinder';
 import ClosureProcessStatus from './close/ClosureProcessStatus';
 import ExportEnvelopes from './close/ExportEnvelopes';
 import Default from './close/Default';
-import { OFFERING_CLOSE_SERVICE_OPTIONS, OFFERING_CLOSE_COUNCURRENCY_OPTIONS } from '../../../../../services/constants/admin/offerings';
+import { OFFERING_CLOSE_COUNCURRENCY_OPTIONS } from '../../../../../services/constants/admin/offerings';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
-  ENUM2: { label: 'Soft Close Notification', keyToEnable: false, ref: 2, enum: 'SOFT_CLOSE_NOTIFICATION', statusKey: 'softCloseNotification' },
-  ENUM3: { label: 'Confirm Balances', keyToEnable: 'softCloseNotification.status', ref: 2, enum: 'CHECK_BALANCE', statusKey: 'checkBalance' },
-  ENUM4: { label: 'Issue Credits', keyToEnable: 'checkBalance.status', ref: 2, enum: 'ISSUE_CREDITS', statusKey: 'issueCredits' },
-  ENUM5: { label: 'Fund Escrow', keyToEnable: 'issueCredits.status', ref: 2, enum: 'FUND_ESCROW', statusKey: 'fundEscrow' },
+  ENUM2: { label: 'Soft Close Notification', keyToEnable: false, keyToEnableCond2: false, ref: 2, enum: 'SOFT_CLOSE_NOTIFICATION', statusKey: 'softCloseNotification' },
+  ENUM3: { label: 'Confirm Balances', keyToEnable: false, keyToEnableCond2: false, ref: 2, enum: 'CHECK_BALANCE', statusKey: 'checkBalance' },
+  ENUM4: { label: 'Issue Credits', keyToEnable: 'softCloseNotification.status', keyToEnableCond2: 'checkBalance.status', ref: 2, enum: 'ISSUE_CREDITS', statusKey: 'issueCredits' },
+  ENUM5: { label: 'Fund Escrow', keyToEnable: 'issueCredits.status', keyToEnableCond2: false, ref: 2, enum: 'FUND_ESCROW', statusKey: 'fundEscrow' },
   ENUM6: {
     label: 'Verify Escrow', keyToEnable: 'fundEscrow.status', ref: 3, enum: 'VERIFY_SECURITY_TRANSACTION', statusKey: 'verifySecurityTransaction',
   },
@@ -199,7 +199,7 @@ export default class Close extends Component {
           this.handleCloseModal();
         }
       }).catch((e) => {
-        console.log(e);
+        window.logger(e);
         this.setState({ inProgress: false });
       });
   };
@@ -255,16 +255,17 @@ export default class Close extends Component {
     const dynamicFields = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? ['interestRate'] : ['revSharePercentage', 'multiple'];
     const modalHeader = find(closingActions, a => a.enum === this.state.action) ? find(closingActions, a => a.enum === this.state.action).label : '';
     const showDefaultOfferingCTA = !['CREATION', 'COMPLETE', 'LIVE'].includes(get(offer, 'stage'));
+    const trueVal = true;
     const ServiceDropDown = props => (
       <>
-        <FormDropDown
+        {/* <FormDropDown
           fielddata={props.form.fields.service}
           selection
           value={props.form.fields.service.value}
           name="service"
           options={OFFERING_CLOSE_SERVICE_OPTIONS}
           onChange={(e, result) => formChange(e, result, props.formName)}
-        />
+        /> */}
         <FormDropDown
           fielddata={props.form.fields.concurrency}
           selection
@@ -305,7 +306,7 @@ export default class Close extends Component {
             </>
           </p>
           <Divider section />
-          {((hoursToClose <= 0 && !offerStatus.isFailed) || true)
+          {((hoursToClose <= 0 && !offerStatus.isFailed) || trueVal)
             ? (
               <>
                 <Step.Group className="campaign-close">
@@ -422,7 +423,7 @@ export default class Close extends Component {
                             loading={inProgress === fA.enum}
                             onClick={() => this.closeAction(fA.enum, 2, false, fA.label)}
                             primary
-                            disabled={fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)}
+                            disabled={(fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)) || (fA.keyToEnableCond2 !== false && !(fA.keyToEnableCond2 ? get(closureProcess, fA.keyToEnableCond2) === 'COMPLETE' : false))}
                           >{fA.label}
                           </Button>
                         ))}

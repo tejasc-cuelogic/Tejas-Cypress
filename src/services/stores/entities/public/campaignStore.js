@@ -1,8 +1,10 @@
+import React from 'react';
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce, isArray } from 'lodash';
+import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce, isArray, find } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -10,7 +12,7 @@ import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, get
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
-import { userDetailsStore, watchListStore, userStore, authStore, offeringCreationStore, portfolioStore } from '../../index';
+import { userDetailsStore, watchListStore, userStore, navStore, authStore, offeringCreationStore, portfolioStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
@@ -74,6 +76,12 @@ export class CampaignStore {
     closingBinder: { selectedDoc: null, accordionActive: true },
   };
 
+  @observable isPostedNewComment = false;
+
+  @observable postNavCount = { updates: 0, comments: 0 };
+
+  @observable postedCommentCount = 0;
+
   @action
   setFieldValue = (field, val, path = false) => {
     if (path) {
@@ -111,7 +119,7 @@ export class CampaignStore {
           }
         },
         onError: (err) => {
-          console.log(err);
+          window.logger(err);
           reject();
         },
       });
@@ -171,6 +179,7 @@ export class CampaignStore {
       campaignData.data.getOfferingDetailsBySlug.updates = get(newData, 'updates');
       campaignData.data.getOfferingDetailsBySlug.comments = get(newData, 'comments');
       this.details = campaignData;
+      this.navCountData();
     }
   }
 
@@ -181,6 +190,24 @@ export class CampaignStore {
       campaignData.data.getOfferingDetailsBySlug.comments = get(newData, 'comments');
       this.details = campaignData;
     }
+  }
+
+  @action
+  updateCommentThread = (commentResponse, commentID) => {
+    const comments = get(this.campaign, 'comments');
+    if (commentID) {
+      const currentComment = find(comments, o => o.id === commentID);
+      const threadArray = currentComment.threadComments;
+      threadArray.push(commentResponse);
+    } else {
+      // const campaignData = toJS(this.details);
+      // campaignData.data.getOfferingDetailsBySlug.comments.unshift(commentResponse);
+      // this.details = campaignData;
+      comments.unshift(commentResponse);
+    }
+    this.setFieldValue('isPostedNewComment', true);
+    // const commentCount = this.navCountData;
+    this.navCountData();
   }
 
   @action
@@ -282,7 +309,7 @@ export class CampaignStore {
   loadMoreRecord = (type) => {
     const offeringsList = type === 'completedToDisplay' ? this.completedList : type === 'activeToDisplay' ? this.orderedActiveList : this.creationList;
     if (offeringsList.length > this[type]) {
-      this[type] = this[type] + (type === 'creationToDisplay' ? 6 : this.RECORDS_TO_DISPLAY);
+      this[type] += (type === 'creationToDisplay' ? 6 : this.RECORDS_TO_DISPLAY);
     }
   }
 
@@ -300,6 +327,62 @@ export class CampaignStore {
       return toJS(this.details.data.getOfferingById);
     }
     return {};
+  }
+
+  @computed get campaignCommentsMeta() {
+    const commentMeta = {
+      isValid: false,
+      content: null,
+      action: null,
+    };
+
+    const { campaign, campaignStatus } = this;
+    const { isInvestorAccreditated, signupStatus } = userDetailsStore;
+    const { activeAccounts, frozenAccounts } = signupStatus;
+    const { stepInRoute } = navStore;
+
+    const loggedInAsInvestor = authStore.isUserLoggedIn && userStore.currentUser.roles.includes('investor');
+    const passedProcessingDate = get(campaignStatus, 'diffForProcessing.value') <= 0;
+    const validCampaignStage = ['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(get(campaign, 'stage'));
+    const offeringRegulation = get(campaign, 'keyTerms.regulation');
+    const isOfferingRegD = ['BD_506C', 'BD_506B'].includes(offeringRegulation);
+
+    if (!loggedInAsInvestor || !authStore.isUserLoggedIn) {
+      // User is Not logged in, require them to authenticate
+      if (isOfferingRegD) {
+        commentMeta.content = (<p>In order to leave a comment, please {get(stepInRoute, 'word')} and verify your status as an <br />accredited investor.</p>);
+      } else {
+        commentMeta.content = (<p>In order to leave comments, please {get(stepInRoute, 'word')}.</p>);
+      }
+      commentMeta.action = handleLogin => (<Link onClick={e => handleLogin(e, true)} to="/" className="ui button primary">{get(stepInRoute, 'title')}</Link>);
+    } else if (activeAccounts.length === 0) {
+      // TODO: need to add additional validation in, CAN post if USER !== FULL || CIP !== PASS
+      // User does not have an active account, have them finish signup
+      if (isOfferingRegD && !isInvestorAccreditated.status) {
+        commentMeta.content = (<p>In order to leave a comment, please complete your account setup and verify your status as an accredited investor.</p>);
+      } else if (!frozenAccounts.length) {
+        commentMeta.content = (<p>In order to leave a comment, please complete your account setup.</p>);
+      }
+      if (!frozenAccounts.length) {
+        commentMeta.action = () => (<Link to="/dashboard/setup" className="ui button primary">Complete Account Setup</Link>);
+      }
+    } else if (activeAccounts.length && isOfferingRegD && !isInvestorAccreditated.status) {
+      commentMeta.content = (<p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>);
+      if (isInvestorAccreditated.requestedStatus) {
+        commentMeta.content = (
+          <p>In order to leave a comment, we must confirm your status as an accredited investor. If you have any questions about your
+          approval status, please contact <a href="mailto: support@nextseed.com">support@nextseed.com</a>.</p>
+        );
+      }
+      commentMeta.action = () => (!isInvestorAccreditated.requestedStatus ? (
+        <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
+      ) : true);
+    } else if (!validCampaignStage || frozenAccounts.length || passedProcessingDate) {
+      commentMeta.isValid = false;
+    } else {
+      commentMeta.isValid = true;
+    }
+    return commentMeta;
   }
 
   @computed get campaignStatus() {
@@ -364,9 +447,11 @@ export class CampaignStore {
     campaignStatus.isSafe = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE;
     campaignStatus.isConvertibleNotes = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.CONVERTIBLE_NOTES;
     campaignStatus.isEquity = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY;
-    campaignStatus.isRealEstate = (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE || (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(campaign, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
-    campaignStatus.isPreferredEquity = (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C || (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(campaign, 'keyTerms.equityClass') === 'PREFERRED' || (this.inInvestmentFlow && ['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(campaign, 'keyTerms.equityClass'))))));
+    campaignStatus.isRealEstate = ((this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(campaign, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
+    campaignStatus.isPreferredEquity = ((this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(campaign, 'keyTerms.equityClass') === 'PREFERRED' || (this.inInvestmentFlow && ['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(campaign, 'keyTerms.equityClass'))))));
     campaignStatus.doneComputing = (get(this.details, 'data.getOfferingDetailsBySlug') && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
+    campaignStatus.isAgreementTemplate = (get(campaign, 'investNow.template') && get(campaign, 'investNow.template') === 2);
+    campaignStatus.investNowToc = get(campaign, 'investNow.page');
     return campaignStatus;
   }
 
@@ -495,12 +580,35 @@ export class CampaignStore {
     });
   });
 
-  @computed get navCountData() {
-    const res = { updates: 0, comments: 0 };
+  // @computed get navCountData() {
+  //   const res = { updates: 0, comments: 0 };
+  //   let sum = 0;
+  //   if (this.campaign) {
+  //     const { updates, comments } = this.campaign;
+  //     res.updates = updates && updates.length ? updates.length : 0;
+  //     if (comments) {
+  //       comments.map((c) => {
+  //         if (c.scope === 'PUBLIC'
+  //           && ((['admin', 'investor'].includes(get(c, 'createdUserInfo.roles[0].name')))
+  //             || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
+  //           const cnt = reduce(get(c, 'threadComments'), (tcSum, tc) => (tc.scope === 'PUBLIC' && ((['admin', 'investor'].includes(get(tc, 'createdUserInfo.roles[0].name'))) || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
+  //           sum = sum + 1 + (cnt || 0);
+  //         }
+  //         return null;
+  //       });
+  //     }
+  //   }
+  //   res.comments = sum;
+  //   return res;
+  // }
+
+  @action
+  navCountData = () => {
     let sum = 0;
     if (this.campaign) {
       const { updates, comments } = this.campaign;
-      res.updates = updates && updates.length ? updates.length : 0;
+      const updatesCnt = updates && updates.length ? updates.length : 0;
+      this.setFieldValue('postNavCount', updatesCnt, 'updates');
       if (comments) {
         comments.map((c) => {
           if (c.scope === 'PUBLIC'
@@ -513,8 +621,9 @@ export class CampaignStore {
         });
       }
     }
-    res.comments = sum;
-    return res;
+    const postedCommentCount = get(this.campaign, 'comments') || [];
+    this.setFieldValue('postNavCount', sum, 'comments');
+    this.setFieldValue('postedCommentCount', postedCommentCount.length);
   }
 
   @computed get offerStructure() {
@@ -561,7 +670,7 @@ export class CampaignStore {
       const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506') && get(offeringKeyTermDetails, 'maxOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'maxOfferingAmount506') : get(offeringKeyTermDetails, 'maxOfferingAmount506C') ? get(offeringKeyTermDetails, 'maxOfferingAmount506C') : '0.00';
       const regulation = get(offeringKeyTermDetails, 'regulation');
       const securities = get(offeringKeyTermDetails, 'securities');
-      const isRealEstate = (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE || (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(offeringKeyTermDetails, 'equityClass') === 'LLC_MEMBERSHIP_UNITS'));
+      const isRealEstate = (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(offeringKeyTermDetails, 'equityClass') === 'LLC_MEMBERSHIP_UNITS');
       const minimumOfferingAmount = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
       const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
       const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;

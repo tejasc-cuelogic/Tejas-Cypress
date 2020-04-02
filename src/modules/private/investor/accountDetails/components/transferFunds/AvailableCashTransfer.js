@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
-import { Grid, Card, Button, Statistic, Icon, Popup } from 'semantic-ui-react';
+import { Grid, Card, Button, Statistic } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import AddWithdrawFund from './AddWithdrawFund';
 import FrozenAccountModal from '../../FrozenAccountModal';
-import TransferFundVerifyModal from './previewModel/TransferFundVerifyModal';
+import { PopUpModal } from '../../../../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 // const AvailableCashTransfer = props => (
 @withRouter
@@ -51,11 +53,12 @@ class AvailableCashTransfer extends Component {
             <Grid>
               <Grid.Column mobile={16} tablet={6} computer={6}>
                 <Statistic size="tiny">
-                  <Statistic.Label>Available cash
-                    <Popup
-                      trigger={<Icon className="ns-help-circle" />}
+                  <Statistic.Label>
+                    <PopUpModal
+                      customTrigger={<span className="popup-label">Available cash</span>}
                       content="Available cash includes funds that are immediately available for withdrawal. This excludes pending incoming deposits, pending investments, and investment credits."
                       position="top center"
+                      showOnlyPopup={!isMobile}
                       wide
                     />
                   </Statistic.Label>
@@ -84,17 +87,6 @@ class AvailableCashTransfer extends Component {
           exact
           path={`${props.match.url}/:action`}
           render={params => <AddWithdrawFund refLink={props.match.url} {...params} {...props} />}
-        />
-        <Route
-          exact
-          path={`${this.props.match.url}/:action/verify`}
-          render={() => (
-            <TransferFundVerifyModal
-              refLink={this.props.refLink}
-              refLinkList={this.props.match.url}
-            />
-          )
-          }
         />
       </>
     );

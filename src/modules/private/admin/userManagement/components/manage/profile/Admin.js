@@ -44,7 +44,7 @@ export default class Admin extends Component {
     return (
       <Form>
         <Header as="h4">
-          User{"'"}s profile data
+          User{'\''}s profile data
         </Header>
         <Header as="h6">
           Personal info

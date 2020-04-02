@@ -94,7 +94,7 @@ export const US_STATES = [
   { key: '1V', value: '1V', text: 'NORTHERN MARIANA ISLANDS' },
 ];
 
-export const US_STATES_FOR_INVESTOR = US_STATES.map(s => ({ ...s, ...{ value: Helper.caseify(s.text) } }));
+export const US_STATES_FOR_INVESTOR = US_STATES.map(s => ({ ...s, ...{ value: Helper.caseify(s.text), text: Helper.caseify(s.text) } }));
 
 export const FILE_UPLOAD_STEPS = {
   photoId: 'PROFILE_CIP_LICENSE',
@@ -135,6 +135,14 @@ export const IND_LINK_BANK_MANUALLY = {
     label: 'Bank Account Number',
     // tooltip: 'Put your 4 to 17 digit bank account number',
     maxLength: 17,
+  },
+  bankName: {
+    key: 'bankName',
+    value: '',
+    error: undefined,
+    placeHolder: 'Enter your bank name',
+    rule: 'required',
+    label: 'Bank Name',
   },
   accountType: {
     value: '',
@@ -458,7 +466,7 @@ export const ACC_TYPE = {
     values: [
       {
         label: 'Individual Account',
-        labelDescription: 'Get started with a personal investment account',
+        labelDescription: <>Get started with a personal investment account</>,
         value: 0,
         description: `Open a NextSeed investment account to begin investing in local businesses.
         An initial deposit can be quickly and securely completed by linking your checking account.
@@ -470,7 +478,7 @@ export const ACC_TYPE = {
       },
       {
         label: 'Self-Directed IRA',
-        labelDescription: 'Open a traditional or Roth IRA (setup & annual fees on us)',
+        labelDescription: <>Open a traditional or Roth IRA (setup & annual fees on us)</>,
         value: 1,
         description: `Open a self-directed NextSeed IRA to begin investing in local businesses. (Traditional and Roth IRA options available.)
         Minimum opening deposit: $5,000. Investment limits apply.
@@ -480,7 +488,7 @@ export const ACC_TYPE = {
       },
       {
         label: 'Entity Account',
-        labelDescription: 'Invest using your corporation, LLC, LP, or trust',
+        labelDescription: <>Invest using your corporation, LLC, LP, or trust</>,
         value: 2,
         description: `Invest in local businesses through an Entity investment account. (Note: Investment limits for Entity accounts are treated separately from Individual investment accounts)
         An initial deposit can be quickly and securely completed by linking your entity checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information.
@@ -515,7 +523,6 @@ export const BROKERAGE_EMPLOYMENT = {
     value: '',
     label: 'Firm Name',
     error: undefined,
-    // rule: 'alphaBrokerage|required_if:brokerageEmployment,yes',
     rule: 'optional',
     placeHolder: 'Enter here',
     customErrors: {
@@ -546,15 +553,16 @@ export const PUBLIC_COMPANY_REL = {
     value: '',
     label: 'Ticker Symbol or Company Name',
     error: undefined,
-    rule: 'alphaPublicCompanyRel|required_if:publicCompanyRel,yes',
+    showError: true,
     placeHolder: 'E.g. GOOG',
+    rule: 'optional',
     customErrors: {
       required_if: 'required',
     },
   },
 };
 
-export const EMPLOYMENT = {
+export const EMPLOYMENT_STATUS = {
   status: {
     key: 'status',
     value: '',
@@ -577,6 +585,7 @@ export const EMPLOYMENT = {
         },
       ],
     error: undefined,
+    showError: true,
     rule: 'required',
     objRef: 'employment',
     objRefOutput: 'employment',
@@ -586,6 +595,7 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Employer',
     error: undefined,
+    showError: true,
     rule: 'required_if:status,EMPLOYED',
     placeHolder: 'Enter employer name',
     objRef: 'employment',
@@ -599,6 +609,7 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Position',
     error: undefined,
+    showError: true,
     rule: 'required_if:status,EMPLOYED',
     placeHolder: 'e.g. Manager',
     objRef: 'employment',
@@ -624,10 +635,11 @@ export const INVESTOR_PROFILE = {
 };
 
 export const FINANCES = {
-  investorProfileType: {
+  taxFilingAs: {
     value: '',
     values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
     error: undefined,
+    showError: true,
     rule: 'required',
     customErrors: {
       required: 'required',
@@ -637,20 +649,24 @@ export const FINANCES = {
     value: '',
     label: 'Net Worth',
     error: undefined,
+    showError: true,
     rule: 'required|min:1',
     placeHolder: 'Enter here',
+    fieldType: 'integer',
     customErrors: {
       required: 'required',
-      min: 'Please enter a valid amount to deposit',
+      min: 'Please enter a valid amount',
     },
   },
   annualIncomeCurrentYear: {
     value: '',
     label: `Annual Income ${Helper.getLastThreeYearsLabel().annualIncomePreviousYear}`,
     error: undefined,
+    showError: true,
     rule: 'required|min:1|max:2147483647',
     year: Helper.getLastThreeYearsLabel().annualIncomePreviousYear,
     placeHolder: 'Enter here',
+    fieldType: 'integer',
     objRefOutput: 'annualIncome',
     customErrors: {
       required: 'required',
@@ -665,7 +681,13 @@ export const INVESTMENT_EXPERIENCE = {
     value: '',
     values: [{ label: 'No experience', value: 'NONE' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
+    showError: true,
     rule: 'required',
+  },
+  isPartialProfile: {
+    value: false,
+    error: undefined,
+    rule: 'optional',
   },
   isComfortable: {
     value: [],
@@ -676,6 +698,7 @@ export const INVESTMENT_EXPERIENCE = {
       },
     ],
     error: undefined,
+    showError: true,
     rule: 'optional',
   },
   isRiskTaker: {
@@ -687,12 +710,13 @@ export const INVESTMENT_EXPERIENCE = {
       },
     ],
     error: undefined,
+    showError: true,
     rule: 'optional',
   },
 };
 
 export const INV_PROFILE = {
-  ...EMPLOYMENT,
+  ...EMPLOYMENT_STATUS,
   ...INVESTOR_PROFILE,
   ...FINANCES,
   ...INVESTMENT_EXPERIENCE,
@@ -708,9 +732,9 @@ export const VARIFY_ROLES = [
 
 export const INVESTOR_PROFILE_FULL_META = {
   ...INVESTMENT_EXPERIENCE,
-  ...EMPLOYMENT,
+  ...EMPLOYMENT_STATUS,
   ...BROKERAGE_EMPLOYMENT,
-  taxFilingAs: FINANCES.investorProfileType,
+  taxFilingAs: FINANCES.taxFilingAs,
   netWorth: FINANCES.netWorth,
   annualIncomeCurrentYear: FINANCES.annualIncomeCurrentYear,
   ...PUBLIC_COMPANY_REL,

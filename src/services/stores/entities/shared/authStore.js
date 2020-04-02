@@ -8,12 +8,12 @@ import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
-import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup } from '../../queries/profile';
+import { portPrequalDataToApplication, checkEmailExistsPresignup } from '../../queries/profile';
 import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { adminValidateCreateAdminUser } from '../../queries/users';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { uiStore, navStore, identityStore, userDetailsStore, userStore, businessAppStore } from '../../index';
+import { uiStore, navStore, userDetailsStore, userStore, businessAppStore } from '../../index';
 import { validateOfferingPreviewPassword } from '../../queries/campagin';
 
 
@@ -113,14 +113,8 @@ export class AuthStore {
     if (result && result.name && result.name === 'role') {
       cookie.save('ROLE_VALUE', result.value, { maxAge: 1200 });
     }
-    if (e.password || e.password === '') {
-      this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
-      if (this.SIGNUP_FRM.fields.password.value === this.SIGNUP_FRM.fields.verify.value) {
-        this.SIGNUP_FRM.fields.verify.error = undefined;
-      }
-    } else {
-      this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValues(e, result));
-    }
+    const values = (e.password || e.password === '') ? Validator.pullValuesForPassword(e, result) : Validator.pullValues(e, result);
+    this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, values);
     if (e.score !== undefined) {
       this.currentScore = e.score;
     }
@@ -142,6 +136,14 @@ export class AuthStore {
     this.CONFIRM_FRM = Validator.onChange(
       this.CONFIRM_FRM,
       { name: 'code', value: e },
+    );
+  };
+
+  @action
+  setVerifyPassword = (e) => {
+    this.SIGNUP_FRM = Validator.onChange(
+      this.SIGNUP_FRM,
+      { name: 'verify', value: e.password },
     );
   };
 
@@ -281,54 +283,6 @@ export class AuthStore {
   setUserLoginDetails = (email, password) => {
     this.LOGIN_FRM.fields.email.value = email;
     this.LOGIN_FRM.fields.password.value = password;
-  }
-
-  verifyAndUpdateEmail = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: verifyAndUpdateEmail,
-          variables: {
-            resourceId: identityStore.requestOtpResponse,
-            confirmationCode: this.CONFIRM_FRM.fields.code.value,
-          },
-        })
-        .then(() => {
-          userDetailsStore.getUser(userStore.currentUser.sub);
-          resolve();
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
-
-  requestEmailChange = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: requestEmailChnage,
-          variables: {
-            newEmail: this.CONFIRM_FRM.fields.email.value.toLowerCase(),
-          },
-        })
-        .then((result) => {
-          identityStore.setRequestOtpResponse(result.data.requestEmailChange);
-          uiStore.setProgress(false);
-          resolve();
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          uiStore.setProgress(false);
-          reject(err);
-        });
-    });
   }
 
   portPrequalDataToApplication = (applicationId) => {
@@ -529,7 +483,7 @@ export class AuthStore {
       emailContent: JSON.stringify(errors),
     };
     this.notifyApplicationError(params).then(() => { }).catch((e) => {
-      console.log('Error while calling notifyApplicationError', e);
+      window.logger('Error while calling notifyApplicationError', e);
     });
   }
 

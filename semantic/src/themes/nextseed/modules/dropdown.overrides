@@ -64,7 +64,8 @@
 //    Custom for NS V.2
 .ui.selection.dropdown{
     min-width: auto;
-	border-bottom:@border-color 1px solid;
+    border-bottom:@border-color 1px solid;
+    min-height: 43px;
 	.menu{
 		border:none;
 		padding:0 @menuGutterWidth;
@@ -229,5 +230,8 @@ dl.dl-horizontal dd .ui.selection.dropdown.display-only{
 	~.page-header-section {
         margin-top: @58px;
         background: @neutral-offwhite;
-	}
+    }
+    &.large-header{
+        top: 140px;
+    }
 }

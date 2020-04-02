@@ -49,12 +49,12 @@ export const GqlClient = new ApolloClient({
     onError((res) => {
       // if (graphQLErrors) {
       //   graphQLErrors.forEach(({ message, locations, path }) =>
-      //     console.log(
+      //     window.logger(
       //       `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
       //     ),
       //   );
       // }
-      // if (networkError) console.log(`[Network error]: ${networkError}`);
+      // if (networkError) window.logger(`[Network error]: ${networkError}`);
       if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV) && get(res, 'graphQLErrors[0]')) {
         authStore.sendErrorMail(res);
       }

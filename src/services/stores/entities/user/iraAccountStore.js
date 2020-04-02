@@ -32,6 +32,8 @@ class IraAccountStore {
 
   @observable isFormSubmitted = false;
 
+  @observable apiCall = false;
+
   @observable retry = 0;
 
   @observable stepToBeRendered = 0;
@@ -158,13 +160,13 @@ class IraAccountStore {
       this.submitMutation().then(() => {
         resolve();
       }).catch((e) => {
-        console.log(e);
+        window.logger(e);
       });
     } else {
       this.submitMutation().then(() => {
         resolve();
       }).catch((e) => {
-        console.log(e);
+        window.logger(e);
       });
     }
   });
@@ -213,11 +215,16 @@ class IraAccountStore {
 
   @action
   createAccount = (currentStep, removeUploadedData = false) => new Promise((resolve) => {
-    this.validateAndSubmitStep(currentStep, removeUploadedData).then(() => {
-      resolve();
-    }).catch((e) => {
-      console.log(e);
-    });
+    if (!this.apiCall) {
+      this.setFieldValue('apiCall', true);
+      this.validateAndSubmitStep(currentStep, removeUploadedData).then(() => {
+        this.setFieldValue('apiCall', false);
+        resolve();
+      }).catch((e) => {
+        this.setFieldValue('apiCall', false);
+        window.logger(e);
+      });
+    }
   })
 
   @action
@@ -466,6 +473,12 @@ class IraAccountStore {
       }
     }
     uiStore.setProgress(false);
+  }
+
+  @computed
+  get isThankYouStep() {
+    const fundingType = this.fundingOption ? this.fundingOption.value : '';
+    return ((this.stepToBeRendered === 8 && fundingType === 0) || (this.stepToBeRendered === 6 && fundingType !== 0));
   }
 
   @action

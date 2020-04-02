@@ -225,6 +225,20 @@ export const getOfferingDetails = gql`
         isinRegD
         sfAccountNumberRegD
       }
+      investNow {
+        template
+        page {
+          title
+          page
+          regulation
+          toc {
+            label
+            order
+            account
+            required
+          }
+        }
+      }
       closureProcess {
         checkBalance {
           finished
@@ -1537,12 +1551,6 @@ query getTotalAmount{
   }
   }
   `;
-
-export const adminOfferingClose = gql`
-  mutation adminOfferingClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum, $concurrency: Int) {
-    adminOfferingClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload, service: $service, concurrency: $concurrency)
-  }
-`;
 
 export const setOrderForOfferings = gql`
   mutation setOrderForOfferings($offeringOrderDetails:[OfferingOrderInput]){

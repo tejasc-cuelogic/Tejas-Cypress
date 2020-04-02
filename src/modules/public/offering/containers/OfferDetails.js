@@ -1,9 +1,10 @@
 /* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
-import { get, find, has, cloneDeep } from 'lodash';
+import { get, find, has, cloneDeep, includes } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Responsive, Container, Grid, Visibility, Button, Icon } from 'semantic-ui-react';
+// import queryString from 'query-string';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, MobileDropDownNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
@@ -12,7 +13,8 @@ import InvestNow from '../components/investNow/InvestNow';
 import CommunityGuideline from '../components/campaignDetails/CommunityGuideline';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import SecondaryMenu from '../components/CampaignSecondaryMenu';
-import Agreement from '../components/investNow/agreement/components/Agreement';
+// import Agreement from '../components/investNow/agreement/components/Agreement';
+import AgreementTemplate from '../../../shared/campaign/AgreementTemplate';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
@@ -62,6 +64,8 @@ class offerDetails extends Component {
       if (get(exception, 'code') === 'OFFERING_EXCEPTION') {
         if (['TERMINATED', 'FAILED'].includes(get(exception, 'stage')) && !isAdmin) {
           this.props.history.push('/offerings');
+        } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
+          this.props.history.push('/offerings');
         } else if (['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
           this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
@@ -70,8 +74,6 @@ class offerDetails extends Component {
           this.setState({ showPassDialog: false, preLoading: false });
           this.props.uiStore.setAuthRef(this.props.location.pathname, this.props.location.hash);
           this.props.history.push('/login');
-        } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
-          this.props.history.push('/offerings');
         } else {
           this.props.campaignStore.getCampaignDetails(this.props.match.params.id, false, true);
         }
@@ -199,7 +201,7 @@ class offerDetails extends Component {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, campaign, navCountData, modifySubNavs, campaignStatus,
+      details, campaign, modifySubNavs, campaignStatus,
     } = campaignStore;
     const { isWatching } = this.props.watchListStore;
     let navItems = [];
@@ -231,6 +233,7 @@ class offerDetails extends Component {
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
     const showWatchingBtn = isWatching !== 'loading';
+    // const AgreementComponent = campaignStatus.isAgreementTemplate ? AgreementTemplate : Agreement;
     const followBtn = (
       <Button disabled={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} inverted loading={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} fluid color="white" onClick={this.handleFollowBtn}>
         {showWatchingBtn && <Icon name={` ${!this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') && 'heart'} ${isWatching ? '' : 'outline'}`} color={isWatching ? 'green' : ''} />} {isWatching ? 'Following' : 'Follow'}
@@ -253,7 +256,7 @@ class offerDetails extends Component {
               <MobileDropDownNav
                 inverted
                 refMatch={match}
-                navCountData={navCountData}
+                // navCountData={navCountData}
                 navItems={navItems}
                 location={location}
                 isBonusReward={isBonusReward}
@@ -286,10 +289,10 @@ class offerDetails extends Component {
                       <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
                       <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
                       <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}${newLayout ? '#comments' : '/comments'}`} {...props} />} />
-                      <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
+                      <Route exact path={`${match.url}/agreement`} render={() => <AgreementTemplate refLink={this.props.match.url} />} />
                       <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
                       <Route exact path={`${match.url}/congratulation`} render={() => <Congratulation refLink={this.props.match.url} />} />
-                      <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
+                      <Route exact path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
                       <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
                       <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
                       <Route component={NotFound} />
@@ -300,6 +303,7 @@ class offerDetails extends Component {
             </section>
           </Container>
         </div>
+        { includes(this.props.location.pathname, 'herovideo') && <VideoModal refLink={this.props.match} {...this.props} />}
       </>
     );
   }

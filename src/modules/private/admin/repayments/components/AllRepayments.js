@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Card, Table, Button, Grid, Form, Icon, Header, Popup, Confirm } from 'semantic-ui-react';
+import { Card, Table, Button, Grid, Form, Icon, Header, Popup } from 'semantic-ui-react';
 import moment from 'moment';
 import { get } from 'lodash';
 import Helper from '../../../../../helper/utility';
@@ -65,39 +65,39 @@ const PaymentsList = ({ calculateFormula, headerTitle, type, sortOrder, repaymen
                         {repaymentMeta.map(h => h.applicable.includes(type) && (
                           <Table.Cell key={`${h.title}${h.key}`}>
                             {(type !== 'IN_REPAYMENT' && h.calculation)
-                            ? calculateFormula(
-                              type,
-                              h.title,
-                              {
-                                hardCloseDate: get(record, 'offering.closureSummary.hardCloseDate'),
-                                firstPaymentDate: get(record, 'offering.closureSummary.repayment.firstPaymentDate'),
-                                startupPeriod: get(record, 'offering.closureSummary.startupPeriod'),
-                                anticipatedOpenDate: get(record, 'offering.closureSummary.anticipatedOpenDate'),
-                                actualOpeningDate: get(record, 'offering.closureSummary.operationsDate'),
-                                term: get(record, 'offering.keyTerms.maturity'),
-                              },
+                              ? calculateFormula(
+                                type,
+                                h.title,
+                                {
+                                  hardCloseDate: get(record, 'offering.closureSummary.hardCloseDate'),
+                                  firstPaymentDate: get(record, 'offering.closureSummary.repayment.firstPaymentDate'),
+                                  startupPeriod: get(record, 'offering.closureSummary.startupPeriod'),
+                                  anticipatedOpenDate: get(record, 'offering.closureSummary.anticipatedOpenDate'),
+                                  actualOpeningDate: get(record, 'offering.closureSummary.operationsDate'),
+                                  term: get(record, 'offering.keyTerms.maturity'),
+                                },
                               )
-                            : h.link
-                              ? (
-                                <>
-                                  <Link to={getLink(record.offering.offeringSlug, record.offering.stage)}>
-                                    <b>{get(record, h.key)}</b>
-                                  </Link>
-                                  {get(record, 'offering.contact.payments')
-                                    && (
-                                      <Popup
-                                        trigger={<span> @</span>}
-                                        content={get(record, 'offering.contact.payments').split(',').map(p => (<div>{p}</div>))}
-                                        hoverable
-                                        position="top center"
-                                      />
-                                    )}
-                                </>
-                              ) : h.options ? (get(record, h.key) ? 'Y' : 'N')
-                                : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
-                                  : h.validate ? validDate(record, h.key)
-                                    : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months') >= 0 ? moment(moment(get(record, h.key))).diff(moment(), 'months') : '0'})` : ''
-                                      : h.currency ? Helper.CurrencyFormat(get(record, h.key) || 0) : (get(record, h.key) || 'N/A')
+                              : h.link
+                                ? (
+                                  <>
+                                    <Link to={getLink(record.offering.offeringSlug, record.offering.stage)}>
+                                      <b>{get(record, h.key)}</b>
+                                    </Link>
+                                    {get(record, 'offering.contact.payments')
+                                      && (
+                                        <Popup
+                                          trigger={<span> @</span>}
+                                          content={get(record, 'offering.contact.payments').split(',').map(p => (<div>{p}</div>))}
+                                          hoverable
+                                          position="top center"
+                                        />
+                                      )}
+                                  </>
+                                ) : h.options ? (get(record, h.key) ? 'Y' : 'N')
+                                  : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
+                                    : h.validate ? validDate(record, h.key)
+                                      : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months') >= 0 ? moment(moment(get(record, h.key))).diff(moment(), 'months') : '0'})` : ''
+                                        : h.currency ? Helper.CurrencyFormat(get(record, h.key) || 0) : (get(record, h.key) || 'N/A')
                             }
                           </Table.Cell>
                         ))}
@@ -129,7 +129,6 @@ export default class AllRepayments extends PureComponent {
     TERM_NOTE: true,
     REVENUE_SHARING_NOTE: true,
     showActionModal: false,
-    showConfirmModal: false,
   }
 
   constructor(props) {
@@ -170,36 +169,46 @@ export default class AllRepayments extends PureComponent {
   validDate = (data, field) => (get(data, field) && moment(get(data, field), 'MM/DD/YYYY', true).isValid() ? moment(get(data, field)).format('M/D/YY') : '');
 
   render() {
-    const { paymentCtaHandlers, calculateFormula, termNotes, revenueSharingNotes, sortOrderRSN, sortOrderTN, repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
+    const { calculateFormula, termNotes, revenueSharingNotes, sortOrderRSN, sortOrderTN, repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
     const { loadingArray } = this.props.nsUiStore;
-    const { showConfirmModal, showActionModal, STARTUP_PERIOD, IN_REPAYMENT, TERM_NOTE, REVENUE_SHARING_NOTE } = this.state;
+    const { showActionModal, STARTUP_PERIOD, IN_REPAYMENT, TERM_NOTE, REVENUE_SHARING_NOTE } = this.state;
     if (loadingArray.includes('adminPaymentsIssuerList')) {
       return <InlineLoader />;
     }
     return (
       <>
-        {showActionModal && <ActionModal toggleVisibilityStatus={this.toggleVisibilityStatus} showActionModal={showActionModal} />}
+        {!!showActionModal && <ActionModal updateState={this.updateState} showActionModal={showActionModal} />}
         <Form>
           <Grid stackable>
             <Grid.Row>
               <ByKeyword
                 change={this.executeSearch}
-                w={[5]}
+                w={[7]}
                 placeholder="Search by keyword or phrase"
                 more="no"
                 addon={(
-                  <Grid.Column width={11} textAlign="right">
-                      <Button color="green" size="small" floated="right" onClick={() => this.toggleVisibilityStatus('showActionModal')}>
+                  <>
+                    <Grid.Column width={9} className="right-align">
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentGenerateAdminSummary')}>
                         Generate Admin Summary
                       </Button>
-                      <Button color="green" size="small" floated="right" loading={loadingArray.includes('adminPaymentSendGoldStarDraftInstructions')} disabled={loadingArray.includes('adminPaymentSendGoldStarDraftInstructions')} onClick={() => this.updateState('showConfirmModal', 'adminPaymentSendGoldStarDraftInstructions')}>
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendGoldStarDraftInstructions')}>
                         Send GoldStar Draft Instructions
                       </Button>
-                      <Button color="green" size="small" floated="right" loading={loadingArray.includes('adminPaymentSendIssuerDraftNotice')} disabled={loadingArray.includes('adminPaymentSendIssuerDraftNotice')} onClick={() => this.updateState('showConfirmModal', 'adminPaymentSendIssuerDraftNotice')}>
+                    </Grid.Column>
+                    <Grid.Column width={16} className="mt-20 right-align">
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerDraftNotice')}>
                         Send Issuer Draft Notice
                       </Button>
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerFirstNotice')}>
+                        Send First Notice Emails
+                      </Button>
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerSecondNotice')}>
+                        Send Second Notice Emails
+                      </Button>
                     </Grid.Column>
-                  )}
+                  </>
+                )}
               />
             </Grid.Row>
           </Grid>
@@ -234,9 +243,9 @@ export default class AllRepayments extends PureComponent {
                 stateToggle={IN_REPAYMENT}
               />
             </>
-            )
-            : (
-              <>
+          )
+          : (
+            <>
               <PaymentsList
                 calculateFormula={calculateFormula}
                 headerTitle="Term Note"
@@ -267,15 +276,6 @@ export default class AllRepayments extends PureComponent {
               />
             </>
           )}
-        <Confirm
-          header="Confirm"
-          content="Are you sure to continue with selected action?"
-          open={showConfirmModal}
-          onCancel={() => this.updateState('showConfirmModal', null)}
-          onConfirm={() => { paymentCtaHandlers(showConfirmModal); this.updateState('showConfirmModal', null); }}
-          size="mini"
-          className="deletion"
-        />
       </>
     );
   }

@@ -19,25 +19,6 @@ export const updateUserProfileData = gql`
     }
   }`;
 
-export const requestEmailChnage = gql`
-  mutation requestEmailChange($newEmail: String!) {
-    requestEmailChange(
-      newEmail: $newEmail
-    )
-  }`;
-
-export const verifyAndUpdateEmail = gql`
-  mutation verifyAndUpdateEmail($confirmationCode: String! $resourceId: String!) {
-    verifyAndUpdateEmail(
-      confirmationCode: $confirmationCode
-      resourceId: $resourceId
-    ){
-      email {
-        address
-      }
-    }
-  }`;
-
 export const isUniqueSSN = gql`
   query isUniqueSSN($ssn: String!) {
     isUniqueSSN(ssn: $ssn) {
@@ -56,8 +37,16 @@ export const verifyCipSoftFail = gql`
   }`;
 
 export const verifyCipHardFail = gql`
-mutation verifyCipHardFail($license: String!, $residence: String!) {
+  mutation verifyCipHardFail($license: String!, $residence: String!) {
     verifyCipHardFail(
+      license: $license
+      residence: $residence
+    )
+  }`;
+
+export const cipLegalDocUploads = gql`
+  mutation cipLegalDocUploads($license: String!, $residence: String!) {
+    cipLegalDocUploads(
       license: $license
       residence: $residence
     )
@@ -73,39 +62,97 @@ export const portPrequalDataToApplication = gql`
     }
   }`;
 
-export const requestOtp = gql`
-  mutation requestOtp($type: MFAModeEnum, $isLinkedBankChange: Boolean, $address: String){
-    requestOtp(
+
+  export const sendOtp = gql`
+  mutation sendOtp($type: OtpTypeEnum!, $method: MFAMethodEnum!, $to: String!){
+    sendOtp(
       type: $type
-      isLinkedBankChange: $isLinkedBankChange
-      address: $address
+      method: $method
+      to: $to
     )
   }`;
 
-export const verifyOtp = gql`
-  mutation verifyOtp($resourceId: String! $verificationCode: String!, $isEmailVerify: Boolean, $isPhoneNumberUpdated: Boolean){
-    verifyOtp(
+export const verifyOtpPhone = gql`
+  mutation verifyOtpPhone($resourceId: String! $verificationCode: String!, $phone: String!){
+    verifyOtpPhone(
       resourceId: $resourceId
       verificationCode: $verificationCode
-      isEmailVerify: $isEmailVerify
-      isPhoneNumberUpdated: $isPhoneNumberUpdated
+      phone: $phone
     )
   }
 `;
 
-export const requestOtpWrapper = gql`
-  mutation requestOTPWrapper($address: String!, $firstName: String, $tags: tagsInput){
-    requestOTPWrapper(
-      address: $address
-      firstName: $firstName
+export const changeLinkedBankRequest = gql`
+  mutation changeLinkedBankRequest(
+    $resourceId: String!
+    $verificationCode: String!
+    $accountId: String!
+    $plaidPublicToken: String
+    $plaidAccountId: String
+    $bankRoutingNumber: String
+    $bankAccountNumber: String
+    $accountType: accountTypeEnum
+    $bankName: String
+    ){
+    changeLinkedBankRequest(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+      accountId: $accountId
+      plaidPublicToken: $plaidPublicToken
+      plaidAccountId: $plaidAccountId
+      bankRoutingNumber: $bankRoutingNumber
+      bankAccountNumber: $bankAccountNumber
+      accountType: $accountType
+      bankName: $bankName
+    ) {
+      lastDigits
+      dateRequested
+      status
+    }
+  }
+`;
+
+export const changeEmailRequest = gql`
+  mutation changeEmailRequest($resourceId: String! $verificationCode: String!){
+    changeEmailRequest(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+    )
+  }
+`;
+
+export const changePhoneRequest = gql`
+  mutation changePhoneRequest($resourceId: String! $verificationCode: String!, $phone: String!){
+    changePhoneRequest(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+      phone: $phone
+    )
+  }
+`;
+
+export const verifyOtpEmailPrivate = gql`
+  mutation verifyOtpEmail($resourceId: String! $verificationCode: String!, $email: String!){
+    verifyOtpEmail(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+      email: $email
+    )
+  }
+`;
+
+export const sendOtpEmail = gql`
+  mutation sendOtpEmail($email: String!, $tags: tagsInput){
+    sendOtpEmail(
+      email: $email
       tags: $tags
     )
   }
 `;
 
-export const verifyOTPWrapper = gql`
-  mutation verifyOTPWrapper($verifyOTPData: VerifyOTPInput!){
-    verifyOTPWrapper(
+export const verifyOtpEmail = gql`
+  mutation verifyOtpEmail($verifyOTPData: VerifyOTPEmailInput!){
+    verifyOtpEmail(
       verifyOTPData: $verifyOTPData
     )
   }

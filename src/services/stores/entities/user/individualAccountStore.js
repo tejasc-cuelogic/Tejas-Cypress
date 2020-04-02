@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import { isEmpty, find, get, isNull } from 'lodash';
 import { bankAccountStore, uiStore, userDetailsStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
@@ -80,7 +80,7 @@ class IndividualAccountStore {
             resolve();
           }
         }).catch((err) => {
-          console.log('Error', err);
+          window.logger('Error', err);
           reject(err);
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
             if (this.retry < 1) {
@@ -106,8 +106,8 @@ class IndividualAccountStore {
       if (res.data.createIndividualGoldStarInvestor) {
         this.setFieldValue('showProcessingModal', false);
       }
-      bankAccountStore.resetStoreData();
       uiStore.setProgress(false);
+      bankAccountStore.resetStoreData();
       this.isFormSubmitted = true;
       resolve();
     }).catch((err) => {
@@ -133,6 +133,11 @@ class IndividualAccountStore {
       otherContributions: 0,
     };
     return data;
+  }
+
+  @computed
+  get isThankYouStep() {
+    return this.stepToBeRendered === 3;
   }
 
   @action

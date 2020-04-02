@@ -43,7 +43,7 @@ if (process.env.REACT_APP_BUG_SNAG_KEY) {
   ErrorBoundary = bugsnagClient.getPlugin('react');
 }
 
-// this is the logging function using instead of console.log()
+// this is the logging function using instead of window.logger()
 window.logger = Utils.logger;
 
 // For easier debugging

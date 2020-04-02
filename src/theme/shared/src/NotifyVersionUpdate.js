@@ -34,9 +34,9 @@ const NotifyVersionUpdate = (props) => {
         floating
         style={{ zIndex: '9999', wordBreak: 'unset', width: isMobile ? '100%' : 'auto', textAlign: 'center', fontSize: '12px', position: 'fixed', ...(isMobile ? { bottom: 0, margin: 0 } : { left: '50%', transform: 'translate(-50%, 0)' }) }}
       >
-        {`We${"'"}ve made an update to the website.`}
+        {`We${'\''}ve made an update to the website.`}
         {isMobile ? <br /> : ' '}
-        {`We${"'"}re refreshing your page now to show you the latest version.`}
+        {`We${'\''}re refreshing your page now to show you the latest version.`}
       </Message>
     );
   }
@@ -45,7 +45,7 @@ const NotifyVersionUpdate = (props) => {
       <Modal.Content>
         <Modal.Description style={{ textAlign: 'center', margin: '15px 0px 0px' }}>
           <h5 style={{ fontWeight: 'normal' }}>
-            There{"'"}s a new version of this website available. <Responsive as="br" minWidth={768} />
+            There{'\''}s a new version of this website available. <Responsive as="br" minWidth={768} />
             Please reload your browser to see the latest version.
           </h5>
           <Button positive content="Refresh" onClick={update} />

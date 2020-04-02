@@ -107,7 +107,7 @@ export default class WhyNextseed extends Component {
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30 center-align'}>Invest in the growth of local communities </Header>
             <p className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-70 center-align'}>
-              Don{"'"}t just invest through Wall Street and Silicon Valley - put your capital to work with<Responsive minWidth={992} as="br" /> main street businesses, growing startups, experiential real estate, and more.
+              Don{'\''}t just invest through Wall Street and Silicon Valley - put your capital to work with<Responsive minWidth={992} as="br" /> main street businesses, growing startups, experiential real estate, and more.
             </p>
             {!responsiveVars.uptoTablet
               ? (

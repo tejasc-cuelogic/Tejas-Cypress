@@ -23,13 +23,13 @@ const checkStatus = (signupStatus, key, userDetailsStore) => {
     }
   } else if (key === 'cash-dollar') {
     if ((signupStatus.investorProfileCompleted && !signupStatus.isMigratedFullAccount)
-    || (signupStatus.isMigratedFullAccount
-    && signupStatus.isCipDoneForMigratedUser
-    && signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed && signupStatus.investorProfileCompleted)) {
+      || (signupStatus.isMigratedFullAccount
+        && signupStatus.isCipDoneForMigratedUser
+        && signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed && signupStatus.investorProfileCompleted)) {
       status = 2;
     } else if (((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING' || signupStatus.idVerification === 'OFFLINE')
-    && signupStatus.phoneVerification === 'DONE')
-    || (signupStatus.isMigratedFullAccount && userDetailsStore.isBasicVerDoneForMigratedFullUser)
+      && signupStatus.phoneVerification === 'DONE')
+      || (signupStatus.isMigratedFullAccount && userDetailsStore.isBasicVerDoneForMigratedFullUser)
     ) {
       status = 1;
     } else {
@@ -38,10 +38,10 @@ const checkStatus = (signupStatus, key, userDetailsStore) => {
   } else if (key === 'bar-line-chart') {
     if ((signupStatus.investorProfileCompleted && !signupStatus.isMigratedFullAccount)
       || (signupStatus.isMigratedFullAccount
-      && signupStatus.isCipDoneForMigratedUser
-      && signupStatus.phoneVerification === 'DONE'
-      && signupStatus.isEmailConfirmed
-      && signupStatus.investorProfileCompleted
+        && signupStatus.isCipDoneForMigratedUser
+        && signupStatus.phoneVerification === 'DONE'
+        && signupStatus.isEmailConfirmed
+        && signupStatus.investorProfileCompleted
       )) {
       status = 1;
     } else {
@@ -55,9 +55,9 @@ const ProgressCard = props => (
   <Card.Group stackable itemsPerRow={3}>
     {
       (isEmpty(props.signupStatus.activeAccounts)
-      || (props.signupStatus.isMigratedFullAccount
-        && (!props.isBasicVerDoneForMigratedFullUser
-        || !props.signupStatus.investorProfileCompleted)))
+        || (props.signupStatus.isMigratedFullAccount
+          && (!props.isBasicVerDoneForMigratedFullUser
+            || !props.signupStatus.investorProfileCompleted)))
       && Object.keys(progressMeta).map((key) => {
         const currentCard = progressMeta[key];
         const status = checkStatus(props.signupStatus, key, props.userDetailsStore);
@@ -67,10 +67,10 @@ const ProgressCard = props => (
         /*
         * Condition added for migrated-user
         */
-        const verificationStatus = props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification)
-        || (props.signupStatus.isMigratedFullAccount
-        && (props.userDetailsStore.userDetails && props.userDetailsStore.userDetails.cip
-        && props.userDetailsStore.userDetails.cip.requestId !== null));
+        const verificationStatus = [...props.userDetailsStore.validAccStatus, ...['OFFLINE']].includes(props.signupStatus.idVerification)
+          || (props.signupStatus.isMigratedFullAccount
+            && (props.userDetailsStore.userDetails && props.userDetailsStore.userDetails.cip
+              && props.userDetailsStore.userDetails.cip.requestId !== null));
         const isEmailVerified = props.signupStatus.isEmailConfirmed;
         /*
         * Condition added for migrated-user
@@ -86,38 +86,38 @@ const ProgressCard = props => (
                 && (
                   <Icon.Group size="huge">
                     {/* <Icon className={`ns-${key}`} /> */}
-                          <NSImage path={(status === 2 || status === 0) ? (`cards/${key}.png`) : (`cards/${key}-green.png`)} />
-                          <Icon corner color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `${status === 2 ? 'ns-check-circle' : ''}`} />
+                    <NSImage path={(status === 2 || status === 0) ? (`cards/${key}.png`) : (`cards/${key}-green.png`)} />
+                    <Icon corner color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `${status === 2 ? 'ns-check-circle' : ''}`} />
                   </Icon.Group>
                 )
               }
               <p><b>{currentCard.label}</b></p>
-              </Card.Content>
-              <Card.Content extra className={isMobile ? '' : 'pt-0'}>
+            </Card.Content>
+            <Card.Content extra className={isMobile ? '' : 'pt-0'}>
               {isMobile && status === 2
                 ? (
                   <Icon size="large" color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `${status === 2 ? 'ns-check-circle' : ''} mb-half`} />
                 ) : null
               }
-              {status === 2 ? <p className="mt-0 neutral-text"><b>{currentCard.successMsg}</b></p> : '' }
+              {status === 2 ? <p className="mt-0 neutral-text"><b>{currentCard.successMsg}</b></p> : ''}
               {status === 0 && <p className="mt-0" />}
               {status === 0
                 ? ''
                 : status !== 2
                   ? (
-<Button
-  color="green"
-  content={<>{currentCard.step === 2 ? 'Create' : 'Continue'} <Icon className="ns-caret-right" color="green" /></>}
-  onClick={() => (currentCard.step !== 0
-    ? props.history.push(`${pathToRender}`)
-    : !isEmailVerified
-      ? props.history.push(currentCard.emailVerificationRoute)
-      : !verificationStatus
-        ? props.history.push(`${pathToRender}`)
-        : props.history.push(`${altPathToRender}`))
-      }
-  className="link-button"
-/>
+                    <Button
+                      color="green"
+                      content={<>{currentCard.step === 2 ? 'Create' : 'Continue'} <Icon className="ns-caret-right" color="green" /></>}
+                      onClick={() => (currentCard.step !== 0
+                        ? props.history.push(`${pathToRender}`)
+                        : !isEmailVerified
+                          ? props.history.push(currentCard.emailVerificationRoute)
+                          : !verificationStatus
+                            ? props.history.push(`${pathToRender}`)
+                            : props.history.push(`${altPathToRender}`))
+                      }
+                      className="link-button"
+                    />
                   )
                   : ' '
               }
@@ -126,10 +126,13 @@ const ProgressCard = props => (
         );
       })
     }
-    {/* {props.signupStatus.partialAccounts.length > 0 &&
-      props.signupStatus.partialAccounts.map(accountType => (
-        <Card fluid className={props.getStepStatus('accounts') === 'disable'
-          ? 'verification disabled' : 'verification'}>
+
+    {props.signupStatus.partialAccounts.length === 0
+      && !isEmpty(props.signupStatus.roles)
+      && props.signupStatus.roles.length > 1
+      && props.signupStatus.inActiveAccounts.length > 0
+      && (
+        <Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
           <Card.Content>
             <Icon.Group size="huge">
               <Icon className="ns-bar-line-chart" />
@@ -138,49 +141,14 @@ const ProgressCard = props => (
             <Button.Group vertical>
               <Button
                 color={props.getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
-                // eslint-disable-next-line max-len
-                content={`Continue ${accountType === 'ira' ?
-                upperCase(accountType) : startCase(accountType)} Account Creation`}
+                content="Continue Account Creation"
                 disabled={props.getStepStatus('accounts') === 'disable'}
-                onClick={() => props.navToAccTypes(accountType)}
+                onClick={() => props.navToAccTypes()}
+                className="link-button"
               />
-              {!isEmpty(props.signupStatus.roles) &&
-              props.signupStatus.inActiveAccounts.length > 0 &&
-                <Button
-                  className="link-button padded"
-                  color="green"
-                  content="or create a different investment account"
-                  disabled={props.getStepStatus('accounts') === 'disable'}
-                  onClick={() => props.navToAccTypes()}
-                />
-              }
             </Button.Group>
           </Card.Content>
         </Card>
-      ))
-    } */}
-    {props.signupStatus.partialAccounts.length === 0
-    && !isEmpty(props.signupStatus.roles)
-    && props.signupStatus.roles.length > 1
-    && props.signupStatus.inActiveAccounts.length > 0
-      && (
-<Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
-        <Card.Content>
-          <Icon.Group size="huge">
-            <Icon className="ns-bar-line-chart" />
-          </Icon.Group>
-          <p><b>Create Investment Account</b></p>
-          <Button.Group vertical>
-            <Button
-              color={props.getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
-              content="Continue Account Creation"
-              disabled={props.getStepStatus('accounts') === 'disable'}
-              onClick={() => props.navToAccTypes()}
-              className="link-button"
-            />
-          </Button.Group>
-        </Card.Content>
-      </Card>
       )
     }
   </Card.Group>

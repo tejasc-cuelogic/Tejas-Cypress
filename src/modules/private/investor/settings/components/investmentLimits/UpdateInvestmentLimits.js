@@ -10,6 +10,11 @@ import Helper from '../../../../../../helper/utility';
 @withRouter
 @observer
 export default class UpdateInvestmentLimits extends Component {
+  componentWillUnmount() {
+    const { setFieldValue } = this.props.investmentLimitStore;
+    setFieldValue('isUpdateLimitActionActive', false);
+  }
+
   submit = (e) => {
     e.stopPropagation();
   }
@@ -25,13 +30,18 @@ export default class UpdateInvestmentLimits extends Component {
     });
   }
 
+  investmentCalculate = () => {
+    const { calculateCfLimit } = this.props.investmentLimitStore;
+    calculateCfLimit('INVESTMENT_LIMIT_META');
+  }
+
   render() {
     const errors = false;
     const { inProgress } = this.props.uiStore;
     const {
-      INVESTEMENT_LIMIT_META, maskingFieldChange, currentLimit,
+      INVESTMENT_LIMIT_META, maskingFieldChange, currentLimit, isUpdateLimitActionActive,
     } = this.props.investmentLimitStore;
-    const { fields } = INVESTEMENT_LIMIT_META;
+    const { fields } = INVESTMENT_LIMIT_META;
     return (
       <div>
         <Modal open closeIcon onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick={false}>
@@ -61,7 +71,8 @@ export default class UpdateInvestmentLimits extends Component {
                     value={fields[field].value}
                     fielddata={fields[field]}
                     changed={maskingFieldChange}
-                    // onblur={investmentCalculate}
+                    onblur={this.investmentCalculate}
+                    toolTipOnLabel
                   />
                 ))
               }
@@ -74,8 +85,8 @@ export default class UpdateInvestmentLimits extends Component {
               }
               <div className="center-align mt-30">
                 <Button.Group>
-                  <Button type="button" onClick={this.handleCloseModal}>Cancel</Button>
-                  <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid} onClick={this.updateInvestmentLimit} />
+                  <Button type="button" disabled={inProgress} onClick={this.handleCloseModal}>Cancel</Button>
+                  <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTMENT_LIMIT_META.meta.isValid || inProgress || !isUpdateLimitActionActive} onClick={this.updateInvestmentLimit} />
                 </Button.Group>
               </div>
             </Form>

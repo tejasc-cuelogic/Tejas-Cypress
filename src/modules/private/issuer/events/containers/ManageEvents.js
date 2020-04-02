@@ -5,7 +5,7 @@ import AllEvents from '../components/AllEvents';
 
 export default class ManageEvents extends Component {
   search = (e) => {
-    if (e.charCode === 13 && false) {
+    if (e.charCode === 13) {
       // search goes here..
     }
   }

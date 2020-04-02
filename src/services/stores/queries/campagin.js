@@ -104,17 +104,29 @@ query offeringWatchList($offeringId: String){
   offeringWatchList(offeringId: $offeringId) {
     userId
     status
-    offeringId
     lastUpdated
+    activity
+    investmentCount
     userInfo {
       email {
         address
       }
-    info {
-      firstName
-      lastName
+      info {
+        firstName
+        lastName
+        mailingAddress {
+          city
+          state
+        }
+      }
+      legalDetails {
+        legalAddress {
+          city
+          state
+        }
+      }
     }
-    }
+
   }
 }
 `;
@@ -324,6 +336,20 @@ export const campaignDetailsQuery = gql`
         }
       }
     }
+    investNow {
+      template
+      page {
+        title
+        page
+        regulation
+        toc {
+          label
+          order
+          account
+          required
+        }
+      }
+    }
     closureSummary {
       processingDate
       hardCloseDate
@@ -432,6 +458,20 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     offeringSlug
     isAvailablePublicly
     stage
+    investNow {
+      template
+      page {
+        title
+        page
+        regulation
+        toc {
+          label
+          order
+          account
+          required
+        }
+      }
+    }
     closureSummary {
       processingDate
       hardCloseDate
