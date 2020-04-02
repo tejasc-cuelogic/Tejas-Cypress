@@ -32,8 +32,15 @@ export default class Content extends Component {
     }
   }
 
+  checkValidFormIndexZero = () => {
+    const fields = this.props.manageOfferingStore.OFFERING_CONTENT_FRM.fields.content[0];
+    return (fields.title.value && fields.contentType.value && fields.scope.value);
+  }
+
   addMore = () => {
-    this.props.manageOfferingStore.addMore('OFFERING_CONTENT_FRM', 'content');
+    if (this.checkValidFormIndexZero()) {
+      this.props.manageOfferingStore.addMore('OFFERING_CONTENT_FRM', 'content');
+    }
     this.toggleModal(true);
   }
 

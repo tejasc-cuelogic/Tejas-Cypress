@@ -2,17 +2,11 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import { Grid, Tab, Form, Button, Icon, Confirm } from 'semantic-ui-react';
+import { Grid, Tab, Form, Confirm } from 'semantic-ui-react';
 import InvestNowTocList from './toc/InvestNowTocList';
 import { CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
-import formHOC from '../../../../../../theme/form/formHOC';
 import OfferingButtonGroup from '../OfferingButtonGroup';
-
-const metaInfo = {
-  store: 'manageOfferingStore',
-  form: 'INVEST_NOW_TOC_TEMPLATE_FRM',
-};
 
 @inject('manageOfferingStore', 'uiStore', 'offeringsStore')
 @withRouter
@@ -25,19 +19,21 @@ class InvestNowToc extends Component {
   handleFormSubmit = (type) => {
     const { manageOfferingStore } = this.props;
     const { updateOffering } = manageOfferingStore;
-    updateOffering({ keyName: 'investNow', forms: 'INVEST_NOW_TOC_TEMPLATE_FRM', tocAction: type });
+    updateOffering({ keyName: 'investNow', offeringData: { template: 2 }, forms: 'INVEST_NOW_TOC_TEMPLATE_FRM', tocAction: type });
   };
 
   render() {
     const { showConfirm } = this.state;
-    const { smartElement, match, manageOfferingStore, uiStore, offeringsStore } = this.props;
-    const { getAgreementTocList, INVEST_NOW_TOC_TEMPLATE_FRM, campaignStatus } = manageOfferingStore;
+    const { match, manageOfferingStore, uiStore, offeringsStore } = this.props;
+    const { getAgreementTocList, campaignStatus } = manageOfferingStore;
     const { offer } = offeringsStore;
     const regulation = get(offer, 'regulation');
+    const securities = get(offer, 'keyTerms.securities');
+    const showWarningMsg = (!regulation || !securities);
     const { inProgress } = uiStore;
     const isReadOnly = get(offer, 'stage') !== 'CREATION' || campaignStatus.lock;
-    const tocTemplate = INVEST_NOW_TOC_TEMPLATE_FRM.fields.template.value;
-    const showReset = (get(offer, 'stage') === 'CREATION' && tocTemplate === 2 && !!get(offer, 'investNow.page'));
+    const tocTemplate = get(offer, 'template');
+    const showReset = (get(offer, 'stage') === 'CREATION' && tocTemplate === 2 && !!get(offer, 'investNow.page[0]'));
     const panes = Object.keys(getAgreementTocList).map(key => ({
       menuItem: CAMPAIGN_KEYTERMS_REGULATION[key], render: () => (<InvestNowTocList regulation={key} refLink={match.url} data={getAgreementTocList[key]} />),
     }));
@@ -48,28 +44,25 @@ class InvestNowToc extends Component {
       <div className="inner-content-spacer">
         <Form>
           <Grid stackable>
+            {showWarningMsg ? <Grid.Row><span className="negative-text mt-10 ml-10">Please select and verify the offering Regulation and Security (and equity class for Equity).</span></Grid.Row> : (
             <Grid.Row>
-              <Grid.Column width={6}>
-                {smartElement.FormDropDown('template', { containerclassname: 'dropdown-field', displayMode: isReadOnly })}
-              </Grid.Column>
-              {!isReadOnly
+              {(!isReadOnly || showReset)
               && (
-              <Grid.Column width={5} textAlign="right" floated="right">
+              <Grid.Column textAlign="right" floated="right">
                 <OfferingButtonGroup
-                  buttonTitle="Update"
-                  updateOffer={this.handleFormSubmit}
+                  buttonTitle={showReset ? 'Reset' : 'Edit'}
+                  updateOffer={() => (showReset ? this.setState({ showConfirm: true }) : this.handleFormSubmit('EDIT'))}
                 />
               </Grid.Column>
               )}
-            </Grid.Row>
-            {showReset
-            && (
-            <Grid.Row>
+              {/* {showReset
+              && (
               <Grid.Column textAlign="right" floated="right">
                 <Button icon className="link-button" onClick={() => this.setState({ showConfirm: true })}>
                   <Icon color="green" size="large" className="ns-reload-circle" />
                 </Button>
               </Grid.Column>
+              )} */}
             </Grid.Row>
             )}
           </Grid>
@@ -94,4 +87,4 @@ class InvestNowToc extends Component {
   }
 }
 
-export default formHOC(InvestNowToc, metaInfo);
+export default InvestNowToc;

@@ -319,7 +319,9 @@ export class AgreementsStore {
   @action
   previewAgreementTocs = (regulation, page, params) => {
     const { offer } = offeringsStore;
-    let investNowTocs = get(offer, 'investNow.page') || [];
+    const { getInvestNowTocDefaults } = manageOfferingStore;
+    const isTemplate2 = get(offer, 'template') === 2;
+    let investNowTocs = (!isTemplate2 || !get(offer, 'investNow.page[0]')) ? getInvestNowTocDefaults() : get(offer, 'investNow.page') || [];
     investNowTocs = investNowTocs.find(i => i.page === page && i.regulation === regulation);
     const requiredArray = [];
     const pageRequiredArray = [];

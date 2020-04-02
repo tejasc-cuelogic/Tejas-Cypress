@@ -62,7 +62,14 @@ class Tombstone extends Component {
             <Grid.Column>
               <Header as="h4">Tombstone</Header>
               {smartElement.Input('customTag', { readOnly: isReadOnly })}
-              {smartElement.FormTextarea('description', { readOnly: isReadOnly, containerclassname: 'secondary' })}
+              <Form.Group widths={1}>
+                <Form.Field>
+                  <Header as="h6">{TOMBSTONE_BASIC_FRM.fields.description.label}</Header>
+                  {smartElement.HtmlEditor('description', { readOnly: isReadOnly, imageUploadPath: `offerings/${currentOfferingId}` })}
+                </Form.Field>
+              </Form.Group>
+              <Divider hidden />
+              {/* {smartElement.FormTextarea('description', { readOnly: isReadOnly, containerclassname: 'secondary' })} */}
               {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Tombstone Toggle Meta' })}
             </Grid.Column>
           </Grid>
