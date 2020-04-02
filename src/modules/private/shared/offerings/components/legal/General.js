@@ -90,7 +90,7 @@ export default class General extends Component {
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
+              displayMode={isReadonly}
               fielddata={GENERAL_FRM.fields.taxedAs}
               selection
               value={GENERAL_FRM.fields.taxedAs.value}
