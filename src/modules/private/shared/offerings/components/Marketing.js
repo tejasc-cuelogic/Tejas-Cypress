@@ -25,10 +25,10 @@ export default class Marketing extends Component {
   render() {
     const { isIssuer } = this.props.userStore;
     const navItems = [
-      { title: 'Tombstone', to: 'tombstone', component: 'Tombstone' },
+      { title: 'Summary Card', to: 'tombstone', component: 'Tombstone' },
       { title: 'Header', to: 'header', component: 'CampaignHeader' },
-      { title: 'Sub Header', to: 'sub-header', component: 'CampaignSubHeader' },
-      { title: 'Content', to: 'content', component: 'Content' },
+      { title: 'Sticky Bar', to: 'sub-header', component: 'CampaignSubHeader' },
+      { title: 'Offering Page', to: 'content', component: 'Content' },
       { title: 'Misc', to: 'misc', component: 'Misc' },
     ];
     const { match } = this.props;

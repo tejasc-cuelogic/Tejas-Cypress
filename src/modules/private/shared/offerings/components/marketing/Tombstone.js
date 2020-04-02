@@ -70,7 +70,7 @@ class Tombstone extends Component {
               </Form.Group>
               <Divider hidden />
               {/* {smartElement.FormTextarea('description', { readOnly: isReadOnly, containerclassname: 'secondary' })} */}
-              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Tombstone Toggle Meta' })}
+              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Display Toggle' })}
             </Grid.Column>
           </Grid>
           <TombstoneHeaderMeta />

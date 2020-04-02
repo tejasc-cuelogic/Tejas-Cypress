@@ -60,10 +60,10 @@ class CampaignSubHeader extends Component {
           <Divider section />
           <Grid columns="1">
             <Grid.Column>
-              {smartElement.FormCheckBox('toggleMeta', { fielddata: SUB_HEADER_BASIC_FRM.fields.toggleMeta, defaults: true, containerclassname: 'ui list field', label: 'Sub Header Toggle Meta' })}
+              {smartElement.FormCheckBox('toggleMeta', { fielddata: SUB_HEADER_BASIC_FRM.fields.toggleMeta, defaults: true, containerclassname: 'ui list field', label: 'Display Toggle' })}
             </Grid.Column>
           </Grid>
-          <TombstoneHeaderMeta hideHighlight noAddMore title="Sub Header Meta" />
+          <TombstoneHeaderMeta hideHighlight noAddMore title="Additional Fields" />
           <Divider section />
           <OfferingButtonGroup
             updateOffer={this.handleFormSubmit}

@@ -31,7 +31,7 @@ class NewContentModal extends Component {
     return (
       <Modal open closeIcon size="small" onClose={() => toggleModal(false, index)} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Add new component</Header>
+          <Header as="h3">Add new content block</Header>
         </Modal.Header>
         {
           <Modal.Content className="signup-content">
