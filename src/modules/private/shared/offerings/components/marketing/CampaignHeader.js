@@ -77,11 +77,11 @@ class CampaignHeader extends Component {
               {smartElement.Input('heroVideoURL', { displayMode: isReadOnly })}
             </Grid.Column>
             <Grid.Column>
-              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Header Toggle Meta' })}
+              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Display Toggle' })}
             </Grid.Column>
           </Grid>
           <CampaignHeaderSocial />
-          <TombstoneHeaderMeta hideHighlight title="Header Meta" />
+          <TombstoneHeaderMeta hideHighlight title="Additional Fields" />
           <Divider section />
           <OfferingButtonGroup
             updateOffer={this.handleFormSubmit}

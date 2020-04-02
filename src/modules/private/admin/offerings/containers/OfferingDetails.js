@@ -124,11 +124,11 @@ export default class OfferingDetails extends Component {
                   ))}
                 <Header.Subheader className="mt-10">
                   <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}`}>
-                    <Icon className="ns-view" /><b>Preview the offering page</b>
+                    <Icon className="ns-view" /><b>Preview offering page</b>
                   </Link>
-                  {offer.stage === 'CREATION'
+                  {/* {offer.stage === 'CREATION'
                     && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
-                  }
+                  } */}
                 </Header.Subheader>
               </Header>
             </CopyToClipboard>

@@ -64,7 +64,7 @@ class Misc extends Component {
             ))
           }
           <Divider section /> */}
-          <Header as="h4">Social media share links
+          <Header as="h4">Social Sharing Previews
             <Header.Subheader>
               Share links that go on the user’s social media to share the offering
             </Header.Subheader>

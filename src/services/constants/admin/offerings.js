@@ -1053,7 +1053,7 @@ export const OFFERING_DETAILS = {
   },
   referralCode: {
     value: '',
-    label: 'Offering Referral Code',
+    label: 'Issuer Referral Code',
     error: undefined,
     rule: 'optional|alpha_num',
     placeHolder: 'Enter here',

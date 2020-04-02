@@ -1,7 +1,7 @@
 import { FormHelper } from '../../../../helper';
 
 const TOMBSTONE_TOGGLE_META = [
-  { label: 'Investor Count', value: 'INVESTOR_COUNT' },
+  { label: 'Fundraising Stats', value: 'INVESTOR_COUNT' },
 ];
 
 const HEADER_TOGGLE_META = [
@@ -32,10 +32,10 @@ export const TOMBSTONE_BASIC = FormHelper.generateMeta([
   ['hardCloseDate', 'Hard Close Date', '', 'optional', 'e.g MM/DD/YYYY', { asIn: true, props: { maskFormattedChange: 'formatted', format: '##/##/####', skipField: true } }],
   ['raisedAmount', 'Raised Amount', '', 'optional', 'e.g $ 100', { asIn: true, props: { maskFormattedChange: 'float', skipField: true } }],
   ['investorCount', 'Investor Count', '', 'optional', 'e.g 3', { asIn: true, props: { skipField: true } }],
-  ['description', 'Tombstone Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
-  ['customTag', 'Tombstone Custom Tag', '', 'optional', 'Enter here...'],
+  ['description', 'Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
+  ['customTag', 'Custom Tag', '', 'optional', 'Enter here...'],
   ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { defaultValue: [], values: TOMBSTONE_TOGGLE_META } }],
-  ['image', 'Tombstone Image', '', 'optional', '', { s3Upload: true }],
+  ['image', 'Featured Image', '', 'optional', '', { s3Upload: true }],
 ]);
 
 export const SUB_HEADER_BASIC = FormHelper.generateMeta([
@@ -55,10 +55,10 @@ export const HEADER_BASIC = FormHelper.generateMeta([
   ['investorCount', 'Investor Count', '', 'optional', 'e.g 3', { asIn: true, props: { skipField: true } }],
   ['repaymentCount', 'Repayment Count', '', 'optional', 'e.g 2', { asIn: true, props: { skipField: true } }],
   ['earlyBird', 'Early Bird Available', '', 'optional', 'e.g 4', { asIn: true, props: { skipField: true } }],
-  ['heroVideoURL', 'Hero Video URL', '', 'optional', 'Enter here...'],
+  ['heroVideoURL', 'Featured Video', '', 'optional', 'Enter here...'],
   ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { defaultValue: [], values: HEADER_TOGGLE_META } }],
-  ['heroImage', 'Hero Image', '', 'optional', '', { s3Upload: true }],
-  ['heroBackgroundImage', 'Hero Background Image', '', 'optional', '', { s3Upload: true }],
+  ['heroImage', 'Featured Image', '', 'optional', '', { s3Upload: true }],
+  ['heroBackgroundImage', 'Background Image', '', 'optional', '', { s3Upload: true }],
 ]);
 
 export const OFFERING_MISC = FormHelper.generateMeta([
@@ -74,7 +74,7 @@ export const OFFERING_MISC = FormHelper.generateMeta([
   ['twitter_blurb', 'Blurb', '', 'optional', 'e.g. Company was formed...', { asIn: true, props: { find: 'type', type: 'twitter', skipField: true, ArrayObjItem: true, objRef: 'social' } }],
   ['twitter_featuredImageUpload', 'Featured Upload image', '', 'optional', 'e.g. Company was formed...', { s3Upload: true, asIn: true, props: { find: 'type', type: 'twitter', skipField: true, ArrayObjItem: true }, objRef: 'social' }],
   ['issuerStatement', 'Issuer Statement', '', 'optional', 'Enter here...'],
-  ['logo', 'Logo', '', 'optional', '', { s3Upload: true }],
+  ['logo', 'Company Logo', '', 'optional', '', { s3Upload: true }],
   ['avatar', 'Company Avatar', '', 'optional', '', { s3Upload: true }],
 ]);
 
@@ -138,7 +138,7 @@ export const OFFERING_CONTENT = {
 export const TOMBSTONE_HEADER_META = {
   meta: [{
     keyLabel: {
-      label: 'Key Name',
+      label: 'Field Name',
       value: '',
       error: undefined,
       rule: 'optional',
@@ -153,7 +153,7 @@ export const TOMBSTONE_HEADER_META = {
       defaultValue: 1,
     },
     keyType: {
-      label: 'Key Type',
+      label: 'Field Type',
       value: '',
       error: undefined,
       rule: 'optional',
@@ -164,7 +164,7 @@ export const TOMBSTONE_HEADER_META = {
       ],
     },
     keyValue: {
-      label: 'Key Value',
+      label: 'Field Value',
       value: '',
       error: undefined,
       rule: 'optional',
@@ -186,7 +186,7 @@ export const TOMBSTONE_HEADER_META = {
       placeHolder: 'Enter here',
     },
     keyFormat: {
-      label: 'Key Format',
+      label: 'Field Format',
       value: '',
       error: undefined,
       rule: 'optional',

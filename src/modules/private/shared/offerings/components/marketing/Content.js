@@ -55,7 +55,7 @@ export default class Content extends Component {
     const { OFFERING_CONTENT_FRM } = this.props.manageOfferingStore;
     const navItems = [];
     OFFERING_CONTENT_FRM.fields.content.map((content, index) => {
-      navItems.push({ title: `${content.title.value !== '' ? content.title.value : `Content ${index + 1}`}`, to: `${index + 1}`, index });
+      navItems.push({ title: `${content.title.value !== '' ? content.title.value : `Content Block ${index + 1}`}`, to: `${index + 1}`, index });
       return navItems;
     });
     return (
@@ -66,7 +66,7 @@ export default class Content extends Component {
             <div className="sticky-sidebar">
               <DraggableMenu secondary vertical match={match} onSortEnd={this.onSortEnd} navItems={navItems} />
               {OFFERING_CONTENT_FRM.fields.content.length < 10
-              && <Button size="small" color="blue" className="link-button mt-20" onClick={this.addMore}>+ Add another component</Button>
+              && <Button size="small" color="blue" className="link-button mt-20" onClick={this.addMore}>+ Add another content block</Button>
               }
             </div>
           </Grid.Column>
