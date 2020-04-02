@@ -1205,7 +1205,11 @@ export class OfferingCreationStore extends DataModelStore {
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
         window.logger('Error', err);
-        Helper.toast('Something went wrong.', 'error');
+        if (get(err, 'message') && get(err, 'message').includes('has locked the offering')) {
+          Helper.toast(get(err, 'message'), 'error');
+        } else {
+          Helper.toast('Something went wrong.', 'error');
+        }
         rej();
       })
       .finally(() => {

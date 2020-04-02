@@ -409,11 +409,18 @@ export class ManageOfferingStore extends DataModelStore {
       action: offeringAction,
     };
     try {
-      await this.executeMutation({
+      const data = await this.executeMutation({
         mutation: 'adminLockOrUnlockOffering',
         clientType: 'PRIVATE',
         variables,
       });
+      window.logger(data);
+      const lockObj = get(data, 'data.adminLockOrUnlockOffering') ? {
+        date: get(data, 'data.adminLockOrUnlockOffering.date'),
+        user: get(data, 'data.adminLockOrUnlockOffering.user'),
+        userId: get(data, 'data.adminLockOrUnlockOffering.userId'),
+      } : null;
+      offeringsStore.updateLockOffering(lockObj);
       res();
     } catch (error) {
       rej(error);

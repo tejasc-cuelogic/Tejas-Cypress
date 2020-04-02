@@ -18,7 +18,6 @@ function LockUnlockOffering(props) {
     const action = forceUnlockEnabled ? 'FORCE_UNLOCK' : get(aResult, 'checked') ? 'LOCK' : 'UNLOCK';
     props.manageOfferingStore.adminLockOrUnlockOffering(action).then(() => {
       setLockStatus(get(aResult, 'checked'));
-      window.location.reload();
     }).catch((err) => {
       const message = get(err, 'message') || '';
       if (message.includes('Not authorized.') || message.includes('has the lock')) {

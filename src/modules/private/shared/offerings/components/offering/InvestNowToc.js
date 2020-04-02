@@ -26,7 +26,7 @@ class InvestNowToc extends Component {
     const { showConfirm } = this.state;
     const { match, manageOfferingStore, uiStore, offeringsStore } = this.props;
     const { getAgreementTocList, campaignStatus } = manageOfferingStore;
-    const { offer } = offeringsStore;
+    const { offer, offerDataLoading } = offeringsStore;
     const regulation = get(offer, 'regulation');
     const securities = get(offer, 'keyTerms.securities');
     const showWarningMsg = (!regulation || !securities);
@@ -37,7 +37,7 @@ class InvestNowToc extends Component {
     const panes = Object.keys(getAgreementTocList).map(key => ({
       menuItem: CAMPAIGN_KEYTERMS_REGULATION[key], render: () => (<InvestNowTocList regulation={key} refLink={match.url} data={getAgreementTocList[key]} />),
     }));
-    if (inProgress === 'save') {
+    if (inProgress === 'save' || offerDataLoading) {
       return (<InlineLoader />);
     }
     return (
