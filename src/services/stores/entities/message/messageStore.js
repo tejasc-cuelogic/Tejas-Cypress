@@ -10,7 +10,7 @@ import {
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { DRAFT_NEW } from '../../../constants/messages';
-import { offeringCreationStore, campaignStore, userDetailsStore } from '../../index';
+import { offeringCreationStore, campaignStore, userDetailsStore, userStore } from '../../index';
 import uiStore from '../shared/uiStore';
 
 export class NewMessage {
@@ -114,8 +114,10 @@ export class NewMessage {
         .then((result) => {
           if (!offeringCreationStore.currentOfferingId) {
             campaignStore.getCampaignDetails(campaignSlug, false);
-          } else if (get(result, 'data.createOfferingComments')) {
+          } else if (get(result, 'data.createOfferingComments') && !userStore.isAdmin) {
             campaignStore.updateCommentThread(get(result, 'data.createOfferingComments'), currentMessageId);
+          } else if (get(result, 'data.createOfferingComments') && userStore.isAdmin) {
+            this.initRequest();
           }
           this.resetMessageForm();
           Helper.toast('Message sent.', 'success');
