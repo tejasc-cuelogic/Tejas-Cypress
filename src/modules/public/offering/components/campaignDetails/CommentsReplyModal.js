@@ -9,7 +9,7 @@ import { DataFormatter } from '../../../../../helper';
 @inject('messageStore')
 @observer
 class CommentsReplyModal extends Component {
-  state={ readMore: false }
+  state = { readMore: false }
 
   constructor(props) {
     super(props);
@@ -49,17 +49,17 @@ class CommentsReplyModal extends Component {
           <Comment.Group className="comments-modal">
             {!messageType && message
               && (
-<Comment className="issuer-comment">
-                <Comment.Content>
-                  <Comment.Author>{get(message, 'createdUserInfo.info.firstName')} {this.props.issuerId === get(message, 'createdUserInfo.id') && <Label color="blue" size="mini">ISSUER</Label>}</Comment.Author>
-                  <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(date, true, true, false)}</span></Comment.Metadata>
-                  <Comment.Text className="mt-20">
-                    {this.state.readMore === message.id
-                      ? message.comment : message.comment.length > readMoreLength ? `${message.comment.substr(0, readMoreLength)}...` : message.comment.substr(0, readMoreLength)}
-                    {message.comment.length > readMoreLength && <Link to="/" onClick={e => this.readMore(e, this.state.readMoreInner !== message.id ? message.id : false)}>{this.state.readMoreInner !== message.id ? 'read more' : 'read less'}</Link>}
-                  </Comment.Text>
-                </Comment.Content>
-              </Comment>
+                <Comment className="issuer-comment">
+                  <Comment.Content>
+                    <Comment.Author>{get(message, 'createdUserInfo.info.firstName')} {this.props.issuerId === get(message, 'createdUserInfo.id') && <Label color="blue" size="mini">ISSUER</Label>}</Comment.Author>
+                    <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(date, true, true, false)}</span></Comment.Metadata>
+                    <Comment.Text className="mt-20">
+                      {this.state.readMore === message.id
+                        ? message.comment : message.comment.length > readMoreLength ? `${message.comment.substr(0, readMoreLength)}...` : message.comment.substr(0, readMoreLength)}
+                      {message.comment.length > readMoreLength && <Link to="/" onClick={e => this.readMore(e, this.state.readMoreInner !== message.id ? message.id : false)}>{this.state.readMoreInner !== message.id ? 'read more' : 'read less'}</Link>}
+                    </Comment.Text>
+                  </Comment.Content>
+                </Comment>
               )
             }
             {/* Add below div if signed up - do not remove */}
