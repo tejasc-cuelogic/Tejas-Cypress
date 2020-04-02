@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 
 const updateField = `
       id
+      tiers
       title
       isVisible
       offeringId
