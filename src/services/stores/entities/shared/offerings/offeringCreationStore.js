@@ -527,7 +527,7 @@ export class OfferingCreationStore extends DataModelStore {
       if (field === 'legalBusinessName') {
         this[formName].fields.shorthandBusinessName.value = value;
       }
-      this[formName].fields.offeringSlug.value = kebabCase(value);
+      this[formName].fields.offeringSlug.value = `https://www/nextseed.com/offering/${kebabCase(value)}`;
     }
   }
 
