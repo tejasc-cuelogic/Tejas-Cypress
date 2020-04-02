@@ -86,7 +86,7 @@ export default class OffersPanel extends Component {
                           ishidelabel
                           containerclassname={isReadonly ? 'display-only' : ''}
                           className={isReadonly ? 'display-only secondary' : 'secondary'}
-                          readOnly={isReadonly}
+                          // readOnly={isReadonly}
                           displayMode={isIssuer}
                           name="structure"
                           placeholder="Choose"
@@ -231,7 +231,7 @@ export default class OffersPanel extends Component {
                           displayMode={isIssuer}
                           containerclassname={isReadonly ? 'display-only' : ''}
                           className={isReadonly ? 'display-only secondary' : 'secondary'}
-                          readOnly={isReadonly}
+                          // readOnly={isReadonly}
                           name="personalGuarantee"
                           placeholder="Choose"
                           fluid

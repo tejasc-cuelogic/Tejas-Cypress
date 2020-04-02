@@ -83,7 +83,7 @@ export default class KeyTerms extends Component {
               />
             ))}
             <FormDropDown
-              disabled={isReadonly}
+              displayMode={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.industry}
               selection
               value={KEY_TERMS_FRM.fields.industry.value}
@@ -105,6 +105,7 @@ export default class KeyTerms extends Component {
             ))}
             {['securities', 'equityClass', 'equityUnitType'].map(field => (
               <FormDropDown
+                displayMode={isReadonly}
                 containerclassname={isReadonly ? 'display-only' : ''}
                 className={isReadonly ? 'display-only' : ''}
                 disabled={isReadonly}
@@ -154,7 +155,7 @@ export default class KeyTerms extends Component {
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
+              displayMode={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.legalBusinessType}
               selection
               value={KEY_TERMS_FRM.fields.legalBusinessType.value}
@@ -178,7 +179,7 @@ export default class KeyTerms extends Component {
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
+              displayMode={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.regulation}
               selection
               value={KEY_TERMS_FRM.fields.regulation.value}
@@ -243,7 +244,7 @@ export default class KeyTerms extends Component {
             {/* <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
+              displayMode={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.roundType}
               selection
               value={KEY_TERMS_FRM.fields.roundType.value}
@@ -401,7 +402,7 @@ export default class KeyTerms extends Component {
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
+              displayMode={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.nsFeePercentage}
               selection
               value={KEY_TERMS_FRM.fields.nsFeePercentage.value}

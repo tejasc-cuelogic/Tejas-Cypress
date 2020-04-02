@@ -3,8 +3,8 @@ import graphql from 'mobx-apollo';
 import { isEmpty, map, uniqWith, isEqual, find, get, filter } from 'lodash';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore, individualAccountStore, entityAccountStore } from '../../index';
-import { linkBankRequestPlaid, linkBankRequestManual, validateBankAccount, declineBankChangeRequest, getDecryptedRoutingNumber, hasPendingTransfersWithPendingBankChange } from '../../queries/banking';
+import { accountStore, userDetailsStore, uiStore, iraAccountStore, individualAccountStore, entityAccountStore } from '../../index';
+import { validateBankAccount, declineBankChangeRequest, getDecryptedRoutingNumber, hasPendingTransfersWithPendingBankChange } from '../../queries/banking';
 import Helper from '../../../../helper/utility';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META, ENTITY_ADD_FUND,
@@ -505,38 +505,6 @@ export class BankAccountStore {
   }
 
   @action
-  changeBankPlaid = (pladiAccountDetails) => {
-    // const data = Validator.ExtractValues(this.formLinkBankManually.fields);
-    const data = {
-      plaidPublicToken: pladiAccountDetails.public_token,
-      plaidAccountId: pladiAccountDetails.account_id,
-      accountId: this.CurrentAccountId,
-    };
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: linkBankRequestPlaid,
-          variables: data,
-        })
-        .then(() => {
-          Helper.toast('Request for Change linked Bank initiated.', 'success');
-          this.resetFormData('formLinkBankManually');
-          userDetailsStore.getUser(userStore.currentUser.sub);
-          resolve();
-        })
-        .catch((error) => {
-          uiStore.setErrors(error.message);
-          Helper.toast(error.message, 'error');
-          reject(error.message);
-        }).finally(() => {
-          this.setLinkedBankCancelRequestStatus(false);
-          uiStore.setProgress(false);
-        });
-      // .catch (() => Helper.toast('Error', 'error'));
-    });
-  }
-
-  @action
   validateManualAccount = (accountType) => {
     // const data = Validator.ExtractValues(this.formLinkBankManually.fields);
     const { accountNumber, routingNumber } = this.formLinkBankManually.fields;
@@ -564,43 +532,6 @@ export class BankAccountStore {
           uiStore.setProgress(false);
         });
       // .catch (() => Helper.toast('Error', 'error'));
-    });
-  }
-
-  @action
-  linkBankRequestManual = () => {
-    const data = Validator.ExtractValues(this.formLinkBankManually.fields);
-    const updatedData = {
-      bankRoutingNumber: data.routingNumber,
-      bankAccountNumber: data.accountNumber,
-      accountId: this.CurrentAccountId,
-      accountType: data.accountType,
-    };
-    if (data.bankName) {
-      updatedData.bankName = data.bankName;
-    }
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: linkBankRequestManual,
-          variables: updatedData,
-        })
-        .then(() => {
-          Helper.toast('Request for Change linked Bank initiated.', 'success');
-          this.resetFormData('formLinkBankManually');
-          userDetailsStore.getUser(userStore.currentUser.sub);
-          resolve();
-          uiStore.setProgress(false);
-        })
-        .catch((error) => {
-          uiStore.setProgress(false);
-          uiStore.setErrors(error.message);
-          Helper.toast(error.message, 'error');
-          reject(error.message);
-        }).finally(() => {
-          this.setLinkedBankCancelRequestStatus(false);
-        });
-      // .catch((error) => Helper.toast('Error', 'error'));
     });
   }
 
