@@ -192,7 +192,7 @@ class Comments extends Component {
             </>
           )
         }
-        {(comments && comments.length && commentsMainThreadCount.length) || (isPostedNewComment && comments.length)
+        {(comments && commentsMainThreadCount.length) || (isPostedNewComment && comments.length)
           ? (
             <>
               <div color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>
