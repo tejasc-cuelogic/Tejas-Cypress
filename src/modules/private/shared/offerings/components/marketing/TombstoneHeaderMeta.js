@@ -118,9 +118,9 @@ function TombstoneHeaderMeta(props) {
   return (
     <>
       <Header as="h4">
-        {title || 'Tombstone Meta'}
+        {title || 'Additional Fields'}
         {(!isReadOnly && !noAddMore && TOMBSTONE_HEADER_META_FRM.fields.meta.length < 5)
-        && <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMore('TOMBSTONE_HEADER_META_FRM', 'meta')}>+ Add another section</Button>
+        && <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMore('TOMBSTONE_HEADER_META_FRM', 'meta')}>+ Add another field</Button>
         }
       </Header>
       <MetaList

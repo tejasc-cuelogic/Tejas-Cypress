@@ -7,7 +7,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { InlineLoader } from '../../../../../theme/shared';
 import LiveSummary from '../components/LiveSummary';
-import CreationSummary from '../components/CreationSummary';
+// import CreationSummary from '../components/CreationSummary';
 import OfferingModule from '../../../shared/offerings/components';
 import EditOffering from '../components/EditOfferingModal';
 import EditPoc from '../components/EditPocModal';
@@ -124,17 +124,17 @@ export default class OfferingDetails extends Component {
                   ))}
                 <Header.Subheader className="mt-10">
                   <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}`}>
-                    <Icon className="ns-view" /><b>Preview the offering page</b>
+                    <Icon className="ns-view" /><b>Preview offering page</b>
                   </Link>
-                  {offer.stage === 'CREATION'
+                  {/* {offer.stage === 'CREATION'
                     && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
-                  }
+                  } */}
                 </Header.Subheader>
               </Header>
             </CopyToClipboard>
             {/* Lock unlock component */}
             <LockUnlockOffering />
-            {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
+            {offer.stage === 'CREATION' ? '' : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
               <SecondaryMenu isBonusReward bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
               <Switch>

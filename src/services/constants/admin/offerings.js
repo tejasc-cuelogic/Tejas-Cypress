@@ -40,7 +40,7 @@ export const KEY_TERMS = {
   },
   shorthandBusinessName: {
     value: '',
-    label: 'Short hand Name of Business',
+    label: 'DBA',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',
@@ -546,15 +546,15 @@ export const BUSINESS_TYPE_VALUES = [
 ];
 
 export const OFFERING_TEMPLATE_VALUES = [
-  { key: 1, value: 1, text: '1' },
-  { key: 2, value: 2, text: '2' },
+  { key: 1, value: 1, text: 'Legacy' },
+  { key: 2, value: 2, text: 'Version 2.0' },
 ];
 
 export const REGULATION_VALUES = [
-  { key: 'Reg CF', value: 'BD_CF', text: 'Reg CF' },
-  { key: 'Reg D 506(c)', value: 'BD_506C', text: 'Reg D 506(c)' },
-  { key: 'Reg D 506(b)', value: 'BD_506B', text: 'Reg D 506(b)' },
-  { key: 'Reg CF + Reg D 506(c)', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c)' },
+  { key: 'Reg CF', value: 'BD_CF', text: 'Regulation Crowdfunding' },
+  { key: 'Reg D 506(c)', value: 'BD_506C', text: 'Regulation D, 506(c)' },
+  { key: 'Reg D 506(b)', value: 'BD_506B', text: 'Regulation D, 506(b)' },
+  { key: 'Reg CF + Reg D 506(c)', value: 'BD_CF_506C', text: 'Parallel (Regulation Crowdfunding + Regulation D, 506(c))' },
 ];
 
 export const NS_FEE_PERCENTAGE = [
@@ -1039,7 +1039,7 @@ export const CONTINGENCIES = {
 export const OFFERING_DETAILS = {
   offeringSlug: {
     value: '',
-    label: 'Offering Slug',
+    label: 'Offering URL',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',
@@ -1053,7 +1053,7 @@ export const OFFERING_DETAILS = {
   },
   referralCode: {
     value: '',
-    label: 'Offering Referral Code',
+    label: 'Issuer Referral Code',
     error: undefined,
     rule: 'optional|alpha_num',
     placeHolder: 'Enter here',

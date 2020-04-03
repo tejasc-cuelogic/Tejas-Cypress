@@ -82,8 +82,12 @@ export default class Listing extends Component {
           <Table unstackable className="application-list clickable striped">
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Status</Table.HeaderCell>
+                <Table.HeaderCell>Offering Name</Table.HeaderCell>
+                <Table.HeaderCell>Security Type</Table.HeaderCell>
+                <Table.HeaderCell>Exemption</Table.HeaderCell>
+                {stage !== 'creation'
+                  && <Table.HeaderCell>Status</Table.HeaderCell>
+                }
                 {stage === 'live'
                   ? (
                     <Table.HeaderCell></Table.HeaderCell>
@@ -91,8 +95,8 @@ export default class Listing extends Component {
                   : (stage !== 'engagement'
                     ? (
                       <>
-                        <Table.HeaderCell>Created Date</Table.HeaderCell>
-                        <Table.HeaderCell>{stage === 'creation' ? 'Days till launch' : 'Launch Date'}</Table.HeaderCell>
+                        <Table.HeaderCell>Date Created</Table.HeaderCell>
+                        <Table.HeaderCell>{stage === 'creation' ? 'Days Until Launch' : 'Launch Date'}</Table.HeaderCell>
                       </>
                     )
                     : <Table.HeaderCell>Hard Close Date</Table.HeaderCell>
@@ -104,7 +108,6 @@ export default class Listing extends Component {
                   && <Table.HeaderCell>Lead</Table.HeaderCell>
                 }
                 <Table.HeaderCell>POC</Table.HeaderCell>
-                <Table.HeaderCell>Securities</Table.HeaderCell>
                 {stage === 'engagement'
                   && <Table.HeaderCell>Repayment Amount</Table.HeaderCell>
                 }
@@ -124,22 +127,33 @@ export default class Listing extends Component {
                             (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
                           ))}
                         </b>
-                        <br />
-                            {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
                       </Link>
                     </Table.Cell>
-                    <Table.Cell className="text-capitalize">
-                      {offering && offering.stage
-                        ? stage === 'live' && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0 && get(offering, 'category') && ['processing'].includes(get(offering, 'category'))
-                          ? STAGES.PROCESSING.label
-                          : stage === 'live' && get(offering, 'category') && !['processing', 'reachedMax'].includes(get(offering, 'category')) && get(offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
-                            ? STAGES.LOCK.label
-                            : stage === 'live' && get(offering, 'category') && ['reachedMax'].includes(get(offering, 'category'))
-                              ? 'Reached Max'
-                              : STAGES[offering.stage].label
-                        : STAGES[offering.stage].label
-                      }
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
+                      {(() => {
+                        const security = SECURITIES_VALUES.find(s => s.value === get(offering, 'keyTerms.securities'));
+                        return security ? security.text : 'N/A';
+                      })()}
                     </Table.Cell>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
+                      {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
+                    </Table.Cell>
+                    {stage !== 'creation'
+                      && (
+                        <Table.Cell className="text-capitalize">
+                          {offering && offering.stage
+                            ? stage === 'live' && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0 && get(offering, 'category') && ['processing'].includes(get(offering, 'category'))
+                              ? STAGES.PROCESSING.label
+                              : stage === 'live' && get(offering, 'category') && !['processing', 'reachedMax'].includes(get(offering, 'category')) && get(offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
+                                ? STAGES.LOCK.label
+                                : stage === 'live' && get(offering, 'category') && ['reachedMax'].includes(get(offering, 'category'))
+                                  ? 'Reached Max'
+                                  : STAGES[offering.stage].label
+                            : STAGES[offering.stage].label
+                          }
+                        </Table.Cell>
+                      )
+                    }
                     {stage === 'live'
                       ? (
                         <Table.Cell>
@@ -165,8 +179,8 @@ export default class Listing extends Component {
                             </>
                           )
                           : <Table.Cell onClick={() => this.handleAction('Edit', offering)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}</Table.Cell>
-
-                      )}
+                      )
+                    }
                     {/* {stage !== 'engagement'
                       ? (
                         <>
@@ -209,12 +223,6 @@ export default class Listing extends Component {
                           : <b>N/A</b>
                         }
                       </p>
-                    </Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
-                      {(() => {
-                        const security = SECURITIES_VALUES.find(s => s.value === get(offering, 'keyTerms.securities'));
-                        return security ? security.text : 'N/A';
-                      })()}
                     </Table.Cell>
                     {stage === 'engagement'
                       && <Table.Cell onClick={() => this.handleAction('Edit', offering)}>{offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? `${Helper.CurrencyFormat(get(offering, 'closureSummary.repayment.currentRepaidAmount'))} (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}</Table.Cell>
