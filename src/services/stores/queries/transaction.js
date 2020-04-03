@@ -52,6 +52,7 @@ export const paymentHistory = gql`
       interestGrossAmount
       principalGrossAmount
       remainingPrincipalDue
+      paymentType
     }
   }
 `;

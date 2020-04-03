@@ -3,7 +3,9 @@ import { observer, inject } from 'mobx-react';
 import { get, pick } from 'lodash';
 import ReactCodeInput from 'react-code-input';
 import { Button, Form, Confirm, Header } from 'semantic-ui-react';
-import { ImageCropper, FormTextarea, FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown } from '.';
+import {
+  ImageCropper, FormTextarea, FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown,
+} from '.';
 import Address from './src/Address';
 import HtmlEditor from '../../modules/shared/HtmlEditor';
 import { Image64 } from '../shared';

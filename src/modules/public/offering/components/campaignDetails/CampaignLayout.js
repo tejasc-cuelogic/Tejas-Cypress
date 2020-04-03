@@ -187,10 +187,10 @@ class CampaignLayout extends Component {
   }
 
   render() {
-    const { campaign, campaignStatus, dataRoomDocs } = this.props.campaignStore;
+    const { campaign, campaignStatus, dataRoomDocs, postedCommentCount } = this.props.campaignStore;
     let updates = campaign && campaign.updates;
     updates = orderBy(updates, o => get(o, 'updatedDate') && moment(new Date(o.updatedDate)).unix(), ['asc']);
-    const postedComments = get(campaign, 'comments') || [];
+    // const postedComments = get(campaign, 'comments') || [];
     return (
       <div className="campaign-content-wrapper v-2">
         {get(campaign, 'template') === 2
@@ -276,12 +276,12 @@ class CampaignLayout extends Component {
             }
             <Divider hidden section />
             {!campaignStatus.isFund && <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />}
-            {postedComments.length > 1
-              && (
-                <Button onClick={() => this.handleCollapseExpand('expandComments', '#comments')} className="link-button highlight-text mt-40">
-                  {this.state.expandComments ? 'Collapse' : 'Expand'} All Comments
-              <Icon className={`ns-caret-${this.state.expandComments ? 'up' : 'down'} right`} />
-                </Button>
+            {postedCommentCount > 1
+            && (
+              <Button onClick={() => this.handleCollapseExpand('expandComments', '#comments')} className="link-button highlight-text mt-40">
+                {this.state.expandComments ? 'Collapse' : 'Expand'} All Comments
+                <Icon className={`ns-caret-${this.state.expandComments ? 'up' : 'down'} right`} />
+              </Button>
               )
             }
           </>

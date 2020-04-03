@@ -264,7 +264,6 @@ export default class Leader extends Component {
               : (
                 <MaskedInput
                   name="ssn"
-                  type="tel"
                   fielddata={LEADERSHIP_FRM.fields.leadership[index].ssn}
                   ssn
                   changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}

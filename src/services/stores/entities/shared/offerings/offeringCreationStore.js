@@ -613,8 +613,9 @@ export class OfferingCreationStore extends DataModelStore {
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
     const isDateField = includes(['maturityDate', 'dob', 'dateOfService', 'dlExpirationDate', 'dlIssuedDate'], field);
+    const isString = includes(['ssn'], field);
     const isAbsField = includes(['startupPeriod'], field);
-    const fieldValue = isDateField ? values.formattedValue : isAbsField ? Math.abs(values.floatValue) || '' : values.floatValue;
+    const fieldValue = isDateField ? values.formattedValue : isAbsField ? Math.abs(values.floatValue) || '' : isString ? values.value : values.floatValue;
     if (form === 'KEY_TERMS_FRM' && includes(['minOfferingAmount506', 'maxOfferingAmount506'], field)) {
       this[form] = Validator.onArrayFieldChange(
         this[form],

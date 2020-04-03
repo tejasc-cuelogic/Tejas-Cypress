@@ -37,7 +37,6 @@ class InvestNowToc extends Component {
     const panes = Object.keys(getAgreementTocList).map(key => ({
       menuItem: CAMPAIGN_KEYTERMS_REGULATION[key], render: () => (<InvestNowTocList regulation={key} refLink={match.url} data={getAgreementTocList[key]} />),
     }));
-    console.log(showReset, isReadOnly);
     if (inProgress === 'save' || offerDataLoading) {
       return (<InlineLoader />);
     }
