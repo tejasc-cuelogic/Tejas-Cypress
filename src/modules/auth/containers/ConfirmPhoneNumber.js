@@ -7,7 +7,7 @@ import ReactCodeInput from 'react-code-input';
 import { Grid, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 import { MaskedInput, FormRadioGroup } from '../../../theme/form';
-import { ListErrors, SuccessScreen, NsModal } from '../../../theme/shared';
+import { ListErrors, NsModal } from '../../../theme/shared';
 import MigratedUserPhoneNumber from './MigratedUserPhoneNumber';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -128,7 +128,7 @@ export default class ConfirmPhoneNumber extends Component {
     if (signupStatus.isMigratedFullAccount && !confirmMigratedUserPhoneNumber) {
       return <MigratedUserPhoneNumber />;
     } if (isOptConfirmed) {
-      return <SuccessScreen closeLink="/dashboard/setup" handleCloseModal={this.handleCloseModal} successMsg="Thank you! Your phone number has been confirmed." handleContinue={this.handleContinue} />;
+      this.handleContinue();
     }
     return (
       <NsModal
