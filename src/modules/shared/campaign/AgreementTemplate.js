@@ -160,7 +160,7 @@ function AgreementTemplate(props) {
         isProgressHeaderDisable
         isHeaderDisabled={showAgreementPdf}
         modalContentClass={showAgreementPdf ? 'pt-0 pb-0' : ''}
-        disableCloseIcon={showDocuSign || showAgreementPdf}
+        disableCloseIcon={showDocuSign || showAgreementPdf || inProgress}
       >
         {(showDocuSign || showAgreementPdf)
           && (
