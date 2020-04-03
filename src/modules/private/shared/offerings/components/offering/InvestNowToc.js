@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import { Grid, Tab, Form, Confirm } from 'semantic-ui-react';
+import { Grid, Tab, Form, Confirm, Button } from 'semantic-ui-react';
 import InvestNowTocList from './toc/InvestNowTocList';
 import { CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
-import OfferingButtonGroup from '../OfferingButtonGroup';
+// import OfferingButtonGroup from '../OfferingButtonGroup';
 
 @inject('manageOfferingStore', 'uiStore', 'offeringsStore')
 @withRouter
@@ -37,6 +37,7 @@ class InvestNowToc extends Component {
     const panes = Object.keys(getAgreementTocList).map(key => ({
       menuItem: CAMPAIGN_KEYTERMS_REGULATION[key], render: () => (<InvestNowTocList regulation={key} refLink={match.url} data={getAgreementTocList[key]} />),
     }));
+    console.log(showReset, isReadOnly);
     if (inProgress === 'save' || offerDataLoading) {
       return (<InlineLoader />);
     }
@@ -44,9 +45,15 @@ class InvestNowToc extends Component {
       <div className="inner-content-spacer">
         <Form>
           <Grid stackable>
-            {showWarningMsg ? <Grid.Row><span className="negative-text mt-10 ml-10">Please select and verify the offering Regulation and Security (and equity class for Equity).</span></Grid.Row> : (
+            {showWarningMsg ? <Grid.Row><span className="negative-text mt-10 ml-10">Please select and verify the offering Regulation and Security (and equity class for Equity).</span></Grid.Row>
+            : (!isReadOnly || showReset) && (
             <Grid.Row>
-              {(!isReadOnly || showReset)
+              <Grid.Column textAlign="right" floated="right">
+                <Button.Group size="mini" textAlign="right" floated="right">
+                  <Button disabled={inProgress} loading={inProgress === 'save'} primary onClick={() => (showReset ? this.setState({ showConfirm: true }) : this.handleFormSubmit('EDIT'))} color="green" className="relaxed" content={showReset ? 'Reset' : 'Edit'} />
+                </Button.Group>
+              </Grid.Column>
+              {/* {(!isReadOnly || showReset)
               && (
               <Grid.Column textAlign="right" floated="right">
                 <OfferingButtonGroup
@@ -54,25 +61,20 @@ class InvestNowToc extends Component {
                   updateOffer={() => (showReset ? this.setState({ showConfirm: true }) : this.handleFormSubmit('EDIT'))}
                 />
               </Grid.Column>
-              )}
-              {/* {showReset
-              && (
-              <Grid.Column textAlign="right" floated="right">
-                <Button icon className="link-button" onClick={() => this.setState({ showConfirm: true })}>
-                  <Icon color="green" size="large" className="ns-reload-circle" />
-                </Button>
-              </Grid.Column>
               )} */}
             </Grid.Row>
             )}
           </Grid>
         </Form>
+        {!showWarningMsg
+        && (
         <Grid>
           <Grid.Column widescreen={16} computer={16}>
             {regulation !== 'BD_CF_506C' ? Object.keys(getAgreementTocList).map(key => (<InvestNowTocList regulation={key} refLink={match.url} data={getAgreementTocList[key]} />))
             : <Tab className="offering-creation-tab" panes={panes} />}
           </Grid.Column>
         </Grid>
+        )}
         <Confirm
           header="Confirm"
           content="Are you sure you want to reset invest now toc with ns-default values?"

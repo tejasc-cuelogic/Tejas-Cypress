@@ -193,11 +193,12 @@ export default class InvestNowTocList extends Component {
   preview = label => this.props.agreementsStore.preview(label, { docuSignHandeler: this.callbackFun, refLink: '', agreementPDFLoader: this.callbackFun });
 
   render() {
-    const { data, regulation, offeringsStore } = this.props;
+    const { data, regulation, offeringsStore, manageOfferingStore } = this.props;
     const { offer } = offeringsStore;
+    const { campaignStatus } = manageOfferingStore;
     const { showConfirm, activeIndex, showModal, page, tocIndex, previewMode } = this.state;
     const tocTemplate = get(offer, 'template');
-    const isReadOnly = get(offer, 'stage') !== 'CREATION' || tocTemplate !== 2 || (!get(offer, 'investNow.page[0]') && tocTemplate === 2);
+    const isReadOnly = campaignStatus.lock || get(offer, 'stage') !== 'CREATION' || tocTemplate !== 2 || (!get(offer, 'investNow.page[0]') && tocTemplate === 2);
     return (
       <>
         {!isReadOnly && <Button size="small" color="blue" floated="right" className="link-button mt-20 mb-20" onClick={e => this.addMore(e, 'PAGE')}>+ Add Page</Button>}
