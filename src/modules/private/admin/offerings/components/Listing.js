@@ -230,7 +230,7 @@ export default class Listing extends Component {
                     <Table.Cell collapsing textAlign="center">
                       <Button.Group>
                         {Object.keys(actions).map(action => (
-                          action.label === 'Delete' && stage === 'engagement' ? ''
+                          actions[action].label === 'Publish' && stage === 'creation' ? ''
                             : (
                               <Button icon className="link-button">
                                 <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering, !offering.isAvailablePublicly)} />
