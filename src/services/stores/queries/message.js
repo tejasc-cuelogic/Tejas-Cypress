@@ -85,6 +85,51 @@ export const createOfferingComments = gql`
     commentInput: $commentInput
   ) {
     id
+    scope
+      comment
+      approved {
+        date
+      }
+      updated {
+        date
+      }
+      created {
+        date
+      }
+      createdUserInfo {
+        id
+        info {
+          firstName
+          lastName
+        }
+        roles {
+          name
+        }
+      }
+      threadComments {
+        id
+        scope
+        comment
+        approved {
+          date
+        }
+        updated {
+          date
+        }
+        created {
+          date
+        }
+        createdUserInfo {
+          id
+          info {
+            firstName
+            lastName
+          }
+          roles {
+            name
+          }
+        }
+      }
   }
 }
 `;
