@@ -79,7 +79,7 @@ export class ManageOfferingStore extends DataModelStore {
   get getAgreementTocList() {
     const { offer } = offeringsStore;
     const regulation = get(offer, 'regulation');
-    const selectedTemplate = get(offer, 'template');
+    const selectedTemplate = get(offer, 'investNow.template');
     const nsDefaultData = this.getInvestNowTocDefaults();
     let investNow = [];
     if (selectedTemplate === 2 && get(offer, 'investNow.page[0]')) {

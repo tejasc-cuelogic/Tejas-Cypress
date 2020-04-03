@@ -32,7 +32,7 @@ class InvestNowToc extends Component {
     const showWarningMsg = (!regulation || !securities);
     const { inProgress } = uiStore;
     const isReadOnly = get(offer, 'stage') !== 'CREATION' || campaignStatus.lock;
-    const tocTemplate = get(offer, 'template');
+    const tocTemplate = get(offer, 'investNow.template');
     const showReset = (get(offer, 'stage') === 'CREATION' && tocTemplate === 2 && !!get(offer, 'investNow.page[0]'));
     const panes = Object.keys(getAgreementTocList).map(key => ({
       menuItem: CAMPAIGN_KEYTERMS_REGULATION[key], render: () => (<InvestNowTocList regulation={key} refLink={match.url} data={getAgreementTocList[key]} />),

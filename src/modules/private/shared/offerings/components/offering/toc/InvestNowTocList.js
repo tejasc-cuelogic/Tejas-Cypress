@@ -197,7 +197,7 @@ export default class InvestNowTocList extends Component {
     const { offer } = offeringsStore;
     const { campaignStatus } = manageOfferingStore;
     const { showConfirm, activeIndex, showModal, page, tocIndex, previewMode } = this.state;
-    const tocTemplate = get(offer, 'template');
+    const tocTemplate = get(offer, 'investNow.template');
     const isReadOnly = campaignStatus.lock || get(offer, 'stage') !== 'CREATION' || tocTemplate !== 2 || (!get(offer, 'investNow.page[0]') && tocTemplate === 2);
     return (
       <>
