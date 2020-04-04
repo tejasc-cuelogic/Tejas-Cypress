@@ -14,7 +14,7 @@ import InvestmentDetails from './InvestmentDetails';
 import CancelInvestment from '../components/portfolio/CancelInvestment';
 import { InlineLoader, IframeModal } from '../../../../../theme/shared';
 import InvestNow from '../../../../public/offering/components/investNow/InvestNow';
-import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
+// import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
 import AgreementTemplate from '../../../../shared/campaign/AgreementTemplate';
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
@@ -106,8 +106,8 @@ export default class Portfolio extends PureComponent {
   }
 
   routesList = () => {
-    const { match, campaignStore } = this.props;
-    const AgreementComponent = campaignStore.campaignStatus.isAgreementTemplate ? AgreementTemplate : Agreement;
+    const { match } = this.props;
+    // const AgreementComponent = campaignStore.campaignStatus.isAgreementTemplate ? AgreementTemplate : Agreement;
     return (
       <Switch>
         <Route
@@ -119,7 +119,7 @@ export default class Portfolio extends PureComponent {
           path={`${match.url}/:offeringId/invest-now`}
           render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
         />
-        <Route exact path={`${match.url}/:offeringId/agreement`} render={() => <AgreementComponent changeInvestment refLink={match.url} />} />
+        <Route exact path={`${match.url}/:offeringId/agreement`} render={() => <AgreementTemplate changeInvestment refLink={match.url} />} />
         <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}`} {...props} />} />
         <Route path={`${match.url}/:offeringId/congratulation`} render={() => <Congratulation changeInvestment />} />
         <Route

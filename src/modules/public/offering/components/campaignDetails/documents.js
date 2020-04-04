@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
-import { isEmpty, get } from 'lodash';
+import { isEmpty, get, camelCase } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Header, Grid, Segment, Button, Divider } from 'semantic-ui-react';
@@ -59,8 +59,8 @@ export default class Documents extends Component {
           ? (
             <>
               <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
-                <span className="anchor" id="data-room" />
-                Documents
+                <span className="anchor" id={this.props.title ? camelCase(this.props.title) : 'data-room'} />
+                {this.props.title || 'Documents'}
               </Header>
             </>
           ) : null

@@ -150,6 +150,8 @@
                 }
                 > .meta{
                     text-transform:none;
+                    font-size: @15px;
+                    line-height: 24px;
                 }
                 .description{
                     min-height:120px;
@@ -165,6 +167,10 @@
                     min-height: 115px;
                     @media only screen and (max-width : @monitorBreakpoint){
                         min-height: auto;
+                    }
+                    .ui.table tbody tr td{
+                        line-height: 26px;
+                        font-size: @14px;
                     }
                 }
                 p{
@@ -188,6 +194,7 @@
             top: auto;
             width: 100%;
             background: @white;
+            min-height: 73px !important;
             @media only screen and (max-width : @largestMobileScreen){
                 padding:0 @22px @20px;
             }

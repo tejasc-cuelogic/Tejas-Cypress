@@ -14,6 +14,7 @@ import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLO
 import authStore from '../services/stores/entities/shared/authStore';
 import userStore from '../services/stores/entities/userStore';
 import DataFormatter from './utilities/DataFormatter';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL, CAMPAIGN_KEYTERMS_REGULATION } from '../constants/offering';
 
 export class Utility {
   // Default options for the toast
@@ -386,6 +387,14 @@ export class Utility {
     }
   };
 
+  formatValue = (format, value) => {
+    if (format && format.search('{{var}}') > -1) {
+      const d = format.replace('{{var}}', value);
+      return d;
+    }
+    return value;
+  };
+
   checkAccreditationExpiryStatus = (expirationDate, isUnix = false) => {
     let dateDiff = '';
     if (expirationDate) {
@@ -401,6 +410,22 @@ export class Utility {
     const regulationType = _.get(offeringRegulationArr, '[0]');
     return regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
   }
+
+  enumToText = (valKey = '', value, fullText = false) => {
+    let val = value;
+    if (valKey) {
+      let key = valKey.split('.');
+      if (valKey && key.length) {
+        key = key[key.length - 1];
+        if (key === 'securities') {
+          val = CAMPAIGN_KEYTERMS_SECURITIES[value];
+        } else if (key === 'regulation') {
+          val = fullText ? CAMPAIGN_KEYTERMS_REGULATION[value] : CAMPAIGN_KEYTERMS_REGULATION_PARALLEL[value];
+        }
+      }
+    }
+    return val;
+  };
 
   cleanMsg = msg => (msg ? msg.replace('GraphQL error: ', '').replace('Error: ', '') : '');
 }

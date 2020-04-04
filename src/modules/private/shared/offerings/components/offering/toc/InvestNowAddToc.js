@@ -33,8 +33,8 @@ function InvestNowAddToc(props) {
   };
 
   const { smartElement, manageOfferingStore, type } = props;
-  const { INVEST_NOW_TOC_FRM } = manageOfferingStore;
-  const isReadOnly = false;
+  const { INVEST_NOW_TOC_FRM, campaignStatus } = manageOfferingStore;
+  const isReadOnly = campaignStatus.lock;
   return (
     <div className="inner-content-spacer">
       <Form>

@@ -4,7 +4,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import { Popup, Icon } from 'semantic-ui-react';
 import { forEach, filter, get, groupBy, map, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
-import { uiStore, campaignStore, userDetailsStore, offeringsStore } from '../../../index';
+import { uiStore, campaignStore, userDetailsStore, offeringsStore, manageOfferingStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
 import { getBoxEmbedLink, getLegalDocsFileIds, getS3DownloadLinkByFileId } from '../../../queries/agreements';
 import { AGREEMENT_TEMPLATE_DETAILS_INFO } from '../../../../constants/investment';
@@ -275,7 +275,7 @@ export class AgreementsStore {
     const { campaignStatus } = campaignStore;
     const { currentActiveAccount } = userDetailsStore;
     const currentSelectedAccount = ['individual', 'ira'].includes(currentActiveAccount) ? 'INDIVIDUAL' : 'ENTITY';
-    let investNowTocs = campaignStatus.investNowToc;
+    let investNowTocs = campaignStatus.isAgreementTemplate ? campaignStatus.investNowToc : manageOfferingStore.getInvestNowTocDefaults(true);
     const checkAccountValidation = acc => (!acc || acc === 'ALL' || acc === currentSelectedAccount);
     const checkRegulationValidation = reg => (!reg || reg === currentRegulation);
     investNowTocs = filter(investNowTocs, i => (checkRegulationValidation(i.regulation)));
@@ -319,7 +319,9 @@ export class AgreementsStore {
   @action
   previewAgreementTocs = (regulation, page, params) => {
     const { offer } = offeringsStore;
-    let investNowTocs = get(offer, 'investNow.page') || [];
+    const { getInvestNowTocDefaults } = manageOfferingStore;
+    const isTemplate2 = get(offer, 'investNow.template') === 2;
+    let investNowTocs = (!isTemplate2 || !get(offer, 'investNow.page[0]')) ? getInvestNowTocDefaults() : get(offer, 'investNow.page') || [];
     investNowTocs = investNowTocs.find(i => i.page === page && i.regulation === regulation);
     const requiredArray = [];
     const pageRequiredArray = [];
