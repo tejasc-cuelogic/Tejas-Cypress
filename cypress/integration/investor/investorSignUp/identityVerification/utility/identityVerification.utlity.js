@@ -4,25 +4,22 @@ import { fillSignUpFormAndProceed, confirmEmailAddressScreen } from '../../basic
 export const fillLegalDetailsForm = (legalDetails = undefined) => {
   cy.fixture('investor/identityVerification.json').then((legalData) => {
     const legalDetailObject = legalDetails || legalData.legalDetailsMeta;
-    cy.get('div.content > form').within(() => {
-      cy.get('div[name="salutation"]')
+    cy.get('[data-cy="salutation"]')
         .click()
         .get(`div[role="option"]:contains(${legalDetailObject.salutation})`)
         .click();
-      // cy.get('div[name="title"]').find('div.text').type(legalDetailObject.salutation);
-      cy.get('input[name="firstLegalName"]').type(legalDetailObject.firstLegalName);
-      cy.get('input[name="lastLegalName"]').type(legalDetailObject.lastLegalName);
-      cy.get('input[name="street"]').type(legalDetailObject.residentialStreet);
-      cy.get('input[name="city"]').type(legalDetailObject.city);
-      cy.get('div[name="state"]')
+      cy.get('[data-cy="firstLegalName"]').type(legalDetailObject.firstLegalName);
+      cy.get('[data-cy="lastLegalName"]').type(legalDetailObject.lastLegalName);
+      cy.get('[data-cy="street"]').type(legalDetailObject.residentialStreet);
+      cy.get('[data-cy="city"]').type(legalDetailObject.city);
+      cy.get('[data-cy="state"]')
         .click()
         .get(`div[role="option"]:contains(${legalDetailObject.state})`)
         .click();
-      cy.get('input[name="zipCode"]').type(legalDetailObject.zipCode);
-      cy.get('input[name="phoneNumber"]').type(legalDetailObject.phoneNumber);
-      cy.get('input[name="dateOfBirth"]').type(legalDetailObject.dateOfBirth);
-      cy.get('input[name="ssn"]').type(legalDetailObject.ssn);
-    });
+      cy.get('[data-cy="zipCode"]').type(legalDetailObject.zipCode);
+      cy.get('[data-cy="phoneNumber"]').type(legalDetailObject.phoneNumber);
+      cy.get('[data-cy="dateOfBirth"]').type(legalDetailObject.dateOfBirth);
+      cy.get('[data-cy="ssn"]').type(legalDetailObject.ssn);
   });
 };
 

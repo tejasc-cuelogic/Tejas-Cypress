@@ -24,7 +24,7 @@ export const getJSONDataFromFixtures = async (path = '', props = undefined) => {
 };
 
 export const typeOtpCode = () => {
-  cy.get('.react-code-input', { timeout: 100000 }).within(() => {
+  cy.get('.react-code-input').within(() => {
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < 6; i++) {
       cy.get(`[data-id=${i}]`).type('1');
@@ -35,7 +35,7 @@ export const typeOtpCode = () => {
 export const enterCodeAndConfirm = (operationName) => {
   registerApiCall(operationName, '/dev/graphql');
   typeOtpCode();
-  cy.get('form').find('button').contains('Confirm').click();
+  cy.get('[data-cy=confirm-email]').click();
   cy.wait(`@${operationName}`);
 };
 

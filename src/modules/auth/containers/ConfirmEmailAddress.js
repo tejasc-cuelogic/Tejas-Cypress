@@ -260,7 +260,7 @@ export default class ConfirmEmailAddress extends Component {
                   </Message>
                 )
               }
-              <Button fluid={isMobile} primary content="Confirm" disabled={!canSubmitConfirmEmail || (errors && errors.message) || inProgress} />
+              <Button fluid={isMobile} primary content="Confirm" data-cy="confirm-email" disabled={!canSubmitConfirmEmail || (errors && errors.message) || inProgress} />
             </Form>
           </Grid.Column>
         </Grid>

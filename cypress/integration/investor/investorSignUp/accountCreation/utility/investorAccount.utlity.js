@@ -5,7 +5,7 @@ import { registerApiCall, clickRadioAndNext, btnClickAndWait, uploadFile, enterC
 
 export const investorFlowProcess = () => {
   cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-  cy.applicationUnlock();
+  // cy.applicationUnlock();
   fillSignUpFormAndProceed();
   enterCodeAndConfirm('confirmEmail');
   confirmEmailAddressScreen();
