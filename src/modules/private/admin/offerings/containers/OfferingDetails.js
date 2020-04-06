@@ -155,8 +155,8 @@ export default class OfferingDetails extends Component {
             </Card>
           </Modal.Content>
         </Modal>
-        <Route path={`${match.url}/editPoc`} render={props => <EditPoc stage={offer.stage} refLink={match.url} {...props} />} />
-        <Route path={`${match.url}/editOffering`} render={props => <EditOffering refLink={match.url} {...props} />} />
+        <Route path={`${match.url}/editPoc`} render={props => <EditPoc stage={offer.stage} refLink={`${match.url}/overview`} {...props} />} />
+        <Route path={`${match.url}/editOffering`} render={props => <EditOffering refLink={`${match.url}/overview`} {...props} />} />
       </>
     );
   }
