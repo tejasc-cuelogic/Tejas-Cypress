@@ -124,7 +124,9 @@ export default class CampaignHeaderPreview extends Component {
                 <Grid.Column width={6}>
                   <Header as="h3" inverted>
                     {offer && offer.keyTerms && offer.keyTerms.shorthandBusinessName}
-                    <Header.Subheader>{address}</Header.Subheader>
+                    {headerBasicFields.toggleMeta.value.includes('BUSINESS_LOCATION')
+                      && (<Header.Subheader>{address}</Header.Subheader>)
+                    }
                   </Header>
                   <Statistic inverted size="tiny" className={`${isMobile && 'mt-40'} basic mb-0`}>
                     {headerBasicFields.toggleMeta.value.includes('FUNDINGRAISING_STATE')

@@ -12,6 +12,7 @@ const HEADER_TOGGLE_META = [
   { label: 'Payments Made', value: 'REPAYMENT_COUNT' },
   { label: 'Fundraising State', value: 'FUNDINGRAISING_STATE' },
   { label: 'Follow Button', value: 'FOLLOW_STATE' },
+  { label: 'Business Location', value: 'BUSINESS_LOCATION' },
 ];
 
 const SUB_HEADER_TOGGLE_META = [

@@ -129,7 +129,9 @@ export default class CampaignHeaderV2 extends Component {
                       <Grid.Column width={6}>
                         <Header as="h3" inverted>
                           {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
-                          <Header.Subheader>{address}</Header.Subheader>
+                          {isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('BUSINESS_LOCATION')
+                            && (<Header.Subheader>{address}</Header.Subheader>)
+                          }
                         </Header>
                         <Statistic inverted size="tiny" className={`${isMobile && 'mt-40'} basic mb-0`}>
                           {isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
@@ -243,7 +245,8 @@ export default class CampaignHeaderV2 extends Component {
                 <div className={`${newLayout && isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
                   <Header as="h4" inverted>
                     {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
-                    {!campaignStatus.isFund && address && <Header.Subheader>{address}</Header.Subheader>}
+                    {!campaignStatus.isFund && address && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('BUSINESS_LOCATION')
+                      && <Header.Subheader>{address}</Header.Subheader>}
                   </Header>
                   <div className="video-wrapper campaign">
                     {get(campaign, 'header.heroVideoURL')
@@ -406,7 +409,7 @@ export default class CampaignHeaderV2 extends Component {
                               </>
                             )}
                           {isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE')
-                          && followBtn}
+                            && followBtn}
                         </Button.Group>
                       </>
                     )
