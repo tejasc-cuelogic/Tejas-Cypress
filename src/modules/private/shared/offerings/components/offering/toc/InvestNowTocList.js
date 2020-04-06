@@ -206,8 +206,10 @@ export default class InvestNowTocList extends Component {
         {data && data.length ? data.map((toc, index) => (data.length === 1 ? (
           <>
             <div className="toc-header">
-              <Header as="h6" content={`Title: ${toc.title}`} />
-              {get(toc, 'note') && <Header as="h6" content={`Note: ${get(toc, 'note')}`} />}
+              <Header as="h6">
+                Title: {toc.title}
+                {get(toc, 'note') && <Header as="h6" className="mt-14" content={`Note: ${get(toc, 'note')}`} />}
+              </Header>
               <Button.Group>
                 {data.length
                   && (
