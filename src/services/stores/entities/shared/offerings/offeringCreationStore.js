@@ -527,7 +527,7 @@ export class OfferingCreationStore extends DataModelStore {
       if (field === 'legalBusinessName') {
         this[formName].fields.shorthandBusinessName.value = value;
       }
-      this[formName].fields.offeringSlug.value = kebabCase(value);
+      this[formName].fields.offeringSlug.value = `https://www/nextseed.com/offering/${kebabCase(value)}`;
     }
   }
 
@@ -1058,7 +1058,7 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
-  evaluateFormFieldToArray = (fields) => {
+  evaluateFormFieldToArray = (fields, includeHighlight = true) => {
     const social = [];
     const highlight = [];
     map(fields, (ele, key) => {
@@ -1107,7 +1107,7 @@ export class OfferingCreationStore extends DataModelStore {
             social.push(object);
           }
         }
-        if (Array.isArray(toJS(fields[key]))) {
+        if (includeHighlight && Array.isArray(toJS(fields[key]))) {
           records.forEach((field) => {
             highlight.push(field.highlight.value);
           });
@@ -1116,7 +1116,8 @@ export class OfferingCreationStore extends DataModelStore {
         window.logger(e);
       }
     });
-    return { social, highlight };
+    const socialData = includeHighlight ? { social, highlight } : { social };
+    return socialData;
   }
 
   generateActivityHistory = (resourceId, activityType, activityTitle, subType) => {
@@ -1200,12 +1201,16 @@ export class OfferingCreationStore extends DataModelStore {
         } else if (keyName === false && payload.stage === 'LIVE') {
           this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.LIVE, 'Application launched!', 'LAUNCHED');
         }
-        res();
+        res((get(result, 'data.updateOffering.template')));
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
         window.logger('Error', err);
-        Helper.toast('Something went wrong.', 'error');
+        if (get(err, 'message') && get(err, 'message').includes('has locked the offering')) {
+          Helper.toast(get(err, 'message'), 'error');
+        } else {
+          Helper.toast('Something went wrong.', 'error');
+        }
         rej();
       })
       .finally(() => {
@@ -2146,7 +2151,7 @@ export class OfferingCreationStore extends DataModelStore {
     );
     if (type === 'CLOSING_BINDER' && (!obj.closingBinder || !obj.closingBinder.length)) {
       // obj.closingBinder = mergeWith(
-      //   toJS(getOfferingById.closingBinder),
+      //   toJS(getOffering.closingBinder),
       //   obj.closingBinder,
       //   this.mergeCustomize,
       // );

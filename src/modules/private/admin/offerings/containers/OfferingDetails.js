@@ -7,13 +7,14 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { InlineLoader } from '../../../../../theme/shared';
 import LiveSummary from '../components/LiveSummary';
-import CreationSummary from '../components/CreationSummary';
+// import CreationSummary from '../components/CreationSummary';
 import OfferingModule from '../../../shared/offerings/components';
 import EditOffering from '../components/EditOfferingModal';
 import EditPoc from '../components/EditPocModal';
 import { REACT_APP_DEPLOY_ENV, NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Helper from '../../../../../helper/utility';
 import { STAGES } from '../../../../../services/constants/admin/offerings';
+import LockUnlockOffering from '../components/LockUnlockOffering';
 
 
 @inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore', 'businessAppStore')
@@ -76,6 +77,7 @@ export default class OfferingDetails extends Component {
     if (!get(offer, 'id') || (offerLoading && offer && !offer.stage)) {
       return <InlineLoader />;
     }
+    const template = get(offer, 'template') === 2 ? 2 : 1;
     const isDev = ['localhost', 'dev'].includes(REACT_APP_DEPLOY_ENV);
     navItems = navStore.filterByAccess(
       navItems,
@@ -93,6 +95,7 @@ export default class OfferingDetails extends Component {
     if (access.level !== 'FULL') {
       navItems = navItems.filter(n => (n.title !== 'Close'));
     }
+    navItems = navItems.filter(n => (n.template === template || !n.template));
     // add business application after Bonus Rewards // offer.stage === 'CREATION' &&
     if (offer.applicationId && !['WP_MIGRATION'].includes(offer.applicationId)) {
       const pos = navItems.findIndex(n => n.to === 'overview');
@@ -105,6 +108,7 @@ export default class OfferingDetails extends Component {
     const offeringState = !['CREATION'].includes(offer.stage) ? 'OTHER' : offer.stage;
     navItems = navStore.manageNavigationOrder(navItems, offeringState);
     const { responsiveVars } = this.props.uiStore;
+    // const isLocked = true;
     return (
       <>
         <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
@@ -120,22 +124,24 @@ export default class OfferingDetails extends Component {
                   ))}
                 <Header.Subheader className="mt-10">
                   <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}`}>
-                    <Icon className="ns-view" /><b>Preview the offering page</b>
+                    <Icon className="ns-view" /><b>Preview offering page</b>
                   </Link>
-                  {offer.stage === 'CREATION'
+                  {/* {offer.stage === 'CREATION'
                     && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
-                  }
+                  } */}
                 </Header.Subheader>
               </Header>
             </CopyToClipboard>
-            {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
+            {/* Lock unlock component */}
+            <LockUnlockOffering />
+            {offer.stage === 'CREATION' ? '' : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
               <SecondaryMenu isBonusReward bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
               <Switch>
-                <Route exact path={match.url} component={OfferingModule('overview')} />
+                <Route exact path={match.url} component={OfferingModule('overview', template)} />
                 {
                   navItems.map((item) => {
-                    const CurrentModule = OfferingModule(item.to);
+                    const CurrentModule = OfferingModule(item.to, template);
                     return (
                       <Route
                         key={item.to}

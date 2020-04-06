@@ -22,8 +22,8 @@ export const INVEST_NOW_TOC = FormHelper.generateMeta([
 export const INVEST_NOW_TOC_TEMPLATE = FormHelper.generateMeta([
   ['template', 'Template', 1, 'required', 'Template', { props: {
     options: [
-      { key: 'Static', value: 1, text: 'Static' },
-      { key: 'Dynamic', value: 2, text: 'Dynamic' },
+      { key: 'NS-Default', value: 1, text: 'NS-Default' },
+      { key: 'Custom', value: 2, text: 'Custom' },
     ],
     defaultValue: 1,
   },

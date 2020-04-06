@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { get, capitalize } from 'lodash';
+import { get, capitalize, sortBy } from 'lodash';
 import { Container, Card, Grid, Label, Icon, Button, Divider, Table } from 'semantic-ui-react';
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
@@ -47,19 +47,21 @@ export default class CampaignList extends Component {
     this.setState({ filters: filters === false });
   }
 
-  renderBaners = (offering) => {
+  renderBaners = (offering, additionalTag = null) => {
     const resultFound = get(offering, 'isBannerShow');
     const realEstateBanner = get(offering, 'realEstateBanner');
+    const customTag = additionalTag ? (<Label color="grey">{additionalTag}</Label>) : null;
     if (resultFound) {
       const bannerFirst = get(offering, 'datesBanner');
       const bannerSecond = get(offering, 'amountsBanner');
       return (
         <Label.Group size="small">
+          {customTag}
           {realEstateBanner
             && <Label color="grey">{realEstateBanner}</Label>
           }
           {bannerFirst
-          && <Label color={bannerFirst === 'Processing' ? 'grey' : bannerFirst === 'NEW' ? 'blue' : 'green'}>{bannerFirst}</Label>
+            && <Label color={bannerFirst === 'Processing' ? 'grey' : bannerFirst === 'NEW' ? 'blue' : 'green'}>{bannerFirst}</Label>
           }
           {bannerSecond
             && <Label color={bannerFirst === 'Processing' ? 'grey' : 'green'}>{bannerSecond}</Label>
@@ -69,8 +71,15 @@ export default class CampaignList extends Component {
     } if (realEstateBanner) {
       return (
         <Label.Group size="small">
+          {customTag}
           <Label color="grey">{realEstateBanner}</Label>
         </Label.Group>
+      );
+    } if (customTag) {
+      return (
+      <Label.Group size="small">
+        {customTag}
+      </Label.Group>
       );
     }
     return null;
@@ -78,11 +87,13 @@ export default class CampaignList extends Component {
 
   render() {
     const { campaigns, loading, isFunded } = this.props;
+    const isTemplate2 = template => template === 2;
+    const tombstoneImage = offering => (isTemplate2(get(offering, 'template')) ? get(offering, 'tombstone.image.url') : get(offering, 'media.tombstoneImage.url'));
+    const getTombstoneDescription = offering => (isTemplate2(get(offering, 'template')) ? get(offering, 'tombstone.description') : get(offering, 'offering.overview.tombstoneDescription'));
+    const showInvestorsCount = offering => (!isTemplate2(get(offering, 'template')) || (isTemplate2(get(offering, 'template')) && (get(offering, 'tombstone.toggleMeta') || []).includes('INVESTOR_COUNT')));
+    const getCustomTag = offering => ((isTemplate2(get(offering, 'template')) && get(offering, 'tombstone.customTag')) || '');
     return (
       <>
-        {/* {this.props.filters &&
-          <Filters toggleFilters={this.toggleFilters} status={this.state.filters} />
-        } */}
         <section className="campaign-list-wrapper">
           <Container>
             {this.props.heading}
@@ -99,15 +110,12 @@ export default class CampaignList extends Component {
                               <Image64
                                 bg
                                 centered
-                                srcUrl={offering && offering.media && offering.media.tombstoneImage
-                                  && offering.media.tombstoneImage.url
-                                  ? offering.media.tombstoneImage.url : null
-                                }
+                                srcUrl={tombstoneImage(offering) || ''}
                                 alt={`${offering.keyTerms.shorthandBusinessName} poster`}
                               />
                             </div>
                           </div>
-                          {offering.stage === 'LIVE' ? this.renderBaners(offering) : null}
+                          {offering.stage === 'LIVE' ? this.renderBaners(offering, getCustomTag(offering)) : null}
                           {(['INVESTOR', 'WATCHING'].includes(offering.watchListStatus))
                             && (
                               <Icon name="heart" />
@@ -120,69 +128,82 @@ export default class CampaignList extends Component {
                               }
                               </Card.Header>
                               {get(offering, 'keyTerms.securities') !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS && (get(offering, 'keyTerms.city') || get(offering, 'keyTerms.state'))
-                              && (
-                              <Card.Meta>
-                                {get(offering, 'keyTerms.city') || ''}
-                                {get(offering, 'keyTerms.city') && get(offering, 'keyTerms.state') ? ', ' : ''}
-                                {get(offering, 'keyTerms.state') || ''}
-                              </Card.Meta>
-                              )}
+                                && (
+                                  <Card.Meta>
+                                    {get(offering, 'keyTerms.city') || ''}
+                                    {get(offering, 'keyTerms.city') && get(offering, 'keyTerms.state') ? ', ' : ''}
+                                    {get(offering, 'keyTerms.state') || ''}
+                                  </Card.Meta>
+                                )}
                               <Card.Description>
                                 <HtmlEditor
                                   readOnly
-                                  content={(offering && offering.offering
-                                    && offering.offering.overview
-                                    && offering.offering.overview.tombstoneDescription
-                                    ? offering.offering.overview.tombstoneDescription : '')}
+                                  content={getTombstoneDescription(offering) || ''}
                                 />
                               </Card.Description>
                               <Divider />
                               <div className="campaign-card-table-wrapper">
                                 <Table basic="very" compact="very" unstackable className="no-border campaign-card">
-                                  <Table.Body>
-                                    {(isFunded ? keyTermList.filter(i => i.forFunded) : keyTermList).map(row => (
-                                      <>
-                                        {((isFunded || row.for.includes('ALL') || (row.for.includes(offering.keyTerms.securities) || (['EQUITY'].includes(offering.keyTerms.securities) && get(row, 'equityClass') && get(row, 'equityClass').includes(get(offering, 'keyTerms.equityClass'))))) && ((get(offering, row.key) === 0 || get(offering, row.key)) || row.value))
-                                          && (
-                                            <Table.Row verticalAlign="top">
-                                              <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : (row.label === 'Security' && get(offering, row.key) && ((get(offering, row.key) === 'EQUITY' && get(offering, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'))) ? 'Type of Investment' : row.label}</Table.Cell>
-                                              <Table.Cell collapsing className={`${!isFunded && !row.for.includes('ALL') && row.value !== 'View in Data Room' ? 'highlight-text' : ''} right-align`}>
-                                                <b>
-                                                  {((get(offering, row.key) !== undefined && get(offering, row.key) !== null) || row.value)
-                                                    ? (
-                                                      <>
-                                                        {typeof row.type === 'object' ? (
-                                                          row.type[get(offering, row.key)]
-                                                            && ((get(offering, row.key) === 'EQUITY' && get(offering, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS')) ? <>Commercial Real Estate</>
-                                                              : ((get(offering, row.key) === 'EQUITY' && get(offering, 'keyTerms.equityClass') === 'PREFERRED')) ? row.type.PREFERRED_EQUITY_506C
-                                                              : row.type[get(offering, row.key)] || '-'
-                                                        ) : row.type === '$' ? row.key ? Helper.CurrencyFormat(get(offering, row.key), 0) : row.value
-                                                            : row.type === '%' ? row.key ? `${get(offering, row.key)}%` : row.value
-                                                              : row.type === 'X' ? row.key ? `${get(offering, row.key)}x` : row.value
-                                                                : row.type === 'months' ? row.key ? `${get(offering, row.key)} months` : row.value
-                                                                  : row.type === 'string' ? row.key ? `${get(offering, row.key)}` : row.value
-                                                                    : row.key ? get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '') : row.value
-                                                        }
-                                                      </>
-                                                    )
-                                                    : '-'
-                                                  }
-                                                </b>
-                                              </Table.Cell>
-                                            </Table.Row>
-                                          )
+                                  {!isTemplate2(get(offering, 'template'))
+                                    ? (
+                                      <Table.Body>
+                                        {(isFunded ? keyTermList.filter(i => i.forFunded) : keyTermList).map(row => (
+                                          <>
+                                            {((isFunded || row.for.includes('ALL') || (row.for.includes(offering.keyTerms.securities) || (['EQUITY'].includes(offering.keyTerms.securities) && get(row, 'equityClass') && get(row, 'equityClass').includes(get(offering, 'keyTerms.equityClass'))))) && ((get(offering, row.key) === 0 || get(offering, row.key)) || row.value))
+                                              && (
+                                                <Table.Row verticalAlign="top">
+                                                  <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : (row.label === 'Security' && get(offering, row.key) && ((get(offering, row.key) === 'EQUITY' && get(offering, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'))) ? 'Type of Investment' : row.label}</Table.Cell>
+                                                  <Table.Cell collapsing className={`${!isFunded && !row.for.includes('ALL') && row.value !== 'View in Data Room' ? 'highlight-text' : ''} right-align`}>
+                                                    <b>
+                                                      {((get(offering, row.key) !== undefined && get(offering, row.key) !== null) || row.value)
+                                                        ? (
+                                                          <>
+                                                            {typeof row.type === 'object' ? (
+                                                              row.type[get(offering, row.key)]
+                                                                && ((get(offering, row.key) === 'EQUITY' && get(offering, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS')) ? <>Commercial Real Estate</>
+                                                                : ((get(offering, row.key) === 'EQUITY' && get(offering, 'keyTerms.equityClass') === 'PREFERRED')) ? row.type.PREFERRED_EQUITY_506C
+                                                                  : row.type[get(offering, row.key)] || '-'
+                                                            ) : row.type === '$' ? row.key ? Helper.CurrencyFormat(get(offering, row.key), 0) : row.value
+                                                                : row.type === '%' ? row.key ? `${get(offering, row.key)}%` : row.value
+                                                                  : row.type === 'X' ? row.key ? `${get(offering, row.key)}x` : row.value
+                                                                    : row.type === 'months' ? row.key ? `${get(offering, row.key)} months` : row.value
+                                                                      : row.type === 'string' ? row.key ? `${get(offering, row.key)}` : row.value
+                                                                        : row.key ? get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '') : row.value
+                                                            }
+                                                          </>
+                                                        )
+                                                        : '-'
+                                                      }
+                                                    </b>
+                                                  </Table.Cell>
+                                                </Table.Row>
+                                              )
+                                            }
+                                          </>
+                                        ))
                                         }
-                                      </>
-                                    ))
-                                    }
-                                  </Table.Body>
+                                      </Table.Body>
+                                    ) : (
+                                      <Table.Body>
+                                        {get(offering, 'tombstone.meta[0]') && sortBy(get(offering, 'tombstone.meta'), ['order', 'asc']).map(row => (
+                                          <Table.Row verticalAlign="top">
+                                            <Table.Cell collapsing>{row.keyLabel}</Table.Cell>
+                                            <Table.Cell className={`${row.isHighlight ? 'highlight-text' : ''} right-align`}>
+                                              <b>{row.keyType === 'custom' ? row.keyValue : Helper.formatValue(row.keyFormat, Helper.enumToText(row.keyValue, get(offering, row.keyValue)))}</b>
+                                            </Table.Cell>
+                                          </Table.Row>
+                                        ))
+                                        }
+                                      </Table.Body>
+                                    )
+                                  }
                                 </Table>
                               </div>
                               <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
                             </Card.Content>
                           </div>
                           <Card.Content extra className={!get(offering, 'isAvailablePublicly') ? 'disabled' : ''}>
-                            <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} {get(offering, 'keyTerms.securities') !== 'FUNDS' ? `from ${get(offering, 'closureSummary.totalInvestorCount') || 0} investors` : ''}</b></p>
+                            {showInvestorsCount(offering) && <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} {get(offering, 'keyTerms.securities') !== 'FUNDS' ? `from ${get(offering, 'closureSummary.totalInvestorCount') || 0} investors` : ''}</b></p>}
                             {isFunded
                               && (
                                 <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>

@@ -47,6 +47,8 @@ export default class Offering extends Component {
     if (offer.stage === 'LIVE') {
       navItems = navItems.filter(n => (n.title !== 'Investors'));
     }
+    const template = get(offer, 'template') === 2 ? 2 : 1;
+    navItems = navItems.filter(n => (n.template === template || !n.template));
     return (
       <>
         <Helmet>

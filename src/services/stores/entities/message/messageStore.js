@@ -114,9 +114,9 @@ export class NewMessage {
         .then((result) => {
           if (!offeringCreationStore.currentOfferingId) {
             campaignStore.getCampaignDetails(campaignSlug, false);
-          } else if (get(result, 'data.createOfferingComments') && !userStore.isAdmin) {
+          } else if (get(result, 'data.createOfferingComments') && userStore.isInvestor) {
             campaignStore.updateCommentThread(get(result, 'data.createOfferingComments'), currentMessageId);
-          } else if (get(result, 'data.createOfferingComments') && userStore.isAdmin) {
+          } else if (get(result, 'data.createOfferingComments') || get(result, 'data.updateOfferingCommentsInfo')) {
             this.initRequest();
           }
           this.resetMessageForm();
