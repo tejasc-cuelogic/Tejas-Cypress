@@ -63,9 +63,10 @@ const SortableList = SortableContainer(({ data, handleAction, preview, isReadOnl
   </div>
 ));
 
-const ToCList = ({ toc, title, regulation, isReadOnly, onSortEnd, handleAction, preview, addMore }) => (
+const ToCList = ({ toc, title, note, regulation, isReadOnly, onSortEnd, handleAction, preview, addMore }) => (
   <>
-  {title && <Header as="h6" content={title} />}
+  {title && <Header as="h6" content={`Title: ${title}`} />}
+  {note && <Header as="h6" content={`Note: ${note}`} />}
   <div className="ui card fluid">
     <div className="ui basic table">
       <div className="row-wrap striped-table thead">
@@ -205,7 +206,8 @@ export default class InvestNowTocList extends Component {
         {data && data.length ? data.map((toc, index) => (data.length === 1 ? (
           <>
             <div className="toc-header">
-              <Header as="h6" content={toc.title} />
+              <Header as="h6" content={`Title: ${toc.title}`} />
+              {get(toc, 'note') && <Header as="h6" content={`Note: ${get(toc, 'note')}`} />}
               <Button.Group>
                 {data.length
                   && (
@@ -249,6 +251,7 @@ export default class InvestNowTocList extends Component {
             <ToCList
               toc={toc}
               title={toc.title}
+              note={toc.note}
               handleAction={this.handleAction}
               onSortEnd={this.onSortEnd}
               preview={this.preview}

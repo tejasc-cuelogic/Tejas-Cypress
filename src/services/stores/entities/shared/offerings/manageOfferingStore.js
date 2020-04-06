@@ -9,7 +9,7 @@ import DataModelStore, * as dataModelStore from '../dataModelStore';
 import {
   TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC, SUB_HEADER_BASIC, GALLERY,
 } from '../../../../constants/offering/formMeta/offering';
-import { INVEST_NOW_TOC, INVEST_NOW_PAGE, INVEST_NOW_TOC_TEMPLATE } from '../../../../constants/offering/formMeta';
+import { INVEST_NOW_TOC, INVEST_NOW_PAGE } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore, userDetailsStore, campaignStore } from '../../../index';
@@ -36,8 +36,6 @@ export class ManageOfferingStore extends DataModelStore {
   OFFERING_CONTENT_FRM = Validator.prepareFormObject(OFFERING_CONTENT);
 
   OFFERING_MISC_FRM = Validator.prepareFormObject(OFFERING_MISC);
-
-  INVEST_NOW_TOC_TEMPLATE_FRM = Validator.prepareFormObject(INVEST_NOW_TOC_TEMPLATE);
 
   INVEST_NOW_TOC_FRM = Validator.prepareFormObject(INVEST_NOW_TOC);
 
@@ -116,7 +114,7 @@ export class ManageOfferingStore extends DataModelStore {
         } : { required: !investNow[index].toc[tocIndex].required };
         investNow[index].toc[tocIndex] = { ...investNow[index].toc[tocIndex], ...editTOC };
       } else {
-        investNow[index] = { ...investNow[index], title: formData.title };
+        investNow[index] = { ...investNow[index], title: formData.title, note: formData.note };
       }
     } else if (form === 'INVEST_NOW_PAGE_FRM') {
       const formData = Validator.evaluateFormData(this[form].fields);
@@ -124,6 +122,7 @@ export class ManageOfferingStore extends DataModelStore {
         page: ((agreementLists[regulation] && agreementLists[regulation].length) || 0) + 1,
         regulation,
         title: formData.title,
+        note: formData.note,
       };
       investNow.push(addPage);
     } else if (form === 'INVEST_NOW_TOC_FRM') {
@@ -438,7 +437,6 @@ export class ManageOfferingStore extends DataModelStore {
       OFFERING_CONTENT_FRM: { isMultiForm: true },
       OFFERING_MISC_FRM: { isMultiForm: false },
       INVEST_NOW_TOC_FRM: { isMultiForm: true },
-      INVEST_NOW_TOC_TEMPLATE_FRM: { isMultiForm: false },
       GALLERY_FRM: { isMultiForm: true },
     };
     return metaDataMapping[formName][getField];
@@ -508,7 +506,6 @@ decorate(ManageOfferingStore, {
   campaignStatus: computed,
   INVEST_NOW_TOC_FRM: observable,
   INVEST_NOW_PAGE_FRM: observable,
-  INVEST_NOW_TOC_TEMPLATE_FRM: observable,
   initLoad: observable,
   getAgreementTocList: computed,
   reOrderHandle: action,

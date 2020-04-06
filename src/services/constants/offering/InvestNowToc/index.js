@@ -3,7 +3,8 @@ export const REAL_ESTATE_EQUITY = {
     page: [{
       page: 1,
       regulation: 'BD_CF',
-      title: 'NS TOC Default CF Real Estate Equity',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -39,7 +40,8 @@ export const REAL_ESTATE_EQUITY = {
     {
       page: 1,
       regulation: 'BD_506C',
-      title: 'NS TOC Default 506C Real Estate Equity',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -75,7 +77,8 @@ export const REAL_ESTATE_EQUITY = {
     {
       page: 1,
       regulation: 'BD_506B',
-      title: 'NS TOC Default 506B Real Estate Equity',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'Iunderstand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -123,7 +126,8 @@ export const CLASS_EQUITY = {
     page: [{
       page: 1,
       regulation: 'BD_CF',
-      title: 'NS TOC Default CF Class Equity',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.\n',
@@ -159,7 +163,8 @@ export const CLASS_EQUITY = {
     {
       page: 1,
       regulation: 'BD_506C',
-      title: 'NS TOC Default 506C Class Equity',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -195,7 +200,8 @@ export const CLASS_EQUITY = {
     {
       page: 1,
       regulation: 'BD_506B',
-      title: 'NS TOC Default 506B Class Equity',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'Iunderstand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -242,7 +248,8 @@ export const PREFERRED_EQUITY = {
     page: [{
       page: 1,
       regulation: 'BD_CF',
-      title: 'NS TOC Default CF Preferred Equity',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -278,7 +285,8 @@ export const PREFERRED_EQUITY = {
     {
       page: 1,
       regulation: 'BD_506C',
-      title: 'NS TOC Default 506C Preferred Equity',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -314,7 +322,8 @@ export const PREFERRED_EQUITY = {
     {
       page: 1,
       regulation: 'BD_506B',
-      title: 'NS TOC Default 506B Preferred Equity',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'Iunderstand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -361,7 +370,8 @@ export const SAFE = {
     page: [{
       page: 1,
       regulation: 'BD_CF',
-      title: 'NS TOC Default CF SAFE',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.\n',
@@ -396,7 +406,8 @@ export const SAFE = {
     }, {
       page: 1,
       regulation: 'BD_506C',
-      title: 'NS TOC Default 506C SAFE',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -431,7 +442,8 @@ export const SAFE = {
     }, {
       page: 1,
       regulation: 'BD_506B',
-      title: 'NS TOC Default 506B SAFE',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'Iunderstand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -477,7 +489,8 @@ export const REVENUE_SHARING_NOTE = {
     page: [{
       page: 1,
       regulation: 'BD_CF',
-      title: 'NS TOC Default CF Revenue Share',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -512,7 +525,8 @@ export const REVENUE_SHARING_NOTE = {
     }, {
       page: 1,
       regulation: 'BD_506C',
-      title: 'NS TOC Default 506C Revenue Share',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.\n',
@@ -547,7 +561,8 @@ export const REVENUE_SHARING_NOTE = {
     }, {
       page: 1,
       regulation: 'BD_506B',
-      title: 'NS TOC Default 506B Revenue Share',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -593,7 +608,8 @@ export const TERM_NOTE = {
     page: [{
       page: 1,
       regulation: 'BD_CF',
-      title: 'NS TOC Default CF Term Note',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
@@ -628,7 +644,8 @@ export const TERM_NOTE = {
     }, {
       page: 1,
       regulation: 'BD_506C',
-      title: 'NS TOC Default 506C Term Note',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.\n',
@@ -663,7 +680,8 @@ export const TERM_NOTE = {
     }, {
       page: 1,
       regulation: 'BD_506B',
-      title: 'NS TOC Default 506B Term Note',
+      title: '',
+      note: '',
       toc: [{
         account: 'ALL',
         label: 'I understand that I may not be able to cancel my investment commitment or obtain a return of my investment.',
