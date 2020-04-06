@@ -267,7 +267,8 @@ export const PRIVATE_NAV = [
       {
         title: 'Key Terms', to: 'key-terms', accessFor: [1], accessibleTo: ['admin', 'manager', 'support'], template: 1,
       },
-      { title: 'Legal', to: 'legal', accessFor: [1] },
+      { title: 'Legal', to: 'legal', accessFor: [1], template: 1 },
+      { title: 'Legal', to: 'legal', accessFor: [1, 2, 3, 4], template: 2 },
       { title: 'Offering', to: 'offering', accessFor: [1], template: 1 },
       { title: 'Offering', to: 'offering', accessFor: [1, 2, 3, 4], template: 2 },
       { title: 'Media', to: 'media', accessFor: [1], template: 1 },
