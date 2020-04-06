@@ -2,6 +2,7 @@ import { FormHelper } from '../../../../helper';
 
 const TOMBSTONE_TOGGLE_META = [
   { label: 'Fundraising Stats', value: 'INVESTOR_COUNT' },
+  { label: 'Business Location', value: 'BUSINESS_LOCATION' },
 ];
 
 const HEADER_TOGGLE_META = [
@@ -9,6 +10,8 @@ const HEADER_TOGGLE_META = [
   { label: 'Investor Count', value: 'INVESTOR_COUNT' },
   { label: 'Early Bird', value: 'EARLY_BIRD' },
   { label: 'Payments Made', value: 'REPAYMENT_COUNT' },
+  { label: 'Fundraising State', value: 'FUNDINGRAISING_STATE' },
+  { label: 'Follow Button', value: 'FOLLOW_STATE' },
 ];
 
 const SUB_HEADER_TOGGLE_META = [
