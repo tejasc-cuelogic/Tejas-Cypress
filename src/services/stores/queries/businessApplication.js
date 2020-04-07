@@ -438,53 +438,6 @@ mutation adminUpdateApplicationStatusAndReview(
 }
 `;
 
-export const getBusinessApplicationOffers = gql`
-query getBusinessApplicationById ($id: String!) {
-  businessApplication(
-    applicationId: $id
-  ){
-    userId
-    applicationId
-    applicationStatus
-    created {
-      date
-    }
-    updated {
-      date
-    }
-    prequalDetails {
-      # businessModel
-      businessGoal
-      businessGeneralInfo {
-        businessName
-      }
-    }
-    offers {
-      offer {
-        structure
-        amount
-        minimumAmount
-        maturity
-        interestRate
-        amortizationAmount
-        mthRevenueSharing
-        personalGuarantee
-        businessBlanket
-        expirationDate
-        multiple
-        totalCapital
-        isAccepted
-        additionalTerms
-      }
-      expectedAnnualRevenue {
-        label
-        year
-      }
-    }  
-  }
-}
-`;
-
 export const signPortalAgreement = gql`
 mutation signPortalAgreement($applicationId: String!, $selectedOffer: OfferInput!, $isSelectedOfferChanged: Boolean, $callbackUrl: String){
   signPortalAgreement(
