@@ -4,16 +4,20 @@ import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import { FormValidator, DataFormatter, MobxApollo, Utilities as Utils } from '../../../../helper';
-import { nsUiStore } from '../../index';
+import { nsUiStore, commonStore, uiStore } from '../../index';
 import { fileUpload } from '../../../actions';
 import Helper from '../../../../helper/utility';
 
 export default class DataModelStore {
   result = [];
 
+  initLoad = []
+
   gqlRef = {};
 
   currTime;
+
+  showConfirmModal = false;
 
   // 0: error, 1: loading, 2: success
   auStatus = null;
@@ -27,6 +31,8 @@ export default class DataModelStore {
   stepToBeRendered = 0;
 
   removeFileIdsList = [];
+
+  removeFileNamesList = [];
 
   requestState = {
     lek: { 'page-1': null },
@@ -53,16 +59,34 @@ export default class DataModelStore {
     } else {
       this[field] = value;
     }
+    this.currTime = +new Date();
   }
 
-  removeUploadedFiles = () => {
-    const fileList = toJS(this.removeFileIdsList);
-    if (fileList.length) {
-      forEach(fileList, (fileId) => {
-        fileUpload.removeUploadedData(fileId);
-      });
-      this.setFieldValue('removeFileIdsList', []);
+  removeUploadedFiles = (fromS3) => {
+    if (fromS3) {
+      const fileList = toJS(this.removeFileNamesList);
+      if (fileList.length) {
+        forEach(fileList, (fileName) => {
+          commonStore.deleteCdnS3File(`offerings/${this.currentOfferingId}/${fileName}`).then(() => {
+          }).catch((error) => {
+            uiStore.setErrors(error.message);
+          });
+        });
+        this.setFieldValue('removeFileNamesList', []);
+      }
+    } else {
+      const fileList = toJS(this.removeFileIdsList);
+      if (fileList.length) {
+        forEach(fileList, (fileId) => {
+          fileUpload.removeUploadedData(fileId).then(() => {
+          }).catch((error) => {
+            uiStore.setErrors(error.message);
+          });
+        });
+        this.setFieldValue('removeFileIdsList', []);
+      }
     }
+    this.currTime = +new Date();
   }
 
   executeMutation = async (params) => {
@@ -140,6 +164,7 @@ export default class DataModelStore {
     if (setLoader) {
       nsUiStore.setFieldValue('loadingArray', setLoader, false, true);
     }
+    this.currTime = +new Date();
   }
 
   resetLoader = (removeLoader, operation) => {
@@ -148,9 +173,20 @@ export default class DataModelStore {
     } else {
       nsUiStore.filterLoaderByOperation(operation);
     }
+    this.currTime = +new Date();
   }
 
-  formChange = (e, result, form, type) => {
+  editorChange = (field, value, form, ref, index = undefined) => {
+    if (index !== undefined) {
+      this[form].fields[ref][index][field].value = value;
+    } else {
+      this[form].fields[field].value = value;
+      this[form] = FormValidator.validateForm(this[form], true, false, false);
+    }
+    this.currTime = +new Date();
+  }
+
+  formChange = (e, result, form, type, checked = undefined) => {
     const formName = Array.isArray(form) ? form[0] : form;
     if (Array.isArray(form)) {
       this[formName] = FormValidator.onArrayFieldChange(
@@ -159,9 +195,10 @@ export default class DataModelStore {
         form[1],
         form[2],
         type,
+        checked,
       );
     } else {
-      this[formName] = FormValidator.onChange(this[formName], FormValidator.pullValues(e, result), type);
+      this[formName] = FormValidator.onChange(this[formName], FormValidator.pullValues(e, result), type, checked);
     }
     this.currTime = +new Date();
   };
@@ -181,6 +218,35 @@ export default class DataModelStore {
 
   setAddressFields = (place, form) => {
     FormValidator.setAddressFields(place, this[form]);
+    this.currTime = +new Date();
+  }
+
+  setMediaAttribute = (form, attr, value, field, index = -1, arrayName) => {
+    if (index > -1) {
+      this[form].fields[arrayName][index][field][attr] = value;
+    } else {
+      this[form].fields[field][attr] = value;
+    }
+    this.currTime = +new Date();
+  }
+
+  resetImageCropper = (form, field, index = -1, arrayName) => {
+    const attributes = ['src', 'error', 'meta', 'base64String', 'responseUrl', 'value', 'preSignedUrl', 'confirmModal'];
+    attributes.forEach((val) => {
+      const typeCheck = index > -1 ? this[form].fields[arrayName][index][field][val] : this[form].fields[field][val];
+      if ((typeof typeCheck === 'object') && (typeCheck !== null)) {
+        if (index > -1) {
+          this[form].fields[arrayName][index][field][val] = {};
+        } else {
+          this[form].fields[field][val] = {};
+        }
+      } else if (index > -1) {
+          this[form].fields[arrayName][index][field][val] = val === 'confirmModal' ? false : '';
+      } else {
+        this[form].fields[field][val] = val === 'confirmModal' ? false : '';
+      }
+    });
+    this.currTime = +new Date();
   }
 
   setFileUploadData = (form, field, multiple = false, index = null, arrayName = null, stepName, files, { userRole, investorId, applicationId, offeringId, applicationIssuerId, tags }) => {
@@ -211,6 +277,30 @@ export default class DataModelStore {
     });
     this.currTime = +new Date();
   }
+
+  uploadMedia = (name, form, path, files = false) => {
+    const formName = Array.isArray(form) ? form[0] : form;
+    const arrayName = Array.isArray(form) ? form[1] : false;
+    const index = Array.isArray(form) ? form[2] : -1;
+    const fileObj = {
+      obj: files ? files[0] : index > -1 ? this[formName].fields[arrayName][index][name].base64String : this[formName].fields[name].base64String,
+      name: Helper.sanitize(files ? files[0].name : index > -1 ? this[formName].fields[arrayName][index][name].fileName : this[formName].fields[name].fileName),
+    };
+    this.setMediaAttribute(formName, 'showLoader', true, name, index, arrayName);
+    fileUpload.uploadToS3(fileObj, path)
+      .then((res) => {
+        window.logger(res);
+        const url = res.split('/');
+        this.setMediaAttribute(formName, 'value', url[url.length - 1], name, index, arrayName);
+        this.setMediaAttribute(formName, 'preSignedUrl', res, name, index, arrayName);
+        this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
+      })
+      .catch((err) => {
+        this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
+        window.logger(err);
+      });
+      this.currTime = +new Date();
+  };
 
   removeUploadedData = (form, field, index = null, arrayName = null) => {
     const path = (arrayName && index !== null) ? `fields.${arrayName}[${index}].${field}` : `fields.${field}`;
@@ -262,14 +352,17 @@ export default class DataModelStore {
 
   validateForm = (formName) => {
     this[formName] = FormValidator.validateForm(this[formName]);
+    this.currTime = +new Date();
   }
 
-  resetForm = (form, targetedFields = undefined) => {
-    this[form] = FormValidator.resetFormData(this[form], targetedFields);
+  resetForm = (form) => {
+    this[form] = FormValidator.resetFormData(this[form]);
+    this.currTime = +new Date();
   }
 
   addMore = (form, key, count = 1) => {
     this[form] = FormValidator.addMoreRecordToSubSection(this[form], key, count, true);
+    this.currTime = +new Date();
   }
 
   removeOne = (form, arrayName, index, e = undefined) => {
@@ -277,10 +370,12 @@ export default class DataModelStore {
       e.preventDefault();
     }
     this[form].fields[arrayName].splice(index, 1);
+    this.currTime = +new Date();
   }
 
   resetAll = () => {
     this.client.clearStore();
+    this.currTime = +new Date();
   }
 
   setFormData = (form, elemRef, elementValue, subForm = false) => {
@@ -289,6 +384,7 @@ export default class DataModelStore {
     } else {
       this[form].fields[elemRef].value = elementValue;
     }
+    this.currTime = +new Date();
   }
 
   initiateSearch = (srchParams) => {
@@ -296,6 +392,7 @@ export default class DataModelStore {
     this.setFieldValue('requestState', 1, 'page');
     this.setFieldValue('requestState', srchParams, 'search');
     this.initRequest();
+    this.currTime = +new Date();
   }
 
   setInitiateSrch = (name, value, setDefaultFilter = undefined) => {
@@ -323,10 +420,12 @@ export default class DataModelStore {
       }
       this.initiateSearch(srchParams);
     }
+    this.currTime = +new Date();
   }
 
   setStepToBeRendered = (step) => {
     this.setFieldValue('stepToBeRendered', step);
+    this.currTime = +new Date();
   }
 
   resetFilters = () => {
@@ -339,15 +438,20 @@ export default class DataModelStore {
       search: {
       },
     };
+    this.currTime = +new Date();
   }
 
   resetInitLoad = () => {
     this.initLoad = [];
+    this.currTime = +new Date();
   }
 }
 
 export const decorateDefault = {
   result: observable,
+  initLoad: observable,
+  showConfirmModal: observable,
+  removeFileNamesList: observable,
   removeFileIdsList: observable,
   currTime: observable,
   currentScore: observable,
@@ -355,6 +459,7 @@ export const decorateDefault = {
   removeUploadedFiles: action,
   resetInitLoad: action,
   setFieldValue: action,
+  uploadMedia: action,
   formChange: action,
   maskChange: action,
   validateForm: action,
@@ -374,6 +479,9 @@ export const decorateDefault = {
   setInitiateSrch: action,
   setFormData: action,
   resetFilters: action,
+  setMediaAttribute: action,
+  resetImageCropper: action,
   addMore: action,
   removeOne: action,
+  editorChange: action,
 };

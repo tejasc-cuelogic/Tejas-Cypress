@@ -8,7 +8,7 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const getModule = component => lazyRetry(() => import(`./offering/${component}`));
 
-@inject('userStore', 'uiStore', 'offeringCreationStore', 'offeringsStore', 'manageOfferingStore')
+@inject('userStore', 'offeringCreationStore', 'offeringsStore', 'manageOfferingStore')
 @withRouter
 @observer
 export default class Offering extends Component {

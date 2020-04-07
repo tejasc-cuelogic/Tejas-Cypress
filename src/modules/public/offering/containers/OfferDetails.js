@@ -9,6 +9,7 @@ import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, MobileDropDownNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
+import CampaignHeaderV2 from '../components/campaignDetails/CampaignHeaderV2';
 import InvestNow from '../components/investNow/InvestNow';
 import CommunityGuideline from '../components/campaignDetails/CommunityGuideline';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
@@ -205,23 +206,27 @@ class offerDetails extends Component {
     } = campaignStore;
     const { isWatching } = this.props.watchListStore;
     let navItems = [];
-    const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
-    if (isMobile) {
-      navItems = modifySubNavs(cloneDeep(tempNavItems), newLayout);
-      navItems = this.addDataRoomSubnavs(navItems, get(campaign, 'legal.dataroom.documents'));
-      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
-      navItems = this.removeSubNavs(navItems);
+    if (newLayout && campaignStatus.campaignTemplate === 2) {
+      navItems = campaignStatus.templateNavs;
     } else {
-      navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
-      navItems = modifySubNavs(navItems, newLayout);
-      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
-    }
-    if (!['LIVE', 'CREATION'].includes(get(campaign, 'stage'))) {
-      navItems = navItems.filter(n => n.to !== '#data-room');
-    }
-    if (campaignStatus.isFund) {
-      navItems = navItems.filter(n => !['#gallery', '#comments'].includes(n.to));
-      navItems = navItems.map(n => (navTitleMeta[n.to] ? { ...n, title: navTitleMeta[n.to] } : { ...n }));
+      const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
+      if (isMobile) {
+        navItems = modifySubNavs(cloneDeep(tempNavItems), newLayout);
+        navItems = this.addDataRoomSubnavs(navItems, get(campaign, 'legal.dataroom.documents'));
+        navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
+        navItems = this.removeSubNavs(navItems);
+      } else {
+        navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
+        navItems = modifySubNavs(navItems, newLayout);
+        navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
+      }
+      if (!['LIVE', 'CREATION'].includes(get(campaign, 'stage'))) {
+        navItems = navItems.filter(n => n.to !== '#data-room');
+      }
+      if (campaignStatus.isFund) {
+        navItems = navItems.filter(n => !['#gallery', '#comments'].includes(n.to));
+        navItems = navItems.map(n => (navTitleMeta[n.to] ? { ...n, title: navTitleMeta[n.to] } : { ...n }));
+      }
     }
     if ((details && details.data && !details.data.getOfferingDetailsBySlug)
       || this.state.found === 2) {
@@ -246,13 +251,13 @@ class offerDetails extends Component {
           && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
         {!isMobile
-          && <CampaignHeader followBtn={followBtn} {...this.props} />
+          && (campaignStatus.campaignTemplate === 2 ? <CampaignHeaderV2 followBtn={followBtn} {...this.props} /> : <CampaignHeader followBtn={followBtn} {...this.props} />)
         }
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu newLayout={newLayout} {...this.props} />
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
-              {mobileHeaderAndSideBar}
+              {campaignStatus.campaignTemplate === 2 ? <CampaignHeaderV2 followBtn={followBtn} {...this.props} /> : mobileHeaderAndSideBar}
               <MobileDropDownNav
                 inverted
                 refMatch={match}

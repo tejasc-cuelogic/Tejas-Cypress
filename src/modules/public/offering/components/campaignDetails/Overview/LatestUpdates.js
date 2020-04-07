@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Icon, Item, Header, Divider } from 'semantic-ui-react';
-import { orderBy } from 'lodash';
+import { orderBy, camelCase } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import moment from 'moment';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
@@ -30,8 +30,8 @@ class LatestUpdates extends Component {
     return (
       <>
         <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
-          Updates
-          <span className="anchor" id="updates" />
+          {this.props.title || 'Updates'}
+          <span className="anchor" id={this.props.title ? camelCase(this.props.title) : 'updates'} />
         </Header>
         <Item.Group className="update-items">
           <Item>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { get, orderBy } from 'lodash';
+import { get, orderBy, camelCase } from 'lodash';
 import { Header, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import 'react-vertical-timeline-component/style.min.css';
@@ -42,8 +42,8 @@ class Updates extends Component {
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
         <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
-          Updates
-          <span className="anchor" id={newLayout ? 'updates' : ''} />
+          {this.props.title || 'Updates'}
+          <span className="anchor" id={newLayout ? this.props.title ? camelCase(this.props.title) : 'updates' : ''} />
         </Header>
         {updates && updates.length
           ? (

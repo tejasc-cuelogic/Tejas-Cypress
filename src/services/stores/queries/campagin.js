@@ -1,13 +1,103 @@
 import gql from 'graphql-tag';
 
+const offeringTemplate2 = {
+  content: `content {
+    title
+    order
+    contentType
+    scope
+    customValue
+  }`,
+  gallery: `gallery {
+    caption
+    order
+    image {
+      url
+      fileName
+    }
+    isVisible
+  }`,
+  misc: `misc {
+    issuerStatement
+    logo {
+      url
+      fileName
+    }
+    avatar {
+      url
+      fileName
+    }
+    social {
+      type
+      url
+      shareLink
+      blurb
+      featuredImageUpload {
+        url
+        fileName
+      }
+    }
+  }`,
+  tombstone: `tombstone {
+    image {
+      url
+      fileName
+    }
+    description
+    meta {
+      keyLabel
+      order
+      keyType
+      keyValue
+      keyFormat
+      isHighlight
+    }
+    customTag
+    toggleMeta
+  }`,
+  header: `header {
+    heroImage {
+      url
+      fileName
+    }
+    heroBackgroundImage {
+      url
+      fileName
+    }
+    heroVideoURL
+    meta {
+      keyLabel
+      order
+      keyType
+      keyValue
+      keyFormat
+      isHighlight
+    }
+    toggleMeta
+  }`,
+  subHeader: `subHeader {
+    meta {
+      keyLabel
+      order
+      keyType
+      keyValue
+      keyFormat
+      isHighlight
+    }
+    toggleMeta
+  }`,
+};
+
 export const allOfferings = gql`
 query getOfferingList($filters: OfferingListFilterInputType){
     getOfferingList(filters: $filters) {
       id
+      template
       isAvailablePublicly
       watchListStatus
       offeringSlug
       stage
+      ${offeringTemplate2.tombstone}
       updated {
         date
       }
@@ -158,6 +248,12 @@ export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    template
+    ${offeringTemplate2.header}
+    ${offeringTemplate2.subHeader}
+    ${offeringTemplate2.content}
+    ${offeringTemplate2.misc}
+    ${offeringTemplate2.gallery}
     investmentSummary {
       isInvestedInOffering
       tranche

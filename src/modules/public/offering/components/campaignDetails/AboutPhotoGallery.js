@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { Modal, Container } from 'semantic-ui-react';
 import { NsCarousel, Image64 } from '../../../../../theme/shared';
 import NSImage from '../../../../shared/NSImage';
@@ -25,7 +26,7 @@ class AboutPhotoGallery extends Component {
   }
 
   render() {
-    const { campaign, gallarySelectedImageIndex } = this.props.campaignStore;
+    const { campaignStatus, gallarySelectedImageIndex } = this.props.campaignStore;
     const settings = {
       dots: false,
       infinite: false,
@@ -34,15 +35,15 @@ class AboutPhotoGallery extends Component {
       arrows: true,
       adaptiveHeight: true,
     };
-    const galleryArray = campaign && campaign.media && campaign.media.gallery
-      && campaign.media.gallery.length ? campaign.media.gallery : [];
+    const isTemplate2 = campaignStatus.campaignTemplate === 2;
+    const galleryArray = campaignStatus.galleryImages || [];
     return (
       <Modal
         open
         onClose={this.handleClose}
         size="fullscreen"
         closeIcon
-        className="about-modal"
+        className={`${isTemplate2 ? 'about-modal-2' : ''} about-modal`}
       >
         <Modal.Content>
           <div className="carousel">
@@ -55,11 +56,13 @@ class AboutPhotoGallery extends Component {
                 refItems={galleryArray}
                 handlePaginationFun={this.handlePagination}
                 fade={!isTablet}
+                isTemplate2={isTemplate2}
               >
                 {galleryArray.length ? galleryArray.map(data => (
-                  <div className="about-carousel">
-                    <div className="carousel-counter">{gallarySelectedImageIndex !== null ? (gallarySelectedImageIndex + 1) : (this.state.activeSlide + 1)}/{galleryArray.length}</div>
-                    <Image64 srcUrl={data.url} />
+                  <div className={`${isTemplate2 ? 'about-carousel-2' : ''} about-carousel`}>
+                    <div className={`carousel-details counter ${isTemplate2 ? 'template2' : ''}`}>{gallarySelectedImageIndex !== null ? (gallarySelectedImageIndex + 1) : (this.state.activeSlide + 1)}/{galleryArray.length}</div>
+                    <Image64 srcUrl={isTemplate2 ? get(data, 'image.url') : data.url} />
+                    {isTemplate2 && get(data, 'caption') && <div className={`carousel-details caption ${isTemplate2 ? 'template2' : ''}`}>{get(data, 'caption')}</div>}
                   </div>
                 ))
                   : <NSImage path="gallery-placeholder-16-9.jpg" />

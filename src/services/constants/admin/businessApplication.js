@@ -1837,7 +1837,7 @@ export const APPLICATION_MAPPED_OFFERING = {
   },
   shorthandBusinessName: {
     value: '',
-    label: 'Short hand Name of Business',
+    label: 'DBA',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',
@@ -1845,7 +1845,7 @@ export const APPLICATION_MAPPED_OFFERING = {
   },
   offeringSlug: {
     value: '',
-    label: 'Offering Slug',
+    label: 'Offering URL',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',
