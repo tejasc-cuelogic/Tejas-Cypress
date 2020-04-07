@@ -365,6 +365,7 @@ function formHoc(WrappedComponent, metaInfo) {
                   name={name}
                   cropInModal
                   aspect={3 / 2}
+                  size="small"
                 />
               )
           }

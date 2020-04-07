@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import mime from 'mime-types';
 import ReactCrop, { makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import { Icon, Modal, Header, Button } from 'semantic-ui-react';
+import { Icon, Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
 import { FieldError } from '../../shared';
 
 @observer
@@ -126,7 +126,7 @@ export default class ImageCropper extends Component {
 
   render() {
     // const { profilePhoto } = this.props.fieldData.fields;
-    const { field, cropInModal, disabled } = this.props;
+    const { field, cropInModal, disabled, size } = this.props;
     return (
       <>
         {field.src && !field.error ? cropInModal
@@ -161,6 +161,9 @@ export default class ImageCropper extends Component {
           : (
             <>
               <div className="file-uploader">
+                <Dimmer active={field.showLoader}>
+                  <Loader size={size} />
+                </Dimmer>
                 <div className="file-uploader-inner">
                   <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
                 </div>
