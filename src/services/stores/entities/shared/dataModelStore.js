@@ -241,7 +241,7 @@ export default class DataModelStore {
           this[form].fields[field][val] = {};
         }
       } else if (index > -1) {
-          this[form].fields[arrayName][index][field][val] = val === 'confirmModal' ? false : '';
+        this[form].fields[arrayName][index][field][val] = val === 'confirmModal' ? false : '';
       } else {
         this[form].fields[field][val] = val === 'confirmModal' ? false : '';
       }
@@ -299,7 +299,7 @@ export default class DataModelStore {
         this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
         window.logger(err);
       });
-      this.currTime = +new Date();
+    this.currTime = +new Date();
   };
 
   removeUploadedData = (form, field, index = null, arrayName = null) => {
@@ -445,6 +445,11 @@ export default class DataModelStore {
     this.initLoad = [];
     this.currTime = +new Date();
   }
+
+  handleUploadLoader = (fileId) => {
+    const { inProgress } = commonStore;
+    return !!(inProgress === fileId);
+  }
 }
 
 export const decorateDefault = {
@@ -484,4 +489,5 @@ export const decorateDefault = {
   addMore: action,
   removeOne: action,
   editorChange: action,
+  handleUploadLoader: action,
 };

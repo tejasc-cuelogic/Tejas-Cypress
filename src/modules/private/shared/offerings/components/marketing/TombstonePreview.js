@@ -45,9 +45,9 @@ export default class TombstonePreview extends Component {
       );
     } if (customTag) {
       return (
-      <Label.Group size="small">
-        {customTag}
-      </Label.Group>
+        <Label.Group size="small">
+          {customTag}
+        </Label.Group>
       );
     }
     return null;
@@ -87,14 +87,18 @@ export default class TombstonePreview extends Component {
                     && offer.keyTerms.shorthandBusinessName ? offer.keyTerms.shorthandBusinessName : ''
                   }
                   </Card.Header>
-                  <Card.Meta>
-                    {offer && offer.keyTerms && offer.keyTerms.city
-                      ? offer.keyTerms.city : '-'
-                    },{' '}
-                    {offer && offer.keyTerms && offer.keyTerms.state
-                      ? offer.keyTerms.state : '-'
-                    }
-                  </Card.Meta>
+                  {TOMBSTONE_BASIC_FRM.fields.toggleMeta.value.includes('BUSINESS_LOCATION')
+                    && (
+                      <Card.Meta>
+                        {offer && offer.keyTerms && offer.keyTerms.city
+                          ? offer.keyTerms.city : '-'
+                        },{' '}
+                        {offer && offer.keyTerms && offer.keyTerms.state
+                          ? offer.keyTerms.state : '-'
+                        }
+                      </Card.Meta>
+                    )
+                  }
                   <Card.Description>
                     <HtmlEditor
                       readOnly
@@ -108,13 +112,13 @@ export default class TombstonePreview extends Component {
                         {TOMBSTONE_HEADER_META_FRM.fields.meta.map(row => (
                           <>
                             {(
-                                <Table.Row verticalAlign="top">
-                                  <Table.Cell collapsing>{row.keyLabel.value}</Table.Cell>
-                                  <Table.Cell className={`${row.isHighlight.value ? 'highlight-text' : ''} right-align`}>
-                                    <b>{row.keyType.value === 'custom' ? row.keyValue.value : Helper.formatValue(row.keyFormat.value, Helper.enumToText(row.keyValue.value, get(offer, row.keyValue.value)))}</b>
-                                  </Table.Cell>
-                                </Table.Row>
-                              )
+                              <Table.Row verticalAlign="top">
+                                <Table.Cell collapsing>{row.keyLabel.value}</Table.Cell>
+                                <Table.Cell className={`${row.isHighlight.value ? 'highlight-text' : ''} right-align`}>
+                                  <b>{row.keyType.value === 'custom' ? row.keyValue.value : Helper.formatValue(row.keyFormat.value, Helper.enumToText(row.keyValue.value, get(offer, row.keyValue.value)))}</b>
+                                </Table.Cell>
+                              </Table.Row>
+                            )
                             }
                           </>
                         ))
@@ -127,16 +131,16 @@ export default class TombstonePreview extends Component {
               </div>
               <Card.Content extra>
                 {TOMBSTONE_BASIC_FRM.fields.toggleMeta.value.includes('INVESTOR_COUNT')
-                && (
-                <>
-                <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(TOMBSTONE_BASIC_FRM.fields.raisedAmount.value || 0, 0)} from {TOMBSTONE_BASIC_FRM.fields.investorCount.value || 0} investors</b></p>
-                {isFunded
                   && (
-                    <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offer, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>
-                  )
-                }
-                </>
-                )}
+                    <>
+                      <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(TOMBSTONE_BASIC_FRM.fields.raisedAmount.value || 0, 0)} from {TOMBSTONE_BASIC_FRM.fields.investorCount.value || 0} investors</b></p>
+                      {isFunded
+                        && (
+                          <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offer, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>
+                        )
+                      }
+                    </>
+                  )}
                 <p className="more-info">
                   Offered by {get(offer, 'regulation')
                     ? CAMPAIGN_OFFERED_BY[get(offer, 'regulation')]

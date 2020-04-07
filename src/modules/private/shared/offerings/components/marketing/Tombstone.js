@@ -56,7 +56,7 @@ class Tombstone extends Component {
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.image.label}</Header>
-              {smartElement.ImageCropper('image', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
+              {smartElement.ImageCropper('image', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia, isImagePreviewDisabled: true })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
