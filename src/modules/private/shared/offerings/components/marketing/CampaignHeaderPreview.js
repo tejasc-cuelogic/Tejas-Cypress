@@ -202,7 +202,7 @@ export default class CampaignHeaderPreview extends Component {
                           <Grid>
                             {(!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
                               && (
-                                <Grid.Column width={followBtn ? '10' : ''} className="center-align">
+                                <Grid.Column width={followBtn && headerBasicFields.toggleMeta.value.includes('FOLLOW_STATE') ? '10' : ''} className="center-align">
                                   <Button
                                     primary={!isInProcessing}
                                     disabled={maxFlagStatus || isInProcessing}
