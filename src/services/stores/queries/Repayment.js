@@ -109,11 +109,11 @@ export const adminPaymentSendGoldStarDraftInstructions = gql`
   }
 `;
 
-export const adminPaymentGenerateAdminSummary = gql`
-  mutation adminPaymentGenerateAdminSummary($date: String!, $scope: String, $sendEmail: Boolean){
-    adminPaymentGenerateAdminSummary(date: $date, scope: $scope, sendEmail: $sendEmail)
-  }
-`;
+// export const adminPaymentGenerateAdminSummary = gql`
+//   mutation adminPaymentGenerateAdminSummary($date: String!, $scope: String, $sendEmail: Boolean){
+//     adminPaymentGenerateAdminSummary(date: $date, scope: $scope, sendEmail: $sendEmail)
+//   }
+// `;
 
 export const adminPaymentSendIssuerFirstNotice = gql`
   mutation adminPaymentSendIssuerFirstNotice($date: String!, $scope: String, $sendEmail: Boolean){

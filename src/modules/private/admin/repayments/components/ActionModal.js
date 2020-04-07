@@ -8,7 +8,7 @@ import { MaskedInput, FormRadioGroup, FormDropDown } from '../../../../../theme/
 const title = {
   adminPaymentSendIssuerFirstNotice: 'Send First Notice Emails',
   adminPaymentSendIssuerSecondNotice: 'Send Second Notice Emails',
-  adminPaymentGenerateAdminSummary: 'Generate Admin Summary',
+  // adminPaymentGenerateAdminSummary: 'Generate Admin Summary',
   adminPaymentSendGoldStarDraftInstructions: 'Send GoldStar Draft Instructions',
   adminPaymentSendIssuerDraftNotice: 'Send Issuer Draft Notice',
 };
@@ -46,13 +46,17 @@ function ActionModal(props) {
         <Header as="h3">{title[props.showActionModal]}</Header>
         <Form>
           <Form.Field width={4}>
-            <MaskedInput
-              name="date"
-              placeHolder={ACTION_FRM.fields.date.placeHolder}
-              fielddata={ACTION_FRM.fields.date}
-              changed={(values, name) => maskChange(values, name, 'ACTION_FRM', 'formatted')}
-              dateOfBirth
-            />
+            {['adminPaymentSendGoldStarDraftInstructions'].includes(props.showActionModal)
+              && (
+                <MaskedInput
+                  name="date"
+                  placeHolder={ACTION_FRM.fields.date.placeHolder}
+                  fielddata={ACTION_FRM.fields.date}
+                  changed={(values, name) => maskChange(values, name, 'ACTION_FRM', 'formatted')}
+                  dateOfBirth
+                />
+              )
+            }
             <FormDropDown
               name="scope"
               fielddata={{ ...ACTION_FRM.fields.scope.values, error: undefined }}
