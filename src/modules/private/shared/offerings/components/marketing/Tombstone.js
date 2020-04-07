@@ -47,7 +47,7 @@ class Tombstone extends Component {
           <Grid columns="5">
             {['launchDate', 'closeDate', 'hardCloseDate', 'raisedAmount', 'investorCount'].map(field => (
               <Grid.Column>
-                {smartElement.Masked(field, { prefix: field === 'raisedAmount' ? '$' : false, currency: field === 'raisedAmount', dateOfBirth: ['closeDate', 'launchDate', 'hardCloseDate'].includes(field), displayMode: isReadOnly })}
+                {smartElement.Masked(field, { prefix: field === 'raisedAmount' ? '$' : '', currency: field === 'raisedAmount', dateOfBirth: ['closeDate', 'launchDate', 'hardCloseDate'].includes(field), displayMode: isReadOnly })}
               </Grid.Column>
             ))}
           </Grid>
