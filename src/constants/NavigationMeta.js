@@ -272,7 +272,7 @@ export const PRIVATE_NAV = [
       { title: 'Offering', to: 'offering', accessFor: [1, 2, 3, 4], template: 2 },
       { title: 'Media', to: 'media', accessFor: [1], template: 1 },
       { title: 'Leadership', to: 'leadership', accessFor: [1], template: 1 },
-      { title: 'Investors', to: 'investors', accessFor: [2, 3, 4], template: 1 },
+      { title: 'Investors', to: 'investors', accessFor: [2, 3, 4] },
       {
         title: 'Transactions', to: 'transactions', accessFor: [3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 1, env: ['localhost', 'predev', 'dev'],
       },
@@ -287,7 +287,7 @@ export const PRIVATE_NAV = [
         title: 'Offering Creation', to: 'offering-creation', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 1,
       },
       {
-        title: 'Watch List', to: 'watch-list', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 1,
+        title: 'Watch List', to: 'watch-list', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
       },
       {
         title: 'Activity History', to: 'activity-history', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
