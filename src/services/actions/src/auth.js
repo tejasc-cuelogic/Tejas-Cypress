@@ -177,8 +177,8 @@ export class Auth {
     try {
     const session = await AmplifyAuth.currentSession();
     await this.refreshSessionPromise(session.getRefreshToken());
-    } catch (e) {
-      console.log(e);
+    // eslint-disable-next-line no-empty
+    } catch {
     }
   }
 
