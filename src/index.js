@@ -105,4 +105,3 @@ ReactDOM.render(
       window.logger('[OfflinePlugin] onUpdateFailed');
     },
   });
-
