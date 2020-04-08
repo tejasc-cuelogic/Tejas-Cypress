@@ -88,7 +88,7 @@ class Overview extends Component {
           </>
           ) : null
         }
-        {campaignStatus.gallary !== 0 ? (
+        {campaignStatus.gallery !== 0 ? (
         <>
           <Gallery
             galleryUrl={this.props.match.url}

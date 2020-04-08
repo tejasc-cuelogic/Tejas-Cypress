@@ -5,7 +5,7 @@ import { get } from 'lodash';
 import { Header, Button, Grid } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 import { InlineLoader, NsModal } from '../../../theme/shared';
-import CustomAgreement from '../../public/offering/components/investNow/agreement/agreementTemplates/customAgreement';
+// import CustomAgreement from '../../public/offering/components/investNow/agreement/agreementTemplates/customAgreement';
 import DynamicAgreement from '../../public/offering/components/investNow/agreement/agreementTemplates/dynamicAgreement';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -124,8 +124,8 @@ function AgreementTemplate(props) {
   const { campaign, campaignStatus } = props.campaignStore;
   const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
   const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
-  const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
-  const offeringRegulationType = get(campaign, 'keyTerms.regulation');
+  // const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
+  // const offeringRegulationType = get(campaign, 'keyTerms.regulation');
   const index = agreementPage;
   return (
     <>
@@ -205,7 +205,19 @@ function AgreementTemplate(props) {
                     </Header.Subheader>
                   )}
               </Header>
-              {
+              <DynamicAgreement
+                inProgress={inProgress}
+                showError={showError}
+                docuSignHandeler={docuSignHandeler}
+                agreementPDFLoader={agreementPDFLoader}
+                submit={submit}
+                setCheckbox={setCheckbox}
+                isAgreementFormValid={isAgreementFormValid}
+                investmentFlowErrorMessage={investmentFlowErrorMessage}
+                index={index}
+                {...props}
+              />
+              {/*
                 campaignStatus.isAgreementTemplate
                   ? (
                     <DynamicAgreement
@@ -233,7 +245,7 @@ function AgreementTemplate(props) {
                       {...props}
                     />
                   )
-              }
+              */}
             </div>
           </Grid.Column>
         </Grid>

@@ -288,3 +288,13 @@
 		}
 	}
 }
+.ui.checkbox.toggle{
+	&.negative-toggle{
+		&.checked label:before{
+			background-color: @highlight-primary !important;
+		}
+		input:focus:checked~label:before{
+			background-color: @highlight-primary !important;
+		}
+	}
+}

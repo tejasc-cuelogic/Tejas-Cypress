@@ -20,6 +20,7 @@ import IssuerStatement from './Overview/IssuerStatement';
 import BonusRewards from './BonusRewards';
 import Documents from './documents';
 import Comments from './Comments';
+import CampaignTemplate2 from './CampaignTemplate2';
 import Helper from '../../../../../helper/utility';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
@@ -146,8 +147,11 @@ class CampaignLayout extends Component {
 
   handleOnScroll = () => {
     this.processLazyLoadImages();
-    const { campaignNavData } = this.props.campaignStore;
-    const navs = toJS(campaignNavData);
+    const { campaignNavData, campaignStatus } = this.props.campaignStore;
+    let navs = toJS(campaignNavData);
+    if (campaignStatus.campaignTemplate === 2) {
+      navs = campaignStatus.templateNavs;
+    }
     if (navs && Array.isArray(navs)) {
       navs.forEach((item) => {
         if (document.getElementById(item.to.slice(1))
@@ -189,90 +193,104 @@ class CampaignLayout extends Component {
     // const postedComments = get(campaign, 'comments') || [];
     return (
       <div className="campaign-content-wrapper v-2">
-        {campaignStatus.hasTopThingToKnow ? (
-          <>
-            <AboutTheCompany isFund={campaignStatus.isFund} newLayout refLink={this.props.refLink} campaign={campaign} />
-            <Divider hidden section />
-          </>
-        ) : null}
-        {/* <KeyTerms refLink={this.props.refLink} campaign={campaign} /> */}
-        {campaignStatus.updates !== 0
-          && (
-            <>
-              {this.state.expandUpdate
-                ? <Updates newLayout handleUpdateCollapseExpand={this.handleUpdateCollapseExpand} />
-                : (
-                  <LatestUpdates
-                    newLayout
-                    handleUpdateCollapseExpand={this.handleUpdateCollapseExpand}
-                    updates={updates}
-                    refLink={this.props.refLink}
-                    isTabletLand={isTabletLand}
-                    companyAvatarUrl={campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}
-                    bussinessName={campaign && campaign.keyTerms
-                      && campaign.keyTerms.shorthandBusinessName}
-                  />
-                )
-              }
-              {campaign && campaign.updates && campaign.updates.length > 1 ? (
-                <Button onClick={() => this.handleCollapseExpand('expandUpdate', '#updates')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
-                  {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
-                  <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
-                </Button>
-              ) : null
-              }
-              <Divider hidden section />
-            </>
-          )
-        }
-        <InvestmentDetails newLayout />
-        <AboutCompany newLayout />
-        {campaignStatus.isBonusReward
+        {get(campaign, 'template') === 2
           ? (
-            <>
-              <BonusRewards newLayout />
-              <Divider hidden section />
-            </>
-          ) : null
-        }
-        {campaignStatus.gallary !== 0 && !campaignStatus.isFund ? (
-          <>
-            <Gallery
+            <CampaignTemplate2
+              state={this.state}
+              refLink={this.props.match.url}
+              isTablet={isTablet}
+              isTabletLand={isTabletLand}
               processScroll={this.processScroll}
-              newLayout
-              galleryUrl={this.props.match.url}
-              campaign={campaign}
+              handleCollapseExpand={this.handleCollapseExpand}
             />
-            <Divider hidden section />
-          </>
-        ) : null}
-        {(dataRoomDocs.length && ['LIVE', 'CREATION'].includes(get(campaign, 'stage')))
-          ? (
+)
+        : (
+        <>
+          {campaignStatus.hasTopThingToKnow ? (
             <>
-              <Documents newLayout />
+              <AboutTheCompany isFund={campaignStatus.isFund} newLayout refLink={this.props.refLink} campaign={campaign} />
               <Divider hidden section />
             </>
-          ) : null
-        }
-        <>
-          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : null
-            // campaignStatus.isTermNote && (<TotalPaymentCalculator newLayout {...this.props} />)
+          ) : null}
+          {/* <KeyTerms refLink={this.props.refLink} campaign={campaign} /> */}
+          {campaignStatus.updates !== 0
+            && (
+              <>
+                {this.state.expandUpdate
+                  ? <Updates newLayout handleUpdateCollapseExpand={this.handleUpdateCollapseExpand} />
+                  : (
+                    <LatestUpdates
+                      newLayout
+                      handleUpdateCollapseExpand={this.handleUpdateCollapseExpand}
+                      updates={updates}
+                      refLink={this.props.refLink}
+                      isTabletLand={isTabletLand}
+                      companyAvatarUrl={campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}
+                      bussinessName={campaign && campaign.keyTerms
+                        && campaign.keyTerms.shorthandBusinessName}
+                    />
+                  )
+                }
+                {campaign && campaign.updates && campaign.updates.length > 1 ? (
+                  <Button onClick={() => this.handleCollapseExpand('expandUpdate', '#updates')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
+                    {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
+                  <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
+                  </Button>
+                ) : null
+                }
+                <Divider hidden section />
+              </>
+            )
           }
-          <Divider hidden section />
-          {!campaignStatus.isFund && <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />}
-          {postedCommentCount > 1
+          <InvestmentDetails newLayout />
+          <AboutCompany newLayout />
+          {campaignStatus.isBonusReward
+            ? (
+              <>
+                <BonusRewards newLayout />
+                <Divider hidden section />
+              </>
+            ) : null
+          }
+          {campaignStatus.gallery !== 0 && !campaignStatus.isFund ? (
+            <>
+              <Gallery
+                processScroll={this.processScroll}
+                newLayout
+                galleryUrl={this.props.match.url}
+              />
+              <Divider hidden section />
+            </>
+          ) : null}
+          {(dataRoomDocs.length && ['LIVE', 'CREATION'].includes(get(campaign, 'stage')))
+            ? (
+              <>
+                <Documents newLayout />
+                <Divider hidden section />
+              </>
+            ) : null
+          }
+          <>
+            {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : null
+            // campaignStatus.isTermNote && (<TotalPaymentCalculator newLayout {...this.props} />)
+            }
+            <Divider hidden section />
+            {!campaignStatus.isFund && <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />}
+            {postedCommentCount > 1
             && (
               <Button onClick={() => this.handleCollapseExpand('expandComments', '#comments')} className="link-button highlight-text mt-40">
                 {this.state.expandComments ? 'Collapse' : 'Expand'} All Comments
                 <Icon className={`ns-caret-${this.state.expandComments ? 'up' : 'down'} right`} />
               </Button>
-            )
-          }
+              )
+            }
+          </>
         </>
+        )}
         {campaignStatus.issuerStatement ? (
           <>
             <Divider hidden section />
-            <IssuerStatement newLayout campaign={campaign} />
+            <IssuerStatement newLayout issuerStatement={campaignStatus.issuerStatement} />
           </>
         ) : null
         }

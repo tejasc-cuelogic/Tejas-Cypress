@@ -8,7 +8,7 @@ const NavItems = ({
   isActive, location, navItems, navClick, match, stepsStatus, addon, navCustomClick,
 }) => navItems.map((item, key) => (
   <React.Fragment key={item.to}>
-    {(item.subNavigations)
+    {(item.subNavigations && !item.hideSubNav)
       ? (
         <Dropdown
           item
