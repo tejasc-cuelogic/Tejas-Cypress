@@ -64,9 +64,9 @@ export default class WatchList extends Component {
         <Table unstackable singleline className="investment-details">
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell collapsing>Date</Table.HeaderCell>
-              <Table.HeaderCell>Time</Table.HeaderCell>
-              <Table.HeaderCell>Name</Table.HeaderCell>
+              <Table.HeaderCell width="1">Date</Table.HeaderCell>
+              <Table.HeaderCell width="2">Time</Table.HeaderCell>
+              <Table.HeaderCell width="7">Name</Table.HeaderCell>
               <Table.HeaderCell>City</Table.HeaderCell>
               <Table.HeaderCell>State</Table.HeaderCell>
               <Table.HeaderCell># of Prior Investments</Table.HeaderCell>
@@ -81,7 +81,7 @@ export default class WatchList extends Component {
                 <>
                   {WatchersList.map(user => (
                     <Table.Row key={user.userId} className={`${this.props.nsUiStore.loadingArray.includes(`removing-${user.userId}`) ? 'disabled' : ''}`}>
-                      <Table.Cell collapsing>
+                      <Table.Cell>
                         {get(user, 'lastUpdated') ? DataFormatter.getDateAsPerTimeZone(get(user, 'lastUpdated'), true, false, false) : '-'}
                       </Table.Cell>
                       <Table.Cell>
