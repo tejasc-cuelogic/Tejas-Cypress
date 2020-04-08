@@ -207,7 +207,7 @@ export default class CampaignHeaderV2 extends Component {
                                 <Grid>
                                   {(!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
                                     && (
-                                      <Grid.Column width={followBtn ? '10' : ''} className="center-align">
+                                      <Grid.Column width={followBtn && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE') ? '10' : ''} className="center-align">
                                         <Button
                                           primary={!isInProcessing}
                                           disabled={maxFlagStatus || isInProcessing}
