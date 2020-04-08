@@ -68,27 +68,6 @@ function ActionModal(props) {
                 />
               )
             }
-            {/* <FormDropDown
-              name="scope"
-              fielddata={{ ...ACTION_FRM.fields.scope.values, error: undefined }}
-              options={ACTION_FRM.fields.scope.values.map(s => ({ ...s, ...{ text: s.text } }))}
-              onChange={(e, result) => formActionDropdownChange(e, result, 'ACTION_FRM')}
-              search
-              selection
-              placeholder="Select"
-            /> */}
-            {/* {sendEmailOptionVisibility
-              && (
-                <div className="field">
-                  <Header as="label">{ACTION_FRM.fields.sendEmail.label}</Header>
-                  <FormRadioGroup
-                    fielddata={ACTION_FRM.fields.sendEmail}
-                    name="sendEmail"
-                    changed={(e, result) => formChange(e, result, 'ACTION_FRM')}
-                  />
-                </div>
-              )
-            } */}
           </Form.Field>
           <div className="center-align mt-30">
             {ACTION_FRM.fields.scope.values.map(s => (
