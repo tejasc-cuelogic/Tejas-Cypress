@@ -70,6 +70,9 @@ export class PaymentStore extends DataModelStore {
   paymentCtaHandlers = mutation => new Promise((resolve) => {
     let variables = { ...toJS(Validator.evaluateFormData(this.ACTION_FRM.fields)) };
     variables = { ...variables, sendEmail: !['issuer', 'goldstar'].includes(variables.scope) ? true : variables.sendEmail };
+    if (!['adminPaymentSendGoldStarDraftInstructions'].includes(mutation)) {
+      delete variables.date;
+    }
     this.executeMutation({
       mutation,
       setLoader: mutation,
