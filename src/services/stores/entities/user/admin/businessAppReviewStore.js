@@ -11,7 +11,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { applicationDeclinedByIssuer, getBusinessApplications, adminGeneratePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, adminUpdateApplicationStatusAndReview, adminBusinessApplicationsDetails, getBusinessApplicationOffers, adminCreateOffering } from '../../../queries/businessApplication';
+import { applicationDeclinedByIssuer, getBusinessApplications, adminGeneratePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, adminUpdateApplicationStatusAndReview, adminBusinessApplicationsDetails, adminCreateOffering } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore, userStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { allOfferingsCompact } from '../../../queries/offerings/manage';
@@ -573,30 +573,6 @@ export class BusinessAppReviewStore {
   @computed get offerLoading() {
     return this.businessApplicationOffers.loading;
   }
-
-  @action
-  fetchApplicationOffers = applicationId => new Promise((resolve) => {
-    uiStore.setAppLoader(true);
-    uiStore.setLoaderMessage('Getting application data');
-    this.businessApplicationOffers = graphql({
-      client,
-      query: getBusinessApplicationOffers,
-      variables: {
-        id: applicationId,
-      },
-      fetchPolicy: 'network-only',
-      onFetch: () => {
-        if (!this.businessApplicationOffers.loading) {
-          uiStore.setAppLoader(false);
-          resolve();
-        }
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        uiStore.setAppLoader(false);
-      },
-    });
-  });
 
   @computed get offerStructure() {
     const offerData = this.fetchBusinessApplicationOffers;
