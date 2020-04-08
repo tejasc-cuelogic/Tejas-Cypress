@@ -173,6 +173,27 @@ export class Auth {
     }
   }
 
+  async refreshCurrentSession() {
+    try {
+    const session = await AmplifyAuth.currentSession();
+    await this.refreshSessionPromise(session.getRefreshToken());
+    // eslint-disable-next-line no-empty
+    } catch {
+    }
+  }
+
+  refreshSessionPromise = refreshToken => new Promise(async (resolve, reject) => {
+    const user = await AmplifyAuth.currentAuthenticatedUser();
+    user.refreshSession(refreshToken, async (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+        resolve(data); // THIS IS YOUR REFRESHED ATTRIBUTES/GROUPS
+      }
+    });
+  })
+
   resetPasswordExpiration = async (lowerCasedEmail, password) => {
     const res = await userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail);
     if (res.data.resetPasswordExpirationDurationForCognitoUser) {

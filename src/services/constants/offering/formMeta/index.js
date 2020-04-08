@@ -19,19 +19,9 @@ export const INVEST_NOW_TOC = FormHelper.generateMeta([
   asIn: true }],
 ]);
 
-export const INVEST_NOW_TOC_TEMPLATE = FormHelper.generateMeta([
-  ['template', 'Template', 1, 'required', 'Template', { props: {
-    options: [
-      { key: 'NS-Default', value: 1, text: 'NS-Default' },
-      { key: 'Custom', value: 2, text: 'Custom' },
-    ],
-    defaultValue: 1,
-  },
-  asIn: true }],
-]);
-
 export const INVEST_NOW_PAGE = FormHelper.generateMeta([
-  ['title', 'Description (optional)', '', 'optional', 'Description (optional)'],
+  ['title', 'Description (Copy on the InvestNow UI)', '', 'optional', 'Description (Copy on the InvestNow UI)'],
+  ['note', 'Note (Additional Notes about this TOC)', '', 'optional', 'Note (Additional Notes about this TOC)'],
   // ['page', 'Page no.', '', 'optional', 'Page no.'],
   // ['regulation', 'Regulation', '', 'required', 'Regulation', { props: {
   //   options: REGULATION_VALUES,

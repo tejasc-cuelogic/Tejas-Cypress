@@ -329,6 +329,7 @@ export const getOfferingDetails = gql`
       investNow {
         template
         page {
+          note
           title
           page
           regulation
