@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { get, pick } from 'lodash';
 import ReactCodeInput from 'react-code-input';
-import { Button, Form, Confirm, Header } from 'semantic-ui-react';
+import { Button, Form, Confirm, Header, Responsive, Icon } from 'semantic-ui-react';
 import {
   ImageCropper, FormTextarea, FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown,
 } from '.';
@@ -303,9 +303,10 @@ function formHoc(WrappedComponent, metaInfo) {
         }
         this.props[metaInfo.store].resetImageCropper(metaInfo.form, name, index, arrayName);
       };
+      const handleFileUploadLoader = fileId => this.props[metaInfo.store].handleUploadLoader(fileId);
       return (
-        <Form className="cropper-wrap tombstone-img">
-          {fieldData.preSignedUrl ? (
+        <Form className={`${!props.isImagePreviewDisabled ? 'cropper-wrap' : ''} tombstone-img`}>
+          {fieldData.preSignedUrl && !props.isImagePreviewDisabled ? (
             <div className="file-uploader attached" style={get(props, 'style')}>
               {!props.isReadonly
                 && <Button onClick={() => setConfirmModal(true)} circular icon={{ className: 'ns-close-light' }} />
@@ -320,21 +321,54 @@ function formHoc(WrappedComponent, metaInfo) {
                 className="deletion"
               />
             </div>
-          ) : (
-              <ImageCropper
-                disabled={props.isReadonly}
-                fieldData={fieldData}
-                setData={(attr, value) => setData(attr, value)}
-                verifyExtension={handleVerifyFileExtension}
-                handelReset={handleResetImageCropper}
-                verifyImageDimension={handelImageDimension}
-                field={fieldData}
-                modalUploadAction={fieldName => this.props[metaInfo.store].uploadMedia(fieldName, (get(props, 'multiForm') || metaInfo.form), props.uploadPath)}
-                name={name}
-                cropInModal
-                aspect={3 / 2}
+          ) : fieldData.value && props.isImagePreviewDisabled ? (
+            <div className="file-uploader attached">
+              <Responsive
+                as={Button}
+                minWidth={768}
+                size="tiny"
+                compact
+                className="ghost-button remove pull-right"
+                onClick={() => setConfirmModal(true)}
+              >
+                Remove
+                    </Responsive>
+              <Responsive
+                as={Icon}
+                maxWidth={767}
+                name="remove"
+                className="pull-right"
+                onClick={() => setConfirmModal(true)}
               />
-            )}
+              {handleFileUploadLoader(fieldData.fileId) ? 'Loading...'
+                : <span title={fieldData.value}>{fieldData.value}</span>
+              }
+              <Confirm
+                content="Are you sure you want to remove this media file?"
+                open={fieldData.confirmModal}
+                onCancel={() => setConfirmModal(false)}
+                onConfirm={handleRemoveConfirm}
+                size="mini"
+                className="deletion"
+              />
+            </div>
+          ) : (
+                <ImageCropper
+                  disabled={props.isReadonly}
+                  fieldData={fieldData}
+                  setData={(attr, value) => setData(attr, value)}
+                  verifyExtension={handleVerifyFileExtension}
+                  handelReset={handleResetImageCropper}
+                  verifyImageDimension={handelImageDimension}
+                  field={fieldData}
+                  modalUploadAction={fieldName => this.props[metaInfo.store].uploadMedia(fieldName, (get(props, 'multiForm') || metaInfo.form), props.uploadPath)}
+                  name={name}
+                  cropInModal
+                  aspect={3 / 2}
+                  size="small"
+                />
+              )
+          }
         </Form>
       );
     }

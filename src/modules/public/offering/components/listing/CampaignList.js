@@ -91,6 +91,7 @@ export default class CampaignList extends Component {
     const tombstoneImage = offering => (isTemplate2(get(offering, 'template')) ? get(offering, 'tombstone.image.url') : get(offering, 'media.tombstoneImage.url'));
     const getTombstoneDescription = offering => (isTemplate2(get(offering, 'template')) ? get(offering, 'tombstone.description') : get(offering, 'offering.overview.tombstoneDescription'));
     const showInvestorsCount = offering => (!isTemplate2(get(offering, 'template')) || (isTemplate2(get(offering, 'template')) && (get(offering, 'tombstone.toggleMeta') || []).includes('INVESTOR_COUNT')));
+    const showBusinessLocation = offering => (!isTemplate2(get(offering, 'template')) || (isTemplate2(get(offering, 'template')) && (get(offering, 'tombstone.toggleMeta') || []).includes('BUSINESS_LOCATION')));
     const getCustomTag = offering => ((isTemplate2(get(offering, 'template')) && get(offering, 'tombstone.customTag')) || '');
     return (
       <>
@@ -127,7 +128,7 @@ export default class CampaignList extends Component {
                                 && offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
                               }
                               </Card.Header>
-                              {get(offering, 'keyTerms.securities') !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS && (get(offering, 'keyTerms.city') || get(offering, 'keyTerms.state'))
+                              {showBusinessLocation(offering) && get(offering, 'keyTerms.securities') !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS && (get(offering, 'keyTerms.city') || get(offering, 'keyTerms.state'))
                                 && (
                                   <Card.Meta>
                                     {get(offering, 'keyTerms.city') || ''}

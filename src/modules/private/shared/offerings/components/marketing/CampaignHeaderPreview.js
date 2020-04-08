@@ -63,49 +63,49 @@ export default class CampaignHeaderPreview extends Component {
                       )
                     }
                     {headerBasicFields.toggleMeta.value && headerBasicFields.toggleMeta.value.length
-                    ? (
-                      <div className="offer-stats">
-                        <Statistic.Group>
-                          <>
-                          {isLive && headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
-                            && (
-                            <Statistic size="mini" className="basic">
-                              <Statistic.Value>{countDown.valueToShow || 'X'}</Statistic.Value>
-                              <Statistic.Label>{countDown.labelToShow || 'Days Left'}</Statistic.Label>
-                            </Statistic>
-                            )}
-                            {headerBasicFields.toggleMeta.value.includes('INVESTOR_COUNT') && headerBasicFields.investorCount.value > 0
-                            && (
-                            <Statistic size="mini" className="basic">
-                              <Statistic.Value>
-                                {headerBasicFields.investorCount.value || 0}
-                              </Statistic.Value>
-                              <Statistic.Label>Investors</Statistic.Label>
-                            </Statistic>
-                            )}
-                          </>
-                          {isClosed && headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT') && headerBasicFields.repaymentCount.value > 0
-                            && (
-                              <Statistic size="mini" className="basic">
-                                <Statistic.Value>
-                                  {headerBasicFields.repaymentCount.value || 0}
-                                </Statistic.Value>
-                                <Statistic.Label>Payments made</Statistic.Label>
-                              </Statistic>
-                            )
-                          }
-                          {!isClosed && headerBasicFields.toggleMeta.value.includes('EARLY_BIRD') && headerBasicFields.earlyBird.value > 0
-                            ? (
-                              <Statistic size="mini" className="basic">
-                                <Statistic.Value>
-                                  {headerBasicFields.earlyBird.value || 0}
-                                </Statistic.Value>
-                                <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                              </Statistic>
-                            ) : ''
-                          }
-                        </Statistic.Group>
-                      </div>
+                      ? (
+                        <div className="offer-stats">
+                          <Statistic.Group>
+                            <>
+                              {isLive && headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
+                                && (
+                                  <Statistic size="mini" className="basic">
+                                    <Statistic.Value>{countDown.valueToShow || 'X'}</Statistic.Value>
+                                    <Statistic.Label>{countDown.labelToShow || 'Days Left'}</Statistic.Label>
+                                  </Statistic>
+                                )}
+                              {headerBasicFields.toggleMeta.value.includes('INVESTOR_COUNT') && headerBasicFields.investorCount.value > 0
+                                && (
+                                  <Statistic size="mini" className="basic">
+                                    <Statistic.Value>
+                                      {headerBasicFields.investorCount.value || 0}
+                                    </Statistic.Value>
+                                    <Statistic.Label>Investors</Statistic.Label>
+                                  </Statistic>
+                                )}
+                            </>
+                            {isClosed && headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT') && headerBasicFields.repaymentCount.value > 0
+                              && (
+                                <Statistic size="mini" className="basic">
+                                  <Statistic.Value>
+                                    {headerBasicFields.repaymentCount.value || 0}
+                                  </Statistic.Value>
+                                  <Statistic.Label>Payments made</Statistic.Label>
+                                </Statistic>
+                              )
+                            }
+                            {!isClosed && headerBasicFields.toggleMeta.value.includes('EARLY_BIRD') && headerBasicFields.earlyBird.value > 0
+                              ? (
+                                <Statistic size="mini" className="basic">
+                                  <Statistic.Value>
+                                    {headerBasicFields.earlyBird.value || 0}
+                                  </Statistic.Value>
+                                  <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                                </Statistic>
+                              ) : ''
+                            }
+                          </Statistic.Group>
+                        </div>
                       ) : null}
                   </div>
                   <div className="clearfix social-links mt-10">
@@ -124,21 +124,27 @@ export default class CampaignHeaderPreview extends Component {
                 <Grid.Column width={6}>
                   <Header as="h3" inverted>
                     {offer && offer.keyTerms && offer.keyTerms.shorthandBusinessName}
-                    <Header.Subheader>{address}</Header.Subheader>
+                    {headerBasicFields.toggleMeta.value.includes('BUSINESS_LOCATION')
+                      && (<Header.Subheader>{address}</Header.Subheader>)
+                    }
                   </Header>
                   <Statistic inverted size="tiny" className={`${isMobile && 'mt-40'} basic mb-0`}>
-                    <Statistic.Value>
-                      <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
-                    </Statistic.Value>
+                    {headerBasicFields.toggleMeta.value.includes('FUNDINGRAISING_STATE')
+                      && (
+                        <Statistic.Value>
+                          <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
+                        </Statistic.Value>
+                      )
+                    }
                     {minFlagStatus
                       && (
                         <Statistic.Label className="flag-status">
                           <Icon name="flag" /> Surpassed minimum goal
-                      </Statistic.Label>
+                        </Statistic.Label>
                       )
                     }
                   </Statistic>
-                  {!campaignStatus.isFund
+                  {!campaignStatus.isFund && headerBasicFields.toggleMeta.value.includes('FUNDINGRAISING_STATE')
                     ? (
                       !isClosed
                         ? <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
@@ -158,11 +164,11 @@ export default class CampaignHeaderPreview extends Component {
                       <>
                         <p>
                           <span className="mr-10">{Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                            position="top center"
-                          />
+                            <Popup
+                              trigger={<Icon name="help circle" color="green" />}
+                              content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                              position="top center"
+                            />
                           </span>
                           |
                           <span className="ml-10">{Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
@@ -195,22 +201,22 @@ export default class CampaignHeaderPreview extends Component {
                         <>
                           <Grid>
                             {(!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
-                            && (
-                            <Grid.Column width={followBtn ? '10' : ''} className="center-align">
-                              <Button
-                                primary={!isInProcessing}
-                                disabled={maxFlagStatus || isInProcessing}
-                                onClick={this.handleInvestNowClick}
-                                fluid
-                              >
-                                {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`}
-                              </Button>
-                              <p className="mt-10">
-                                {Helper.CurrencyFormat(get(offer, 'keyTerms.minInvestAmt'), 0)} min investment
+                              && (
+                                <Grid.Column width={followBtn && headerBasicFields.toggleMeta.value.includes('FOLLOW_STATE') ? '10' : ''} className="center-align">
+                                  <Button
+                                    primary={!isInProcessing}
+                                    disabled={maxFlagStatus || isInProcessing}
+                                    onClick={this.handleInvestNowClick}
+                                    fluid
+                                  >
+                                    {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`}
+                                  </Button>
+                                  <p className="mt-10">
+                                    {Helper.CurrencyFormat(get(offer, 'keyTerms.minInvestAmt'), 0)} min investment
                             </p>
-                            </Grid.Column>
-                            )}
-                            {followBtn
+                                </Grid.Column>
+                              )}
+                            {followBtn && headerBasicFields.toggleMeta.value.includes('FOLLOW_STATE')
                               && (
                                 <Grid.Column width="6">
                                   <>{followBtn}</>
