@@ -1039,7 +1039,7 @@ export const CONTINGENCIES = {
 
 export const OFFERING_DETAILS = {
   offeringSlug: {
-    value: 'http',
+    value: '',
     label: 'Offering URL',
     error: undefined,
     rule: 'required',
@@ -1053,7 +1053,7 @@ export const OFFERING_DETAILS = {
     placeHolder: 'Enter here',
   },
   referralCode: {
-    value: 'fdafd',
+    value: '',
     label: 'Issuer Referral Code',
     error: undefined,
     rule: 'optional|alpha_num',

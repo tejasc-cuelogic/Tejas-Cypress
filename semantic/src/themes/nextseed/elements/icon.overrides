@@ -1895,9 +1895,6 @@ i.icon[class*="ns-"]{
 .ns-convertible-icon:before{
     content:@ns-convertible-icon;
 }
-.ns-bridge-icon:before{
-    content:@ns-bridge-icon;
-}
 .ns-corporation:before{
     content:@ns-corporation;
 }
