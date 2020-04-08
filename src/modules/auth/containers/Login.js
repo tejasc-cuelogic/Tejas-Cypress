@@ -49,9 +49,6 @@ class Login extends Component {
     const userCredentials = { email: lowerCasedEmail, password: password.value };
     authActions.login()
       .then(() => {
-        if (this.props.uiStore.appUpdated) {
-          window.location.reload();
-        }
         if (this.props.authStore.newPasswordRequired) {
           this.props.uiStore.removeOneFromProgressArray('login');
           this.props.history.push('/change-password');
