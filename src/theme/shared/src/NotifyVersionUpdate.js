@@ -24,10 +24,10 @@ const NotifyVersionUpdate = (props) => {
   const show = showUpdateModal(location.pathname);
   const { isMobile, isTablet } = props.responsiveVars;
   if (show) {
-    setTimeout(() => { Helper.modalCssUpdate('show-top', 'show-top'); }, 500);
+    setTimeout(() => { Helper.modalCssUpdate('show-top', 'show-top'); }, 50000000);
   }
   if (!show) {
-    setTimeout(() => { update(); }, 5000);
+    setTimeout(() => { update(); }, 50000000);
     return (
       <Message
         size="mini"
