@@ -47,7 +47,6 @@ export default class Overview extends Component {
                   lowercase={field === 'referralCode'}
                   name={field}
                   disabled={isIssuer}
-                  value={field === 'offeringSlug' ? `https://www/nextseed.com/offering/${OFFERING_DETAILS_FRM.value}` : ''}
                   fielddata={OFFERING_DETAILS_FRM.fields[field]}
                   changed={(e, result) => formChange(e, result, 'OFFERING_DETAILS_FRM')}
                 />

@@ -558,6 +558,7 @@ export const REGULATION_VALUES = [
 ];
 
 export const NS_FEE_PERCENTAGE = [
+  { key: '0', value: '0.00', text: '0%' },
   { key: '1', value: '1.00', text: '1%' },
   { key: '2', value: '2.00', text: '2%' },
 ];
@@ -1038,7 +1039,7 @@ export const CONTINGENCIES = {
 
 export const OFFERING_DETAILS = {
   offeringSlug: {
-    value: '',
+    value: 'http',
     label: 'Offering URL',
     error: undefined,
     rule: 'required',
@@ -1052,7 +1053,7 @@ export const OFFERING_DETAILS = {
     placeHolder: 'Enter here',
   },
   referralCode: {
-    value: '',
+    value: 'fdafd',
     label: 'Issuer Referral Code',
     error: undefined,
     rule: 'optional|alpha_num',
