@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button } from 'semantic-ui-react';
 
-@inject('uiStore')
+@inject('uiStore', 'manageOfferingStore')
 @observer
 export default class OfferingButtonGroup extends Component {
   render() {
-    const { updateOffer, uiStore, isDisable, buttonTitle } = this.props;
-    const { inProgress, htmlEditorImageLoading } = this.props.uiStore;
+    const { updateOffer, uiStore, isDisable, buttonTitle, manageOfferingStore } = this.props;
+    const { inProgress, htmlEditorImageLoading } = uiStore;
+    const { campaignStatus } = manageOfferingStore;
+    const isReadOnly = campaignStatus.lock;
     return (
       <>
         <div className="sticky-actions">
@@ -30,7 +32,7 @@ export default class OfferingButtonGroup extends Component {
             } */}
           </Button.Group>
           <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
-            <Button disabled={htmlEditorImageLoading || isDisable} loading={inProgress === 'save'} primary onClick={updateOffer} color="green" className="relaxed">{buttonTitle || 'Save'}</Button>
+            <Button disabled={isReadOnly || htmlEditorImageLoading || isDisable} loading={inProgress === 'save'} primary onClick={updateOffer} color="green" className="relaxed">{buttonTitle || 'Save'}</Button>
           </Button.Group>
         </div>
       </>

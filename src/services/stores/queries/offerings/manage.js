@@ -4,6 +4,7 @@ const common = {
   offeringBasics: `
   isAvailablePublicly
   offeringSlug
+  template
   keyTerms {
     legalBusinessName
     shorthandBusinessName
@@ -66,6 +67,95 @@ const common = {
     }
   }
   order`,
+  offeringTemplate2: `
+  content {
+    title
+    order
+    contentType
+    scope
+    customValue
+  }
+  gallery {
+    caption
+    isVisible
+    order
+    image {
+      id
+      url
+      isPublic
+      fileName
+    }
+  }
+  misc {
+    issuerStatement
+    logo {
+      url
+      fileName
+    }
+    avatar {
+      url
+      fileName
+    }
+    social {
+      type
+      url
+      shareLink
+      blurb
+      featuredImageUpload {
+        url
+        fileName
+      }
+    }
+  }
+  tombstone {
+    image {
+      url
+      fileName
+    }
+    description
+    meta {
+      keyLabel
+      order
+      keyType
+      keyValue
+      keyFormat
+      isHighlight
+    }
+    customTag
+    toggleMeta
+  }
+  subHeader {
+    meta {
+      keyLabel
+      order
+      keyType
+      keyValue
+      keyFormat
+      isHighlight
+    }
+    toggleMeta
+  }
+  header {
+    heroImage {
+      url
+      fileName
+    }
+    heroBackgroundImage {
+      url
+      fileName
+    }
+    heroVideoURL
+    meta {
+      keyLabel
+      order
+      keyType
+      keyValue
+      keyFormat
+      isHighlight
+    }
+    toggleMeta
+  }
+  `,
 };
 export const allOfferingsCompact = gql`
   query getOfferings($stage: [OfferingStageEnumType], $issuerId: String){
@@ -211,11 +301,22 @@ export const getOfferingDetails = gql`
   query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug(offeringSlug: $id) {
       id
+      investmentSummary {
+        isInvestedInOffering
+        tranche
+      }
+      lock {
+        userId
+        user
+        date
+      }
       offeringSlug
       referralCode
       previewPassword
       regulation
+      template
       rootFolderId
+      ${common.offeringTemplate2}
       goldstar {
         isin
         contactId
@@ -228,6 +329,7 @@ export const getOfferingDetails = gql`
       investNow {
         template
         page {
+          note
           title
           page
           regulation
