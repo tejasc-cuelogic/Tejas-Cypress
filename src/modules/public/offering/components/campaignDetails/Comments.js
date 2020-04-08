@@ -48,7 +48,7 @@ const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHan
         disabled={!(visiblePost)}
       />
       {showButton
-        && <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC'} onClick={btnHandler} disabled={!isFormValid || buttonLoader === 'PUBLIC' || !(visiblePost)} primary content="Post Comment" />}
+        && <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC' && visiblePost} onClick={btnHandler} disabled={!isFormValid || buttonLoader === 'PUBLIC' || !(visiblePost)} primary content="Post Comment" />}
       {showCancelButton
         && <Button fluid={isMobile} className={isMobile && 'mlr-0 mt-20 mb-30'} onClick={closeBtnHandler} disabled={buttonLoader === 'PUBLIC'} basic>Cancel</Button>}
     </Form>
