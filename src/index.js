@@ -11,7 +11,7 @@ import * as OfflinePluginRuntime from 'offline-plugin/runtime';
 import App from './App';
 import * as stores from './services/stores';
 import { ErrorBoundry as CustomErrorBoundry, Utilities as Utils } from './helper';
-import { REACT_APP_DEPLOY_ENV } from './constants/common';
+import { REACT_APP_DEPLOY_ENV, NODE_ENV } from './constants/common';
 
 // Set the default error boundry to the customErrorBoundry
 // and reassign it if one from Bugsnag is present
@@ -66,6 +66,7 @@ ReactDOM.render(
 );
 
 // install only for production build (will not run on local dev)
+if (NODE_ENV === 'production') {
   // keep service worker version info in local and sesssion storage
   // which will be used - on changing tab if version is updated for any tab, refesh tab
   // as soon as it is active
@@ -105,3 +106,4 @@ ReactDOM.render(
       window.logger('[OfflinePlugin] onUpdateFailed');
     },
   });
+}
