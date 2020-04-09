@@ -87,15 +87,17 @@ export default class AccountCreation extends Component {
     try {
       this.props.uiStore.setcreateAccountMessage();
       await this.props[`${accountType}AccountStore`].submitAccount();
+      await this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+      this.props.uiStore.setProgress(false);
       this.props.uiStore.resetcreateAccountMessage();
       // const confirmModal = this.props[`${accountType}AccountStore`].showProcessingModal ? 'processing' : 'success';
       // this.props.history.push(`${this.props.match.url}/${accountType}/${confirmModal}`);
       const currStep = this.props[`${accountType}AccountStore`].stepToBeRendered;
       this.props[`${accountType}AccountStore`].setStepToBeRendered(currStep + 1);
     } catch (err) {
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+      this.props.uiStore.setProgress(false);
       if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
         this.props.history.push(this.props.identityStore.cipStepUrlMapping.ciphardFail.url);
       }

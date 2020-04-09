@@ -1,18 +1,19 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import ReactCodeInput from 'react-code-input';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
-import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import Helper from '../../../helper/utility';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
+import formHOC from '../../../theme/form/formHOC';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('authStore', 'uiStore')
-@observer
-export default class ResetPassword extends Component {
+const metaInfo = {
+  store: 'authStore',
+  form: 'RESET_PASS_FRM',
+};
+class ResetPassword extends Component {
   constructor(props) {
     super(props);
     const { RESET_PASS_FRM } = this.props.authStore;
@@ -58,6 +59,7 @@ export default class ResetPassword extends Component {
       currentScore,
     } = this.props.authStore;
     const { errors } = this.props.uiStore;
+    const { smartElement } = this.props;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -68,39 +70,10 @@ export default class ResetPassword extends Component {
           <Form error onSubmit={this.onSubmit}>
             <Form.Field className="otp-wrap center-align mt-10">
               <label>Enter verification code here:</label>
-              <ReactCodeInput
-                fields={6}
-                type="number"
-                filterChars
-                name="code"
-                autoFocus={!isMobile}
-                className="otp-field mt-10"
-                pattern="[0-9]*"
-                inputmode="numeric"
-                fielddata={RESET_PASS_FRM.fields.code}
-                onChange={resetPassChange}
-              />
+              {smartElement.CodeInput('code', { autoFocus: !isMobile, className: 'otp-field mt-10', onChange: resetPassChange })}
             </Form.Field>
-            <FormPasswordStrength
-              key="password"
-              name="password"
-              type="password"
-              iconDisplay
-              minLength={8}
-              minScore={4}
-              tooShortWord="Weak"
-              scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-              inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'New Password' }}
-              changed={resetPassChange}
-              fielddata={RESET_PASS_FRM.fields.password}
-            />
-            <FormInput
-              key="verify"
-              type={pwdInputType}
-              name="verify"
-              fielddata={RESET_PASS_FRM.fields.verify}
-              changed={resetPassChange}
-            />
+            {smartElement.FormPasswordStrength('password', { changed: resetPassChange })}
+            {smartElement.Input('verify', { changed: resetPassChange, type: pwdInputType })}
             {errors && (
               <Message error textAlign="left" className="mt-30">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
@@ -115,3 +88,4 @@ export default class ResetPassword extends Component {
     );
   }
 }
+export default inject('authStore', 'uiStore')(formHOC(observer(ResetPassword), metaInfo));

@@ -3,7 +3,7 @@ import { orderBy, get, findIndex, pick, forEach, remove } from 'lodash';
 import moment from 'moment';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary, adminPaymentSendIssuerFirstNotice, adminPaymentSendIssuerSecondNotice } from '../../queries/Repayment';
+import { adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentSendIssuerFirstNotice, adminPaymentSendIssuerSecondNotice } from '../../queries/Repayment';
 import { PAYMENT, ACTION } from '../../../constants/payment';
 import { uiStore } from '../../index';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
@@ -11,7 +11,7 @@ import Helper from '../../../../helper/utility';
 
 export class PaymentStore extends DataModelStore {
   constructor() {
-    super({ adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary, adminPaymentSendIssuerFirstNotice, adminPaymentSendIssuerSecondNotice });
+    super({ adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentSendIssuerFirstNotice, adminPaymentSendIssuerSecondNotice });
   }
 
   data = [];
@@ -70,6 +70,9 @@ export class PaymentStore extends DataModelStore {
   paymentCtaHandlers = mutation => new Promise((resolve) => {
     let variables = { ...toJS(Validator.evaluateFormData(this.ACTION_FRM.fields)) };
     variables = { ...variables, sendEmail: !['issuer', 'goldstar'].includes(variables.scope) ? true : variables.sendEmail };
+    if (!['adminPaymentSendGoldStarDraftInstructions'].includes(mutation)) {
+      delete variables.date;
+    }
     this.executeMutation({
       mutation,
       setLoader: mutation,

@@ -306,6 +306,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Equity', icon: 'ns-calculator-icon', value: 'EQUITY' },
       { label: 'Debt', icon: 'ns-debt-icon', value: 'DEBT' },
       { label: 'Convertible Notes / SAFE', icon: 'ns-convertible-icon', value: 'CONVERTIBLE_NOTE' },
+      { label: 'Community Bridge Note', icon: 'ns-covid-icon', value: 'BRIDGE_NOTE' },
     ],
     error: undefined,
     rule: 'required',
@@ -326,9 +327,9 @@ export const BUSINESS_PRE_QUALIFICATION = {
   fundUsage: {
     value: [],
     values: [
+      { label: 'Working Capital', icon: 'ns-working-capital', value: 'WORKING_CAPITAL' },
       { label: 'Renovations', icon: 'ns-renovations', value: 'RENOVATIONS' },
       { label: 'Equipment Purchase', icon: 'ns-equipment-purchase', value: 'EQUIPMENT_PURCHASE' },
-      { label: 'Working Capital', icon: 'ns-working-capital', value: 'WORKING_CAPITAL' },
       { label: 'Inventory', icon: 'ns-inventory', value: 'INVENTORY' },
       { label: 'New Product Line', icon: 'ns-new-product', value: 'NEW_PRODUCT_LINE' },
       { label: 'New Location', icon: 'ns-new-location', value: 'NEW_LOCATION' },

@@ -558,6 +558,7 @@ export const REGULATION_VALUES = [
 ];
 
 export const NS_FEE_PERCENTAGE = [
+  { key: '0', value: '0.00', text: '0%' },
   { key: '1', value: '1.00', text: '1%' },
   { key: '2', value: '2.00', text: '2%' },
 ];
