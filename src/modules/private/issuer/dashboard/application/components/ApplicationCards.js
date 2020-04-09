@@ -63,8 +63,8 @@ export default class ApplicationCards extends Component {
           {fetchBusinessApplication.length
             ? fetchBusinessApplication.map(application => (
               application.applicationStatus !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED
-                && (
-<Card fluid key={application.applicationId}>
+              && (
+                <Card fluid key={application.applicationId}>
                   <Card.Content>
                     <Header as="h4"><Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
                   </Card.Content>
@@ -78,20 +78,20 @@ export default class ApplicationCards extends Component {
                       <dd>{(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated) ? <DateTimeFormat isCSTFormat datetime={(DataFormatter.getDateAsPerTimeZone((get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated.date), true, false, false))} /> : '--'}</dd>
                     </dl>
                     {application.applicationStatus
-                    === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED
+                      === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED
                       && <Button className="mb-half" inverted color="green" as={Link} to={`/dashboard/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>Continue application</Button>
                     }
                     {(application.applicationStatus
-                    === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED
-                    || application.applicationStatus
-                    === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL
-                    || application.applicationStatus
-                    === BUSINESS_APPLICATION_STATUS.REVIEW_FAILED
-                    || application.applicationStatus
-                    === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED)
+                      === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED
+                      || application.applicationStatus
+                      === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL
+                      || application.applicationStatus
+                      === BUSINESS_APPLICATION_STATUS.REVIEW_FAILED
+                      || application.applicationStatus
+                      === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED)
                       && <Button className="mb-half" inverted color="green" as={Link} to={`/dashboard/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
                     }
-                    {([BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL, BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED].includes(application.applicationStatus))
+                    {/* ([BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL, BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED].includes(application.applicationStatus))
                       && (
                         <Button className="mb-half" inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/dashboard/application/${application.applicationId}/offers`, application.applicationId)}>
                         { application.applicationStatus
@@ -99,10 +99,10 @@ export default class ApplicationCards extends Component {
                       }
                       </Button>
                       )
-                    }
+                    */ }
                   </Card.Content>
                 </Card>
-                )
+              )
             )) : null
           }
         </Card.Group>
