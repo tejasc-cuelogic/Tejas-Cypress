@@ -1,37 +1,39 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import { Link, withRouter, Route } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
+import moment from 'moment';
 import { Button, Header, Form, Message, Divider, Grid } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import { authActions } from '../../../services/actions';
-import { FormInput } from '../../../theme/form';
-import { ListErrors, NsModal, SuccessScreen } from '../../../theme/shared';
+import { ListErrors, SuccessScreen, NsModal } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 import ConfirmCreateOrCancel from './ConfirmCreateOrCancel';
+import formHOC from '../../../theme/form/formHOC';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore', 'referralsStore', 'authStore')
-@withRouter
-@observer
-export default class ConfirmEmailAddress extends Component {
+const metaInfo = {
+  store: 'authStore',
+  form: 'CONFIRM_FRM',
+};
+
+class ConfirmEmailAddress extends Component {
   constructor(props) {
     super(props);
-    if (this.props.refLink) {
-      this.props.uiStore.setAuthRef(this.props.refLink);
+    const { userDetailsStore, authStore, uiStore, refLink, history } = this.props;
+    if (refLink) {
+      uiStore.setAuthRef(refLink);
     }
-
-    const { email } = this.props.userDetailsStore.userDetails;
-    const currentEmail = email && email.address ? email.address : '';
-    const sameEmailExists = !!(this.props.authStore.CONFIRM_FRM.fields.email.value === currentEmail || !this.props.authStore.CONFIRM_FRM.fields.email.value);
-    if ((!this.props.authStore.CONFIRM_FRM.fields.email.value
-      && !this.props.authStore.isUserLoggedIn) || (sameEmailExists && (sessionStorage.getItem('changedEmail') !== null))) {
+    const { value: formEmail } = authStore.CONFIRM_FRM.fields.email;
+    const { email } = userDetailsStore.userDetails;
+    const currentEmail = (email && email.address) || '';
+    const sameEmailExists = !!(formEmail === currentEmail || !formEmail);
+    if ((!formEmail && !authStore.isUserLoggedIn) || (sameEmailExists && sessionStorage.getItem('changedEmail') !== null)) {
       sessionStorage.removeItem('changedEmail');
-      this.props.history.push(this.props.refLink || '/login');
+      history.push(refLink || '/login');
     }
     this.props.authStore.setUserCredentiansConfirmEmail();
     this.sendOtpForMigratedUser();
@@ -61,102 +63,85 @@ export default class ConfirmEmailAddress extends Component {
     }
   }
 
+  redirectAsPerRoleAfterConfirmation = async (processSaasQuatch = false) => {
+    const { uiStore, userStore, identityStore, referralsStore, history } = this.props;
+    const { roles } = userStore.currentUser;
+    uiStore.setProgress(false);
+    if (roles.includes('investor')) {
+      const referralCode = window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE');
+      if (processSaasQuatch && referralCode) {
+        const referalData = await referralsStore.userPartialFullSignupWithReferralCode(referralCode);
+        if (referalData) {
+          window.localStorage.removeItem('SAASQUATCH_REFERRAL_CODE');
+        }
+      }
+      identityStore.setIsOptConfirmed(true);
+    } else {
+      const redirectUrl = !roles ? '/login' : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
+      history.replace(redirectUrl);
+    }
+  }
+
+  confirmUser = async (isMigratedUser = false) => {
+    const { identityStore, userDetailsStore, uiStore } = this.props;
+    if (isMigratedUser) {
+      const res = await identityStore.confirmEmailForMigratedUser();
+      if (res) {
+        userDetailsStore.mergeUserData('email', { verified: moment().tz('America/Chicago').toISOString() });
+        uiStore.setProgress(false);
+      }
+    } else {
+      const res = await identityStore.verifyOtpEmail();
+      if (res) {
+        await authActions.register(isMobile);
+      }
+    }
+    this.redirectAsPerRoleAfterConfirmation(!isMigratedUser);
+  }
+
   handleSubmitForm = async (e) => {
     e.preventDefault();
-    const { uiStore } = this.props;
-    this.props.authStore.setProgress('confirm');
+    const { uiStore, authStore, userStore, userDetailsStore, identityStore, history, refLink } = this.props;
+    authStore.setProgress('confirm');
     uiStore.setProgress();
-    if (this.props.refLink) {
-      const res = await this.props.identityStore.changeEmailRequest();
+    if (refLink) {
+      const res = await identityStore.changeEmailRequest();
       if (res) {
-        if (this.props.userStore.isInvestor) {
-          this.props.identityStore.setIsOptConfirmed(true);
+        if (userStore.isInvestor) {
+          identityStore.setIsOptConfirmed(true);
         } else {
-          this.props.history.push('/dashboard/account-settings');
+          history.push('/dashboard/account-settings');
         }
         sessionStorage.removeItem('changedEmail');
       }
-    } else if (this.props.authStore.SIGNUP_FRM.fields.email.value === ''
-      && !this.props.userStore.currentUser) {
-      this.props.history.push('/register-investor');
+    } else if (authStore.SIGNUP_FRM.fields.email.value === '' && !userStore.currentUser) {
+      history.push('/register-investor');
     } else {
-      const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
-      if (isMigratedUser) {
-        const res = await this.props.identityStore.confirmEmailForMigratedUser();
-        if (res) {
-          this.props.userDetailsStore.mergeUserData('email', { verified: moment().tz('America/Chicago').toISOString() });
-          uiStore.setProgress(false);
-          const { roles } = this.props.userStore.currentUser;
-          if (roles.includes('investor')) {
-            this.props.identityStore.setIsOptConfirmed(true);
-          } else {
-            const redirectUrl = !roles ? '/login'
-              : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
-            this.props.history.replace(redirectUrl);
-          }
-        }
-      } else {
-        const res = await this.props.identityStore.verifyOtpEmail();
-        if (res) {
-          authActions.register(isMobile)
-            .then(() => {
-              uiStore.setProgress(false);
-              const { roles } = this.props.userStore.currentUser;
-              if (roles.includes('investor')) {
-                if (window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') && window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') !== undefined) {
-                  const referralCode = window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE');
-                  this.props.referralsStore.userPartialFullSignupWithReferralCode(referralCode)
-                    .then((data) => {
-                      if (data) {
-                        window.localStorage.removeItem('SAASQUATCH_REFERRAL_CODE');
-                      }
-                    });
-                }
-                this.props.identityStore.setIsOptConfirmed(true);
-              } else {
-                const redirectUrl = !roles ? '/login'
-                  : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
-                this.props.history.replace(redirectUrl);
-              }
-            })
-            .catch(() => { });
-        }
-      }
+      const { isMigratedUser } = userDetailsStore.signupStatus;
+      await this.confirmUser(isMigratedUser);
       sessionStorage.removeItem('changedEmail');
     }
   }
 
   handleCloseModal = () => {
-    // if (!this.props.refLink && this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
-    //   this.props.history.push('/dashboard/setup');
-    // } else {
-    //   this.props.history.push(this.props.uiStore.authRef || '/');
-    // }
-    if (!this.props.refLink) {
-      this.props.history.push(`${this.props.match.url}/create-or-cancel`);
-    } else {
-      this.props.history.push(this.props.uiStore.authRef || '/');
-    }
-    this.props.uiStore.clearErrors();
+    const { refLink, history, match, uiStore } = this.props;
+    history.push(!refLink ? `${match.url}/create-or-cancel` : (uiStore.authRef || '/'));
+    uiStore.clearErrors();
     sessionStorage.removeItem('changedEmail');
   }
 
   handleResendCode = async () => {
-    this.props.authStore.setProgress('resend');
-    if (this.props.refLink) {
-      const res = await this.props.identityStore.sendOtp('EMAIL_CHANGE', isMobile);
-      if (res) {
-        this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
-        this.props.uiStore.clearErrors();
-      }
+    const { authStore, uiStore, identityStore, userDetailsStore, refLink } = this.props;
+    authStore.setProgress('resend');
+    if (refLink) {
+      await identityStore.sendOtp('EMAIL_CHANGE', isMobile);
     } else {
-      if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
-        await this.props.identityStore.sendOtp('EMAIL_CONFIGURATION', undefined, isMobile);
+      if (userDetailsStore.signupStatus.isMigratedUser) {
+        await identityStore.sendOtp('EMAIL_CONFIGURATION', undefined, isMobile);
       } else {
-        await this.props.identityStore.sendOtpEmail(isMobile);
+        await identityStore.sendOtpEmail(isMobile);
       }
-      this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
-      this.props.uiStore.clearErrors();
+      uiStore.clearErrors();
     }
   }
 
@@ -183,6 +168,7 @@ export default class ConfirmEmailAddress extends Component {
     const { errors, inProgress, responsiveVars } = this.props.uiStore;
     const { isOptConfirmed } = this.props.identityStore;
     const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
+    const { smartElement } = this.props;
     if (errors && errors.code === 'NotAuthorizedException') {
       this.props.history.push('/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
@@ -220,18 +206,7 @@ export default class ConfirmEmailAddress extends Component {
             <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
               Please confirm the 6-digit verification code sent to your email
           </p>
-            <FormInput
-              ishidelabel
-              type="email"
-              name="email"
-              fielddata={CONFIRM_FRM.fields.email}
-              changed={ConfirmChange}
-              readOnly
-              displayMode
-              disabled
-              title={CONFIRM_FRM.fields.email.value}
-              className={`${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only no-border`}
-            />
+            {smartElement.Input('email', { className: `${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only no-border`, disabled: true })}
             {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value))
               && <Link to={changeEmailAddressLink} color="green">Change email address</Link>
             }
@@ -268,3 +243,4 @@ export default class ConfirmEmailAddress extends Component {
     );
   }
 }
+export default inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore', 'referralsStore')(withRouter(formHOC(observer(ConfirmEmailAddress), metaInfo)));

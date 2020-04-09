@@ -1,25 +1,22 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Button, Form, Grid, Modal, Divider } from 'semantic-ui-react';
-import { FormInput } from '../../../../theme/form';
+import formHOC from '../../../../theme/form/formHOC';
+
+const metaInfo = {
+  store: 'authStore',
+  form: 'NEWSLETTER_FRM',
+};
 
 const SubscribeFields = observer(({
-  NEWSLETTER_FRM, newsLetterChange, modal, inProgress,
+  NEWSLETTER_FRM, modal, inProgress, smartElement,
 }) => (
   <Grid centered>
     <Grid.Row>
       {
         Object.keys(NEWSLETTER_FRM.fields).map(field => (
           <Grid.Column computer={12} tablet={12} mobile={16} key={field}>
-            <FormInput
-              key={field}
-              type="text"
-              name={field}
-              fielddata={NEWSLETTER_FRM.fields[field]}
-              changed={newsLetterChange}
-              ishidelabel={!modal}
-              showerror
-            />
+          {smartElement.Input(field, { ishidelabel: !modal, showerror: true })}
           </Grid.Column>
         ))
       }
@@ -46,9 +43,7 @@ const ThanksNote = props => (
   </Modal>
 );
 
-@inject('authStore', 'uiStore')
-@observer
-export default class SubscribeForNewsletter extends Component {
+class SubscribeForNewsletter extends Component {
   state = { dialog: false };
 
   componentWillUnmount() {
@@ -72,6 +67,7 @@ export default class SubscribeForNewsletter extends Component {
     const { NEWSLETTER_FRM, newsLetterChange } = this.props.authStore;
     const { inProgress } = this.props.uiStore;
     const { dialog } = this.state;
+    const { smartElement } = this.props;
     return (
       <>
         <Form onSubmit={this.submit} className={this.props.className}>
@@ -81,6 +77,7 @@ export default class SubscribeForNewsletter extends Component {
               newsLetterChange={newsLetterChange}
               modal={this.props.modal}
               inProgress={inProgress}
+              smartElement={smartElement}
             />
           ) : (
             <SubscribeFields
@@ -88,6 +85,7 @@ export default class SubscribeForNewsletter extends Component {
               newsLetterChange={newsLetterChange}
               modal={this.props.modal}
               inProgress={inProgress}
+              smartElement={smartElement}
             />
           )}
         </Form>
@@ -96,3 +94,4 @@ export default class SubscribeForNewsletter extends Component {
     );
   }
 }
+export default inject('authStore', 'uiStore')(formHOC(observer(SubscribeForNewsletter), metaInfo));
