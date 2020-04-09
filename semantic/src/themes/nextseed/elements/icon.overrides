@@ -1898,6 +1898,9 @@ i.icon[class*="ns-"]{
 .ns-corporation:before{
     content:@ns-corporation;
 }
+.ns-covid-icon:before {
+    content: @ns-covid-icon; 
+}
 .ns-credit-card:before{
     content:@ns-credit-card;
 }

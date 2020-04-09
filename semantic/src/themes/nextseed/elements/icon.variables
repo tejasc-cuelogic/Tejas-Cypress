@@ -165,6 +165,7 @@
 @ns-contact-card: "\e971";
 @ns-convertible-icon: "\e9a2";
 @ns-corporation: "\e955";
+@ns-covid-icon: "\e9ad";
 @ns-credit-card: "\e91f";
 @ns-dashboard: "\e920";
 @ns-dashboard-circle: "\e921";
