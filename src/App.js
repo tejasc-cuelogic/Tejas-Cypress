@@ -264,6 +264,8 @@ class App extends Component {
     const { location, uiStore, userStore, authStore } = this.props;
     const { authChecked } = this.state;
     const { isTablet } = uiStore.responsiveVars;
+    const { isInvestor } = userStore;
+
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
       return (
         <Route path="/secure-gateway" component={SecureGateway} />
@@ -274,7 +276,7 @@ class App extends Component {
         <Spinner loaderMessage={uiStore.loaderMessage} />
       );
     }
-    const { isInvestor } = userStore;
+
     return (
       <div className={(isInvestor || !matchPath(location.pathname, { path: '/dashboard' })) ? 'public-pages' : ''}>
         {authStore.isUserLoggedIn
