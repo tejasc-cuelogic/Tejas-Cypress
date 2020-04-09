@@ -306,7 +306,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Equity', icon: 'ns-calculator-icon', value: 'EQUITY' },
       { label: 'Debt', icon: 'ns-debt-icon', value: 'DEBT' },
       { label: 'Convertible Notes / SAFE', icon: 'ns-convertible-icon', value: 'CONVERTIBLE_NOTE' },
-      { label: 'Community Bridge Note', icon: 'ns-bridge-icon', value: 'BRIDGE_NOTE' },
+      { label: 'Community Bridge Note', icon: 'ns-covid-icon', value: 'BRIDGE_NOTE' },
     ],
     error: undefined,
     rule: 'required',
