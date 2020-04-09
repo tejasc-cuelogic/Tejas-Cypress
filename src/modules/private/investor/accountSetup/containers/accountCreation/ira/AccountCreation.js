@@ -60,10 +60,6 @@ export default class AccountCreation extends React.Component {
     });
   }
 
-  updateSteps = (steps) => {
-    this.props.uiStore.setFieldvalue('multiSteps', steps);
-  }
-
   render() {
     let steps = [];
     const {
@@ -246,10 +242,9 @@ export default class AccountCreation extends React.Component {
         },
       ];
     }
-    this.updateSteps(steps);
     return (
       <div className="step-progress">
-        <MultiStep hideHeader={(stepToBeRendered === -1 && !isMobile)} isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep hideHeader={(stepToBeRendered === -1 && !isMobile)} isdynamicSteps isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }
