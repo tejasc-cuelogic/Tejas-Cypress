@@ -16,12 +16,14 @@ export const investorFlowProcess = () => {
 
 export const individualManualLinkbankProcess = () => {
   registerApiCall('manualAccount', '/dev/graphql');
-  cy.get('.dimmer-visible').should('not.be.visible')
-  cy.get('div.content').get('div.center-align > button.link-button').contains('Change link bank account').click();
-  cy.get('div.content').get('div.center-align > button.link-button').contains('Link bank account').click();
+  cy.get('.dimmer-visible').should('not.be.visible');
+  cy.get('[data-cy=multistep-back]').dblclick();
+  cy.get('[data-cy=change-link-bank]').click();
+  cy.get('[data-cy=link-bank-manually]').click();
   cy.get('input[name="accountNumber"]').type('0000000008');
   cy.get('input[name="routingNumber"]').type('122105278');
   cy.get('input[name="accountType"]').check('SAVINGS', { force: true });
+  cy.get('input[name="bankName"]').type('test bank');
   cy.get('button.button').contains('Confirm').click();
   cy.wait('@manualAccount');
 };
@@ -29,11 +31,11 @@ export const individualManualLinkbankProcess = () => {
 export const addFunds = (amount, doNotDeposit = true) => {
   registerApiCall('addFunds', '/dev/graphql');
   if (doNotDeposit) {
-    cy.get('div.content').get('div.center-align > button.link-button').contains('I don’t want to deposit any money now').click();
+    cy.get('[data-cy=no-deposit-add-funds]').click();
   } else {
     cy.get('form').within(() => {
       cy.get('input[name="value"]').type(amount);
-      cy.get('button').contains('Confirm').click();
+      cy.get('[data-cy=deposit-add-funds]').click();
     });
   }
   cy.wait('@addFunds');
@@ -67,50 +69,50 @@ export const entityAccountCreation = () => {
   cy.wait(200);
   registerApiCall('upsertInvestorAccount', '/dev/graphql');
   cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
-  cy.log('step value', text);
-  // eslint-disable-next-line default-case
-  switch (text) {
-    case 'Financial info':
-      cy.get('input[name="netAssets"]').type('123456789');
-      cy.get('input[name="annualIncome"]').type('123456789');
-      btnClickAndWait('upsertInvestorAccount');
-      entityAccountCreation();
-      break;
-    case 'General':
-      entityGeneralStep();
-      entityAccountCreation();
-      break;
-    case 'Trust Status':
-      clickRadioAndNext('input[name="isTrust"]', 'false', 'upsertInvestorAccount');
-      entityAccountCreation();
-      break;
-    case 'Personal info':
-      cy.get('input[name="title"]').type('CTO');
-      uploadFile('input[name="legalDocUrl"]', '/dev/graphql');
-      cy.wait('@fileUpload');
-      entityAccountCreation();
-      break;
-    case 'Formation doc':
-      entityFormationDocStep();
-      entityAccountCreation();
-      break;
-    case 'Link bank':
-      individualPlaidProcess('.progtrckr-doing', '3');
-      addFunds('7000');
-      cy.wait('@addFunds');
-      cy.wait('@addFunds');
-      entityAccountCreation();
-      break;
-    case 'Summary':
-      registerApiCall('submitAccount', '/dev/graphql');
-      cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
-      cy.wait('@submitAccount');
-      cy.wait('@submitAccount');
-      cy.get('.modal').then(($el) => {
-        const element = cy.wrap($el)
-        element.get('button.button').contains('Continue').click({ force: true });
-      });
-      break;
+    cy.log('step value', text);
+    // eslint-disable-next-line default-case
+    switch (text) {
+      case 'Financial info':
+        cy.get('input[name="netAssets"]').type('123456789');
+        cy.get('input[name="annualIncome"]').type('123456789');
+        btnClickAndWait('upsertInvestorAccount');
+        entityAccountCreation();
+        break;
+      case 'General':
+        entityGeneralStep();
+        entityAccountCreation();
+        break;
+      case 'Trust Status':
+        clickRadioAndNext('input[name="isTrust"]', 'false', 'upsertInvestorAccount');
+        entityAccountCreation();
+        break;
+      case 'Personal info':
+        cy.get('input[name="title"]').type('CTO');
+        uploadFile('input[name="legalDocUrl"]', '/dev/graphql');
+        cy.wait('@fileUpload');
+        entityAccountCreation();
+        break;
+      case 'Formation doc':
+        entityFormationDocStep();
+        entityAccountCreation();
+        break;
+      case 'Link bank':
+        individualPlaidProcess('.progtrckr-doing', '3');
+        addFunds('7000');
+        cy.wait('@addFunds');
+        cy.wait('@addFunds');
+        entityAccountCreation();
+        break;
+      case 'Summary':
+        registerApiCall('submitAccount', '/dev/graphql');
+        cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
+        cy.wait('@submitAccount');
+        cy.wait('@submitAccount');
+        cy.get('.modal').then(($el) => {
+          const element = cy.wrap($el)
+          element.get('button.button').contains('Continue').click({ force: true });
+        });
+        break;
     }
   });
 };
@@ -173,33 +175,27 @@ export const entityFormationDocStep = () => {
 }
 
 
-export const individualPlaidProcess = (progressStep, count) => {
-  cy.get('input[name="accType"]').check('0', { force: true });
-  cy.get('button.next').click();
+export const individualPlaidProcess = (count) => {
+  cy.get('[data-cy=0]').click()
   cy.get('.dimmer-visible').should('not.be.visible')
-  cy.get(`.multistep-modal > ol.progtrckr > ${progressStep}`).click({ force: true }).invoke('text').then((step) => {
-    cy.log('bank step', step.toUpperCase());
-    if (step.toUpperCase() === 'LINK BANK') {
-      cy.get('.bank-link:first').click({ force: true });
-      cy.wait(5000);
-      registerApiCall('plaidAccount', '/dev/graphql');
-      cy.get(`#plaid-link-iframe-${count}`).then(($iframe) => {
-        const $body = $iframe.contents().find('body');
-        cy.log('body', $iframe.contents().find('body'));
-        let stripe = cy.wrap($body);
-        stripe.find('button[type="button"]').contains('Continue').click({ force: true });
-        stripe = cy.wrap($body);
-        stripe.find('input[name="username"]').type('user_good');
-        stripe = cy.wrap($body);
-        stripe.find('input[name="password"]').type('pass_good', { force: true });
-        stripe = cy.wrap($body);
-        stripe.find('button[type="submit"]').click();
-        stripe = cy.wrap($body);
-        stripe.find('div.AccountItem:first').click({ force: true });
-        stripe = cy.wrap($body);
-        stripe.find('button').contains('Continue').click({ force: true });
-        cy.wait('@plaidAccount');
-      });
-    }
+  cy.get('.bank-link:first').click({ force: true });
+  cy.wait(5000);
+  registerApiCall('plaidAccount', '/dev/graphql');
+  cy.get(`#plaid-link-iframe-${count}`).then(($iframe) => {
+    const $body = $iframe.contents().find('body');
+    cy.log('body', $iframe.contents().find('body'));
+    let stripe = cy.wrap($body);
+    stripe.find('button[type="button"]').contains('Continue').click({ force: true });
+    stripe = cy.wrap($body);
+    stripe.find('input[name="username"]').type('user_good');
+    stripe = cy.wrap($body);
+    stripe.find('input[name="password"]').type('pass_good', { force: true });
+    stripe = cy.wrap($body);
+    stripe.find('button[type="submit"]').click();
+    stripe = cy.wrap($body);
+    stripe.find('div.AccountItem:first').click({ force: true });
+    stripe = cy.wrap($body);
+    stripe.find('button').contains('Continue').click({ force: true });
+    cy.wait('@plaidAccount');
   });
 };

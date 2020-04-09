@@ -1,11 +1,11 @@
-import {  
-        investorFlowProcess,
-        individualManualLinkbankProcess,
-        individualPlaidProcess,
-        addFunds,
-        iraAccountCreation,
-        entityAccountCreation
-       } from './utility/investorAccount.utlity';
+import {
+  investorFlowProcess,
+  individualManualLinkbankProcess,
+  individualPlaidProcess,
+  addFunds,
+  iraAccountCreation,
+  entityAccountCreation
+} from './utility/investorAccount.utlity';
 import { registerApiCall } from '../../../common.utility';
 
 describe('Account Creation', () => {
@@ -28,20 +28,11 @@ describe('Account Creation', () => {
   });
 
   it('should successfully link bank with plaid process', () => {
-    individualPlaidProcess('.progtrckr-doing', '1');
-    cy.get('input[name="value"]').then(() => {
-      cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
-        cy.log('step value', step);
-        assert.equal(step, 'Add funds', 'Should be on add funds modal')	
-      });
-    });
+    individualPlaidProcess('1');
   });
 
   it('should successfully link bank with manual process', () => {
-    cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-done`).click({ force: true }).invoke('text').then((step) => {
-      cy.log('step value', step);
-      individualManualLinkbankProcess();
-    });
+    individualManualLinkbankProcess();
   });
 
   it('should create individual account successfully', () => {

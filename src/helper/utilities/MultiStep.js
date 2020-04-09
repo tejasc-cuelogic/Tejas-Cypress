@@ -311,6 +311,7 @@ export default class MultiStep extends React.Component {
                         {isBackCta
                           && (
                             <Button
+                              data-cy="multitep-back"
                               icon={{ className: 'ns-chevron-left' }}
                               className={`${this.state.showPreviousBtn ? '' : 'disabled'} multistep__btn prev`}
                               onClick={this.previous}
@@ -348,6 +349,7 @@ export default class MultiStep extends React.Component {
                         className={`${this.state.showPreviousBtn ? '' : 'disabled'} multistep__btn prev link-button`}
                         onClick={this.previous}
                         content="Back"
+                        data-cy="multistep-back"
                       />
                     )
                   }

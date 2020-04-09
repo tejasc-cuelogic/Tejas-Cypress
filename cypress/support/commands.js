@@ -191,7 +191,7 @@ Cypress.Commands.add('addWindowLocalStorageKey', (KEY_NAME, VALUE= false) => {
 
 Cypress.Commands.add('Logout', () => {
   cy.visit('/dashboard', { failOnStatusCode: false, timeout: 100000 });
-  cy.applicationUnlock();
+  // cy.applicationUnlock();
   cy.get('div.menu').get('div.ns-scrollbar').find('span').contains('Logout').click();
 });
 

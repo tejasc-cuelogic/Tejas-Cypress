@@ -102,11 +102,11 @@ export default class AddFunds extends Component {
               </Message>
             )
           }
-          <Button primary fluid={isMobile} className="mt-30 relaxed" content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
+          <Button primary fluid={isMobile} className="mt-30 relaxed" data-cy="deposit-add-funds" content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
         </Form>
         <div className={isMobile && 'center-align'}>
           {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])
-            && <Button color="green" className="link-button mt-30" disabled={!isAccountPresent || inProgress} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+            && <Button color="green" data-cy="no-deposit-add-funds" className="link-button mt-30" disabled={!isAccountPresent || inProgress} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
           }
         </div>
       </>
