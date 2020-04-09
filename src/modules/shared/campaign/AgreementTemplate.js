@@ -75,16 +75,22 @@ function AgreementTemplate(props) {
     const isFormValid = currentAction && currentAction === 'CUSTOM' ? props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid : props.agreementsStore.isAgreementFormValid;
     if (isFormValid) {
       setShowError(false);
-      props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
-      props.investmentStore.investNowSubmit(currentAction === 'DYNAMIC').then((investmentStatus) => {
-        if (investmentStatus) {
-          props.history.push('congratulation');
-        }
-      });
+      if (currentAction !== 'NEXT') {
+        props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
+        props.investmentStore.investNowSubmit(currentAction === 'DYNAMIC').then((investmentStatus) => {
+          if (investmentStatus) {
+            props.history.push('congratulation');
+          }
+        });
+      } else {
+        const { setField, agreementPage } = props.agreementsStore;
+        setField('agreementPage', agreementPage + 1);
+      }
     } else {
       setShowError(true);
     }
   };
+
 
   const handleCancelAgreement = () => {
     // e.preventDefault();
@@ -110,6 +116,11 @@ function AgreementTemplate(props) {
     setShowAgreementPdf(false);
   };
 
+  const moveBack = () => {
+    const { setField, agreementPage } = props.agreementsStore;
+    setField('agreementPage', agreementPage - 1);
+  };
+
   const {
     investmentAmount,
     agreementDetails,
@@ -127,6 +138,7 @@ function AgreementTemplate(props) {
   // const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
   // const offeringRegulationType = get(campaign, 'keyTerms.regulation');
   const index = agreementPage;
+  const isBackButtonVisible = !!(AGREEMENT_DETAILS_FORM.fields.page.length > 1 && index > 0);
   return (
     <>
       <NsModal
@@ -161,6 +173,7 @@ function AgreementTemplate(props) {
         isHeaderDisabled={showAgreementPdf}
         modalContentClass={showAgreementPdf ? 'pt-0 pb-0' : ''}
         disableCloseIcon={showDocuSign || showAgreementPdf || inProgress}
+        back={isBackButtonVisible && moveBack}
       >
         {(showDocuSign || showAgreementPdf)
           && (

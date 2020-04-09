@@ -310,6 +310,7 @@ export class AgreementsStore {
       optionalLabels.push(pageOptionalLabels);
       this.AGREEMENT_DETAILS_FORM.fields.page[index].title.value = get(tocs, '[0].title');
       this.AGREEMENT_DETAILS_FORM.fields.page[index].toc.values = valuesArray;
+      this.AGREEMENT_DETAILS_FORM.fields.page[index].toc.value = [];
     });
     this.tocRequiredArray = requiredArray;
     this.tocOptional.array = optionalArray;
@@ -345,30 +346,31 @@ export class AgreementsStore {
   @computed get getUncheckedOptionalToc() {
     const uncheckedTocs = [];
     // const page = toJS(this.AGREEMENT_DETAILS_FORM.fields.page);
-    const page = toJS(this.AGREEMENT_DETAILS_FORM.fields.page[this.agreementPage]);
+    const page = toJS(this.AGREEMENT_DETAILS_FORM.fields.page);
     const optionalArray = toJS(this.tocOptional.array) || [];
     const optionalLabels = toJS(this.tocOptional.labels) || [];
     // page.forEach((p, index) => {
-    optionalArray[this.agreementPage].forEach((optional, oi) => {
-      if (!(page.toc.value || []).includes(optional)) {
-        uncheckedTocs.push(optionalLabels[this.agreementPage][oi]);
-      }
-    });
+    // optionalArray[this.agreementPage].forEach((optional, oi) => {
+    //   if (!(page.toc.value || []).includes(optional)) {
+    //     uncheckedTocs.push(optionalLabels[this.agreementPage][oi]);
+    //   }
+    // });
     // });
 // multipage support
-    // page.forEach((p, index) => {
-    //   optionalArray[index].forEach((optional, oi) => {
-    //     if (!(p.toc.value || []).includes(optional)) {
-    //       uncheckedTocs.push(optionalLabels[index][oi]);
-    //     }
-    //   });
-    // });
+    page.forEach((p, index) => {
+      optionalArray[index].forEach((optional, oi) => {
+        if (!(p.toc.value || []).includes(optional)) {
+          uncheckedTocs.push(optionalLabels[index][oi]);
+        }
+      });
+    });
     return uncheckedTocs;
   }
 
   @computed get isAgreementFormValid() {
     const requiredArray = toJS(get(this.tocRequiredArray, `[${this.agreementPage}]`)) || [];
-    return requiredArray.every(e => toJS(this.AGREEMENT_DETAILS_FORM.fields.page[this.agreementPage].toc.value).includes(e));
+    const formArr = get(this.AGREEMENT_DETAILS_FORM.fields, `page[${this.agreementPage}].toc.value`) || [];
+    return requiredArray.every(e => toJS(formArr).includes(e));
   }
 
   @action
