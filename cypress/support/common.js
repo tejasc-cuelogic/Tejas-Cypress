@@ -23,10 +23,10 @@ export const clickonDashboard = () => {
   cy.get('.header-wrap').get('button.button').contains('Dashboard').click({ force: true });
 }
 
-export const btnClickAndWait = (operationName) => {
+export const btnClickAndWait = (selector, operationName) => {
   registerApiCall(operationName, '/dev/graphql');
   cy.wait(500)
-  cy.get('button.next').click({ force: true });
+  cy.get(selector).click();
   cy.wait(`@${operationName}`);
 };
 

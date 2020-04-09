@@ -7,11 +7,10 @@ export const investorFlowProcess = () => {
   cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
   // cy.applicationUnlock();
   fillSignUpFormAndProceed();
-  enterCodeAndConfirm('confirmEmail');
+  enterCodeAndConfirm('confirmEmail', '**/graphql');
   confirmEmailAddressScreen();
   fillLegalFormAndProceed();
-  enterCodeAndConfirm('confirmPhone');
-  confirmPhoneNumberScreen();
+  enterCodeAndConfirm('confirmPhone', 'dev/graphql');
   completeInvestorProfile();
 };
 

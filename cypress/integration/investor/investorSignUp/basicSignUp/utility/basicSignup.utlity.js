@@ -26,7 +26,10 @@ export const fillSignUpFormAndProceed = () => {
 };
 
 export const confirmEmailAddressScreen = () => {
-// cy.get('[data-cy="confirm-email-success"]').click();
+  registerApiCall('cognito', '**/**');
+  cy.wait('@cognito');
+  registerApiCall('userDetails', 'dev/graphql');
+  cy.wait('@userDetails');
 }
 
 export const confirmPhoneNumberScreen = () => {

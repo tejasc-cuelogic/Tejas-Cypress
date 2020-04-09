@@ -32,10 +32,10 @@ export const typeOtpCode = () => {
   });
 };
 
-export const enterCodeAndConfirm = (operationName) => {
-  registerApiCall(operationName, '/dev/graphql');
+export const enterCodeAndConfirm = (operationName, gqlUrl) => {
+  registerApiCall(operationName, gqlUrl);
   typeOtpCode();
-  cy.get('[data-cy=confirm-email]').click();
+  cy.get('[data-cy=confirm-code]').click();
   cy.wait(`@${operationName}`);
 };
 
