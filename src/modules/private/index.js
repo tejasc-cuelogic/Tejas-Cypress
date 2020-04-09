@@ -2,7 +2,7 @@ import React from 'react';
 import { toJS } from 'mobx';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { authActions } from '../../services/actions';
 import { privateRoutes } from '../routes';
 import { InlineLoader, SuspenseBoundary, lazyRetry, Spinner } from '../../theme/shared';
@@ -119,6 +119,7 @@ export default class Private extends React.Component {
                   key={route.path}
                 />
               ))}
+              {['*', ''].map(u => <Redirect from={`/dashboard/summary/${u}`} to={`/dashboard/setup/${u}`} />)}
               <Route exact path="/dashboard/legal-docs/:agreementKey" render={props => <AgreementsPdfLoader isNewTab {...props} />} />
               {Object.keys(routes).map(route => routes[route])}
               {myRoutes.length > 0 ? <Route component={NotFound} />
