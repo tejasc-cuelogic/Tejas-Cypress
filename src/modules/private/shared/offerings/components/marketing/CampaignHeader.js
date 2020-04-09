@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Form, Header, Divider, Grid } from 'semantic-ui-react';
+import { Form, Header, Divider, Grid, Button, Icon } from 'semantic-ui-react';
 import OfferingButtonGroup from '../OfferingButtonGroup';
 import formHOC from '../../../../../../theme/form/formHOC';
 import TombstoneHeaderMeta from './TombstoneHeaderMeta';
@@ -43,6 +43,12 @@ class CampaignHeader extends Component {
     const { HEADER_BASIC_FRM, campaignStatus } = manageOfferingStore;
     const { currentOfferingId } = offeringCreationStore;
     const isReadOnly = campaignStatus.lock;
+    const showWatchingBtn = true;
+    const followBtn = (
+      <Button disabled={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} inverted loading={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} fluid color="white" onClick={this.handleFollowBtn}>
+        {showWatchingBtn && <Icon name={` ${!this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') && 'heart'} outline`} />} Follow
+      </Button>
+    );
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -52,23 +58,23 @@ class CampaignHeader extends Component {
           <Grid columns="5">
             {['closeDate', 'raisedAmount', 'investorCount', 'repaymentCount', 'earlyBird'].map(field => (
               <Grid.Column>
-                {smartElement.Masked(field, { prefix: field === 'raisedAmount' ? '$' : false, currency: field === 'raisedAmount', dateOfBirth: field === 'closeDate', displayMode: isReadOnly })}
+                {smartElement.Masked(field, { prefix: field === 'raisedAmount' ? '$' : '', currency: field === 'raisedAmount', dateOfBirth: field === 'closeDate', displayMode: isReadOnly })}
               </Grid.Column>
             ))}
           </Grid>
           <Divider hidden />
-          <CampaignHeaderPreview newLayout />
+          <CampaignHeaderPreview newLayout followBtn={followBtn} />
           <Divider hidden />
           <Divider section />
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{HEADER_BASIC_FRM.fields.heroImage.label}</Header>
-              {smartElement.ImageCropper('heroImage', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
+              {smartElement.ImageCropper('heroImage', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia, isImagePreviewDisabled: true })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
-            <Header as="h4">{HEADER_BASIC_FRM.fields.heroBackgroundImage.label}</Header>
-              {smartElement.ImageCropper('heroBackgroundImage', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
+              <Header as="h4">{HEADER_BASIC_FRM.fields.heroBackgroundImage.label}</Header>
+              {smartElement.ImageCropper('heroBackgroundImage', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia, isImagePreviewDisabled: true })}
               <Divider hidden />
             </Grid.Column>
           </Grid>

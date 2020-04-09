@@ -19,7 +19,7 @@ class InvestNowToc extends Component {
   handleFormSubmit = (type) => {
     const { manageOfferingStore } = this.props;
     const { updateOffering } = manageOfferingStore;
-    updateOffering({ keyName: 'investNow', offeringData: { template: 2 }, forms: 'INVEST_NOW_TOC_TEMPLATE_FRM', tocAction: type });
+    updateOffering({ keyName: 'investNow', offeringData: { template: 2 }, tocAction: type });
   };
 
   render() {
