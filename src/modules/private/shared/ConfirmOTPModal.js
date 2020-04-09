@@ -111,7 +111,7 @@ export default class ConfirmOTPModal extends Component {
                   </Message>
                 )
               }
-              <Button type="submit" primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTPVerifyMeta.meta.isValid} />
+              <Button type="submit" primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTPVerifyMeta.meta.isValid || this.props.uiStore.inProgress} />
             </Form>
           </Grid.Column>
         </Grid>

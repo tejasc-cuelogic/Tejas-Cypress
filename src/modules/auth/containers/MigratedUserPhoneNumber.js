@@ -79,7 +79,7 @@ export default class MigratedUserPhoneNumber extends Component {
                 phone number. Your mobile carrier’s messaging and data fees may apply.
               </p>
               <Divider hidden />
-              <Button disabled={!(ID_VERIFICATION_FRM.fields.phoneNumber.value !== '' && ID_VERIFICATION_FRM.fields.phoneNumber.error === undefined)} primary fluid={isMobile} content="Confirm" loading={this.props.uiStore.inProgress} />
+              <Button disabled={!(ID_VERIFICATION_FRM.fields.phoneNumber.value !== '' && ID_VERIFICATION_FRM.fields.phoneNumber.error === undefined) || this.props.uiStore.inProgress} primary fluid={isMobile} content="Confirm" loading={this.props.uiStore.inProgress} />
             </Form>
             {errors
               && (
