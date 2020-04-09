@@ -59,7 +59,7 @@ class Login extends Component {
           window.location.reload();
         }
         if (newPasswordRequired) {
-          this.props.uiStore.removeOneFromProgressArray('login');
+          removeOneFromProgressArray('login');
           this.props.history.push('/change-password');
         } else {
           setCredentials(userCredentials);
