@@ -206,7 +206,6 @@ const BUSINESS_PREQUAL_COMMON = {
     rule: 'required',
     customErrors: { required: 'required' },
     placeHolder: 'e.g. $100,000',
-    tooltip: (<span>Minimum amount of funding is $100,000. For requirements on different levels of funding, <a href="/business" target="_blank">click here.</a></span>),
   },
   businessEntityStructure: {
     value: '',
@@ -306,7 +305,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Equity', icon: 'ns-calculator-icon', value: 'EQUITY' },
       { label: 'Debt', icon: 'ns-debt-icon', value: 'DEBT' },
       { label: 'Convertible Notes / SAFE', icon: 'ns-convertible-icon', value: 'CONVERTIBLE_NOTE' },
-      { label: 'Community Bridge Note', icon: 'ns-covid-icon', value: 'BRIDGE_NOTE', tooltip: (<span>The Community Bridge Note (CBN) is a special, low-interest note designed for businesses navigating the COVID-19 crisis. <a href="/insights/community-bridge-notes" target="_blank">Learn more</a> to see whether you qualify.</span>) },
+      { label: 'Community Bridge Note', icon: 'ns-covid-icon', value: 'BRIDGE_NOTE', tooltip: (<span>Tip: The Community Bridge Note (CBN) is a special, low-interest note designed for businesses navigating the COVID-19 crisis. <a href="/insights/community-bridge-notes" target="_blank">Learn more</a> to see whether you qualify.</span>) },
     ],
     error: undefined,
     rule: 'required',
@@ -316,9 +315,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     value: '',
     values: [
       { label: <span>Fund New Business <br /> (&lt;12 months of operations) </span>, icon: 'ns-new-business', value: BUSINESS_GOAL.BRAND_NEW },
-      // { label: 'Open Franchise', icon: 'ns-franchise', value: BUSINESS_GOAL.FRANCHISE },
       { label: <span>Expand/Upgrade Existing Business <br /> (over 12 months of operations) </span>, icon: 'ns-expand-business', value: BUSINESS_GOAL.UPGRADE },
-      // { label: 'Create Off-shoot of Existing Business', icon: 'ns-off-shoot-business', value: BUSINESS_GOAL.RESTRUCTURE },
     ],
     error: undefined,
     rule: 'required',

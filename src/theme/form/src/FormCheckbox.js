@@ -10,7 +10,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 
 const FormCheckbox = observer((props) => {
   const {
-    values, value,
+    values, value, tooltip,
   } = props.fielddata;
   const {
     customLabel, conditionalCustomLabel, customUpdateLimitLabel, customRegulationLabel,
@@ -50,7 +50,7 @@ const FormCheckbox = observer((props) => {
                   {c.icon
                   && <Icon className={c.icon} />
                     }
-                  {c.tooltip
+                  {tooltip
                   ? (
                     <PopUpModal
                       customTrigger={<span className="popup-label">{c.customLabel ? customLabel : c.label}</span>}

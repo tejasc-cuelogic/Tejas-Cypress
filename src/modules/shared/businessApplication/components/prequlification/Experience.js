@@ -39,7 +39,6 @@ const Experience = (props) => {
             value={props.fields[field].value}
             fielddata={props.fields[field]}
             changed={props.businessAppEleMaskChange}
-            toolTipOnLabel={field === 'amountNeeded'}
           />
         ))
       }

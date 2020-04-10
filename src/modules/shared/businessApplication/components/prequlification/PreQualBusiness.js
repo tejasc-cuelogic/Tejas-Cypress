@@ -62,6 +62,9 @@ export default class PreQualBusiness extends Component {
             changed={businessAppEleChange}
             containerclassname="iconic-checkbox"
           />
+          <div className="mt-10">
+            {<span>{fields.businessSecurities.values[3].tooltip}</span>}
+          </div>
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields} header="What would best describe your company's phase of development?*">
           <FormRadioGroup
