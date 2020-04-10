@@ -196,12 +196,12 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700', customErrors: { required: 'required' },
   },
   totalProjectCost: {
-    value: '', maxLength: 16, label: 'What’s the total project cost?', error: undefined, rule: 'required', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'How much total capital are you raising for your business right now (including other investors, banks, and etc.)?', error: undefined, rule: 'required', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
   },
   amountNeeded: {
     value: '',
     maxLength: 16,
-    label: 'How much do you need to raise on NextSeed?',
+    label: 'How much are you looking to raise on the NextSeed platform?',
     error: undefined,
     rule: 'required',
     customErrors: { required: 'required' },
@@ -306,7 +306,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Equity', icon: 'ns-calculator-icon', value: 'EQUITY' },
       { label: 'Debt', icon: 'ns-debt-icon', value: 'DEBT' },
       { label: 'Convertible Notes / SAFE', icon: 'ns-convertible-icon', value: 'CONVERTIBLE_NOTE' },
-      { label: 'Community Bridge Note', icon: 'ns-covid-icon', value: 'BRIDGE_NOTE' },
+      { label: 'Community Bridge Note', icon: 'ns-covid-icon', value: 'BRIDGE_NOTE', tooltip: (<span>The Community Bridge Note (CBN) is a special, low-interest note designed for businesses navigating the COVID-19 crisis. <a href="/insights/community-bridge-notes" target="_blank">Learn more</a> to see whether you qualify.</span>) },
     ],
     error: undefined,
     rule: 'required',
