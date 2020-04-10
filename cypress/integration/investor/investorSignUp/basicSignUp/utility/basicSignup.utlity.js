@@ -2,7 +2,7 @@ import { registerApiCall } from '../../../../common.utility';
 
 export const goToSignUpScreen = () => {
   cy.contains('Sign Up');
-  cy.get('.header-wrap').get('.menu-button').contains('Sign Up').click();
+  cy.get('data-cy=auth-register').contains('Sign Up').click();
   cy.get('[data-cy=investor]').click();
 };
 

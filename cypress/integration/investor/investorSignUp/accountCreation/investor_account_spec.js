@@ -27,20 +27,20 @@ describe('Account Creation', () => {
     cy.cleanUpUser();
   });
 
-  it('should successfully link bank with plaid process', () => {
+  it.skip('should successfully link bank with plaid process', () => {
     individualPlaidProcess('1');
   });
 
-  it('should successfully link bank with manual process', () => {
+  it.skip('should successfully link bank with manual process', () => {
     individualManualLinkbankProcess();
   });
 
-  it('should create individual account successfully', () => {
+  it.skip('should create individual account successfully', () => {
     cy.get('.dimmer-visible').should('not.be.visible');
     addFunds('15000');
     registerApiCall('submitAccount', '/dev/graphql');
     cy.get('.dimmer-visible').should('not.be.visible')
-    cy.get('button').contains('Create your account').click({ force: true });
+    cy.get('[data-cy=ind-summary]').dblclick();
     cy.wait('@submitAccount');
     cy.wait('@submitAccount');
   });
