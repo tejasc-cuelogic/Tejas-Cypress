@@ -10,7 +10,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 
 const FormCheckbox = observer((props) => {
   const {
-    values, tooltip, value,
+    values, value, tooltip,
   } = props.fielddata;
   const {
     customLabel, conditionalCustomLabel, customUpdateLimitLabel, customRegulationLabel,
@@ -54,7 +54,7 @@ const FormCheckbox = observer((props) => {
                   ? (
                     <PopUpModal
                       customTrigger={<span className="popup-label">{c.customLabel ? customLabel : c.label}</span>}
-                      content={tooltip}
+                      content={c.tooltip}
                       position="top center"
                       className="center-align"
                       wide
@@ -62,9 +62,35 @@ const FormCheckbox = observer((props) => {
                     />
                   )
                   : <span>{c.customLabel ? customLabel : c.label}</span>
-                    }
+                  }
                 </label>
               </>
+            //   <Checkbox
+            //     checked={value.includes(c.value)}
+            //     value={c.value}
+            //     onChange={props.changed}
+            //     {...props}
+            //     label={(
+            //       <label>
+            //       {c.icon
+            //       && <Icon className={c.icon} />
+            //         }
+            //       {c.tooltip
+            //       ? (
+            //         <PopUpModal
+            //           customTrigger={<span className="popup-label">{c.customLabel ? customLabel : c.label}</span>}
+            //           content={c.tooltip}
+            //           position="top center"
+            //           className="center-align"
+            //           wide
+            //           showOnlyPopup={!isMobile}
+            //         />
+            //       )
+            //       : <span>{c.customLabel ? customLabel : c.label}</span>
+            //       }
+            //     </label>
+            //     )}
+            //   />
             )
             }
           </List.Item>
