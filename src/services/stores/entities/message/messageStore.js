@@ -160,7 +160,7 @@ export class NewMessage {
   }
 
   @action
-  deleteMessage = id => client
+  deleteMessage = (id, isInitRequest = false) => client
     .mutate({
       mutation: deleteMessage,
       variables: { id: [id] },
@@ -169,7 +169,12 @@ export class NewMessage {
         variables: { offerId: offeringCreationStore.currentOfferingId },
       }],
     })
-    .then(() => Helper.toast('Message deleted successfully.', 'success'))
+    .then(() => {
+      if (isInitRequest) {
+        this.initRequest();
+      }
+      Helper.toast('Message deleted successfully.', 'success');
+    })
     .catch(() => Helper.toast('Error while deleting message', 'error'));
 
   @computed get allData() {
