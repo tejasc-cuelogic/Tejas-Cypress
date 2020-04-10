@@ -1,5 +1,5 @@
 {
-  "baseUrl": "https://dev.nextseed.qa",
+  "baseUrl": "http://2742-investor-enhancement-cypress-test-cases-update.s3-website-us-east-1.amazonaws.com/",
   "chromeWebSecurity": false,
   "pageTimeoutLoad": 80000,
   "defaultCommandTimeout": 80000,

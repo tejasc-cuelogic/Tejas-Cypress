@@ -6,6 +6,7 @@ import {
   iraAccountCreation,
   entityAccountCreation
 } from './utility/investorAccount.utlity';
+
 import { registerApiCall } from '../../../common.utility';
 
 describe('Account Creation', () => {
@@ -27,7 +28,7 @@ describe('Account Creation', () => {
     cy.cleanUpUser();
   });
 
-  it.skip('should successfully link bank with plaid process', () => {
+  it('should successfully link bank with plaid process', () => {
     individualPlaidProcess('1');
   });
 

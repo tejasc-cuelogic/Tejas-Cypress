@@ -192,7 +192,7 @@ Cypress.Commands.add('addWindowLocalStorageKey', (KEY_NAME, VALUE= false) => {
 Cypress.Commands.add('Logout', () => {
   cy.visit('/dashboard', { failOnStatusCode: false, timeout: 100000 });
   cy.applicationUnlock();
-  cy.get('div.menu').get('div.ns-scrollbar').find('span').contains('Logout').click();
+  cy.get('.ns-logout').click();
 });
 
 const deleteUserCtaAction = (ctaName) => {
@@ -201,10 +201,10 @@ const deleteUserCtaAction = (ctaName) => {
   cy.get('div.signup-content.content > form').get('button.button').contains('Submit').click();
 }
 
-
 Cypress.Commands.add('cleanUpUser', () => {
   const investorEmail = window.localStorage.getItem('investorEmail');
   cy.Logout();
+  cy.get('data-cy=auth-login').click();
   cy.login(investorEmail, Cypress.env('commonPassword')).then((user) => {
     if (user.signInUserSession) {
       if (user.signInUserSession.idToken && user.signInUserSession.idToken.jwtToken) {
