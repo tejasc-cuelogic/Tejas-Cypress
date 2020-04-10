@@ -265,7 +265,7 @@ export class NavigationItems extends Component {
       { to: 'login', title: 'Log In', className: 'basic primary', cypressAttr: 'auth-login' },
       { to: 'register', title: 'Sign Up', className: 'primary', cypressAttr: 'auth-rgister' },
     ]
-      : [{ ...stepInRoute, className: 'primary basic' }];
+      : [{ ...stepInRoute, className: 'primary basic', cypressAttr: 'auth-login' }];
     const { topBanner } = uiStore;
     return (
       <Menu
