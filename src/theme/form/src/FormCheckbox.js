@@ -54,7 +54,7 @@ const FormCheckbox = observer((props) => {
                   ? (
                     <PopUpModal
                       customTrigger={<span className="popup-label">{c.customLabel ? customLabel : c.label}</span>}
-                      content="test"
+                      content={c.tooltip}
                       position="top center"
                       className="center-align"
                       wide
@@ -91,7 +91,7 @@ const FormCheckbox = observer((props) => {
             //     </label>
             //     )}
             //   />
-            // )
+            )
             }
           </List.Item>
         ))
