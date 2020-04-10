@@ -19,8 +19,11 @@ export default class MessagesWrap extends Component {
   }
 
   deleteCommentHandler = (id) => {
+    const { thread, threadMainMessage } = this.props.messageStore;
+    const threadMessages = threadMainMessage.concat(thread);
+    const isInitRequest = !!(threadMessages.length <= 1);
     this.props.uiStore.setConfirmBox('', '', '', false);
-    this.props.messageStore.deleteMessage(id);
+    this.props.messageStore.deleteMessage(id, isInitRequest);
   }
 
   approveCommentHandler = (e, id) => {
