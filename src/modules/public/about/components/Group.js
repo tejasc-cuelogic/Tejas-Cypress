@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Header, Grid, Container, Button } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const highlights = {
   title: 'The Nextseed Group',
   description: <>Since 2015, the NextSeed Group has been at the forefront of rapidly changing financial markets to connect community and capital in diverse and meaningful ways. A pioneer in
@@ -66,46 +67,46 @@ export default class Group extends Component {
             </Header>
             <p className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-70'}>{highlights.description}</p>
           </section>
-            { nsGroup.map(i => (
-                i.gray ? (
-                <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100'} style={{ backgroundColor: '#f7f8fc' }}>
-                  <Grid>
-                    <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} verticalAlign="middle">
-                      <div>
-                        <NSImage path={i.logo} />
-                        <p className="mb-30 mt-30">{i.description}</p>
-                        {!responsiveVars.isMobile && i.link
-                          && (
-                            <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>
-                          )
-                        }
-                      </div>
-                    </Grid.Column>
-                    <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                      <NSImage path={i.image} fluid />
-                    </Grid.Column>
-                  </Grid>
-                </section>
-                ) : (
-                <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100'}>
+          { nsGroup.map(i => (
+              i.gray || isMobile ? (
+              <section key={i.title} className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100'}>
                 <Grid>
-                  <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                    <NSImage path={i.image} fluid />
-                  </Grid.Column>
                   <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} verticalAlign="middle">
                     <div>
                       <NSImage path={i.logo} />
                       <p className="mb-30 mt-30">{i.description}</p>
-                      {!responsiveVars.isMobile && i.link
-                        && (
-                          <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>
-                        )
+                      {i.link
+                        ? isMobile
+                          ? (
+                            <a href={i.link} target="_blank" rel="noopener noreferrer"><Button fluid inverted color="green" className="mb-30">Learn More</Button></a>
+                          ) : (
+                            <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>
+                          )
+                        : ''
                       }
                     </div>
                   </Grid.Column>
+                  <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+                    <NSImage path={i.image} fluid />
+                  </Grid.Column>
                 </Grid>
               </section>
-            )))}
+              ) : (
+              <section key={i.title} className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100'}>
+              <Grid>
+                <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+                  <NSImage path={i.image} fluid />
+                </Grid.Column>
+                <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} verticalAlign="middle">
+                  <div>
+                    <NSImage path={i.logo} />
+                    <p className="mb-30 mt-30">{i.description}</p>
+                      {i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>}
+                  </div>
+                </Grid.Column>
+              </Grid>
+            </section>
+          )))}
         </Container>
       </>
     );
