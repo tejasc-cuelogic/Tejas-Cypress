@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Link, Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Grid, Container, Divider, Responsive, Icon, Item, Segment } from 'semantic-ui-react';
-import { VideoModal } from '../../../../theme/shared';
+import { Header, Grid, Container, Divider, Responsive } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
 // const businesses = [
@@ -22,29 +21,7 @@ import NSImage from '../../../shared/NSImage';
 //     description: '289 members invested $300,000 in Urban Putt’s second location',
 //   },
 // ];
-const highlights = [
-  {
-    title: 'Explore',
-    icon: 'icons/compass-icon.svg',
-    meta: 'Browse a curated selection of pre-vetted businesses that have passed our strict screening process.',
-    extra: 'Our vetting process',
-    link: '/resources/education-center/investor/business-survival',
-  },
-  {
-    title: 'Invest',
-    icon: 'icons/money-icon.svg',
-    meta: 'Invest with an Individual account, an Investment Entity, or a new Self-Directed IRA.',
-    extra: 'Our types of accounts offered',
-    link: '/resources/education-center/investor/account-opening-requirements-and-options',
-  },
-  {
-    title: 'Receive',
-    icon: 'icons/arrows-icon.svg',
-    meta: 'NextSeed collects and processes any payments directly into your investment account.',
-    extra: 'Our payments process',
-    link: '/resources/education-center/investor/payments',
-  },
-];
+
 @inject('uiStore')
 @withRouter
 @observer
@@ -60,11 +37,16 @@ export default class Group extends Component {
       <>
         <Container>
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-            <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30'} textAlign={responsiveVars.uptoTablet ? 'left' : 'center'}>
-              Alternative investments, made simple
+            <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30'}>
+              The NextSeed Group
             </Header>
-            <p className={responsiveVars.uptoTablet ? 'mb-30' : 'center-align mb-70'}>You can harness our cutting-edge technology and expertise in private investments to build your portfolio.</p>
-            <div className="how-it-works-steps">
+            <p className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-70'}>Since 2015, we have worked on the forefront of rapidly changing financial markets to
+      connect community and capital in diverse and meaningful ways. Starting by offering the first ever investment crowdfunding campaign in the United States on
+      the <a href="/" target="_blank">nextseed.com</a> investment platform, The NextSeed Group has evolved into a forward-thinking investment banking practice, created a first-of-its-kind
+      place-based credit fund to accelerate its mission to build community through financial markets. By combining with RIA Collaboration Capital, a leader in the
+      impact/ESG investing space, the firm expanded its scope to offer full-service wealth management and asset management for retail and institutional clients, all with a focus on meaningful investing.
+      <br /><br /> Looking forward, we will continue looking for ways to build a technology-driven impact investment firm open to everyone, furthering our mission to democratize finance. <br /><br /> Learn more about our portfolio of companies below.</p>
+            {/* <div className="how-it-works-steps">
               <Item.Group className="horizontal-items home-page">
                 {
                   highlights.map(h => (
@@ -86,17 +68,8 @@ export default class Group extends Component {
                   ))
                 }
               </Item.Group>
-            </div>
-            <Link to="/investors/video" className="no-decoration">
-              <Segment className={`${responsiveVars.uptoTablet ? 'mt-30' : 'mt-70'} video-segment`}>
-                <Header as={responsiveVars.uptoTablet ? 'h2' : 'h3'} textAlign="center">
-                  Watch our video
-                    <Icon size="large" color="green" className="ns-play play-icon ml-16" />
-                </Header>
-              </Segment>
-            </Link>
+            </div> */}
           </section>
-          <Divider fitted as={!responsiveVars.uptoTablet && Container} />
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'investor-priority-section pt-100'}>
             <Grid>
@@ -149,7 +122,6 @@ export default class Group extends Component {
             </Grid>
           </section>
         </Container>
-        <Route path="/investors/video" render={props => <VideoModal {...props} videoDetails={{ embed: 307106547 }} />} />
       </>
     );
   }
