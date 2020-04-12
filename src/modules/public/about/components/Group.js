@@ -4,6 +4,41 @@ import { inject, observer } from 'mobx-react';
 import { Header, Grid, Container, Divider, Responsive } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
+const nsGroup = [
+  {
+    title: "Nextseed Securities",
+    description: <>NextSeed Securities is a fast-growing fintech company that empowers everyday investors to invest directly in local businesses, enabling private companies across the US to raise capital directly from their community. 
+    The Next Seed, Inc. operates NextSeed Services LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.</>,
+    logo: 'group/ns-securities-logo.jpg',
+    image: 'group/ns-securities.jpg',
+    link: 'somewhere'
+  },
+  {
+    title: "Nextseed Capital",
+    description: <>NextSeed Capital is an actively managed private fund, invest in local communities through a diversified portfolio of income producing private debt and equity securities.
+    The fund will invest in impactful and traditionally underserved businesses such as women and minority owned enterprises, veteran run management teams, and fulfill the capital needs of small businesses recovering from the Covid-19 recession.</>,
+    logo: 'group/ns-capital-logo.jpg',
+    image: 'group/ns-capital.jpg',
+    link: 'somewhere'
+  },
+  {
+    title: "Collaboration Capital",
+    description: <>Collaboration Capital is a wealth management firm that aggregates the niche expertise of multiple, independent investment practitioners into a tangible deliverable: a complete ESG/impact-oriented portfolio across public and private securities whose return objective and risk profile approximates that of traditional benchmarks.
+    We prioritize the caliber of intellectual property going into client deliverable over bricks and mortar.</>,
+    logo: 'group/collab-capital-logo.jpg',
+    image: 'group/collab-capital.jpg',
+    link: 'somewhere'
+  },
+  {
+    title: "Collaboration Assets Management",
+    description: <>Collaboration Asset Management offers proprietary public equity strategies built on the core fundamentals of ESG investing.
+    Collaboration Asset Management’s investment team aggregates selected securities across asset classes through a disciplined portfolio construction methodology that combines both fundamental and quantitative securities analysis.</>,
+    logo: 'group/collab-assets-logo.jpg',
+    image: 'group/collab-assets.jpg',
+    link: 'somewhere'
+  }
+];
+
 @inject('uiStore')
 @withRouter
 @observer
