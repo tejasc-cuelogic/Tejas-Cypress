@@ -18,7 +18,7 @@ const nsGroup = [
     title: 'Nextseed Securities',
     description: <>NextSeed Securities is a fast-growing fintech<Responsive as="br" minWidth={768} /> company that empowers everyday investors to invest directly in local businesses, enabling private companies across the US to raise capital directly from their community.
     <br /><br />The Next Seed, Inc. operates NextSeed Services LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.</>,
-    logo: 'group/ns-securities-logo.png',
+    logo: 'group/ns-logo.png',
     image: 'group/ns-securities.jpg',
     link: 'somewhere',
     gray: true,
