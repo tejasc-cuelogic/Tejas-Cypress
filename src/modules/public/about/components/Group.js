@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Header, Grid, Container, Divider, Responsive } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
+<<<<<<< HEAD
 // const businesses = [
 //   {
 //     title: 'Houston, TX',
