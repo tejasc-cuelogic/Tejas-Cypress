@@ -4,6 +4,15 @@ import { inject, observer } from 'mobx-react';
 import { Header, Grid, Container, Divider, Responsive } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
+const highlights = {
+  title: 'The Nextseed Group',
+  description: <>Since 2015, we have worked on the forefront of rapidly changing financial markets to
+  connect community and capital in diverse and meaningful ways. Starting by offering the first ever investment crowdfunding campaign in the United States on
+  the <a href="/" target="_blank">nextseed.com</a> investment platform, The NextSeed Group has evolved into a forward-thinking investment banking practice, created a first-of-its-kind
+  place-based credit fund to accelerate its mission to build community through financial markets. By combining with RIA Collaboration Capital, a leader in the
+  impact/ESG investing space, the firm expanded its scope to offer full-service wealth management and asset management for retail and institutional clients, all with a focus on meaningful investing.
+  <br /><br /> Looking forward, we will continue looking for ways to build a technology-driven impact investment firm open to everyone, furthering our mission to democratize finance. <br /><br /> Learn more about our portfolio of companies below.</>,
+}
 const nsGroup = [
   {
     title: "Nextseed Securities",
@@ -12,7 +21,7 @@ const nsGroup = [
     logo: 'group/ns-capital-logo.png',
     image: 'group/ns-securities.jpg',
     link: 'somewhere',
-    float: "right",
+    gray: false,
   },
   {
     title: "Nextseed Capital",
@@ -21,7 +30,7 @@ const nsGroup = [
     logo: 'group/ns-capital-logo.png',
     image: 'group/ns-capital.jpg',
     link: 'somewhere',
-    float: "left",
+    gray: true,
   },
   {
     title: "Collaboration Capital",
@@ -30,7 +39,7 @@ const nsGroup = [
     logo: 'group/ns-capital-logo.png',
     image: 'group/collab-capital.jpg',
     link: 'somewhere',
-    float: "right",
+    gray: false,
   },
   {
     title: "Collaboration Assets Management",
@@ -39,7 +48,7 @@ const nsGroup = [
     logo: 'group/ns-capital-logo.png',
     image: 'group/collab-assets.jpg',
     link: 'somewhere',
-    float: "left",
+    gray: true,
   },
 ];
 @inject('uiStore')
@@ -50,8 +59,9 @@ export default class Group extends Component {
     this.props.uiStore.setAuthRef('/investors');
     this.props.history.push('/register-investor');
   }
+
   handleButtonRoutes = () => {
-    
+    const name = 'Im a const';
   }
 
   render() {
@@ -61,87 +71,57 @@ export default class Group extends Component {
         <Container>
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30'}>
-              The NextSeed Group
+              {highlights.title}
             </Header>
-            <p className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-70'}>Since 2015, we have worked on the forefront of rapidly changing financial markets to
-      connect community and capital in diverse and meaningful ways. Starting by offering the first ever investment crowdfunding campaign in the United States on
-      the <a href="/" target="_blank">nextseed.com</a> investment platform, The NextSeed Group has evolved into a forward-thinking investment banking practice, created a first-of-its-kind
-      place-based credit fund to accelerate its mission to build community through financial markets. By combining with RIA Collaboration Capital, a leader in the
-      impact/ESG investing space, the firm expanded its scope to offer full-service wealth management and asset management for retail and institutional clients, all with a focus on meaningful investing.
-      <br /><br /> Looking forward, we will continue looking for ways to build a technology-driven impact investment firm open to everyone, furthering our mission to democratize finance. <br /><br /> Learn more about our portfolio of companies below.</p>
-            {/* <div className="how-it-works-steps">
-              <Item.Group className="horizontal-items home-page">
-                {
-                  highlights.map(h => (
-                    <Item>
-                      <div className="ui mini image">
-                        <NSImage path={h.icon} />
-                      </div>
-                      <Item.Content>
-                        <Item.Header as="h6">{h.title}</Item.Header>
-                        <Item.Meta>{h.meta}</Item.Meta>
-                        <Item.Extra>
-                          <Link to={h.link}>
-                            {h.extra}
-                            <Icon className="ns-chevron-right ml-10" color="green" />
-                          </Link>
-                        </Item.Extra>
-                      </Item.Content>
-                    </Item>
-                  ))
-                }
-              </Item.Group>
-            </div> */}
+            <p className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-70'}>{highlights.description}</p>
           </section>
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
-              {
-                nsGroup.map(i =>{
-                  <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'investor-priority-section pt-100'}>
-                    <Grid>
-                      <Grid.Row>
-                        {/* {!responsiveVars.isMobile
+            {
+              nsGroup.map(i => {
+                {!i.gray ? 
+                <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100'}>
+                  <Grid>
+                    {/* {!responsiveVars.isMobile
+                      && (
+                        <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} />
+                      )
+                    } */}
+                    <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle" floated="right">
+                      <div>
+                        <NSImage path={i.logo} />
+                        <p className="mb-30 mt-30">{i.description}</p>
+                        {!responsiveVars.isMobile
                           && (
-                            <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} />
+                            <Button onClick={this.handleButtonRoutes} primary className="mb-30">Learn More</Button>
                           )
-                        } */}
-                        <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
-                          <div>
-                            <NSImage path={i.logo} />
-                            <p className="mb-30 mt-30">{i.description}</p>
-                            {!responsiveVars.isMobile
-                              && (
-                                <Button onClick={this.handleButtonRoutes} primary className="mb-30">Learn More</Button>
-                              )
-                            }
-                          </div>
-                        </Grid.Column>
-                        <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} floated="">
-                          <NSImage path={i.image} />
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </section>
-              })}
-          {/* <Divider fitted as={!responsiveVars.uptoTablet && Container} />
-          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-            <Grid centered reversed="mobile">
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
-                <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-50'}>Every investment comes <Responsive minWidth={992} as="br" />with risk and opportunity</Header>
-                <p>
-                  Remember, returns and bonus rewards are not guaranteed. Investments can be lost entirely.
-                  Be sure to do your own due diligence, review all offering documents carefully,
-                  and never invest more than you can afford to lose.
-                </p>
-                <Divider hidden />
-                <p>
-                  Businesses may fail, but those that succeed can make a lasting impact in your city.
-                </p>
-              </Grid.Column>
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
-                <NSImage path="investors/couple-pitch.jpg" fluid />
-              </Grid.Column>
-            </Grid>
-          </section> */}
+                        }
+                      </div>
+                    </Grid.Column>
+                    <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} floated="right">
+                      <NSImage path={i.image} />
+                    </Grid.Column>
+                  </Grid>
+                </section>
+                :
+                <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100'}>
+                <Grid>
+                  <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} floated="left">
+                    <NSImage path={i.image} />
+                  </Grid.Column>
+                  <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle" floated="left">
+                    <div>
+                      <NSImage path={i.logo} />
+                      <p className="mb-30 mt-30">{i.description}</p>
+                      {!responsiveVars.isMobile
+                        && (
+                          <Button onClick={this.handleButtonRoutes} primary className="mb-30">Learn More</Button>
+                        )
+                      }
+                    </div>
+                  </Grid.Column>
+                </Grid>
+              </section>
+            }})}
         </Container>
       </>
     );
