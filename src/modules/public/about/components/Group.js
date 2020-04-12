@@ -7,36 +7,40 @@ import NSImage from '../../../shared/NSImage';
 const nsGroup = [
   {
     title: "Nextseed Securities",
-    description: <>NextSeed Securities is a fast-growing fintech company that empowers everyday investors to invest directly in local businesses, enabling private companies across the US to raise capital directly from their community. 
+    description: <>NextSeed Securities is a fast-growing fintech<Responsive as="br" minWidth={768} /> company that empowers everyday investors to invest directly in local businesses, enabling private companies across the US to raise capital directly from their community. 
     The Next Seed, Inc. operates NextSeed Services LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.</>,
-    logo: 'group/ns-securities-logo.jpg',
+    logo: 'group/ns-capital-logo.png',
     image: 'group/ns-securities.jpg',
-    link: 'somewhere'
+    link: 'somewhere',
+    float: "right",
   },
   {
     title: "Nextseed Capital",
     description: <>NextSeed Capital is an actively managed private fund, invest in local communities through a diversified portfolio of income producing private debt and equity securities.
     The fund will invest in impactful and traditionally underserved businesses such as women and minority owned enterprises, veteran run management teams, and fulfill the capital needs of small businesses recovering from the Covid-19 recession.</>,
-    logo: 'group/ns-capital-logo.jpg',
+    logo: 'group/ns-capital-logo.png',
     image: 'group/ns-capital.jpg',
-    link: 'somewhere'
+    link: 'somewhere',
+    float: "left",
   },
   {
     title: "Collaboration Capital",
     description: <>Collaboration Capital is a wealth management firm that aggregates the niche expertise of multiple, independent investment practitioners into a tangible deliverable: a complete ESG/impact-oriented portfolio across public and private securities whose return objective and risk profile approximates that of traditional benchmarks.
     We prioritize the caliber of intellectual property going into client deliverable over bricks and mortar.</>,
-    logo: 'group/collab-capital-logo.jpg',
+    logo: 'group/ns-capital-logo.png',
     image: 'group/collab-capital.jpg',
-    link: 'somewhere'
+    link: 'somewhere',
+    float: "right",
   },
   {
     title: "Collaboration Assets Management",
     description: <>Collaboration Asset Management offers proprietary public equity strategies built on the core fundamentals of ESG investing.
     Collaboration Asset Management’s investment team aggregates selected securities across asset classes through a disciplined portfolio construction methodology that combines both fundamental and quantitative securities analysis.</>,
-    logo: 'group/collab-assets-logo.jpg',
+    logo: 'group/ns-capital-logo.png',
     image: 'group/collab-assets.jpg',
-    link: 'somewhere'
-  }
+    link: 'somewhere',
+    float: "left",
+  },
 ];
 @inject('uiStore')
 @withRouter
@@ -45,6 +49,9 @@ export default class Group extends Component {
   handleApplyCta = () => {
     this.props.uiStore.setAuthRef('/investors');
     this.props.history.push('/register-investor');
+  }
+  handleButtonRoutes = () => {
+    
   }
 
   render() {
@@ -87,37 +94,35 @@ export default class Group extends Component {
             </div> */}
           </section>
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
-          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'investor-priority-section pt-100'}>
-            <Grid>
-              <Grid.Row>
-                {!responsiveVars.isMobile
-                  && (
-                    <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} />
-                  )
-                }
-                <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                  <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-50'}>Your security is our top priority</Header>
-                  {responsiveVars.isMobile
-                    && <NSImage path="investors/left-phone-mockup-mobile.png" className="mb-20" />
-                  }
-                  <Header as="h5" className="mb-10">Your funds stay safe and sound.</Header>
-                  <p className={responsiveVars.uptoTablet ? 'mb-14' : 'mb-20'}>
-                    The uninvested cash  in your account <sup>1</sup> is FDIC-insured up
-                    to $250,000.
-                  </p>
-                  <Header as="h5" className="mb-10">Keep your information protected.</Header>
-                  <p className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-50'}>We safeguard your information with bank-level security measures</p>
-                  <NSImage path="ssl.jpg" />
-                  <p className={`note ${responsiveVars.uptoTablet ? 'mt-30' : 'mt-50 mb-50'}`}>
-                    <sup>1</sup> NextSeed accounts are provided and held at our partner bank, Happy
-                    State Bank DBA GoldStar Trust Company (&quot;GoldStar&quot;), which provides FDIC
-                    insurance for uninvested cash in NextSeed accounts.
-                  </p>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </section>
-          <Divider fitted as={!responsiveVars.uptoTablet && Container} />
+              {
+                nsGroup.map(i =>{
+                  <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'investor-priority-section pt-100'}>
+                    <Grid>
+                      <Grid.Row>
+                        {/* {!responsiveVars.isMobile
+                          && (
+                            <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} />
+                          )
+                        } */}
+                        <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
+                          <div>
+                            <NSImage path={i.logo} />
+                            <p className="mb-30 mt-30">{i.description}</p>
+                            {!responsiveVars.isMobile
+                              && (
+                                <Button onClick={this.handleButtonRoutes} primary className="mb-30">Learn More</Button>
+                              )
+                            }
+                          </div>
+                        </Grid.Column>
+                        <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} floated="">
+                          <NSImage path={i.image} />
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
+                  </section>
+              })}
+          {/* <Divider fitted as={!responsiveVars.uptoTablet && Container} />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Grid centered reversed="mobile">
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
@@ -136,7 +141,7 @@ export default class Group extends Component {
                 <NSImage path="investors/couple-pitch.jpg" fluid />
               </Grid.Column>
             </Grid>
-          </section>
+          </section> */}
         </Container>
       </>
     );
