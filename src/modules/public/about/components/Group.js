@@ -20,7 +20,7 @@ const nsGroup = [
     <br /><br />NextSeed Securities is our forward-thinking investment banking practice, which sources exclusive alternative investment offerings for our investment platform. Our proprietary platform manages everything from deal-sourcing and underwriting to investor account management and automatic payment processing.</>,
     logo: 'group/ns-logo.png',
     image: 'group/ns-securities.jpg',
-    link: 'somewhere',
+    link: 'www.nextseed.com',
     gray: true,
   },
   {
@@ -37,7 +37,7 @@ const nsGroup = [
     <br /><br />Forward-looking clients receive a custom-tailored ESG/impact-oriented portfolio across public and private securities that both reflects their values and priorities and whose return objective and risk profile approximates that of traditional benchmarks.</>,
     logo: 'group/collab-capital-logo.png',
     image: 'group/collab-capital.jpg',
-    link: 'somewhere',
+    link: 'collaboration.capital',
     gray: true,
   },
   {
@@ -46,7 +46,7 @@ const nsGroup = [
     <br /><br />Our experienced investment team aggregates selected securities across asset classes through a disciplined portfolio construction methodology that combines both fundamental and quantitative securities analysis.</>,
     logo: 'group/collab-assets-logo.png',
     image: 'group/collab-assets.jpg',
-    link: 'somewhere',
+    link: 'am.collaboration.capital',
     gray: false,
   },
 ];
