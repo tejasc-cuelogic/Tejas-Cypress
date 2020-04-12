@@ -5,46 +5,41 @@ import { Header, Grid, Container, Divider, Responsive, Icon, Item, Segment } fro
 import { VideoModal } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
 
-const businesses = [
+const nsGroup = [
   {
-    title: 'Houston, TX',
-    image: 'investors/img-2.jpg',
-    description: '',
+    title: "Nextseed Securities",
+    description: <>NextSeed Securities is a fast-growing fintech company that empowers everyday investors to invest directly in local businesses, enabling private companies across the US to raise capital directly from their community. 
+    The Next Seed, Inc. operates NextSeed Services LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.</>,
+    logo: 'group/ns-securities-logo.jpg',
+    image: 'group/ns-securities.jpg',
+    link: 'somewhere'
   },
   {
-    title: 'Seattle, WA',
-    image: 'investors/img-1.jpg',
-    description: '292 members invested $327,800 to launch Fair Isle Brewing',
+    title: "Nextseed Capital",
+    description: <>NextSeed Capital is an actively managed private fund, invest in local communities through a diversified portfolio of income producing private debt and equity securities.
+    The fund will invest in impactful and traditionally underserved businesses such as women and minority owned enterprises, veteran run management teams, and fulfill the capital needs of small businesses recovering from the Covid-19 recession.</>,
+    logo: 'group/ns-capital-logo.jpg',
+    image: 'group/ns-capital.jpg',
+    link: 'somewhere'
   },
   {
-    title: 'Denver, CO',
-    image: 'investors/img.jpg',
-    description: '289 members invested $300,000 in Urban Putt’s second location',
+    title: "Collaboration Capital",
+    description: <>Collaboration Capital is a wealth management firm that aggregates the niche expertise of multiple, independent investment practitioners into a tangible deliverable: a complete ESG/impact-oriented portfolio across public and private securities whose return objective and risk profile approximates that of traditional benchmarks.
+    We prioritize the caliber of intellectual property going into client deliverable over bricks and mortar.</>,
+    logo: 'group/collab-capital-logo.jpg',
+    image: 'group/collab-capital.jpg',
+    link: 'somewhere'
   },
+  {
+    title: "Collaboration Assets Management",
+    description: <>Collaboration Asset Management offers proprietary public equity strategies built on the core fundamentals of ESG investing.
+    Collaboration Asset Management’s investment team aggregates selected securities across asset classes through a disciplined portfolio construction methodology that combines both fundamental and quantitative securities analysis.</>,
+    logo: 'group/collab-assets-logo.jpg',
+    image: 'group/collab-assets.jpg',
+    link: 'somewhere'
+  }
 ];
-const highlights = [
-  {
-    title: 'Explore',
-    icon: 'icons/compass-icon.svg',
-    meta: 'Browse a curated selection of pre-vetted businesses that have passed our strict screening process.',
-    extra: 'Our vetting process',
-    link: '/resources/education-center/investor/business-survival',
-  },
-  {
-    title: 'Invest',
-    icon: 'icons/money-icon.svg',
-    meta: 'Invest with an Individual account, an Investment Entity, or a new Self-Directed IRA.',
-    extra: 'Our types of accounts offered',
-    link: '/resources/education-center/investor/account-opening-requirements-and-options',
-  },
-  {
-    title: 'Receive',
-    icon: 'icons/arrows-icon.svg',
-    meta: 'NextSeed collects and processes any payments directly into your investment account.',
-    extra: 'Our payments process',
-    link: '/resources/education-center/investor/payments',
-  },
-];
+
 @inject('uiStore')
 @withRouter
 @observer
