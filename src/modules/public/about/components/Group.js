@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Grid, Container, Button } from 'semantic-ui-react';
+import { Header, Grid, Container, Button, Link } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
 const highlights = {
@@ -84,7 +84,7 @@ export default class Group extends Component {
                         <p className="mb-30 mt-30">{i.description}</p>
                         {!responsiveVars.isMobile && i.link
                           && (
-                            <Button onClick={this.handleButtonRoutes} inverted color="green" className="mb-30">Learn More</Button>
+                            <Button onClick={this.handleButtonRoutes} as={Link} to={i.link} inverted color="green" className="mb-30">Learn More</Button>
                           )
                         }
                       </div>
@@ -106,7 +106,7 @@ export default class Group extends Component {
                       <p className="mb-30 mt-30">{i.description}</p>
                       {!responsiveVars.isMobile && i.link
                         && (
-                          <Button onClick={this.handleButtonRoutes} inverted color="green" className="mb-30">Learn More</Button>
+                          <Button onClick={this.handleButtonRoutes} as={Link} to={i.link} inverted color="green" className="mb-30">Learn More</Button>
                         )
                       }
                     </div>
