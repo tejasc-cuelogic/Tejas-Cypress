@@ -71,23 +71,20 @@ export default class Group extends Component {
               i.gray || isMobile ? (
               <section key={i.title} className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100'}>
                 <Grid>
-                  <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} verticalAlign="middle">
+                  <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
                     <div>
                       <NSImage path={i.logo} />
                       <p className="mb-30 mt-30">{i.description}</p>
-                      {i.link
-                        ? isMobile
-                          ? (
-                            <a href={i.link} target="_blank" rel="noopener noreferrer"><Button fluid inverted color="green" className="mb-30">Learn More</Button></a>
-                          ) : (
-                            <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>
-                          )
-                        : ''
+                      {i.link && !isMobile
+                        && (
+                          <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>
+                        )
                       }
                     </div>
                   </Grid.Column>
-                  <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+                  <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
                     <NSImage path={i.image} fluid />
+                    {isMobile && i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button fluid inverted color="green" className="mt-30">Learn More</Button></a>}
                   </Grid.Column>
                 </Grid>
               </section>
@@ -97,7 +94,7 @@ export default class Group extends Component {
                 <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
                   <NSImage path={i.image} fluid />
                 </Grid.Column>
-                <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} verticalAlign="middle">
+                <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
                   <div>
                     <NSImage path={i.logo} />
                     <p className="mb-30 mt-30">{i.description}</p>
