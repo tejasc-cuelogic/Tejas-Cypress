@@ -1,33 +1,27 @@
 import React, { Component } from 'react';
 import { Link, Route, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Grid, Container, Button, Divider, Responsive, Icon, Item, Segment, Card } from 'semantic-ui-react';
-import { NsCarousel, VideoModal } from '../../../../theme/shared';
+import { Header, Grid, Container, Divider, Responsive, Icon, Item, Segment } from 'semantic-ui-react';
+import { VideoModal } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
 
-const settings = {
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  arrows: true,
-  dots: false,
-};
-const businesses = [
-  {
-    title: 'Houston, TX',
-    image: 'investors/img-2.jpg',
-    description: '539 members invested $1,000,000 to open Bravery Chef Hall',
-  },
-  {
-    title: 'Seattle, WA',
-    image: 'investors/img-1.jpg',
-    description: '292 members invested $327,800 to launch Fair Isle Brewing',
-  },
-  {
-    title: 'Denver, CO',
-    image: 'investors/img.jpg',
-    description: '289 members invested $300,000 in Urban Putt’s second location',
-  },
-];
+// const businesses = [
+//   {
+//     title: 'Houston, TX',
+//     image: 'investors/img-2.jpg',
+//     description: '539 members invested $1,000,000 to open Bravery Chef Hall',
+//   },
+//   {
+//     title: 'Seattle, WA',
+//     image: 'investors/img-1.jpg',
+//     description: '292 members invested $327,800 to launch Fair Isle Brewing',
+//   },
+//   {
+//     title: 'Denver, CO',
+//     image: 'investors/img.jpg',
+//     description: '289 members invested $300,000 in Urban Putt’s second location',
+//   },
+// ];
 const highlights = [
   {
     title: 'Explore',
@@ -51,10 +45,10 @@ const highlights = [
     link: '/resources/education-center/investor/payments',
   },
 ];
-@inject('uiStore', 'userStore')
+@inject('uiStore')
 @withRouter
 @observer
-export default class WhyNextseed extends Component {
+export default class Group extends Component {
   handleApplyCta = () => {
     this.props.uiStore.setAuthRef('/investors');
     this.props.history.push('/register-investor');
@@ -62,7 +56,6 @@ export default class WhyNextseed extends Component {
 
   render() {
     const { responsiveVars } = this.props.uiStore;
-    const { userStore } = this.props;
     return (
       <>
         <Container>
@@ -104,76 +97,6 @@ export default class WhyNextseed extends Component {
             </Link>
           </section>
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
-          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-            <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30 center-align'}>Invest in the growth of local communities </Header>
-            <p className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-70 center-align'}>
-              Don{'\''}t just invest through Wall Street and Silicon Valley - put your capital to work with<Responsive minWidth={992} as="br" /> main street businesses, growing startups, experiential real estate, and more.
-            </p>
-            {!responsiveVars.uptoTablet
-              ? (
-                <Container>
-                  <Card.Group itemsPerRow={3}>
-                    {
-                      businesses.map(b => (
-                        <Card className="bordered center-align">
-                          <NSImage path={b.image} centered />
-                          <Card.Content>
-                            <Header as="h5">{b.title}</Header>
-                            <p>{b.description}</p>
-                          </Card.Content>
-                        </Card>
-                      ))
-                    }
-                  </Card.Group>
-                </Container>
-              )
-              : (
-                <>
-                  <Container>
-                    <NsCarousel {...settings} className="investor-slide">
-                      {businesses.map(b => (
-                        <Card className="bordered center-align">
-                          <NSImage path={b.image} centered />
-                          <Card.Content>
-                            <Header as="h5">{b.title}</Header>
-                            <p>{b.description}</p>
-                          </Card.Content>
-                        </Card>
-                      ))
-                      }
-                    </NsCarousel>
-                  </Container>
-                </>
-              )
-            }
-          </section>
-          <Divider fitted as={!responsiveVars.uptoTablet && Container} />
-          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-            <Grid>
-              <Grid.Row>
-                <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
-                  <div>
-                    <Header as="h2">Your portfolio at<Responsive as="br" minWidth={768} /> your fingertips</Header>
-                    <p className="mb-30 mt-30">
-                      See how your investments are performing<Responsive as="br" minWidth={768} /> and reinvest any earnings effortlessly with<Responsive as="br" minWidth={768} /> our easy-to-use dashboard.</p>
-                    {!userStore.isInvestor && !userStore.isIssuer && !responsiveVars.isMobile
-                      && (
-                        <Button onClick={this.handleApplyCta} primary className="mb-30">Create a  Free Account</Button>
-                      )
-                    }
-                  </div>
-                </Grid.Column>
-                <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16}>
-                  <NSImage path="investors/mackbook-mockup.png" />
-                  {!userStore.isInvestor && !userStore.isIssuer && responsiveVars.isMobile
-                    && (
-                      <Button fluid onClick={this.handleApplyCta} primary className="mt-30">Create a  Free Account</Button>
-                    )
-                  }
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </section>
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'investor-priority-section pt-100'}>
             <Grid>

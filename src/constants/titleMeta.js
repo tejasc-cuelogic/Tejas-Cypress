@@ -22,6 +22,7 @@ export const TITLES = {
   '/business': 'How It Works | Businesses - NextSeed',
   '/investors': 'How It Works | Investors - NextSeed',
   '/about': 'About Us - NextSeed',
+  '/group': 'The Group - NextSeed',
   '/insights': 'Insights and Articles - NextSeed',
   '/education-center': 'Education Center - NextSeed',
   '/education-center/investor': 'Investor Education Center - NextSeed',
