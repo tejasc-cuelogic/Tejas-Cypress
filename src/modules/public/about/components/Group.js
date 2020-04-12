@@ -5,23 +5,23 @@ import { Header, Grid, Container, Divider, Responsive, Icon, Item, Segment } fro
 import { VideoModal } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
 
-// const businesses = [
-//   {
-//     title: 'Houston, TX',
-//     image: 'investors/img-2.jpg',
-//     description: '539 members invested $1,000,000 to open Bravery Chef Hall',
-//   },
-//   {
-//     title: 'Seattle, WA',
-//     image: 'investors/img-1.jpg',
-//     description: '292 members invested $327,800 to launch Fair Isle Brewing',
-//   },
-//   {
-//     title: 'Denver, CO',
-//     image: 'investors/img.jpg',
-//     description: '289 members invested $300,000 in Urban Putt’s second location',
-//   },
-// ];
+const businesses = [
+  {
+    title: 'Houston, TX',
+    image: 'investors/img-2.jpg',
+    description: '',
+  },
+  {
+    title: 'Seattle, WA',
+    image: 'investors/img-1.jpg',
+    description: '292 members invested $327,800 to launch Fair Isle Brewing',
+  },
+  {
+    title: 'Denver, CO',
+    image: 'investors/img.jpg',
+    description: '289 members invested $300,000 in Urban Putt’s second location',
+  },
+];
 const highlights = [
   {
     title: 'Explore',
