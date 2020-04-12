@@ -12,7 +12,7 @@ const highlights = {
   place-based credit fund to accelerate its mission to build community through financial markets. By combining with RIA Collaboration Capital, a leader in the
   impact/ESG investing space, the firm expanded its scope to offer full-service wealth management and asset management for retail and institutional clients, all with a focus on meaningful investing.
   <br /><br /> Looking forward, we will continue looking for ways to build a technology-driven impact investment firm open to everyone, furthering our mission to democratize finance. <br /><br /> Learn more about our portfolio of companies below.</>,
-}
+};
 const nsGroup = [
   {
     title: 'Nextseed Securities',
@@ -78,35 +78,37 @@ export default class Group extends Component {
           </section>
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
             {
-              nsGroup.map(i => {
-                {!i.gray ? 
-                <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100'}>
+              nsGroup.map(i => (
+                i.gray203
+
+                ? (
+                  <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100'}>
                   <Grid>
                     {/* {!responsiveVars.isMobile
                       && (
                         <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} />
                       )
                     } */}
-                    <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle" floated="right">
+                    <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} verticalAlign="middle" floated="right">
                       <div>
                         <NSImage path={i.logo} />
                         <p className="mb-30 mt-30">{i.description}</p>
                         {!responsiveVars.isMobile
                           && (
-                            <Button onClick={this.handleButtonRoutes} primary className="mb-30">Learn More</Button>
+                            <Button onClick={this.handleButtonRoutes} basic primary className="mb-30">Learn More</Button>
                           )
                         }
                       </div>
                     </Grid.Column>
-                    <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} floated="right">
+                    <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} floated="right">
                       <NSImage path={i.image} />
                     </Grid.Column>
                   </Grid>
                 </section>
-                :
+                ) : (
                 <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100'}>
                 <Grid>
-                  <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} floated="left">
+                  <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} floated="left">
                     <NSImage path={i.image} />
                   </Grid.Column>
                   <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle" floated="left">
@@ -122,7 +124,8 @@ export default class Group extends Component {
                   </Grid.Column>
                 </Grid>
               </section>
-            }})}
+              )
+            ))}
         </Container>
       </>
     );
