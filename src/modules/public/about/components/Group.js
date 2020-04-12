@@ -4,25 +4,6 @@ import { inject, observer } from 'mobx-react';
 import { Header, Grid, Container, Divider, Responsive } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
-<<<<<<< HEAD
-// const businesses = [
-//   {
-//     title: 'Houston, TX',
-//     image: 'investors/img-2.jpg',
-//     description: '539 members invested $1,000,000 to open Bravery Chef Hall',
-//   },
-//   {
-//     title: 'Seattle, WA',
-//     image: 'investors/img-1.jpg',
-//     description: '292 members invested $327,800 to launch Fair Isle Brewing',
-//   },
-//   {
-//     title: 'Denver, CO',
-//     image: 'investors/img.jpg',
-//     description: '289 members invested $300,000 in Urban Putt’s second location',
-//   },
-// ];
-
 @inject('uiStore')
 @withRouter
 @observer
@@ -41,12 +22,14 @@ export default class Group extends Component {
             <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30'}>
               The NextSeed Group
             </Header>
-            <p className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-70'}>Since 2015, we have worked on the forefront of rapidly changing financial markets to
-      connect community and capital in diverse and meaningful ways. Starting by offering the first ever investment crowdfunding campaign in the United States on
-      the <a href="/" target="_blank">nextseed.com</a> investment platform, The NextSeed Group has evolved into a forward-thinking investment banking practice, created a first-of-its-kind
-      place-based credit fund to accelerate its mission to build community through financial markets. By combining with RIA Collaboration Capital, a leader in the
-      impact/ESG investing space, the firm expanded its scope to offer full-service wealth management and asset management for retail and institutional clients, all with a focus on meaningful investing.
-      <br /><br /> Looking forward, we will continue looking for ways to build a technology-driven impact investment firm open to everyone, furthering our mission to democratize finance. <br /><br /> Learn more about our portfolio of companies below.</p>
+            <p className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-70'}>
+              Since 2015, we have worked on the forefront of rapidly changing financial markets to
+              connect community and capital in diverse and meaningful ways. Starting by offering the first ever investment crowdfunding campaign in the United States on
+              the <a href="/" target="_blank">nextseed.com</a> investment platform, The NextSeed Group has evolved into a forward-thinking investment banking practice, created a first-of-its-kind
+              place-based credit fund to accelerate its mission to build community through financial markets. By combining with RIA Collaboration Capital, a leader in the
+              impact/ESG investing space, the firm expanded its scope to offer full-service wealth management and asset management for retail and institutional clients, all with a focus on meaningful investing.
+              <br /><br /> Looking forward, we will continue looking for ways to build a technology-driven impact investment firm open to everyone, furthering our mission to democratize finance. <br /><br /> Learn more about our portfolio of companies below.
+            </p>
             {/* <div className="how-it-works-steps">
               <Item.Group className="horizontal-items home-page">
                 {
