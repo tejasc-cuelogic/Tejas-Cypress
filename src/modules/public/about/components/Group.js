@@ -1,41 +1,40 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Grid, Container, Button, Responsive } from 'semantic-ui-react';
+import { Header, Grid, Container, Button } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
 const highlights = {
   title: 'The Nextseed Group',
-  description: <>Since 2015, we have worked on the forefront of rapidly changing financial markets to
-  connect community and capital in diverse and meaningful ways. Starting by offering the first ever investment crowdfunding campaign in the United States on
-  the <a href="/" target="_blank">nextseed.com</a> investment platform, The NextSeed Group has evolved into a forward-thinking investment banking practice, created a first-of-its-kind
-  place-based credit fund to accelerate its mission to build community through financial markets. By combining with RIA Collaboration Capital, a leader in the
-  impact/ESG investing space, the firm expanded its scope to offer full-service wealth management and asset management for retail and institutional clients, all with a focus on meaningful investing.
-  <br /><br /> Looking forward, we will continue looking for ways to build a technology-driven impact investment firm open to everyone, furthering our mission to democratize finance. <br /><br /> Learn more about our portfolio of companies below.</>,
+  description: <>Since 2015, the NextSeed Group has been at the forefront of rapidly changing financial markets to connect community and capital in diverse and meaningful ways. A pioneer in
+  investment crowdfunding, NextSeed has evolved into a technology-driven investment banking practice offering place-based investment opportunities that align with its mission to build
+  community through financial markets. In late 2019, we combined with Collaboration Capital, a family-focused wealth management and asset management investment firm built around ESG
+  (Environmental, Social, and Governance) investing. The NextSeed Group now offers leading edge investment banking and investment management services for retail and institutional clients.
+  <br /><br /> Our mission is to build prosperous communities by making meaningful investments accessible to everyone, which we take to heart in every business decision we make.
+  <br /><br /> Learn more about our family of businesses below.</>,
 };
 const nsGroup = [
   {
     title: 'Nextseed Securities',
-    description: <>NextSeed Securities is a fast-growing fintech<Responsive as="br" minWidth={768} /> company that empowers everyday investors to invest directly in local businesses, enabling private companies across the US to raise capital directly from their community.
-    <br /><br />The Next Seed, Inc. operates NextSeed Services LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.</>,
-    logo: 'group/ns-securities-logo.png',
+    description: <>NextSeed operates a fully integrated online investment platform that offers all investors the opportunity to invest directly in local businesses and commercial real estate projects, enabling private companies across the US to raise capital directly from the general public in a legal, compliant manner.
+    <br /><br />NextSeed Securities is our forward-thinking investment banking practice, which sources exclusive alternative investment offerings for our investment platform. Our proprietary platform manages everything from deal-sourcing and underwriting to investor account management and automatic payment processing.</>,
+    logo: 'group/ns-logo.png',
     image: 'group/ns-securities.jpg',
     link: 'somewhere',
     gray: true,
   },
   {
     title: 'Nextseed Capital',
-    description: <>NextSeed Capital is an actively managed private fund, invest in local communities through a diversified portfolio of income producing private debt and equity securities.
-    <br /><br />The fund will invest in impactful and traditionally underserved businesses such as women and minority owned enterprises, veteran run management teams, and fulfill the capital needs of small businesses recovering from the Covid-19 recession.</>,
+    description: <>NextSeed Capital is our private investment fund manager that directly invests in local communities through a diversified portfolio of income-producing, private debt and equity securities.
+    <br /><br />We seek to invest in impactful and traditionally underserved enterprises such as women- and minority-owned businesses and veteran-run management teams. Our inaugural fund aspires to serve the capital needs of small businesses recovering from the COVID-19 recession.</>,
     logo: 'group/ns-capital-logo.png',
     image: 'group/ns-capital.jpg',
-    link: 'somewhere',
     gray: false,
   },
   {
     title: 'Collaboration Capital',
-    description: <>Collaboration Capital is a wealth management firm that aggregates the niche expertise of multiple, independent investment practitioners into a tangible deliverable: a complete ESG/impact-oriented portfolio across public and private securities whose return objective and risk profile approximates that of traditional benchmarks.
-    <br /><br />We prioritize the caliber of intellectual property going into client deliverable over bricks and mortar.</>,
+    description: <>Collaboration Capital is a wealth management practice that aggregates the niche expertise of multiple, independent investment practitioners into a tangible deliverable for each client.
+    <br /><br />Forward-looking clients receive a custom-tailored ESG/impact-oriented portfolio across public and private securities that both reflects their values and priorities and whose return objective and risk profile approximates that of traditional benchmarks.</>,
     logo: 'group/collab-capital-logo.png',
     image: 'group/collab-capital.jpg',
     link: 'somewhere',
@@ -43,8 +42,8 @@ const nsGroup = [
   },
   {
     title: 'Collaboration Assets Management',
-    description: <>Collaboration Asset Management offers proprietary public equity strategies built on the core fundamentals of ESG investing.
-    <br /><br />Collaboration Asset Management’s investment team aggregates selected securities across asset classes through a disciplined portfolio construction methodology that combines both fundamental and quantitative securities analysis.</>,
+    description: <>Collaboration Asset Management offers multiple proprietary public equity strategies built on the core fundamentals of ESG investing, accessible to both institutional and retail investors across various distribution channels.
+    <br /><br />Our experienced investment team aggregates selected securities across asset classes through a disciplined portfolio construction methodology that combines both fundamental and quantitative securities analysis.</>,
     logo: 'group/collab-assets-logo.png',
     image: 'group/collab-assets.jpg',
     link: 'somewhere',
@@ -83,7 +82,7 @@ export default class Group extends Component {
                       <div>
                         <NSImage path={i.logo} />
                         <p className="mb-30 mt-30">{i.description}</p>
-                        {!responsiveVars.isMobile
+                        {!responsiveVars.isMobile && i.link
                           && (
                             <Button onClick={this.handleButtonRoutes} inverted color="green" className="mb-30">Learn More</Button>
                           )
@@ -105,7 +104,7 @@ export default class Group extends Component {
                     <div>
                       <NSImage path={i.logo} />
                       <p className="mb-30 mt-30">{i.description}</p>
-                      {!responsiveVars.isMobile
+                      {!responsiveVars.isMobile && i.link
                         && (
                           <Button onClick={this.handleButtonRoutes} inverted color="green" className="mb-30">Learn More</Button>
                         )
