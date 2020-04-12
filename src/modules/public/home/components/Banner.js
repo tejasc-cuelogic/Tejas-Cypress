@@ -2,7 +2,16 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Header, Container, Button, Dimmer, Loader } from 'semantic-ui-react';
+import { Header, Container, Button, Dimmer, Loader, Grid } from 'semantic-ui-react';
+
+const highlights = {
+  title: <>Invest in Small Businesses.<br /></>,
+  subTitle: <a style={{ pointerEvents: 'none' }}>Invest in the Recovery.</a>,
+  description: <p className="mb-40">This battle with COVID-19 is affecting all of us. The small businesses that define our communities,
+  enrich our lives, and support our local economies are fighting to survive the financial effects of this pandemic.
+  We believe that now, more than ever, it is important to foster meaningful investments in businesses that need community
+  capital to grow. <br /><br />Create a free NextSeed Investor Account to begin exploring community-building alternative investment opportunities.</p>,
+};
 
 @inject('navStore', 'userDetailsStore', 'authStore', 'userStore', 'uiStore')
 @observer
@@ -18,34 +27,35 @@ class Banner extends Component {
     const { responsiveVars } = this.props.uiStore;
 
     return (
-      <section className="banner business-banner">
+      <section className="banner">
         <Container>
-          {/* <Responsive minWidth={768} as={React.Fragment}> */}
-            <div className="banner-caption">
-              <Header as="h2">
-                Build an investment<br />portfolio you care about
-              </Header>
-              { showButton
-                ? (
-                  <Button
-                    className={`${responsiveVars.isMobile && 'mb-50'} relaxed`}
-                    primary
-                    content="Get Started"
-                    as={Link}
-                    to={redirectUrl}
-                    fluid={responsiveVars.isMobile}
-                  />
-                ) : ''
-              }
-            </div>
-
-          {/* </Responsive> */}
+          <section>
+            <Grid>
+              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+                <Header as="h2">
+                  {highlights.title}
+                  {highlights.subTitle}
+                </Header>
+                {highlights.description}
+                { showButton
+                  ? (
+                    <Button
+                      className={`${responsiveVars.isMobile && 'mb-50'} relaxed`}
+                      primary
+                      content="Get Started"
+                      as={Link}
+                      to={redirectUrl}
+                      fluid={responsiveVars.isMobile}
+                    />
+                  ) : ''
+                }
+              </Grid.Column>
+              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+                Testing
+              </Grid.Column>
+            </Grid>
+          </section>
         </Container>
-        <div className="banner-meta">
-          <p>
-            Bravery Chef Hall<br /><b>Raised $1,000,000 from 539  investors</b>
-          </p>
-        </div>
         {this.props.withDimmer && (
           <Dimmer active className="fullscreen">
             <Loader active>Loading..</Loader>

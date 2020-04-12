@@ -30,7 +30,6 @@ const nsGroup = [
     <br /><br />We seek to invest in impactful and traditionally underserved enterprises such as women- and minority-owned businesses and veteran-run management teams. Our inaugural fund aspires to serve the capital needs of small businesses recovering from the COVID-19 recession.</>,
     logo: 'group/ns-capital-logo.png',
     image: 'group/ns-capital.jpg',
-    gray: false,
   },
   {
     title: 'Collaboration Capital',
@@ -48,7 +47,6 @@ const nsGroup = [
     logo: 'group/collab-assets-logo.png',
     image: 'group/collab-assets.jpg',
     link: 'https://am.collaboration.capital',
-    gray: false,
   },
 ];
 
