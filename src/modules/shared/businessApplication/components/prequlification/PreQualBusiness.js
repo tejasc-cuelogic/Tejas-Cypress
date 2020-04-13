@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Grid, Form, Divider } from 'semantic-ui-react';
+import { Header, Grid, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormRadioGroup, FormCheckbox, MaskedInput } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
@@ -13,7 +13,7 @@ export default class PreQualBusiness extends Component {
   render() {
     const {
       BUSINESS_APP_FRM, businessAppEleChange, setAddressFields,
-      businessAppEleMaskChange, getFranchiseCondition,
+      businessAppEleMaskChange,
       getBusinessTypeCondtion, currentApplicationType,
       preQualFormDisabled,
     } = this.props.businessAppStore;
@@ -80,21 +80,6 @@ export default class PreQualBusiness extends Component {
           <Grid>
             <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
               <div className="field-wrap">
-                {getFranchiseCondition
-                  && (
-                  <>
-                    <Header as="h6" content="Are you an existing or previous franchise holder?*" />
-                    <FormRadioGroup
-                      disabled={preQualFormDisabled}
-                      fielddata={fields.franchiseHolder}
-                      name="franchiseHolder"
-                      changed={businessAppEleChange}
-                      containerclassname="button-radio"
-                    />
-                    <Divider section hidden />
-                  </>
-                  )
-                }
                 {getBusinessTypeCondtion
                   && (
                   <>
@@ -117,7 +102,6 @@ export default class PreQualBusiness extends Component {
                         ))
                       }
                     </Form.Group>
-                    <Divider section hidden />
                   </>
                   )
                 }
