@@ -61,7 +61,7 @@ function hexStringToByte(str) {
   return new Uint8Array(a);
 }
 
-Cypress.Commands.add('uploadFile', (fileName, fileType, selector, url = '**/**') => {
+Cypress.Commands.add('uploadFile', (selector, url = '**/**', fileName = 'images/test-img.png' , fileType = 'png') => {
   cy.server();
   cy.route('POST', url).as('fileUpload');
   cy.fixture(fileName).as('img');
@@ -88,10 +88,10 @@ Cypress.Commands.add('upload_file', (fileName, fileType, selector) => {
 const amplifyLogin = async (username, password) => {
   Amplify.configure({
     Auth: {
-      identityPoolId: Cypress.env('identityPoolId'),
-      region: Cypress.env('region'),
-      userPoolId: Cypress.env('userPoolId'),
-      userPoolWebClientId: Cypress.env('userPoolWebClientId'),
+      identityPoolId: "us-east-1:30f8a32a-2a2d-488a-924f-ee30138d68ce",
+      region: "us-east-1",
+      userPoolId: "us-east-1_TarFRqoSR",
+      userPoolWebClientId: "3t6lm483nsr6sjme7h6novi2o8",
     },
   });
   return await AmplifyAuth.signIn({ username, password });
@@ -204,7 +204,6 @@ const deleteUserCtaAction = (ctaName) => {
 Cypress.Commands.add('cleanUpUser', () => {
   const investorEmail = window.localStorage.getItem('investorEmail');
   cy.Logout();
-  cy.get('data-cy=auth-login').click();
   cy.login(investorEmail, Cypress.env('commonPassword')).then((user) => {
     if (user.signInUserSession) {
       if (user.signInUserSession.idToken && user.signInUserSession.idToken.jwtToken) {

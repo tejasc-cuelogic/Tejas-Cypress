@@ -1,4 +1,3 @@
-import { rejects } from "assert";
 
 export const waitForAPIcall = (operationName) => {
   cy.wait(`@${operationName}`);
@@ -25,7 +24,6 @@ export const clickonDashboard = () => {
 
 export const btnClickAndWait = (selector, operationName) => {
   registerApiCall(operationName, '/dev/graphql');
-  cy.wait(500)
   cy.get(selector).click();
   cy.wait(`@${operationName}`);
 };

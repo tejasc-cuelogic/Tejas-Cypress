@@ -1,4 +1,4 @@
-import { registerApiCall, btnClickAndWait, clickRadioAndNext } from '../../../../../support/common';
+import { registerApiCall, btnClickAndWait } from '../../../../../support/common';
 
 const handleFinancialInfo = () => {
   cy.get('input[name="taxFilingAs"]').check('JOINT', { force: true });

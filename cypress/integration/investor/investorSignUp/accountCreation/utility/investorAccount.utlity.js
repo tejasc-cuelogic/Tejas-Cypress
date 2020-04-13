@@ -1,4 +1,4 @@
-import { fillSignUpFormAndProceed, confirmEmailAddressScreen, confirmPhoneNumberScreen } from '../../basicSignUp/utility/basicSignup.utlity';
+import { fillSignUpFormAndProceed, confirmEmailAddressScreen } from '../../basicSignUp/utility/basicSignup.utlity';
 import { fillLegalFormAndProceed } from '../../identityVerification/utility/identityVerification.utlity';
 import { completeInvestorProfile } from '../../InvestorProfile/utlity/investorProfile.utlity';
 import { registerApiCall, clickRadioAndNext, btnClickAndWait, uploadFile, enterCodeAndConfirm } from '../../../../common.utility';
@@ -28,15 +28,16 @@ export const individualManualLinkbankProcess = () => {
   cy.wait('@manualAccount');
 };
 
-export const addFunds = (amount, doNotDeposit = true) => {
+export const addFunds = (amount) => {
+  cy.get('.dimmer-visible').should('not.be.visible')
   registerApiCall('addFunds', '/dev/graphql');
-  if (doNotDeposit) {
-    cy.get('[data-cy=no-deposit-add-funds]').click();
-  } else {
+  if (amount) {
     cy.get('form').within(() => {
       cy.get('input[name="value"]').type(amount);
       cy.get('[data-cy=deposit-add-funds]').click();
     });
+  } else {
+    cy.get('[data-cy=no-deposit-add-funds]').click();
   }
   cy.wait('@addFunds');
   cy.wait('@addFunds');
@@ -73,7 +74,7 @@ export const entityAccountCreation = () => {
     // eslint-disable-next-line default-case
     switch (text) {
       case 'Financial info':
-        cy.get('input[name="netAssets"]').type('123456789');
+        cy.get('input[name="netAssets"]').addtype('123456789');
         cy.get('input[name="annualIncome"]').type('123456789');
         btnClickAndWait('upsertInvestorAccount');
         entityAccountCreation();
@@ -117,66 +118,42 @@ export const entityAccountCreation = () => {
   });
 };
 
+const handleFinInfoIra = () => {
+  cy.get('[data-cy=netWorth]').type('123456789');
+  cy.get('[data-cy=income]').type('123456789');
+  btnClickAndWait('[data-cy=fin-info-ira-submit]', 'upsertInvestorAccount');
+}
+
+const handleSummary = () => {
+  registerApiCall('submitAccount', '/dev/graphql');
+  cy.get('[data-cy=ira-summary]').click();
+  cy.wait('@submitAccount');
+  cy.wait('@submitAccount');
+  cy.get('[data-cy=explore-campaigns]');
+}
 export const iraAccountCreation = () => {
   cy.get('.dimmer-visible').should('not.be.visible')
   registerApiCall('upsertInvestorAccount', '/dev/graphql');
-  cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
-    cy.log('step value', text);
-    // eslint-disable-next-line default-case
-    switch (text) {
-      case 'Financial info':
-        cy.get('input[name="netWorth"]').type('123456789');
-        cy.get('input[name="income"]').type('123456789');
-        btnClickAndWait('upsertInvestorAccount');
-        iraAccountCreation();
-        break;
-      case 'Account type':
-        clickRadioAndNext('input[name="iraAccountType"]', '1', 'upsertInvestorAccount');
-        iraAccountCreation();
-        break;
-      case 'Funding':
-        clickRadioAndNext('input[name="fundingType"]', '0', 'upsertInvestorAccount');
-        iraAccountCreation();
-        break;
-      case 'Link bank':
-        individualPlaidProcess('.progtrckr-doing', '2');
-        addFunds('5010');
-        iraAccountCreation();
-        break;
-      case 'Identity':
-        uploadFile('div.test > input[type="file"]', '/dev/graphql');
-        cy.wait('@fileUpload');
-        iraAccountCreation();
-        break;
-      case 'Summary':
-        registerApiCall('submitAccount', '/dev/graphql');
-        cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
-        cy.wait('@submitAccount');
-        cy.wait('@submitAccount');
-        cy.get('.modal').then(($el) => {
-          const element = cy.wrap($el);
-          element.get('button.button').contains('Continue').click({ force: true });
-        });
-        break;
-    }
-  });
+  handleFinInfoIra();
+  btnClickAndWait('[data-cy=1]', 'upsertInvestorAccount');
+  btnClickAndWait('[data-cy=0]', 'upsertInvestorAccount');
+  individualPlaidProcess('2');
+  addFunds('5010');
+  cy.get('.dimmer-visible').should('not.be.visible')
+  cy.uploadFile('input[type="file"]', '/dev/graphql');
+  handleSummary();
 };
 
 export const entityFormationDocStep = () => {
-  cy.get('.dimmer-visible').should('not.be.visible')
-  uploadFile('input[name="formationDoc"]', '/dev/graphql');
-  cy.get('.dimmer-visible').should('not.be.visible')
-  uploadFile('input[name="operatingAgreementDoc"]', '/dev/graphql');
-  cy.get('.dimmer-visible').should('not.be.visible')
-  uploadFile('input[name="einVerificationDoc"]', '/dev/graphql');
-  cy.get('.dimmer-visible').should('not.be.visible')
-  btnClickAndWait('upsertInvestorAccount');
-  registerApiCall('upsertInvestorAccount');
+  ['formationDoc', 'operatingAgreementDoc', 'einVerificationDoc'].forEach(inpName => {
+    cy.get('.dimmer-visible').should('not.be.visible')
+    uploadFile(`input[name="${inpName}"]`, '/dev/graphql');
+  })
+  btnClickAndWait('[data-cy=formation-doc]', 'upsertInvestorAccount');
 }
 
 
 export const individualPlaidProcess = (count) => {
-  cy.get('[data-cy=0]').click()
   cy.get('.dimmer-visible').should('not.be.visible')
   cy.get('.bank-link:first').click({ force: true });
   cy.wait(5000);
