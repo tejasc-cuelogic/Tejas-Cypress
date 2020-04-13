@@ -6,8 +6,8 @@ import NSImage from '../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const highlights = {
-  title: 'The Nextseed Group',
-  description: <>Since 2015, the NextSeed Group has been at the forefront of rapidly changing financial markets to connect community and capital in diverse and meaningful ways. A pioneer in
+  title: 'The NextSeed Group',
+  description: <>Since 2015, The NextSeed Group has been at the forefront of rapidly changing financial markets to connect community and capital in diverse and meaningful ways. A pioneer in
   investment crowdfunding, NextSeed has evolved into a technology-driven investment banking practice offering place-based investment opportunities that align with its mission to build
   community through financial markets. In late 2019, we combined with Collaboration Capital, a family-focused wealth management and asset management investment firm built around ESG
   (Environmental, Social, and Governance) investing. The NextSeed Group now offers leading edge investment banking and investment management services for retail and institutional clients.
@@ -59,7 +59,7 @@ export default class Group extends Component {
     return (
       <>
         <Container>
-          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+          <section className={responsiveVars.uptoTablet ? 'pt-50' : 'pt-100'}>
             <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30'}>
               {highlights.title}
             </Header>
@@ -99,7 +99,8 @@ export default class Group extends Component {
                           <div>
                             <NSImage path={i.logo} />
                             <p className="mb-30 mt-30">{i.description}</p>
-                            {i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>}
+                            <NSImage path={i.image} fluid />
+                            {i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted fluid color="green" className="mt-30">Learn More</Button></a>}
                           </div>
                         )
                         : <NSImage path={i.image} fluid />
@@ -107,14 +108,13 @@ export default class Group extends Component {
                     </Grid.Column>
                     <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
                     {!isMobile
-                        ? (
+                        && (
                           <div>
                             <NSImage path={i.logo} />
                             <p className="mb-30 mt-30">{i.description}</p>
                             {i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>}
                           </div>
                         )
-                        : <NSImage path={i.image} fluid />
                       }
                     </Grid.Column>
                   </Grid>

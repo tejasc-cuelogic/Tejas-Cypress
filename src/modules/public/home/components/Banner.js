@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Header, Container, Button, Dimmer, Loader, Grid } from 'semantic-ui-react';
+import { Header, Container, Button, Dimmer, Loader, Grid, Icon } from 'semantic-ui-react';
 
 const highlights = {
   title: <>Invest in Small Businesses.<br /></>,
@@ -12,6 +12,29 @@ const highlights = {
   We believe that now, more than ever, it is important to foster meaningful investments in businesses that need community
   capital to grow. <br /><br />Create a free NextSeed Investor Account to begin exploring community-building alternative investment opportunities.</p>,
 };
+
+const bannerButtonsMeta = [
+  {
+    label: 'Raise additional working capital with a Community Bridge Note',
+    description: 'The NextSeed Community Bridge Note (CBN) is a special financing product providing an alternative and efficient way to raise flexible, lower cost, lower fee financing.',
+    link: '/business-application/business',
+    note: <><a href="/">Stay up to date</a> on all the business relief programs available to small businesses impacted by COVID-19</>,
+    forInvestors: false,
+  },
+  {
+    label: 'Invest in local businesses',
+    description: 'By investing in small businesses, investors can participate in the recovery of establishments and companies that they care about.',
+    link: '/register-investor',
+    note: <><a href="/">Sign up for our newsletter</a> to be nofitied when our new CBN product is open for investment.</>,
+    forInvestors: true,
+  },
+  {
+    label: 'Donate to the LIFE Fund',
+    description: 'Make a tax-deductible donation to the Local Impact + Food Entrepreneurs (LIFE) Fund, supporting restaurants and delivering meals to front line healthcare workers.',
+    link: 'https://charity.gofundme.com/o/en/campaign/life-fund',
+    forInvestors: true,
+  },
+];
 
 @inject('navStore', 'userDetailsStore', 'authStore', 'userStore', 'uiStore')
 @observer
@@ -51,7 +74,26 @@ class Banner extends Component {
                 }
               </Grid.Column>
               <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                Testing
+                {
+                  bannerButtonsMeta.map(i => (
+                  <>
+                    <h3>{i.forInvestor ? 'Are you a business owner?' : 'Are you an investor?'}</h3>
+                    <Button
+                      basic
+                      fluid
+                      labelPosition="left"
+                      className="arrow-button"
+                      as={Link}
+                    >
+                      <div className="details">
+                        <Header as="h5" className="mb-0">{i.label}</Header>
+                        {i.description}
+                      </div>
+                      <Icon className="ns-chevron-right" color="grey" />
+                    </Button>
+                  </>
+                  ))
+                }
               </Grid.Column>
             </Grid>
           </section>

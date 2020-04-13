@@ -719,7 +719,7 @@ export const PUBLIC_NAV = [
       // { title: 'Careers', to: 'about/careers' },
       { title: 'Insights', to: 'insights' },
       { title: 'NextSeed Space', to: 'space' },
-      { title: 'NextSeed Group', to: 'group' },
+      { title: 'The NextSeed Group', to: 'group' },
     ],
   },
   // {
