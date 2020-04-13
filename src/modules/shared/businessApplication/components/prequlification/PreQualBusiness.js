@@ -16,6 +16,7 @@ export default class PreQualBusiness extends Component {
       businessAppEleMaskChange,
       getBusinessTypeCondtion, currentApplicationType,
       preQualFormDisabled,
+      getBusinessApplicationGoal,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_APP_FRM;
     const { hideFields } = this.props;
@@ -67,14 +68,21 @@ export default class PreQualBusiness extends Component {
           </div>
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields} header="What would best describe your company's phase of development?*">
-          <FormRadioGroup
-            disabled={preQualFormDisabled}
-            fielddata={fields.businessGoal}
-            name="businessGoal"
-            changed={businessAppEleChange}
-            iconic
-            containerclassname="iconic-radio"
-          />
+          {getBusinessApplicationGoal
+          ? (
+            <FormRadioGroup
+              disabled={preQualFormDisabled}
+              fielddata={fields.businessGoal}
+              name="businessGoal"
+              changed={businessAppEleChange}
+              iconic
+              containerclassname="iconic-radio"
+            />
+          )
+          : (
+          <p>new</p>
+          )
+          }
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields} header="Experience">
           <Grid>
