@@ -7,8 +7,10 @@ export const registerApiCall = (operationName, url = '**/**') => {
 }
 
 export const uploadFile = (selector, url = '**/**') => {
+  registerApiCall('fileUpload', url);
   cy.fixture('images/test-img.png').as('img');
-  cy.upload_file('images/test-img.png', 'png', selector, url);
+  cy.upload_file('images/test-img.png', 'png', selector);
+  cy.wait('@fileUpload');
 }
 
 export const clickonDashboard = () => {
@@ -43,6 +45,7 @@ export const clickRadioAndNext = (selector, radioVal, operationName) => {
 };
 
 export const btnClickAndWait = (selector, operationName) => {
+  cy.get('.dimmer-visible').should('not.be.visible')
   registerApiCall(operationName, '/dev/graphql');
   cy.get(selector).click();
   cy.wait(`@${operationName}`);

@@ -5,7 +5,6 @@ import { registerApiCall, clickRadioAndNext, btnClickAndWait, uploadFile, enterC
 
 export const investorFlowProcess = () => {
   cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-  cy.applicationUnlock();
   fillSignUpFormAndProceed();
   enterCodeAndConfirm('confirmEmail', '**/graphql');
   confirmEmailAddressScreen();
@@ -140,7 +139,7 @@ export const iraAccountCreation = () => {
   individualPlaidProcess('2');
   addFunds('5010');
   cy.get('.dimmer-visible').should('not.be.visible')
-  cy.uploadFile('input[type="file"]', '/dev/graphql');
+  cy.uploadFile('input[name="identityDoc"]', '/dev/graphql');
   handleSummary();
 };
 

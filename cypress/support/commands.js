@@ -61,26 +61,30 @@ function hexStringToByte(str) {
   return new Uint8Array(a);
 }
 
-Cypress.Commands.add('uploadFile', (selector, url = '**/**', fileName = 'images/test-img.png' , fileType = 'png') => {
+Cypress.Commands.add('uploadFile', (selector, url = '**/**', fileName = 'images/test-img.png', fileType = '') => {
   cy.server();
   cy.route('POST', url).as('fileUpload');
-  cy.fixture(fileName).as('img');
-  cy.upload_file(fileName, fileType, selector);
-  cy.wait('@fileUpload');
+  cy.upload_file(fileName, fileType, selector).then(() => {
+    cy.wait('@fileUpload');
+  })
 });
 
-Cypress.Commands.add('upload_file', (fileName, fileType, selector) => {
+Cypress.Commands.add('upload_file', (fileName, fileType = '', selector) => {
   cy.get(selector).then((subject) => {
+    cy.log('subject=>', subject)
     cy.fixture(fileName, 'hex').then((fileHex) => {
+      cy.log('fileHex=>', fileHex)
       const fileBytes = hexStringToByte(fileHex);
       const testFile = new File([fileBytes], fileName, {
         type: fileType,
       });
+
       const dataTransfer = new DataTransfer();
       const el = subject[0];
 
       dataTransfer.items.add(testFile);
       el.files = dataTransfer.files;
+      el.dispatchEvent(new Event('change', { bubbles: true }))
     });
   });
 });
@@ -103,7 +107,7 @@ Cypress.Commands.add('login', amplifyLogin);
 
 Cypress.Commands.add('applicationUnlock', () => {
   cy.get('input[name="password"]').type(Cypress.env('appPassword'));
-    cy.get('div.content').get('button.button').contains('Log in').click({ force: true });
+  cy.get('div.content').get('button.button').contains('Log in').click({ force: true });
 });
 
 Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
@@ -185,7 +189,7 @@ Cypress.Commands.add('clearLocalStorageKey', (KEY_NAME) => {
   localStorage.removeItem(KEY_NAME);
 });
 
-Cypress.Commands.add('addWindowLocalStorageKey', (KEY_NAME, VALUE= false) => {
+Cypress.Commands.add('addWindowLocalStorageKey', (KEY_NAME, VALUE = false) => {
   window.localStorage.setItem(KEY_NAME, VALUE);
 });
 
@@ -216,7 +220,7 @@ Cypress.Commands.add('cleanUpUser', () => {
   })
 });
 
-Cypress.Commands.add('deleteUser', (userType='Investor') => {
+Cypress.Commands.add('deleteUser', (userType = 'Investor') => {
   const investorEmail = window.localStorage.getItem('investorEmail');
   console.log('investorEmail====', investorEmail);
   cy.Logout();

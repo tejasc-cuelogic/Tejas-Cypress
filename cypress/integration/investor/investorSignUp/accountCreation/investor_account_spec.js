@@ -33,7 +33,7 @@ describe('Account Creation', () => {
     individualPlaidProcess('1');
   });
 
-  it.skip('should successfully link bank with manual process', () => {
+  it('should successfully link bank with manual process', () => {
     individualManualLinkbankProcess();
   });
 

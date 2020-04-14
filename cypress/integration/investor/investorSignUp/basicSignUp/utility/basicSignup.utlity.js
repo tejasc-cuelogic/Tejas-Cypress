@@ -7,14 +7,10 @@ export const goToSignUpScreen = () => {
 };
 
 export const FillSignUpForm = () => {
-  cy.fixture('investor/signUp.json').then((SignUpMeta) => {
-    cy.get('form').within(() => {
-      const investorEmail = `test${Math.floor(((Math.random() + Math.random()) * 1000000) + 1)}@nextseed.com`;
-      window.localStorage.setItem('investorEmail', investorEmail);
-      cy.get('input[name="email"]').type(investorEmail);
-      cy.get('input[name="password"]').type(SignUpMeta.password);
-    });
-  });
+  const investorEmail = `test${Math.floor(((Math.random() + Math.random()) * 1000000) + 1)}@nextseed.com`;
+  window.localStorage.setItem('investorEmail', investorEmail);
+  cy.get('input[name="email"]').type(investorEmail);
+  cy.get('input[name="password"]').type(Cypress.env('commonPassword'));
 };
 
 export const fillSignUpFormAndProceed = () => {
