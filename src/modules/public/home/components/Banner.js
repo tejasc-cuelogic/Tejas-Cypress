@@ -25,7 +25,7 @@ const bannerButtonsMeta = [
     label: 'Invest in local businesses',
     description: 'By investing in small businesses, investors can participate in the recovery of establishments and companies that they care about.',
     link: '/register-investor',
-    note: <><a href="/">Sign up for our newsletter</a> to be nofitied when our new CBN product is open for investment.</>,
+    note: <><a href="/">Sign up for our newsletter</a> to be notified when our new CBN product is open for investment.</>,
     showInvestor: true,
   },
   {
@@ -49,7 +49,7 @@ class Banner extends Component {
     const { responsiveVars } = this.props.uiStore;
 
     return (
-      <section className="mt-50 banner">
+      <section className={responsiveVars.uptoTablet ? 'pt-50' : 'pt-100'}>
         <Container>
             <Grid>
               <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
