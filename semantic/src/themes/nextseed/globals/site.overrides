@@ -191,6 +191,9 @@ h6{
 .pt-50{
 	padding-top:50px !important;
 }
+.pt-70{
+	padding-top:70px !important;
+}
 .pt-100{
 	padding-top: 100px !important;
 }
@@ -211,6 +214,9 @@ h6{
 }
 .pb-50{
 	padding-bottom: @50px !important;
+}
+.pb-70{
+	padding-bottom: @70px !important;
 }
 .pb-100{
 	padding-bottom: 100px !important;
@@ -3388,5 +3394,59 @@ h3.ui.header.error-2{
 		height: @18px;
 		min-height: auto;
 		line-height: .75;
+	}
+}
+
+/* Homepage covide banner */
+.banner-wrapper{
+	.ui.grid .column{
+		@media only screen and (max-width : @largestMobileScreen){
+			padding-left: @15px !important;
+			padding-right: @15px !important;
+		}
+		@media only screen and (min-width : @tabletBreakpoint) and (max-width: 1366px){
+			padding-left: 100px !important;
+			padding-right: 100px !important;
+		}
+		@media only screen and (min-width : 1367px){
+			padding-left: 180px !important;
+			padding-right: 180px !important;
+		}
+		&.banner-section{
+			position: relative;
+			background: #e7f5f1;
+			@media only screen and (min-width : @tabletBreakpoint) and (max-width: @largestTabletScreen){
+				padding-left: 100px !important;
+				padding-right: 100px !important;
+			}
+			@media only screen and (min-width : @computerBreakpoint) and (max-width: 1366px){
+				padding-left: 60px !important;
+				padding-right: 60px !important;
+			}
+			@media only screen and (min-width : 1367px){
+				padding-left: 105px !important;
+				padding-right: 105px !important;
+			}
+			&:before{
+				content: '';
+				width: 40px;
+				height: 40px;
+				position: absolute;
+				left: 0px;
+				top: 50%;
+				margin-left: -20px;
+				margin-top: -20px;
+				transform: rotate(45deg);
+				background: #e7f5f1;
+				@media only screen and (max-width : @largestTabletScreen){
+					left: 50%;
+					top: 0;
+				}
+			}
+		}
+	}
+	.details{
+		font-size: @13px;
+		line-height: 20px;
 	}
 }

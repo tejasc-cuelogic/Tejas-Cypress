@@ -314,8 +314,10 @@ export const BUSINESS_PRE_QUALIFICATION = {
   businessGoal: {
     value: '',
     values: [
-      { label: <span>Fund New Business <br /> (&lt;12 months of operations) </span>, icon: 'ns-new-business', value: BUSINESS_GOAL.BRAND_NEW },
-      { label: <span>Expand/Upgrade Existing Business <br /> (over 12 months of operations) </span>, icon: 'ns-expand-business', value: BUSINESS_GOAL.UPGRADE },
+      { label: <span>Pre-launch or<br />Pre-opening</span>, icon: 'ns-seed-icon', value: BUSINESS_GOAL.BRAND_NEW },
+      { label: <span>Brand new business<br />(&lt;90 days)</span>, icon: 'ns-sprout-icon', value: BUSINESS_GOAL.UPGRADE },
+      { label: <span>First year<br />of operations</span>, icon: 'ns-shrub-icon', value: BUSINESS_GOAL.BRAND_NEW },
+      { label: <span>Over one year in business</span>, icon: 'ns-tree-icon', value: BUSINESS_GOAL.UPGRADE },
     ],
     error: undefined,
     rule: 'required',
