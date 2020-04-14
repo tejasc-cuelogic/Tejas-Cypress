@@ -694,7 +694,8 @@ export class BusinessAppStore {
 
   @computed get getBusinessTypeCondtion() {
     return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value
-      && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.FRANCHISE
+      && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.PRE_LAUNCH
+      && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.NEW_BUSINESS
       && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW);
   }
 
