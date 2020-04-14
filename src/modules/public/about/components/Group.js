@@ -86,11 +86,9 @@ export default class Group extends Component {
                   </Grid.Column>
                   <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
                     <NSImage path={i.image} fluid />
-                    {i.link && isMobile
-                      ? (
+                    {i.link && (isMobile || isTablet)
+                      && (
                         <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted fluid={isMobile} color="green" className="mt-30">Learn More</Button></a>
-                      ) : (
-                        i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mt-30">Learn More</Button></a>
                       )
                     }
                   </Grid.Column>
