@@ -1473,15 +1473,6 @@ export class BusinessAppStore {
     this.BUSINESS_APP_FRM_BASIC.fields.email.error = error;
   }
 
-  @computed get getBusinessApplicationGoal() {
-    let prevBusinessGoal = false;
-    if (this.businessApplicationDetailsAdmin
-      && (this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'BRAND_NEW' || this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'UPGRADE')) {
-      prevBusinessGoal = true;
-    }
-    return prevBusinessGoal;
-  }
-
   orderedBusinessList = (businessDetailsList) => {
     let businessInprogress = [];
     let businessPending = [];
