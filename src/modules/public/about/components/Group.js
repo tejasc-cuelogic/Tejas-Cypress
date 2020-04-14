@@ -31,6 +31,7 @@ const nsGroup = [
       <br /><br />We seek to invest in impactful and traditionally underserved enterprises such as women- and minority-owned businesses and veteran-run management teams. Our inaugural fund aspires to serve the capital needs of small businesses recovering from the COVID-19 recession.</>,
     logo: 'group/ns-capital-logo.png',
     image: 'group/ns-capital.jpg',
+    disclosure: 'NextSeed Capital and NextSeed Special Situations Local Business Fund have not yet been registered and the fund terms not yet finalized. Final terms and documents will be made available to qualified investors only once finalized and registered, as applicable.',
   },
   {
     title: 'Collaboration Capital',
@@ -85,8 +86,13 @@ export default class Group extends Component {
                   </Grid.Column>
                   <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
                     <NSImage path={i.image} fluid />
-                    {i.link && isMobile && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button fluid inverted color="green" className="mt-30">Learn More</Button></a>}
-                    {i.link && isTablet && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mt-30">Learn More</Button></a>}
+                    {i.link && isMobile
+                      ? (
+                        <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted fluid={isMobile} color="green" className="mt-30">Learn More</Button></a>
+                      ) : (
+                        i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mt-30">Learn More</Button></a>
+                      )
+                    }
                   </Grid.Column>
                 </Grid>
               </Container>
@@ -102,8 +108,14 @@ export default class Group extends Component {
                             <NSImage path={i.logo} />
                             <p className="mb-30 mt-30">{i.description}</p>
                             <NSImage path={i.image} fluid />
-                            {i.link && isMobile && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted fluid color="green" className="mt-30">Learn More</Button></a>}
-                            {i.link && isTablet && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mt-30">Learn More</Button></a>}
+                            <p className="note mt-30">{i.disclosure}</p>
+                            {i.link && isMobile
+                              ? (
+                                <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted fluid={isMobile} color="green" className="mt-30">Learn More</Button></a>
+                              ) : (
+                                i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mt-30">Learn More</Button></a>
+                              )
+                            }
                           </div>
                         )
                         : <NSImage path={i.image} fluid />
@@ -115,6 +127,7 @@ export default class Group extends Component {
                           <div>
                             <NSImage path={i.logo} />
                             <p className="mb-30 mt-30">{i.description}</p>
+                            <p className="note">{i.disclosure}</p>
                             {i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>}
                           </div>
                         )
