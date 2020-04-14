@@ -31,7 +31,7 @@ const bannerButtonsMeta = [
   {
     label: 'Donate to the LIFE Fund',
     description: 'Make a tax-deductible donation to the Local Impact + Food Entrepreneurs (LIFE) Fund, supporting restaurants and delivering meals to front line healthcare workers.',
-    link: '/nextseed.link/life-fund ',
+    link: 'https://nextseed.link/life-fund ',
   },
 ];
 
@@ -91,7 +91,7 @@ class Banner extends Component {
                       </div>
                       <Icon className="ns-chevron-right" color="grey" />
                     </Button>
-                    {i.note && <p className="details pt-10" style={{ fontSize: '13px' }}>{i.note}</p>}
+                    {i.note && <p className="details pt-10">{i.note}</p>}
                   </>
                   ))
                 }
