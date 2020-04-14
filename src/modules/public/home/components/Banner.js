@@ -75,13 +75,13 @@ class Banner extends Component {
                 {
                   bannerButtonsMeta.map(i => (
                   <>
-                  {i.showInvestor && <h3>Are you an investor?</h3>}
-                  {i.showBusiness && <h3>Are you a business owner?</h3>}
+                  {i.showInvestor && <h3><b>Are you an investor?</b></h3>}
+                  {i.showBusiness && <h3><b>Are you a business owner?</b></h3>}
                     <Button
                       basic
                       fluid
                       labelPosition="left"
-                      className="arrow-button bg-offwhite"
+                      className="arrow-button"
                       as={Link}
                     >
                       <div className="details">
@@ -90,7 +90,7 @@ class Banner extends Component {
                       </div>
                       <Icon className="ns-chevron-right" color="grey" />
                     </Button>
-                    {i.note && <p className="details" style={{ fontSize: '13px' }}>{i.note}</p>}
+                    {i.note && <p className="details pt-10" style={{ fontSize: '13px' }}>{i.note}</p>}
                   </>
                   ))
                 }
