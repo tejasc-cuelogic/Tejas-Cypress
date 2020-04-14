@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Header, Container, Button, Dimmer, Loader, Grid, Icon } from 'semantic-ui-react';
+import { Header, Button, Grid, Icon } from 'semantic-ui-react';
 
 const highlights = {
   title: <>Invest in Small Businesses.<br /></>,
@@ -15,7 +15,7 @@ const highlights = {
 
 const bannerButtonsMeta = [
   {
-  label: <><a style={{ pointerEvents: 'none' }} color="green">New! {' '}</a>Raise additional working capital with a Community Bridge Note</>,
+    label: <><a style={{ pointerEvents: 'none' }} color="green">New! {' '}</a>Raise additional working capital with a Community Bridge Note</>,
     description: 'The NextSeed Community Bridge Note (CBN) is a special financing product providing an alternative and efficient way to raise flexible, lower cost, lower fee financing.',
     link: '/insights/community-bridge-notes ',
     note: <><a href="https://www.nextseed.com/insights/businesses-affected-by-coronavirus">Stay up to date</a> on all the business relief programs available to small businesses impacted by COVID-19.</>,
@@ -49,39 +49,38 @@ class Banner extends Component {
     const { responsiveVars } = this.props.uiStore;
 
     return (
-      <section className={responsiveVars.uptoTablet ? 'pt-50' : 'pt-100'}>
-        <Container>
-            <Grid>
-              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                <Header as="h2">
-                  {highlights.title}
-                  {highlights.subTitle}
-                </Header>
-                {highlights.description}
-                { showButton
-                  ? (
-                    <Button
-                      className={`${responsiveVars.isMobile && 'mb-50'} relaxed`}
-                      primary
-                      content="Get Started"
-                      as={Link}
-                      to={redirectUrl}
-                      fluid={responsiveVars.isMobile}
-                    />
-                  ) : ''
-                }
-              </Grid.Column>
-              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} style={{ background: '#E7F5F1' }}>
-                {
-                  bannerButtonsMeta.map(i => (
+      <>
+        <div className="bg-offwhite banner-wrapper">
+          <Grid className="mlr-0">
+            <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+              <Header as={responsiveVars.isTabletLand ? 'h3' : 'h2'}>
+                {highlights.title}
+                {highlights.subTitle}
+              </Header>
+              {highlights.description}
+              {showButton
+                ? (
+                  <Button
+                    primary
+                    content="Get Started"
+                    as={Link}
+                    to={redirectUrl}
+                    fluid={responsiveVars.isMobile}
+                  />
+                ) : ''
+              }
+            </Grid.Column>
+            <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-70 pb-70'} banner-section`}>
+              {
+                bannerButtonsMeta.map(i => (
                   <>
-                  {i.showInvestor && <h3>Are you an investor?</h3>}
-                  {i.showBusiness && <h3>Are you a business owner?</h3>}
+                    {i.showInvestor && <Header as="h4" className="mb-20">Are you an investor?</Header>}
+                    {i.showBusiness && <Header as="h4" className="mb-20">Are you a business owner?</Header>}
                     <Button
                       basic
                       fluid
                       labelPosition="left"
-                      className="arrow-button bg-offwhite"
+                      className="arrow-button bg-white"
                       as={Link}
                       to={i.link}
                     >
@@ -91,19 +90,14 @@ class Banner extends Component {
                       </div>
                       <Icon className="ns-chevron-right" color="grey" />
                     </Button>
-                    {i.note && <p className="details" style={{ fontSize: '13px' }}>{i.note}</p>}
+                    {i.note && <p className="details mt-20">{i.note}</p>}
                   </>
-                  ))
-                }
-              </Grid.Column>
-            </Grid>
-        </Container>
-        {this.props.withDimmer && (
-          <Dimmer active className="fullscreen">
-            <Loader active>Loading..</Loader>
-          </Dimmer>
-        )}
-      </section>
+                ))
+              }
+            </Grid.Column>
+          </Grid>
+        </div>
+      </>
     );
   }
 }
