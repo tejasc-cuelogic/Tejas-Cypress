@@ -5,9 +5,10 @@ import { Header, Grid, Container, Button } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 780;
 const highlights = {
-  title: 'The Nextseed Group',
-  description: <>Since 2015, the NextSeed Group has been at the forefront of rapidly changing financial markets to connect community and capital in diverse and meaningful ways. A pioneer in
+  title: 'The NextSeed Group',
+  description: <>Since 2015, The NextSeed Group has been at the forefront of rapidly changing financial markets to connect community and capital in diverse and meaningful ways. A pioneer in
   investment crowdfunding, NextSeed has evolved into a technology-driven investment banking practice offering place-based investment opportunities that align with its mission to build
   community through financial markets. In late 2019, we combined with Collaboration Capital, a family-focused wealth management and asset management investment firm built around ESG
   (Environmental, Social, and Governance) investing. The NextSeed Group now offers leading edge investment banking and investment management services for retail and institutional clients.
@@ -30,6 +31,7 @@ const nsGroup = [
       <br /><br />We seek to invest in impactful and traditionally underserved enterprises such as women- and minority-owned businesses and veteran-run management teams. Our inaugural fund aspires to serve the capital needs of small businesses recovering from the COVID-19 recession.</>,
     logo: 'group/ns-capital-logo.png',
     image: 'group/ns-capital.jpg',
+    disclosure: 'NextSeed Capital and NextSeed Special Situations Local Business Fund have not yet been registered and the fund terms not yet finalized. Final terms and documents will be made available to qualified investors only once finalized and registered, as applicable.',
   },
   {
     title: 'Collaboration Capital',
@@ -59,7 +61,7 @@ export default class Group extends Component {
     return (
       <>
         <Container>
-          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+          <section className={responsiveVars.uptoTablet ? 'pt-50' : 'pt-100'}>
             <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30'}>
               {highlights.title}
             </Header>
@@ -75,7 +77,7 @@ export default class Group extends Component {
                     <div>
                       <NSImage path={i.logo} />
                       <p className="mb-30 mt-30">{i.description}</p>
-                      {i.link && !isMobile
+                      {i.link && !isMobile && !isTablet
                         && (
                           <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>
                         )
@@ -84,7 +86,13 @@ export default class Group extends Component {
                   </Grid.Column>
                   <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
                     <NSImage path={i.image} fluid />
-                    {isMobile && i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button fluid inverted color="green" className="mt-30">Learn More</Button></a>}
+                    {i.link && isMobile
+                      ? (
+                        <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted fluid={isMobile} color="green" className="mt-30">Learn More</Button></a>
+                      ) : (
+                        i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mt-30">Learn More</Button></a>
+                      )
+                    }
                   </Grid.Column>
                 </Grid>
               </Container>
@@ -94,27 +102,35 @@ export default class Group extends Component {
                 <Container>
                   <Grid>
                     <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                      {isMobile
+                      {isMobile || isTablet
                         ? (
                           <div>
                             <NSImage path={i.logo} />
                             <p className="mb-30 mt-30">{i.description}</p>
-                            {i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>}
+                            <NSImage path={i.image} fluid />
+                            <p className="note mt-30">{i.disclosure}</p>
+                            {i.link && isMobile
+                              ? (
+                                <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted fluid={isMobile} color="green" className="mt-30">Learn More</Button></a>
+                              ) : (
+                                i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mt-30">Learn More</Button></a>
+                              )
+                            }
                           </div>
                         )
                         : <NSImage path={i.image} fluid />
                       }
                     </Grid.Column>
                     <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
-                    {!isMobile
-                        ? (
+                    {!isMobile && !isTablet
+                        && (
                           <div>
                             <NSImage path={i.logo} />
                             <p className="mb-30 mt-30">{i.description}</p>
+                            <p className="note">{i.disclosure}</p>
                             {i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>}
                           </div>
                         )
-                        : <NSImage path={i.image} fluid />
                       }
                     </Grid.Column>
                   </Grid>
