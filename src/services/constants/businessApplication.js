@@ -321,7 +321,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: <span>Pre-launch or Pre-opening</span>, icon: 'ns-seed-icon', value: BUSINESS_GOAL.PRE_LAUNCH },
       { label: <span>Brand new business <br /> (&lt;90 days)</span>, icon: 'ns-sprout-icon', value: BUSINESS_GOAL.NEW_BUSINESS },
       { label: <span>First year of operations </span>, icon: 'ns-shrub-icon', value: BUSINESS_GOAL.FIRST_YEAR },
-      { label: <span>Over one year in business</span>, icon: 'ns-off-shoot-business', value: BUSINESS_GOAL.ESTABLISHED },
+      { label: <span>Over one year in business</span>, icon: 'ns-tree-icon', value: BUSINESS_GOAL.ESTABLISHED },
     ],
     error: undefined,
     rule: 'required',
