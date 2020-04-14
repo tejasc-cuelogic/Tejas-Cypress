@@ -10,6 +10,13 @@ import EntityAndLegal from './EntityAndLegal';
 @inject('businessAppStore')
 @observer
 export default class PreQualBusiness extends Component {
+  // filterBusinessGoals = (getBusinessApplicationGoal) => {
+  //   const { fields } = this.props.businessAppStore.BUSINESS_APP_FRM;
+  //   const goals = [];
+  //   if(getBusinessApplicationGoal) {
+  //     goals = fields.businessGoal.values.filter(value => value === 'BRAND_NEW' || value === 'UPGRADE')
+  //   }
+  // }
   render() {
     const {
       BUSINESS_APP_FRM, businessAppEleChange, setAddressFields,
@@ -68,27 +75,14 @@ export default class PreQualBusiness extends Component {
           </div>
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields} header="What would best describe your company's phase of development?*">
-          {preQualFormDisabled && getBusinessApplicationGoal
-          ? (
-            <FormRadioGroup
-              disabled={preQualFormDisabled}
-              fielddata={fields.businessGoal}
-              name="businessGoal"
-              changed={businessAppEleChange}
-              iconic
-              containerclassname="iconic-radio"
-            />
-          )
-          : (
-            <FormRadioGroup
-              disabled={preQualFormDisabled}
-              fielddata={fields.businessGoal}
-              name="businessGoal"
-              changed={businessAppEleChange}
-              iconic
-              containerclassname="iconic-radio"
-            />
-          )}
+          <FormRadioGroup
+            disabled={preQualFormDisabled}
+            fielddata={fields.businessGoal}
+            name="businessGoal"
+            changed={businessAppEleChange}
+            iconic
+            containerclassname="iconic-radio"
+          />
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields} header="Experience">
           <Grid>
