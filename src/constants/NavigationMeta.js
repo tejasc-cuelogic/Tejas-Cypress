@@ -784,6 +784,7 @@ export const MOBILE_NAV = [
   { title: 'Who We Are', to: 'about' },
   { title: 'Insights', to: 'insights' },
   { title: 'NextSeed Space', to: 'space' },
+  { title: 'The NextSeed Group', to: 'group' },
 ];
 
 export const FOOTER_NAV = [

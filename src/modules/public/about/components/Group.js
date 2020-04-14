@@ -5,6 +5,7 @@ import { Header, Grid, Container, Button } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 780;
 const highlights = {
   title: 'The NextSeed Group',
   description: <>Since 2015, The NextSeed Group has been at the forefront of rapidly changing financial markets to connect community and capital in diverse and meaningful ways. A pioneer in
@@ -75,7 +76,7 @@ export default class Group extends Component {
                     <div>
                       <NSImage path={i.logo} />
                       <p className="mb-30 mt-30">{i.description}</p>
-                      {i.link && !isMobile
+                      {i.link && !isMobile && !isTablet
                         && (
                           <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Learn More</Button></a>
                         )
@@ -84,7 +85,8 @@ export default class Group extends Component {
                   </Grid.Column>
                   <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
                     <NSImage path={i.image} fluid />
-                    {isMobile && i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button fluid inverted color="green" className="mt-30">Learn More</Button></a>}
+                    {i.link && isMobile && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button fluid inverted color="green" className="mt-30">Learn More</Button></a>}
+                    {i.link && isTablet && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mt-30">Learn More</Button></a>}
                   </Grid.Column>
                 </Grid>
               </Container>
@@ -94,20 +96,21 @@ export default class Group extends Component {
                 <Container>
                   <Grid>
                     <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                      {isMobile
+                      {isMobile || isTablet
                         ? (
                           <div>
                             <NSImage path={i.logo} />
                             <p className="mb-30 mt-30">{i.description}</p>
                             <NSImage path={i.image} fluid />
-                            {i.link && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted fluid color="green" className="mt-30">Learn More</Button></a>}
+                            {i.link && isMobile && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted fluid color="green" className="mt-30">Learn More</Button></a>}
+                            {i.link && isTablet && <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mt-30">Learn More</Button></a>}
                           </div>
                         )
                         : <NSImage path={i.image} fluid />
                       }
                     </Grid.Column>
                     <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
-                    {!isMobile
+                    {!isMobile && !isTablet
                         && (
                           <div>
                             <NSImage path={i.logo} />
