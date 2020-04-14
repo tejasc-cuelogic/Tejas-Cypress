@@ -27,34 +27,32 @@ class Banner extends Component {
     const { responsiveVars } = this.props.uiStore;
 
     return (
-      <section className="banner">
+      <section className="banner bg-offwhites">
         <Container>
-          <section>
-            <Grid>
-              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                <Header as="h2">
-                  {highlights.title}
-                  {highlights.subTitle}
-                </Header>
-                {highlights.description}
-                { showButton
-                  ? (
-                    <Button
-                      className={`${responsiveVars.isMobile && 'mb-50'} relaxed`}
-                      primary
-                      content="Get Started"
-                      as={Link}
-                      to={redirectUrl}
-                      fluid={responsiveVars.isMobile}
-                    />
-                  ) : ''
-                }
-              </Grid.Column>
-              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                Testing
-              </Grid.Column>
-            </Grid>
-          </section>
+          <Grid>
+            <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16}>
+              <Header as="h2">
+                {highlights.title}
+                {highlights.subTitle}
+              </Header>
+              {highlights.description}
+              { showButton
+                ? (
+                  <Button
+                    className={`${responsiveVars.isMobile && 'mb-50'} relaxed`}
+                    primary
+                    content="Get Started"
+                    as={Link}
+                    to={redirectUrl}
+                    fluid={responsiveVars.isMobile}
+                  />
+                ) : ''
+              }
+            </Grid.Column>
+            <Grid.Column className="priamry-page-header" widescreen={8} computer={8} tablet={16} mobile={16} floated="right">
+              <Header as="h4">Are you a business owner?</Header>
+            </Grid.Column>
+          </Grid>
         </Container>
         {this.props.withDimmer && (
           <Dimmer active className="fullscreen">
