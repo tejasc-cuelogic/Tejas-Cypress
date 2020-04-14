@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Header, Container, Button, Dimmer, Loader, Grid, Icon } from 'semantic-ui-react';
@@ -15,29 +15,37 @@ const highlights = {
 
 const bannerButtonsMeta = [
   {
-  label: <><a style={{ pointerEvents: 'none' }} color="green">New! {' '}</a>Raise additional working capital with a Community Bridge Note</>,
+    label: <><a style={{ pointerEvents: 'none' }} color="green">New! {' '}</a>Raise additional working capital with a Community Bridge Note</>,
     description: 'The NextSeed Community Bridge Note (CBN) is a special financing product providing an alternative and efficient way to raise flexible, lower cost, lower fee financing.',
-    link: '/insights/community-bridge-notes ',
-    note: <><a href="https://www.nextseed.com/insights/businesses-affected-by-coronavirus">Stay up to date</a> on all the business relief programs available to small businesses impacted by COVID-19.</>,
+    link: '/insights/community-bridge-notes',
+    // eslint-disable-next-line react/jsx-no-target-blank
+    note: <><a href="https://www.nextseed.com/insights/businesses-affected-by-coronavirus" target="_blank">Stay up to date</a> on all the business relief programs available to small businesses impacted by COVID-19.</>,
     showBusiness: true,
   },
   {
     label: 'Invest in local businesses',
     description: 'By investing in small businesses, investors can participate in the recovery of establishments and companies that they care about.',
     link: '/offerings',
-    note: <><a href="/">Sign up for our newsletter</a> to be nofitied when our new CBN product is open for investment.</>,
+    note: <><a href="#news-letter ">Sign up for our newsletter</a> to be nofitied when our new CBN product is open for investment.</>,
     showInvestor: true,
   },
   {
     label: 'Donate to the LIFE Fund',
     description: 'Make a tax-deductible donation to the Local Impact + Food Entrepreneurs (LIFE) Fund, supporting restaurants and delivering meals to front line healthcare workers.',
-    link: '/nextseed.link/life-fund ',
+    link: 'https://nextseed.link/life-fund',
+    showLifeFund: true,
   },
 ];
 
 @inject('navStore', 'userDetailsStore', 'authStore', 'userStore', 'uiStore')
+@withRouter
 @observer
 class Banner extends Component {
+  lifeFundUrl = (link) => {
+    window.open(link, '_blank');
+    this.props.history.push('/');
+  }
+
   render() {
     const { isInvestor } = this.props.userStore;
     const { isUserLoggedIn } = this.props.authStore;
@@ -51,39 +59,40 @@ class Banner extends Component {
     return (
       <section className={responsiveVars.uptoTablet ? 'pt-50' : 'pt-100'}>
         <Container>
-            <Grid>
-              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                <Header as="h2">
-                  {highlights.title}
-                  {highlights.subTitle}
-                </Header>
-                {highlights.description}
-                { showButton
-                  ? (
-                    <Button
-                      className={`${responsiveVars.isMobile && 'mb-50'} relaxed`}
-                      primary
-                      content="Get Started"
-                      as={Link}
-                      to={redirectUrl}
-                      fluid={responsiveVars.isMobile}
-                    />
-                  ) : ''
-                }
-              </Grid.Column>
-              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} style={{ background: '#E7F5F1' }}>
-                {
-                  bannerButtonsMeta.map(i => (
+          <Grid>
+            <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+              <Header as="h2">
+                {highlights.title}
+                {highlights.subTitle}
+              </Header>
+              {highlights.description}
+              {showButton
+                ? (
+                  <Button
+                    className={`${responsiveVars.isMobile && 'mb-50'} relaxed`}
+                    primary
+                    content="Get Started"
+                    as={Link}
+                    to={redirectUrl}
+                    fluid={responsiveVars.isMobile}
+                  />
+                ) : ''
+              }
+            </Grid.Column>
+            <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} style={{ background: '#E7F5F1' }}>
+              {
+                bannerButtonsMeta.map(i => (
                   <>
-                  {i.showInvestor && <h3>Are you an investor?</h3>}
-                  {i.showBusiness && <h3>Are you a business owner?</h3>}
+                    {i.showInvestor && <h3>Are you an investor?</h3>}
+                    {i.showBusiness && <h3>Are you a business owner?</h3>}
                     <Button
                       basic
                       fluid
                       labelPosition="left"
                       className="arrow-button bg-offwhite"
-                      as={Link}
-                      to={i.link}
+                      onClick={() => (
+                        i.showLifeFund ? this.lifeFundUrl(i.link) : this.props.history.push(i.link)
+                      )}
                     >
                       <div className="details">
                         <Header as="h5" className="mb-0">{i.label}</Header>
@@ -93,10 +102,10 @@ class Banner extends Component {
                     </Button>
                     {i.note && <p className="details" style={{ fontSize: '13px' }}>{i.note}</p>}
                   </>
-                  ))
-                }
-              </Grid.Column>
-            </Grid>
+                ))
+              }
+            </Grid.Column>
+          </Grid>
         </Container>
         {this.props.withDimmer && (
           <Dimmer active className="fullscreen">
