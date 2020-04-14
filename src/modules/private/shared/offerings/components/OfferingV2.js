@@ -29,7 +29,7 @@ export default class OfferingV2 extends Component {
     if (showInvestNowToc) {
       navItems.push({ title: 'Invest Now', to: 'invest-now-toc', component: 'offering/InvestNowToc' });
     }
-    navItems.push({ title: 'Launch', to: 'launch', component: 'offering/OfferingLaunch' }, { title: 'Invest Now - DocuSign Generations', to: 'invest-now-docusign-generations', component: 'offering/InvestNowDocusignGenerations' });
+    navItems.push({ title: 'Launch', to: 'launch', component: 'offering/OfferingLaunch' }, { title: 'DocuSign', to: 'invest-now-docusign-generations', component: 'offering/InvestNowDocusignGenerations' });
     if (get(offer, 'stage') === 'LIVE') {
       navItems.push({ title: 'Close', to: 'close', component: 'Close' });
     }
