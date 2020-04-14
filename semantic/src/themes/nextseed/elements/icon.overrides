@@ -2165,6 +2165,9 @@ i.icon[class*="ns-"]{
 .ns-search:before{
     content:@ns-search;
 }
+.ns-seed-icon:before {
+    content: @ns-seed-icon; 
+}
 .ns-send-right:before{
     content:@ns-send-right;
 }
@@ -2173,6 +2176,12 @@ i.icon[class*="ns-"]{
 }
 .ns-shield-check:before{
     content:@ns-shield-check;
+}
+.ns-shrub-icon:before {
+    content: @ns-shrub-icon; 
+}
+.ns-sprout-icon:before {
+    content: @ns-sprout-icon; 
 }
 .ns-star:before{
     content:@ns-star;
@@ -2206,6 +2215,9 @@ i.icon[class*="ns-"]{
 }
 .ns-trash:before{
     content:@ns-trash;
+}
+.ns-tree-icon:before {
+    content: @ns-tree-icon; 
 }
 .ns-trending:before{
     content:@ns-trending;
