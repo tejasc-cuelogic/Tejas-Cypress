@@ -3,6 +3,7 @@ import { Header, Grid, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormRadioGroup, FormCheckbox, MaskedInput } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
+import { BUSINESS_GOAL } from '../../../../../services/constants/businessApplication';
 import GeneralInformation from './GeneralInformation';
 import Experience from './Experience';
 import EntityAndLegal from './EntityAndLegal';
@@ -10,20 +11,26 @@ import EntityAndLegal from './EntityAndLegal';
 @inject('businessAppStore')
 @observer
 export default class PreQualBusiness extends Component {
-  // filterBusinessGoals = (getBusinessApplicationGoal) => {
-  //   const { fields } = this.props.businessAppStore.BUSINESS_APP_FRM;
-  //   const goals = [];
-  //   if(getBusinessApplicationGoal) {
-  //     goals = fields.businessGoal.values.filter(value => value === 'BRAND_NEW' || value === 'UPGRADE')
-  //   }
-  // }
+  filterBusinessGoals = () => {
+    const { BUSINESS_APP_FRM, getBusinessApplicationGoal } = this.props.businessAppStore;
+    const { fields } = BUSINESS_APP_FRM;
+    const buisnessArr = [BUSINESS_GOAL.BRAND_NEW, BUSINESS_GOAL.UPGRADE];
+    return {
+      ...fields.businessGoal,
+      values: fields.businessGoal.values.filter(goal => (
+        getBusinessApplicationGoal
+          ? buisnessArr.includes(goal.value)
+          : !buisnessArr.includes(goal.value)
+      )),
+    };
+  }
+
   render() {
     const {
       BUSINESS_APP_FRM, businessAppEleChange, setAddressFields,
       businessAppEleMaskChange,
       getBusinessTypeCondtion, currentApplicationType,
       preQualFormDisabled,
-      getBusinessApplicationGoal,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_APP_FRM;
     const { hideFields } = this.props;
@@ -77,7 +84,7 @@ export default class PreQualBusiness extends Component {
         <FormElementWrap hideFields={hideFields} header="What would best describe your company's phase of development?*">
           <FormRadioGroup
             disabled={preQualFormDisabled}
-            fielddata={fields.businessGoal}
+            fielddata={this.filterBusinessGoals()}
             name="businessGoal"
             changed={businessAppEleChange}
             iconic
@@ -90,27 +97,27 @@ export default class PreQualBusiness extends Component {
               <div className="field-wrap">
                 {getBusinessTypeCondtion
                   && (
-                  <>
-                    <Header as="h6" content="How long has the existing business been operating?" />
-                    <Form.Group widths="equal">
-                      {
-                        ['businessAgeYears', 'businessAgeMonths'].map(field => (
-                          <MaskedInput
-                            maxLength="2"
-                            containerclassname={preQualFormDisabled ? 'display-only' : ''}
-                            readOnly={preQualFormDisabled}
-                            key={field}
-                            name={field}
-                            asterisk="true"
-                            number
-                            value={fields[field].value}
-                            fielddata={fields[field]}
-                            changed={businessAppEleMaskChange}
-                          />
-                        ))
-                      }
-                    </Form.Group>
-                  </>
+                    <>
+                      <Header as="h6" content="How long has the existing business been operating?" />
+                      <Form.Group widths="equal">
+                        {
+                          ['businessAgeYears', 'businessAgeMonths'].map(field => (
+                            <MaskedInput
+                              maxLength="2"
+                              containerclassname={preQualFormDisabled ? 'display-only' : ''}
+                              readOnly={preQualFormDisabled}
+                              key={field}
+                              name={field}
+                              asterisk="true"
+                              number
+                              value={fields[field].value}
+                              fielddata={fields[field]}
+                              changed={businessAppEleMaskChange}
+                            />
+                          ))
+                        }
+                      </Form.Group>
+                    </>
                   )
                 }
                 <Experience
@@ -136,34 +143,34 @@ export default class PreQualBusiness extends Component {
           <Grid>
             {getBusinessTypeCondtion
               && (
-              <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
-                <Header as={hideFields ? 'h4' : 'h3'}>
-                  Previous year
+                <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
+                  <Header as={hideFields ? 'h4' : 'h3'}>
+                    Previous year
                   <Header.Subheader>
-                    For your business, give us a quick snapshot
-                    of what the prior year looked like.
+                      For your business, give us a quick snapshot
+                      of what the prior year looked like.
                   </Header.Subheader>
-                </Header>
-                <div className="field-wrap">
-                  {
-                    ['previousYearGrossSales', 'previousYearCogSold', 'previousYearOperatingExpenses', 'previousYearNetIncome'].map(field => (
-                      <MaskedInput
-                        containerclassname={preQualFormDisabled ? 'display-only' : ''}
-                        readOnly={preQualFormDisabled}
-                        key={field}
-                        name={field}
-                        asterisk="true"
-                        prefix="$ "
-                        allowNegative={field === 'previousYearNetIncome'}
-                        currency
-                        value={fields[field].value}
-                        fielddata={fields[field]}
-                        changed={businessAppEleMaskChange}
-                      />
-                    ))
-                  }
-                </div>
-              </Grid.Column>
+                  </Header>
+                  <div className="field-wrap">
+                    {
+                      ['previousYearGrossSales', 'previousYearCogSold', 'previousYearOperatingExpenses', 'previousYearNetIncome'].map(field => (
+                        <MaskedInput
+                          containerclassname={preQualFormDisabled ? 'display-only' : ''}
+                          readOnly={preQualFormDisabled}
+                          key={field}
+                          name={field}
+                          asterisk="true"
+                          prefix="$ "
+                          allowNegative={field === 'previousYearNetIncome'}
+                          currency
+                          value={fields[field].value}
+                          fielddata={fields[field]}
+                          changed={businessAppEleMaskChange}
+                        />
+                      ))
+                    }
+                  </div>
+                </Grid.Column>
               )
             }
             <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
