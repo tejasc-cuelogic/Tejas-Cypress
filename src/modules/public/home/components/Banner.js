@@ -49,7 +49,7 @@ class Banner extends Component {
     const { responsiveVars } = this.props.uiStore;
 
     return (
-      <section className="mt-50 banner">
+      <section className={responsiveVars.uptoTablet ? 'pt-50' : 'pt-100'}>
         <Container>
             <Grid>
               <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
