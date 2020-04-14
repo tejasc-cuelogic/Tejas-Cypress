@@ -26,7 +26,7 @@ const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
   { type: 'ogTag', property: 'og:type', content: 'website' },
-  { type: 'ogTag', property: 'og:title', content: 'NextSeed | Build an Investment Portfolio With Local Businesses' },
+  { type: 'ogTag', property: 'og:title', content: 'NextSeed | Invest In Small Businesses' },
   { type: 'ogTag', property: 'og:description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:url', content: window.location.href },
   { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },

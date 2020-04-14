@@ -1,10 +1,12 @@
 import React from 'react';
 
 export const BUSINESS_GOAL = {
-  UPGRADE: 'UPGRADE',
-  RESTRUCTURE: 'RESTRUCTURE',
   BRAND_NEW: 'BRAND_NEW',
-  FRANCHISE: 'FRANCHISE',
+  UPGRADE: 'UPGRADE',
+  PRE_LAUNCH: 'PRE_LAUNCH',
+  NEW_BUSINESS: 'NEW_BUSINESS',
+  FIRST_YEAR: 'FIRST_YEAR',
+  ESTABLISHED: 'ESTABLISHED',
 };
 
 export const BUSINESS_APPLICATION_STEP_STATUS = {
@@ -316,6 +318,10 @@ export const BUSINESS_PRE_QUALIFICATION = {
     values: [
       { label: <span>Fund New Business <br /> (&lt;12 months of operations) </span>, icon: 'ns-new-business', value: BUSINESS_GOAL.BRAND_NEW },
       { label: <span>Expand/Upgrade Existing Business <br /> (over 12 months of operations) </span>, icon: 'ns-expand-business', value: BUSINESS_GOAL.UPGRADE },
+      { label: <span>Pre-launch or Pre-opening</span>, icon: 'ns-seed-icon', value: BUSINESS_GOAL.PRE_LAUNCH },
+      { label: <span>Brand new business <br /> (&lt;90 days)</span>, icon: 'ns-sprout-icon', value: BUSINESS_GOAL.NEW_BUSINESS },
+      { label: <span>First year of operations </span>, icon: 'ns-shrub-icon', value: BUSINESS_GOAL.FIRST_YEAR },
+      { label: <span>Over one year in business</span>, icon: 'ns-off-shoot-business', value: BUSINESS_GOAL.ESTABLISHED },
     ],
     error: undefined,
     rule: 'required',
