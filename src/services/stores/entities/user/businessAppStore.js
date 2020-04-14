@@ -1475,7 +1475,8 @@ export class BusinessAppStore {
 
   @computed get getBusinessApplicationGoal() {
     let prevBusinessGoal = false;
-    if (this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'BRAND_NEW' || this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'UPGRADE') {
+    if (this.businessApplicationDetailsAdmin
+      && (this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'BRAND_NEW' || this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'UPGRADE')) {
       prevBusinessGoal = true;
     }
     return prevBusinessGoal;

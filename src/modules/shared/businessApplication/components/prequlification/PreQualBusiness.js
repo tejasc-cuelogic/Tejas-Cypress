@@ -68,7 +68,7 @@ export default class PreQualBusiness extends Component {
           </div>
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields} header="What would best describe your company's phase of development?*">
-          {getBusinessApplicationGoal
+          {preQualFormDisabled && getBusinessApplicationGoal
           ? (
             <FormRadioGroup
               disabled={preQualFormDisabled}
@@ -80,9 +80,15 @@ export default class PreQualBusiness extends Component {
             />
           )
           : (
-          <p>new</p>
-          )
-          }
+            <FormRadioGroup
+              disabled={preQualFormDisabled}
+              fielddata={fields.businessGoal}
+              name="businessGoal"
+              changed={businessAppEleChange}
+              iconic
+              containerclassname="iconic-radio"
+            />
+          )}
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields} header="Experience">
           <Grid>
