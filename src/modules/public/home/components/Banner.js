@@ -17,21 +17,21 @@ const bannerButtonsMeta = [
   {
   label: <><a style={{ pointerEvents: 'none' }} color="green">New! {' '}</a>Raise additional working capital with a Community Bridge Note</>,
     description: 'The NextSeed Community Bridge Note (CBN) is a special financing product providing an alternative and efficient way to raise flexible, lower cost, lower fee financing.',
-    link: '/business-application/business',
+    link: '/insights/community-bridge-notes ',
     note: <><a href="https://www.nextseed.com/insights/businesses-affected-by-coronavirus">Stay up to date</a> on all the business relief programs available to small businesses impacted by COVID-19.</>,
     showBusiness: true,
   },
   {
     label: 'Invest in local businesses',
     description: 'By investing in small businesses, investors can participate in the recovery of establishments and companies that they care about.',
-    link: '/register-investor',
-    note: <><a href="/">Sign up for our newsletter</a> to be notified when our new CBN product is open for investment.</>,
+    link: '/offerings',
+    note: <><a href="/">Sign up for our newsletter</a> to be nofitied when our new CBN product is open for investment.</>,
     showInvestor: true,
   },
   {
     label: 'Donate to the LIFE Fund',
     description: 'Make a tax-deductible donation to the Local Impact + Food Entrepreneurs (LIFE) Fund, supporting restaurants and delivering meals to front line healthcare workers.',
-    link: 'https://charity.gofundme.com/o/en/campaign/life-fund',
+    link: '/nextseed.link/life-fund ',
   },
 ];
 
@@ -83,6 +83,7 @@ class Banner extends Component {
                       labelPosition="left"
                       className="arrow-button"
                       as={Link}
+                      to={i.link}
                     >
                       <div className="details">
                         <Header as="h5" className="mb-0">{i.label}</Header>
