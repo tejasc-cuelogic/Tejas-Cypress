@@ -64,9 +64,8 @@ function hexStringToByte(str) {
 Cypress.Commands.add('uploadFile', (selector, url = '**/**', fileName = 'images/test-img.png', fileType = '') => {
   cy.server();
   cy.route('POST', url).as('fileUpload');
-  cy.upload_file(fileName, fileType, selector).then(() => {
-    cy.wait('@fileUpload');
-  })
+  cy.upload_file(fileName, fileType, selector)
+  cy.wait('@fileUpload');
 });
 
 Cypress.Commands.add('upload_file', (fileName, fileType = '', selector) => {
