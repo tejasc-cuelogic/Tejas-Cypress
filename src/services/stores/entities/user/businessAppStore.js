@@ -694,7 +694,8 @@ export class BusinessAppStore {
 
   @computed get getBusinessTypeCondtion() {
     return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value
-      && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.FRANCHISE
+      && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.PRE_LAUNCH
+      && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.NEW_BUSINESS
       && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW);
   }
 
@@ -1470,6 +1471,15 @@ export class BusinessAppStore {
   @action
   setBasicFormError = (error) => {
     this.BUSINESS_APP_FRM_BASIC.fields.email.error = error;
+  }
+
+  @computed get getBusinessApplicationGoal() {
+    let prevBusinessGoal = false;
+    if (this.businessApplicationDetailsAdmin
+      && (this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'BRAND_NEW' || this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'UPGRADE')) {
+      prevBusinessGoal = true;
+    }
+    return prevBusinessGoal;
   }
 
   orderedBusinessList = (businessDetailsList) => {
