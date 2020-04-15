@@ -92,7 +92,7 @@ Cypress.Commands.add('upload_file', (fileName, fileType = '', selector) => {
 const amplifyLogin = async (username, password) => {
   Amplify.configure({
     Auth: {
-      identityPoolId:  Cypress.env('identityPoolId'),
+      identityPoolId: Cypress.env('identityPoolId'),
       region: Cypress.env('region'),
       userPoolId: Cypress.env('userPoolId'),
       userPoolWebClientId: Cypress.env('userPoolWebClientId'),

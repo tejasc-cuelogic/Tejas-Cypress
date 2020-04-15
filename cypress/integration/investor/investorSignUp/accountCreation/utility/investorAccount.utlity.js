@@ -4,7 +4,8 @@ import { completeInvestorProfile } from '../../InvestorProfile/utlity/investorPr
 import { registerApiCall, btnClickAndWait, uploadFile, enterCodeAndConfirm, getJSONDataFromFixtures } from '../../../../common.utility';
 
 export const investorFlowProcess = () => {
-  cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
+  cy.visit('/', { failOnStatusCode: false });
+  cy.applicationUnlock();
   fillSignUpFormAndProceed();
   enterCodeAndConfirm('confirmEmail', '**/graphql');
   confirmEmailAddressScreen();
@@ -82,7 +83,7 @@ export const handleSummary = (sel) => {
   cy.get(`[data-cy=${sel}]`).click();
   cy.itterativeWait('submitAccount', 2);
   cy.get('.dimmer-visible').should('not.be.visible')
-  cy.get('.close').dblclick();
+  // cy.get('.close').dblclick();
 }
 export const iraAccountCreation = () => {
   cy.get('.dimmer-visible').should('not.be.visible')
