@@ -1,19 +1,43 @@
-{ 
+{
   "legalDetailsMeta": {
-  "salutation": "Mr.",
-  "firstLegalName": "John",
-  "lastLegalName": "Smith",
-  "residentialStreet": "222333 Peachtree Place.",
-  "city": "Atlanta",
-  "state": "Georgia",
-  "zipCode": "30318",
-  "phoneNumber": "1111111111",
-  "dateOfBirth": " 02-28-1975",
-  "ssn": "112223333"
-},
+    "salutation": {
+      "value": "Mr.",
+      "isDropdown": true,
+      "isNotType": true
+    },
+    "firstLegalName": {
+      "value": "John"
+    },
+    "lastLegalName": {
+      "value": "Smith"
+    },
+    "street": {
+      "value": "222333 Peachtree Place."
+    },
+    "city": {
+      "value": "Atlanta"
+    },
+    "state": {
+      "value": "Georgia",
+      "isDropdown": true,
+      "isNotType": true
+    },
+    "zipCode": {
+      "value": "30318"
+    },
+    "phoneNumber": {
+      "value": "1111111111"
+    },
+    "dateOfBirth": {
+      "value": "02-28-1975"
+    },
+    "ssn": {
+      "value": "112223333"
+    }
+  },
   "withBusinessAddress": {
     "residentialStreet": "3 Greenway Plaza Houston, TX 77046",
-    "state": "TEXAS", 
+    "state": "TEXAS",
     "city": "Houston"
   }
 }

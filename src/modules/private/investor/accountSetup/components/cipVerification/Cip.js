@@ -60,7 +60,7 @@ class Cip extends React.Component {
             {headerSiblingsContent}
           </Grid.Column>
           <Grid.Column mobile={16} tablet={16} computer={9}>
-            <Form error onSubmit={() => cipUtility.handleCip(false)}>
+            <Form error data-cy="cip-form" onSubmit={() => cipUtility.handleCip(false)}>
               <Form.Group widths="equal">
                 <FormSelect
                   name="salutation"
