@@ -27,9 +27,9 @@ export default class OfferingV2 extends Component {
     const showInvestNowToc = !!get(offer, 'investNow.page[0]') || get(offer, 'stage') === 'CREATION';
     const navItems = [];
     if (showInvestNowToc) {
-      navItems.push({ title: 'Invest Now', to: 'invest-now-toc', component: 'offering/InvestNowToc' });
+      navItems.push({ title: 'Invest ToC', to: 'invest-now-toc', component: 'offering/InvestNowToc' });
     }
-    navItems.push({ title: 'DocuSign', to: 'invest-now-docusign-generations', component: 'offering/InvestNowDocusignGenerations' }, { title: 'Launch', to: 'launch', component: 'offering/OfferingLaunch' });
+    navItems.push({ title: 'Invest DocuSign', to: 'invest-now-docusign-generations', component: 'offering/InvestNowDocusignGenerations' }, { title: 'Launch', to: 'launch', component: 'offering/OfferingLaunch' });
     if (get(offer, 'stage') === 'LIVE') {
       navItems.push({ title: 'Close', to: 'close', component: 'Close' });
     }

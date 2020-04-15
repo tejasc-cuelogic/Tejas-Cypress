@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { get, isEmpty, forEach, find, includes, keyBy, has, pickBy, identity } from 'lodash';
+import { get, isEmpty, forEach, find, includes, keyBy, has, pickBy, identity, filter } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { adminListFilePlugins, getPluginList, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile } from '../../queries/data';
 import Helper from '../../../../helper/utility';
@@ -171,7 +171,7 @@ export class FactoryStore extends DataModelStore {
     }
   }
 
-  fetchPluginsForFileFactory = async () => {
+  fetchPluginsForFileFactory = async (fetchSpecificPlugins = false) => {
     try {
       const res = await this.executeQuery({
         client: 'PRIVATE',
@@ -182,7 +182,13 @@ export class FactoryStore extends DataModelStore {
       if (get(res, 'adminListFilePlugins')) {
         const fileData = { adminListFilePlugins: { plugins: get(res, 'adminListFilePlugins') } };
         this.setFieldValue('pluginListArr', fileData);
-        this.setFieldValue('FILEFACTORY_FRM', this.dropDownValuesForPlugin('adminListFilePlugins'), 'fields.method.values');
+        if (fetchSpecificPlugins) {
+          const filePlugins = this.dropDownValuesForPlugin('adminListFilePlugins');
+          const filteredFilePluginList = filter(filePlugins, o => o.value.includes(fetchSpecificPlugins));
+          this.setFieldValue('FILEFACTORY_FRM', filteredFilePluginList, 'fields.method.values');
+        } else {
+          this.setFieldValue('FILEFACTORY_FRM', this.dropDownValuesForPlugin('adminListFilePlugins'), 'fields.method.values');
+        }
       }
     } catch (error) {
       Helper.toast('Something went wrong, please try again later.', 'error');
