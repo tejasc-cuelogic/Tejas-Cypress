@@ -216,7 +216,7 @@ Cypress.Commands.add('addWindowLocalStorageKey', (KEY_NAME, VALUE = false) => {
 Cypress.Commands.add('Logout', () => {
   cy.visit('/dashboard', { failOnStatusCode: false, timeout: 100000 });
   cy.applicationUnlock();
-  cy.get('.ns-logout').click();
+  cy.get('[data-cy=auth-logout]').click();
 });
 
 const deleteUserCtaAction = (ctaName) => {
