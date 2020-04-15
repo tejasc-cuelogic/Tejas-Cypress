@@ -115,15 +115,29 @@ Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
     forIn(dataSet, (val, key) => {
       const selector = dataSet[key].selector || 'name';
       let cySelector = '';
-      if (parentSelector) {
-        cySelector = cy.get(`[data-cy=${parentSelector}]`).find(`input[${selector.replace(/["']/g, "")}="${key}"]`);
-      } else {
-        cySelector = cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`);
+      if (!dataSet[key].isDropdown) {
+        if (parentSelector) {
+          cySelector = cy.get(`[data-cy=${parentSelector}]`).find(`input[${selector.replace(/["']/g, "")}="${key}"]`);
+        } else {
+          cySelector = cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`);
+        }
       }
 
-      if (!dataSet[key].skip) {
+      if (!dataSet[key].skip && !dataSet[key].isNotType) {
         cySelector.type(dataSet[key].value);
       }
+
+      if (!dataSet[key].skip && dataSet[key].isCheckBox) {
+        cySelector.check(dataSet[key].value, { force: true });
+      }
+
+      if (!dataSet[key].skip && dataSet[key].isDropdown) {
+        cy.get(`div[name="${key}"]`)
+        .click()
+        .get(`div[role="option"]:contains(${dataSet[key].value})`)
+        .click();
+      }
+
       if (!dataSet[key].skip && dataSet[key].isEnterEvent) {
         cySelector.type('{enter}');
       }
@@ -135,6 +149,12 @@ Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
     });
   }
 });
+
+Cypress.Commands.add('itterativeWait', (alias, count) => {
+  for (let i = 0; i < count; i++) {
+    cy.wait(`@${alias}`);
+  } 
+})
 
 Cypress.Commands.add('clearFormField', (dataSet, parentSelector = false) => {
   if (!isEmpty(dataSet)) {

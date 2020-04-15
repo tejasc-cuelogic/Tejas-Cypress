@@ -3,6 +3,7 @@ import {
   individualManualLinkbankProcess,
   individualPlaidProcess,
   addFunds,
+  handleSummary,
   iraAccountCreation,
   entityAccountCreation
 } from './utility/investorAccount.utlity';
@@ -40,12 +41,7 @@ describe('Account Creation', () => {
   it('should create individual account successfully', () => {
     cy.get('.dimmer-visible').should('not.be.visible');
     addFunds('15000');
-    registerApiCall('submitAccount', '/dev/graphql');
-    cy.get('.dimmer-visible').should('not.be.visible')
-    cy.get('[data-cy=ind-summary]').dblclick();
-    cy.wait('@submitAccount');
-    cy.wait('@submitAccount');
-    cy.get('.close').dblclick();
+    handleSummary('ind-summary')
   });
 
   it('should create IRA account successfully', () => {
@@ -53,13 +49,13 @@ describe('Account Creation', () => {
     cy.get('[data-cy=1]').click()
     cy.get('[data-cy=about-ira]').click()
     iraAccountCreation();
-    cy.get('.close').dblclick();
   });
 
-  it.skip('should create Entity account successfully', () => {
+  it('should create Entity account successfully', () => {
     cy.get('.btn-item').contains('Add New Account').click({ force: true });
-    cy.get('input[name="accType"]').check('2', { force: true });
-    cy.get('button.next').click();
+    cy.log('click->',"add accountr")
+    cy.get('[data-cy=2]').click();
+    cy.log('click->',"add account type")
     entityAccountCreation();
   });
 });
