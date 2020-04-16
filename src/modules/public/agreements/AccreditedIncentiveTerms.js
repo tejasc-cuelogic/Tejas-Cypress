@@ -30,8 +30,12 @@ export default class AccreditedIncentiveTerms extends Component {
               confirm the member’s status.
             </p>
             <p>
-              Upon completion of the verification process, NextSeed Members will earn an
-              investment credit towards future NextSeed investments.
+              Upon initial completion of the verification process, NextSeed Members will earn an
+              investment credit towards future NextSeed investments. Investment credits under the
+              AIV Program will only be issued once, during the initial verification of any account
+              associated with a NextSeed Member. The AIV Program does not apply to any subsequent
+              accredited investor verification of the same or different account associated with a
+              NextSeed Member.
             </p>
             <Divider hidden />
             <Header as="h5">Redeeming Investment Credits</Header>
