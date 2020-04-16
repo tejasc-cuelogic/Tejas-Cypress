@@ -4,9 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { Card } from 'semantic-ui-react';
 import { get } from 'lodash';
 import GenerateDocuments from './investNowDocusign/generateDocuments';
+import DocumentUpload from './investNowDocusign/documentUpload';
 import { InlineLoader } from '../../../../../../theme/shared';
-import DataRoom from '../legal/DataRoom';
-
 
 @inject('businessAppReviewStore', 'businessAppStore', 'nsUiStore', 'offeringCreationStore', 'factoryStore', 'offeringsStore')
 @withRouter
@@ -21,7 +20,7 @@ class InvestNowDocusignGenerations extends Component {
     const { loadingArray } = this.props.nsUiStore;
     const { setFormDataForBusinessUploadDocuments } = this.props.offeringCreationStore;
     setFormDataForBusinessUploadDocuments('DATA_ROOM_FRM', '');
-    const businessAppReadOnly = false;
+    const isReadOnlyFlag = false;
     const { offer, offerDataLoading } = this.props.offeringsStore;
     const regulation = get(offer, 'regulation');
     const securities = get(offer, 'keyTerms.securities');
@@ -42,12 +41,11 @@ class InvestNowDocusignGenerations extends Component {
                 <Card.Content header="Upload Documents" />
                 <Card.Content>
                   <Card.Description>
-                    <DataRoom
-                      header="Documents"
-                      isHeaderVisible={false}
+                    <DocumentUpload
                       referenceFrom="BUSINESS_APPLICATION"
-                      documentUpload="AGREEMENTS"
-                      isReadOnlyFlag={businessAppReadOnly}
+                      documentUpload="DOCUMENTS_INVEST_NOW"
+                      isReadOnlyFlag={isReadOnlyFlag}
+                      isSaveOnly
                     />
                   </Card.Description>
                 </Card.Content>
