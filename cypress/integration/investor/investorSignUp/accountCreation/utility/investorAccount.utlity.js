@@ -5,7 +5,7 @@ import { registerApiCall, btnClickAndWait, uploadFile, enterCodeAndConfirm, getJ
 
 export const investorFlowProcess = () => {
   cy.visit('/', { failOnStatusCode: false });
-  // cy.applicationUnlock();
+  cy.applicationUnlock();
   fillSignUpFormAndProceed();
   enterCodeAndConfirm('confirmEmail', '**/graphql');
   confirmEmailAddressScreen();
