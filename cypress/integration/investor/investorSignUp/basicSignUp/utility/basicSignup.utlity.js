@@ -24,7 +24,7 @@ export const fillSignUpFormAndProceed = () => {
 export const confirmEmailAddressScreen = () => {
   registerApiCall('cognito', '**/**');
   cy.wait('@cognito');
-  registerApiCall('userDetails', 'dev/graphql');
+  registerApiCall('userDetails');
   cy.wait('@userDetails');
 }
 

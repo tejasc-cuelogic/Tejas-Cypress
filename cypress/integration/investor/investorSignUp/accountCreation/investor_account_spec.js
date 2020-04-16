@@ -17,7 +17,7 @@ describe('Account Creation', () => {
 
   beforeEach(() => {
     cy.restoreLocalStorage();
-    registerApiCall('upsertInvestorAccount', '/dev/graphql');
+    registerApiCall('upsertInvestorAccount');
   });
 
   afterEach(() => {

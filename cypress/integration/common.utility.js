@@ -1,12 +1,12 @@
 import { forEach } from 'lodash';
 import { devices } from '../fixtures/common/devices';
 
-export const registerApiCall = (operationName, url = '**/**') => {
+export const registerApiCall = (operationName, url = '/dev/graphql') => {
   cy.server();
   cy.route('POST', url).as(operationName);
 }
 
-export const uploadFile = (selector, url = '**/**') => {
+export const uploadFile = (selector, url = '/dev/graphql') => {
   registerApiCall('fileUpload', url);
   cy.fixture('images/test-img.png').as('img');
   cy.upload_file('images/test-img.png', 'png', selector);

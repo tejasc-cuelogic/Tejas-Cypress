@@ -61,7 +61,7 @@ function hexStringToByte(str) {
   return new Uint8Array(a);
 }
 
-Cypress.Commands.add('uploadFile', (selector, url = '**/**', fileName = 'images/test-img.png', fileType = '') => {
+Cypress.Commands.add('uploadFile', (selector, fileName = 'images/test-img.png', fileType = '', url = '/dev/graphql') => {
   cy.server();
   cy.route('POST', url).as('fileUpload');
   cy.upload_file(fileName, fileType, selector)
@@ -258,22 +258,22 @@ Cypress.Commands.add('deleteUser', (userType = 'Investor') => {
     });
 
     cy.visit('/app/users');
-    registerApiCall('listUsers', '/dev/graphql');
+    registerApiCall('listUsers');
     cy.wait('@listUsers');
 
     cy.get('form').within(() => {
       cy.get('input[placeholder="Search by name"]').type(investorEmail).type('{enter}');
     });
-    registerApiCall('listUsers', '/dev/graphql');
+    registerApiCall('listUsers');
     cy.wait('@listUsers');
     cy.get('span.user-name').within(() => {
       cy.get('a').click({ force: true });
     });
 
     deleteUserCtaAction('Soft Delete Profile');
-    registerApiCall('adminDeleteInvestorOrIssuerUser', '/dev/graphql');
+    registerApiCall('adminDeleteInvestorOrIssuerUser');
     cy.wait('@adminDeleteInvestorOrIssuerUser');
-    registerApiCall('listUsers', '/dev/graphql');
+    registerApiCall('listUsers');
     cy.wait('@listUsers');
 
     const splitEmail = investorEmail.split('@');
@@ -290,12 +290,12 @@ Cypress.Commands.add('deleteUser', (userType = 'Investor') => {
     cy.get('span.user-name').within(() => {
       cy.get('a').click({ force: true });
     })
-    registerApiCall('getUserDetails', '/dev/graphql');
+    registerApiCall('getUserDetails');
     cy.wait('@getUserDetails');
     cy.get('div.floated.buttons').get('button.button').contains('Hard Delete Profile').click({ force: true });
     cy.get('div.modal.deletion').get('div.actions').get('button.button').contains('OK').click({ force: true });
 
-    registerApiCall('adminUserHardDelete', '/dev/graphql');
+    registerApiCall('adminUserHardDelete');
     cy.wait('@adminUserHardDelete');
     cy.Logout();
   });

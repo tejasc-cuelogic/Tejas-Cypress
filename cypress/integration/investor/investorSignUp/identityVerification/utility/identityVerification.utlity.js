@@ -17,7 +17,7 @@ export const legalDetailsProcess = () => {
 }
 
 export const fillLegalFormAndProceed = (legalDetails = undefined) => {
-  registerApiCall('legal', '/dev/graphql');
+  registerApiCall('legal');
   fillLegalDetailsForm(legalDetails);
   cy.get('form').find('button').contains('Verify my identity').click();
   cy.wait('@legal');

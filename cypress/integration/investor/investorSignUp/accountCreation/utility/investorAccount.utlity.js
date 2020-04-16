@@ -5,7 +5,7 @@ import { registerApiCall, btnClickAndWait, uploadFile, enterCodeAndConfirm, getJ
 
 export const investorFlowProcess = () => {
   cy.visit('/', { failOnStatusCode: false });
-  cy.applicationUnlock();
+  // cy.applicationUnlock();
   fillSignUpFormAndProceed();
   enterCodeAndConfirm('confirmEmail', '**/graphql');
   confirmEmailAddressScreen();
@@ -15,7 +15,7 @@ export const investorFlowProcess = () => {
 };
 
 export const individualManualLinkbankProcess = async () => {
-  registerApiCall('manualAccount', '/dev/graphql');
+  registerApiCall('manualAccount');
   manualFormData = await getJSONDataFromFixtures('investor/linkBank.json', 'manualForm');
   cy.get('.dimmer-visible').should('not.be.visible');
   cy.get('[data-cy=multistep-back]').dblclick();
@@ -28,7 +28,7 @@ export const individualManualLinkbankProcess = async () => {
 
 export const addFunds = (amount) => {
   cy.get('.dimmer-visible').should('not.be.visible')
-  registerApiCall('addFunds', '/dev/graphql');
+  registerApiCall('addFunds');
   if (amount) {
     cy.get('form').within(() => {
       cy.get('input[name="value"]').type(amount);
@@ -59,18 +59,18 @@ const entityFormationDocStep = () => {
   cy.get('.dimmer-visible').should('not.be.visible')
   const formationDocArr = ['formationDoc', 'operatingAgreementDoc', 'einVerificationDoc'];
   formationDocArr.forEach(inpName => {
-    cy.uploadFile(`input[name="${inpName}"]`, '/dev/graphql');
+    cy.uploadFile(`input[name="${inpName}"]`);
   })
   btnClickAndWait('[data-cy=formation-doc]', 'upsertInvestorAccount');
 }
 
 export const entityAccountCreation = () => {
-  registerApiCall('upsertInvestorAccount', '/dev/graphql');
+  registerApiCall('upsertInvestorAccount');
   handleFinInfo(['netAssets', 'annualIncome'], 'fin-info-entity-submit');
   entityGeneralStep();
   btnClickAndWait('[data-cy=false]', 'upsertInvestorAccount');
   cy.get('input[name="title"]').type('CTO');
-  cy.uploadFile('input[name="legalDocUrl"]', '/dev/graphql');
+  cy.uploadFile('input[name="legalDocUrl"]');
   entityFormationDocStep();
   individualPlaidProcess('3');
   addFunds('7000');
@@ -78,7 +78,7 @@ export const entityAccountCreation = () => {
 };
 
 export const handleSummary = (sel) => {
-  registerApiCall('submitAccount', '/dev/graphql');
+  registerApiCall('submitAccount');
   cy.get('.dimmer-visible').should('not.be.visible')
   cy.get(`[data-cy=${sel}]`).click();
   cy.itterativeWait('submitAccount', 2);
@@ -87,14 +87,14 @@ export const handleSummary = (sel) => {
 }
 export const iraAccountCreation = () => {
   cy.get('.dimmer-visible').should('not.be.visible')
-  registerApiCall('upsertInvestorAccount', '/dev/graphql');
+  registerApiCall('upsertInvestorAccount');
   handleFinInfo(['netWorth', 'income'], 'fin-info-ira-submit');
   btnClickAndWait('[data-cy=1]', 'upsertInvestorAccount');
   btnClickAndWait('[data-cy=0]', 'upsertInvestorAccount');
   individualPlaidProcess('2');
   addFunds('5010');
   cy.get('.dimmer-visible').should('not.be.visible')
-  cy.uploadFile('input[name="identityDoc"]', '/dev/graphql');
+  cy.uploadFile('input[name="identityDoc"]');
   handleSummary('ira-summary');
 };
 
@@ -102,7 +102,7 @@ export const individualPlaidProcess = (count) => {
   cy.get('.dimmer-visible').should('not.be.visible')
   cy.get('.bank-link:first').click({ force: true });
   cy.wait(5000);
-  registerApiCall('plaidAccount', '/dev/graphql');
+  registerApiCall('plaidAccount');
   cy.get(`#plaid-link-iframe-${count}`).then(($iframe) => {
     const $body = $iframe.contents().find('body');
     cy.log('body', $iframe.contents().find('body'));

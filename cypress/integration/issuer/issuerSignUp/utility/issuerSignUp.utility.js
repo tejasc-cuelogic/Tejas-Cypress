@@ -30,7 +30,7 @@ export const fillNextYearProjection = (nextYearProjection) => {
 }
 
 export const fillBusinessDetails = async (businessDetails) => {
-  cy.uploadFile('input[name="businessPlan"]', '/dev/graphql', '/issuer/test-img.png', 'png');
+  cy.uploadFile('input[name="businessPlan"]', '/issuer/test-img.png');
   cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
   fillSourcesAndUses(businessDetails.sourcesAndUses);
   fillExistingDebt(businessDetails.existingDebt);
@@ -66,7 +66,7 @@ export const fillExistingDebt = (existingDebt) => {
 export const fillOwnerInfo = (owner) => {
   cy.clearFormField(owner);
   cy.formFill(owner);
-  cy.uploadFile('input[name="resume"]', '/dev/graphql', '/issuer/test-img.png', 'png');
+  cy.uploadFile('input[name="resume"]', '/issuer/test-img.png');
   cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
 }
 
@@ -128,15 +128,15 @@ export const completeBusinessApplication = async () => {
   cy.wait('@perfomance');
   cy.get('<div.ui.large.text.loader>', { timeout: 6000 }).should('not.exist');
   registerApiCall('perfomance');
-  cy.uploadFile('input[name="fiveYearProjection"]', '/dev/graphql', '/issuer/test-img.png');
+  cy.uploadFile('input[name="fiveYearProjection"]', '/issuer/test-img.png');
   cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
-  cy.uploadFile('input[name="sourcesAndUses"]', '/dev/graphql', '/issuer/test-img.png');
+  cy.uploadFile('input[name="sourcesAndUses"]', '/issuer/test-img.png');
   cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
   cy.get('div[class="pull-right"]').children().click({ force: true });
   cy.get('<div.ui.large.text.loader>', { timeout: 6000 }).should('not.exist');
-  cy.uploadFile('input[name="leaseAgreementsOrLOIs"]', '/dev/graphql', '/issuer/test-img.png');
+  cy.uploadFile('input[name="leaseAgreementsOrLOIs"]', '/issuer/test-img.png');
   cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
-  cy.uploadFile('input[name="personalTaxReturn"]', '/dev/graphql', '/issuer/test-img.png');
+  cy.uploadFile('input[name="personalTaxReturn"]', '/issuer/test-img.png');
   cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
   cy.get('input[name="blanketLien"]').check('false', { force: true });
   cy.get('input[name="personalGuarantee"]').check('false', { force: true });
