@@ -70,9 +70,7 @@ Cypress.Commands.add('uploadFile', (selector, fileName = 'images/test-img.png', 
 
 Cypress.Commands.add('upload_file', (fileName, fileType = '', selector) => {
   cy.get(selector).then((subject) => {
-    cy.log('subject=>', subject)
     cy.fixture(fileName, 'hex').then((fileHex) => {
-      cy.log('fileHex=>', fileHex)
       const fileBytes = hexStringToByte(fileHex);
       const testFile = new File([fileBytes], fileName, {
         type: fileType,
@@ -152,7 +150,8 @@ Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
 Cypress.Commands.add('itterativeWait', (alias, count) => {
   for (let i = 0; i < count; i++) {
     cy.wait(`@${alias}`).then((xhr) => {
-      assert.isNotNull(xhr.response.body.data, `${count} API call has data`)
+      cy.log('response', xhr.response);
+      assert.isNotNull(xhr.response, `${count} API call has data`)
     })
   } 
 })

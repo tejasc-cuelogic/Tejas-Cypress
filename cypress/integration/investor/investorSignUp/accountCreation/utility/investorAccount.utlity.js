@@ -78,11 +78,10 @@ export const entityAccountCreation = () => {
 };
 
 export const handleSummary = (sel) => {
-  registerApiCall('submitAccount');
   cy.get('.dimmer-visible').should('not.be.visible')
+  registerApiCall('submitAccount');
   cy.get(`[data-cy=${sel}]`).click();
   cy.itterativeWait('submitAccount', 2);
-  cy.get('.dimmer-visible').should('not.be.visible')
   // cy.get('.close').dblclick();
 }
 export const iraAccountCreation = () => {
