@@ -151,7 +151,9 @@ Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
 
 Cypress.Commands.add('itterativeWait', (alias, count) => {
   for (let i = 0; i < count; i++) {
-    cy.wait(`@${alias}`);
+    cy.wait(`@${alias}`).then((xhr) => {
+      assert.isNotNull(xhr.response.body.data, `${count} API call has data`)
+    })
   } 
 })
 
