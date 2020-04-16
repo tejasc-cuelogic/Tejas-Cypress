@@ -4,6 +4,7 @@ import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { adminListFilePlugins, getPluginList, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile } from '../../queries/data';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
+import { offeringsStore } from '../../index';
 import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META, REQUESTFACTORY_LOG__META, PROCESSFACTORY_LOG__META, FILEFACTORY_META } from '../../../constants/admin/data';
 
 export class FactoryStore extends DataModelStore {
@@ -346,11 +347,23 @@ export class FactoryStore extends DataModelStore {
     }
   });
 
-  fileFactoryPluginTrigger = () => new Promise(async (resolve, reject) => {
-    const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields;
-    const formPayloadData = Validator.evaluateFormData(fieldsPayload, true);
-    const TestformData = this.ExtractToJSON(formPayloadData, true);
-    if (TestformData.payload && TestformData.payload !== '' && !this.isValidJson(TestformData.payload)) {
+  fileFactoryPluginTrigger = (investNowDocuSign = false) => new Promise(async (resolve, reject) => {
+    let TestformData = {};
+    if (investNowDocuSign) {
+      const { offer } = offeringsStore;
+      const filePayload = this.FILEFACTORY_FRM.fields;
+      const filePayloadData = Validator.evaluateFormData(filePayload, true);
+      const fileDropdownData = this.ExtractToJSON(filePayloadData, true);
+      TestformData.identifier = fileDropdownData.method;
+      TestformData.ownerId = offer.id;
+      TestformData.resourceId = offer.id;
+    } else {
+      const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields;
+      const formPayloadData = Validator.evaluateFormData(fieldsPayload, true);
+      TestformData = this.ExtractToJSON(formPayloadData, true);
+    }
+
+    if (TestformData.payload && TestformData.payload !== '' && !this.isValidJson(TestformData.payload) && !investNowDocuSign) {
       this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
       this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid = false;
     } else {
@@ -362,9 +375,9 @@ export class FactoryStore extends DataModelStore {
           setLoader: adminGenerateFile,
           message: { error: 'Something went wrong, please try again later.' },
         });
-        if (get(result, 'data.generateFile')) {
+        if (get(result, 'data.adminGenerateFile')) {
           Helper.toast('Your request is processed.', 'success');
-          resolve(result.data.generateFile);
+          resolve(result.data.adminGenerateFile);
         }
       } catch (error) {
         Helper.toast('Something went wrong, please try again later.', 'error');

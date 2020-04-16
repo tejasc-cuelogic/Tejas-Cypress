@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Card, Grid, Divider, Header, Form, Button } from 'semantic-ui-react';
+import { Card, Grid, Form, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../../../theme/form/formHOC';
-import DynamicFormInput from './dynamicFormInput';
+// import DynamicFormInput from './dynamicFormInput';
 
 const metaInfo = {
   store: 'factoryStore',
@@ -25,12 +25,12 @@ function GenerateDocuments(props) {
   }, []);
 
   const onSubmit = () => {
-    props.factoryStore.fileFactoryPluginTrigger();
+    props.factoryStore.fileFactoryPluginTrigger(true);
   };
 
   const { factoryStore, smartElement } = props;
   const {
-    FILEFACTORY_FRM, formChangeForPlugin, inProgress, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
+    FILEFACTORY_FRM, formChangeForPlugin, inProgress, DYNAMCI_PAYLOAD_FRM,
   } = factoryStore;
   return (
     <>
@@ -41,20 +41,20 @@ function GenerateDocuments(props) {
             <Form onSubmit={FILEFACTORY_FRM.meta.isValid && onSubmit}>
               <Form.Group>
                 <Grid className="full-width mlr-0" stackable>
-                  <Grid.Column width={10}>
+                  <Grid.Column width={8}>
                     {smartElement.FormDropDown('method', {
                       onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
                       containerclassname: 'dropdown-field mlr-0',
                       placeholder: 'Choose here',
                       options: FILEFACTORY_FRM.fields.method.values,
                       className: 'mb-80',
+                      containerwidth: 14,
                     })}
-                    <Divider section hidden />
-                    <Button className="mt-80 ml-10" primary content="Generate" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} />
+                    {/* <Divider section hidden />
+                    <Button className="mt-80 ml-10" primary content="Generate" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} /> */}
                   </Grid.Column>
-                  <Grid.Column width={6}>
-                    <Header as="h5">Payload</Header>
-                    <DynamicFormInput {...props} formPayload={DYNAMCI_PAYLOAD_FRM.FILEFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'FILEFACTORY' }} selectedPlugin={currentPluginSelected} />
+                  <Grid.Column width={8}>
+                  <Button className="mt-80 ml-10" primary content="Generate" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>
