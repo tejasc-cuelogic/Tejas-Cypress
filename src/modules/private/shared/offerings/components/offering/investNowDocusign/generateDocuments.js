@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Card, Grid, Form, Button } from 'semantic-ui-react';
+import { Card, Form, Grid, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../../../theme/form/formHOC';
 // import DynamicFormInput from './dynamicFormInput';
 
@@ -34,34 +34,34 @@ function GenerateDocuments(props) {
   } = factoryStore;
   return (
     <>
-      <Card fluid className="elastic-search">
-        <Card.Content header="Generate Document" />
-        <Card.Content>
-          <Card.Description>
-            <Form onSubmit={FILEFACTORY_FRM.meta.isValid && onSubmit}>
-              <Form.Group>
-                <Grid className="full-width mlr-0" stackable>
-                  <Grid.Column width={8}>
-                    {smartElement.FormDropDown('method', {
-                      onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
-                      containerclassname: 'dropdown-field mlr-0',
-                      placeholder: 'Choose here',
-                      options: FILEFACTORY_FRM.fields.method.values,
-                      className: 'mb-80',
-                      containerwidth: 14,
-                    })}
-                    {/* <Divider section hidden />
-                    <Button className="mt-80 ml-10" primary content="Generate" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} /> */}
-                  </Grid.Column>
-                  <Grid.Column width={8}>
-                  <Button className="mt-80 ml-10" primary content="Generate" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} />
-                  </Grid.Column>
-                </Grid>
-              </Form.Group>
-            </Form>
-          </Card.Description>
-        </Card.Content>
-      </Card>
+      <Grid>
+        <Grid.Column>
+          <Card fluid className="elastic-search">
+            <Card.Content header="Generate Document" />
+            <Card.Content>
+              <Card.Description>
+                <Form onSubmit={FILEFACTORY_FRM.meta.isValid && onSubmit}>
+                  <Form.Group className="bottom-aligned">
+                    <Form.Field width={8}>
+                      {smartElement.FormDropDown('method', {
+                        onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
+                        containerclassname: 'dropdown-field mlr-0',
+                        placeholder: 'Choose here',
+                        options: FILEFACTORY_FRM.fields.method.values,
+                        className: 'mb-80',
+                        containerwidth: 14,
+                      })}
+                    </Form.Field>
+                    <Form.Field width={4}>
+                      <Button primary content="Generate" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} />
+                    </Form.Field>
+                  </Form.Group>
+                </Form>
+              </Card.Description>
+            </Card.Content>
+          </Card>
+        </Grid.Column>
+      </Grid>
     </>
   );
 }
