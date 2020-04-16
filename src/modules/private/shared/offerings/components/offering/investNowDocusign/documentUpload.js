@@ -89,43 +89,39 @@ const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, is
 export default class DocumentUpload extends Component {
 
   onFileDrop = (files, name, index) => {
-    const { closingBinder, supplementalAgreements, referenceFrom } = this.props;
-    const uploadEnum = referenceFrom && referenceFrom === 'BUSINESS_APPLICATION' ? 'AGREEMENTS' : closingBinder ? 'OFFERING_CLOSING_BINDER' : supplementalAgreements ? 'OFFERING_SUPPLEMENTAL_AGREEMENT' : 'DOCUMENTS_LEGAL_DATAROOM';
-    const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
-    if (businessApplicationFlag) {
-      let fileArr = '';
-      this.props.offeringCreationStore.setFileUploadDataMulitpleVartually(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', closingBinder ? 'closingBinder' : 'documents', name, files, uploadEnum, index, true);
-      this.forceUpdate();
-      fileArr = files[0];
-      fileArr.currentIndex = index
-      uploadFileArr.push(fileArr);
-      // uploadFileArr.push({ fileDetails: files[0], currentIndex: index });
-    } else {
-      this.props.offeringCreationStore.setFileUploadDataMulitple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', closingBinder ? 'closingBinder' : 'documents', name, files, uploadEnum, index, true);
-    }
+    const { uploadEnum, metaInfo, uploadFormKey } = this.props
+    let fileArr = '';
+    this.props.offeringCreationStore.setFileUploadDataMulitpleVartually(metaInfo.form, uploadFormKey, name, files, uploadEnum, index, true);
+    this.forceUpdate();
+    fileArr = files[0];
+    fileArr.currentIndex = index
+    uploadFileArr.push(fileArr);
+    // uploadFileArr.push({ fileDetails: files[0], currentIndex: index });
+
   }
   handleDelDoc = (field, index = undefined) => {
-    const { closingBinder, referenceFrom } = this.props;
-    const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
-    this.props.offeringCreationStore.removeUploadedDataMultiple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', field, index, closingBinder ? 'closingBinder' : 'documents', false, businessApplicationFlag);
+    const { metaInfo, uploadFormKey } = this.props;
+    const isMultipRmoveArray = true;
+    this.props.offeringCreationStore.removeUploadedDataMultiple(metaInfo.form, field, index, uploadFormKey, false, isMultipRmoveArray);
     this.forceUpdate();
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
-  addMore = (e, formName) => {
+  addMore = (e, formName, uploadFormKey) => {
     e.preventDefault();
-    this.props.offeringCreationStore.addMore(formName, this.props.closingBinder ? 'closingBinder' : 'documents');
+    this.props.offeringCreationStore.addMoreUploadForm(formName, uploadFormKey);
   }
   handleLockUnlock = (index) => {
-    this.props.offeringCreationStore.setAccreditedOnlyField(this.props.closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', index);
+    const { metaInfo } = this.props;
+    this.props.offeringCreationStore.setAccreditedOnlyField(metaInfo.form, index);
     this.forceUpdate();
   }
-  handleFormSubmit = (isApproved = null) => {
-    const { DATA_ROOM_FRM, CLOSING_BINDER_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, this.props.closingBinder ? CLOSING_BINDER_FRM.fields : DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
-  }
+  // handleFormSubmit = (isApproved = null) => {
+  //   const { DATA_ROOM_FRM, CLOSING_BINDER_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+  //   updateOffering(currentOfferingId, this.props.closingBinder ? CLOSING_BINDER_FRM.fields : DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
+  // }
 
   handleFormSubmitForBusinessApplication = (isApproved = null) => {
     const { updateApplication } = this.props.offeringCreationStore;
@@ -135,12 +131,24 @@ export default class DocumentUpload extends Component {
 
   onSortEnd = ({ oldIndex, newIndex }, isReadonly) => {
     if (!isReadonly) {
-      const docs = [...this.props.offeringCreationStore.DATA_ROOM_FRM.fields.documents];
+      const { metaInfo } = this.props;
+      const docs = [...this.props[metaInfo.store][metaInfo.form].fields.documents];
       this.props.offeringCreationStore.setDataRoomDocsOrder(arrayMove(docs, oldIndex, newIndex));
     }
   };
   render() {
-    const { match, offeringClose, closingBinder, uiStore, referenceFrom, header, isSaveOnly, isButtonGroup } = this.props;
+    const {
+      match,
+      offeringClose,
+      closingBinder,
+      uiStore,
+      referenceFrom,
+      header,
+      isSaveOnly,
+      isButtonGroup,        
+      uploadFormKey,
+      metaInfo,
+    } = this.props;
     const { inProgress } = uiStore;
     const { isIssuer } = this.props.userStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -150,19 +158,15 @@ export default class DocumentUpload extends Component {
       offer.legal.dataroom.submitted) ? offer.legal.dataroom.submitted : null;
     const approved = (offer && offer.legal && offer.legal.dataroom &&
       offer.legal.dataroom.approved) ? offer.legal.dataroom.approved : null;
-    const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
-    const isReadonly = (!offeringClose && ((submitted && !isManager) || (isManager && approved && approved.status) || (!!(this.props.isReadOnlyFlag && businessApplicationFlag))));
-    const {
-      DATA_ROOM_FRM,
-      CLOSING_BINDER_FRM,
+    const isReadonly = (!offeringClose && ((submitted && !isManager) || (isManager && approved && approved.status) || !!(this.props.isReadOnlyFlag)));
+    const {      
       formArrayChange,
       confirmModal,
       confirmModalName,
       removeData,
     } = this.props.offeringCreationStore;
-    const formName = closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM';
-    const docs = [...(closingBinder ? CLOSING_BINDER_FRM.fields.closingBinder : DATA_ROOM_FRM.fields.documents)];
-    // const businessApplicationReadOnlyStatus = !!(this.props.isReadOnlyFlag && businessApplicationFlag);
+    const formName = metaInfo.form;
+    const docs = [...(this.props[metaInfo.store][metaInfo.form].fields.documents)];
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
@@ -170,7 +174,7 @@ export default class DocumentUpload extends Component {
             {header || ''}
             {!isReadonly &&
               <Button.Group size="mini" floated="right">
-                <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
+                <Button onClick={e => this.addMore(e, formName, uploadFormKey)} primary compact content="Add" />
               </Button.Group>
             }
           </Header>
@@ -196,8 +200,8 @@ export default class DocumentUpload extends Component {
               formName={formName}
               lockAxis="y"
               useDragHandle
-              showLockActivity={!(businessApplicationFlag)}
-              isBusinessApplication={businessApplicationFlag}
+              showLockActivity={true}
+              isBusinessApplication={true}
             />
           </div>
           <Divider hidden />
@@ -216,7 +220,7 @@ export default class DocumentUpload extends Component {
             &&
             (
               <div className="right-align mt-20">
-                <Button disabled={!DATA_ROOM_FRM.meta.isValid || inProgress === 'save'} loading={inProgress === 'save'} primary className="relaxed" onClick={this.handleFormSubmitForBusinessApplication} >Save</Button>
+                <Button disabled={!this.props[metaInfo.store][metaInfo.form].meta.isValid || inProgress === 'save'} loading={inProgress === 'save'} primary className="relaxed" onClick={this.handleFormSubmitForBusinessApplication} >Save</Button>
               </div>
             )
           }

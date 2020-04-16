@@ -914,6 +914,12 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
+  addMoreUploadForm = (form, key, count = 1) => {
+    this[form] = Validator.addMoreRecordToSubSection(this[form], key, count, true);
+    this[form].fields[key][this[form].fields[key].length - 1].upload.showLoader = false;
+  }
+
+  @action
   setContingencyDataOnAdd = (formName, arrayKey) => {
     const { fields } = this.ADD_NEW_CONTINGENCY_FRM;
     const dataLength = this[formName].fields[arrayKey].length;

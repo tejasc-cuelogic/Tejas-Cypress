@@ -7,6 +7,11 @@ import GenerateDocuments from './investNowDocusign/generateDocuments';
 import DocumentUpload from './investNowDocusign/documentUpload';
 import { InlineLoader } from '../../../../../../theme/shared';
 
+const metaInfo = {
+  store: 'offeringCreationStore',
+  form: 'DATA_ROOM_FRM',
+};
+
 @inject('businessAppReviewStore', 'businessAppStore', 'nsUiStore', 'offeringCreationStore', 'factoryStore', 'offeringsStore')
 @withRouter
 @observer
@@ -26,7 +31,7 @@ class InvestNowDocusignGenerations extends Component {
     const securities = get(offer, 'keyTerms.securities');
     const showWarningMsg = (!regulation || !securities);
     return (
-      (loadingArray.includes('getPluginList') || offerDataLoading)
+      (loadingArray.includes('adminListFilePlugins') || offerDataLoading)
         ? <InlineLoader />
         : showWarningMsg
           ? (
@@ -43,7 +48,9 @@ class InvestNowDocusignGenerations extends Component {
                   <Card.Description>
                     <DocumentUpload
                       referenceFrom="BUSINESS_APPLICATION"
-                      documentUpload="DOCUMENTS_INVEST_NOW"
+                      metaInfo={metaInfo}
+                      uploadFormKey="documents"
+                      uploadEnum="DOCUMENTS_INVEST_NOW"
                       isReadOnlyFlag={isReadOnlyFlag}
                       isSaveOnly
                     />
