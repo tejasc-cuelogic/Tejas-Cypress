@@ -155,15 +155,15 @@ export class AuthStore extends DataModelStore {
     }
   };
 
-  setNewPasswordRequired(value) {
+  setNewPasswordRequired = (value) => {
     this.newPasswordRequired = value;
   }
 
-  setHasSession(status) {
+  setHasSession = (status) => {
     this.hasSession = status;
   }
 
-  setUserLoggedIn(status) {
+  setUserLoggedIn = (status) => {
     this.isUserLoggedIn = status;
     if (status) {
       cookie.save('EVER_LOGS_IN', status, { maxAge: 31536000 });
@@ -179,7 +179,7 @@ export class AuthStore extends DataModelStore {
     this.confirmProgress = entity;
   }
 
-  setCredentials(credentials) {
+  setCredentials = (credentials) => {
     this.CONFIRM_FRM = Validator.onChange(
       this.CONFIRM_FRM,
       { name: 'email', value: credentials.email },
@@ -214,7 +214,7 @@ export class AuthStore extends DataModelStore {
     return this.devAuth.required && !this.devAuth.authStatus && !this.isOfferPreviewUrl;
   }
 
-  setUserId(userId) {
+  setUserId = (userId) => {
     this.userId = userId;
   }
 
