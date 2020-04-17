@@ -18,7 +18,10 @@ const metaInfo = {
 class InvestNowDocusignGenerations extends Component {
   constructor(props) {
     super(props);
+    const { offer } = this.props.offeringsStore;
+    this.props.offeringsStore.setFieldValue('offeringStorageDetails', null);
     this.props.factoryStore.fetchPluginsForFileFactory('InvestNow');
+    this.props.offeringsStore.getofferingStorageDetailBySlug(offer.offeringSlug);
   }
 
   render() {

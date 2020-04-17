@@ -297,6 +297,14 @@ export const getOfferingClosureProcess = gql`
   }
 `;
 
+export const getOfferingStoreDetails = gql`
+  query getOfferingDetailsBySlug($id: String!) {
+    getOfferingDetailsBySlug(offeringSlug: $id) {
+      storageDetails
+    }
+  }
+`;
+
 export const getOfferingDetails = gql`
   query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug(offeringSlug: $id) {

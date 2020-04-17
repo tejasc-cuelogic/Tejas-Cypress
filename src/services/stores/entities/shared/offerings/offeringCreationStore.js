@@ -15,10 +15,12 @@ import {
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore from '../dataModelStore';
-import { deleteBonusReward, updateOffering,
+import {
+  deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
-  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted, getOfferingClosureProcess } from '../../../queries/offerings/manage';
+  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted, getOfferingClosureProcess,
+} from '../../../queries/offerings/manage';
 import { adminInvokeProcessorDriver } from '../../../queries/data';
 import { updateBusinessApplicationInformation, adminBusinessApplicationsDetails } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -670,6 +672,14 @@ export class OfferingCreationStore extends DataModelStore {
           const fileData = Helper.getFormattedFileData(file);
           this.isUploadingFile = true;
           this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
+          // const fileData = {
+          //   fileName: '[PE-LLC] Purchase Agreement.docx',
+          //   fileType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          //   fileExtension: 'docx',
+          //   fileSize: '76745',
+          // };
+          // fileUpload.setFileUploadData('', fileData, 'DOCUMENTS_INVEST_NOW', 'ADMIN', '', 'b4f565d0-7ef5-11ea-bb8c-b7a0276e2a1a')
+
           fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
             const { fileId, preSignedUrl } = result.data.createUploadEntry;
             fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(action(() => {
@@ -1838,14 +1848,14 @@ export class OfferingCreationStore extends DataModelStore {
     const result = await this.executeMutation({
       mutation: 'adminInvokeProcessorDriver',
       variables: {
-                    method: 'OFFERING_CLOSE',
-                    payload: requestVariable,
-                 },
+        method: 'OFFERING_CLOSE',
+        payload: requestVariable,
+      },
       setLoader: adminInvokeProcessorDriver,
       message: {
-                success: 'Your request is processed.',
-                error: 'Error while performing operation.',
-              },
+        success: 'Your request is processed.',
+        error: 'Error while performing operation.',
+      },
     });
     uiStore.setProgress(false);
   });
@@ -2275,19 +2285,19 @@ export class OfferingCreationStore extends DataModelStore {
 
   getOfferingClosureProcessMeta = id => new Promise((resolve) => {
     graphql({
-        client,
-        query: getOfferingClosureProcess,
-        fetchPolicy: 'no-cache',
-        variables: { id },
-        onFetch: (res) => {
-          if (res !== undefined) {
-            resolve(res.getOfferingDetailsBySlug.closureProcess);
-          }
-        },
-        onError: () => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        },
-      });
+      client,
+      query: getOfferingClosureProcess,
+      fetchPolicy: 'no-cache',
+      variables: { id },
+      onFetch: (res) => {
+        if (res !== undefined) {
+          resolve(res.getOfferingDetailsBySlug.closureProcess);
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
   });
 }
 

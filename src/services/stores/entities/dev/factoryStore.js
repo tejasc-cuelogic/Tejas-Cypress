@@ -348,9 +348,10 @@ export class FactoryStore extends DataModelStore {
   });
 
   fileFactoryPluginTrigger = (investNowDocuSign = false) => new Promise(async (resolve, reject) => {
+    const { offer, offeringStorageDetails, getofferingStorageDetailBySlug } = offeringsStore;
+    const isEmptyStoreDetails = !!(isEmpty(offeringStorageDetails) || !get(offeringStorageDetails, 'data.getOfferingDetailsBySlug.storageDetails.Legal.GeneratedInvestNowDocs.id'));
     let TestformData = {};
     if (investNowDocuSign) {
-      const { offer } = offeringsStore;
       const filePayload = this.FILEFACTORY_FRM.fields;
       const filePayloadData = Validator.evaluateFormData(filePayload, true);
       const fileDropdownData = this.ExtractToJSON(filePayloadData, true);
@@ -376,8 +377,16 @@ export class FactoryStore extends DataModelStore {
           message: { error: 'Something went wrong, please try again later.' },
         });
         if (get(result, 'data.adminGenerateFile')) {
-          Helper.toast('Your request is processed.', 'success');
-          resolve(result.data.adminGenerateFile);
+          if (investNowDocuSign && isEmptyStoreDetails) {
+            getofferingStorageDetailBySlug(offer.offeringSlug)
+              .then((res) => {
+                Helper.toast('Your request is processed.', 'success');
+                resolve(res);
+              });
+          } else {
+            Helper.toast('Your request is processed.', 'success');
+            resolve(result.data.adminGenerateFile);
+          }
         }
       } catch (error) {
         Helper.toast('Something went wrong, please try again later.', 'error');

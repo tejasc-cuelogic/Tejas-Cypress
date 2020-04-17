@@ -9,6 +9,7 @@ import { STAGES } from '../../../../constants/admin/offerings';
 import {
   allOfferings, allOfferingsCompact, updateOffering,
   adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings, getofferingById,
+  getOfferingStoreDetails,
 } from '../../../queries/offerings/manage';
 import { offeringCreationStore, userStore, uiStore, campaignStore } from '../../../index';
 import { ClientDb, DataFormatter } from '../../../../../helper';
@@ -51,6 +52,8 @@ export class OfferingsStore {
   @observable totalRaisedAmount = [];
 
   @observable orderedActiveLiveList = [];
+
+  @observable offeringStorageDetails = null;
 
   @action
   initRequest = (props, forceResetDb = false) => {
@@ -513,6 +516,26 @@ export class OfferingsStore {
     ];
     return sortedResultObject;
   }
+
+  @action
+  getofferingStorageDetailBySlug = id => new Promise((resolve) => {
+    this.offerLoading = true;
+    this.offeringStorageDetails = graphql({
+      client,
+      query: getOfferingStoreDetails,
+      fetchPolicy: 'no-cache',
+      variables: { id },
+      onFetch: (res) => {
+        if (!this.offerLoading) {
+          this.offerLoading = false;
+          resolve(res.getOfferingDetailsBySlug.storageDetails);
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  });
 }
 
 export default new OfferingsStore();
