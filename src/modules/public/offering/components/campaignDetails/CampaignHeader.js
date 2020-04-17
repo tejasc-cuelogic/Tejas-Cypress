@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { get, capitalize } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Statistic, Grid, Button } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { CAMPAIGN_SECURITIES_DETAILED } from '../../../../../constants/offering';
 import { Image64, PopUpModal } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
@@ -21,6 +21,7 @@ export default class CampaignHeader extends Component {
   render() {
     const { campaignStore, newLayout, followBtn } = this.props;
     const { campaign, offerStructure, campaignStatus } = campaignStore;
+    const { keyTerms } = campaign;
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
@@ -180,12 +181,18 @@ export default class CampaignHeader extends Component {
                           />
                         </p>
                       </>
-                    )}
-                  {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
-                    && (
-                      <p className="raise-type mb-0">
-                        {campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_KEYTERMS_SECURITIES.PREFERRED_EQUITY_506C : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
-                      </p>
+                    )
+                  }
+                  {CAMPAIGN_SECURITIES_DETAILED.TOOLTIP[offerStructure]
+                  ? (
+                    <PopUpModal
+                      customTrigger={<span className="popup-label">{campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES.PREFERRED_EQUITY_506C : CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure]}</span>}
+                      content={CAMPAIGN_SECURITIES_DETAILED.TOOLTIP[keyTerms.securities]}
+                      position="top center"
+                      showOnlyPopup={!isMobile}
+                    />
+                    ) : (
+                      <span>{campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES.PREFERRED_EQUITY_506C : CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure]}</span>
                     )
                   }
                   {campaignStatus.isRealEstate
@@ -205,21 +212,39 @@ export default class CampaignHeader extends Component {
                   {campaignStatus.isTermNote
                     && (
                       <p className="mb-0">
-                        Interest Rate: {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
+                        <PopUpModal
+                          customTrigger={<span className="popup-label">Interest Rate:</span>}
+                          content={<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>}
+                          position="top center"
+                          showOnlyPopup={!isMobile}
+                        />
+                        {' '}{get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
                       </p>
                     )
                   }
                   {campaignStatus.isRevenueShare
                     && (
                       <p className="mb-0">
-                        Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
+                        <PopUpModal
+                          customTrigger={<span className="popup-label">Investment Multiple:</span>}
+                          content={<>This is the multiple of your original investment that the Issuer has agreed to pay back prior to maturity. The Issuer pays a portion of their gross revenues every month until the Investment Multiple is achieved. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
+                          position="top center"
+                          showOnlyPopup={!isMobile}
+                        />
+                        {' '}{get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
                       </p>
                     )
                   }
                   {(campaignStatus.isTermNote || campaignStatus.isRevenueShare)
                     && (
                       <p className="mb-0">
-                        Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
+                        <PopUpModal
+                          customTrigger={<span className="popup-label">Maturity:</span>}
+                          content={<>This is the deadline by which the issuer is obligated to make payment in full to investors.</>}
+                          position="top center"
+                          showOnlyPopup={!isMobile}
+                        />
+                        {' '}{get(campaign, 'keyTerms.maturity') || '-'} months
                       </p>
                     )
                   }
@@ -227,7 +252,13 @@ export default class CampaignHeader extends Component {
                     && (
                       <>
                         <p className="mb-0">
-                          Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : '-'}
+                          <PopUpModal
+                            customTrigger={<span className="popup-label">Pre-Money Valuation:</span>}
+                            content={<>This is the valuation of the business immediately prior to this round of financing.</>}
+                            position="top center"
+                            showOnlyPopup={!isMobile}
+                          />
+                          {' '}{get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : '-'}
                         </p>
                         <p className="mb-0">
                           {`${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price:`} {get(campaign, 'keyTerms.priceCopy') || '-'}
@@ -240,12 +271,24 @@ export default class CampaignHeader extends Component {
                       <>
                         {get(campaign, 'keyTerms.valuationCap') && (
                           <p className="mb-0">
-                            Valuation Cap: {get(campaign, 'keyTerms.valuationCap')}
+                            <PopUpModal
+                              customTrigger={<span className="popup-label">Valuation Cap:</span>}
+                              content={<>The Valuation Cap is the maximum valuation of the Issuer that may be used when converting your investment to equity. If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is higher than the Valuation Cap, then the investment converts to equity as if the investor invested at the lower valuation.</>}
+                              position="top center"
+                              showOnlyPopup={!isMobile}
+                            />
+                            {' '}{get(campaign, 'keyTerms.valuationCap')}
                           </p>
                         )}
                         {get(campaign, 'keyTerms.discount') && (
                           <p className="mb-0">
-                            Discount: {get(campaign, 'keyTerms.discount')}
+                            <PopUpModal
+                              customTrigger={<span className="popup-label">Discount:</span>}
+                              content={<>In certain circumstances, an investment may convert to equity at a discount to the valuation used in connection with the applicable valuation event.  If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is lower than the Valuation Cap (or when there is no Valuation Cap), then the Discount will be applied to the future valuation to determine the valuation at which your investment will convert to equity.</>}
+                              position="top center"
+                              showOnlyPopup={!isMobile}
+                            />
+                            {' '}{get(campaign, 'keyTerms.discount')}
                           </p>
                         )}
                       </>
