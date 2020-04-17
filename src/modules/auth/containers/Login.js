@@ -47,7 +47,6 @@ class Login extends Component {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    const { newPasswordRequired, setCredentials, resetForm } = this.props.authStore;
     const { removeOneFromProgressArray, authRef, appUpdated, setAppUpdated, authRefHash } = this.props.uiStore;
     this.props.uiStore.clearErrors();
     const { email, password } = this.props.authStore.LOGIN_FRM.fields;
@@ -55,6 +54,7 @@ class Login extends Component {
     const userCredentials = { email: lowerCasedEmail, password: password.value };
     authActions.login()
       .then(() => {
+        const { newPasswordRequired, setCredentials, resetForm } = this.props.authStore;
         if (appUpdated) {
           window.location.reload();
         }
