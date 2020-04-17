@@ -25,7 +25,7 @@ import { adminInvokeProcessorDriver } from '../../../queries/data';
 import { updateBusinessApplicationInformation, adminBusinessApplicationsDetails } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore, businessAppStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore, businessAppStore, manageOfferingStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 import { INDUSTRY_TYPES } from '../../../../../constants/offering';
@@ -1487,6 +1487,32 @@ export class OfferingCreationStore extends DataModelStore {
   });
 
   @action
+  updateUploadDocs = (uploadMeta, uploadDocumentArr = undefined, fromS3 = false) => {
+    uiStore.setProgress('save');
+    const { form, uploadFormKey, fieldName, uploadEnum } = uploadMeta;
+    this.bulkFileUpload(form, uploadFormKey, fieldName, uploadDocumentArr, uploadEnum, true).then(() => {
+      const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
+      // const removedDataRoomsDocs = Validator.evaluateFormData(this.removedFileData).documents || [];
+      // const oldDataRoomDocs = Validator.evaluateFormData(this.oldFormDetails).documents;
+      const finalDataRoomDocs = [];
+      dataRoomDocs.map((data, index) => {
+        if (data.accreditedOnly !== undefined) {
+          delete data.accreditedOnly;
+        }
+        if (data.name !== '' || data.upload.fileId !== '') {
+          finalDataRoomDocs.push(data);
+        }
+        return finalDataRoomDocs;
+      });
+      const payloadData = {
+        template: 2,
+        doc: cleanDeep(finalDataRoomDocs),
+      };
+      manageOfferingStore.updateOffering({ keyName: 'investNow', offeringData: { docuSign: payloadData } });
+    });
+  }
+
+  @action
   updateApplication = (uploadDocumentArr = undefined, fromS3 = false) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     uiStore.setProgress('save');
@@ -2212,14 +2238,14 @@ export class OfferingCreationStore extends DataModelStore {
       });
   }
 
-  bulkFileUpload = (form, arrayName, field, files, stepName) => new Promise((resolve, reject) => {
+  bulkFileUpload = (form, arrayName, field, files, stepName, isOffering = false) => new Promise((resolve, reject) => {
     // resolve();
     if (typeof files !== 'undefined' && files.length) {
       const funcArray = [];
       forEach(files, (file, index) => {
         const fileData = Helper.getFormattedFileData(file);
         this.isUploadingFile = true;
-        funcArray.push(this.uploadFiles(form, arrayName, field, file, stepName, fileData, file.currentIndex));
+        funcArray.push(this.uploadFiles(form, arrayName, field, file, stepName, fileData, file.currentIndex, isOffering));
       });
       Promise.all(funcArray).then((responseArr) => {
         window.logger(responseArr);
@@ -2233,10 +2259,10 @@ export class OfferingCreationStore extends DataModelStore {
     }
   });
 
-  uploadFiles = (form, arrayName, field, file, stepName, fileData, index) => new Promise((resolve, reject) => {
+  uploadFiles = (form, arrayName, field, file, stepName, fileData, index, isOffering = false) => new Promise((resolve, reject) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
-    const businessApplicationId = businessApplicationDetailsAdmin.applicationId;
-    const issuerId = businessApplicationDetailsAdmin.userId;
+    const businessApplicationId = isOffering ? '' : businessApplicationDetailsAdmin.applicationId;
+    const issuerId = isOffering ? '' : businessApplicationDetailsAdmin.userId;
     fileUpload.setFileUploadData(businessApplicationId, fileData, stepName, 'ADMIN', issuerId, this.currentOfferingId).then((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(action(() => {

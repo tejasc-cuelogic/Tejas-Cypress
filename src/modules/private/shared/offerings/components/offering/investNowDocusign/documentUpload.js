@@ -124,8 +124,15 @@ export default class DocumentUpload extends Component {
   // }
 
   handleFormSubmitForBusinessApplication = (isApproved = null) => {
-    const { updateApplication } = this.props.offeringCreationStore;
-    updateApplication(uploadFileArr);
+    const { updateUploadDocs } = this.props.offeringCreationStore;
+    const { metaInfo, uploadFormKey, uploadEnum } = this.props;
+    const uploadMeta = {
+      form: metaInfo.form,
+      uploadFormKey: uploadFormKey,
+      fieldName: 'upload',
+      uploadEnum: uploadEnum,
+    };
+    updateUploadDocs(uploadMeta, uploadFileArr);
     uploadFileArr = [];
   }
 
