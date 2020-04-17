@@ -146,7 +146,8 @@ export default class CampaignHeader extends Component {
                       !isClosed
                         ? <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
                         : <Progress percent="100" size="tiny" color="green" />
-                    ) : null}
+                    ) : null
+                  }
                   {!campaignStatus.isFund
                     ? (
                       <>
@@ -185,14 +186,16 @@ export default class CampaignHeader extends Component {
                   }
                   {CAMPAIGN_SECURITIES_DETAILED.TOOLTIP[offerStructure]
                   ? (
-                    <PopUpModal
-                      customTrigger={<span className="popup-label">{campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES.PREFERRED_EQUITY_506C : CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure]}</span>}
-                      content={CAMPAIGN_SECURITIES_DETAILED.TOOLTIP[keyTerms.securities]}
-                      position="top center"
-                      showOnlyPopup={!isMobile}
-                    />
+                    <p className="raise-type mb-0">
+                      <PopUpModal
+                        customTrigger={<span className="popup-label">{campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES.PREFERRED_EQUITY_506C : CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure]}</span>}
+                        content={CAMPAIGN_SECURITIES_DETAILED.TOOLTIP[keyTerms.securities]}
+                        position="top center"
+                        showOnlyPopup={!isMobile}
+                      />
+                    </p>
                     ) : (
-                      <span>{campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES.PREFERRED_EQUITY_506C : CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure]}</span>
+                      <p className="raise-type mb-0">{campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES.PREFERRED_EQUITY_506C : CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure]}</p>
                     )
                   }
                   {campaignStatus.isRealEstate
