@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Icon } from 'semantic-ui-react';
+// import { Button, Icon } from 'semantic-ui-react';
 
-const TopBanner = props => (
+const TopBanner => (
   <>
     {/* <div className={(props.leftMenu) ? 'sticky-message hide' : 'sticky-message'}>
     Small businesses affected by COVID-19 can{' '}<b><a href="https://www.nextseed.com/insights/community-bridge-notes">apply to raise working capital</a></b>
