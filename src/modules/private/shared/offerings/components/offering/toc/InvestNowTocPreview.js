@@ -31,16 +31,19 @@ function InvestNowTocPreview(props) {
       <Grid centered stackable className="mt-0">
         <Grid.Column width="10" className="pt-0">
           <div style={{ display: 'block' }}>
-            <Header as="h3" className={`${AGREEMENT_DETAILS_FORM.fields.page[index].title.value ? '' : 'mb-40'}`}>
-              Let&#39;s confirm your investment.<br />You are investing
-              <span className="positive-text"> XXXX.00</span> in {businessName}.
-            </Header>
+            {AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader.value
+              && (
+                <Header as="h3" className={`${AGREEMENT_DETAILS_FORM.fields.page[index].title.value ? '' : 'mb-40'}`}>
+                  Let&#39;s confirm your investment.<br />You are investing
+                  <span className="positive-text"> XXXX.00</span> in {businessName}.
+                </Header>
+              )}
             {AGREEMENT_DETAILS_FORM.fields.page[index].title.value
               && (
-              <Header as="h4" className="mb-40">
-                {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
-              </Header>
-            )}
+                <Header as="h4" className="mb-40">
+                  {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
+                </Header>
+              )}
             <Form>
               <Grid stackable>
                 <Grid.Row>
