@@ -333,6 +333,7 @@ export const getOfferingDetails = gql`
           title
           page
           regulation
+          hideHeader
           toc {
             label
             order
