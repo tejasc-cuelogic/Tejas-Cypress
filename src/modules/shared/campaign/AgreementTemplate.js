@@ -208,7 +208,7 @@ function AgreementTemplate(props) {
               </div>
             </div>
             <div style={{ display: showDocuSign || showAgreementPdf ? 'none' : 'block' }}>
-              {AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader.value
+              {!AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader.value
                 && (
                   <Header as="h3" className={`${AGREEMENT_DETAILS_FORM.fields.page[index].title.value ? '' : 'mb-40'}`}>
                     Let&#39;s confirm your investment.<br />You are investing
