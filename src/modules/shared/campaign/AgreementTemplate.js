@@ -208,16 +208,16 @@ function AgreementTemplate(props) {
               </div>
             </div>
             <div style={{ display: showDocuSign || showAgreementPdf ? 'none' : 'block' }}>
-              <Header as="h3" className="mb-40">
+              <Header as="h3" className={`${AGREEMENT_DETAILS_FORM.fields.page[index].title.value ? '' : 'mb-40'}`}>
                 Let&#39;s confirm your investment.<br />You are investing
                   <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
-                {AGREEMENT_DETAILS_FORM.fields.page[index].title.value
-                  && (
-                    <Header.Subheader>
-                      {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
-                    </Header.Subheader>
-                  )}
               </Header>
+              {AGREEMENT_DETAILS_FORM.fields.page[index].title.value
+                && (
+                  <Header as="h4" className="mb-40">
+                    {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
+                  </Header>
+                )}
               <DynamicAgreement
                 inProgress={inProgress}
                 showError={showError}
