@@ -23,6 +23,7 @@ export const FILTER_META = {
       { text: 'Requested', value: 'REQUESTED' },
       { text: 'Approved', value: 'CONFIRMED' },
       { text: 'Declined', value: 'INVALID' },
+      { text: 'Expired', value: 'EXPIRED' },
     ],
     error: undefined,
     rule: 'empty',
