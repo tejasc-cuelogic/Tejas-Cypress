@@ -480,6 +480,7 @@ export class Auth {
     accountStore.resetStoreData();
     identityStore.resetStoreData();
     investorProfileStore.resetAll();
+    investorProfileStore.resetStoreData();
     userDetailsStore.resetStoreData();
     iraAccountStore.resetStoreData();
     entityAccountStore.resetStoreData();

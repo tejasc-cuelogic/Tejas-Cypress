@@ -106,7 +106,7 @@ class Login extends Component {
     } = this.props.authStore;
     const { smartElement } = this.props;
 
-    const isProgress = inProgress || !isEmpty(inProgressArray);
+    const isProgress = inProgress || inProgressArray.includes('login');
 
     const customError = errors && errors.message === 'User does not exist.'
       ? 'Incorrect username or password.' : errors && errors.message;
