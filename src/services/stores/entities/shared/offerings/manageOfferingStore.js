@@ -486,6 +486,7 @@ export class ManageOfferingStore extends DataModelStore {
       const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
       if (index > -1) {
         const pageData = investNow[index];
+        pageData.hideHeader = [pageData.hideHeader];
         this.INVEST_NOW_PAGE_FRM = Validator.setFormData(this.INVEST_NOW_PAGE_FRM, pageData);
         this.INVEST_NOW_PAGE_FRM = Validator.validateForm(this.INVEST_NOW_PAGE_FRM);
       }
