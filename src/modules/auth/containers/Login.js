@@ -106,6 +106,8 @@ class Login extends Component {
     } = this.props.authStore;
     const { smartElement } = this.props;
 
+    const isProgress = inProgress || !isEmpty(inProgressArray);
+
     const customError = errors && errors.message === 'User does not exist.'
       ? 'Incorrect username or password.' : errors && errors.message;
 
@@ -126,7 +128,8 @@ class Login extends Component {
               ['email', 'password'].map(field => (
                 smartElement.Input(field, { type: field === 'password' ? pwdInputType : 'email',
                 icon: field === 'password' ? togglePasswordType() : null,
-                autoFocus: !responsiveVars.isMobile && field === 'email' })
+                autoFocus: !responsiveVars.isMobile && field === 'email',
+                disabled: isProgress })
               ))
             }
             <Form.Field>
@@ -140,7 +143,7 @@ class Login extends Component {
               )
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Log in" loading={inProgress || !isEmpty(inProgressArray)} disabled={!LOGIN_FRM.meta.isValid || inProgress || !isEmpty(inProgressArray)} />
+              <Button fluid primary size="large" className="very relaxed" content="Log in" loading={isProgress} disabled={!LOGIN_FRM.meta.isValid || inProgress || !isEmpty(inProgressArray)} />
             </div>
           </Form>
         </Modal.Content>
