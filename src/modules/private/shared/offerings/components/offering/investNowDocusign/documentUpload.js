@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { Form, Header, Button, Divider, Icon, Confirm } from 'semantic-ui-react';
 import { get } from 'lodash';
-import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
+import { FormInput, DropZoneConfirm as DropZone, FormRadioGroup } from '../../../../../../../theme/form';
 import ButtonGroupType2 from '../../ButtonGroupType2';
 
 let uploadFileArr = [];
@@ -42,6 +42,15 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
             onremove={fieldName => handleDelDoc(fieldName, docIndx)}
           />
         }
+      </div>
+      <div className="balance-half">
+        <FormRadioGroup
+          readOnly={isReadonly}
+          containerclassname={isReadonly ? 'display-only' : ''}
+          fielddata={document.mappingRequired}
+          name="mappingRequired"
+          changed={(e, result) => formArrayChange(e, result, formName, 'documents', docIndx)}
+        />
       </div>
       <div className="action">
         {showLockActivity
@@ -118,11 +127,7 @@ export default class DocumentUpload extends Component {
     this.props.offeringCreationStore.setAccreditedOnlyField(metaInfo.form, index);
     this.forceUpdate();
   }
-  // handleFormSubmit = (isApproved = null) => {
-  //   const { DATA_ROOM_FRM, CLOSING_BINDER_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-  //   updateOffering(currentOfferingId, this.props.closingBinder ? CLOSING_BINDER_FRM.fields : DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
-  // }
-
+  
   handleFormSubmitForBusinessApplication = (isApproved = null) => {
     const { updateUploadDocs } = this.props.offeringCreationStore;
     const { metaInfo, uploadFormKey, uploadEnum } = this.props;
@@ -140,7 +145,7 @@ export default class DocumentUpload extends Component {
     if (!isReadonly) {
       const { metaInfo } = this.props;
       const docs = [...this.props[metaInfo.store][metaInfo.form].fields.documents];
-      this.props.offeringCreationStore.setDataRoomDocsOrder(arrayMove(docs, oldIndex, newIndex));
+      this.props.offeringCreationStore.setDataRoomDocsOrder(arrayMove(docs, oldIndex, newIndex), metaInfo.form);
     }
   };
   render() {
@@ -149,10 +154,9 @@ export default class DocumentUpload extends Component {
       offeringClose,
       closingBinder,
       uiStore,
-      referenceFrom,
       header,
       isSaveOnly,
-      isButtonGroup,        
+      isButtonGroup,
       uploadFormKey,
       metaInfo,
     } = this.props;
@@ -166,7 +170,7 @@ export default class DocumentUpload extends Component {
     const approved = (offer && offer.legal && offer.legal.dataroom &&
       offer.legal.dataroom.approved) ? offer.legal.dataroom.approved : null;
     const isReadonly = (!offeringClose && ((submitted && !isManager) || (isManager && approved && approved.status) || !!(this.props.isReadOnlyFlag)));
-    const {      
+    const {
       formArrayChange,
       confirmModal,
       confirmModalName,
@@ -190,6 +194,7 @@ export default class DocumentUpload extends Component {
             <div className="row-wrap thead">
               <div className="balance-half">Document Name</div>
               <div className="balance-half">Document</div>
+              <div className="balance-half">Is Mappeing Required</div>
               <div className="action width-70">Actions</div>
             </div>
             <SortableList
@@ -207,7 +212,7 @@ export default class DocumentUpload extends Component {
               formName={formName}
               lockAxis="y"
               useDragHandle
-              showLockActivity={true}
+              showLockActivity={false}
               isBusinessApplication={true}
             />
           </div>
@@ -237,7 +242,7 @@ export default class DocumentUpload extends Component {
           content="Are you sure you want to remove this document?"
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName, 'documents', false, !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION'))}
+          onConfirm={() => removeData(confirmModalName, 'documents', false, true)}
           size="mini"
           className="deletion"
         />

@@ -11,7 +11,7 @@ import {
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS, CLOSING_BINDING,
-  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES, OFFERING_DEFAULT,
+  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES, OFFERING_DEFAULT, UPLOAD_DATA,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore from '../dataModelStore';
@@ -112,6 +112,8 @@ export class OfferingCreationStore extends DataModelStore {
   @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
 
   @observable DATA_ROOM_FRM = Validator.prepareFormObject(DATA_ROOM);
+
+  @observable UPLOAD_DATA_FRM = Validator.prepareFormObject(UPLOAD_DATA);
 
   @observable CLOSING_BINDER_FRM = Validator.prepareFormObject(CLOSING_BINDING);
 
@@ -284,7 +286,7 @@ export class OfferingCreationStore extends DataModelStore {
   resetAllForms = () => {
     offeringInvestorStore.setData('db', undefined);
     offeringInvestorStore.setData('data', []);
-    const forms = ['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
+    const forms = ['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM', 'UPLOAD_DATA_FRM'];
     forms.forEach((f) => {
       this[f] = Validator.resetFormData(this[f]);
     });
@@ -497,7 +499,7 @@ export class OfferingCreationStore extends DataModelStore {
   removeData = (formName, subForm = 'data', isApiDelete = false, isForBusinessApplication = false) => {
     const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
-      if (['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'CLOSING_BINDER_FRM', 'DATA_ROOM_FRM'].includes(formName)) {
+      if (['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'CLOSING_BINDER_FRM', 'DATA_ROOM_FRM', 'UPLOAD_DATA_FRM'].includes(formName)) {
         let removeFileIds = '';
         let removedArr = [];
         if (isForBusinessApplication) {
@@ -1020,6 +1022,19 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
+  setFormDataForUploadDocuments = (form, ref) => {
+    this.resetForm(form);
+    this.setFieldValue('removedFileData', [], 'documents');
+    const { offer } = offeringsStore;
+    const evaluatedFormData = Helper.replaceKeysDeep(offer, { doc: 'documents' });
+    const formDetails = Validator.setFormData(this[form], evaluatedFormData, ref);
+    this[form] = formDetails;
+    this.setFieldValue('oldFormDetails', formDetails.fields);
+    this.checkFormValid(form, true, false);
+    return false;
+  }
+
+  @action
   stringTemplateFormatting = (form, data) => {
     const currentForm = this[form];
     forEach(currentForm.fields, (field, key) => {
@@ -1052,6 +1067,7 @@ export class OfferingCreationStore extends DataModelStore {
       DOCUMENTATION_FRM: { isMultiForm: false },
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
       DATA_ROOM_FRM: { isMultiForm: true },
+      UPLOAD_DATA_FRM: { isMultiForm: true },
       CLOSING_BINDER_FRM: { isMultiForm: true },
       POC_DETAILS_FRM: { isMultiForm: false },
       OFFERING_CLOSE_1: { isMultiForm: false },
@@ -1491,7 +1507,7 @@ export class OfferingCreationStore extends DataModelStore {
     uiStore.setProgress('save');
     const { form, uploadFormKey, fieldName, uploadEnum } = uploadMeta;
     this.bulkFileUpload(form, uploadFormKey, fieldName, uploadDocumentArr, uploadEnum, true).then(() => {
-      const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
+      const dataRoomDocs = Validator.evaluateFormData(this[form].fields).documents || [];
       // const removedDataRoomsDocs = Validator.evaluateFormData(this.removedFileData).documents || [];
       // const oldDataRoomDocs = Validator.evaluateFormData(this.oldFormDetails).documents;
       const finalDataRoomDocs = [];
@@ -1508,8 +1524,16 @@ export class OfferingCreationStore extends DataModelStore {
         template: 2,
         doc: cleanDeep(finalDataRoomDocs),
       };
-      manageOfferingStore.updateOffering({ keyName: 'investNow', offeringData: { docuSign: payloadData } });
-    });
+      manageOfferingStore.updateOffering({ keyName: 'investNow', offeringData: { docuSign: payloadData } })
+        .then(() => {
+          this.removeUploadedFiles(fromS3);
+          // Helper.toast('Document has been saved successfully.', 'success');
+          uiStore.setProgress(false);
+        });
+    }).catch(action((error) => {
+      window.logger(error);
+      uiStore.setProgress(false);
+    }));
   }
 
   @action
@@ -2205,7 +2229,8 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
-  setDataRoomDocsOrder = (orderedForm) => {
+  setDataRoomDocsOrder = (orderedForm, formName = false) => {
+    const activeForm = formName || 'DATA_ROOM_FRM';
     const dataRoomDocs = toJS(orderedForm).map((d) => {
       return {
         name: d.name.value,
@@ -2213,7 +2238,7 @@ export class OfferingCreationStore extends DataModelStore {
         upload: { fileId: d.upload.fileId, fileName: d.upload.value },
       };
     });
-    this.DATA_ROOM_FRM = Validator.setFormData(this.DATA_ROOM_FRM, { documents: dataRoomDocs });
+    this[activeForm] = Validator.setFormData(this[activeForm], { documents: dataRoomDocs });
   }
 
   @action

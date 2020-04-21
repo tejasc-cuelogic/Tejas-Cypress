@@ -9,7 +9,7 @@ import { InlineLoader } from '../../../../../../theme/shared';
 
 const metaInfo = {
   store: 'offeringCreationStore',
-  form: 'DATA_ROOM_FRM',
+  form: 'UPLOAD_DATA_FRM',
 };
 
 @inject('businessAppReviewStore', 'businessAppStore', 'nsUiStore', 'offeringCreationStore', 'factoryStore', 'offeringsStore')
@@ -26,8 +26,8 @@ class InvestNowDocusignGenerations extends Component {
 
   render() {
     const { loadingArray } = this.props.nsUiStore;
-    const { setFormDataForBusinessUploadDocuments } = this.props.offeringCreationStore;
-    setFormDataForBusinessUploadDocuments('DATA_ROOM_FRM', '');
+    const { setFormDataForUploadDocuments } = this.props.offeringCreationStore;
+    setFormDataForUploadDocuments(metaInfo.form, 'investNow.docuSign');
     const isReadOnlyFlag = false;
     const { offer, offerDataLoading } = this.props.offeringsStore;
     const regulation = get(offer, 'regulation');
@@ -50,7 +50,6 @@ class InvestNowDocusignGenerations extends Component {
                 <Card.Content>
                   <Card.Description>
                     <DocumentUpload
-                      referenceFrom="BUSINESS_APPLICATION"
                       metaInfo={metaInfo}
                       uploadFormKey="documents"
                       uploadEnum="DOCUMENTS_INVEST_NOW"

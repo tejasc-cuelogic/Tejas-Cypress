@@ -2899,6 +2899,19 @@ export const CLOSING_BINDING = {
   }],
 };
 
+export const UPLOAD_DATA = {
+  documents: [{
+    ...DATA_ROOM_COMMON,
+    mappingRequired: {
+      value: '',
+      values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
+      label: 'Is mapping required?',
+      error: undefined,
+      rule: 'optional',
+    },
+  }],
+};
+
 export const POC_DETAILS = {
   issuerId: {
     value: '',

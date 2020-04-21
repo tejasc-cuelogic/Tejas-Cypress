@@ -348,6 +348,17 @@ export const getOfferingDetails = gql`
             required
           }
         }
+        docuSign {
+          template
+          doc {
+            name
+            mappingRequired
+            upload {
+              fileId
+              fileName
+            }
+          }
+        }
       }
       closureProcess {
         checkBalance {
