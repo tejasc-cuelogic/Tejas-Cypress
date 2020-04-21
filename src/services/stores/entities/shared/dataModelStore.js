@@ -378,6 +378,17 @@ export default class DataModelStore {
     this.currTime = +new Date();
   }
 
+  resetAllForms = () => {
+    this.formArr.forEach((f) => {
+      this[f] = FormValidator.resetFormData(this[f]);
+    });
+  }
+
+  resetStoreData = () => {
+    this.resetAllForms();
+    this.stepToBeRendered = 0;
+  }
+
   setFormData = (form, elemRef, elementValue, subForm = false) => {
     if (subForm) {
       this[form][subForm].fields[elemRef].value = elementValue;
@@ -490,4 +501,6 @@ export const decorateDefault = {
   removeOne: action,
   editorChange: action,
   handleUploadLoader: action,
+  resetStoreData: action,
+  resetAllForms: action,
 };
