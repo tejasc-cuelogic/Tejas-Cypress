@@ -31,7 +31,7 @@ function InvestNowTocPreview(props) {
       <Grid centered stackable className="mt-0">
         <Grid.Column width="10" className="pt-0">
           <div style={{ display: 'block' }}>
-            {!AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader.value
+            {(!AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader || (AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader && !AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader.value))
               && (
                 <Header as="h3" className={`${AGREEMENT_DETAILS_FORM.fields.page[index].title.value ? '' : 'mb-40'}`}>
                   Let&#39;s confirm your investment.<br />You are investing

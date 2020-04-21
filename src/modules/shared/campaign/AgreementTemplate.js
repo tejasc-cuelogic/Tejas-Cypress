@@ -45,7 +45,7 @@ function AgreementTemplate(props) {
       stepToBeRendered, setStepToBeRendered, investAccTypes, resetAggrementForm, setFieldValue,
     } = investmentStore;
     const {
-      getLegalDocsFileIds, alreadySet, createAgreementTocs,
+      getLegalDocsFileIds, alreadySet, createAgreementTocs, setField,
     } = agreementsStore;
     if (!alreadySet) {
       getLegalDocsFileIds().then(() => {
@@ -67,6 +67,7 @@ function AgreementTemplate(props) {
       const redirectURL = props.history.location.pathname;
       if (!redirectURL.includes('change-investment-limit') && !redirectURL.includes('agreement')) {
         investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+        setField('agreementPage', 0);
       }
     };
   }, []);
@@ -208,7 +209,7 @@ function AgreementTemplate(props) {
               </div>
             </div>
             <div style={{ display: showDocuSign || showAgreementPdf ? 'none' : 'block' }}>
-              {!AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader.value
+              {(!AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader || (AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader && !AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader.value))
                 && (
                   <Header as="h3" className={`${AGREEMENT_DETAILS_FORM.fields.page[index].title.value ? '' : 'mb-40'}`}>
                     Let&#39;s confirm your investment.<br />You are investing
