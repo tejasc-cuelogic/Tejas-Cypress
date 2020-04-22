@@ -285,7 +285,7 @@ export class AuthStore extends DataModelStore {
     this.resetForm('RESET_PASS_FRM', null);
     this.resetForm('NEWSLETTER_FRM', null);
     this.newPasswordRequired = false;
-    this.isUserLoggedIn = false;
+    this.setUserLoggedIn(false);
   }
 
   setCurrentUserCapabilites = (capabilities) => {
