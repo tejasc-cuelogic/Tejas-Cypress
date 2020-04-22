@@ -19,7 +19,8 @@ import InsightsDetails from './public/resources/containers/InsightsDetails';
 import EducationCenter from './public/resources/containers/EducationCenter';
 import Space from './public/space/containers/Space';
 import Group from './public/about/components/Group';
-
+import NewMission from './public/about/components/NewMission';
+import Team from './public/about/components/Team';
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
 import XmlForm from './private/admin/edgar/containers/XmlForm';
@@ -63,6 +64,14 @@ export const publicRoutes = [
   {
     path: '/about/:section?', // optional section to support old urls
     component: About,
+  },
+  {
+    path: '/mission',
+    component: NewMission,
+  },
+  {
+    path: '/team',
+    component: Team,
   },
   {
     path: '/invest/get-started',
