@@ -46,7 +46,7 @@ class InvestNowDocusignGenerations extends Component {
             <>
               <GenerateDocuments />
               <Card fluid className="elastic-search">
-                <Card.Content header="Upload Documents" />
+                {/* <Card.Content header="Upload Documents" /> */}
                 <Card.Content>
                   <Card.Description>
                     <DocumentUpload
@@ -55,6 +55,7 @@ class InvestNowDocusignGenerations extends Component {
                       uploadEnum="DOCUMENTS_INVEST_NOW"
                       isReadOnlyFlag={isReadOnlyFlag}
                       isSaveOnly
+                      header="Upload Documents"
                     />
                   </Card.Description>
                 </Card.Content>

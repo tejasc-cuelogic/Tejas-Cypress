@@ -51,7 +51,7 @@ function GenerateDocuments(props) {
               <Card.Description>
                 <Form onSubmit={FILEFACTORY_FRM.meta.isValid && onSubmit}>
                   <Form.Group className="bottom-aligned">
-                    <Form.Field width={8}>
+                    <Form.Field width={12}>
                       {smartElement.FormDropDown('method', {
                         onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
                         containerclassname: 'dropdown-field mlr-0',
@@ -63,23 +63,14 @@ function GenerateDocuments(props) {
                     </Form.Field>
                     <Form.Field width={4}>
                       <Button primary content="Generate" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} />
-                    </Form.Field>
-                    {isPreview
-                      && (
-                        <Form.Field width={4}>
+                      {isPreview
+                        && (
                           <Button secondary content="Preview" onClick={e => handleDocumentsLink(e, folderId)} disabled={props.commonStore.inProgress === folderId || inProgress.fileFactory} loading={props.commonStore.inProgress === folderId} />
-                        </Form.Field>
-                      )
-                    }
+                        )
+                      }
+                    </Form.Field>
                   </Form.Group>
                 </Form>
-                {/* {isPreview
-                  && (
-                    <div className="right-align mt-20">
-                      <Button secondary content="Preview" onClick={e => handleDocumentsLink(e, folderId)} disabled={props.commonStore.inProgress === folderId} loading={props.commonStore.inProgress === folderId} />
-                    </div>
-                  )
-                } */}
               </Card.Description>
             </Card.Content>
           </Card>
