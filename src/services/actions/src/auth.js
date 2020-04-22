@@ -87,7 +87,7 @@ export class Auth {
       new Promise((res, rej) => {
         AmplifyAuth.currentSession().then((currentUser) => {
           if (currentUser) {
-            AmplifyAuth.currentAuthenticatedUser().then((user) => {
+            AmplifyAuth.currentAuthenticatedUser({ bypassCache: true }).then((user) => {
               const { signInUserSession, attributes } = user;
               const mapData = this.parseRoles(this.mapCognitoToken(attributes));
               userStore.setCurrentUser(mapData);
@@ -175,9 +175,9 @@ export class Auth {
 
   async refreshCurrentSession() {
     try {
-    const session = await AmplifyAuth.currentSession();
-    await this.refreshSessionPromise(session.getRefreshToken());
-    // eslint-disable-next-line no-empty
+      const session = await AmplifyAuth.currentSession();
+      await this.refreshSessionPromise(session.getRefreshToken());
+      // eslint-disable-next-line no-empty
     } catch {
     }
   }
@@ -189,7 +189,7 @@ export class Auth {
         reject(err);
       } else {
         userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
-        resolve(data); // THIS IS YOUR REFRESHED ATTRIBUTES/GROUPS
+        resolve(data);
       }
     });
   })
@@ -480,6 +480,7 @@ export class Auth {
     accountStore.resetStoreData();
     identityStore.resetStoreData();
     investorProfileStore.resetAll();
+    investorProfileStore.resetStoreData();
     userDetailsStore.resetStoreData();
     iraAccountStore.resetStoreData();
     entityAccountStore.resetStoreData();
