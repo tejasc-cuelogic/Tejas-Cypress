@@ -457,7 +457,7 @@ export class IdentityStore {
       method = 'EMAIL';
     } else if (type === 'BANK_CHANGE') {
       to = phone;
-      method = multiFactorMfaValue;
+      method = multiFactorMfaValue || 'TEXT';
     } else {
       to = phone;
       method = mfaMethod.value === '' ? 'TEXT' : mfaMethod.value;
