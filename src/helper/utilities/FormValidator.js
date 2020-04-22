@@ -502,7 +502,7 @@ class FormValidator {
         } else {
           fields[key].value = data && typeof data === 'object' ? (data[key] !== null && data[key] !== '' && data[key] !== undefined) ? data[key] : fields[key].value : data || fields[key].value;
         }
-        if (fields[key].refSelector) {
+        if (fields[key].refSelector !== null) {
           fields[key].refSelectorValue = fields[key].value !== '';
           if (fields[key].value !== undefined) {
             fields[fields[key].refSelector].value = (fields[key].value !== null && fields[key].value !== '');

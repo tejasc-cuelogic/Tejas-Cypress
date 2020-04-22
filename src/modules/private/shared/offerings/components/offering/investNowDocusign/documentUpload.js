@@ -48,7 +48,9 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
           readOnly={isReadonly}
           containerclassname={isReadonly ? 'display-only' : ''}
           fielddata={document.mappingRequired}
-          name="mappingRequired"
+          default
+          name={`mappingRequired[${docIndx}]`}
+          eleName="mappingRequired"
           changed={(e, result) => formArrayChange(e, result, formName, 'documents', docIndx)}
         />
       </div>
@@ -194,7 +196,7 @@ export default class DocumentUpload extends Component {
             <div className="row-wrap thead">
               <div className="balance-half">Document Name</div>
               <div className="balance-half">Document</div>
-              <div className="balance-half">Is Mappeing Required</div>
+              <div className="balance-half">Mappeing Required</div>
               <div className="action width-70">Actions</div>
             </div>
             <SortableList
