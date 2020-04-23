@@ -1,166 +1,169 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Button, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
+import { Header, Button, Message } from 'semantic-ui-react';
+import money from 'money-math';
+import { get } from 'lodash';
 import BasicTransferRequest from './transferRequest/basicTransferRequest';
+import TransferRequestMethod from './transferRequest/transferRequestMethod';
+import Helper from '../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
-@inject('investmentStore', 'investmentLimitStore', 'uiStore', 'accreditationStore')
-@withRouter
-@observer
-class TransferRequest extends Component {
-  constructor(props) {
-    super(props);
+const TRANSFER_AMOUNT_LIMIT = '10000';
+
+function TransferRequest(props) {
+  const [showTransferRequest, setShowTransferRequest] = useState('basic');
+  const [transferRequestMethod, setTransferRequestMethod] = useState(null);
+
+  const getTransferRequestMethod = (transferAmount) => {
+    const { campaignStore, portfolioStore } = props;
+    const offeringReuglation = get(campaignStore.campaign, 'keyTerms.regulation') || get(portfolioStore.getInvestorAccountById, 'offering.keyTerms.regulation');
+    const formatedTransferAmount = money.floatToAmount(transferAmount);
+    const formatedBaseAmount = money.floatToAmount(TRANSFER_AMOUNT_LIMIT);
+    const comairResult = money.cmp(formatedTransferAmount, formatedBaseAmount);
+    if (Math.sign(comairResult) >= 0 && ['BD_506B', 'BD_506C'].includes(offeringReuglation)) {
+      setShowTransferRequest('advance');
+    }
+  };
+
+  useEffect(() => {
     const {
       getTransferRequestAmount,
       setStepToBeRendered,
       resetFormErrors,
-    } = this.props.investmentStore;
-    resetFormErrors('INVESTMONEY_FORM');
-    if (getTransferRequestAmount > 0) {
-      setStepToBeRendered(2);
-    } else {
-      this.props.history.push('agreement');
-    }
-  }
-
-  componentDidMount() {
-    const { setStepToBeRendered, setFieldValue } = this.props.investmentStore;
-    setFieldValue('disableNextbtn', true);
-    setStepToBeRendered(2);
-  }
-
-  componentWillUnmount() {
-    const {
-      stepToBeRendered,
-      setStepToBeRendered,
       setFieldValue,
-      resetFormErrors,
-    } = this.props.investmentStore;
-    if (stepToBeRendered === 2) {
-      setStepToBeRendered(0);
-    }
-    this.props.uiStore.clearErrors();
-    setFieldValue('investmentFlowEquityErrorMessage', null);
-    setFieldValue('investmentFlowErrorMessage', null);
+      stepToBeRendered,
+    } = props.investmentStore;
     resetFormErrors('INVESTMONEY_FORM');
-  }
-
-  handleShowTransferErrRequest = () => {
-    this.props.investmentStore.setShowTransferRequestErr(false);
-    this.props.investmentStore.resetData();
-    this.props.accreditationStore.resetUserAccreditatedStatus();
-    this.props.history.push(this.props.refLink);
-  }
-
-  render() {
-    const { investmentStore, investmentLimitStore, changeInvest, isPreferredEquity } = this.props;
-    const {
-      getTransferRequestAmount,
-      showTransferRequestErr,
-      investmentAmount,
-      investmentFlowErrorMessage,
-    } = investmentStore;
-    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
-    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
-    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
-    const getPreviousInvestedAmount = (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
-    const bankAndAccountName = userAmountDetails && userAmountDetails.bankNameAndAccountNumber ? userAmountDetails.bankNameAndAccountNumber : '-';
-    if (showTransferRequestErr) {
-      return (
-        <div className="center-align">
-          <Header as="h3" textAlign="center">Your investment transaction was not processed.</Header>
-          <p className="mt-30 mb-30">This may have happened because your session expired or your network connection dropped.
-          We did not complete your investment transaction. Please check your account, and
-          try again to complete your investment.
-          </p>
-          <Button primary content="Try Again" onClick={this.handleShowTransferErrRequest} />
-        </div>
-      );
+    if (getTransferRequestAmount <= 0) {
+      props.history.push('agreement');
+    } else {
+      setFieldValue('disableNextbtn', true);
+      setStepToBeRendered(2);
     }
+    getTransferRequestMethod(getTransferRequestAmount);
+
+    return () => {
+      if (stepToBeRendered === 2) {
+        setStepToBeRendered(0);
+      }
+      props.uiStore.clearErrors();
+      setFieldValue('investmentFlowEquityErrorMessage', null);
+      setFieldValue('investmentFlowErrorMessage', null);
+      resetFormErrors('INVESTMONEY_FORM');
+    };
+  }, []);
+
+  const handleShowTransferErrRequest = () => {
+    props.investmentStore.setShowTransferRequestErr(false);
+    props.investmentStore.resetData();
+    props.accreditationStore.resetUserAccreditatedStatus();
+    props.history.push(props.refLink);
+  };
+
+  const renderTransferStep = (renderStep) => {
+    setTransferRequestMethod(renderStep);
+  };
+
+  const { investmentStore, investmentLimitStore, changeInvest, isPreferredEquity } = props;
+  const {
+    getTransferRequestAmount,
+    showTransferRequestErr,
+    investmentAmount,
+    investmentFlowErrorMessage,
+  } = investmentStore;
+  const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+  const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
+  const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
+  const getPreviousInvestedAmount = (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
+  const bankAndAccountName = userAmountDetails && userAmountDetails.bankNameAndAccountNumber ? userAmountDetails.bankNameAndAccountNumber : '-';
+  let headerTitle = showTransferRequest === 'basic' ? 'Confirm Transfer Request' : 'How would you like to fund this investment?';
+  if (transferRequestMethod) {
+    headerTitle = transferRequestMethod === 'ACH' ? 'Confirm Transfer Date and Request' : 'Confirm Wire Amount';
+  }
+  const { campaignStore, portfolioStore } = props;
+  const offeringReuglation = get(campaignStore.campaign, 'keyTerms.regulation') || get(portfolioStore.getInvestorAccountById, 'offering.keyTerms.regulation');
+  const advanceTransferStepStatement = offeringReuglation === 'BD_506B'
+   ? `Since the Balance Required exceeds ${Helper.CurrencyFormat(TRANSFER_AMOUNT_LIMIT, 0)} and this is an investment under Rule 506(b) of Regulation D, you have the option to initiate a transfer of funds or wire funds after you reserve your investment.`
+   : `Since the Balance Required exceeds ${Helper.CurrencyFormat(TRANSFER_AMOUNT_LIMIT, 0)} and your accredited investor status has been verified, you have the option to schedule a transfer of funds for a future date or wire funds after you reserve your investment.`;
+
+   if (showTransferRequestErr) {
     return (
-      <>
-        <Header as="h4">Confirm Transfer Request</Header>
-        <BasicTransferRequest
-          isPreferredEquity={isPreferredEquity}
-          investmentAmount={investmentAmount}
-          changeInvest={changeInvest}
-          getPreviousInvestedAmount={getPreviousInvestedAmount}
-          getCurrCashAvailable={getCurrCashAvailable}
-          getCurrCreditAvailable={getCurrCreditAvailable}
-          getTransferRequestAmount={getTransferRequestAmount}
-          isMobile={isMobile}
-        />
-        {/* <Table basic="very" className="confirm-transfer-table mt-30" compact>
-          <Table.Body>
-            <Table.Row>
-              <Table.Cell>Investment Amount:</Table.Cell>
-              <Table.Cell collapsing className="right-align">
-                {isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}
-              </Table.Cell>
-            </Table.Row>
-            {changeInvest
-              && (
-                <Table.Row>
-                  <Table.Cell>Previous Investment:</Table.Cell>
-                  <Table.Cell collapsing className="right-align">
-                    {isPreferredEquity ? Helper.CurrencyFormat(getPreviousInvestedAmount) : Helper.CurrencyFormat(getPreviousInvestedAmount, 0)}
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            <Table.Row>
-              <Table.Cell>
-                <PopUpModal
-                  wide
-                  customTrigger={<span className="popup-label">Available Cash:</span>}
-                  content="If this investment is a request to change an existing investment in this offering, then Cash Available also includes any dollars currently reserved or invested in the same offering."
-                  position="top center"
-                  showOnlyPopup={!isMobile}
-                />
-              </Table.Cell>
-              <Table.Cell collapsing className="right-align">
-                {isPreferredEquity ? Helper.CurrencyFormat(getCurrCashAvailable) : Helper.CurrencyFormat(getCurrCashAvailable, 0)}
-              </Table.Cell>
-            </Table.Row>
-            {!money.isZero(getCurrCreditAvailable)
-              && (
-                <Table.Row>
-                  <Table.Cell>Available Credit: </Table.Cell>
-                  <Table.Cell collapsing className="right-align">
-                    {isPreferredEquity ? Helper.CurrencyFormat(getCurrCreditAvailable) : Helper.CurrencyFormat(getCurrCreditAvailable, 0)}
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-          </Table.Body>
-          <Table.Footer>
-            <Table.Row>
-              <Table.HeaderCell>Transfer Request: </Table.HeaderCell>
-              <Table.HeaderCell className="positive-text right-align" collapsing>{isPreferredEquity ? Helper.CurrencyFormat(getTransferRequestAmount) : Helper.CurrencyFormat(getTransferRequestAmount, 0)}</Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
-        </Table> */}
-        {investmentFlowErrorMessage
-          && (
-            <Message error className="mt-30">
-              {investmentFlowErrorMessage}
-            </Message>
-          )
-        }
-        <Button.Group widths="2" className="inline mt-30">
-          <Button content="Back" type="button" onClick={this.props.cancel} />
-          <Button primary content="Confirm" onClick={this.props.confirm} />
-        </Button.Group>
-        <p className="mt-50">
-          By clicking the “Confirm” button, I authorize the transfer from
-          my {bankAndAccountName} to my NextSeed account in the
-          amount equal to the Transfer Requested above. I understand this transfer will
-          be initiated within 1-3 business days.
-        </p>
-      </>
+      <div className="center-align">
+        <Header as="h3" textAlign="center">Your investment transaction was not processed.</Header>
+        <p className="mt-30 mb-30">This may have happened because your session expired or your network connection dropped.
+        We did not complete your investment transaction. Please check your account, and
+        try again to complete your investment.
+          </p>
+        <Button primary content="Try Again" onClick={handleShowTransferErrRequest} />
+      </div>
     );
   }
+  return (
+    <>
+      <Header as="h4">{headerTitle}</Header>
+      {!transferRequestMethod
+        ? (
+          <BasicTransferRequest
+            isPreferredEquity={isPreferredEquity}
+            investmentAmount={investmentAmount}
+            changeInvest={changeInvest}
+            getPreviousInvestedAmount={getPreviousInvestedAmount}
+            getCurrCashAvailable={getCurrCashAvailable}
+            getCurrCreditAvailable={getCurrCreditAvailable}
+            getTransferRequestAmount={getTransferRequestAmount}
+            isMobile={isMobile}
+            transferRequest={showTransferRequest}
+          />
+        )
+        : (
+          <TransferRequestMethod
+            isPreferredEquity={isPreferredEquity}
+            getTransferRequestAmount={getTransferRequestAmount}
+            transferMethod={transferRequestMethod}
+          />
+        )
+      }
+
+      <p className="mt-50">
+        {!transferRequestMethod
+          ? showTransferRequest === 'basic'
+            ? `By clicking the “Confirm” button, I authorize the transfer from
+          my ${bankAndAccountName} to my NextSeed account in the
+          amount equal to the Transfer Requested above. I understand this transfer will
+          be initiated within 1-3 business days.`
+            : advanceTransferStepStatement
+          : transferRequestMethod === 'ACH'
+            ? `By clicking the “Confirm” button, I authorize the transfer from my Wells Fargo account ${bankAndAccountName} in the amount equal to the Transfer Requested above. I understand this transfer will be initiated within 1 business day of the Transfer Date.`
+            : 'By clicking the “Confirm” button, I acknowledge that I will initiate a wire transfer with these instructions within 5 business days. If funds are not received by GoldStar Trust within this time period, my investment will be canceled.'
+        }
+      </p>
+
+      {investmentFlowErrorMessage
+        && (
+          <Message error className="mt-30">
+            {investmentFlowErrorMessage}
+          </Message>
+        )
+      }
+      <Button.Group widths="2" className="inline mt-30">
+        {showTransferRequest === 'basic' || transferRequestMethod
+          ? (
+            <>
+              <Button content="Back" type="button" onClick={transferRequestMethod ? () => renderTransferStep(null) : props.cancel} />
+              <Button primary content="Confirm" onClick={props.confirm} />
+            </>
+          )
+          : (
+            <>
+              <Button primary content="Transfer Funds Via ACH" type="button" onClick={() => renderTransferStep('ACH')} />
+              <Button primary content="WIre Funds" onClick={() => renderTransferStep('WIRE')} />
+            </>
+          )
+        }
+      </Button.Group>
+    </>
+  );
 }
 
-export default TransferRequest;
+export default inject('investmentStore', 'investmentLimitStore', 'uiStore', 'accreditationStore', 'campaignStore', 'portfolioStore')(withRouter(observer(TransferRequest)));

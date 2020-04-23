@@ -12,7 +12,8 @@ function BasicTransferRequest(props) {
     getCurrCashAvailable,
     getCurrCreditAvailable,
     getTransferRequestAmount,
-    isMobile } = props;
+    isMobile,
+    transferRequest } = props;
 
   return (
     <>
@@ -61,8 +62,8 @@ function BasicTransferRequest(props) {
         </Table.Body>
         <Table.Footer>
           <Table.Row>
-            <Table.HeaderCell>Transfer Request: </Table.HeaderCell>
-            <Table.HeaderCell className="positive-text right-align" collapsing>{isPreferredEquity ? Helper.CurrencyFormat(getTransferRequestAmount) : Helper.CurrencyFormat(getTransferRequestAmount, 0)}</Table.HeaderCell>
+            <Table.HeaderCell>{transferRequest === 'basic' ? 'Transfer Request:' : 'Balance Required:'} </Table.HeaderCell>
+            <Table.HeaderCell className="right-align" collapsing>{isPreferredEquity ? Helper.CurrencyFormat(getTransferRequestAmount) : Helper.CurrencyFormat(getTransferRequestAmount, 0)}</Table.HeaderCell>
           </Table.Row>
         </Table.Footer>
       </Table>
