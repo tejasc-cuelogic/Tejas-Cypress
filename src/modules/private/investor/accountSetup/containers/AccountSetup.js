@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { findKey } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { Header } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import ConfirmPhoneNumber from '../../../../auth/containers/ConfirmPhoneNumber';
@@ -78,12 +78,13 @@ export default class AccountSetup extends Component {
           ) : <InlineLoader />
 
         }
-          <Switch>
-            <Route path={`${match.url}/cip`} component={CipVerification} />
-            <Route exact path={`${match.url}/phone-verification`} component={ConfirmPhoneNumber} />
-            <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
-            <Route path={`${match.url}/account-creation`} component={AccountCreation} />
-          </Switch>
+        <Switch>
+          <Redirect from="*/identity-verification/0" to="/dashboard/setup/cip" />
+          <Route path={`${match.url}/cip`} component={CipVerification} />
+          <Route exact path={`${match.url}/phone-verification`} component={ConfirmPhoneNumber} />
+          <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
+          <Route path={`${match.url}/account-creation`} component={AccountCreation} />
+        </Switch>
       </PrivateLayout>
     );
   }

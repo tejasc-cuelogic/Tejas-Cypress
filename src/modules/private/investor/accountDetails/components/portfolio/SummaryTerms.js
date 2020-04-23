@@ -71,7 +71,7 @@ const summaryData = summaryValues => [
     },
     {
       title: 'Lifetime Payments Received',
-      value: Helper.CurrencyFormat(summaryValues.lifetimePaymentsReceived.replace(/\D./g, '')),
+      value: Helper.MoneyMathDisplayCurrency(summaryValues.lifetimePaymentsReceived),
       tooltip: 'Total payments received from your investments on NextSeed, net of fees.',
     },
   ],

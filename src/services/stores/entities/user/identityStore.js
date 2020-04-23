@@ -12,7 +12,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
-import { fileUpload } from '../../../actions';
+import { fileUpload, authActions } from '../../../actions';
 import { INVESTOR_URLS } from '../../../constants/url';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/cipVerification/helper/index';
 import { US_STATES, FILE_UPLOAD_STEPS, US_STATES_FOR_INVESTOR } from '../../../../constants/account';
@@ -353,6 +353,7 @@ export class IdentityStore {
       const { message } = !get(res, `data.${payLoad.mutationName}.status`) && res.data[`${payLoad.mutationName}`];
 
       if (stepName === 'cipPass') {
+        await authActions.refreshCurrentSession();
         await this.updateUserDataAndSendOtp();
       }
 
@@ -456,7 +457,7 @@ export class IdentityStore {
       method = 'EMAIL';
     } else if (type === 'BANK_CHANGE') {
       to = phone;
-      method = multiFactorMfaValue;
+      method = multiFactorMfaValue || 'TEXT';
     } else {
       to = phone;
       method = mfaMethod.value === '' ? 'TEXT' : mfaMethod.value;

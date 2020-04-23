@@ -189,22 +189,22 @@ export default class AllRepayments extends PureComponent {
                 addon={(
                   <>
                     <Grid.Column width={9} className="right-align">
-                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentGenerateAdminSummary')}>
+                      {/* <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentGenerateAdminSummary')}>
                         Generate Admin Summary
+                      </Button> */}
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerFirstNotice')}>
+                        Send First Notice Emails
                       </Button>
-                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendGoldStarDraftInstructions')}>
-                        Send GoldStar Draft Instructions
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerSecondNotice')}>
+                        Send Second Notice Emails
                       </Button>
                     </Grid.Column>
                     <Grid.Column width={16} className="mt-20 right-align">
                       <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerDraftNotice')}>
                         Send Issuer Draft Notice
                       </Button>
-                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerFirstNotice')}>
-                        Send First Notice Emails
-                      </Button>
-                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendIssuerSecondNotice')}>
-                        Send Second Notice Emails
+                      <Button primary compact onClick={() => this.updateState('showActionModal', 'adminPaymentSendGoldStarDraftInstructions')}>
+                        Send GoldStar Draft Instructions
                       </Button>
                     </Grid.Column>
                   </>

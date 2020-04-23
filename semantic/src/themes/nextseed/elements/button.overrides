@@ -351,3 +351,10 @@
         }
     }
 }
+
+.banner-section .ui.button{
+    &.arrow-button.labeled:not(.icon){
+        background-color: @white !important;
+        border: none !important;
+    }
+}

@@ -25,6 +25,7 @@ import {
   accreditationStore,
   transactionStore,
   offeringsStore,
+  multiFactorAuthStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -87,7 +88,7 @@ export class Auth {
       new Promise((res, rej) => {
         AmplifyAuth.currentSession().then((currentUser) => {
           if (currentUser) {
-            AmplifyAuth.currentAuthenticatedUser().then((user) => {
+            AmplifyAuth.currentAuthenticatedUser({ bypassCache: true }).then((user) => {
               const { signInUserSession, attributes } = user;
               const mapData = this.parseRoles(this.mapCognitoToken(attributes));
               userStore.setCurrentUser(mapData);
@@ -172,6 +173,27 @@ export class Auth {
       }
     }
   }
+
+  async refreshCurrentSession() {
+    try {
+      const session = await AmplifyAuth.currentSession();
+      await this.refreshSessionPromise(session.getRefreshToken());
+      // eslint-disable-next-line no-empty
+    } catch {
+    }
+  }
+
+  refreshSessionPromise = refreshToken => new Promise(async (resolve, reject) => {
+    const user = await AmplifyAuth.currentAuthenticatedUser();
+    user.refreshSession(refreshToken, async (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+        resolve(data);
+      }
+    });
+  })
 
   resetPasswordExpiration = async (lowerCasedEmail, password) => {
     const res = await userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail);
@@ -459,8 +481,10 @@ export class Auth {
     accountStore.resetStoreData();
     identityStore.resetStoreData();
     investorProfileStore.resetAll();
+    investorProfileStore.resetStoreData();
     userDetailsStore.resetStoreData();
     iraAccountStore.resetStoreData();
+    multiFactorAuthStore.resetStoreData();
     entityAccountStore.resetStoreData();
     bankAccountStore.resetStoreData();
     individualAccountStore.resetStoreData();

@@ -13,13 +13,14 @@ const FormSelect = observer((props) => {
     error,
     placeHolder,
   } = props.fielddata;
-  let width = '';
+  let width = false;
   if (props.containerwidth) {
     width = props.containerwidth;
   }
   const { displayMode, readOnly } = props;
+  const fieldClass = `${props.containerclassname || ''} ${displayMode ? ' display-only' : ''}`;
   return (
-    <Form.Field error={error} width={width}>
+    <Form.Field error={error} width={width} className={fieldClass}>
       <label>
         {props.tooltip
           ? (
@@ -41,6 +42,7 @@ const FormSelect = observer((props) => {
         error={!!error}
         onChange={props.changed}
         placeholder={(displayMode || readOnly) ? '' : placeHolder}
+        disabled={displayMode}
       />
       <div className="dropdown-effect">{props.fielddata.label}</div>
       {error

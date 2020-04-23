@@ -10,7 +10,7 @@ import {
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { DRAFT_NEW } from '../../../constants/messages';
-import { offeringCreationStore, campaignStore, userDetailsStore } from '../../index';
+import { offeringCreationStore, campaignStore, userDetailsStore, userStore } from '../../index';
 import uiStore from '../shared/uiStore';
 
 export class NewMessage {
@@ -114,8 +114,10 @@ export class NewMessage {
         .then((result) => {
           if (!offeringCreationStore.currentOfferingId) {
             campaignStore.getCampaignDetails(campaignSlug, false);
-          } else if (get(result, 'data.createOfferingComments')) {
+          } else if (get(result, 'data.createOfferingComments') && userStore.isInvestor) {
             campaignStore.updateCommentThread(get(result, 'data.createOfferingComments'), currentMessageId);
+          } else if (get(result, 'data.createOfferingComments') || get(result, 'data.updateOfferingCommentsInfo')) {
+            this.initRequest();
           }
           this.resetMessageForm();
           Helper.toast('Message sent.', 'success');
@@ -158,7 +160,7 @@ export class NewMessage {
   }
 
   @action
-  deleteMessage = id => client
+  deleteMessage = (id, isInitRequest = false) => client
     .mutate({
       mutation: deleteMessage,
       variables: { id: [id] },
@@ -167,7 +169,12 @@ export class NewMessage {
         variables: { offerId: offeringCreationStore.currentOfferingId },
       }],
     })
-    .then(() => Helper.toast('Message deleted successfully.', 'success'))
+    .then(() => {
+      if (isInitRequest) {
+        this.initRequest();
+      }
+      Helper.toast('Message deleted successfully.', 'success');
+    })
     .catch(() => Helper.toast('Error while deleting message', 'error'));
 
   @computed get allData() {

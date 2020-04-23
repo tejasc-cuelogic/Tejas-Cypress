@@ -18,6 +18,7 @@ import Insights from './public/resources/containers/Insights';
 import InsightsDetails from './public/resources/containers/InsightsDetails';
 import EducationCenter from './public/resources/containers/EducationCenter';
 import Space from './public/space/containers/Space';
+import Group from './public/about/components/Group';
 
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
@@ -152,6 +153,10 @@ export const publicRoutes = [
   {
     path: '/space',
     component: Space,
+  },
+  {
+    path: '/group',
+    component: Group,
   },
 ];
 

@@ -7,3 +7,14 @@ mutation offeringUpsert($id: String, $offeringDetails: OfferingInputType!) {
   }
 }
 `;
+
+export const adminLockOrUnlockOffering = gql`
+mutation adminLockOrUnlockOffering($offeringId: String!, $action: OfferingLockActionEnumType!) {
+  adminLockOrUnlockOffering(offeringId: $offeringId, action: $action) {
+    date
+    user
+    userId
+    message
+  }
+}
+`;

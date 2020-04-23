@@ -36,18 +36,19 @@ const CommentHeader = ({ newLayout, refLink, isMobile }) => (
   </>
 );
 
-const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHandler, showButton, showCopy, match, errors, isMobile, showCancelButton, closeBtnHandler }) => (
+const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHandler, showButton, showCopy, match, errors, isMobile, showCancelButton, closeBtnHandler, visiblePost }) => (
   <>
     <Form className="public-form mt-30 clearfix" reply>
       <FormTextarea
         clear
-        fielddata={MESSAGE_FRM.fields.comment}
+        fielddata={visiblePost && MESSAGE_FRM.fields.comment}
         name="comment"
         changed={msgEleChange}
         containerclassname="secondary"
+        disabled={!(visiblePost)}
       />
       {showButton
-        && <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC'} onClick={btnHandler} disabled={!isFormValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />}
+        && <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC' && visiblePost} onClick={btnHandler} disabled={!isFormValid || buttonLoader === 'PUBLIC' || !(visiblePost)} primary content="Post Comment" />}
       {showCancelButton
         && <Button fluid={isMobile} className={isMobile && 'mlr-0 mt-20 mb-30'} onClick={closeBtnHandler} disabled={buttonLoader === 'PUBLIC'} basic>Cancel</Button>}
     </Form>
@@ -174,22 +175,17 @@ class Comments extends Component {
           )}
         {(campaignCommentsMeta.isValid)
           && (
-            <>
-              {visiblePost
-                ? (
-                  <ReplyBox
-                    MESSAGE_FRM={MESSAGE_FRM}
-                    msgEleChange={msgEleChange}
-                    buttonLoader={buttonLoader}
-                    isFormValid={MESSAGE_FRM.meta.isValid}
-                    showButton
-                    btnHandler={() => this.send('PUBLIC', campaignSlug, null, campaignId)}
-                    errors={errors}
-                    isMobile={isMobile}
-                  />
-                ) : ''
-              }
-            </>
+            <ReplyBox
+              MESSAGE_FRM={MESSAGE_FRM}
+              msgEleChange={msgEleChange}
+              buttonLoader={buttonLoader}
+              isFormValid={MESSAGE_FRM.meta.isValid}
+              showButton
+              btnHandler={() => this.send('PUBLIC', campaignSlug, null, campaignId)}
+              errors={errors}
+              isMobile={isMobile}
+              visiblePost={visiblePost}
+            />
           )
         }
         {(comments && commentsMainThreadCount.length) || (isPostedNewComment && comments.length)
@@ -289,6 +285,7 @@ class Comments extends Component {
                                 closeBtnHandler={() => this.closeTextBox(c.id)}
                                 errors={errors}
                                 isMobile={isMobile}
+                                visiblePost={visible && c.id === this.state.commentId}
                               />
                             ) : ''}
                           </Comment.Content>

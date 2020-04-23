@@ -24,7 +24,7 @@ const rightSummary = offer => [
 ];
 
 const LiveSummary = ({ offer, refLink, onClick, offerStatus }) => (
-  <Grid columns="equal">
+  <Grid columns="equal" className="mt-10">
     <Grid.Row>
       <Grid.Column>
         <Card fluid className="ba-info-card">

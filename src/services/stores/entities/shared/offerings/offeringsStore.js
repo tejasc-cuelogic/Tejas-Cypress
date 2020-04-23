@@ -2,7 +2,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
-import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes, orderBy } from 'lodash';
+import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes, orderBy, set } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
@@ -107,6 +107,12 @@ export class OfferingsStore {
         uiStore.removeOneFromProgressArray('publish');
         Helper.toast('Error while updating offering', 'error');
       });
+  }
+
+  @action
+  updateLockOffering = (lockObj) => {
+    const tempRef = this.offerData;
+    this.offerData = set(tempRef, 'data.getOfferingDetailsBySlug.lock', lockObj);
   }
 
   @action

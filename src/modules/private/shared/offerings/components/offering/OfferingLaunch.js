@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
+import omitDeep from 'omit-deep';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Icon, Label } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../theme/form';
@@ -9,7 +10,7 @@ import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
 import { DataFormatter } from '../../../../../../helper';
 import { CAMPAIGN_KEYTERMS_REGULATION_ENUM } from '../../../../../../constants/offering';
 
-@inject('offeringCreationStore', 'userStore', 'offeringsStore', 'commonStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore', 'commonStore', 'manageOfferingStore')
 @observer
 export default class OfferingLaunch extends Component {
   // constructor(props) {
@@ -31,7 +32,7 @@ export default class OfferingLaunch extends Component {
   handleFileLink = (fileId) => {
     this.props.commonStore.getBoxFileDetails(fileId).then((response) => {
       const boxFileId = response && response.getFileDetails
-      && response.getFileDetails.boxFileId;
+        && response.getFileDetails.boxFileId;
       if (boxFileId) {
         window.open(`${NEXTSEED_BOX_URL}file/${boxFileId}`, '_blank');
       }
@@ -39,19 +40,26 @@ export default class OfferingLaunch extends Component {
   }
 
   launch = () => {
-    const {
-      updateOfferingMutation,
-      currentOfferingSlug,
-      currentOfferingId,
-    } = this.props.offeringCreationStore;
+    const { offeringCreationStore, offeringsStore, manageOfferingStore } = this.props;
+    const { updateOfferingMutation, currentOfferingSlug, currentOfferingId } = offeringCreationStore;
+    const { offer } = offeringsStore;
+    const { getInvestNowTocDefaults } = manageOfferingStore;
+    const investNow = get(offer, 'investNow');
+    const template = get(investNow, 'template');
+    let offeringPayload = { stage: 'LIVE' };
+    if (template !== 2) {
+      offeringPayload = { ...offeringPayload, investNow: { ...investNow, page: getInvestNowTocDefaults() } };
+    }
+    offeringPayload = omitDeep(offeringPayload, ['__typename', 'fileHandle']);
     new Promise((res, rej) => {
       updateOfferingMutation(
-        currentOfferingId, { stage: 'LIVE' }, 'LAUNCHOFFERING',
+        currentOfferingId, offeringPayload, 'LAUNCHOFFERING',
         true, 'Offering Launched successfully.', false, res, rej,
       );
     })
-      .then(() => {
-        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/offering/launch`);
+      .then((offeringTemplate) => {
+        const isTemplate2 = offeringTemplate === 2;
+        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}${isTemplate2 ? '' : '/offering-creation'}/offering/launch`);
       });
   }
 
@@ -73,12 +81,12 @@ export default class OfferingLaunch extends Component {
       && offer.offering.launch.approved) ? offer.offering.launch.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     const legalDocs = offer && offer.legal && offer.legal.documentation
-    && offer.legal.documentation.admin;
+      && offer.legal.documentation.admin;
     const regulation = get(offer, 'regulation');
     let goldStartFields = ['contactId', 'isin', 'esAccountNumber', 'sfAccountNumber'];
     goldStartFields = regulation === CAMPAIGN_KEYTERMS_REGULATION_ENUM.BD_CF_506C ? [...goldStartFields, 'esAccountNumberRegD', 'isinRegD', 'sfAccountNumberRegD'] : goldStartFields;
     return (
-      <Form>
+      <Form className="inner-content-spacer">
         <Header as="h4">Launch Timeline</Header>
         <Form.Group widths="equal">
           {
@@ -103,16 +111,16 @@ export default class OfferingLaunch extends Component {
                 <Label>{ADMIN_DOCUMENTATION_FRM.fields[document].label}</Label>
                 {legalDocs && legalDocs[document] && legalDocs[document].fileName
                   ? (
-<>
-                    <div className="display-only">
-                      <Link to={this.props.match.url} onClick={() => this.handleFileLink(legalDocs[document].fileId)} title={legalDocs[document].fileName}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
-                    </div>
-                    <p>uploaded on{' '}
-                      {
-                        DataFormatter.getDateAsPerTimeZone(legalDocs[document].fileHandle.created.date, true, false, false)
-                      }
-                    </p>
-                  </>
+                    <>
+                      <div className="display-only">
+                        <Link to={this.props.match.url} onClick={() => this.handleFileLink(legalDocs[document].fileId)} title={legalDocs[document].fileName}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
+                      </div>
+                      <p>uploaded on{' '}
+                        {
+                          DataFormatter.getDateAsPerTimeZone(legalDocs[document].fileHandle.created.date, true, false, false)
+                        }
+                      </p>
+                    </>
                   )
                   : <div>Not Uploaded</div>
                 }

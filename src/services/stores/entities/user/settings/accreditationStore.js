@@ -1024,6 +1024,8 @@ export class AccreditationStore {
     investmentStore.setFieldValue('disableNextbtn', true);
     investmentStore.setFieldValue('isGetTransferRequestCall', false);
     this.setFieldVal('isAccreditationExpired', false);
+    this.setFieldVal('userData', {});
+    this.resetAccreditationObject();
   }
 
   checkIsAccreditationExpired = (expirationDate, isUnix = false) => {
