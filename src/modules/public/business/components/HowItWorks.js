@@ -181,7 +181,7 @@ class HowItWorks extends Component {
                     </Header>
                     <p className="ml-37">
                       <span className="highlight-text"><b>NEW!</b></span>
-                      <Link to="/" className="neutral-text no-decoration ml-18">Learn More <Icon size="small" className="ns-chevron-right" /></Link>
+                      <Link to="/insights/community-bridge-notes" className="neutral-text no-decoration ml-18">Learn More <Icon size="small" className="ns-chevron-right" /></Link>
                     </p>
                     </List.Item>
                   </List>
