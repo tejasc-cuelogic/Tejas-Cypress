@@ -311,6 +311,7 @@ export class AgreementsStore {
       this.AGREEMENT_DETAILS_FORM.fields.page[index].title.value = get(tocs, '[0].title');
       this.AGREEMENT_DETAILS_FORM.fields.page[index].toc.values = valuesArray;
       this.AGREEMENT_DETAILS_FORM.fields.page[index].toc.value = [];
+      this.AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader.value = get(tocs, '[0].hideHeader');
     });
     this.tocRequiredArray = requiredArray;
     this.tocOptional.array = optionalArray;
@@ -340,6 +341,7 @@ export class AgreementsStore {
     requiredArray.push(pageRequiredArray);
     this.AGREEMENT_DETAILS_FORM.fields.page[0].title.value = get(investNowTocs, 'title');
     this.AGREEMENT_DETAILS_FORM.fields.page[0].toc.values = valuesArray;
+    this.AGREEMENT_DETAILS_FORM.fields.page[0].hideHeader.value = get(investNowTocs, 'hideHeader');
     this.tocRequiredArray = requiredArray;
   }
 
