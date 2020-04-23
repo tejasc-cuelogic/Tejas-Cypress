@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Button, Table, Message } from 'semantic-ui-react';
+import { Header, Button, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import money from 'money-math';
-import Helper from '../../../../../helper/utility';
-import { PopUpModal } from '../../../../../theme/shared';
+import BasicTransferRequest from './transferRequest/basicTransferRequest';
 
 const isMobile = document.documentElement.clientWidth < 768;
-
 @inject('investmentStore', 'investmentLimitStore', 'uiStore', 'accreditationStore')
 @withRouter
 @observer
@@ -74,8 +71,8 @@ class TransferRequest extends Component {
         <div className="center-align">
           <Header as="h3" textAlign="center">Your investment transaction was not processed.</Header>
           <p className="mt-30 mb-30">This may have happened because your session expired or your network connection dropped.
-            We did not complete your investment transaction. Please check your account, and
-            try again to complete your investment.
+          We did not complete your investment transaction. Please check your account, and
+          try again to complete your investment.
           </p>
           <Button primary content="Try Again" onClick={this.handleShowTransferErrRequest} />
         </div>
@@ -84,7 +81,17 @@ class TransferRequest extends Component {
     return (
       <>
         <Header as="h4">Confirm Transfer Request</Header>
-        <Table basic="very" className="confirm-transfer-table mt-30" compact>
+        <BasicTransferRequest
+          isPreferredEquity={isPreferredEquity}
+          investmentAmount={investmentAmount}
+          changeInvest={changeInvest}
+          getPreviousInvestedAmount={getPreviousInvestedAmount}
+          getCurrCashAvailable={getCurrCashAvailable}
+          getCurrCreditAvailable={getCurrCreditAvailable}
+          getTransferRequestAmount={getTransferRequestAmount}
+          isMobile={isMobile}
+        />
+        {/* <Table basic="very" className="confirm-transfer-table mt-30" compact>
           <Table.Body>
             <Table.Row>
               <Table.Cell>Investment Amount:</Table.Cell>
@@ -133,7 +140,7 @@ class TransferRequest extends Component {
               <Table.HeaderCell className="positive-text right-align" collapsing>{isPreferredEquity ? Helper.CurrencyFormat(getTransferRequestAmount) : Helper.CurrencyFormat(getTransferRequestAmount, 0)}</Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
-        </Table>
+        </Table> */}
         {investmentFlowErrorMessage
           && (
             <Message error className="mt-30">
