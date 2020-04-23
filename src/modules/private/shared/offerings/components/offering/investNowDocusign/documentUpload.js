@@ -12,10 +12,12 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" /
 const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length, showLockActivity, isBusinessApplication }) => {
   return (
     <div className="row-wrap">
-      <div className="balance-half simple-drag-row-title">
+      <div className="width-70">
         {!offeringClose
           && <DragHandle />
         }
+      </div>
+      <div className="balance-half">
         <FormInput
           displayMode={isReadonly}
           name="name"
@@ -43,7 +45,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
           />
         }
       </div>
-      <div className="balance-half">
+      <div className="width-130">
         <FormRadioGroup
           readOnly={isReadonly}
           containerclassname={isReadonly ? 'display-only' : ''}
@@ -194,10 +196,11 @@ export default class DocumentUpload extends Component {
           <Divider hidden />
           <div className="ui basic compact table form-table">
             <div className="row-wrap thead">
+              <div className="width-70" />
               <div className="balance-half">Document Name</div>
               <div className="balance-half">Document</div>
-              <div className="balance-half">Mappeing Required</div>
-              <div className="action width-70">Actions</div>
+              <div className="width-130">Mappeing Required</div>
+              <div className="action">Actions</div>
             </div>
             <SortableList
               offeringClose={offeringClose}
