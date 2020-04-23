@@ -717,8 +717,6 @@ export const PUBLIC_NAV = [
     subNavigations: [
       { title: 'Our Mission', to: 'mission' },
       { title: 'Our Team', to: 'team' },
-      // { title: 'Team & Culture', to: 'about/team' },
-      // { title: 'Careers', to: 'about/careers' },
       { title: 'The NextSeed Group', to: 'group' },
       { title: 'NextSeed Space', to: 'space' },
     ],

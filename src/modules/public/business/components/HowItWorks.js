@@ -148,13 +148,13 @@ class HowItWorks extends Component {
                     }
                   </div>
                 </Grid.Column>
-                <Grid.Column className="centered" widescreen={5} computer={6} tablet={16} mobile={16} verticalAlign="middle">
+                <Grid.Column className="centered" widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
                   <List className={responsiveVars.isMobile ? 'capital-list' : ''}>
                     <List.Item className={responsiveVars.isMobile ? 'mt-0' : 'mb-30'}>
                       <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
                         <Icon className="ns-tick" color="grey" />
                         Debt
-                       </Header>
+                      </Header>
                     </List.Item>
                     <List.Item className={responsiveVars.isMobile ? 'mt-14' : 'mb-30'}>
                       <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>

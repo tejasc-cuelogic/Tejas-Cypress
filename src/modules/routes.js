@@ -1,4 +1,3 @@
-import About from './public/about/containers/About';
 import ReferralProgramTerms from './public/agreements/ReferralProgramTerms';
 import AccreditedIncentiveTerms from './public/agreements/AccreditedIncentiveTerms';
 import IraPromotionTerms from './public/agreements/IraPromotionTerms';
@@ -19,7 +18,7 @@ import InsightsDetails from './public/resources/containers/InsightsDetails';
 import EducationCenter from './public/resources/containers/EducationCenter';
 import Space from './public/space/containers/Space';
 import Group from './public/about/components/Group';
-import NewMission from './public/about/components/NewMission';
+import Mission from './public/about/components/Mission';
 import Team from './public/about/components/Team';
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
@@ -63,11 +62,11 @@ export const publicRoutes = [
   },
   {
     path: '/about/:section?', // optional section to support old urls
-    component: About,
+    component: Mission,
   },
   {
     path: '/mission',
-    component: NewMission,
+    component: Mission,
   },
   {
     path: '/team',
