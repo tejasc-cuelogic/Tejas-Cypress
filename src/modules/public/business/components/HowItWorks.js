@@ -148,7 +148,7 @@ class HowItWorks extends Component {
                     }
                   </div>
                 </Grid.Column>
-                <Grid.Column className="centered" widescreen={5} computer={5} tablet={16} mobile={16} verticalAlign="middle">
+                <Grid.Column className="centered" widescreen={5} computer={6} tablet={16} mobile={16} verticalAlign="middle">
                   <List className={responsiveVars.isMobile ? 'capital-list' : ''}>
                     <List.Item className={responsiveVars.isMobile ? 'mt-0' : 'mb-30'}>
                       <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
@@ -173,6 +173,16 @@ class HowItWorks extends Component {
                         <Icon className="ns-tick" color="grey" />
                         SAFEs
                     </Header>
+                    </List.Item>
+                    <List.Item className={responsiveVars.isMobile ? 'mt-14' : 'mb-30'}>
+                      <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
+                        <Icon className="ns-tick" color="grey" />
+                        Community Bridge Note<br />
+                    </Header>
+                    <p className="ml-37">
+                      <span className="highlight-text"><b>NEW!</b></span>
+                      <Link to="/" className="neutral-text no-decoration ml-18">Learn More <Icon size="small" className="ns-chevron-right" /></Link>
+                    </p>
                     </List.Item>
                   </List>
                   {!userStore.isIssuer && responsiveVars.isMobile
