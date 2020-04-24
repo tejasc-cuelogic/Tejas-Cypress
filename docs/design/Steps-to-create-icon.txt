@@ -1,0 +1,35 @@
+Steps to create fonts on icomoon app:
+
+1) First get a .svg file of the image without strokes. Because, strokes get ignored while creating a icon font.
+2) On https://icomoon.io/app/#/select website, open the manage project menu which is given on the right hand side.
+3) Now, if we are creating a new project, then select a 'new project' link, else click on import project link.
+4) If import project selected then you have to import a .json file of the icon fonts. (if the previous icons are genetated from the icomoon it is there in the previous folder)
+5) As we already have a nextseed icon set. So, we will import a .json file which includes all the custom icons used in nextseed.
+6) Now, after loading the icons, to add new .svg icons, click on 'import icon' button or drag and drop the icons in the set.
+7) In the header of the page there are options to edit, delete, move and select. Now, to edit the icon, click on edit menu and select the icon which you want to edit.
+8) After selecting the icon, modal will open up and there are several options available. Add the appropriate names and tags to icon and close the modal after editing. no need to save.
+9) After editing all icons. Select all icons and click the bottom button 'Generate font'
+10) on the page 'https://icomoon.io/app/#/select/font', you can see the button 'preferences' on top, after clicking it modal will open. Here you can select the which type of css you want to generate (ex. sass, less, etc.)
+11) On the same modal, add the class prefix and font name. For nextseed, it is already set.
+12) After done with prefixes, close the modal and click the download button in the bottom.
+ 
+ 'NOTE': After each iteration on adding icon, save the folder with date mentioned for the next time. We need the .json file to add new icons to the list.
+
+------------------------------------------------------------------------
+
+Steps to add the font icons in the project:
+
+1) In the folder downloaded from icomoon site, copy all the font file from fonts folder.
+2) Paste the fonts in below location in the semantic project folder 
+ '/semantic/src/themes/nextseed/assets/fonts'
+3) Now, open the files icon.variables and icon.overrides from the project theme folder
+4) Also, open the files style.less and variables.less from the iconmoon folder 
+5) After this, add the newly added icons from style.less to icon.overrides in the alphabetical order.
+6) Same copy the variables.less to icon.variables in an alphabetical order.
+7) Now, run the 'gulp build' command. So, that the newly added icons get compiled.
+8) Now, while using the icons use following way:
+    <Icon className="ns-close" />
+9) Here, ns-close is a custom icon. While using the icon name add that to the className attribute.
+10) And here we go!!! Our font icons are ready!!!
+
+------------------------------------------------------------------------
