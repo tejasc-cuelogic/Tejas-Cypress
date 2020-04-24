@@ -106,16 +106,17 @@
                 margin-left: -12px;
                 border-width: 0 12px 12px;
                 border-style: solid;
-                border-color: @primary-one transparent;
+                border-color: @white transparent;
                 display: block;
                 width: 0;
             }
             >.item {
-                background: @primary-one !important;
-                text-align: center;
-                color: @white !important;
+                background: @white !important;
+                text-align: left;
+                color: @neutral !important;
                 font-size: @16px !important;
-                border-bottom: 1px solid @primary-one-darken;
+                border-bottom: 1px solid @white;
+                font-weight: @normal !important;
                 @media only screen and (min-width : @tabletBreakpoint) and (max-width : @computerBreakpoint){
                     font-size: @14px!important;
                 }
@@ -123,8 +124,8 @@
                     border-bottom: 0;
                 }
                 &:hover, &.active {
-                    background: @primary-one-darken !important;
-                    color: @white !important;
+                    background: @neutral-offwhite!important;
+                    color: @primary-one !important;
                 }
             }
         }
