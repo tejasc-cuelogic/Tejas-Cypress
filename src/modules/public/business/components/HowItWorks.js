@@ -174,7 +174,7 @@ class HowItWorks extends Component {
                         SAFEs
                     </Header>
                     </List.Item>
-                    <List.Item className={responsiveVars.isMobile ? 'mt-14' : 'mb-30'}>
+                    <List.Item className={responsiveVars.isMobile ? 'mt-14' : 'mb-30'} style={{ columnSpan: 'all' }}>
                       <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
                         <Icon className="ns-tick" color="grey" />
                         Community Bridge Note<br />

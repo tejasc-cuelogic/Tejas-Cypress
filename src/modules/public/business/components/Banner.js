@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Header, Container, Button, Responsive, Grid } from 'semantic-ui-react';
+import { Header, Container, Button, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import NSImage from '../../../shared/NSImage';
 
@@ -33,7 +33,7 @@ class Banner extends Component {
           <Container>
             <Grid reversed="mobile">
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left" verticalAlign="middle">
-                <Header as="h2">Tap into capital from <Responsive minWidth={992} as="br" /> your community</Header>
+                <Header as="h2">Tap into capital from <br /> your community</Header>
                 {!userStore.isIssuer && !responsiveVars.isMobile
                   && (
                     <Button className="mt-40" onClick={this.props.handleApplyCta} primary>Apply Online</Button>
