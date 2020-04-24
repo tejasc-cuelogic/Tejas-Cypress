@@ -1,0 +1,187 @@
+List of components created and containing files:
+
+<NsModel> - SignupInitial.js
+          - ConfirmEmailAddress.js
+          - ConfirmPhoneNumber.js
+          - EmailWelcomeScreen.js
+          - InvestorSignup.js
+          - MigratedUserPhoneNumber.js
+          - Cip.js
+          - CipAddressVerification.js
+          - CipHardFail.js
+          - CipPhoneVerification.js
+          - CipSoftFail.js
+          - FinancialInfo.js
+          - failedAccreditation.js
+          - ThanksNote.js
+          - ConfirmOTPModal.js
+          - InvestNowTocPreview.js
+          - ConfirmPhoneNumber.js
+          - ManageMultiFactorAuth.js
+          - NewEmailAddress.js
+          - NewPhoneNumber.js
+          - Agreement.js
+          - Congratulation.js
+          - AgreementTemplate.js
+          - SuccessScreen.js
+-------------------------------------------------------------------
+<FormArrowButton> - SignupInitial.js
+                - AccountTypes.js
+                - FinancialInfo.js
+                - AccountType.js
+                - Funding.js
+                - Employment.js
+                - Experience.js
+                - NetWorth.js
+                - EntityAccreditationMethod.js
+                - IncomeEvidence.js
+                - IncomeQualCheck.js
+                - NetWorthQualCheck.js
+                - TrustEntityAccreditationMethod.js
+                - AccountType.js
+-------------------------------------------------------------------
+FormHOC - includes all form elements
+-------------------------------------------------------------------
+<Multistep> - AccountCreation.js - entity
+          - AccountCreation.js - individual
+          - AccountCreation.js - IRA
+          - AccountCreation.js - Esatblish Profile
+          - PopulateAccreditationSteps.js
+          - Accreditation.js - assets
+          - Accreditation.js - income
+          - Investnow.js
+-------------------------------------------------------------------
+<SecondaryMenu> - Review.js
+              - ApplicationDetails.js
+              - ElasticSearch.js
+              - OfferingDetails.js
+              - AccountDetails.js
+              - ClosedAccount.js
+              - Investor.js
+              - UserDetails.js
+              - BonusRewards.js
+              - Overview.js - investor - portfolio
+              - Transaction.js
+              - Updates.js
+              - InvestmentDetails.js
+              - Statements.js
+              - Agreements.js
+              - ChooseOffer.js
+              - PrivateHOC.js
+              - PrivateLayout.js
+              - ApplicationDetails.js
+              - Leadership.js
+              - Legal.js
+              - Marketing.js
+              - Offering.js
+              - OfferingCreation.js
+              - OfferingV2.js
+              - Overview-v2.js
+              - AffiliatedIssuer.js
+              - Leadership.js
+              - Agreements.js
+              - documents.js
+              - OfferDetails.js
+-------------------------------------------------------------------
+<DropZone> - ConfirmModel.js
+         - BusinessPlan.js
+         - Miscellaneous.js
+         - Offer.js
+         - Projections.js
+         - TeamDetails.js
+         - CipHardFail.js
+         - FormationDocuments.js
+         - PersonalInformation.js
+         - Identity.js
+         - UploadDocuments.js
+         - KeyTerms.js
+         - ExportEnvelopes.js
+         - Leader.js
+         - DataRoom.js
+         - Documentation.js
+         - GenerateDocs.js
+         - OfferingOverview.js
+         - BusinessDetails.js
+         - Performance.js
+         - BusinessDocumentation.js
+         - RealEstateDocumentation.js
+         - formHOC.js
+         - DropzoneConfirm.js
+-------------------------------------------------------------------
+<PopupModal>                        - InvestmentList.js
+(used for the tooltip over text)    - Overview.js
+                                    - SummaryHead.js
+                                    - SummaryTerms.js
+                                    - AvailableCashTransfer.js
+                                    - FinancialInfo.js
+                                    - Leader.js
+                                    - CampaignHeader.js
+                                    - CampaignHeaderV2.js
+                                    - CampaignSideBar.js
+                                    - KeytermsDetails.js
+                                    - FinancialInfo.js
+                                    - TransferRequest.js
+                                    - InvestmentLimit.js
+                                    - GeneralInformation.js
+                                    - accreditationRequests.js
+                                    - agreementsStore.js
+                                    - FormCheckbox.js
+                                    - FormSelect.js
+                                    - MaskedInput.js
+-------------------------------------------------------------------
+<UserAvatar> - AllTeam.js
+             - TeamDetails.js
+           - UserListing.js
+           - UserDetails.js
+           - ActivityFeed.js
+           - Bosy.js
+           - MessageList.js
+           - NewUpdate.js
+           - PreviewUpdate.js
+           - ProfileData.js
+           - Updates.js
+           - LatestUpdates.js
+           - userListingStore.js
+           - SidebarLeftOverlay.js
+-------------------------------------------------------------------
+<MessageList> - Comments.js
+            - Messages.js
+-------------------------------------------------------------------
+<MessagesWrap> - Comments.js
+-------------------------------------------------------------------
+<NavBarMobile >- index.js - public
+             - SidebarLeftOverlay.js
+-------------------------------------------------------------------
+<SidebarLeftOverlay> - index.js - private
+-------------------------------------------------------------------
+<DragHandle>(used to rearrange list by drag and drop)
+            - allCategories.js
+            - AllFaqs.js
+            - AllKnowledgeBaseItems.js
+            - DraggableListing.js
+            - AllTeam.js
+            - DataRoom.js
+            - TombstoneHeaderMeta.js
+            - Gallery.js
+            - InvestNowTocList.js
+            - DraggableMenu.js
+-------------------------------------------------------------------
+<ActivityHistory> - ElasticSearch.js
+                - AccountDetails.js
+                - NewUpdate.js
+-------------------------------------------------------------------
+<SubscribeForNewsletter> (used in marketing pages)
+                         - Home.js
+                         - Offering.js
+-------------------------------------------------------------------
+<NsCarousel> - OffersPanel.js
+             - HowItWorks.js
+             - WhyNextseed.js
+             - index.js - public/news
+             - AboutPhotoGallery.js
+             - Insights.js
+-------------------------------------------------------------------
+<ChartPie> - PortfolioAllocations.js
+-------------------------------------------------------------------
+<CampaignList> - Home.js
+               - Offering.js
