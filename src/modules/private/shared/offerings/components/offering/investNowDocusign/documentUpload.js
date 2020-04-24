@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { Form, Header, Button, Divider, Icon, Confirm } from 'semantic-ui-react';
-import { get } from 'lodash';
+import { remove } from 'lodash';
 import { FormInput, DropZoneConfirm as DropZone, FormRadioGroup } from '../../../../../../../theme/form';
 import ButtonGroupType2 from '../../ButtonGroupType2';
 
@@ -120,7 +120,7 @@ export default class DocumentUpload extends Component {
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
-    this.props.offeringCreationStore.toggleConfirmModal(index, formName);
+    this.props.offeringCreationStore.toggleConfirmModal(index, formName);     
   }
   addMore = (e, formName, uploadFormKey) => {
     e.preventDefault();
@@ -131,9 +131,9 @@ export default class DocumentUpload extends Component {
     this.props.offeringCreationStore.setAccreditedOnlyField(metaInfo.form, index);
     this.forceUpdate();
   }
-  
+
   handleFormSubmitForBusinessApplication = (isApproved = null) => {
-    const { updateUploadDocs } = this.props.offeringCreationStore;
+    const { updateUploadDocs, removeFileIdsList } = this.props.offeringCreationStore;
     const { metaInfo, uploadFormKey, uploadEnum } = this.props;
     const uploadMeta = {
       form: metaInfo.form,
@@ -141,7 +141,9 @@ export default class DocumentUpload extends Component {
       fieldName: 'upload',
       uploadEnum: uploadEnum,
     };
-    updateUploadDocs(uploadMeta, uploadFileArr);
+    remove(uploadFileArr, n => removeFileIdsList.includes(n.currentIndex)); 
+    console.log(uploadFileArr);
+    // updateUploadDocs(uploadMeta, uploadFileArr);
     uploadFileArr = [];
   }
 
