@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, arrow-body-style, max-len, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith, isEqual } from 'lodash';
+import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith, isEqual, remove } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -1502,38 +1502,56 @@ export class OfferingCreationStore extends DataModelStore {
     );
   });
 
+  singleFileUpload = (form, uploadFormKey, fieldName, firstFileRecord, uploadEnum) => new Promise((resolve, reject) => {
+    this.bulkFileUpload(form, uploadFormKey, fieldName, firstFileRecord, uploadEnum, true).then(() => {
+      resolve(true);
+    }).catch(action((error) => {
+      reject(error);
+    }));
+  });
+
   @action
-  updateUploadDocs = (uploadMeta, uploadDocumentArr = undefined, fromS3 = false) => {
+  updateUploadDocs = async (uploadMeta, uploadDocumentArr = undefined, fromS3 = false) => {
     uiStore.setProgress('save');
     const { form, uploadFormKey, fieldName, uploadEnum } = uploadMeta;
-    this.bulkFileUpload(form, uploadFormKey, fieldName, uploadDocumentArr, uploadEnum, true).then(() => {
-      const dataRoomDocs = Validator.evaluateFormData(this[form].fields).documents || [];
-      // const removedDataRoomsDocs = Validator.evaluateFormData(this.removedFileData).documents || [];
-      // const oldDataRoomDocs = Validator.evaluateFormData(this.oldFormDetails).documents;
-      const finalDataRoomDocs = [];
-      dataRoomDocs.map((data, index) => {
-        if (data.accreditedOnly !== undefined) {
-          delete data.accreditedOnly;
-        }
-        if (data.name !== '' || data.upload.fileId !== '') {
-          finalDataRoomDocs.push(data);
-        }
-        return finalDataRoomDocs;
-      });
-      const payloadData = {
-        template: 2,
-        doc: cleanDeep(finalDataRoomDocs),
-      };
-      manageOfferingStore.updateOffering({ keyName: 'investNow', offeringData: { docuSign: payloadData } })
-        .then(() => {
-          this.removeUploadedFiles(fromS3);
-          // Helper.toast('Document has been saved successfully.', 'success');
-          uiStore.setProgress(false);
+    let isBulkCall = false;
+    if (uploadDocumentArr.length > 1) {
+      // eslint-disable-next-line no-irregular-whitespace
+      const firstFileRecord = remove(uploadDocumentArr, (n, i) => i === 0);
+      isBulkCall = await this.singleFileUpload(form, uploadFormKey, fieldName, firstFileRecord, uploadEnum);
+    } else {
+      isBulkCall = true;
+    }
+    if (isBulkCall) {
+      this.bulkFileUpload(form, uploadFormKey, fieldName, uploadDocumentArr, uploadEnum, true).then(() => {
+        const dataRoomDocs = Validator.evaluateFormData(this[form].fields).documents || [];
+        // const removedDataRoomsDocs = Validator.evaluateFormData(this.removedFileData).documents || [];
+        // const oldDataRoomDocs = Validator.evaluateFormData(this.oldFormDetails).documents;
+        const finalDataRoomDocs = [];
+        dataRoomDocs.map((data, index) => {
+          if (data.accreditedOnly !== undefined) {
+            delete data.accreditedOnly;
+          }
+          if (data.name !== '' || data.upload.fileId !== '') {
+            finalDataRoomDocs.push(data);
+          }
+          return finalDataRoomDocs;
         });
-    }).catch(action((error) => {
-      window.logger(error);
-      uiStore.setProgress(false);
-    }));
+        const payloadData = {
+          template: 2,
+          doc: cleanDeep(finalDataRoomDocs),
+        };
+        manageOfferingStore.updateOffering({ keyName: 'investNow', offeringData: { docuSign: payloadData } })
+          .then(() => {
+            this.removeUploadedFiles(fromS3);
+            // Helper.toast('Document has been saved successfully.', 'success');
+            uiStore.setProgress(false);
+          });
+      }).catch(action((error) => {
+        window.logger(error);
+        uiStore.setProgress(false);
+      }));
+    }
   }
 
   @action

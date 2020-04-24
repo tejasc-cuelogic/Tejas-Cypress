@@ -142,8 +142,8 @@ export default class DocumentUpload extends Component {
       uploadEnum: uploadEnum,
     };
     remove(uploadFileArr, n => removeFileIdsList.includes(n.currentIndex)); 
-    console.log(uploadFileArr);
-    // updateUploadDocs(uploadMeta, uploadFileArr);
+    // console.log('uploadFileArr passing==>', uploadFileArr);
+    updateUploadDocs(uploadMeta, uploadFileArr);
     uploadFileArr = [];
   }
 
