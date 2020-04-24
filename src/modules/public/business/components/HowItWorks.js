@@ -177,10 +177,10 @@ class HowItWorks extends Component {
                     <List.Item className={responsiveVars.isMobile ? 'mt-14' : 'mb-30'} style={{ columnSpan: 'all' }}>
                       <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
                         <Icon className="ns-tick" color="grey" />
-                        Community Bridge Note<br />
+                        Community Bridge Note
                     </Header>
-                    <p className="ml-37">
-                      <span className="highlight-text"><b>NEW!</b></span>
+                    <p className={responsiveVars.isMobile ? 'ml-30' : 'ml-45'}>
+                      <span className="highlight-text"><b>New!</b></span>
                       <Link to="/insights/community-bridge-notes" className="neutral-text no-decoration ml-18">Learn More <Icon size="small" className="ns-chevron-right" /></Link>
                     </p>
                     </List.Item>
