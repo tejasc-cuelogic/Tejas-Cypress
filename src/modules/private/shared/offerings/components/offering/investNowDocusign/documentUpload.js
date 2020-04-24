@@ -8,6 +8,7 @@ import { FormInput, DropZoneConfirm as DropZone, FormRadioGroup } from '../../..
 import ButtonGroupType2 from '../../ButtonGroupType2';
 
 let uploadFileArr = [];
+let removedArr = [];
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
 const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length, showLockActivity, isBusinessApplication }) => {
   return (
@@ -120,7 +121,10 @@ export default class DocumentUpload extends Component {
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
-    this.props.offeringCreationStore.toggleConfirmModal(index, formName);     
+    this.props.offeringCreationStore.toggleConfirmModal(index, formName);
+    if (index >= 0) {
+      removedArr.push(index);
+    }   
   }
   addMore = (e, formName, uploadFormKey) => {
     e.preventDefault();
@@ -141,10 +145,12 @@ export default class DocumentUpload extends Component {
       fieldName: 'upload',
       uploadEnum: uploadEnum,
     };
-    remove(uploadFileArr, n => removeFileIdsList.includes(n.currentIndex)); 
-    // console.log('uploadFileArr passing==>', uploadFileArr);
+    remove(uploadFileArr, n => removedArr.includes(n.currentIndex)); 
+    console.log('uploadFileArr passing==>', uploadFileArr);
+    console.log('removedArr==>', removedArr);
     updateUploadDocs(uploadMeta, uploadFileArr);
     uploadFileArr = [];
+    removedArr = [];
   }
 
   onSortEnd = ({ oldIndex, newIndex }, isReadonly) => {
