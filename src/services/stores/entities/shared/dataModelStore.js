@@ -221,6 +221,12 @@ export default class DataModelStore {
     this.currTime = +new Date();
   }
 
+
+  reOrderHandle = (orderedForm, form, arrayName) => {
+    const content = toJS(orderedForm).map((d, index) => ({ ...d, order: { ...d.order, value: index + 1 } }));
+    this.setFieldValue(form, content, `fields.${arrayName}`);
+  }
+
   setMediaAttribute = (form, attr, value, field, index = -1, arrayName) => {
     if (index > -1) {
       this[form].fields[arrayName][index][field][attr] = value;

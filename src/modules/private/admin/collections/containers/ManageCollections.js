@@ -4,11 +4,11 @@ import { Grid, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import { ByKeyword as Search } from '../../../../../theme/form/Filters';
-import PartnersListing from '../components/PartnersListing';
+import CollectionsListing from '../components/CollectionsListing';
 
-function ManagePartners(props) {
+function ManageCollections(props) {
   useEffect(() => {
-    props.partnerStore.initRequest();
+    props.collectionStore.initRequest();
   }, []);
 
   const search = (e) => {
@@ -20,7 +20,7 @@ function ManagePartners(props) {
   const { match } = props;
   const {
     requestState,
-  } = props.partnerStore;
+  } = props.collectionStore;
   return (
     <PrivateLayout
       refMatch={props.refMatch}
@@ -43,8 +43,8 @@ function ManagePartners(props) {
         />
       )}
     >
-      <PartnersListing match={match} />
+      <CollectionsListing match={match} />
     </PrivateLayout>
   );
 }
-export default inject('partnerStore')(observer(ManagePartners));
+export default inject('collectionStore')(observer(ManageCollections));

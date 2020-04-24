@@ -6,11 +6,11 @@ import { InlineLoader } from '../../../../../theme/shared';
 import formHOC from '../../../../../theme/form/formHOC';
 
 const metaInfo = {
-  store: 'partnerStore',
+  store: 'collectionStore',
   form: 'PARTNER_FRM',
 };
 
-function EditPartner(props) {
+function EditCollection(props) {
   const { smartElement } = props;
   const history = useHistory();
 
@@ -51,4 +51,4 @@ function EditPartner(props) {
     </Modal>
   );
 }
-export default inject('uiStore')(formHOC(observer(EditPartner), metaInfo));
+export default inject('uiStore')(formHOC(observer(EditCollection), metaInfo));

@@ -3,19 +3,19 @@ import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { Table } from 'semantic-ui-react';
 
-const PARTNER_META = [
+const COLLECTION_META = [
   { label: 'First Name', key: 'name', getRowValue: value => `${value}`, isMobile: true, isDesktop: true },
   { label: 'Last Name', key: 'lastName', getRowValue: value => `${value}`, isMobile: true, isDesktop: true },
 ];
-function partnersListing(props) {
-  const { records } = props.partnerStore;
+function CollectionsListing(props) {
+  const { records } = props.collectionStore;
   return (
     <div className="table-wrapper">
     <Table verticalAlign="middle" unstackable singleLine selectable>
       <Table.Header>
         <Table.Row>
           {
-            PARTNER_META.map(col => (
+            COLLECTION_META.map(col => (
               <Table.HeaderCell key={col.label}>{col.label}</Table.HeaderCell>
             ))
           }
@@ -26,7 +26,7 @@ function partnersListing(props) {
           {records.map((data, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <Table.Row key={index}>
-              {PARTNER_META.map(row => (
+              {COLLECTION_META.map(row => (
                 <Table.Cell verticalAlign="middle" className={row.className}>
                   {
                     row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key)) : 'N/A'
@@ -44,4 +44,4 @@ function partnersListing(props) {
   </div>
   );
 }
-export default inject('partnerStore')(observer(partnersListing));
+export default inject('collectionStore')(observer(CollectionsListing));
