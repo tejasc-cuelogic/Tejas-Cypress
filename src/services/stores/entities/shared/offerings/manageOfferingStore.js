@@ -114,7 +114,7 @@ export class ManageOfferingStore extends DataModelStore {
         } : { required: !investNow[index].toc[tocIndex].required };
         investNow[index].toc[tocIndex] = { ...investNow[index].toc[tocIndex], ...editTOC };
       } else {
-        investNow[index] = { ...investNow[index], title: formData.title, note: formData.note };
+        investNow[index] = { ...investNow[index], title: formData.title, note: formData.note, hideHeader: formData.hideHeader.includes(true) || false };
       }
     } else if (form === 'INVEST_NOW_PAGE_FRM') {
       const formData = Validator.evaluateFormData(this[form].fields);
@@ -123,6 +123,7 @@ export class ManageOfferingStore extends DataModelStore {
         regulation,
         title: formData.title,
         note: formData.note,
+        hideHeader: formData.hideHeader.includes(true) || false,
       };
       investNow.push(addPage);
     } else if (form === 'INVEST_NOW_TOC_FRM') {
@@ -485,6 +486,7 @@ export class ManageOfferingStore extends DataModelStore {
       const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
       if (index > -1) {
         const pageData = investNow[index];
+        pageData.hideHeader = [pageData.hideHeader];
         this.INVEST_NOW_PAGE_FRM = Validator.setFormData(this.INVEST_NOW_PAGE_FRM, pageData);
         this.INVEST_NOW_PAGE_FRM = Validator.validateForm(this.INVEST_NOW_PAGE_FRM);
       }
