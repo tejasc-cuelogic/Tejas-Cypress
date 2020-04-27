@@ -157,7 +157,7 @@ export default class DocumentUpload extends Component {
     if (!isReadonly) {
       const { metaInfo } = this.props;
       const docs = [...this.props[metaInfo.store][metaInfo.form].fields.documents];
-      this.props.offeringCreationStore.setDataRoomDocsOrder(arrayMove(docs, oldIndex, newIndex), metaInfo.form);
+      this.props.offeringCreationStore.setUploadDocsOrder(arrayMove(docs, oldIndex, newIndex), metaInfo.form);
     }
   };
   render() {

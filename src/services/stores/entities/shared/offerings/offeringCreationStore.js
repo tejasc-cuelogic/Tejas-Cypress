@@ -2260,6 +2260,20 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
+  setUploadDocsOrder = (orderedForm, formName = false) => {
+    const activeForm = formName || 'DATA_ROOM_FRM';
+    const uploadDocs = toJS(orderedForm).map((d) => {
+      return {
+        name: d.name.value,
+        accreditedOnly: d.accreditedOnly.value,
+        upload: { fileId: d.upload.fileId, fileName: d.upload.value },
+        mappingRequired: d.mappingRequired.value,
+      };
+    });
+    this[activeForm] = Validator.setFormData(this[activeForm], { documents: uploadDocs });
+  }
+
+  @action
   initializeClosingBinder = () => {
     uiStore.setProgress();
     client
