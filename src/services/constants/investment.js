@@ -90,6 +90,12 @@ export const AGREEMENT_TEMPLATE_DETAILS_INFO = {
     error: undefined,
     rule: 'required',
   },
+  hideHeader: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'optional',
+  },
   }],
 };
 
