@@ -9,7 +9,7 @@ import TransferRequestMethod from './transferRequest/transferRequestMethod';
 import Helper from '../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
-const TRANSFER_AMOUNT_LIMIT = '10000';
+const MINIMUM_AUTODRAFT_AMOUNT_WIRE = '10000';
 
 function TransferRequest(props) {
   const [showTransferRequest, setShowTransferRequest] = useState('basic');
@@ -19,7 +19,7 @@ function TransferRequest(props) {
     const { campaignStore, portfolioStore } = props;
     const offeringReuglation = get(campaignStore.campaign, 'keyTerms.regulation') || get(portfolioStore.getInvestorAccountById, 'offering.keyTerms.regulation');
     const formatedTransferAmount = money.floatToAmount(transferAmount);
-    const formatedBaseAmount = money.floatToAmount(TRANSFER_AMOUNT_LIMIT);
+    const formatedBaseAmount = money.floatToAmount(MINIMUM_AUTODRAFT_AMOUNT_WIRE);
     const comairResult = money.cmp(formatedTransferAmount, formatedBaseAmount);
     if (Math.sign(comairResult) >= 0 && ['BD_506B', 'BD_506C'].includes(offeringReuglation)) {
       setShowTransferRequest('advance');
@@ -42,6 +42,7 @@ function TransferRequest(props) {
       setStepToBeRendered(2);
     }
     getTransferRequestMethod(getTransferRequestAmount);
+    setFieldValue('transferRequestDraft', 'ACH');
 
     return () => {
       if (stepToBeRendered === 2) {
@@ -62,6 +63,11 @@ function TransferRequest(props) {
   };
 
   const renderTransferStep = (renderStep) => {
+    const { handleBack, investmentStore } = props;
+    const { setFieldValue } = investmentStore;
+    setFieldValue('transferRequestDraft', !renderStep ? 'ACH' : renderStep);
+    const backButtonState = !!renderStep;
+    handleBack(backButtonState);
     setTransferRequestMethod(renderStep);
   };
 
@@ -84,8 +90,8 @@ function TransferRequest(props) {
   const { campaignStore, portfolioStore } = props;
   const offeringReuglation = get(campaignStore.campaign, 'keyTerms.regulation') || get(portfolioStore.getInvestorAccountById, 'offering.keyTerms.regulation');
   const advanceTransferStepStatement = offeringReuglation === 'BD_506B'
-   ? `Since the Balance Required exceeds ${Helper.CurrencyFormat(TRANSFER_AMOUNT_LIMIT, 0)} and this is an investment under Rule 506(b) of Regulation D, you have the option to initiate a transfer of funds or wire funds after you reserve your investment.`
-   : `Since the Balance Required exceeds ${Helper.CurrencyFormat(TRANSFER_AMOUNT_LIMIT, 0)} and your accredited investor status has been verified, you have the option to schedule a transfer of funds for a future date or wire funds after you reserve your investment.`;
+   ? `Since the Balance Required exceeds ${Helper.CurrencyFormat(MINIMUM_AUTODRAFT_AMOUNT_WIRE, 0)} and this is an investment under Rule 506(b) of Regulation D, you have the option to initiate a transfer of funds or wire funds after you reserve your investment.`
+   : `Since the Balance Required exceeds ${Helper.CurrencyFormat(MINIMUM_AUTODRAFT_AMOUNT_WIRE, 0)} and your accredited investor status has been verified, you have the option to schedule a transfer of funds for a future date or wire funds after you reserve your investment.`;
 
    if (showTransferRequestErr) {
     return (
