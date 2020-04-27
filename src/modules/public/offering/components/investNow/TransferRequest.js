@@ -146,7 +146,7 @@ function TransferRequest(props) {
           </Message>
         )
       }
-      <Button.Group widths="2" className="inline mt-30">
+      <Button.Group>
         {showTransferRequest === 'basic' || transferRequestMethod
           ? (
             <>
