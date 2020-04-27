@@ -157,6 +157,9 @@ export const userDetailsQuery = gql`
               status
               expiration
             }
+            goldstar {
+              accountNumber              
+            }
             limits {
               income
               netWorth

@@ -87,11 +87,17 @@ function TransferRequest(props) {
   if (transferRequestMethod) {
     headerTitle = transferRequestMethod === 'ACH' ? 'Confirm Transfer Date and Request' : 'Confirm Wire Amount';
   }
-  const { campaignStore, portfolioStore } = props;
+  const { campaignStore, portfolioStore, userDetailsStore } = props;
   const offeringReuglation = get(campaignStore.campaign, 'keyTerms.regulation') || get(portfolioStore.getInvestorAccountById, 'offering.keyTerms.regulation');
   const advanceTransferStepStatement = offeringReuglation === 'BD_506B'
    ? `Since the Balance Required exceeds ${Helper.CurrencyFormat(MINIMUM_AUTODRAFT_AMOUNT_WIRE, 0)} and this is an investment under Rule 506(b) of Regulation D, you have the option to initiate a transfer of funds or wire funds after you reserve your investment.`
    : `Since the Balance Required exceeds ${Helper.CurrencyFormat(MINIMUM_AUTODRAFT_AMOUNT_WIRE, 0)} and your accredited investor status has been verified, you have the option to schedule a transfer of funds for a future date or wire funds after you reserve your investment.`;
+   const { currentActiveAccountDetails, userDetails } = userDetailsStore;
+   const investorFullName = `${get(userDetails, 'info.firstName')} ${get(userDetails, 'info.lastName')}`;
+   const accountDetailsMeta = {
+     goldstarAccountNumber: get(currentActiveAccountDetails, 'details.goldstar.accountNumber') || null,
+     userFullName: investorFullName,
+   };
 
    if (showTransferRequestErr) {
     return (
@@ -127,6 +133,7 @@ function TransferRequest(props) {
             isPreferredEquity={isPreferredEquity}
             getTransferRequestAmount={getTransferRequestAmount}
             transferMethod={transferRequestMethod}
+            accountDetailsMeta={accountDetailsMeta}
           />
         )
       }
@@ -172,4 +179,4 @@ function TransferRequest(props) {
   );
 }
 
-export default inject('investmentStore', 'investmentLimitStore', 'uiStore', 'accreditationStore', 'campaignStore', 'portfolioStore')(withRouter(observer(TransferRequest)));
+export default inject('investmentStore', 'investmentLimitStore', 'uiStore', 'accreditationStore', 'campaignStore', 'portfolioStore', 'userDetailsStore')(withRouter(observer(TransferRequest)));
