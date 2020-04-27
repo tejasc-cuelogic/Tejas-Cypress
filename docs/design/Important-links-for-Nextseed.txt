@@ -1,0 +1,10 @@
+Important links for Nextseed:
+
+1) Semantic react UI - https://react.semantic-ui.com/
+2) React slick slider - https://www.npmjs.com/package/react-slick
+3) Recharts - https://recharts.org/en-US/
+4) React confetti - https://www.npmjs.com/package/react-confetti
+5) React Avatar - https://www.npmjs.com/package/react-avatar
+6) Vertical timeline component - https://www.npmjs.com/package/react-vertical-timeline-component
+7) React dropzone - https://www.npmjs.com/package/react-dropzone
+8) Icon font generation - icomoon.io
