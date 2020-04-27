@@ -24,6 +24,8 @@ export default class DataModelStore {
 
   loading = false;
 
+  apiHit = false;
+
   client = publicClient;
 
   currentScore = 0;

@@ -1,4 +1,3 @@
-/*  eslint-disable jsx-a11y/label-has-for */
 import React, { useState } from 'react';
 import { observer, inject } from 'mobx-react';
 import { arrayMove } from 'react-sortable-hoc';

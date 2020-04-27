@@ -2,9 +2,8 @@ import { FormHelper } from '../../../helper';
 // [key, label, value, rule, placeHolder, additionalProps];
 
 export const COLLECTION = FormHelper.generateMeta([
-  ['title', 'Title', '', 'required', 'Click to edit article name'],
-  ['content', 'description', '', 'required', ''],
-  ['altContent', 'description', '', 'required', ''],
+  ['name', 'Name', '', 'required', 'Click to edit article name'],
+  ['slug', 'Slug', '', 'required', 'Enter here'],
 ]);
 
 export const OVERVIEW = FormHelper.generateMeta([

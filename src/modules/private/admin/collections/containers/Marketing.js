@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 // import Content from '../../../shared/marketing/Content';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
+import Content from '../components/Content';
 
 
 const getModule = component => lazyRetry(() => import(`../components/${component}`));
@@ -14,7 +15,6 @@ const navItems = [
     to: 'content',
     title: 'Content',
     component: 'Content',
-
   },
   {
     to: 'tombstone',
@@ -30,6 +30,7 @@ const navItems = [
         <SecondaryMenu force2ary match={match} navItems={navItems} />
         <SuspenseBoundary fallback={<InlineLoader styledAs={{ marginTop: '100px' }} />}>
           <Switch>
+          <Route exact path={match.url} component={Content} />
             {navItems.map((item) => {
               const CurrentComponent = getModule(item.component);
               return (

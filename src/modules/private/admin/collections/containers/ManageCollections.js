@@ -33,7 +33,7 @@ function ManageCollections(props) {
           change={e => search(e, 'title')}
           addon={(
             <Grid.Column width={3} textAlign="right" floated="right">
-              <Button color="green" as={Link} floated="right" to={`${match.url}/new/draft`}>
+              <Button color="green" as={Link} floated="right" to={`${match.url}/new/`}>
                 Add new article
                 </Button>
             </Grid.Column>

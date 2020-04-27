@@ -1,11 +1,18 @@
 import { decorate, observable, action } from 'mobx';
+import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC } from '../../../constants/admin/collection';
+import { adminCollectionUpsert, getCollections } from '../../queries/collection';
+import Helper from '../../../../helper/utility';
 
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 
 class CollectionsStore extends DataModelStore {
-  records = [];
+  constructor() {
+    super({ adminCollectionUpsert, getCollections });
+  }
+
+  collections = [];
 
   COLLECTION_FRM = Validator.prepareFormObject(COLLECTION);
 
@@ -17,10 +24,19 @@ class CollectionsStore extends DataModelStore {
 
   contentId = '';
 
-
   initRequest = () => {
-    this.records = [{ name: 'swap', lastName: 'Bhosale' }, { name: 'John', lastName: 'SMith' }];
-  }
+    if (!this.apiHit) {
+      this.executeQuery({
+        query: 'getCollections',
+        setLoader: 'getCollections',
+      }).then((res) => {
+        if (get(res, 'getCollections')) {
+          this.setFieldValue('collections', res.getCollections);
+        }
+        this.setFieldValue('apiHit', true);
+      });
+    }
+  };
 
   setFormData = (form, ref, keepAtLeastOne) => {
     Validator.resetFormData(this[form]);
@@ -41,23 +57,47 @@ class CollectionsStore extends DataModelStore {
     return metaDataMapping[formName][getField];
   }
 
-  updateCollection = (params) => {
+  formPayLoad = (params) => {
     const { forms } = params;
-    const data = Validator.evaluateFormData(this[forms].fields);
-    const mutationsParams = {
-      ...params,
-      id: this.contentId,
-      data,
-    };
-    console.log('content', mutationsParams);
+    let data = {};
+    if (Array.isArray(forms)) {
+      forms.forEach((f) => {
+        if (f === 'COLLECTION_FRM') {
+          data = { collectionDetails: Validator.evaluateFormData(this[f].fields) };
+        }
+      });
+    }
+    if (this.contentId !== '') {
+      data.id = this.contentId;
+    }
+    return data;
+  }
+
+  upsertCollection = async (mutation, params) => {
+    try {
+      const res = await this.executeMutation({
+        mutation,
+        setLoader: mutation,
+        variables: this.formPayLoad(params),
+      });
+      return res;
+    } catch (err) {
+      if (get(err, 'message')) {
+        Helper.toast(get(err, 'message'), 'error');
+      } else {
+        Helper.toast('Something went wrong.', 'error');
+      }
+      return false;
+    }
   };
 }
 decorate(CollectionsStore, {
   ...decorateDefault,
-  records: observable,
+  collections: observable,
   PARTNER_FRM: observable,
   OVERVIEW_FRM: observable,
   contentId: observable,
   initRequest: action,
+  upsertCollection: action,
 });
 export default new CollectionsStore();

@@ -1,14 +1,25 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { useHistory } from 'react-router-dom';
 import { get } from 'lodash';
 import { Table } from 'semantic-ui-react';
+import { InlineLoader } from '../../../../../theme/shared';
 
 const COLLECTION_META = [
-  { label: 'First Name', key: 'name', getRowValue: value => `${value}`, isMobile: true, isDesktop: true },
-  { label: 'Last Name', key: 'lastName', getRowValue: value => `${value}`, isMobile: true, isDesktop: true },
+  { label: 'Name', key: 'name', getRowValue: value => `${value}`, isMobile: true, isDesktop: true },
 ];
 function CollectionsListing(props) {
-  const { records } = props.collectionStore;
+  const { collections } = props.collectionStore;
+  const history = useHistory();
+  const { loadingArray } = props.nsUiStore;
+
+  if (loadingArray.includes('getCollections')) {
+    return <InlineLoader />;
+  }
+
+  if (collections.length === 0) {
+    return <p> No record found </p>;
+  }
   return (
     <div className="table-wrapper">
     <Table verticalAlign="middle" unstackable singleLine selectable>
@@ -23,9 +34,9 @@ function CollectionsListing(props) {
       </Table.Header>
       {
         <Table.Body>
-          {records.map((data, index) => (
+          {collections.map((data, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Table.Row key={index}>
+            <Table.Row key={index} onClick={() => history.push(`${props.match.url}/${data.id}`)}>
               {COLLECTION_META.map(row => (
                 <Table.Cell verticalAlign="middle" className={row.className}>
                   {
@@ -44,4 +55,4 @@ function CollectionsListing(props) {
   </div>
   );
 }
-export default inject('collectionStore')(observer(CollectionsListing));
+export default inject('collectionStore', 'nsUiStore')(observer(CollectionsListing));
