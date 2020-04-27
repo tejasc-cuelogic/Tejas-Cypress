@@ -2907,6 +2907,7 @@ export const UPLOAD_DATA = {
       values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
       label: 'Is mapping required?',
       error: undefined,
+      defaultValue: true,
       rule: 'optional',
     },
   }],
