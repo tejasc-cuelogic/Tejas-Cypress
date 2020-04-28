@@ -140,7 +140,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="mt-30">
-          <Button primary size="large" fluid={isMobile} className="relaxed" content="Create your account" onClick={() => this.props.handleCreateAccount('individual')} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum) || inProgressArray.includes('submitAccountLoader')} />
+          <Button primary size="large" fluid={isMobile} className="relaxed" data-cy="ind-summary" content="Create your account" onClick={() => this.props.handleCreateAccount('individual')} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum) || inProgressArray.includes('submitAccountLoader')} />
         </div>
       </>
     );

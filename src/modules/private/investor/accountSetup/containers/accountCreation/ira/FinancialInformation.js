@@ -39,6 +39,7 @@ export default class FinancialInformation extends React.Component {
               <MaskedInput
                 key={field}
                 type="tel"
+                data-cy={field}
                 fielddata={FIN_INFO_FRM.fields[field]}
                 name={field}
                 changed={values => finInfoChange(values, field)}
@@ -58,7 +59,7 @@ export default class FinancialInformation extends React.Component {
           </p>
           <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
           <div className="mt-30">
-            <Button fluid={isMobile} primary className="relaxed" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
+            <Button fluid={isMobile} primary data-cy="fin-info-ira-submit" className="relaxed" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
           </div>
         </Form>
       </>
