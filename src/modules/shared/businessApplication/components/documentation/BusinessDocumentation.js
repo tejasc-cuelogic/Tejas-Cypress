@@ -111,7 +111,7 @@ export default class BusinessDocumentation extends Component {
         <FormElementWrap
           hideFields={hideFields}
           header="Will you accept a blanket lien on the business if your campaign is successfully funded?*"
-          subHeader="This is a requirement for NextSeed debt products only (note that if you have existing debt with a lien attached, a second lien will be accepted). The Community Bridge Note does not require a lien."
+          subHeader="This is a NextSeed requirement for Debt products only. (Note that if you have existing debt with liens attached, a second lien will be accepted.)"
         >
           <FormRadioGroup
             disabled={formReadOnlyMode}
