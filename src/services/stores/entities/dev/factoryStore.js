@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { get, isEmpty, forEach, find, includes, keyBy, has, pickBy, identity, filter } from 'lodash';
+import { get, isEmpty, forEach, find, includes, keyBy, has, pickBy, identity, filter, remove } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { adminListFilePlugins, getPluginList, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile } from '../../queries/data';
 import Helper from '../../../../helper/utility';
@@ -185,7 +185,8 @@ export class FactoryStore extends DataModelStore {
         this.setFieldValue('pluginListArr', fileData);
         if (fetchSpecificPlugins) {
           const filePlugins = this.dropDownValuesForPlugin('adminListFilePlugins');
-          const filteredFilePluginList = filter(filePlugins, o => o.value.includes(fetchSpecificPlugins));
+          const investNowFilePluginList = filter(filePlugins, o => o.value.includes(fetchSpecificPlugins));
+          const filteredFilePluginList = this.filterPluginAsperRegulation(investNowFilePluginList);
           this.setFieldValue('FILEFACTORY_FRM', filteredFilePluginList, 'fields.method.values');
         } else {
           this.setFieldValue('FILEFACTORY_FRM', this.dropDownValuesForPlugin('adminListFilePlugins'), 'fields.method.values');
@@ -450,6 +451,25 @@ export class FactoryStore extends DataModelStore {
     const defulatValues = [...dynamicFormfields[defaultValueMappedObj.mappedKey].defaultValues];
     const defaultPayloadObj = find(defulatValues, o => o.key === currentMethod);
     this.setFormData(formObj.parentForm, defaultValueMappedObj.mappedKey, defaultPayloadObj.value, formObj.childForm);
+  }
+
+  filterPluginAsperRegulation = (pluginList) => {
+    const { offeringStatus } = offeringsStore;
+    const offeringSecurity = offeringStatus.isPreferredEquity ? 'PREFERRED_EQUITY' : offeringStatus.isTermNote ? 'TERM_NOTE' : offeringStatus.isRevenueShare ? 'REVENUE_SHARING' : 'OTHER';
+    const dropDownList = pluginList;
+    const npaAgrement = remove(dropDownList, n => n.value.includes('NotePurchaseAgreement'));
+    if (offeringSecurity === 'PREFERRED_EQUITY') {
+      return dropDownList;
+    } if (offeringSecurity === 'TERM_NOTE') {
+      npaAgrement[0].text = 'TermNote NPA';
+      npaAgrement[0].key = 'TermNote NPA';
+      return npaAgrement;
+    } if (offeringSecurity === 'REVENUE_SHARING') {
+      npaAgrement[0].text = 'RevShare NPA';
+      npaAgrement[0].key = 'RevShare NPA';
+      return npaAgrement;
+    }
+    return [];
   }
 }
 

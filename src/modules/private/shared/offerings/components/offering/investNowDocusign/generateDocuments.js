@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { Card, Form, Grid, Button } from 'semantic-ui-react';
 import { get } from 'lodash';
 import formHOC from '../../../../../../../theme/form/formHOC';
+import { InlineLoader } from '../../../../../../../theme/shared';
+
 
 const metaInfo = {
   store: 'factoryStore',
@@ -14,7 +16,6 @@ function GenerateDocuments(props) {
   useEffect(() => {
     props.factoryStore.resetForm('FILEFACTORY_FRM');
     props.factoryStore.setFieldValue('inProgress', false, 'fileFactory');
-    props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {}, 'FILEFACTORY');
   }, []);
 
   const onSubmit = () => {
@@ -36,10 +37,11 @@ function GenerateDocuments(props) {
 
   const { factoryStore, smartElement, offeringsStore } = props;
   const {
-    FILEFACTORY_FRM, formChangeForPlugin, inProgress, DYNAMCI_PAYLOAD_FRM,
+    FILEFACTORY_FRM, formChangeForPlugin, inProgress,
   } = factoryStore;
   const { offeringStorageDetails } = offeringsStore;
-  const isPreview = !!(get(offeringStorageDetails, 'data.getOfferingDetailsBySlug.storageDetails.Legal.GeneratedInvestNowDocs.id'));
+  const isDocGenerationValid = !!(FILEFACTORY_FRM.fields.method.values.length > 0);
+  const isPreview = !!(get(offeringStorageDetails, 'data.getOfferingDetailsBySlug.storageDetails.Legal.GeneratedInvestNowDocs.id') && isDocGenerationValid);
   const folderId = get(offeringStorageDetails, 'data.getOfferingDetailsBySlug.storageDetails.Legal.GeneratedInvestNowDocs.id');
   return (
     <>
@@ -52,17 +54,23 @@ function GenerateDocuments(props) {
                 <Form onSubmit={FILEFACTORY_FRM.meta.isValid && onSubmit}>
                   <Form.Group className="bottom-aligned">
                     <Form.Field width={12}>
-                      {smartElement.FormDropDown('method', {
-                        onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
-                        containerclassname: 'dropdown-field mlr-0',
-                        placeholder: 'Choose here',
-                        options: FILEFACTORY_FRM.fields.method.values,
-                        className: 'mb-80',
-                        containerwidth: 11,
-                      })}
+                      {!isDocGenerationValid
+                        ? (
+                          <InlineLoader text="No DocGen supported for this security type" />
+                        )
+                        : (smartElement.FormDropDown('method', {
+                          onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
+                          containerclassname: 'dropdown-field mlr-0',
+                          placeholder: 'Choose here',
+                          options: FILEFACTORY_FRM.fields.method.values,
+                          className: 'mb-80',
+                          containerwidth: 11,
+                        })
+                        )
+                      }
                     </Form.Field>
                     <Form.Field width={4}>
-                      <Button primary content="Generate" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} />
+                      <Button primary content="Generate" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid} loading={inProgress.fileFactory} />
                       {isPreview
                         && (
                           <Button secondary content="Preview" onClick={e => handleDocumentsLink(e, folderId)} disabled={props.commonStore.inProgress === folderId || inProgress.fileFactory} loading={props.commonStore.inProgress === folderId} />

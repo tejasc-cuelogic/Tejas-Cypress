@@ -5,7 +5,7 @@ import money from 'money-math';
 import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes, orderBy, set } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../../api/publicApi';
-import { STAGES } from '../../../../constants/admin/offerings';
+import { STAGES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/admin/offerings';
 import {
   allOfferings, allOfferingsCompact, updateOffering,
   adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings, getofferingById,
@@ -536,6 +536,25 @@ export class OfferingsStore {
       },
     });
   });
+
+  @computed get offeringSecurity() {
+    return get(this.offer, 'keyTerms.securities') || '';
+  }
+
+  @computed get offeringStatus() {
+    const { offer } = this;
+    const offeringStatus = {};
+    offeringStatus.revenueSharingSummary = get(offer, 'keyTerms.revShareSummary');
+    offeringStatus.isRevenueShare = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE;
+    offeringStatus.isTermNote = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
+    offeringStatus.isFund = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS;
+    offeringStatus.isSafe = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE;
+    offeringStatus.isConvertibleNotes = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.CONVERTIBLE_NOTES;
+    offeringStatus.isEquity = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY;
+    offeringStatus.isRealEstate = ((this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(offer, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
+    offeringStatus.isPreferredEquity = ((this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(offer, 'keyTerms.equityClass') === 'PREFERRED' || (this.inInvestmentFlow && ['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(offer, 'keyTerms.equityClass'))))));
+    return offeringStatus;
+  }
 }
 
 export default new OfferingsStore();
