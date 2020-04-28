@@ -24,6 +24,8 @@ export default class DataModelStore {
 
   loading = false;
 
+  apiHit = false;
+
   client = publicClient;
 
   currentScore = 0;
@@ -219,6 +221,12 @@ export default class DataModelStore {
   setAddressFields = (place, form) => {
     FormValidator.setAddressFields(place, this[form]);
     this.currTime = +new Date();
+  }
+
+
+  reOrderHandle = (orderedForm, form, arrayName) => {
+    const content = toJS(orderedForm).map((d, index) => ({ ...d, order: { ...d.order, value: index + 1 } }));
+    this.setFieldValue(form, content, `fields.${arrayName}`);
   }
 
   setMediaAttribute = (form, attr, value, field, index = -1, arrayName) => {

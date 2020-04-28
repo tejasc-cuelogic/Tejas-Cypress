@@ -63,7 +63,7 @@ export default class EditArticle extends Component {
 
   handleCloseModal = () => {
     if (this.props.match.params.id !== 'new') {
-      this.props.articleStore.reset();
+      this.props.artiActionscleStore.reset();
     }
     this.props.history.replace(this.props.refLink);
   };

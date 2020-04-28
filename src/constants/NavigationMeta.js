@@ -502,6 +502,15 @@ export const PRIVATE_NAV = [
     ],
   },
   {
+    icon: 'credit card',
+    title: 'Collections',
+    capability: 'COLLECTIONS_ANY',
+    to: 'collections',
+    path: 'admin/collections',
+    accessibleTo: ['admin', 'manager', 'support'],
+    subPanel: 0,
+  },
+  {
     icon: 'user plus',
     title: 'Beneficiaries',
     capability: 'BENEFICIARIES_ANY',
