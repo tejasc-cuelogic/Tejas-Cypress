@@ -26,6 +26,7 @@ import XmlForm from './private/admin/edgar/containers/XmlForm';
 import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
 import UserManagement from './private/admin/userManagement';
 import DashboardCta from './shared/DashboardCta';
+import Collections from './public/collections/components/Collections';
 
 import {
   AdminAuthorization,
@@ -124,6 +125,10 @@ export const publicRoutes = [
   {
     path: '/offerings',
     component: Offering,
+  },
+  {
+    path: '/collections',
+    component: Collections,
   },
   {
     path: '/business',
