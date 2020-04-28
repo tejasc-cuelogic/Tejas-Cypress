@@ -504,9 +504,11 @@ export class BusinessAppStore {
           }
         });
       } else if (this.currentApplicationType === 'business' && this.getNewBusinessTypeCondtion) {
-        ['ytd'].forEach((field) => {
+        ['priorToThreeYear', 'ytd'].forEach((field) => {
           if (data.financialStatements[field] && data.financialStatements[field].length) {
             this.setFileObjectToForm(data.financialStatements[field], 'BUSINESS_PERF_FRM', field);
+          } else {
+            this.BUSINESS_PERF_FRM.fields[field].rule = '';
           }
         });
       } else {
@@ -541,6 +543,10 @@ export class BusinessAppStore {
           ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
             const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
             this.BUSINESS_PERF_FRM.fields[field[key]].value = prequalData.performanceSnapshot.pastYearSnapshot[ele];
+          });
+        } else if (this.getNewBusinessTypeCondtion) {
+          ['priorToThreeYear', 'pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'].forEach((ele) => {
+            this.BUSINESS_PERF_FRM.fields[ele].rule = '';
           });
         } else {
           ['priorToThreeYear', 'ytd', 'pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'].forEach((ele) => {
