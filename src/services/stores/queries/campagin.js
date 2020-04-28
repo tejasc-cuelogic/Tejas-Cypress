@@ -438,6 +438,7 @@ export const campaignDetailsQuery = gql`
         title
         page
         regulation
+        hideHeader
         toc {
           label
           order
@@ -560,6 +561,7 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
         title
         page
         regulation
+        hideHeader
         toc {
           label
           order

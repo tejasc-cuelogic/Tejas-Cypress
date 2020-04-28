@@ -118,7 +118,7 @@
         }
         &.active .menu {
             box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
-            border: 1px solid rgba(34,36,38,.15);
+            border: 1px solid rgba(34,36,38,.10);
             margin: 0px -@1px;
             padding: 0 @5px;
             min-width: ~"calc(100% + 2px)";

@@ -59,6 +59,11 @@ export class MultiFactorAuthStore {
         });
     });
   }
+
+  @action
+  resetStoreData = () => {
+    this.MFA_MODE_TYPE_META = Validator.resetFormData(this.MFA_MODE_TYPE_META);
+  }
 }
 
 export default new MultiFactorAuthStore();

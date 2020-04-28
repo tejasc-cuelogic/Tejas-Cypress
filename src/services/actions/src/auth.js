@@ -25,6 +25,7 @@ import {
   accreditationStore,
   transactionStore,
   offeringsStore,
+  multiFactorAuthStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -483,6 +484,7 @@ export class Auth {
     investorProfileStore.resetStoreData();
     userDetailsStore.resetStoreData();
     iraAccountStore.resetStoreData();
+    multiFactorAuthStore.resetStoreData();
     entityAccountStore.resetStoreData();
     bankAccountStore.resetStoreData();
     individualAccountStore.resetStoreData();

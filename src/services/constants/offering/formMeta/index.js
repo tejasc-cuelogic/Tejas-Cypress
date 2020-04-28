@@ -22,6 +22,16 @@ export const INVEST_NOW_TOC = FormHelper.generateMeta([
 export const INVEST_NOW_PAGE = FormHelper.generateMeta([
   ['title', 'Description (Copy on the InvestNow UI)', '', 'optional', 'Description (Copy on the InvestNow UI)'],
   ['note', 'Note (Additional Notes about this TOC)', '', 'optional', 'Note (Additional Notes about this TOC)'],
+  ['hideHeader', 'Hide Header', [], 'optional', '', { props: {
+    values: [
+      {
+        label: 'Hide Header',
+        value: true,
+      },
+    ],
+    defaultValue: [],
+  },
+  asIn: true }],
   // ['page', 'Page no.', '', 'optional', 'Page no.'],
   // ['regulation', 'Regulation', '', 'required', 'Regulation', { props: {
   //   options: REGULATION_VALUES,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Responsive, Button } from 'semantic-ui-react';
+import { Button, Divider, Container } from 'semantic-ui-react';
 import { authActions } from '../../../../services/actions';
 import Banner from '../components/Banner';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
@@ -65,12 +65,12 @@ class Business extends Component {
 
   render() {
     const { location } = this.props;
+    const { responsiveVars } = this.props.uiStore;
     return (
       <>
         <MetaTagGenerator pathName={location.pathname} metaTagsData={metaTagsData} />
-        {location.pathname === '/business' ? <Banner handleApplyCta={this.handleApplyCta} />
-          : <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />
-        }
+        <Banner handleApplyCta={this.handleApplyCta} />
+        <Divider fitted as={!responsiveVars.uptoTablet && Container} />
         <HowItWorks handleApplyCta={this.handleApplyCta} />
         {
           this.state.isInvestorModal
