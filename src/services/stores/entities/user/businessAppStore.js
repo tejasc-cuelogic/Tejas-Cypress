@@ -503,6 +503,12 @@ export class BusinessAppStore {
             this.setFileObjectToForm(data.financialStatements[field], 'BUSINESS_PERF_FRM', field);
           }
         });
+      } else if (this.currentApplicationType === 'business' && this.getNewBusinessTypeCondtion) {
+        ['ytd'].forEach((field) => {
+          if (data.financialStatements[field] && data.financialStatements[field].length) {
+            this.setFileObjectToForm(data.financialStatements[field], 'BUSINESS_PERF_FRM', field);
+          }
+        });
       } else {
         ['priorToThreeYear', 'ytd'].forEach((ele) => {
           this.BUSINESS_PERF_FRM.fields[ele].rule = '';
@@ -697,6 +703,11 @@ export class BusinessAppStore {
       && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.PRE_LAUNCH
       && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.NEW_BUSINESS
       && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW);
+  }
+
+  @computed get getNewBusinessTypeCondtion() {
+    return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value
+      && this.BUSINESS_APP_FRM.fields.businessGoal.value === BUSINESS_GOAL.NEW_BUSINESS);
   }
 
   @computed get getOwnPropertyCondtion() {
