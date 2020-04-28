@@ -184,7 +184,7 @@ export default class Summary extends Component {
         {!isMobile
         && (
           <div className="mt-30">
-            <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent || inProgressArray.includes('submitAccountLoader')} />
+            <Button primary size="large" className="relaxed" data-cy="entity-summary" content="Submit for review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent || inProgressArray.includes('submitAccountLoader')} />
           </div>
         )}
       </>

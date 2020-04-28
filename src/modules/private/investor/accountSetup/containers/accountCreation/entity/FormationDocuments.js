@@ -73,7 +73,7 @@ export default class FormationDocumemts extends Component {
               </Message>
             )
           }
-          <Button fluid={isMobile} primary className="relaxed" content="Continue" disabled={!FORM_DOCS_FRM.meta.isValid || errors} onClick={this.handleContinueButton} />
+          <Button fluid={isMobile} primary className="relaxed" data-cy="formation-doc" content="Continue" disabled={!FORM_DOCS_FRM.meta.isValid || errors} onClick={this.handleContinueButton} />
         </Form>
       </>
     );

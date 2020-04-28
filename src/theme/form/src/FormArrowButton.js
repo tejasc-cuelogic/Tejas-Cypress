@@ -34,6 +34,7 @@ const FormArrowButton = observer((props) => {
       basic
       fluid
       labelPosition="left"
+      data-cy={field.value}
       className={`arrow-button ${classname} ${value === field.value ? 'active' : ''} ${ctaErrors && ctaErrors.for === field.value ? 'error' : ''}`}
     >
     <div className="details">
