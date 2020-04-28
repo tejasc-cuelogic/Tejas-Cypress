@@ -175,7 +175,7 @@ export default class Summary extends Component {
           />
         </p>
         <div className="mt-30">
-          <Button primary size="large" fluid={isMobile} className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('ira')} disabled={!this.props.iraAccountStore.isValidIraForm || inProgressArray.includes('submitAccountLoader')} />
+          <Button primary size="large" fluid={isMobile} className="relaxed" content="Submit for review" data-cy="ira-summary" onClick={() => this.props.handleCreateAccount('ira')} disabled={!this.props.iraAccountStore.isValidIraForm || inProgressArray.includes('submitAccountLoader')} />
         </div>
       </>
     );

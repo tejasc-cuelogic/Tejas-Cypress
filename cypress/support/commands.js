@@ -61,26 +61,27 @@ function hexStringToByte(str) {
   return new Uint8Array(a);
 }
 
-Cypress.Commands.add('uploadFile', (fileName, fileType, selector, url = '**/**') => {
+Cypress.Commands.add('uploadFile', (selector, fileName = 'images/test-img.png', fileType = '', url = '/dev/graphql') => {
   cy.server();
   cy.route('POST', url).as('fileUpload');
-  cy.fixture(fileName).as('img');
-  cy.upload_file(fileName, fileType, selector);
+  cy.upload_file(fileName, fileType, selector)
   cy.wait('@fileUpload');
 });
 
-Cypress.Commands.add('upload_file', (fileName, fileType, selector) => {
+Cypress.Commands.add('upload_file', (fileName, fileType = '', selector) => {
   cy.get(selector).then((subject) => {
     cy.fixture(fileName, 'hex').then((fileHex) => {
       const fileBytes = hexStringToByte(fileHex);
       const testFile = new File([fileBytes], fileName, {
         type: fileType,
       });
+
       const dataTransfer = new DataTransfer();
       const el = subject[0];
 
       dataTransfer.items.add(testFile);
       el.files = dataTransfer.files;
+      el.dispatchEvent(new Event('change', { bubbles: true }))
     });
   });
 });
@@ -103,7 +104,7 @@ Cypress.Commands.add('login', amplifyLogin);
 
 Cypress.Commands.add('applicationUnlock', () => {
   cy.get('input[name="password"]').type(Cypress.env('appPassword'));
-    cy.get('div.content').get('button.button').contains('Log in').click({ force: true });
+  cy.get('div.content').get('button.button').contains('Log in').click({ force: true });
 });
 
 Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
@@ -111,15 +112,29 @@ Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
     forIn(dataSet, (val, key) => {
       const selector = dataSet[key].selector || 'name';
       let cySelector = '';
-      if (parentSelector) {
-        cySelector = cy.get(`[data-cy=${parentSelector}]`).find(`input[${selector.replace(/["']/g, "")}="${key}"]`);
-      } else {
-        cySelector = cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`);
+      if (!dataSet[key].isDropdown) {
+        if (parentSelector) {
+          cySelector = cy.get(`[data-cy=${parentSelector}]`).find(`input[${selector.replace(/["']/g, "")}="${key}"]`);
+        } else {
+          cySelector = cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`);
+        }
       }
 
-      if (!dataSet[key].skip) {
+      if (!dataSet[key].skip && !dataSet[key].isNotType) {
         cySelector.type(dataSet[key].value);
       }
+
+      if (!dataSet[key].skip && dataSet[key].isCheckBox) {
+        cySelector.check(dataSet[key].value, { force: true });
+      }
+
+      if (!dataSet[key].skip && dataSet[key].isDropdown) {
+        cy.get(`div[name="${key}"]`)
+        .click()
+        .get(`div[role="option"]:contains(${dataSet[key].value})`)
+        .click();
+      }
+
       if (!dataSet[key].skip && dataSet[key].isEnterEvent) {
         cySelector.type('{enter}');
       }
@@ -131,6 +146,15 @@ Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
     });
   }
 });
+
+Cypress.Commands.add('itterativeWait', (alias, count) => {
+  for (let i = 0; i < count; i++) {
+    cy.wait(`@${alias}`).then((xhr) => {
+      cy.log('response', xhr.response);
+      assert.isNotNull(xhr.response, `${count} API call has data`)
+    })
+  } 
+})
 
 Cypress.Commands.add('clearFormField', (dataSet, parentSelector = false) => {
   if (!isEmpty(dataSet)) {
@@ -185,14 +209,14 @@ Cypress.Commands.add('clearLocalStorageKey', (KEY_NAME) => {
   localStorage.removeItem(KEY_NAME);
 });
 
-Cypress.Commands.add('addWindowLocalStorageKey', (KEY_NAME, VALUE= false) => {
+Cypress.Commands.add('addWindowLocalStorageKey', (KEY_NAME, VALUE = false) => {
   window.localStorage.setItem(KEY_NAME, VALUE);
 });
 
 Cypress.Commands.add('Logout', () => {
   cy.visit('/dashboard', { failOnStatusCode: false, timeout: 100000 });
   cy.applicationUnlock();
-  cy.get('div.menu').get('div.ns-scrollbar').find('span').contains('Logout').click();
+  cy.get('[data-cy=auth-logout]').click();
 });
 
 const deleteUserCtaAction = (ctaName) => {
@@ -200,7 +224,6 @@ const deleteUserCtaAction = (ctaName) => {
   cy.get('div.signup-content.content > form > div.field.secondary').get('textarea[name="message"]').type('Test User delete')
   cy.get('div.signup-content.content > form').get('button.button').contains('Submit').click();
 }
-
 
 Cypress.Commands.add('cleanUpUser', () => {
   const investorEmail = window.localStorage.getItem('investorEmail');
@@ -217,13 +240,13 @@ Cypress.Commands.add('cleanUpUser', () => {
   })
 });
 
-Cypress.Commands.add('deleteUser', (userType='Investor') => {
+Cypress.Commands.add('deleteUser', (userType = 'Investor') => {
   const investorEmail = window.localStorage.getItem('investorEmail');
   console.log('investorEmail====', investorEmail);
   cy.Logout();
   cy.visit('/');
   // cy.applicationUnlock();
-  cy.get('.header-wrap').get('.menu-button').contains('Log In').click({ force: true });
+  cy.get('data-cy=auth-login').dblclick();
 
   cy.fixture('admin/user').then((data) => {
     cy.get('form').within(() => {
@@ -236,22 +259,22 @@ Cypress.Commands.add('deleteUser', (userType='Investor') => {
     });
 
     cy.visit('/app/users');
-    registerApiCall('listUsers', '/dev/graphql');
+    registerApiCall('listUsers');
     cy.wait('@listUsers');
 
     cy.get('form').within(() => {
       cy.get('input[placeholder="Search by name"]').type(investorEmail).type('{enter}');
     });
-    registerApiCall('listUsers', '/dev/graphql');
+    registerApiCall('listUsers');
     cy.wait('@listUsers');
     cy.get('span.user-name').within(() => {
       cy.get('a').click({ force: true });
     });
 
     deleteUserCtaAction('Soft Delete Profile');
-    registerApiCall('adminDeleteInvestorOrIssuerUser', '/dev/graphql');
+    registerApiCall('adminDeleteInvestorOrIssuerUser');
     cy.wait('@adminDeleteInvestorOrIssuerUser');
-    registerApiCall('listUsers', '/dev/graphql');
+    registerApiCall('listUsers');
     cy.wait('@listUsers');
 
     const splitEmail = investorEmail.split('@');
@@ -268,12 +291,12 @@ Cypress.Commands.add('deleteUser', (userType='Investor') => {
     cy.get('span.user-name').within(() => {
       cy.get('a').click({ force: true });
     })
-    registerApiCall('getUserDetails', '/dev/graphql');
+    registerApiCall('getUserDetails');
     cy.wait('@getUserDetails');
     cy.get('div.floated.buttons').get('button.button').contains('Hard Delete Profile').click({ force: true });
     cy.get('div.modal.deletion').get('div.actions').get('button.button').contains('OK').click({ force: true });
 
-    registerApiCall('adminUserHardDelete', '/dev/graphql');
+    registerApiCall('adminUserHardDelete');
     cy.wait('@adminUserHardDelete');
     cy.Logout();
   });
