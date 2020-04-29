@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { Form, Header, Button, Divider, Icon, Confirm } from 'semantic-ui-react';
-import { remove } from 'lodash';
+import { remove, forEach } from 'lodash';
 import { FormInput, DropZoneConfirm as DropZone, FormRadioGroup } from '../../../../../../../theme/form';
 import ButtonGroupType2 from '../../ButtonGroupType2';
 
@@ -43,6 +43,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
             uploadtitle="Upload"
             ondrop={(files, name) => onFileDrop(files, name, docIndx)}
             onremove={fieldName => handleDelDoc(fieldName, docIndx)}
+            customValidExtension={['doc', 'docx']}
           />
         }
       </div>
@@ -139,6 +140,7 @@ export default class DocumentUpload extends Component {
   handleFormSubmitForBusinessApplication = (isApproved = null) => {
     const { updateUploadDocs, removeFileIdsList } = this.props.offeringCreationStore;
     const { metaInfo, uploadFormKey, uploadEnum } = this.props;
+    const docs = [...(this.props[metaInfo.store][metaInfo.form].fields.documents)];
     const uploadMeta = {
       form: metaInfo.form,
       uploadFormKey: uploadFormKey,
@@ -146,8 +148,12 @@ export default class DocumentUpload extends Component {
       uploadEnum: uploadEnum,
     };
     remove(uploadFileArr, n => removedArr.includes(n.currentIndex)); 
-    console.log('uploadFileArr passing==>', uploadFileArr);
-    console.log('removedArr==>', removedArr);
+    // console.log('uploadFileArr passing==>', uploadFileArr);
+    // console.log('removedArr==>', removedArr);
+    // forEach(docs, function(value, key) {
+    //   console.log(key);
+    //   console.log(value);
+    // });
     updateUploadDocs(uploadMeta, uploadFileArr);
     uploadFileArr = [];
     removedArr = [];
