@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import CollectionsHeader from '../components/CollectionsHeader';
 import CollectionsList from '../components/CollectionsList';
-// import CollectionsFooter from '../components/CollectionsFooter';
+import CollectionsFooter from '../components/CollectionsFooter';
 
 
 @inject('campaignStore', 'uiStore', 'userStore')
@@ -23,6 +23,7 @@ class Collections extends Component {
       <>
         <CollectionsHeader />
         <CollectionsList />
+        <CollectionsFooter />
       </>
     );
   }
