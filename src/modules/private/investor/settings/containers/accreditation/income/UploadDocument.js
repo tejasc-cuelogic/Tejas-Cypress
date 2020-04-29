@@ -33,7 +33,6 @@ export default class UploadDocument extends Component {
   render() {
     const {
       INCOME_UPLOAD_DOC_FORM, formChange, FILLING_STATUS_FORM, maskChange, isFilingAllowed,
-
     } = this.props.accreditationStore;
 
     // const isFilling = FILLING_STATUS_FORM.fields.method.value;
