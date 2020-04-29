@@ -5,7 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 // import Content from '../../../shared/marketing/Content';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
-import Content from '../components/Content';
+import Content from './Content';
 
 
 const getModule = component => lazyRetry(() => import(`../components/${component}`));

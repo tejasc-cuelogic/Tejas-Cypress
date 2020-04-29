@@ -11,7 +11,9 @@ const metaInfo = {
 
 function NewCollection(props) {
   useEffect(() => {
-    props.collectionStore.resetForm('COLLECTION_FRM');
+    const { resetForm, setFieldValue } = props.collectionStore;
+    resetForm('COLLECTION_FRM');
+    setFieldValue('contentId', null);
   }, []);
 
   const handleCloseModal = () => {

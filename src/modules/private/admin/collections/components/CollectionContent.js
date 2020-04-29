@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm } from 'semantic-ui-react';
@@ -12,13 +12,11 @@ const metaInfo = {
 };
 
 function CollectionContent(props) {
-  // state = {
-  //   editable: false,
-  //   showConfirm: false,
-  // };
-
+  const [editable, setEditable] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const updateState = (val, key = 'editable') => {
-    this.setState({ [key]: val });
+    // eslint-disable-next-line no-unused-expressions
+    key === 'editable' ? setEditable(val) : setShowConfirm(val);
   };
 
   const handleFormSubmit = (reOrder = false) => {
@@ -46,17 +44,17 @@ function CollectionContent(props) {
       <div className="inner-content-spacer">
         <Form>
           <small className="pull-right">
-            {!this.state.editable
+            {!editable
               ? <Link to="/" onClick={(e) => { e.preventDefault(); updateState(true); }}><Icon className="ns-pencil" />Edit</Link>
               : <Link to="/" className="text-link mr-10" onClick={(e) => { e.preventDefault(); updateState(false); }}>Cancel</Link>
             }
             {COLLECTION_CONTENT_FRM.fields.content.length > 1 && <Link to="/" className="ml-10 negative-text" onClick={(e) => { e.preventDefault(); updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>}
           </small>
           <Form.Group widths={2}>
-            {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
-            {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
+            {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: !editable })}
+            {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !editable })}
             {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: true })}
-            {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
+            {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !editable })}
           </Form.Group>
           <Divider hidden />
           {['CUSTOM', 'ISSUER_STATEMENT'].includes(COLLECTION_CONTENT_FRM.fields.content[index].contentType.value)
@@ -69,7 +67,7 @@ function CollectionContent(props) {
               </Form.Group>
             )}
           <Divider hidden />
-          {/* {(this.state.editable || COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM' || onDragSaveEnable)
+          {/* {(editable|| COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM' || onDragSaveEnable)
             && (
             <OfferingButtonGroup
               updateOffer={this.handleFormSubmit}
@@ -91,7 +89,7 @@ function CollectionContent(props) {
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this component?"
-          open={this.state.showConfirm}
+          open={showConfirm}
           onCancel={() => updateState(false, 'showConfirm')}
           onConfirm={handleDeleteAction}
           size="mini"

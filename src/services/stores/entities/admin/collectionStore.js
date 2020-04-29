@@ -2,17 +2,21 @@ import { decorate, observable, action } from 'mobx';
 import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC } from '../../../constants/admin/collection';
-import { adminCollectionUpsert, getCollections } from '../../queries/collection';
+import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 
 class CollectionsStore extends DataModelStore {
   constructor() {
-    super({ adminCollectionUpsert, getCollections });
+    super({ adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection });
   }
 
   collections = [];
+
+  initLoad = [];
+
+  collection = {};
 
   COLLECTION_FRM = Validator.prepareFormObject(COLLECTION);
 
@@ -22,7 +26,7 @@ class CollectionsStore extends DataModelStore {
 
   TOMBSTONE_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
 
-  contentId = '';
+  contentId = null;
 
   initRequest = () => {
     if (!this.apiHit) {
@@ -33,7 +37,7 @@ class CollectionsStore extends DataModelStore {
         if (get(res, 'getCollections')) {
           this.setFieldValue('collections', res.getCollections);
         }
-        this.setFieldValue('apiHit', true);
+        this.setFieldValue('apiHit', false);
       });
     }
   };
@@ -41,10 +45,11 @@ class CollectionsStore extends DataModelStore {
   setFormData = (form, ref, keepAtLeastOne) => {
     Validator.resetFormData(this[form]);
     this.initLoad.push(form);
-    if (!this.records) {
+    const { collection } = this;
+    if (!collection) {
       return false;
     }
-    this[form] = Validator.setFormData(this[form], this.records, ref, keepAtLeastOne);
+    this[form] = Validator.setFormData(this[form], collection, ref, keepAtLeastOne);
     const multiForm = this.getActionType(form, 'isMultiForm');
     this[form] = Validator.validateForm(this[form], multiForm, false, false);
     return false;
@@ -52,9 +57,13 @@ class CollectionsStore extends DataModelStore {
 
   getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {
-      COLLECTION_CONTENT_FRM: { isMultiForm: true },
+      [formName]: { isMultiForm: true },
     };
     return metaDataMapping[formName][getField];
+  }
+
+  filterInitLoad = (formName) => {
+   this.initLoad = this.initLoad.filter(f => f !== formName);
   }
 
   formPayLoad = (params) => {
@@ -62,16 +71,61 @@ class CollectionsStore extends DataModelStore {
     let data = {};
     if (Array.isArray(forms)) {
       forms.forEach((f) => {
-        if (f === 'COLLECTION_FRM') {
+        if (f === 'COLLECTION_CONTENT_FRM') {
+          data = { collectionDetails: { marketing: Validator.evaluateFormData(this[f].fields) } };
+        } else {
           data = { collectionDetails: Validator.evaluateFormData(this[f].fields) };
         }
       });
     }
-    if (this.contentId !== '') {
+    if (this.contentId !== null) {
       data.id = this.contentId;
     }
     return data;
   }
+
+  mergeCollection = (data) => {
+    this.collections = [...this.collections, [...data]];
+  }
+
+  getCollection = (slug) => {
+    this.initLoad.push('getCollection');
+    this.executeQuery({
+      query: 'getCollection',
+      variables: { slug },
+      setLoader: 'getCollection',
+    }).then((res) => {
+      if (get(res, 'getCollection')) {
+        this.setFieldValue('contentId', res.getCollection.id);
+        this.setFieldValue('collection', res.getCollection);
+        this.COLLECTION_OVERVIEW_FRM = Validator.setFormData(this.COLLECTION_OVERVIEW_FRM, res.getCollection);
+      }
+    });
+  }
+
+  adminLockOrUnlockCollection = lockAction => new Promise(async (res, rej) => {
+    const variables = {
+      id: this.contentId,
+      action: lockAction,
+    };
+    try {
+      const data = await this.executeMutation({
+        mutation: 'adminLockOrUnlockCollection',
+        setLoader: 'adminLockOrUnlockCollection',
+        variables,
+      });
+      window.logger(data);
+      const lockObj = get(data, 'data.adminLockOrUnlockCollection') ? {
+        date: get(data, 'data.adminLockOrUnlockCollection.date'),
+        by: get(data, 'data.adminLockOrUnlockCollection.by'),
+        id: get(data, 'data.adminLockOrUnlockCollection.id'),
+      } : null;
+      this.setFieldValue('collection', lockObj, 'lock');
+      res();
+    } catch (error) {
+      rej(error);
+    }
+  });
 
   upsertCollection = async (mutation, params) => {
     try {
@@ -80,6 +134,12 @@ class CollectionsStore extends DataModelStore {
         setLoader: mutation,
         variables: this.formPayLoad(params),
       });
+      if (get(res, 'adminCollectionUpsert')) {
+        this.setFieldValue('contentId', res.adminCollectionUpsert.id);
+        if (this.contentId === null) {
+          this.mergeCollection(res.adminCollectionUpsert);
+        }
+      }
       return res;
     } catch (err) {
       if (get(err, 'message')) {
@@ -97,7 +157,11 @@ decorate(CollectionsStore, {
   PARTNER_FRM: observable,
   OVERVIEW_FRM: observable,
   contentId: observable,
+  collection: observable,
+  initLoad: observable,
   initRequest: action,
   upsertCollection: action,
+  filterInitLoad: action,
+  mergeCollection: action,
 });
 export default new CollectionsStore();

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
 import { arrayMove } from 'react-sortable-hoc';
 import { Switch, Route } from 'react-router-dom';
@@ -8,6 +8,12 @@ import NewContentModal from './NewContentModal';
 import CollectionContent from './CollectionContent';
 
 function Content(props) {
+  useEffect(() => {
+    if (!props.collectionStore.initLoad.includes('COLLECTION_CONTENT_FRM')) {
+      props.collectionStore.setFormData('COLLECTION_CONTENT_FRM', 'marketing');
+    }
+  }, []);
+
   const [openModal, setOpenModal] = useState(false);
 
   const toggleModal = (val, index = false) => {

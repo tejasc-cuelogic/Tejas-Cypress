@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject } from 'mobx-react';
+import { useHistory } from 'react-router-dom';
 import { Form, Divider, Header, Modal, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
 
@@ -9,14 +10,17 @@ const metaInfo = {
 };
 
 function NewContentModal(props) {
+  const history = useHistory();
+
   const handleFormSubmit = () => {
     const params = {
       keyName: false,
       forms: ['COLLECTION_CONTENT_FRM'],
     };
-    props.collectionStore.reOrderHandle(props.collectionStore.COLLECTION_CONTENT_FRM.fields.content);
-    props.collectionStore.updateCollection(params).then(() => {
-      props.history.push(`${props.refLink}/${props.index + 1}`);
+    const { reOrderHandle, upsertCollection } = props.collectionStore;
+    reOrderHandle(props.collectionStore.COLLECTION_CONTENT_FRM.fields.content);
+    upsertCollection('adminCollectionUpsert', params).then(() => {
+      history.push(`${props.refLink}/${props.index + 1}`);
     });
   };
   const { smartElement, index, toggleModal, uiStore, collectionStore } = props;
@@ -38,7 +42,7 @@ function NewContentModal(props) {
             <Divider hidden />
           </Form>
           <div className="center-align">
-            <Button disabled={!COLLECTION_CONTENT_FRM.meta.isValid} loading={inProgress} primary content="Save" onClick={handleFormSubmit} />
+            <Button disabled={!COLLECTION_CONTENT_FRM.meta.isValid} loading={inProgress} primary content="Save" onClick={() => handleFormSubmit()} />
             <Button content="Close" onClick={() => toggleModal(false, index)} />
           </div>
         </Modal.Content>

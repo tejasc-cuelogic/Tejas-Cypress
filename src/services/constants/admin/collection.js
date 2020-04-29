@@ -7,9 +7,8 @@ export const COLLECTION = FormHelper.generateMeta([
 ]);
 
 export const OVERVIEW = FormHelper.generateMeta([
-  ['offeringSlug', 'Collection URL', '', 'required', 'Enter here'],
+  ['slug', 'Slug', '', 'required', 'Enter here'],
   ['previewPassword', 'Preview Password', '', 'required', 'Enter here'],
-  ['offeringreferralCodeSlug', 'Issuer Referral Code', '', 'required', 'Enter here'],
 ]);
 
 export const TOMBSTONE_BASIC = {
@@ -64,9 +63,10 @@ export const CONTENT = {
       rule: 'required',
       options: [
         { key: 'CUSTOM', value: 'CUSTOM', text: 'Custom' },
-        { key: 'INVESTMENT_DETAILS', value: 'INVESTMENT_DETAILS', text: 'Investment Details' },
-        { key: 'BONUS_REWARDS', value: 'BONUS_REWARDS', text: 'Bonus Rewards' },
-        { key: 'DATA_ROOM', value: 'DATA_ROOM', text: 'Data Room' },
+        { key: 'ACTIVE_INVESTMENTS', value: 'ACTIVE_INVESTMENTS', text: 'Active Investments' },
+        { key: 'COMPLETE_INVESTMENTS', value: 'COMPLETE_INVESTMENTS', text: 'Complete Investments' },
+        { key: 'INSIGHTS', value: 'INSIGHTS', text: 'Insights' },
+        { key: 'HEADER', value: 'HEADER', text: 'Header' },
       ],
       placeHolder: 'Enter here',
     },

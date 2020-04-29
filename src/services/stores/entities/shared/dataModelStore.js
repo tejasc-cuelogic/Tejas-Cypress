@@ -116,7 +116,7 @@ export default class DataModelStore {
     } catch (err) {
       this.loading = false;
       // remove only loaders who are set exlplicity
-      this.resetLoader(payLoad.removeLoader, payLoad.mutation);
+      this.resetLoader([...payLoad.removeLoader], payLoad.mutation);
       this.auStatus = 0;
       const errorMessage = { message: get(payLoad, 'message.error') || err.message };
       if (get(payLoad, 'message') && payLoad.showToastError) {
