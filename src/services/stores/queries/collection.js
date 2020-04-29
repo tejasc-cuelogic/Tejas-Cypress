@@ -11,13 +11,21 @@ export const adminCollectionUpsert = gql`
           id
           by
           date
-        } 
+        }
     }
   }`;
 
 export const getCollections = gql`
 query getCollections {
   getCollections{
+    id
+    name
+  }
+}`;
+
+export const getCollection = gql`
+query getCollection($slug: String!) {
+  getCollection(slug: $slug) {
     id
     name
   }

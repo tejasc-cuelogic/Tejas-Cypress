@@ -2,15 +2,17 @@ import { decorate, observable, action } from 'mobx';
 import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC } from '../../../constants/admin/collection';
-import { adminCollectionUpsert, getCollections } from '../../queries/collection';
+import { adminCollectionUpsert, getCollections, getCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 
 class CollectionsStore extends DataModelStore {
   constructor() {
-    super({ adminCollectionUpsert, getCollections });
+    super({ adminCollectionUpsert, getCollections, getCollection });
   }
+
+  collectionDetails = null;
 
   collections = [
     {
@@ -119,6 +121,19 @@ class CollectionsStore extends DataModelStore {
     }
   };
 
+  getCollection = (slug) => {
+    this.executeQuery({
+      clientType: 'PUBLIC',
+      query: 'getCollection',
+      setLoader: 'getCollection',
+      variables: { slug },
+    }).then((res) => {
+      if (get(res, 'getCollection')) {
+        this.setFieldValue('collectionDetails', res.getCollection);
+      }
+    });
+  };
+
   setFormData = (form, ref, keepAtLeastOne) => {
     Validator.resetFormData(this[form]);
     this.initLoad.push(form);
@@ -180,6 +195,7 @@ class CollectionsStore extends DataModelStore {
 decorate(CollectionsStore, {
   ...decorateDefault,
   collections: observable,
+  collectionDetails: observable,
   PARTNER_FRM: observable,
   OVERVIEW_FRM: observable,
   contentId: observable,

@@ -6,6 +6,7 @@ import Home from './public/home/containers/Home';
 import Invest from './public/invest/containers/Invest';
 import Offering from './public/offering/containers/Offering';
 import OfferDetails from './public/offering/containers/OfferDetails';
+import CollectionDetails from './public/collections/containers/CollectionDetails';
 // import VideoModal from './public/offering/components/campaignDetails/Overview/VideoModal';
 import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
@@ -113,6 +114,10 @@ export const publicRoutes = [
     path: '/offerings/:id',
     component: OfferDetails,
     props: 'newLayout',
+  },
+  {
+    path: '/collections/:slug',
+    component: CollectionDetails,
   },
   {
     path: '/offerings-v1/preview/:id',

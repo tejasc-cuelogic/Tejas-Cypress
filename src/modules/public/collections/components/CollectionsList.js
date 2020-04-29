@@ -22,7 +22,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
                 <p className="mb-30">{collection.marketing.tombstone.description}</p>
                 {!isMobile && !isTablet
                   && (
-                  <a href={`${collectionUrl}/collection.slug`} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Explore</Button></a>
+                  <a href={`${collectionUrl}/${collection.slug}`} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Explore</Button></a>
                   )
                 }
               </Grid.Column>
@@ -61,7 +61,7 @@ export default class CollectionsList extends Component {
           isMobile={isMobile}
           isTablet={isTablet}
           responsiveVars={responsiveVars}
-          collectionUrl={match}
+          collectionUrl={match.url}
         />
       </>
     );
