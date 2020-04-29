@@ -7,9 +7,10 @@ import { get } from 'lodash';
 import BasicTransferRequest from './transferRequest/basicTransferRequest';
 import TransferRequestMethod from './transferRequest/transferRequestMethod';
 import Helper from '../../../../../helper/utility';
+import { MINIMUM_AUTODRAFT_AMOUNT_WIRE } from '../../../../../constants/common';
+
 
 const isMobile = document.documentElement.clientWidth < 768;
-const MINIMUM_AUTODRAFT_AMOUNT_WIRE = '10000';
 
 function TransferRequest(props) {
   const [showTransferRequest, setShowTransferRequest] = useState('basic');
