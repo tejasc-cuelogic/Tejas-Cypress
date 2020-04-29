@@ -41,17 +41,17 @@ class CollectionsHeader extends Component {
         id: 1,
         title: 'Locations',
         description: 'Explore investments in your neighborhood, hometown, or a region that you know well.',
-        image: 'group/ns-securities.jpg',
+        image: 'collections/skyline.jpg',
       }, {
         id: 2,
         title: 'Interests & Industries',
         description: 'Identify investments by themes that you find most relevant.',
-        image: 'group/ns-capital.jpg',
+        image: 'collections/bar.jpg',
       }, {
         id: 3,
         title: 'Partners',
         description: 'Get exclusive access to investment opportunities from vetted Partners in the NextSeed network.',
-        image: 'group/collab-capital.jpg',
+        image: 'collections/partners.jpg',
       },
     ];
     return (
