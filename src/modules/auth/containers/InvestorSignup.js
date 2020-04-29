@@ -108,7 +108,7 @@ class InvestorSignup extends Component {
               )
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
+              <Button fluid primary size="large" className="very relaxed" data-cy="investor-signup" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
             </div>
             <p className="mt-40">Already have an account? <Link to="/login">Log in</Link></p>
 
