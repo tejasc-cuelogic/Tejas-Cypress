@@ -707,6 +707,10 @@ export const PUBLIC_NAV = [
     ],
   },
   {
+    title: 'Collections',
+    to: 'collections',
+  },
+  {
     title: 'How It Works',
     to: '',
     subPanel: 1,
@@ -778,6 +782,7 @@ export const MOBILE_NAV = [
     isLoggedIn: true,
   },
   { title: 'Investment Opportunities', to: 'offerings', isLoggedIn: true },
+  { title: 'Collections', to: 'collections', isLoggedIn: true },
   {
     title: 'Refer a Friend',
     to: 'app/referrals',

@@ -26,7 +26,7 @@ import XmlForm from './private/admin/edgar/containers/XmlForm';
 import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
 import UserManagement from './private/admin/userManagement';
 import DashboardCta from './shared/DashboardCta';
-import Collections from './public/collections/components/Collections';
+import Collections from './public/collections/containers/Collections';
 
 import {
   AdminAuthorization,
