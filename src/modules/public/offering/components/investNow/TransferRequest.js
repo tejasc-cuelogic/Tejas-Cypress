@@ -92,10 +92,10 @@ function TransferRequest(props) {
   const advanceTransferStepStatement = offeringReuglation === 'BD_506B'
    ? `Since the Balance Required exceeds ${Helper.CurrencyFormat(MINIMUM_AUTODRAFT_AMOUNT_WIRE, 0)} and this is an investment under Rule 506(b) of Regulation D, you have the option to initiate a transfer of funds or wire funds after you reserve your investment.`
    : `Since the Balance Required exceeds ${Helper.CurrencyFormat(MINIMUM_AUTODRAFT_AMOUNT_WIRE, 0)} and your accredited investor status has been verified, you have the option to schedule a transfer of funds for a future date or wire funds after you reserve your investment.`;
-   const { userDetails } = userDetailsStore;
+   const { userDetails, investorActiveAccountDetails } = userDetailsStore;
    const investorFullName = `${get(userDetails, 'info.firstName')} ${get(userDetails, 'info.lastName')}`;
    const accountDetailsMeta = {
-     goldstarAccountNumber: 1234, // get(currentActiveAccountDetails, 'details.goldstar.accountNumber') || null,
+     goldstarAccountNumber: get(investorActiveAccountDetails, 'details.goldstar.accountNumber') || null,
      userFullName: investorFullName,
    };
 
