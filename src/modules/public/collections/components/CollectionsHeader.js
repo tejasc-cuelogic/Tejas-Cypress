@@ -12,7 +12,7 @@ const HeaderItem = ({ collectionHeader, responsiveVars }) => (
     </p>
     {
       <Container>
-        <Card.Group itemsPerRow={3}>
+        <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : 3}>
           {
             collectionHeader.map(b => (
               <Card className="bordered center-align">

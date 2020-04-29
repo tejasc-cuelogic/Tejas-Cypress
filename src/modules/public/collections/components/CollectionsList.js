@@ -6,38 +6,38 @@ import NSImage from '../../../shared/NSImage';
 
 const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections }) => (
   <>
-    <section key={collections.id} className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'} bg-offwhite`}>
-      <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20' : 'mb-30'}>
-        Collections
-      </Header>
-      <p className={responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}>
-        Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br /> } Partner
-        Organizations, as well as offerings grouped by theme, such as location or security type.
-      </p>
-      <Container>
+    <Container>
+      <section key={collections.id} className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'} bg-offwhite`}>
+        <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20' : 'mb-30'}>
+          Collections
+        </Header>
+        <p className={responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}>
+          Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br /> } Partner
+          Organizations, as well as offerings grouped by theme, such as location or security type.
+        </p>
         {
           collections.map(items => (
             <Grid>
-            <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16}>
-              <NSImage path={items.image} />
-            </Grid.Column>
-            <Grid.Column widescreen={11} computer={11} tablet={16} mobile={16}>
-              <Header as="h3">{items.title}</Header>
-              <p className="mb-30">{items.description}</p>
-              {items.link && !isMobile && !isTablet
-                && (
-                <a href={items.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Explore</Button></a>
-                )
-              }
-            </Grid.Column>
-          </Grid>
+              <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16}>
+                <NSImage path={items.image} />
+              </Grid.Column>
+              <Grid.Column widescreen={11} computer={11} tablet={16} mobile={16}>
+                <Header as="h3">{items.title}</Header>
+                <p className="mb-30">{items.description}</p>
+                {items.link && !isMobile && !isTablet
+                  && (
+                  <a href={items.link} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Explore</Button></a>
+                  )
+                }
+              </Grid.Column>
+            </Grid>
           ))
         }
-        <div className="mt-50 center-align">
-          <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Collections" />
-        </div>
-      </Container>
-    </section>
+          <div className="mt-50 center-align">
+            <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Collections" />
+          </div>
+      </section>
+    </Container>
   </>
 );
 @withRouter
