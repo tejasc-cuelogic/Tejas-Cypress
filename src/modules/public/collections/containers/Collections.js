@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import CollectionsHeader from '../components/CollectionsHeader';
 import CollectionsList from '../components/CollectionsList';
 // import CollectionsFooter from '../components/CollectionsFooter';
@@ -7,6 +8,7 @@ import CollectionsList from '../components/CollectionsList';
 
 @inject('campaignStore', 'uiStore', 'userStore')
 @observer
+@withRouter
 class Collections extends Component {
   constructor(props) {
     super(props);
