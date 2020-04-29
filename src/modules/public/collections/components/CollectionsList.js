@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid, Container, Button, Header } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
@@ -22,7 +22,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
                 <p className="mb-30">{collection.marketing.tombstone.description}</p>
                 {!isMobile && !isTablet
                   && (
-                  <a href={`${collectionUrl}/${collection.slug}`} target="_blank" rel="noopener noreferrer"><Button inverted color="green" className="mb-30">Explore</Button></a>
+                    <Button as={Link} to={`${collectionUrl}/${collection.slug}`} inverted color="green" className="mb-30">Explore</Button>
                   )
                 }
               </Grid.Column>
