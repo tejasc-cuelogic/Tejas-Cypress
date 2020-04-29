@@ -12,7 +12,88 @@ class CollectionsStore extends DataModelStore {
     super({ adminCollectionUpsert, getCollections });
   }
 
-  collections = [];
+  collections = [
+    {
+      id: '1111',
+      name: 'Cevitas',
+      slug: 'cevitas-capital',
+      order: 2,
+      previewPassword: 'nextseedTest',
+      lock: false,
+      marketing: {
+        tombstone: {
+          image: 'group/ns-securities.jpg',
+          bgColor: 'green',
+          title: 'Invest with Cevitas Capital',
+          description: 'lorem ipsum some random words to fill out some space and look like there\'s an actual text for the description. It\'s all nothing but random text',
+          tag: {
+            color: 'blue',
+            text: 'New',
+          },
+        },
+      },
+    },
+    {
+      id: '1112',
+      name: 'Houston Angel Network (HAN)',
+      slug: 'cevitas-capital',
+      order: 3,
+      previewPassword: 'nextseedTest',
+      lock: false,
+      marketing: {
+        tombstone: {
+          image: 'group/ns-securities.jpg',
+          bgColor: 'green',
+          title: 'Houston Angel Network (HAN)',
+          description: 'lorem ipsum some random words to fill out some space and look like there\'s an actual text for the description. It\'s all nothing but random text',
+          tag: {
+            color: 'blue',
+            text: 'New',
+          },
+        },
+      },
+    },
+    {
+      id: '1113',
+      name: 'Houston, Tx',
+      slug: 'cevitas-capital',
+      order: 4,
+      previewPassword: 'nextseedTest',
+      lock: false,
+      marketing: {
+        tombstone: {
+          image: 'group/ns-securities.jpg',
+          bgColor: 'green',
+          title: 'Houston, Tx',
+          description: 'lorem ipsum some random words to fill out some space and look like there\'s an actual text for the description. It\'s all nothing but random text',
+          tag: {
+            color: 'blue',
+            text: 'New',
+          },
+        },
+      },
+    },
+    {
+      id: '1114',
+      name: 'NextSeed Securities',
+      slug: 'cevitas-capital',
+      order: 5,
+      previewPassword: 'nextseedTest',
+      lock: false,
+      marketing: {
+        tombstone: {
+          image: 'group/ns-securities.jpg',
+          bgColor: 'green',
+          title: 'NextSeed Securities',
+          description: 'lorem ipsum some random words to fill out some space and look like there\'s an actual text for the description. It\'s all nothing but random text',
+          tag: {
+            color: 'blue',
+            text: 'New',
+          },
+        },
+      },
+    },
+  ];
 
   COLLECTION_FRM = Validator.prepareFormObject(COLLECTION);
 
@@ -90,6 +171,11 @@ class CollectionsStore extends DataModelStore {
       return false;
     }
   };
+
+  // @computed get active() {
+  //   const collectionList = this.orderedActiveList.slice();
+  //   return collectionList.splice(0, this.activeToDisplay);
+  // }
 }
 decorate(CollectionsStore, {
   ...decorateDefault,

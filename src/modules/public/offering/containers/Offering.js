@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash';
 import { Header, Container, Button, Grid, Responsive, Divider, Icon } from 'semantic-ui-react';
 // import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
+import CollectionsList from '../../collections/components/CollectionsList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -46,6 +47,8 @@ class Offering extends Component {
           heading={<Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>Active Campaigns</Header>}
           subheading={<p className={responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}>Browse the newest investment opportunities on NextSeed. {!responsiveVars.isMobile && <br /> }The next big thing may be inviting you to participate.</p>}
         />
+        <Divider section hidden />
+        <CollectionsList />
         <Divider section hidden />
         {(!hideCreationList && showCreationList && !loading)
         && (

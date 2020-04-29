@@ -22,7 +22,7 @@ const FooterItem = ({ collectionFooter, responsiveVars }) => (
             <List>
               {
                 collectionFooter.map(item => (
-                  <List.Item className={responsiveVars.isMobile ? 'mt-0 mb-10' : 'mb-20'}>
+                  <List.Item key={item.id} className={responsiveVars.isMobile ? 'mt-0 mb-10' : 'mb-20'}>
                     <Header as="h5" className="mb-10">
                       <Icon className="ns-tick" color="grey" style={{ fontSize: '28px' }} />
                       {item.title}
