@@ -39,7 +39,7 @@ function LockUnlockCollection(props) {
   return (
     <>
       <Checkbox
-        disabled={(lock && (currentUserId !== get(lock, 'userId'))) || loadingArray.includes('adminLockOrUnlockCollection')}
+        disabled={(lock && (currentUserId !== get(lock, 'id'))) || loadingArray.includes('adminLockOrUnlockCollection')}
         name="isLocked"
         value={lockStatus}
         onChange={(e, result) => adminLockOrUnlockCollection(result)}

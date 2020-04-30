@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 // import Content from '../../../shared/marketing/Content';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
@@ -24,6 +24,13 @@ const navItems = [
 ];
 
   function Marketing(props) {
+    const history = useHistory();
+
+    useEffect(() => {
+      if (props.match.isExact) {
+        history.push(`${props.match.url}/content`);
+      }
+    }, []);
     const { match } = props;
     return (
       <>
