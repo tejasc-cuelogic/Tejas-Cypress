@@ -1,11 +1,10 @@
 import { decorate, observable, action } from 'mobx';
 import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
+import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
-
-import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 
 class CollectionsStore extends DataModelStore {
   constructor() {
@@ -134,12 +133,12 @@ class CollectionsStore extends DataModelStore {
         setLoader: mutation,
         variables: this.formPayLoad(params),
       });
-      if (get(res, 'adminCollectionUpsert')) {
-        this.setFieldValue('contentId', res.adminCollectionUpsert.id);
-        if (this.contentId === null) {
-          this.mergeCollection(res.adminCollectionUpsert);
-        }
-      }
+      // if (get(res, 'adminCollectionUpsert')) {
+      //   this.setFieldValue('contentId', res.adminCollectionUpsert.id);
+      //   if (this.contentId === null) {
+      //     this.mergeCollection(res.adminCollectionUpsert);
+      //   }
+      // }
       return res;
     } catch (err) {
       if (get(err, 'message')) {
@@ -152,10 +151,11 @@ class CollectionsStore extends DataModelStore {
   };
 }
 decorate(CollectionsStore, {
-  ...decorateDefault,
+  ...dataModelStore.decorateDefault,
   collections: observable,
   PARTNER_FRM: observable,
   OVERVIEW_FRM: observable,
+  COLLECTION_CONTENT_FRM: observable,
   contentId: observable,
   collection: observable,
   initLoad: observable,
@@ -163,5 +163,7 @@ decorate(CollectionsStore, {
   upsertCollection: action,
   filterInitLoad: action,
   mergeCollection: action,
+  setFormData: action,
+  getActionType: action,
 });
 export default new CollectionsStore();
