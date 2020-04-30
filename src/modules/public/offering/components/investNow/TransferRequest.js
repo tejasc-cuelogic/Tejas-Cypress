@@ -135,6 +135,7 @@ function TransferRequest(props) {
             getTransferRequestAmount={getTransferRequestAmount}
             transferMethod={transferRequestMethod}
             accountDetailsMeta={accountDetailsMeta}
+            isMobile={isMobile}
           />
         )
       }

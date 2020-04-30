@@ -3,12 +3,12 @@ import { Grid } from 'semantic-ui-react';
 // import Helper from '../../../../../../helper/utility';
 
 function TransferRequestMethod(props) {
-  // const { isPreferredEquity, getTransferRequestAmount, transferMethod, accountDetailsMeta } = props;
+  // const { isPreferredEquity, getTransferRequestAmount, transferMethod, accountDetailsMeta, isMobile} = props;
   console.log(props);
   return (
     <>
     <Grid columns="equal">
-      <Grid.Row className="mt-60">
+      <Grid.Row className={isMobile ? 'mt-20' : 'mt-60'}>
         <Grid.Column>
           <p><b>Wire Amount</b></p>
         </Grid.Column>
@@ -16,7 +16,7 @@ function TransferRequestMethod(props) {
           <p className="right-align"><b>$ 20,000</b></p>
         </Grid.Column>
       </Grid.Row>
-      <Grid.Row className="mt-60">
+      <Grid.Row className={isMobile ? 'mt-0' : 'mt-60'}>
         <Grid.Column>
           <p><b>Wire Instructions:</b></p>
         </Grid.Column>
