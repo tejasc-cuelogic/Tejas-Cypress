@@ -116,7 +116,7 @@ export default class DataModelStore {
     } catch (err) {
       this.loading = false;
       // remove only loaders who are set exlplicity
-      this.resetLoader(payLoad.removeLoader, payLoad.mutation);
+      this.resetLoader(payLoad.removeLoader, loader);
       this.auStatus = 0;
       const errorMessage = { message: get(payLoad, 'message.error') || err.message };
       if (get(payLoad, 'message') && payLoad.showToastError) {
@@ -156,7 +156,7 @@ export default class DataModelStore {
         this.auStatus = 0;
         this.loading = false;
         // remove only loaders who are set exlplicity
-        this.resetLoader(payLoad.removeLoader, payLoad.query);
+        this.resetLoader(payLoad.removeLoader, loader);
         rej(e);
       },
     });
@@ -170,7 +170,7 @@ export default class DataModelStore {
   }
 
   resetLoader = (removeLoader, operation) => {
-    if (removeLoader) {
+    if (Array.isArray(removeLoader)) {
       removeLoader.map(item => (nsUiStore.filterLoaderByOperation(item)));
     } else {
       nsUiStore.filterLoaderByOperation(operation);

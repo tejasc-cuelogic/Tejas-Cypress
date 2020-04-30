@@ -1,18 +1,23 @@
-import { decorate, observable, action } from 'mobx';
+import { decorate, observable, action, computed, toJS } from 'mobx';
 import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC } from '../../../constants/admin/collection';
-import { adminCollectionUpsert, getCollections, getCollection } from '../../queries/collection';
+import { adminCollectionUpsert, getCollections, getCollection, getCollectionMapping } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
+import authStore from '../shared/authStore';
 
 class CollectionsStore extends DataModelStore {
   constructor() {
-    super({ adminCollectionUpsert, getCollections, getCollection });
+    super({ adminCollectionUpsert, getCollections, getCollection, getCollectionMapping });
   }
 
   collectionDetails = null;
+
+  collectionMappingsOfferings = [];
+
+  collectionMappingsInsights = [];
 
   collections = [
     {
@@ -122,6 +127,8 @@ class CollectionsStore extends DataModelStore {
   };
 
   getCollection = (slug) => {
+    this.setFieldValue('collectionMappingsOfferings', null);
+    this.setFieldValue('collectionMappingsInsights', null);
     this.executeQuery({
       clientType: 'PUBLIC',
       query: 'getCollection',
@@ -130,9 +137,42 @@ class CollectionsStore extends DataModelStore {
     }).then((res) => {
       if (get(res, 'getCollection')) {
         this.setFieldValue('collectionDetails', res.getCollection);
+        if (authStore.isUserLoggedIn) {
+          this.getCollectionMapping(res.getCollection.id, 'OFFERING');
+          this.getCollectionMapping(res.getCollection.id, 'INSIGHT');
+        }
       }
     });
   };
+
+  getCollectionMapping = (collectionId, type) => {
+    this.executeQuery({
+      query: 'getCollectionMapping',
+      setLoader: 'getCollectionMapping',
+      variables: { collectionId, type },
+    }).then((res) => {
+      if (get(res, 'getCollectionMapping')) {
+        const data = [];
+        res.getCollectionMapping.forEach((c) => {
+          const obj = type === 'OFFERING' ? c.offering : c.insight;
+          data.push(obj);
+        });
+        if (type === 'OFFERING') {
+          this.setFieldValue('collectionMappingsOfferings', data);
+        } else {
+          this.setFieldValue('collectionMappingsInsights', data);
+        }
+      }
+    });
+  }
+
+  get getOfferingsList() {
+    return toJS(this.collectionMappingsOfferings);
+  }
+
+  get getInsightsList() {
+    return toJS(this.collectionMappingsInsights);
+  }
 
   setFormData = (form, ref, keepAtLeastOne) => {
     Validator.resetFormData(this[form]);
@@ -195,6 +235,10 @@ class CollectionsStore extends DataModelStore {
 decorate(CollectionsStore, {
   ...decorateDefault,
   collections: observable,
+  collectionMappingsOfferings: observable,
+  collectionMappingsInsights: observable,
+  getOfferingsList: computed,
+  getInsightsList: computed,
   collectionDetails: observable,
   PARTNER_FRM: observable,
   OVERVIEW_FRM: observable,

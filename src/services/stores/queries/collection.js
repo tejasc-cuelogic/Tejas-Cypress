@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { offeringFields } from './campagin';
 
 export const adminCollectionUpsert = gql`
   mutation adminCollectionUpsert($id: String, $collectionDetails: CollectionInputType!) {
@@ -56,6 +57,24 @@ query getCollection($slug: String!) {
         title
         meta
       }
+    }
+  }
+}`;
+
+export const getCollectionMapping = gql`
+query getCollectionMapping($collectionId: String!, $type: CollectionMappingTypeEnum) {
+  getCollectionMapping(collectionId: $collectionId, type: $type) {
+    collectionId
+    referenceId
+    type
+    scope
+    order
+    offering {
+      ${offeringFields}
+    }
+    insight {
+      id
+      title
     }
   }
 }`;
