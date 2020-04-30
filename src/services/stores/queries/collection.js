@@ -28,5 +28,34 @@ query getCollection($slug: String!) {
   getCollection(slug: $slug) {
     id
     name
+    slug
+    status
+    marketing {
+      tombstone {
+        image {
+          url
+          isPublic
+        }
+        bgImage {
+          url
+          isPublic
+        }
+        bgColor
+        title
+        description
+        tag {
+          color
+          text
+        }
+      }
+      content {
+        contentType
+        customValue
+        order
+        scope
+        title
+        meta
+      }
+    }
   }
 }`;

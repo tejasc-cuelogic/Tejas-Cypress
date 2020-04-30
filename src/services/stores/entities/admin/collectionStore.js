@@ -18,7 +18,7 @@ class CollectionsStore extends DataModelStore {
     {
       id: '1111',
       name: 'Cevitas',
-      slug: 'cevitas-capital',
+      slug: 'chetan-b',
       order: 2,
       previewPassword: 'nextseedTest',
       lock: false,
@@ -38,7 +38,7 @@ class CollectionsStore extends DataModelStore {
     {
       id: '1112',
       name: 'Houston Angel Network (HAN)',
-      slug: 'cevitas-capital',
+      slug: 'chetan-b',
       order: 3,
       previewPassword: 'nextseedTest',
       lock: false,
@@ -58,7 +58,7 @@ class CollectionsStore extends DataModelStore {
     {
       id: '1113',
       name: 'Houston, Tx',
-      slug: 'cevitas-capital',
+      slug: 'chetan-b',
       order: 4,
       previewPassword: 'nextseedTest',
       lock: false,
@@ -78,7 +78,7 @@ class CollectionsStore extends DataModelStore {
     {
       id: '1114',
       name: 'NextSeed Securities',
-      slug: 'cevitas-capital',
+      slug: 'chetan-b',
       order: 5,
       previewPassword: 'nextseedTest',
       lock: false,
