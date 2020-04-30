@@ -1059,6 +1059,9 @@ export const OFFERING_DETAILS = {
     rule: 'optional|alpha_num',
     placeHolder: 'Enter here',
   },
+  collection: {
+    value: '', label: 'Collections', error: undefined, rule: 'optional',
+  },
 };
 
 export const MEDIA = {
