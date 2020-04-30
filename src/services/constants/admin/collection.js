@@ -14,7 +14,7 @@ export const OVERVIEW = FormHelper.generateMeta([
 export const TOMBSTONE_BASIC = {
   tag: {
     ...FormHelper.generateMeta([
-      ['color', 'Colour', '', '', 'Enter Here'], ['text', 'text', '', '', 'Enter Here'],
+      ['color', 'Colour', '', 'optional', 'Enter Here'], ['text', 'text', '', '', 'Enter Here'],
     ]),
   },
   ...FormHelper.generateMeta([

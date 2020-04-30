@@ -31,6 +31,7 @@ class Tombstone extends Component {
     const { collectionStore, offeringCreationStore, smartElement } = this.props;
     const { TOMBSTONE_FRM } = collectionStore;
     const { currentOfferingId } = offeringCreationStore;
+    const isReadOnly = false;
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -57,6 +58,14 @@ class Tombstone extends Component {
               </Form.Group>
               <Divider hidden />
               {/* {smartElement.FormTextarea('description', { containerclassname: 'secondary' })} */}
+            </Grid.Column>
+          </Grid>
+          <Grid columns="2">
+            <Grid.Column>
+              {smartElement.Input('title', { readOnly: isReadOnly })}
+            </Grid.Column>
+            <Grid.Column>
+              {smartElement.Input('bgColor', { readOnly: isReadOnly })}
             </Grid.Column>
           </Grid>
           <Divider section />
