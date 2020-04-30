@@ -60,3 +60,31 @@ mutation adminLockOrUnlockCollection($id: String!, $action: CollectionLockAction
     message
   }
 }`;
+
+export const adminCollectionMappingUpsert = gql`
+mutation adminCollectionMappingUpsert(
+  $collectionId: String!
+  $referenceId: String!
+  $type: CollectionMappingTypeEnum!
+  $order: Int
+  $scope: ScopeEnumType!){
+  adminCollectionMappingUpsert(
+    collectionId: $collectionId,
+    referenceId: $referenceId,
+    type: $type,
+    order: $order,
+    scope: $scope,
+    ) {
+      collectionId
+      referenceId
+      type
+      order
+      scope
+      offering {
+        offeringSlug
+      }
+      insight {
+        title
+      }
+    }
+}`;

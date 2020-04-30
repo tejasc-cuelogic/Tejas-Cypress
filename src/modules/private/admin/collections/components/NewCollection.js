@@ -25,7 +25,7 @@ function NewCollection(props) {
       forms: [metaInfo.form],
     };
     const { upsertCollection } = props.collectionStore;
-    await upsertCollection('adminCollectionUpsert', params);
+    await upsertCollection(params);
     handleCloseModal();
   };
 

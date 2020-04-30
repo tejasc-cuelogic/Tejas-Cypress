@@ -3,12 +3,12 @@ import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC } from '../../../constants/admin/collection';
-import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection } from '../../queries/collection';
+import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 
 class CollectionsStore extends DataModelStore {
   constructor() {
-    super({ adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection });
+    super({ adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert });
   }
 
   collections = [];
@@ -16,6 +16,8 @@ class CollectionsStore extends DataModelStore {
   initLoad = [];
 
   collection = {};
+
+  collectionMappingOfferings = []
 
   COLLECTION_FRM = Validator.prepareFormObject(COLLECTION);
 
@@ -34,7 +36,8 @@ class CollectionsStore extends DataModelStore {
         setLoader: 'getCollections',
       }).then((res) => {
         if (get(res, 'getCollections')) {
-          this.setFieldValue('collections', res.getCollections);
+          ['collectionMappingOfferings', 'collections'].forEach(obs => (
+            this.setFieldValue(obs, res.getCollections)));
         }
         this.setFieldValue('apiHit', false);
       });
@@ -62,7 +65,7 @@ class CollectionsStore extends DataModelStore {
   }
 
   filterInitLoad = (formName) => {
-   this.initLoad = this.initLoad.filter(f => f !== formName);
+    this.initLoad = this.initLoad.filter(f => f !== formName);
   }
 
   formPayLoad = (params) => {
@@ -126,11 +129,29 @@ class CollectionsStore extends DataModelStore {
     }
   });
 
-  upsertCollection = async (mutation, params) => {
+  adminCollectionMappingUpsert = (params, mappingObj) => new Promise(async (res, rej) => {
+    const variables = {
+      ...params,
+    };
+    try {
+      const data = await this.executeMutation({
+        mutation: 'adminCollectionMappingUpsert',
+        setLoader: 'adminCollectionMappingUpsert',
+        variables,
+      });
+      window.logger(data);
+      this[mappingObj] = mappingObj.filter(obj => obj.id !== params.id);
+      res();
+    } catch (error) {
+      rej(error);
+    }
+  });
+
+  upsertCollection = async (params) => {
     try {
       const res = await this.executeMutation({
-        mutation,
-        setLoader: mutation,
+        mutation: 'adminCollectionUpsert',
+        setLoader: 'adminCollectionUpsert',
         variables: this.formPayLoad(params),
       });
       // if (get(res, 'adminCollectionUpsert')) {
