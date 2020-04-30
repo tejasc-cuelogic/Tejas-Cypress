@@ -19,13 +19,13 @@ class Tombstone extends Component {
     window.logger(form, name);
   }
 
-  // handleFormSubmit = () => {
-  //   const params = {
-  //     keyName: 'tombstone',
-  //     forms: ['TOMBSTONE_FRM', 'TOMBSTONE_HEADER_META_FRM'],
-  //   };
-  //   this.props.collectionStore.updateOffering(params);
-  // }
+  handleFormSubmit = () => {
+    const params = {
+      keyName: 'tombstone',
+      forms: ['TOMBSTONE_FRM'], // 'TOMBSTONE_HEADER_META_FRM'
+    };
+    this.props.collectionStore.upsertCollection(params);
+  }
 
   render() {
     const { collectionStore, offeringCreationStore, smartElement } = this.props;
@@ -41,15 +41,12 @@ class Tombstone extends Component {
               <Header as="h4">{TOMBSTONE_FRM.fields.image.label}</Header>
               {smartElement.ImageCropper('image', { uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia, isImagePreviewDisabled: true })}
               <Divider hidden />
-              <Header as="h4">{TOMBSTONE_FRM.fields.image.label}</Header>
+              <Header as="h4">{TOMBSTONE_FRM.fields.bgImage.label}</Header>
               {smartElement.ImageCropper('bgImage', { uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia, isImagePreviewDisabled: true })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
               <Header as="h4">Tombstone</Header>
-              {/* <Grid>
-                {Object.keys(TOMBSTONE_FRM.fields.tag).map(field => (smartElement.Input(field, { fileddata: TOMBSTONE_FRM.fields.tag[field] })))}
-              </Grid> */}
               <Form.Group widths={1}>
                 <Form.Field>
                   <Header as="h6">{TOMBSTONE_FRM.fields.description.label}</Header>
@@ -62,14 +59,44 @@ class Tombstone extends Component {
           </Grid>
           <Grid columns="2">
             <Grid.Column>
-              {smartElement.Input('title', { readOnly: isReadOnly })}
+              {smartElement.Input('title', {
+                readOnly: isReadOnly,
+                // changed: (e, result) => customFormArrayChange(e, result, 'TOMBSTONE_FRM'),
+              })}
             </Grid.Column>
             <Grid.Column>
-              {smartElement.Input('bgColor', { readOnly: isReadOnly })}
+              {smartElement.Input('bgColor', {
+                readOnly: isReadOnly,
+                // changed: (e, result) => customFormArrayChange(e, result, 'TOMBSTONE_FRM'),
+              })}
             </Grid.Column>
           </Grid>
+          <Grid columns="2">
+            <Grid.Column>
+              {smartElement.Input('color', {
+                readOnly: isReadOnly,
+                // changed: (e, result) => customFormArrayChange(e, result, 'TOMBSTONE_FRM'),
+              })}
+            </Grid.Column>
+            <Grid.Column>
+              {smartElement.Input('text', {
+                readOnly: isReadOnly,
+                // changed: (e, result) => customFormArrayChange(e, result, 'TOMBSTONE_FRM'),
+              })}
+            </Grid.Column>
+          </Grid>
+          {/* <Grid columns="2">
+            {Object.keys(TOMBSTONE_FRM.fields.tag).map(field => (
+              <Grid.Column>
+                {smartElement.Input(field, {
+                  fielddata: TOMBSTONE_FRM.fields.tag[field],
+                  changed: (e, result) => customFormArrayChange(e, result, 'TOMBSTONE_FRM', 'tag'),
+                })}
+              </Grid.Column>
+            ))}
+          </Grid> */}
           <Divider section />
-          <OfferingButtonGroup />
+          <OfferingButtonGroup updateOffer={() => this.handleFormSubmit()} />
         </Form>
       </div>
     );

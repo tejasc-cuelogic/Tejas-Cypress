@@ -28,7 +28,7 @@ export default class Overview extends Component {
   }
 
   handleCollectionChange = (e, res) => {
-    console.log('dropdown value', res.value[res.value.length - 1]);
+    // console.log('dropdown value', res.value[res.value.length - 1]);
     const { adminCollectionMappingUpsert } = this.props.collectionStore;
     const {
       formChange,

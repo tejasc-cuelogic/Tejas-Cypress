@@ -12,18 +12,15 @@ export const OVERVIEW = FormHelper.generateMeta([
 ]);
 
 export const TOMBSTONE_BASIC = {
-  tag: {
-    ...FormHelper.generateMeta([
-      ['color', 'Colour', '', 'optional', 'Enter Here'], ['text', 'text', '', '', 'Enter Here'],
-    ]),
-  },
   ...FormHelper.generateMeta([
-  ['title', 'Title', '', 'required', 'Enter Here'],
-  ['bgColor', 'Background Colour', '', 'optional', 'Enter Here'],
-  ['description', 'Description', '', 'required', 'Describe your project and what you`re raising funds to accomplish.'],
-  ['bgImage', 'BackGround Image', '', 'required', '', { s3Upload: true }],
-  ['image', 'Featured Image', '', 'required', '', { s3Upload: true }],
-]),
+    ['title', 'Title', '', 'required', 'Enter Here'],
+    ['bgColor', 'Background Colour', '', 'optional', 'Enter Here'],
+    ['description', 'Description', '', 'required', 'Describe your project and what you`re raising funds to accomplish.'],
+    ['bgImage', 'BackGround Image', '', 'required', '', { s3Upload: true }],
+    ['image', 'Featured Image', '', 'required', '', { s3Upload: true }],
+    ['color', 'Colour', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag' } }],
+    ['text', 'Text', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag' } }],
+  ]),
 };
 
 export const CONTENT = {

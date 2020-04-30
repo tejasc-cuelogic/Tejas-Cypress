@@ -45,6 +45,27 @@ query getCollection($slug: String, $id: String, $previewPassword: String) {
         title
         meta
       }
+      tombstone {
+        title
+        description
+        bgColor
+        image {
+          id
+          url
+          isPublic
+          fileName
+        }
+        bgImage {
+          id
+          url
+          isPublic
+          fileName
+        }
+        tag {
+          color
+          text
+        }
+      }
     }
   }
 }`;

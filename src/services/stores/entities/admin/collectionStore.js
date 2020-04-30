@@ -75,6 +75,8 @@ class CollectionsStore extends DataModelStore {
       forms.forEach((f) => {
         if (f === 'COLLECTION_CONTENT_FRM') {
           data = { collectionDetails: { marketing: Validator.evaluateFormData(this[f].fields) } };
+        } if (f === 'TOMBSTONE_FRM') {
+          data = { collectionDetails: { marketing: { tombstone: Validator.evaluateFormData(this[f].fields) } } };
         } else {
           data = { collectionDetails: Validator.evaluateFormData(this[f].fields) };
         }
@@ -170,6 +172,16 @@ class CollectionsStore extends DataModelStore {
       return false;
     }
   };
+
+  @action
+  customFormArrayChange = (e, result, form, subForm = '', index) => {
+    this[form] = Validator.onArrayFieldChange(
+      this[form],
+      Validator.pullValues(e, result),
+      subForm,
+      index,
+    );
+  }
 }
 decorate(CollectionsStore, {
   ...dataModelStore.decorateDefault,
@@ -186,5 +198,6 @@ decorate(CollectionsStore, {
   mergeCollection: action,
   setFormData: action,
   getActionType: action,
+  customFormArrayChange: action,
 });
 export default new CollectionsStore();
