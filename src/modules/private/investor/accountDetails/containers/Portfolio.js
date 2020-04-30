@@ -136,6 +136,7 @@ export default class Portfolio extends PureComponent {
       multipleUserAccounts,
     } = userDetailsStore;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
+    // const { referralData } = this.props.referralsStore;
     const { getActiveAccounts } = userDetailsStore;
 
     if (portfolioStore.loading) {

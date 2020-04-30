@@ -105,7 +105,7 @@ export default class UploadDocument extends Component {
           <Divider hidden />
           <FormCheckbox
             fielddata={
-              FILLING_STATUS_FORM.fields.method.value
+              isFilling
                 ? INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling
                 : INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling
             }
