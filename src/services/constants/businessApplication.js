@@ -198,7 +198,7 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700', customErrors: { required: 'required' },
   },
   totalProjectCost: {
-    value: '', maxLength: 16, label: 'How much total capital are you raising for your business right now (including other investors, banks, and etc.)?', error: undefined, rule: 'required', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'How much total capital are you raising for your business right now (including other investors, bank loans, and etc.)?', error: undefined, rule: 'required', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
   },
   amountNeeded: {
     value: '',
