@@ -198,7 +198,7 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700', customErrors: { required: 'required' },
   },
   totalProjectCost: {
-    value: '', maxLength: 16, label: 'How much total capital are you raising for your business right now (including other investors, banks, and etc.)?', error: undefined, rule: 'required', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'How much total capital are you raising for your business right now (including other investors, bank loans, and etc.)?', error: undefined, rule: 'required', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
   },
   amountNeeded: {
     value: '',
@@ -517,7 +517,7 @@ export const BUSINESS_SIGNUP = {
 
 export const BUSINESS_DETAILS = {
   businessPlan: {
-    value: [], label: '', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: '', uploadtitle: 'Upload a file or drag it here', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   debts: [{
     amount: {
@@ -584,7 +584,7 @@ export const BUSINESS_DETAILS = {
       value: '', label: 'Title', error: undefined, rule: 'optional', placeHolder: 'e.g. CEO', customErrors: { required: 'required' },
     },
     resume: {
-      value: '', label: 'Upload Resume/CV', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+      value: '', label: 'Upload Resume/CV', uploadtitle: 'Upload a file or drag it here', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
     },
   }],
 };
@@ -634,16 +634,16 @@ export const BUSINESS_PERF = {
 
 export const BUSINESS_DOC = {
   bankStatements: {
-    value: [], label: 'Prior 6 months Bank Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Prior 6 months Bank Statements', uploadtitle: 'Upload a file or drag it here', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   leaseAgreementsOrLOIs: {
-    value: [], label: 'Lease Agreement / Letter of Intent', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], tooltip: 'NextSeed requires a lease or LOI prior to launching your campaign. Before disbursing funds, the executed lease is required. If you are currently still in negotiations with your lease, please submit a draft of the current terms.', customErrors: { required: 'required' },
+    value: [], label: 'Lease Agreement / Letter of Intent', uploadtitle: 'Upload a file or drag it here', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], tooltip: 'NextSeed requires a lease or LOI prior to launching your campaign. Before disbursing funds, the executed lease is required. If you are currently still in negotiations with your lease, please submit a draft of the current terms.', customErrors: { required: 'required' },
   },
   personalTaxReturn: {
-    value: [], label: 'Prior 2 Years of Personal Tax Returns', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Prior 2 Years of Personal Tax Returns', uploadtitle: 'Upload a file or drag it here', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   businessTaxReturn: {
-    value: [], label: 'Prior 3 Years of Business Tax Returns', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Prior 3 Years of Business Tax Returns', uploadtitle: 'Upload a file or drag it here', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   blanketLien: {
     value: '',
@@ -664,7 +664,7 @@ export const BUSINESS_DOC = {
     rule: 'required',
   },
   personalGuaranteeForm: {
-    value: [], label: 'Personal Guarantee Form', error: undefined, rule: 'required_if:personalGuarantee,true', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required_if: 'required' },
+    value: [], label: 'Personal Guarantee Form', uploadtitle: 'Upload a file or drag it here', error: undefined, rule: 'required_if:personalGuarantee,true', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required_if: 'required' },
   },
 };
 

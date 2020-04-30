@@ -575,11 +575,7 @@ export class BusinessAppStore {
 
         ['bankStatements', 'businessTaxReturns', 'leaseAgreementsOrLOIs', 'personalTaxReturns'].forEach((field, key) => {
           const formField = ['bankStatements', 'businessTaxReturn', 'leaseAgreementsOrLOIs', 'personalTaxReturn'];
-          if (this.getBusinessTypeCondtion) {
-            if (data[field] && data[field].length) {
-              this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', formField[key]);
-            }
-          } else if (field === 'leaseAgreementsOrLOIs' || field === 'personalTaxReturns') {
+          if (this.currentApplicationType === 'business') {
             if (data[field] && data[field].length) {
               this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', formField[key]);
             }

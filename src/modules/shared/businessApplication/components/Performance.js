@@ -29,7 +29,7 @@ export default class Performance extends Component {
     if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
       disableFileUpload = false;
     }
-    const statmentConst = getBusinessTypeCondtion || getOwnPropertyCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : getNewBusinessTypeCondtion ? ['ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
+    const statementConst = getBusinessTypeCondtion || getOwnPropertyCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : getNewBusinessTypeCondtion ? ['ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
     return (
       <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form className="issuer-signup">
@@ -50,7 +50,7 @@ export default class Performance extends Component {
           >
             <Grid stackable columns="equal">
               {
-                statmentConst.map(field => (
+                statementConst.map(field => (
                   <Grid.Column key={field}>
                     <DropZone
                       sharableLink
