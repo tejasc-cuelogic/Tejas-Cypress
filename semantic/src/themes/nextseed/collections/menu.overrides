@@ -104,11 +104,16 @@
                 top: -12px;
                 left: 50%;
                 margin-left: -12px;
-                border-width: 0 12px 12px;
+                border-width: 1px;
                 border-style: solid;
-                border-color: @white transparent;
+                border-color: @menu-carat transparent transparent @menu-carat;
                 display: block;
                 width: 0;
+                background-color: @white;
+                width: 24px;
+                height: 24px;
+                transform: rotate(45deg);
+                -webkit-transform: rotate(45deg);
             }
             >.item {
                 background: @white !important;
