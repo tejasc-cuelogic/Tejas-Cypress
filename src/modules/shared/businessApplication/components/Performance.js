@@ -28,7 +28,7 @@ export default class Performance extends Component {
     if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
       disableFileUpload = false;
     }
-    const statmentConst = getBusinessTypeCondtion || getOwnPropertyCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
+    const statementConst = getBusinessTypeCondtion || getOwnPropertyCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
     return (
       <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form className="issuer-signup">
@@ -45,11 +45,11 @@ export default class Performance extends Component {
             hideFields={hideFields}
             noDivider={hideFields || formReadOnlyMode}
             header={currentApplicationType === 'business' ? 'Financial Statements' : 'Upload your Financial Model'}
-            subHeader={`${currentApplicationType === 'business' ? 'How has the business been performing, and what are your projections? Upload your financial statements in each section.' : 'Working model including all assumptions, project cashflows and distributions (5-10yr projections). Include stress testing'}`}
+            subHeader={currentApplicationType === 'business' ? <>How has the business been performing, and what are your projections? Upload your financial statements in each section.<br /> For businesses with less than one year of operating history, provide all available monthly financial statements including monthly P&amp;L from inception to date, in addition to 5 year projections.</> : 'Working model including all assumptions, project cashflows and distributions (5-10yr projections). Include stress testing'}
           >
             <Grid stackable columns="equal">
               {
-                statmentConst.map(field => (
+                statementConst.map(field => (
                   <Grid.Column key={field}>
                     <DropZone
                       sharableLink
