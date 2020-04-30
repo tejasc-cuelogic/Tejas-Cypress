@@ -136,7 +136,6 @@ export default class Portfolio extends PureComponent {
       multipleUserAccounts,
     } = userDetailsStore;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
-    const { referralData } = this.props.referralsStore;
     const { getActiveAccounts } = userDetailsStore;
 
     if (portfolioStore.loading) {
@@ -187,7 +186,8 @@ export default class Portfolio extends PureComponent {
         },
         {
           title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.lifetimePaymentsReceived, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
-        },{
+        },
+        {
           title: 'Available Credit', content: getInvestorAccounts && getInvestorAccounts.rewardsBalance, type: 1, info: `Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest. ${getActiveAccounts.length > 1 ? 'Referral credits are shared amongst all of your investment accounts.' : ''}`,
         },
         // {
