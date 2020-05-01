@@ -149,7 +149,7 @@ function TransferRequest(props) {
           be initiated within 1-3 business days.`
             : advanceTransferStepStatement
           : transferRequestMethod === 'ACH'
-            ? `By clicking the “Confirm” button, I authorize the transfer from my Wells Fargo account ${bankAndAccountName} in the amount equal to the Transfer Requested above. I understand this transfer will be initiated within 1 business day of the Transfer Date.`
+            ? `By clicking the “Confirm” button, I authorize the transfer from my ${bankAndAccountName} account in the amount equal to the Transfer Requested above. I understand this transfer will be initiated within 1 business day of the Transfer Date.`
             : 'By clicking the “Confirm” button, I acknowledge that I will initiate a wire transfer with these instructions within 5 business days. If funds are not received by GoldStar Trust within this time period, my investment will be canceled.'
         }
       </p>
