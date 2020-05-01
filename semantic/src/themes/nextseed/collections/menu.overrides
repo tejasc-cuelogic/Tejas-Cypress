@@ -101,18 +101,16 @@
             &.transition:after {
                 content: "";
                 position: absolute;
-                top: -12px;
+                top: -8px;
                 left: 50%;
-                margin-left: -12px;
+                margin-left: -10px;
                 border-width: 1px;
                 border-style: solid;
                 border-color: @menu-carat transparent transparent @menu-carat;
                 display: block;
-                width: 0;
                 background-color: @white;
-                width: 24px;
-                height: 24px;
-                transform: rotate(45deg);
+                width: 15px;
+                height: 15px;
                 -webkit-transform: rotate(45deg);
             }
             >.item {
