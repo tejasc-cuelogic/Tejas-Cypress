@@ -262,10 +262,10 @@ export class NavigationItems extends Component {
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
     const logInSignUp = stepInRoute.to !== 'login' ? [
-      { to: 'login', title: 'Log In', className: 'basic primary' },
-      { to: 'register', title: 'Sign Up', className: 'primary' },
+      { to: 'login', title: 'Log In', className: 'basic primary', cypressAttr: 'auth-login' },
+      { to: 'register', title: 'Sign Up', className: 'primary', cypressAttr: 'auth-rgister' },
     ]
-      : [{ ...stepInRoute, className: 'primary basic' }];
+      : [{ ...stepInRoute, className: 'primary basic', cypressAttr: 'auth-login' }];
     const { topBanner } = uiStore;
     return (
       <Menu
@@ -320,7 +320,7 @@ export class NavigationItems extends Component {
                 <>
                   {logInSignUp.map(route => (
                     <Menu.Item className="menu-button">
-                      <Button as={Link} onClick={this.setAuthRef} to={`/${route.to}`} className={`${route.className}`}>{route.title}</Button>
+                      <Button as={Link} onClick={this.setAuthRef} to={`/${route.to}`} data-cy={route.cypressAttr} className={`${route.className}`}>{route.title}</Button>
                     </Menu.Item>
                   ))}
                 </>

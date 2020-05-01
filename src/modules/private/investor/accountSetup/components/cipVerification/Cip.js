@@ -60,10 +60,11 @@ class Cip extends React.Component {
             {headerSiblingsContent}
           </Grid.Column>
           <Grid.Column mobile={16} tablet={16} computer={9}>
-            <Form error onSubmit={() => cipUtility.handleCip(false)}>
+            <Form error data-cy="cip-form" onSubmit={() => cipUtility.handleCip(false)}>
               <Form.Group widths="equal">
                 <FormSelect
                   name="salutation"
+                  data-cy="salutation"
                   placeholder="Select"
                   fielddata={ID_VERIFICATION_FRM.fields.salutation}
                   options={USER_TITLE}
@@ -75,6 +76,7 @@ class Cip extends React.Component {
                     type="text"
                     name={field}
                     fielddata={ID_VERIFICATION_FRM.fields[field]}
+                    data-cy={field}
                     changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
                   />
                 ))}
@@ -85,11 +87,13 @@ class Cip extends React.Component {
                 onplaceselected={place => setAddressFieldsForUserVerification(place, 'ID_VERIFICATION_FRM')}
                 changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
                 placeHolder="Street Address, City, State, Zip"
+                data-cy="street"
               />
               <FormInput
                 key="streetTwo"
                 type="text"
                 name="streetTwo"
+                data-cy="streetTwo"
                 fielddata={ID_VERIFICATION_FRM.fields.streetTwo}
                 changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
               />
@@ -97,6 +101,7 @@ class Cip extends React.Component {
                 {cipUtility.addressTemplate('ID_VERIFICATION_FRM')}
                 <MaskedInput
                   name="phoneNumber"
+                  data-cy="phoneNumber"
                   type="tel"
                   fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
                   format="(###) ###-####"
@@ -105,6 +110,7 @@ class Cip extends React.Component {
                 />
                 <MaskedInput
                   name="dateOfBirth"
+                  data-cy="dateOfBirth"
                   fielddata={ID_VERIFICATION_FRM.fields.dateOfBirth}
                   type="tel"
                   format="##/##/####"
@@ -113,6 +119,7 @@ class Cip extends React.Component {
                 />
                 <MaskedInput
                   name="ssn"
+                  data-cy="ssn"
                   fielddata={this.handleEncryptedSsn(ID_VERIFICATION_FRM.fields.ssn)}
                   ssn
                   changed={(values, name) => personalInfoMaskedChange(values, name, 'ID_VERIFICATION_FRM')}

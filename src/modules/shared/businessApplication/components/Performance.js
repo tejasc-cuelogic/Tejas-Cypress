@@ -20,6 +20,7 @@ export default class Performance extends Component {
       businessPerfMaskingChange, getBusinessTypeCondtion, getOwnPropertyCondtion,
       businessAppUploadFiles, businessAppRemoveFiles,
       businessAppParitalSubmit, enableSave, businessApplicationDetailsAdmin,
+      getNewBusinessTypeCondtion,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     const { fields } = BUSINESS_PERF_FRM;
@@ -28,7 +29,7 @@ export default class Performance extends Component {
     if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
       disableFileUpload = false;
     }
-    const statementConst = getBusinessTypeCondtion || getOwnPropertyCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
+    const statementConst = getBusinessTypeCondtion || getOwnPropertyCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : getNewBusinessTypeCondtion ? ['ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
     return (
       <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form className="issuer-signup">
@@ -58,7 +59,7 @@ export default class Performance extends Component {
                       multiple
                       key={field}
                       name={field}
-                      asterisk="true"
+                      asterisk={fields[field].rule.includes('required') ? 'true' : ''}
                       uploadtitle={fields[field].uploadtitle}
                       fielddata={fields[field]}
                       ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM', null, this.props.userStore.isApplicationManager)}

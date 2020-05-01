@@ -215,7 +215,7 @@ export default class ConfirmPhoneNumber extends Component {
                 )
               }
               {!editMode
-                ? <Button primary content="Confirm" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message) || dataLoading)} fluid={isMobile} />
+                ? <Button primary content="Confirm" data-cy="confirm-code" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message) || dataLoading)} fluid={isMobile} />
                 : (
                   <Button.Group widths={isMobile ? '1' : '2'} className="inline">
                     <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />

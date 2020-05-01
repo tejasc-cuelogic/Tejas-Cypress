@@ -31,7 +31,7 @@ export default class AboutIra extends Component {
         NextSeed is not a tax, investment or legal advisor and does not provide any tax, investment, or legal advice; please consult your own advisors or IRS guidelines to determine whether investing in NextSeed offerings through a self-directed IRA is right for you.
         </p>
         <Divider hidden />
-        <Button fluid={isMobile} primary className="relaxed" content="Continue" onClick={this.handleChangeStep} />
+        <Button fluid={isMobile} primary className="relaxed" content="Continue" data-cy="about-ira" onClick={this.handleChangeStep} />
       </>
     );
   }

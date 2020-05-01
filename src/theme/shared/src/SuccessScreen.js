@@ -25,7 +25,7 @@ const SuccessScreen = ({ successMsg, handleContinue, closeLink }) => {
         <Grid.Column mobile={16} tablet={12} computer={7} className="pt-0">
           <Header as="h3">{successMsg}</Header>
           <div className="mt-30">
-            <Button primary fluid={isMobile} onClick={handleContinue} content="Continue" />
+            <Button primary fluid={isMobile} data-cy="confirm-email-success" onClick={handleContinue} content="Continue" />
           </div>
         </Grid.Column>
       </Grid>
