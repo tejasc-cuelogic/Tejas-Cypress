@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { toJS } from 'mobx';
 import { Grid, Input, Dropdown, Form, Label, Icon, List, Button } from 'semantic-ui-react';
-import moment from 'moment';
+import * as moment from 'moment';
 import camelCase from 'lodash/camelCase';
 import startCase from 'lodash/startCase';
 import _ from 'lodash';

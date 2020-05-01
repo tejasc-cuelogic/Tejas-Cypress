@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Grid, Form } from 'semantic-ui-react';
 import { DropdownFilter, DateRangeFilter } from '../../../../theme/form/Filters';
 import formHOC from '../../../../theme/form/formHOC';

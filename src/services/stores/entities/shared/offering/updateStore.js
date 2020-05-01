@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
 import { orderBy, get } from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';

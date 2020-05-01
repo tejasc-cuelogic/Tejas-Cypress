@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import moment from 'moment';
+import * as moment from 'moment';
 import { includes, orderBy, get, filter } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Link, Switch } from 'react-router-dom';

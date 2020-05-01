@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { orderBy, get } from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Divider, Button, Icon } from 'semantic-ui-react';
 import InvestmentDetails from './InvestmentDetails';
 import LatestUpdates from './Overview/LatestUpdates';

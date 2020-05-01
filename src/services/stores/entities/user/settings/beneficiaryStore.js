@@ -1,7 +1,7 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { forEach, floor, ceil } from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore } from '../../../index';
 import { BENEFICIARY_FRM, VERIFY_OTP } from '../../../../constants/beneficiaries';

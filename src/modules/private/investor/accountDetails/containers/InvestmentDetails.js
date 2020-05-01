@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Card, Icon } from 'semantic-ui-react';
-import moment from 'moment';
+import * as moment from 'moment';
 import { includes, get } from 'lodash';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import Documents from '../../../../public/offering/components/campaignDetails/documents';

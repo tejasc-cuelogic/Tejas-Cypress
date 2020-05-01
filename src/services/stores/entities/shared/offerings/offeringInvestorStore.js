@@ -2,7 +2,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { orderBy, get, find, map, isEmpty, isArray } from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { getInvestorListForOffering } from '../../../queries/offering/investor';
 import { ClientDb } from '../../../../../helper';

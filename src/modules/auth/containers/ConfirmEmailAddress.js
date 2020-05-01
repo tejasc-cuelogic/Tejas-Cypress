@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter, Route } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Button, Header, Form, Message, Divider, Grid } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import { authActions } from '../../../services/actions';

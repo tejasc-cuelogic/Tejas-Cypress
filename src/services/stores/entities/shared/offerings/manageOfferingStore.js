@@ -1,7 +1,7 @@
 import { decorate, observable, action, computed, toJS } from 'mobx';
 import { startCase, get, includes, filter, orderBy } from 'lodash';
 import money from 'money-math';
-import moment from 'moment';
+import * as moment from 'moment';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';

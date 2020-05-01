@@ -4,7 +4,7 @@
  */
 import { toast } from 'react-toastify';
 import _ from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import { toJS } from 'mobx';
 import money from 'money-math';
 import sanitizeHtml from 'sanitize-html';

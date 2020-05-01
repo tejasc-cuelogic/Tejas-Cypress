@@ -2,7 +2,7 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
-import moment from 'moment';
+import * as moment from 'moment';
 import { mapValues, map, concat, set, isEmpty, difference, pick, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';

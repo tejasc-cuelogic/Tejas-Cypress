@@ -4,7 +4,7 @@ import { Card, Table, Header, Modal } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import moment from 'moment';
+import * as moment from 'moment';
 import Filters from './requestFilters';
 import { InlineLoader } from '../../../../../../theme/shared';
 import formHOC from '../../../../../../theme/form/formHOC';

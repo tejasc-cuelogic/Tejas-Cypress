@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Grid, Card, Button, Confirm, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { map, capitalize, get } from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Route, withRouter } from 'react-router-dom';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { InlineLoader } from '../../../../../theme/shared';

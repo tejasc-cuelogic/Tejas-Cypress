@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { get } from 'lodash';
 import { Table, Visibility, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
+import * as moment from 'moment';
 import { UserAvatar, NsPagination } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import UserTypeIcon from './UserTypeIcon';

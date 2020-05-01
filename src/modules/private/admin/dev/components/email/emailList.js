@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import moment from 'moment';
+import * as moment from 'moment';
 import Filters from './filter';
 import formHOC from '../../../../../../theme/form/formHOC';
 import EmailContent from '../../../../shared/EmailContent';

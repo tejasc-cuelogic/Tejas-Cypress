@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, Table, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import moment from 'moment';
+import * as moment from 'moment';
 import Filters from './cronFilters';
 import { InlineLoader } from '../../../../../../theme/shared';
 import formHOC from '../../../../../../theme/form/formHOC';

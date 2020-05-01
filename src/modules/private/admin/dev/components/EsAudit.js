@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { capitalize, get, map, isArray } from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import beautify from 'json-beautify';
 import ReactDiffViewer from 'react-diff-viewer';
 import { Modal, Header, Form, Button, Grid } from 'semantic-ui-react';

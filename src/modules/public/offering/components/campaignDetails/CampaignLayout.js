@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { orderBy, get } from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Route } from 'react-router-dom';
 import { toJS } from 'mobx';
 import scrollIntoView from 'scroll-into-view';

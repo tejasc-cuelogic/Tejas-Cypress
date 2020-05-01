@@ -1,5 +1,5 @@
 import Validator from 'validatorjs';
-import moment from 'moment';
+import * as moment from 'moment';
 import React from 'react';
 import { COMMON } from './auth';
 

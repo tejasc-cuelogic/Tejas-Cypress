@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
-import moment from 'moment';
+import * as moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import UpdatesTimeline from './UpdatesComponents/UpdatesTimeline';
 import UpdateDetails from './UpdatesComponents/UpdateDetails';

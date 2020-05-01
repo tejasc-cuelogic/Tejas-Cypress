@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Card, Header } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';

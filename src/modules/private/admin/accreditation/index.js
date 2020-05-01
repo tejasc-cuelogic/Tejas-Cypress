@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
+import * as moment from 'moment';
 import PrivateLayout from '../../shared/PrivateLayout';
 import AllAccreditationRequests from './components/AllAccreditationRequests';
 import { ByKeyword } from '../../../../theme/form/Filters';

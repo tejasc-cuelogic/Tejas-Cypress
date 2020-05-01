@@ -1,7 +1,7 @@
 import { toJS, observable, computed, action } from 'mobx';
 import { filter, uniqBy, get, has, reduce } from 'lodash';
 import graphql from 'mobx-apollo';
-import moment from 'moment';
+import * as moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import {
   offeringCommentsByOfferId, deleteMessage, createOfferingComments,

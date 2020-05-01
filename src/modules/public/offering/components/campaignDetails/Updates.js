@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import moment from 'moment';
+import * as moment from 'moment';
 import { get, orderBy, camelCase } from 'lodash';
 import { Header, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';

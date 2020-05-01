@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import shortid from 'shortid';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../api/gqlApi';

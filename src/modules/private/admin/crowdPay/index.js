@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import { mapValues } from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Label } from 'semantic-ui-react';
 import PrivateLayout from '../../shared/PrivateLayout';
 import AllCrowdPay from './components/AllCrowdPay';

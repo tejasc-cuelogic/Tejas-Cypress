@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Button, Icon, Divider } from 'semantic-ui-react';
 import { observer, inject } from 'mobx-react';
 

@@ -1,7 +1,7 @@
 import { observable, action, toJS, computed } from 'mobx';
 import { forEach, isArray, find, forOwn, filter, capitalize, findKey, includes, get, set, remove } from 'lodash';
 import graphql from 'mobx-apollo';
-import moment from 'moment';
+import * as moment from 'moment';
 import cleanDeep from 'clean-deep';
 import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY, FILLING_STATUS, EVIDENCE_META } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';

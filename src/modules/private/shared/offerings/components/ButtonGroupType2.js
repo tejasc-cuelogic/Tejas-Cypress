@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Button, Icon, Checkbox, Divider } from 'semantic-ui-react';
 
 @inject('uiStore')

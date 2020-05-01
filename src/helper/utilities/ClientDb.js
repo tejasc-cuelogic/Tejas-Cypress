@@ -1,6 +1,6 @@
 import TAFFY from 'taffydb';
 import { uniqWith, isEqual, isArray, map } from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 
 class ClientDb {
   database = null;

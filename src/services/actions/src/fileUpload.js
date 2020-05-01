@@ -1,4 +1,4 @@
-import moment from 'moment';
+import * as moment from 'moment';
 import { get } from 'lodash';
 import { createUploadEntry, removeUploadedFile, adminAccreditedStatusUploadEntry } from '../../stores/queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';

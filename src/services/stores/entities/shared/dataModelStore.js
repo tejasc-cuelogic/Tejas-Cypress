@@ -1,6 +1,6 @@
 import { observable, action, toJS } from 'mobx';
 import { set, forEach, isEmpty, get } from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import { FormValidator, DataFormatter, MobxApollo, Utilities as Utils } from '../../../../helper';

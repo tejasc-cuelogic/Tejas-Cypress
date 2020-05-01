@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Icon, Item, Header, Divider } from 'semantic-ui-react';
 import { orderBy, camelCase } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import moment from 'moment';
+import * as moment from 'moment';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { Image64, UserAvatar } from '../../../../../../theme/shared';
 

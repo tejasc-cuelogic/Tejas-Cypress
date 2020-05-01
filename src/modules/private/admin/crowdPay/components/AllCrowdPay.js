@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
+import * as moment from 'moment';
 import { lowerCase, get } from 'lodash';
 import { withRouter, Route, Link } from 'react-router-dom';
 import { Card, Table, Icon, Button, List } from 'semantic-ui-react';

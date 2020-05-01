@@ -1,4 +1,4 @@
-import moment from 'moment';
+import * as moment from 'moment';
 import { FormHelper } from '../../helper';
 
 export const PAYMENT = FormHelper.generateMeta([

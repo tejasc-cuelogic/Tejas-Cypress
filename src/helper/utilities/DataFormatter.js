@@ -1,5 +1,5 @@
 import { camelCase, upperFirst, reduce, assign, get, forEach } from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 import momentZone from 'moment-timezone';
 import { DEFAULT_TIME_ZONE_TO_DISPLAY, ELIGIBLE_TAGS } from '../../constants/common';
 import Helper from '../utility';

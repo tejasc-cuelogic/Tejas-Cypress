@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import moment from 'moment';
+import * as moment from 'moment';
 import graphql from 'mobx-apollo';
 import { map, kebabCase, sortBy, remove, orderBy, filter, get, join } from 'lodash';
 import isArray from 'lodash/isArray';

@@ -2,7 +2,7 @@
 import { observable, toJS, action, computed } from 'mobx';
 import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith, isEqual } from 'lodash';
 import graphql from 'mobx-apollo';
-import moment from 'moment';
+import * as moment from 'moment';
 import omitDeep from 'omit-deep';
 import cleanDeep from 'clean-deep';
 import {

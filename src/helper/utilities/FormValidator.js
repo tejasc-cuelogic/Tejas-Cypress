@@ -3,7 +3,7 @@
 /* eslint-disable no-prototype-builtins */
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
-import moment from 'moment';
+import * as moment from 'moment';
 import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get, isUndefined, pickBy, identity, isEmpty } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';

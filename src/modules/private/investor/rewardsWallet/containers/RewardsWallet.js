@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Checkbox } from 'semantic-ui-react';
-import moment from 'moment';
+import * as moment from 'moment';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import RewardList from '../components/RewardList';
 import { USER_REWARDS_META } from '../../../../../services/constants/offering';
