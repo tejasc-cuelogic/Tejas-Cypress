@@ -91,7 +91,7 @@ export default class ManualForm extends Component {
         <Header as="h4">
           Enter your bank account and routing number
         </Header>
-        <Form error={!!errors} onSubmit={this.handleSubmitForm}>
+        <Form error={!!errors} data-cy="manual-form" onSubmit={this.handleSubmitForm}>
           <Form.Field className={isMobile ? 'mb-40' : 'mb-50'}>
             <>
               {
@@ -143,7 +143,7 @@ export default class ManualForm extends Component {
               </p>
             )
           }
-          <Button primary size="large" fluid={isMobile} className="mt-30 relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
+          <Button primary size="large" fluid={isMobile} data-cy="manual-confirm" className="mt-30 relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
         </Form>
         <div className={isMobile && 'center-align'}>
           <Button color="green" className="link-button mt-30" content="Link bank account automatically" onClick={this.linkAccountDirectly} />

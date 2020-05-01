@@ -137,7 +137,6 @@ export default class BusinessDetails extends Component {
               asterisk="true"
               name="businessPlan"
               fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
-              uploadtitle={BUSINESS_DETAILS_FRM.fields.businessPlan.uploadtitle}
               ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', null, this.props.userStore.isApplicationManager)}
               onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
             />
@@ -540,7 +539,6 @@ export default class BusinessDetails extends Component {
                               name="resume"
                               asterisk="true"
                               fielddata={owner.resume}
-                              uploadtitle={owner.resume.uploadtitle}
                               ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index, this.props.userStore.isApplicationManager)}
                               onremove={fieldName => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
                             />

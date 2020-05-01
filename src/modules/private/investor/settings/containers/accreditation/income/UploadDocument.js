@@ -32,13 +32,22 @@ export default class UploadDocument extends Component {
 
   render() {
     const {
-      INCOME_UPLOAD_DOC_FORM, formChange, FILLING_STATUS_FORM, maskChange,
+      INCOME_UPLOAD_DOC_FORM, formChange, FILLING_STATUS_FORM, maskChange, isFilingAllowed,
     } = this.props.accreditationStore;
-    const isFilling = FILLING_STATUS_FORM.fields.method.value;
+
+    // const isFilling = FILLING_STATUS_FORM.fields.method.value;
+    let isFilling;
+    if (!isFilingAllowed) {
+      isFilling = true;
+    } else {
+      isFilling = FILLING_STATUS_FORM.fields.method.value;
+    }
+
     let docsToUpload = ['incomeDocSecondLastYear', 'incomeDocLastYear'];
     if (!isFilling) {
       docsToUpload = ['incomeDocThirdLastYear', 'incomeDocSecondLastYear'];
     }
+
     return (
       <div>
         <Header as="h4">Upload documents</Header>
@@ -96,7 +105,7 @@ export default class UploadDocument extends Component {
           <Divider hidden />
           <FormCheckbox
             fielddata={
-              FILLING_STATUS_FORM.fields.method.value
+              isFilling
                 ? INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling
                 : INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling
             }

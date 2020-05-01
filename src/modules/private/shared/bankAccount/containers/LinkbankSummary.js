@@ -78,7 +78,7 @@ export default class LinkbankSummary extends React.Component {
           <Button onClick={this.handleContinueCta} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Confirm" />
         </div>
         <div className={`${isMobile ? 'mb-30 center-align' : ''} mt-30`}>
-          <Button color="green" className="link-button" content="Change link bank account" onClick={() => changeLinkbank()} />
+          <Button color="green" className="link-button" data-cy="change-link-bank" content="Change link bank account" onClick={() => changeLinkbank()} />
         </div>
       </>
     );

@@ -68,7 +68,6 @@ export default class BusinessDocumentation extends Component {
                     name={field}
                     asterisk={fields[field].rule.includes('required') ? 'true' : ''}
                     fielddata={fields[field]}
-                    uploadtitle={fields[field].uploadtitle}
                     ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                     onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
                     tooltip={fields[field].tooltip}
@@ -101,7 +100,6 @@ export default class BusinessDocumentation extends Component {
                   key={field}
                   name={field}
                   fielddata={fields[field]}
-                  uploadtitle={fields[field].uploadtitle}
                   ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                   onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
                 />
@@ -155,7 +153,6 @@ export default class BusinessDocumentation extends Component {
                   multiple
                   name="personalGuaranteeForm"
                   fielddata={fields.personalGuaranteeForm}
-                  uploadtitle={fields.personalGuaranteeForm.uploadtitle}
                   ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                   onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
                 />

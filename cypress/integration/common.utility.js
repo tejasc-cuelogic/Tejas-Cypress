@@ -1,12 +1,12 @@
 import { forEach } from 'lodash';
 import { devices } from '../fixtures/common/devices';
 
-export const registerApiCall = (operationName, url = '**/**') => {
+export const registerApiCall = (operationName, url = '/dev/graphql') => {
   cy.server();
   cy.route('POST', url).as(operationName);
 }
 
-export const uploadFile = (selector, url = '**/**') => {
+export const uploadFile = (selector, url = '/dev/graphql') => {
   registerApiCall('fileUpload', url);
   cy.fixture('images/test-img.png').as('img');
   cy.upload_file('images/test-img.png', 'png', selector);
@@ -24,7 +24,7 @@ export const getJSONDataFromFixtures = async (path = '', props = undefined) => {
 };
 
 export const typeOtpCode = () => {
-  cy.get('.react-code-input', { timeout: 100000 }).within(() => {
+  cy.get('.react-code-input').within(() => {
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < 6; i++) {
       cy.get(`[data-id=${i}]`).type('1');
@@ -32,10 +32,10 @@ export const typeOtpCode = () => {
   });
 };
 
-export const enterCodeAndConfirm = (operationName) => {
-  registerApiCall(operationName, '/dev/graphql');
+export const enterCodeAndConfirm = (operationName, gqlUrl) => {
+  registerApiCall(operationName, gqlUrl);
   typeOtpCode();
-  cy.get('form').find('button').contains('Confirm').click();
+  cy.get('[data-cy=confirm-code]').click();
   cy.wait(`@${operationName}`);
 };
 
@@ -44,9 +44,10 @@ export const clickRadioAndNext = (selector, radioVal, operationName) => {
   btnClickAndWait(operationName);
 };
 
-export const btnClickAndWait = (operationName) => {
+export const btnClickAndWait = (selector, operationName) => {
+  cy.get('.dimmer-visible').should('not.be.visible')
   registerApiCall(operationName, '/dev/graphql');
-  cy.get('button.next').click({ force: true });
+  cy.get(selector).click();
   cy.wait(`@${operationName}`);
 };
 

@@ -59,7 +59,7 @@ export default class Performance extends Component {
                       multiple
                       key={field}
                       name={field}
-                      asterisk="true"
+                      asterisk={fields[field].rule.includes('required') ? 'true' : ''}
                       uploadtitle={fields[field].uploadtitle}
                       fielddata={fields[field]}
                       ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM', null, this.props.userStore.isApplicationManager)}
