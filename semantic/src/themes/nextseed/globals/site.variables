@@ -1001,6 +1001,8 @@
 @commonShadow:0px 1px 1px @thumbInactiveBackground;
 @nav-hover:#3A4048;                   //  campaign navigation hover
 
+@menu-carat:rgba(34,36,38,.10);
+
 /* --------------------------------------------
       OLD VARIABLE VALUES TO BE REMOVED
 -------------------------------------------- */
