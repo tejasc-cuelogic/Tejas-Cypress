@@ -1,5 +1,5 @@
 import React from 'react';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Label, Item } from 'semantic-ui-react';
 import NSImage from '../../../../shared/NSImage';
 

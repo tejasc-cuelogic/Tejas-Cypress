@@ -2,7 +2,7 @@
 import { observable, action, computed } from 'mobx';
 import { find, get, capitalize, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
-import * as moment from 'moment';
+import moment from 'moment';
 import { FormValidator, DataFormatter } from '../../../helper';
 import { bankAccountStore, individualAccountStore, iraAccountStore, userStore, entityAccountStore, userDetailsStore, uiStore, identityStore } from '../index';
 import { GqlClient as client } from '../../../api/gqlApi';

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Switch, Route, matchPath, Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
-import * as moment from 'moment';
+import moment from 'moment';
 import { get, isEmpty } from 'lodash';
 import queryString from 'query-string';
 import IdleTimer from 'react-idle-timer';

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Grid, Form, Icon, Header, Popup } from 'semantic-ui-react';
-import * as moment from 'moment';
+import moment from 'moment';
 import { get } from 'lodash';
 import Helper from '../../../../../helper/utility';
 import { InlineLoader } from '../../../../../theme/shared';

@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import * as moment from 'moment';
+import moment from 'moment';
 import { get, lowerCase } from 'lodash';
 import { Card, Table, Button, Icon } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';

@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import moment from 'moment';
 import { observable, computed, action } from 'mobx';
 import { orderBy, find, get } from 'lodash';
 import graphql from 'mobx-apollo';

@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { mapValues, filter, find, get, isEqual } from 'lodash';
 import graphql from 'mobx-apollo';
-import * as moment from 'moment';
+import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore, userDetailsStore, campaignStore, investmentStore } from '../../../index';
 import { INVESTMENT_LIMIT } from '../../../../constants/investmentLimit';

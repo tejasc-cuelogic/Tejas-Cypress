@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import * as moment from 'moment';
+import moment from 'moment';
 import cleanDeep from 'clean-deep';
 import money from 'money-math';
 import { get, orderBy, isArray, filter, forEach } from 'lodash';

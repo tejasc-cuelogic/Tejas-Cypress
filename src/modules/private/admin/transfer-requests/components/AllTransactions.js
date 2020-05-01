@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import moment from 'moment';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';

@@ -2,7 +2,7 @@
 import React from 'react';
 import { toJS } from 'mobx';
 import { Grid, Dropdown, Form, Label, Icon, List } from 'semantic-ui-react';
-import * as moment from 'moment';
+import moment from 'moment';
 import camelCase from 'lodash/camelCase';
 import startCase from 'lodash/startCase';
 import FormDatePicker from '../../../../../../theme/form/src/FormDatePicker';

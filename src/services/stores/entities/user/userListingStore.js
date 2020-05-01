@@ -2,7 +2,7 @@
 import { toJS, observable, computed, action } from 'mobx';
 import React from 'react';
 import graphql from 'mobx-apollo';
-import * as moment from 'moment';
+import moment from 'moment';
 import { capitalize, isArray, uniq } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { UserAvatar } from '../../../../theme/shared';

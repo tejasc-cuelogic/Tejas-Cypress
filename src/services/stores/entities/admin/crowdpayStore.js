@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { isArray, get, filter as lodashFilter, findIndex, find, omit, has, intersection } from 'lodash';
 import cleanDeep from 'clean-deep';
-import * as moment from 'moment';
+import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { adminGetCrowdPayUsers, adminCrowdPayProcess, adminCrowdPayReview, adminCrowdPayDecline, adminCrowdPayValidate, adminDecrypteGoldstarAccountNumber } from '../../queries/CrowdPay';

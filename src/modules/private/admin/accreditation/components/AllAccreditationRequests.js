@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
 import { InlineLoader, NsPagination } from '../../../../../theme/shared';

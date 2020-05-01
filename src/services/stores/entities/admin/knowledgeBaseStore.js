@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { observable, action, computed, toJS } from 'mobx';
-import * as moment from 'moment';
+import moment from 'moment';
 import graphql from 'mobx-apollo';
 import { isArray, orderBy, find, map, filter, get, kebabCase, remove } from 'lodash';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';

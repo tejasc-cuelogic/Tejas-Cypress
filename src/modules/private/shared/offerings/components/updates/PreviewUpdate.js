@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Header } from 'semantic-ui-react';
 import { observer, inject } from 'mobx-react';
-import * as moment from 'moment';
+import moment from 'moment';
 import { get } from 'lodash';
 import { Image64, UserAvatar, InlineLoader } from '../../../../../../theme/shared';
 import HtmlEditor from '../../../../../shared/HtmlEditor';

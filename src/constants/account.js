@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-for */
-import * as moment from 'moment';
+import moment from 'moment';
 import React from 'react';
 import Validator from 'validatorjs';
 import Helper from '../helper/utility';

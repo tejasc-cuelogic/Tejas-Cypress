@@ -3,7 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce, isArray, find, camelCase } from 'lodash';
 import money from 'money-math';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';

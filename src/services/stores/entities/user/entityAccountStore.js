@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import { isEmpty, find, get, map, set } from 'lodash';
 import graphql from 'mobx-apollo';
-import * as moment from 'moment';
+import moment from 'moment';
 import {
   ENTITY_FIN_INFO,
   ENTITY_GEN_INFO,

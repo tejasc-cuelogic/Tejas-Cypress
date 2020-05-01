@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
-import * as moment from 'moment';
+import moment from 'moment';
 import { mapValues, keyBy, find, flatMap, map, get, isEmpty, intersection } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO, VERIFY_OTP } from '../../../constants/user';

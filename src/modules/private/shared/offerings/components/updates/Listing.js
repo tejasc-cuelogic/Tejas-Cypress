@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Button, Icon, Card } from 'semantic-ui-react';
 import { kebabCase, capitalize } from 'lodash';
-import * as moment from 'moment';
+import moment from 'moment';
 import { observer, inject } from 'mobx-react';
 import { DateTimeFormat, NsPagination } from '../../../../../../theme/shared';
 import { DataFormatter } from '../../../../../../helper';

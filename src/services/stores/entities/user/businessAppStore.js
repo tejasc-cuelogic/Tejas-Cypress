@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { forEach, includes, find, isEmpty, get, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
-import * as moment from 'moment';
+import moment from 'moment';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';

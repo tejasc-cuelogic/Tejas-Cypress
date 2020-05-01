@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import Validator from 'validatorjs';
-import * as moment from 'moment';
+import moment from 'moment';
 import { get, sumBy, forEach } from 'lodash';
 import { TARGETED_INVESTOR_IRR } from '../../constants/business';
 

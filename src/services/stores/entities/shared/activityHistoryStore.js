@@ -1,7 +1,7 @@
 import { toJS, observable, computed, action, decorate } from 'mobx';
 import graphql from 'mobx-apollo';
 import { isArray, capitalize, uniqWith, isEqual } from 'lodash';
-import * as moment from 'moment';
+import moment from 'moment';
 import DataModelStore, { decorateDefault } from './dataModelStore';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { adminFilterActivityHistories, createActivityHistory } from '../../queries/activity';

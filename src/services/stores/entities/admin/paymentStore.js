@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
 import { orderBy, get, findIndex, pick, forEach, remove } from 'lodash';
-import * as moment from 'moment';
+import moment from 'moment';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentSendIssuerFirstNotice, adminPaymentSendIssuerSecondNotice } from '../../queries/Repayment';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
-import * as moment from 'moment';
+import moment from 'moment';
 import { REACT_APP_DEPLOY_ENV, REACT_APP_DEPLOY_TIME, REACT_APP_DEPLOY_BRANCH } from '../../../constants/common';
 
 const DevBanner = props => (

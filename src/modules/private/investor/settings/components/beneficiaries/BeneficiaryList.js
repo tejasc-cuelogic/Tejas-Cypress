@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
 import startCase from 'lodash/startCase';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Card, Grid, Button, Header, Icon, Item, Divider } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader, EmptyDataSet } from '../../../../../../theme/shared';
 import { BENEFICIARY_STATUS } from '../../../../../../constants/user';
