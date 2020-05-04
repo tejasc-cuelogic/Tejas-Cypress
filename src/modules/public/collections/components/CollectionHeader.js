@@ -36,7 +36,7 @@ export default class CollectionHeader extends Component {
                             srcUrl={get(meta, 'image')}
                             imgType="heroImage"
                           />
-                          <div className="ns_flgs_box">NextSeed</div>
+                          {get(meta, 'tag.text') && <div className="ns_flgs_box">{get(meta, 'tag.text')}</div>}
                         </div>
                         <div className="clearfix social-links mt-20">
                           {get(meta, 'social[0]')
