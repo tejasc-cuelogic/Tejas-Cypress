@@ -611,11 +611,11 @@ export const PUBLIC_NAV = [
     headerMobile: false,
     subNavigations: NEW_OFFERING_LAYOUT,
   },
-  {
-    title: 'Investment opportunities',
-    to: 'offerings/',
-    subNavigations: NEW_OFFERING_LAYOUT,
-  },
+  // {
+  //   title: 'Investment opportunities',
+  //   to: 'offerings/',
+  //   subNavigations: NEW_OFFERING_LAYOUT,
+  // },
   {
     title: 'Investment opportunities',
     to: 'offerings-v1',
@@ -707,8 +707,14 @@ export const PUBLIC_NAV = [
     ],
   },
   {
-    title: 'Collections',
-    to: 'collections',
+    title: 'Investment opportunities',
+    to: '',
+    subPanel: 1,
+    exact: true,
+    subNavigations: [
+      { title: 'NextSeed Offerings', to: 'offerings' },
+      { title: 'Investment Collections', to: 'collections' },
+    ],
   },
   {
     title: 'How It Works',
