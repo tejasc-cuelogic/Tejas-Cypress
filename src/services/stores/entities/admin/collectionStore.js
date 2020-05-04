@@ -1,5 +1,5 @@
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { get } from 'lodash';
+import { get, orderBy } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, getCollection, getCollectionMapping } from '../../queries/collection';
@@ -136,7 +136,6 @@ class CollectionsStore extends DataModelStore {
         this.setFieldValue('collectionDetails', res.getCollection);
         if (authStore.isUserLoggedIn) {
           this.getCollectionMappingPublic(res.getCollection.id);
-          // this.getCollectionMapping(res.getCollection.id, 'INSIGHT');
         }
       }
     });
@@ -169,8 +168,16 @@ class CollectionsStore extends DataModelStore {
     return get(this.collectionMappingsData, 'offerings[0]') ? toJS(get(this.collectionMappingsData, 'offerings')) : [];
   }
 
+  get getActiveOfferingsList() {
+    return orderBy(this.getOfferingsList.filter(o => ['LIVE'].includes(o.stage)), 'sortOrder', ['ASC']);
+  }
+
+  get getPastOfferingsList() {
+    return orderBy(this.getOfferingsList.filter(o => ['COMPLETE', 'IN_REPAYMENT', 'STARTUP_PERIOD'].includes(o.stage)), 'sortOrder', ['ASC']);
+  }
+
   get getInsightsList() {
-    return get(this.collectionMappingsData, 'insights[0]') ? toJS(get(this.collectionMappingsData, 'insights')) : [];
+    return get(this.collectionMappingsData, 'insights[0]') ? orderBy(toJS(get(this.collectionMappingsData, 'insights')), 'sortOrder', ['ASC']) : [];
   }
 
   setFormData = (form, ref, keepAtLeastOne) => {
