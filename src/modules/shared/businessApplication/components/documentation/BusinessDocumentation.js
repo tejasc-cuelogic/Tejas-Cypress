@@ -19,7 +19,6 @@ export default class BusinessDocumentation extends Component {
       businessDocChange,
       businessAppUploadFiles,
       businessAppRemoveFiles,
-      getBusinessTypeCondtion,
       getPersonalGuaranteeCondition,
       formReadOnlyMode,
       businessAppParitalSubmit,
@@ -29,8 +28,8 @@ export default class BusinessDocumentation extends Component {
     const { fields } = BUSINESS_DOC_FRM;
     const { hideFields } = this.props;
     const userAccess = this.props.userStore.myAccessForModule('APPLICATIONS');
-    const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
-    const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];
+    const statementFileList = ['bankStatements', 'leaseAgreementsOrLOIs'];
+    const taxFileList = ['personalTaxReturn', 'businessTaxReturn'];
     const { inProgress } = this.props.uiStore;
     let disableFileUpload = true;
     if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {

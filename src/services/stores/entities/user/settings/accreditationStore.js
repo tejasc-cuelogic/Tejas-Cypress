@@ -1195,17 +1195,19 @@ export class AccreditationStore {
   }
 
   @action
-  changeRuleAsPerFilingStatus = (isFilingTrue) => {
-    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.rule = isFilingTrue ? 'optional' : 'required';
-    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.rule = isFilingTrue ? 'required' : 'optional';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.rule = isFilingTrue ? 'optional' : 'required';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.rule = isFilingTrue ? 'required' : 'optional';
-    this.INCOME_UPLOAD_DOC_FORM.fields.previousEstimateIncome.rule = !isFilingTrue ? 'required' : 'optional';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = isFilingTrue;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.skipField = !isFilingTrue;
+  // changeRuleAsPerFilingStatus = (isFilingTrue) => {
+  changeRuleAsPerFilingStatus = () => {
+    const override = true;
+    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.rule = override ? 'optional' : 'required';
+    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.rule = override ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.rule = override ? 'optional' : 'required';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.rule = override ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.previousEstimateIncome.rule = !override ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = override;
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.skipField = !override;
     ['fileData', 'fileId', 'value'].map((field) => {
-      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field] = isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field];
-      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field] = !isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field];
+      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field] = override ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field];
+      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field] = !override ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field];
       return null;
     });
 
