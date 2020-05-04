@@ -3,12 +3,13 @@ import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC } from '../../../constants/admin/collection';
-import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert } from '../../queries/collection';
+import { offeringCreationStore } from '../../index';
+import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, getCollectionMapping } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 
 class CollectionsStore extends DataModelStore {
   constructor() {
-    super({ adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert });
+    super({ adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, getCollectionMapping });
   }
 
   collections = [];
@@ -16,6 +17,10 @@ class CollectionsStore extends DataModelStore {
   initLoad = [];
 
   collection = {};
+
+  collectionMapping = {};
+
+  collectionIndex = null;
 
   collectionMappingOfferings = []
 
@@ -27,7 +32,7 @@ class CollectionsStore extends DataModelStore {
 
   TOMBSTONE_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
 
-  contentId = null;
+  collectionId = null;
 
   initRequest = () => {
     if (!this.apiHit) {
@@ -36,6 +41,7 @@ class CollectionsStore extends DataModelStore {
         setLoader: 'getCollections',
       }).then((res) => {
         if (get(res, 'getCollections')) {
+          offeringCreationStore.setSelectedCollections((get(res, 'getCollections')));
           ['collectionMappingOfferings', 'collections'].forEach(obs => (
             this.setFieldValue(obs, res.getCollections)));
         }
@@ -80,8 +86,8 @@ class CollectionsStore extends DataModelStore {
         }
       });
     }
-    if (this.contentId !== null) {
-      data.id = this.contentId;
+    if (this.collectionId !== null) {
+      data.id = this.collectionId;
     }
     return data;
   }
@@ -98,16 +104,55 @@ class CollectionsStore extends DataModelStore {
       setLoader: 'getCollection',
     }).then((res) => {
       if (get(res, 'getCollection')) {
-        this.setFieldValue('contentId', res.getCollection.id);
+        this.setFieldValue('collectionId', res.getCollection.id);
         this.setFieldValue('collection', res.getCollection);
         this.COLLECTION_OVERVIEW_FRM = Validator.setFormData(this.COLLECTION_OVERVIEW_FRM, res.getCollection);
       }
     });
   }
 
+  getContentType = (contentType) => {
+    if (['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS'].includes(contentType)) {
+      return 'OFFERING';
+    }
+    return 'INSIGHT';
+  }
+
+  getCollectionMapping = (index) => {
+    const { value } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
+    if (this.collectionIndex !== index
+       && ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(value)) {
+      const params = {
+        type: this.getContentType(value),
+        collectionId: this.collectionId,
+      };
+      this.executeQuery({
+        query: 'getCollectionMapping',
+        variables: { ...params },
+        setLoader: 'getCollectionMapping',
+      }).then((res) => {
+        if (get(res, 'getCollectionMapping')) {
+          let data = get(res, 'getCollectionMapping');
+          if (params.type === 'OFFERING') {
+            data = {
+              live: data.filter(d => d.offering.stage === 'LIVE').map(d => d.offering),
+              complete: data.filter(d => d.offering.stage === 'COMPLETE').map(d => d.offering),
+            };
+          }
+          this.collectionMapping[params.type] = data;
+          this.setFieldValue('collectionIndex', index);
+        }
+      }).catch(() => {
+        this.setFieldValue('collectionIndex', null);
+      });
+    } else {
+      this.setFieldValue('collectionIndex', index);
+    }
+  }
+
   adminLockOrUnlockCollection = lockAction => new Promise(async (res, rej) => {
     const variables = {
-      id: this.contentId,
+      id: this.collectionId,
       action: lockAction,
     };
     try {
@@ -129,7 +174,7 @@ class CollectionsStore extends DataModelStore {
     }
   });
 
-  adminCollectionMappingUpsert = (params, mappingObj) => new Promise(async (res, rej) => {
+  adminCollectionMappingUpsert = params => new Promise(async (res, rej) => {
     const variables = {
       ...params,
     };
@@ -140,7 +185,6 @@ class CollectionsStore extends DataModelStore {
         variables,
       });
       window.logger(data);
-      this[mappingObj] = mappingObj.filter(obj => obj.id !== params.id);
       res();
     } catch (error) {
       rej(error);
@@ -155,8 +199,8 @@ class CollectionsStore extends DataModelStore {
         variables: this.formPayLoad(params),
       });
       // if (get(res, 'adminCollectionUpsert')) {
-      //   this.setFieldValue('contentId', res.adminCollectionUpsert.id);
-      //   if (this.contentId === null) {
+      //   this.setFieldValue('collectionId', res.adminCollectionUpsert.id);
+      //   if (this.collectionId === null) {
       //     this.mergeCollection(res.adminCollectionUpsert);
       //   }
       // }
@@ -177,9 +221,10 @@ decorate(CollectionsStore, {
   PARTNER_FRM: observable,
   OVERVIEW_FRM: observable,
   COLLECTION_CONTENT_FRM: observable,
-  contentId: observable,
+  collectionId: observable,
   collection: observable,
   initLoad: observable,
+  collectionMappingOfferings: observable,
   initRequest: action,
   upsertCollection: action,
   filterInitLoad: action,

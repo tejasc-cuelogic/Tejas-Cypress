@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { common } from './offerings/manage';
 
 export const adminCollectionUpsert = gql`
   mutation adminCollectionUpsert($id: String, $collectionDetails: CollectionInputType!) {
@@ -12,6 +13,31 @@ export const adminCollectionUpsert = gql`
           by
           date
         } 
+    }
+  }`;
+
+export const getCollectionMapping = gql`
+  query getCollectionMapping($collectionId: String!, $type: CollectionMappingTypeEnum) {
+    getCollectionMapping(
+      collectionId: $collectionId
+      type: $type
+      # referenceId: "030a5595-a5a2-4140-b65a-d74c063838bf" # Optional, use it if you want to fetch a single collection mapping
+      # type: OFFERING # optional, use it if you want to filter mappings by type
+      # scope: PUBLIC # optional, use it if you want to filter mappings by scope
+      # challenge: "nextseed" # optional, use it if you want to unlock LOCKED mappings for non-admins
+    ) {
+      collectionId
+      referenceId
+      type
+      order
+      scope
+      offering {
+        ${common.offeringBasics}
+      }
+      insight {
+        title
+        # ... any insight article details you want to retrieve (will only be available if mapping's type is INSIGHT
+      }
     }
   }`;
 

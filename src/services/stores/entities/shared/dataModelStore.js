@@ -156,7 +156,7 @@ export default class DataModelStore {
         this.auStatus = 0;
         this.loading = false;
         // remove only loaders who are set exlplicity
-        this.resetLoader(payLoad.removeLoader, payLoad.query);
+        this.resetLoader([...payLoad.removeLoader], payLoad.query);
         rej(e);
       },
     });

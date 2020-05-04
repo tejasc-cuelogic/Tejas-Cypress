@@ -39,9 +39,11 @@ export default class Overview extends Component {
       collectionId: res.value[res.value.length - 1],
       referenceId: currentOfferingId,
       type: 'OFFERING',
+      scope: 'PUBLIC',
     };
-    adminCollectionMappingUpsert(params);
-    formChange(e, res, 'OFFERING_DETAILS_FRM', false, 'dropdown');
+    adminCollectionMappingUpsert(params).then(() => {
+      formChange(e, res, 'OFFERING_DETAILS_FRM', false, 'dropdown');
+    });
   }
 
   render() {
@@ -64,8 +66,6 @@ export default class Overview extends Component {
     if (loadingArray.includes('getCollections')) {
       return <InlineLoader />;
     }
-    const collections = collectionMappingOfferings.map(c => ({ key: c.name, text: c.name, value: c.id }));
-    const selectedCollections = collections.slice(0, 4);
     return (
       <div className={isIssuer ? 'ui card fluid form-card' : 'inner-content-spacer'}>
         <Form>
@@ -98,7 +98,6 @@ export default class Overview extends Component {
             multiple
             selection
             fluid
-            value={[[...OFFERING_DETAILS_FRM.fields.collection.value], [...selectedCollections]]}
             containerclassname="dropdown-field"
             onChange={(e, res) => this.handleCollectionChange(e, res)}
           />

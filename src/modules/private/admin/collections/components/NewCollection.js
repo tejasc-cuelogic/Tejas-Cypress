@@ -13,7 +13,7 @@ function NewCollection(props) {
   useEffect(() => {
     const { resetForm, setFieldValue } = props.collectionStore;
     resetForm('COLLECTION_FRM');
-    setFieldValue('contentId', null);
+    setFieldValue('collectionId', null);
   }, []);
 
   const handleCloseModal = () => {
