@@ -36,8 +36,9 @@ export default class CollectionHeader extends Component {
                             srcUrl={get(meta, 'image')}
                             imgType="heroImage"
                           />
+                          <div className="ns_flgs_box">NextSeed</div>
                         </div>
-                        <div className="clearfix social-links mt-10">
+                        <div className="clearfix social-links mt-20">
                           {get(meta, 'social[0]')
                             ? get(meta, 'social').map(site => (
                               <React.Fragment key={site.type}>
@@ -56,6 +57,10 @@ export default class CollectionHeader extends Component {
                       </Grid.Column>
                     </Grid>
                   </Responsive>
+                  <div className="current-projects-box">
+                    <p className="mb-0">View our current and past projects below.</p>
+                    <i className="icon ns-chevron-down" />
+                  </div>
                 </section>
               </div>
             </>
