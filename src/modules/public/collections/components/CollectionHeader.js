@@ -30,13 +30,13 @@ export default class CollectionHeader extends Component {
                     <Grid relaxed stackable centered>
                       <Grid.Column width={7}>
                         <div className="video-wrapper campaign">
-                          <div className="ns_flgs_box">NextSeed</div>
-                            <Image64
-                              originalImg
-                              bg
-                              srcUrl={get(meta, 'image')}
-                              imgType="heroImage"
-                            />
+                          <Image64
+                            originalImg
+                            bg
+                            srcUrl={get(meta, 'image')}
+                            imgType="heroImage"
+                          />
+                            {get(meta, 'tag.text') && <div style={{ backgroundColor: get(meta, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(meta, 'tag.text')}</p></div>}
                         </div>
                         <div className="clearfix social-links mt-20">
                           {get(meta, 'social[0]')
@@ -69,14 +69,13 @@ export default class CollectionHeader extends Component {
               <Responsive maxWidth={991} as={React.Fragment}>
                 <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
                   <div className="video-wrapper campaign">
-                    <div className="ns_flgs_box">NextSeed</div>
                     <Image64
                       originalImg
                       bg
                       srcUrl={get(meta, 'image')}
                       imgType="heroImage"
                     />
-                    
+                    {get(meta, 'tag.text') && <div style={{ backgroundColor: get(meta, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(meta, 'tag.text')}</p></div>}
                   </div>
                   <Header as="h4" inverted>
                     {title}

@@ -3456,3 +3456,47 @@ h3.ui.header.error-2{
 		line-height: 20px;
 	}
 }
+.ns_flgs_box{
+	clip-path: polygon(0 0,18% 0,16% 50%,18% 100%,0 100%);
+	background-color:@primary-one-lighten;
+	padding: 5px;
+	color:@white;
+	position: absolute;
+	top:10px;
+	left: 0;
+	width: 100%;
+	max-width: 450px;
+	font-size: @14px;
+	z-index: 9;
+	@media only screen and (min-width : @mobileBreakpoint) and (max-width: @tabletBreakpoint){
+		width: 450px !important;
+	}
+	p{
+		word-wrap: break-word;
+		width: 100px;
+		line-height: @16px;
+		font-size: @14px;
+		margin-bottom: 0px !important;
+		text-align: left;
+	}
+}
+.current-projects-box{
+	padding: 10px 0 10px;
+	background: rgba(000, 000, 000, 0.2);
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: auto;
+	right: auto;
+	text-align: center;
+	@media only screen and (min-width : @mobileBreakpoint) and (max-width: @tabletBreakpoint){
+		position: relative !important;
+		color: @neutral-offwhite !important;
+	}
+	p{
+		font-size: @15px;
+		line-height: @24px;
+		font-weight: @bold;
+		color: @neutral-offwhite;
+	}
+}
