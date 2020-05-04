@@ -51,34 +51,35 @@ function GenerateDocuments(props) {
             <Card.Content header="Generate Document" />
             <Card.Content>
               <Card.Description>
-                <Form onSubmit={FILEFACTORY_FRM.meta.isValid && onSubmit}>
-                  <Form.Group className="bottom-aligned">
-                    <Form.Field width={12}>
-                      {!isDocGenerationValid
-                        ? (
-                          <InlineLoader text="No DocGen supported for this security type" />
-                        )
-                        : (smartElement.FormDropDown('method', {
-                          onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
-                          containerclassname: 'dropdown-field mlr-0',
-                          placeholder: 'Choose here',
-                          options: FILEFACTORY_FRM.fields.method.values,
-                          className: 'mb-80',
-                          containerwidth: 11,
-                        })
-                        )
-                      }
-                    </Form.Field>
-                    <Form.Field width={4}>
-                      <Button primary content="Generate" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid} loading={inProgress.fileFactory} />
-                      {isPreview
-                        && (
-                          <Button secondary content="Preview" onClick={e => handleDocumentsLink(e, folderId)} disabled={props.commonStore.inProgress === folderId || inProgress.fileFactory} loading={props.commonStore.inProgress === folderId} />
-                        )
-                      }
-                    </Form.Field>
-                  </Form.Group>
-                </Form>
+                {!isDocGenerationValid
+                  ? (
+                    <InlineLoader text="No DocGen supported for this security type" />
+                  )
+                  : (
+                    <Form onSubmit={FILEFACTORY_FRM.meta.isValid && onSubmit}>
+                      <Form.Group className="bottom-aligned">
+                        <Form.Field width={12}>
+                          {smartElement.FormDropDown('method', {
+                            onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
+                            containerclassname: 'dropdown-field mlr-0',
+                            placeholder: 'Choose here',
+                            options: FILEFACTORY_FRM.fields.method.values,
+                            className: 'mb-80',
+                            containerwidth: 11,
+                          })
+                          }
+                        </Form.Field>
+                        <Form.Field width={4}>
+                          <Button primary content="Generate" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid} loading={inProgress.fileFactory} />
+                          {isPreview
+                            && (
+                              <Button secondary content="Preview" onClick={e => handleDocumentsLink(e, folderId)} disabled={props.commonStore.inProgress === folderId || inProgress.fileFactory} loading={props.commonStore.inProgress === folderId} />
+                            )
+                          }
+                        </Form.Field>
+                      </Form.Group>
+                    </Form>
+                  )}
               </Card.Description>
             </Card.Content>
           </Card>
