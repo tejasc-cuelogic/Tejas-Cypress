@@ -16,10 +16,10 @@ class CollectionInsights extends Component {
       <Container>
         {this.props.heading}
         {this.props.subheading}
-        <Grid stackable doubling>
+        <Grid stackable doubling columns={3}>
           {InsightArticles && InsightArticles.length
             && InsightArticles.map(article => (
-              <Grid.Column mobile={16} tablet={8} computer={4}>
+              <Grid.Column>
                 <Card className="campaign insights" fluid>
                   <Image64
                     centered
