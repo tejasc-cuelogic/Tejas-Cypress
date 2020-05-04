@@ -15,9 +15,7 @@ class CollectionsStore extends DataModelStore {
 
   collectionDetails = null;
 
-  collectionMappingsOfferings = [];
-
-  collectionMappingsInsights = [];
+  collectionMappingsData = null;
 
   collections = [
     {
@@ -127,8 +125,7 @@ class CollectionsStore extends DataModelStore {
   };
 
   getCollection = (slug) => {
-    this.setFieldValue('collectionMappingsOfferings', null);
-    this.setFieldValue('collectionMappingsInsights', null);
+    this.setFieldValue('collectionMappingsData', null);
     this.executeQuery({
       clientType: 'PUBLIC',
       query: 'getCollection',
@@ -138,40 +135,42 @@ class CollectionsStore extends DataModelStore {
       if (get(res, 'getCollection')) {
         this.setFieldValue('collectionDetails', res.getCollection);
         if (authStore.isUserLoggedIn) {
-          this.getCollectionMapping(res.getCollection.id, 'OFFERING');
-          this.getCollectionMapping(res.getCollection.id, 'INSIGHT');
+          this.getCollectionMappingPublic(res.getCollection.id);
+          // this.getCollectionMapping(res.getCollection.id, 'INSIGHT');
         }
       }
     });
   };
 
-  getCollectionMapping = (collectionId, type) => {
+  getCollectionMappingPublic = (collectionId) => {
     this.executeQuery({
       query: 'getCollectionMapping',
       setLoader: 'getCollectionMapping',
-      variables: { collectionId, type },
+      variables: { collectionId },
     }).then((res) => {
       if (get(res, 'getCollectionMapping')) {
-        const data = [];
+        const data = {
+          offerings: [],
+          insights: [],
+        };
         res.getCollectionMapping.forEach((c) => {
-          const obj = type === 'OFFERING' ? c.offering : c.insight;
-          data.push(obj);
+          if (c.referenceId === get(c.offering, 'id')) {
+            data.offerings.push({ ...c.offering, sortOrder: c.order });
+          } else if (c.referenceId === get(c.insight, 'id')) {
+            data.insights.push({ ...c.insight, sortOrder: c.order });
+          }
         });
-        if (type === 'OFFERING') {
-          this.setFieldValue('collectionMappingsOfferings', data);
-        } else {
-          this.setFieldValue('collectionMappingsInsights', data);
-        }
+        this.setFieldValue('collectionMappingsData', data);
       }
     });
   }
 
   get getOfferingsList() {
-    return toJS(this.collectionMappingsOfferings);
+    return get(this.collectionMappingsData, 'offerings[0]') ? toJS(get(this.collectionMappingsData, 'offerings')) : [];
   }
 
   get getInsightsList() {
-    return toJS(this.collectionMappingsInsights);
+    return get(this.collectionMappingsData, 'insights[0]') ? toJS(get(this.collectionMappingsData, 'insights')) : [];
   }
 
   setFormData = (form, ref, keepAtLeastOne) => {
@@ -235,8 +234,7 @@ class CollectionsStore extends DataModelStore {
 decorate(CollectionsStore, {
   ...decorateDefault,
   collections: observable,
-  collectionMappingsOfferings: observable,
-  collectionMappingsInsights: observable,
+  collectionMappingsData: observable,
   getOfferingsList: computed,
   getInsightsList: computed,
   collectionDetails: observable,
