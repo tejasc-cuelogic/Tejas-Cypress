@@ -10,7 +10,7 @@ import ButtonGroupType2 from '../../ButtonGroupType2';
 let uploadFileArr = [];
 let removedArr = [];
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
-const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length, showLockActivity, isBusinessApplication }) => {
+const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length, showLockActivity, isBusinessApplication, docValidationArr }) => {
   return (
     <div className="row-wrap">
       <div className="width-70">
@@ -43,7 +43,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
             uploadtitle="Upload"
             ondrop={(files, name) => onFileDrop(files, name, docIndx)}
             onremove={fieldName => handleDelDoc(fieldName, docIndx)}
-            customValidExtension={['doc', 'docx']}
+            customValidExtension={docValidationArr}
           />
         }
       </div>
@@ -72,7 +72,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
   );
 });
 
-const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName, showLockActivity, isBusinessApplication }) => {
+const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName, showLockActivity, isBusinessApplication, docValidationArr }) => {
   return (
     <div>
       {docs.map((doc, index) => (
@@ -93,6 +93,7 @@ const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, is
           index={index}
           showLockActivity={showLockActivity}
           isBusinessApplication={isBusinessApplication}
+          docValidationArr={docValidationArr}
         />
       ))}
     </div>
@@ -177,6 +178,7 @@ export default class DocumentUpload extends Component {
       isButtonGroup,
       uploadFormKey,
       metaInfo,
+      docValidationArr,
     } = this.props;
     const { inProgress } = uiStore;
     const { isIssuer } = this.props.userStore;
@@ -233,6 +235,7 @@ export default class DocumentUpload extends Component {
               useDragHandle
               showLockActivity={false}
               isBusinessApplication={true}
+              docValidationArr={docValidationArr}
             />
           </div>
           <Divider hidden />

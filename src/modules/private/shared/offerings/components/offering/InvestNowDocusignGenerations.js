@@ -33,6 +33,9 @@ class InvestNowDocusignGenerations extends Component {
     const regulation = get(offer, 'regulation');
     const securities = get(offer, 'keyTerms.securities');
     const showWarningMsg = (!regulation || !securities);
+    const { offeringStatus } = this.props.offeringsStore;
+    const isRealEsateOffering = !!(offeringStatus.isRealEstate);
+    const docValidationArr = isRealEsateOffering ? ['doc', 'docx', 'pdf'] : ['doc', 'docx'];
     return (
       (loadingArray.includes('adminListFilePlugins') || offerDataLoading)
         ? <InlineLoader />
@@ -56,6 +59,7 @@ class InvestNowDocusignGenerations extends Component {
                       isReadOnlyFlag={isReadOnlyFlag}
                       isSaveOnly
                       header="Upload Documents"
+                      docValidationArr={docValidationArr}
                     />
                   </Card.Description>
                 </Card.Content>
