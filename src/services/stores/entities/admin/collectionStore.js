@@ -5,6 +5,8 @@ import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
+import { uiStore } from '../../index';
+
 
 class CollectionsStore extends DataModelStore {
   constructor() {
@@ -151,6 +153,8 @@ class CollectionsStore extends DataModelStore {
 
   upsertCollection = async (params) => {
     try {
+      uiStore.setProgress('save');
+      const { collection } = this;
       const res = await this.executeMutation({
         mutation: 'adminCollectionUpsert',
         setLoader: 'adminCollectionUpsert',
@@ -162,8 +166,11 @@ class CollectionsStore extends DataModelStore {
       //     this.mergeCollection(res.adminCollectionUpsert);
       //   }
       // }
+      this.getCollection(get(collection, 'slug'));
+      uiStore.setProgress(false);
       return res;
     } catch (err) {
+      uiStore.setProgress(false);
       if (get(err, 'message')) {
         Helper.toast(get(err, 'message'), 'error');
       } else {
@@ -172,16 +179,6 @@ class CollectionsStore extends DataModelStore {
       return false;
     }
   };
-
-  @action
-  customFormArrayChange = (e, result, form, subForm = '', index) => {
-    this[form] = Validator.onArrayFieldChange(
-      this[form],
-      Validator.pullValues(e, result),
-      subForm,
-      index,
-    );
-  }
 }
 decorate(CollectionsStore, {
   ...dataModelStore.decorateDefault,
@@ -189,6 +186,7 @@ decorate(CollectionsStore, {
   PARTNER_FRM: observable,
   OVERVIEW_FRM: observable,
   COLLECTION_CONTENT_FRM: observable,
+  TOMBSTONE_FRM: observable,
   contentId: observable,
   collection: observable,
   initLoad: observable,
@@ -198,6 +196,5 @@ decorate(CollectionsStore, {
   mergeCollection: action,
   setFormData: action,
   getActionType: action,
-  customFormArrayChange: action,
 });
 export default new CollectionsStore();

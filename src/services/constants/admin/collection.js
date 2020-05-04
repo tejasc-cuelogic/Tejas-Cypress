@@ -18,8 +18,8 @@ export const TOMBSTONE_BASIC = {
     ['description', 'Description', '', 'required', 'Describe your project and what you`re raising funds to accomplish.'],
     ['bgImage', 'BackGround Image', '', 'required', '', { s3Upload: true }],
     ['image', 'Featured Image', '', 'required', '', { s3Upload: true }],
-    ['color', 'Colour', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag' } }],
-    ['text', 'Text', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag' } }],
+    ['color', 'Colour', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag', objRef: 'tag' } }],
+    ['text', 'Text', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag', objRef: 'tag' } }],
   ]),
 };
 
