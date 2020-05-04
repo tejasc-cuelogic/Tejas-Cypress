@@ -1843,6 +1843,13 @@ export const APPLICATION_MAPPED_OFFERING = {
     placeHolder: 'Enter here',
     objRefOutput: 'keyTerms',
   },
+  template: {
+    value: '',
+    label: 'Offering Template',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Select',
+  },
   offeringSlug: {
     value: '',
     label: 'Offering URL',
