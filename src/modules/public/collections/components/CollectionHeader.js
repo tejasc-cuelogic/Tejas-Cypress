@@ -30,13 +30,13 @@ export default class CollectionHeader extends Component {
                     <Grid relaxed stackable centered>
                       <Grid.Column width={7}>
                         <div className="video-wrapper campaign">
-                          <Image64
-                            originalImg
-                            bg
-                            srcUrl={get(meta, 'image')}
-                            imgType="heroImage"
-                          />
                           <div className="ns_flgs_box">NextSeed</div>
+                            <Image64
+                              originalImg
+                              bg
+                              srcUrl={get(meta, 'image')}
+                              imgType="heroImage"
+                            />
                         </div>
                         <div className="clearfix social-links mt-20">
                           {get(meta, 'social[0]')
@@ -69,12 +69,14 @@ export default class CollectionHeader extends Component {
               <Responsive maxWidth={991} as={React.Fragment}>
                 <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
                   <div className="video-wrapper campaign">
+                    <div className="ns_flgs_box">NextSeed</div>
                     <Image64
                       originalImg
                       bg
                       srcUrl={get(meta, 'image')}
                       imgType="heroImage"
                     />
+                    
                   </div>
                   <Header as="h4" inverted>
                     {title}
@@ -92,6 +94,10 @@ export default class CollectionHeader extends Component {
                   </div>
                 </div>
               </Responsive>
+              <div className="current-projects-box">
+                    <p className="mb-0">View our current and past projects below.</p>
+                    <i className="icon ns-chevron-down" />
+                  </div>
             </div>
           )}
       </>
