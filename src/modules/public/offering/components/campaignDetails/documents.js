@@ -1,8 +1,8 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
-import { isEmpty, get, camelCase } from 'lodash';
-import { withRouter } from 'react-router-dom';
+import { isEmpty, get, camelCase, indexOf } from 'lodash';
+import { withRouter, Route, Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Header, Grid, Segment, Button, Divider } from 'semantic-ui-react';
 import DocumentModal from './DataRoom/DocumentModal';
@@ -77,6 +77,8 @@ export default class Documents extends Component {
                     className="relaxed"
                     primary
                     compact
+                    as={Link}
+                    to={`${this.props.match.url}/data-room#${indexOf(dataRoomDocs, l) + 1}`}
                   >
                     View
                   </Button>
@@ -86,7 +88,7 @@ export default class Documents extends Component {
           }
         </Grid>
         {this.state.doc &&
-          <DocumentModal doc={this.state.doc} close={this.close} />
+          <Route path={`${this.props.match.params}/:fileId`} component={<DocumentModal doc={this.state.doc} close={this.close} />} />
         }
       </div>
       </>
