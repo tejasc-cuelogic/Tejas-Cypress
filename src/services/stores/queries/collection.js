@@ -74,7 +74,12 @@ query getCollectionMapping($collectionId: String!, $type: CollectionMappingTypeE
     }
     insight {
       id
+      # content
+      category
+      featuredImage
+      minuteRead
       title
+      slug
     }
   }
 }`;
