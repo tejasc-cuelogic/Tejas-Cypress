@@ -91,7 +91,7 @@ class CollectionsStore extends DataModelStore {
       forms.forEach((f) => {
         if (f === 'COLLECTION_CONTENT_FRM') {
           data = { collectionDetails: { marketing: Validator.evaluateFormData(this[f].fields) } };
-        } if (f === 'TOMBSTONE_FRM') {
+        } else if (f === 'TOMBSTONE_FRM') {
           data = { collectionDetails: { marketing: { tombstone: Validator.evaluateFormData(this[f].fields) } } };
         } else {
           data = { collectionDetails: Validator.evaluateFormData(this[f].fields) };
