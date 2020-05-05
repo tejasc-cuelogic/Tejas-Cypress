@@ -10,12 +10,12 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-        <section style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} key={get(collection, 'id')} className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
+        <section key={get(collection, 'id')} className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-30 pb-30 '}`}>
           {get(collection, 'marketing.tombstone.bgImage.url')
             && <Image64 bg originalImg className="collection-bg-image" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
           }
           <Container>
-            <Grid>
+            <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className="p-64 collection-box">
               <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16}>
                 {/* {get(collection, 'marketing.tombstone.tag.text')}
                 {get(collection, 'marketing.tombstone.tag.color')} */}
@@ -26,7 +26,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
                 <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
                 {!isMobile && !isTablet
                   && (
-                    <Button as={Link} to={`${collectionUrl}/${get(collection, 'slug')}`} inverted color="green" className="mt-30 mb-30">Explore</Button>
+                    <Button as={Link} to={`${collectionUrl}/${get(collection, 'slug')}`} inverted color="white" className="mt-30 mb-30">Explore</Button>
                   )
                 }
               </Grid.Column>
@@ -43,8 +43,10 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
 
 const Heading = ({ responsiveVars }) => (
   <>
-    <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>Explore Popular Collections</Header>
-    <p className={responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}>Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br /> } Partner Organizations, as well as offerings grouped by theme, such as location or security type.</p>
+  <div className="bg-offwhite">
+      <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`bg-offwhite ${responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}`}>Explore Popular Collections</Header>
+      <p className={`bg-offwhite ${responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}`}>Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br /> } Partner Organizations, as well as offerings grouped by theme, such as location or security type.</p>
+    </div>
   </>
 );
 

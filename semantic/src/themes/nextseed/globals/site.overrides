@@ -209,6 +209,9 @@ h6{
 .pb-half{
 	padding-bottom: @7px !important;
 }
+.pb-15{
+	padding-bottom:15px !important;
+}
 .pb-20{
 	padding-bottom: @20px !important;
 }
@@ -236,6 +239,9 @@ h6{
 .plr-0{
 	padding-left: 0 !important;
 	padding-right: 0 !important;
+}
+.p-64{
+	padding: 64px !important;
 }
 .line-height-24{
 	line-height: 24px !important;
@@ -3457,9 +3463,9 @@ h3.ui.header.error-2{
 	}
 }
 .ns_flgs_box{
-	clip-path: polygon(0 0,18% 0,16% 50%,18% 100%,0 100%);
+	clip-path: polygon(0 0,21% 0,18% 50%,21% 100%,0 100%);
 	background-color:@primary-one-lighten;
-	padding: 5px;
+	padding: 6px 8px;
 	color:@white;
 	position: absolute;
 	top:10px;
@@ -3478,6 +3484,8 @@ h3.ui.header.error-2{
 		font-size: @14px;
 		margin-bottom: 0px !important;
 		text-align: left;
+		text-transform: uppercase;
+		font-weight: 700;
 	}
 }
 .current-projects-box{
@@ -3498,5 +3506,11 @@ h3.ui.header.error-2{
 		line-height: @24px;
 		font-weight: @bold;
 		color: @neutral-offwhite;
+	}
+}
+.collection-box{
+	color: @neutral-midwhite !important;
+	.ui.header{
+		color: @neutral-offwhite !important;
 	}
 }

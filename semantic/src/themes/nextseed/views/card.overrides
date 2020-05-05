@@ -284,6 +284,7 @@
     }
     &.insights{
         height: 100%;
+        padding-bottom: 0px !important;
         &:hover{
             text-decoration: none;
         }
