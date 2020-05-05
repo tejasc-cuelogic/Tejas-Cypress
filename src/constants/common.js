@@ -84,4 +84,4 @@ export const CURR_YEAR = new Date().getFullYear();
 
 export const S3_BUCKET_URL = `https://${process.env.REACT_APP_UPLOADS_BUCKET}`;
 
-export const MINIMUM_AUTODRAFT_AMOUNT_WIRE = '10000';
+export const MINIMUM_AUTODRAFT_AMOUNT_WIRE = '50000';
