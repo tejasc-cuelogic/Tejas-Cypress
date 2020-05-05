@@ -6,17 +6,10 @@ import { Grid, Container, Button, Header, Card } from 'semantic-ui-react';
 import { Image64, InlineLoader } from '../../../../theme/shared';
 import HtmlEditor from '../../../shared/HtmlEditor';
 
-const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionUrl, collectionLength, handleNavigate, expandCollection }) => (
+const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionUrl, collectionLength, handleNavigate }) => (
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-        expandCollection ? (
-          <Container>
-              <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : 3}>
-                <Card>Small card logic</Card>
-              </Card.Group>
-          </Container>
-        ) : (
         <section key={get(collection, 'id')} className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-30 pb-30'}`}>
           {get(collection, 'marketing.tombstone.bgImage.url')
             && <Image64 bg originalImg className="collection-bg-image ui-container" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
@@ -40,21 +33,37 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
             </Grid>
           </Container>
         </section>
-        )
-      ))
-    }
-    {!expandCollection && (
+      ))}
     <div className="mt-50 center-align">
       <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Collections" onClick={handleNavigate} />
     </div>
-    )}
+  </>
+);
+
+const CollectionCards = ({ isMobile, isTablet, responsiveVars, collections, collectionUrl, collectionLength }) => (
+  <>
+    {
+      collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
+        <Container>
+          <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : 3}>
+            <Card>
+              Small card logic
+              {!isMobile && !isTablet
+                && (
+                  <Button as={Link} to={`${collectionUrl}/${get(collection, 'slug')}`} inverted color="white" className="mt-30 mb-30">Explore</Button>
+                )
+              }
+            </Card>
+          </Card.Group>
+        </Container>
+      ))}
   </>
 );
 
 const Heading = ({ responsiveVars }) => (
   <>
     <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`bg-offwhite ${responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}`}>Explore Popular Collections</Header>
-      <p className={`bg-offwhite ${responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}`}>Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br /> } Partner Organizations, as well as offerings grouped by theme, such as location or security type.</p>
+    <p className={`bg-offwhite ${responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}`}>Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br />} Partner Organizations, as well as offerings grouped by theme, such as location or security type.</p>
   </>
 );
 
@@ -83,21 +92,27 @@ export default class CollectionsList extends Component {
       return <InlineLoader />;
     }
     return (
-      <div className={`bg-offwhite ${ responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
+      <div className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
         <Heading responsiveVars={responsiveVars} />
         {collections && collections.length
-        ? (
-        <CollectionItem
-          handleNavigate={this.handleNavigate}
-          collections={collections}
-          collectionLength={collectionLength}
-          isMobile={isMobile}
-          isTablet={isTablet}
-          responsiveVars={responsiveVars}
-          collectionUrl={match.url}
-          expandCollection={expandCollection}
-        />
-        ) : <InlineLoader text="No record to display." />}
+          ? (expandCollection ? (
+              <CollectionCards
+                collections={collections}
+                responsiveVars={responsiveVars}
+                collectionUrl={match.url}
+              />
+            ) : (
+              <CollectionItem
+                handleNavigate={this.handleNavigate}
+                collections={collections}
+                collectionLength={collectionLength}
+                isMobile={isMobile}
+                isTablet={isTablet}
+                responsiveVars={responsiveVars}
+                collectionUrl={match.url}
+              />
+            )
+          ) : <InlineLoader text="No record to display." />}
       </div>
     );
   }
