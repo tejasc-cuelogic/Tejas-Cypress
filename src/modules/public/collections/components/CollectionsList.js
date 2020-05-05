@@ -40,24 +40,22 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
   </>
 );
 
-const CollectionCards = ({ isMobile, isTablet, responsiveVars, collections, collectionUrl, collectionLength }) => (
-  <>
-    {
-      collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-        <Container>
-          <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : 3}>
-            <Card>
-              Small card logic
-              {!isMobile && !isTablet
-                && (
-                  <Button as={Link} to={`${collectionUrl}/${get(collection, 'slug')}`} inverted color="white" className="mt-30 mb-30">Explore</Button>
-                )
-              }
-            </Card>
-          </Card.Group>
-        </Container>
-      ))}
-  </>
+const CollectionCards = ({ responsiveVars, collections, collectionUrl, collectionLength }) => (
+  <Container className="collection-listings-box">
+    <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : 3}>
+      {
+        collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
+          <Card as={Link} to={`${collectionUrl}/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
+            <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
+              <div className="full-width mt-0 p-36" style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
+              <Header as="h5">{get(collection, 'marketing.tombstone.title')}</Header>
+                <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
+                <Button as={Link} to={`${collectionUrl}/${get(collection, 'slug')}`} inverted color="white" className="mt-30 full-width">Explore</Button>
+              </div>
+          </Card>
+        ))}
+    </Card.Group>
+  </Container>
 );
 
 const Heading = ({ responsiveVars }) => (
@@ -96,12 +94,12 @@ export default class CollectionsList extends Component {
         <Heading responsiveVars={responsiveVars} />
         {collections && collections.length
           ? (expandCollection ? (
-              <CollectionCards
-                collections={collections}
-                responsiveVars={responsiveVars}
-                collectionUrl={match.url}
-              />
-            ) : (
+            <CollectionCards
+              collections={collections}
+              responsiveVars={responsiveVars}
+              collectionUrl={match.url}
+            />
+          ) : (
               <CollectionItem
                 handleNavigate={this.handleNavigate}
                 collections={collections}
