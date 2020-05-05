@@ -10,12 +10,19 @@ import { Image64 } from '../../../../theme/shared';
 @observer
 export default class CollectionHeader extends Component {
   render() {
-    const { uiStore, data } = this.props;
+    const { uiStore, data, scrollToActiveOfferings } = this.props;
     const { responsiveVars } = uiStore;
     const { isMobile } = responsiveVars;
     const meta = JSON.parse(get(data, 'meta') || '{}');
     const title = get(meta, 'title');
     const description = get(meta, 'description');
+    const headerDownClick = (
+      <div className="current-projects-box">
+        <p className="mb-0">View our current and past projects below.</p>
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+        <i className="icon ns-chevron-down" onClick={scrollToActiveOfferings} />
+      </div>
+    );
     return (
       <>
         {!isMobile
@@ -36,7 +43,7 @@ export default class CollectionHeader extends Component {
                             srcUrl={get(meta, 'image')}
                             imgType="heroImage"
                           />
-                            {get(meta, 'tag.text') && <div style={{ backgroundColor: get(meta, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(meta, 'tag.text')}</p></div>}
+                          {get(meta, 'tag.text') && <div style={{ backgroundColor: get(meta, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(meta, 'tag.text')}</p></div>}
                         </div>
                         <div className="clearfix social-links mt-20">
                           {get(meta, 'social[0]')
@@ -57,10 +64,7 @@ export default class CollectionHeader extends Component {
                       </Grid.Column>
                     </Grid>
                   </Responsive>
-                  <div className="current-projects-box">
-                    <p className="mb-0">View our current and past projects below.</p>
-                    <i className="icon ns-chevron-down" />
-                  </div>
+                  {headerDownClick}
                 </section>
               </div>
             </>
@@ -93,10 +97,7 @@ export default class CollectionHeader extends Component {
                   </div>
                 </div>
               </Responsive>
-              <div className="current-projects-box">
-                    <p className="mb-0">View our current and past projects below.</p>
-                    <i className="icon ns-chevron-down" />
-                  </div>
+              {headerDownClick}
             </div>
           )}
       </>

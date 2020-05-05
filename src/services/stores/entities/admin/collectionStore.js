@@ -134,15 +134,16 @@ class CollectionsStore extends DataModelStore {
     }).then((res) => {
       if (get(res, 'getCollection')) {
         this.setFieldValue('collectionDetails', res.getCollection);
-        if (authStore.isUserLoggedIn) {
+        // if (authStore.isUserLoggedIn) {
           this.getCollectionMappingPublic(res.getCollection.id);
-        }
+        // }
       }
     });
   };
 
   getCollectionMappingPublic = (collectionId) => {
     this.executeQuery({
+      clientType: authStore.isUserLoggedIn ? 'PRIVATE' : 'PUBLIC',
       query: 'getCollectionMapping',
       setLoader: 'getCollectionMapping',
       variables: { collectionId },

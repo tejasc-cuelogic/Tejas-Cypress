@@ -62,8 +62,8 @@ query getCollection($slug: String!) {
 }`;
 
 export const getCollectionMapping = gql`
-query getCollectionMapping($collectionId: String!, $type: CollectionMappingTypeEnum) {
-  getCollectionMapping(collectionId: $collectionId, type: $type) {
+query getCollectionMapping($collectionId: String!) {
+  getCollectionMapping(collectionId: $collectionId) {
     collectionId
     referenceId
     type
