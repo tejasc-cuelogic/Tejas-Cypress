@@ -10,14 +10,10 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-<<<<<<< HEAD
-        <section key={get(collection, 'id')} className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-30 pb-30 '}`}>
-=======
         expandCollection ? (
           <div>Small card logic</div>
         ) : (
-        <section style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} key={get(collection, 'id')} className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
->>>>>>> f4cf84b02116890b7ee8a338037a2bc9754ccdda
+        <section style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} key={get(collection, 'id')} className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-30 pb-30'}`}>
           {get(collection, 'marketing.tombstone.bgImage.url')
             && <Image64 bg originalImg className="collection-bg-image" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
           }
