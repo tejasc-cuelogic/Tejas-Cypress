@@ -36,7 +36,7 @@ export default class CollectionHeader extends Component {
                             srcUrl={get(meta, 'image')}
                             imgType="heroImage"
                           />
-                          {get(meta, 'tag.text') && <div style={{ backgroundColor: get(meta, 'tag.color') || 'green' }} className="ns_flgs_box">{get(meta, 'tag.text')}</div>}
+                            {get(meta, 'tag.text') && <div style={{ backgroundColor: get(meta, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(meta, 'tag.text')}</p></div>}
                         </div>
                         <div className="clearfix social-links mt-20">
                           {get(meta, 'social[0]')
@@ -75,6 +75,7 @@ export default class CollectionHeader extends Component {
                       srcUrl={get(meta, 'image')}
                       imgType="heroImage"
                     />
+                    {get(meta, 'tag.text') && <div style={{ backgroundColor: get(meta, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(meta, 'tag.text')}</p></div>}
                   </div>
                   <Header as="h4" inverted>
                     {title}
@@ -92,6 +93,10 @@ export default class CollectionHeader extends Component {
                   </div>
                 </div>
               </Responsive>
+              <div className="current-projects-box">
+                    <p className="mb-0">View our current and past projects below.</p>
+                    <i className="icon ns-chevron-down" />
+                  </div>
             </div>
           )}
       </>

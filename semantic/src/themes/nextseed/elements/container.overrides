@@ -128,23 +128,7 @@ section{
                 background-size: cover;
             }
         }
-        .current-projects-box{
-            padding: 10px 0 10px;
-            background: rgba(000, 000, 000, 0.2);
-            width: 100%;
-            position: absolute;
-            bottom: 0;
-            left: auto;
-            right: auto;
-            text-align: center;
-            p{
-                font-size: @15px;
-                line-height: @24px;
-                font-weight: @bold;
-                color: @neutral-offwhite;
-            }
-        }
-    }
+  }
     &.modalbg-banner{
         height:100vh;
         margin-top:-58px;
@@ -187,19 +171,6 @@ section{
         }
         >.ui.container {
             justify-content: center;
-        }
-        .video-wrapper.campaign{
-            .ns_flgs_box{
-                clip-path: polygon(0 0,18% 0,16% 50%,18% 100%,0 100%);
-                background-color:@primary-one-lighten;
-                padding: 5px;
-                color:@white;
-                position: absolute;
-                top:10px;
-                left: 0;
-                width: 100%;
-                font-size: @14px;
-            }
         }
     }
 }
