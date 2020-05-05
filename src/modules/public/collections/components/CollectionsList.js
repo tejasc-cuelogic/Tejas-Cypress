@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Grid, Container, Button, Header } from 'semantic-ui-react';
+import { Grid, Container, Button, Header, Card } from 'semantic-ui-react';
 import { Image64, InlineLoader } from '../../../../theme/shared';
 import HtmlEditor from '../../../shared/HtmlEditor';
 
@@ -11,11 +11,15 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
         expandCollection ? (
-          <div>Small card logic</div>
+          <Container>
+              <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : 3}>
+                <Card>Small card logic</Card>
+              </Card.Group>
+          </Container>
         ) : (
-        <section style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} key={get(collection, 'id')} className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-30 pb-30'}`}>
+        <section key={get(collection, 'id')} className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-30 pb-30'}`}>
           {get(collection, 'marketing.tombstone.bgImage.url')
-            && <Image64 bg originalImg className="collection-bg-image" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
+            && <Image64 bg originalImg className="collection-bg-image ui-container" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
           }
           <Container>
             <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className="p-64 collection-box">
@@ -49,10 +53,8 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
 
 const Heading = ({ responsiveVars }) => (
   <>
-  <div className="bg-offwhite">
-      <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`bg-offwhite ${responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}`}>Explore Popular Collections</Header>
+    <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`bg-offwhite ${responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}`}>Explore Popular Collections</Header>
       <p className={`bg-offwhite ${responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}`}>Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br /> } Partner Organizations, as well as offerings grouped by theme, such as location or security type.</p>
-    </div>
   </>
 );
 
@@ -81,7 +83,7 @@ export default class CollectionsList extends Component {
       return <InlineLoader />;
     }
     return (
-      <>
+      <div className={`bg-offwhite ${ responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
         <Heading responsiveVars={responsiveVars} />
         {collections && collections.length
         ? (
@@ -96,7 +98,7 @@ export default class CollectionsList extends Component {
           expandCollection={expandCollection}
         />
         ) : <InlineLoader text="No record to display." />}
-      </>
+      </div>
     );
   }
 }

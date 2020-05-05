@@ -53,7 +53,6 @@ class CollectionDetails extends Component {
           heading={get(activeInvestment, 'title') && <Header id="offeringsShowd" as="h2" textAlign={isMobile ? '' : 'center'} caption className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>{get(activeInvestment, 'title')}</Header>}
         />
         <Divider section hidden />
-        <Divider section hidden />
         <CampaignList
           refLink={this.props.match.url}
           loading={loadingArray.includes('getCollectionMapping')}
@@ -61,7 +60,6 @@ class CollectionDetails extends Component {
           heading={get(completedInvestment, 'title') && <Header as="h2" textAlign={isMobile ? '' : 'center'} caption className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>{get(completedInvestment, 'title')}</Header>}
         // subheading={<p className={isMobile ? 'mb-40' : 'center-align mb-80'}>Browse the newest investment opportunities on NextSeed. {!isMobile && <br /> }The next big thing may be inviting you to participate.</p>}
         />
-        <Divider section hidden />
         <Divider section hidden />
         <CollectionInsights
           heading={get(collectionInsight, 'title') && <Header as="h2" textAlign={isMobile ? '' : 'center'} caption className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>{get(collectionInsight, 'title')}</Header>}
