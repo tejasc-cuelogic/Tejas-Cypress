@@ -13,11 +13,12 @@ const LoadMoreBtn = ({ action, param }) => (
     <Button fluid={isMobile} primary basic content="View More" onClick={() => action(param)} />
   </div>
 );
-@inject('campaignStore', 'userStore', 'uiStore')
+@inject('campaignStore', 'userStore', 'uiStore', 'collectionStore')
 @observer
 class Offering extends Component {
   constructor(props) {
     super(props);
+    this.props.collectionStore.initRequest('ACTIVE');
     this.props.campaignStore.setFieldValue('isPostedNewComment', false);
     this.props.campaignStore.initRequest('LIVE').finally(() => {
       const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -48,7 +49,7 @@ class Offering extends Component {
           subheading={<p className={responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}>Browse the newest investment opportunities on NextSeed. {!responsiveVars.isMobile && <br /> }The next big thing may be inviting you to participate.</p>}
         />
         <Divider section hidden />
-        <CollectionsList />
+        <CollectionsList collectionLength={3} offering />
         <Divider section hidden />
         {(!hideCreationList && showCreationList && !loading)
         && (

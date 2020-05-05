@@ -6,13 +6,13 @@ import CollectionsList from '../components/CollectionsList';
 import CollectionsFooter from '../components/CollectionsFooter';
 
 
-@inject('campaignStore', 'uiStore', 'userStore', 'navStore')
+@inject('collectionStore')
 @observer
 @withRouter
 class Collections extends Component {
   constructor(props) {
     super(props);
-    props.campaignStore.initRequest('LIVE');
+    props.collectionStore.initRequest('ACTIVE');
   }
 
   handleExploreBtn = () => {
@@ -24,7 +24,7 @@ class Collections extends Component {
     return (
       <>
         <CollectionsHeader />
-        <CollectionsList />
+        <CollectionsList collectionLength={5} />
         <CollectionsFooter />
       </>
     );

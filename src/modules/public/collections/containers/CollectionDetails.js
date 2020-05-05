@@ -19,7 +19,6 @@ class CollectionDetails extends Component {
   }
 
   scrollToActiveOfferings = () => {
-    console.log('clicked');
     document.querySelector('#offeringsShow').scrollIntoView({
       block: 'start',
     });

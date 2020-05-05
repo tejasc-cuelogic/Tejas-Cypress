@@ -17,10 +17,31 @@ export const adminCollectionUpsert = gql`
   }`;
 
 export const getCollections = gql`
-query getCollections {
-  getCollections{
+query getCollections($status: StatusCollectionEnum!) {
+  getCollections(status: $status){
     id
     name
+    slug
+    order
+    marketing {
+      tombstone {
+        image {
+          url
+          isPublic
+        }
+        bgImage {
+          url
+          isPublic
+        }
+        bgColor
+        title
+        description
+        tag {
+          color
+          text
+        }
+      }
+    }
   }
 }`;
 

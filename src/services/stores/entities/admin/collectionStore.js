@@ -6,99 +6,19 @@ import { adminCollectionUpsert, getCollections, getCollection, getCollectionMapp
 import Helper from '../../../../helper/utility';
 
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
-import authStore from '../shared/authStore';
 
 class CollectionsStore extends DataModelStore {
   constructor() {
     super({ adminCollectionUpsert, getCollections, getCollection, getCollectionMapping });
   }
 
+  collectionApiHit = false;
+
   collectionDetails = null;
 
   collectionMappingsData = null;
 
-  collections = [
-    {
-      id: '1111',
-      name: 'Cevitas',
-      slug: 'chetan-b',
-      order: 2,
-      previewPassword: 'nextseedTest',
-      lock: false,
-      marketing: {
-        tombstone: {
-          image: 'group/ns-securities.jpg',
-          bgColor: 'green',
-          title: 'Invest with Cevitas Capital',
-          description: 'lorem ipsum some random words to fill out some space and look like there\'s an actual text for the description. It\'s all nothing but random text',
-          tag: {
-            color: 'blue',
-            text: 'New',
-          },
-        },
-      },
-    },
-    {
-      id: '1112',
-      name: 'Houston Angel Network (HAN)',
-      slug: 'chetan-b',
-      order: 3,
-      previewPassword: 'nextseedTest',
-      lock: false,
-      marketing: {
-        tombstone: {
-          image: 'group/ns-securities.jpg',
-          bgColor: 'green',
-          title: 'Houston Angel Network (HAN)',
-          description: 'lorem ipsum some random words to fill out some space and look like there\'s an actual text for the description. It\'s all nothing but random text',
-          tag: {
-            color: 'blue',
-            text: 'New',
-          },
-        },
-      },
-    },
-    {
-      id: '1113',
-      name: 'Houston, Tx',
-      slug: 'chetan-b',
-      order: 4,
-      previewPassword: 'nextseedTest',
-      lock: false,
-      marketing: {
-        tombstone: {
-          image: 'group/ns-securities.jpg',
-          bgColor: 'green',
-          title: 'Houston, Tx',
-          description: 'lorem ipsum some random words to fill out some space and look like there\'s an actual text for the description. It\'s all nothing but random text',
-          tag: {
-            color: 'blue',
-            text: 'New',
-          },
-        },
-      },
-    },
-    {
-      id: '1114',
-      name: 'NextSeed Securities',
-      slug: 'chetan-b',
-      order: 5,
-      previewPassword: 'nextseedTest',
-      lock: false,
-      marketing: {
-        tombstone: {
-          image: 'group/ns-securities.jpg',
-          bgColor: 'green',
-          title: 'NextSeed Securities',
-          description: 'lorem ipsum some random words to fill out some space and look like there\'s an actual text for the description. It\'s all nothing but random text',
-          tag: {
-            color: 'blue',
-            text: 'New',
-          },
-        },
-      },
-    },
-  ];
+  collections = [];
 
   COLLECTION_FRM = Validator.prepareFormObject(COLLECTION);
 
@@ -110,16 +30,19 @@ class CollectionsStore extends DataModelStore {
 
   contentId = '';
 
-  initRequest = () => {
-    if (!this.apiHit) {
+  initRequest = (status) => {
+    if (!this.collectionApiHit) {
+      this.setFieldValue('collections', []);
       this.executeQuery({
+        clientType: 'PUBLIC',
         query: 'getCollections',
         setLoader: 'getCollections',
+        variables: { status },
       }).then((res) => {
         if (get(res, 'getCollections')) {
           this.setFieldValue('collections', res.getCollections);
         }
-        this.setFieldValue('apiHit', true);
+        this.setFieldValue('collectionApiHit', true);
       });
     }
   };
@@ -143,7 +66,7 @@ class CollectionsStore extends DataModelStore {
 
   getCollectionMappingPublic = (collectionId) => {
     this.executeQuery({
-      clientType: authStore.isUserLoggedIn ? 'PRIVATE' : 'PUBLIC',
+      clientType: 'PUBLIC',
       query: 'getCollectionMapping',
       setLoader: 'getCollectionMapping',
       variables: { collectionId },
@@ -243,6 +166,7 @@ decorate(CollectionsStore, {
   ...decorateDefault,
   collections: observable,
   collectionMappingsData: observable,
+  collectionApiHit: observable,
   getOfferingsList: computed,
   getInsightsList: computed,
   collectionDetails: observable,
