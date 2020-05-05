@@ -9,18 +9,18 @@ import DataModelStore, * as dataModelStore from '../dataModelStore';
 import {
   TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC, SUB_HEADER_BASIC, GALLERY,
 } from '../../../../constants/offering/formMeta/offering';
-import { INVEST_NOW_TOC, INVEST_NOW_PAGE } from '../../../../constants/offering/formMeta';
+import { INVEST_NOW_TOC, INVEST_NOW_PAGE, DOCUMENT_MAPPING } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore, userDetailsStore, campaignStore } from '../../../index';
 import * as investNowTocDefaults from '../../../../constants/offering/InvestNowToc';
-import { offeringUpsert, adminLockOrUnlockOffering } from '../../../queries/offerings/manageOffering';
+import { offeringUpsert, adminLockOrUnlockOffering, adminGetInvestNowMappings } from '../../../queries/offerings/manageOffering';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM } from '../../../../../constants/offering';
 
 
 export class ManageOfferingStore extends DataModelStore {
   constructor() {
-    super({ adminLockOrUnlockOffering });
+    super({ adminLockOrUnlockOffering, adminGetInvestNowMappings });
   }
 
   TOMBSTONE_BASIC_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
@@ -40,6 +40,8 @@ export class ManageOfferingStore extends DataModelStore {
   INVEST_NOW_TOC_FRM = Validator.prepareFormObject(INVEST_NOW_TOC);
 
   INVEST_NOW_PAGE_FRM = Validator.prepareFormObject(INVEST_NOW_PAGE);
+
+  DOCUMENT_MAPPING_FRM = Validator.prepareFormObject(DOCUMENT_MAPPING);
 
   onDragSaveEnable = false;
 
@@ -371,7 +373,7 @@ export class ManageOfferingStore extends DataModelStore {
   updateOfferingMutation = (params) => {
     const {
       id, offeringDetails, keyName, notify = true, successMsg = undefined, fromS3 = false, res, msgType = 'success',
-     } = params;
+    } = params;
     uiStore.setProgress('save');
     const variables = {
       id,
@@ -478,7 +480,7 @@ export class ManageOfferingStore extends DataModelStore {
       const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
       if (index > -1) {
         const pageData = investNow[index];
-        const toc = pageData.toc && pageData.toc.length ? pageData.toc[tocIndex] : { };
+        const toc = pageData.toc && pageData.toc.length ? pageData.toc[tocIndex] : {};
         this.INVEST_NOW_TOC_FRM = Validator.setFormData(this.INVEST_NOW_TOC_FRM, toc);
         this.INVEST_NOW_TOC_FRM = Validator.validateForm(this.INVEST_NOW_TOC_FRM);
       }
@@ -491,6 +493,35 @@ export class ManageOfferingStore extends DataModelStore {
         this.INVEST_NOW_PAGE_FRM = Validator.validateForm(this.INVEST_NOW_PAGE_FRM);
       }
     }
+  }
+
+  adminGetInvestNowMappings = async () => {
+    try {
+      const res = await this.executeQuery({
+        client: 'PRIVATE',
+        query: 'adminGetInvestNowMappings',
+        setLoader: 'adminGetInvestNowMappings',
+        // fetchPolicy: 'cache-first',
+      });
+      if (get(res, 'adminGetInvestNowMappings')) {
+        this.setFieldValue('DOCUMENT_MAPPING_FRM', this.dropDownValuesForPlugin('adminGetInvestNowMappings'), 'fields.type.values');
+      }
+    } catch (error) {
+      Helper.toast('Something went wrong, please try again later.', 'error');
+    }
+  }
+
+  dropDownValuesForPlugin = (pluginList) => {
+    const pluginArr = [];
+    const plugins = pluginList;
+    plugins.forEach((val) => {
+      const tempObj = {};
+      tempObj.key = val.label;
+      tempObj.text = val.label;
+      tempObj.value = val.value;
+      pluginArr.push(tempObj);
+    });
+    return pluginArr;
   }
 }
 
@@ -517,6 +548,8 @@ decorate(ManageOfferingStore, {
   updateOfferingMutation: action,
   setFormData: action,
   setFormDataV2: action,
+  adminGetInvestNowMappings: action,
+  DOCUMENT_MAPPING_FRM: observable,
 });
 
 export default new ManageOfferingStore();

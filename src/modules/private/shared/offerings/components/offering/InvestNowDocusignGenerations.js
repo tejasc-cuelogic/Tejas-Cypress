@@ -12,7 +12,7 @@ const metaInfo = {
   form: 'UPLOAD_DATA_FRM',
 };
 
-@inject('businessAppReviewStore', 'businessAppStore', 'nsUiStore', 'offeringCreationStore', 'factoryStore', 'offeringsStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'nsUiStore', 'offeringCreationStore', 'factoryStore', 'offeringsStore', 'manageOfferingStore')
 @withRouter
 @observer
 class InvestNowDocusignGenerations extends Component {
@@ -22,6 +22,7 @@ class InvestNowDocusignGenerations extends Component {
     this.props.offeringsStore.setFieldValue('offeringStorageDetails', null);
     this.props.factoryStore.fetchPluginsForFileFactory('InvestNow');
     this.props.offeringsStore.getofferingStorageDetailBySlug(offer.offeringSlug);
+    this.props.manageOfferingStore.adminGetInvestNowMappings();
   }
 
   render() {
