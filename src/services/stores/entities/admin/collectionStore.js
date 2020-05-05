@@ -5,6 +5,8 @@ import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, getCollectionMapping } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
+import { uiStore } from '../../index';
+
 
 class CollectionsStore extends DataModelStore {
   constructor() {
@@ -89,6 +91,8 @@ class CollectionsStore extends DataModelStore {
       forms.forEach((f) => {
         if (f === 'COLLECTION_CONTENT_FRM') {
           data = { collectionDetails: { marketing: Validator.evaluateFormData(this[f].fields) } };
+        } if (f === 'TOMBSTONE_FRM') {
+          data = { collectionDetails: { marketing: { tombstone: Validator.evaluateFormData(this[f].fields) } } };
         } else {
           data = { collectionDetails: Validator.evaluateFormData(this[f].fields) };
         }
@@ -207,6 +211,8 @@ class CollectionsStore extends DataModelStore {
 
   upsertCollection = async (params) => {
     try {
+      uiStore.setProgress('save');
+      const { collection } = this;
       const res = await this.executeMutation({
         mutation: 'adminCollectionUpsert',
         setLoader: 'adminCollectionUpsert',
@@ -218,8 +224,11 @@ class CollectionsStore extends DataModelStore {
       //     this.mergeCollection(res.adminCollectionUpsert);
       //   }
       // }
+      this.getCollection(get(collection, 'slug'));
+      uiStore.setProgress(false);
       return res;
     } catch (err) {
+      uiStore.setProgress(false);
       if (get(err, 'message')) {
         Helper.toast(get(err, 'message'), 'error');
       } else {
@@ -239,6 +248,8 @@ decorate(CollectionsStore, {
   collectionMapping: observable,
   collectionId: observable,
   collectionIndex: observable,
+  TOMBSTONE_FRM: observable,
+  contentId: observable,
   collection: observable,
   initLoad: observable,
   initRequest: action,

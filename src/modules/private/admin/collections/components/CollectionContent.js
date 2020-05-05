@@ -105,6 +105,12 @@ class CollectionContent extends Component {
             ))
           }
 
+          {/* {contentTypeValue === 'HEADER'
+           &&(
+
+           )
+          } */}
+
           <Divider section />
 
           <Divider hidden />
