@@ -11,20 +11,28 @@ export const OVERVIEW = FormHelper.generateMeta([
   ['previewPassword', 'Preview Password', '', 'required', 'Enter here'],
 ]);
 
+const COMMON_TOMBSTONE_META = {
+  ...FormHelper.generateMeta([
+    ['title', 'Title', '', 'required', 'Enter Here'],
+    ['bgColor', 'Background Colour', '', 'optional', 'Enter Here'],
+    ['description', 'Description', '', 'required', 'Describe your project and what you`re raising funds to accomplish.'],
+    ['bgImage', 'BackGround Image', '', 'required', '', { s3Upload: true }],
+    ['image', 'Featured Image', '', 'required', '', { s3Upload: true }],
+  ]),
+};
+
 export const TOMBSTONE_BASIC = {
   tag: {
     ...FormHelper.generateMeta([
       ['color', 'Colour', '', '', 'Enter Here'], ['text', 'text', '', '', 'Enter Here'],
     ]),
   },
-  ...FormHelper.generateMeta([
-  ['title', 'Title', '', 'required', 'Enter Here'],
-  ['bgColor', 'Background Colour', '', 'optional', 'Enter Here'],
-  ['description', 'Description', '', 'required', 'Describe your project and what you`re raising funds to accomplish.'],
-  ['bgImage', 'BackGround Image', '', 'required', '', { s3Upload: true }],
-  ['image', 'Featured Image', '', 'required', '', { s3Upload: true }],
-]),
+  ...COMMON_TOMBSTONE_META,
 };
+
+export const COLLECTION_MAPPING = FormHelper.generateMeta([
+  ['collection', 'Collections', '', '', ''],
+]);
 
 export const CONTENT = {
   content: [{
@@ -69,6 +77,9 @@ export const CONTENT = {
         { key: 'HEADER', value: 'HEADER', text: 'Header' },
       ],
       placeHolder: 'Enter here',
+    },
+    meta: {
+     ...COMMON_TOMBSTONE_META,
     },
     customValue: {
       label: 'Custom Value',

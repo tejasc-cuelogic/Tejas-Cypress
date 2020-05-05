@@ -2,8 +2,7 @@ import { decorate, observable, action } from 'mobx';
 import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
-import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC } from '../../../constants/admin/collection';
-import { offeringCreationStore } from '../../index';
+import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, getCollectionMapping } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 
@@ -22,8 +21,6 @@ class CollectionsStore extends DataModelStore {
 
   collectionIndex = null;
 
-  collectionMappingOfferings = []
-
   COLLECTION_FRM = Validator.prepareFormObject(COLLECTION);
 
   COLLECTION_OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
@@ -31,6 +28,8 @@ class CollectionsStore extends DataModelStore {
   COLLECTION_CONTENT_FRM = Validator.prepareFormObject(CONTENT);
 
   TOMBSTONE_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
+
+  COLLECTION_MAPPING_FRM = Validator.prepareFormObject(COLLECTION_MAPPING);
 
   collectionId = null;
 
@@ -41,14 +40,23 @@ class CollectionsStore extends DataModelStore {
         setLoader: 'getCollections',
       }).then((res) => {
         if (get(res, 'getCollections')) {
-          offeringCreationStore.setSelectedCollections((get(res, 'getCollections')));
-          ['collectionMappingOfferings', 'collections'].forEach(obs => (
-            this.setFieldValue(obs, res.getCollections)));
+          this.setSelectedCollections((get(res, 'getCollections')));
+          this.setFieldValue('collections', res.getCollections);
         }
         this.setFieldValue('apiHit', false);
       });
     }
   };
+
+  setSelectedCollections = (collections) => {
+    this.COLLECTION_MAPPING_FRM.fields.collection.value = [];
+    const selectedCollections = collections.slice(0, 4).map(c => c.id);
+    this.COLLECTION_MAPPING_FRM.fields.collection.value = [
+      ...this.COLLECTION_MAPPING_FRM.fields.collection.value,
+      ...selectedCollections,
+    ];
+  }
+
 
   setFormData = (form, ref, keepAtLeastOne) => {
     Validator.resetFormData(this[form]);
@@ -121,7 +129,7 @@ class CollectionsStore extends DataModelStore {
   getCollectionMapping = (index) => {
     const { value } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
     if (this.collectionIndex !== index
-       && ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(value)) {
+      && ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(value)) {
       const params = {
         type: this.getContentType(value),
         collectionId: this.collectionId,
@@ -133,14 +141,20 @@ class CollectionsStore extends DataModelStore {
       }).then((res) => {
         if (get(res, 'getCollectionMapping')) {
           let data = get(res, 'getCollectionMapping');
+          const tempData = {};
           if (params.type === 'OFFERING') {
             data = {
               live: data.filter(d => d.offering.stage === 'LIVE').map(d => d.offering),
               complete: data.filter(d => d.offering.stage === 'COMPLETE').map(d => d.offering),
             };
+            tempData[params.type] = data;
+          } else if (params.type === 'INSIGHT') {
+            tempData[params.type] = data.map(d => d.insight);
+          } else {
+            tempData[params.type] = data;
           }
-          this.collectionMapping[params.type] = data;
           this.setFieldValue('collectionIndex', index);
+          this.collectionMapping = { ...tempData };
         }
       }).catch(() => {
         this.setFieldValue('collectionIndex', null);
@@ -221,15 +235,18 @@ decorate(CollectionsStore, {
   PARTNER_FRM: observable,
   OVERVIEW_FRM: observable,
   COLLECTION_CONTENT_FRM: observable,
+  COLLECTION_MAPPING_FRM: observable,
+  collectionMapping: observable,
   collectionId: observable,
+  collectionIndex: observable,
   collection: observable,
   initLoad: observable,
-  collectionMappingOfferings: observable,
   initRequest: action,
   upsertCollection: action,
   filterInitLoad: action,
   mergeCollection: action,
   setFormData: action,
   getActionType: action,
+  setSelectedCollections: action,
 });
 export default new CollectionsStore();

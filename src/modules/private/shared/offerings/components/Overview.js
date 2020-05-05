@@ -4,8 +4,9 @@ import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Form, Header, Button } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
-import { FormInput, FormDropDown } from '../../../../../theme/form';
+import { FormInput } from '../../../../../theme/form';
 import { InlineLoader } from '../../../../../theme/shared';
+import AddToCollection from '../../marketing/AddToCollection';
 
 @withRouter
 @inject('offeringCreationStore', 'userStore', 'uiStore', 'nsUiStore', 'collectionStore')
@@ -13,7 +14,9 @@ import { InlineLoader } from '../../../../../theme/shared';
 export default class Overview extends Component {
   constructor(props) {
     super(props);
-    this.props.collectionStore.initRequest();
+    if (this.props.match.isExact) {
+      this.props.collectionStore.initRequest();
+    }
   }
 
   handleSubmitOfferingDetails = () => {
@@ -27,25 +30,6 @@ export default class Overview extends Component {
     });
   }
 
-  handleCollectionChange = (e, res) => {
-    console.log('dropdown value', res.value[res.value.length - 1]);
-    const { adminCollectionMappingUpsert } = this.props.collectionStore;
-    const {
-      formChange,
-      currentOfferingId,
-    } = this.props.offeringCreationStore;
-
-    const params = {
-      collectionId: res.value[res.value.length - 1],
-      referenceId: currentOfferingId,
-      type: 'OFFERING',
-      scope: 'PUBLIC',
-    };
-    adminCollectionMappingUpsert(params).then(() => {
-      formChange(e, res, 'OFFERING_DETAILS_FRM', false, 'dropdown');
-    });
-  }
-
   render() {
     const {
       LAUNCH_CONTITNGENCIES_FRM,
@@ -53,6 +37,7 @@ export default class Overview extends Component {
       OFFERING_DETAILS_FRM,
       formChange,
       formArrayChange,
+      currentOfferingId,
     } = this.props.offeringCreationStore;
     const { isIssuer } = this.props.userStore;
     const { inProgress } = this.props.uiStore;
@@ -62,7 +47,6 @@ export default class Overview extends Component {
       && CLOSING_CONTITNGENCIES_FRM.fields.close.length > 0;
     const offeringMetaFields = isIssuer ? ['previewPassword', 'referralCode'] : ['offeringSlug', 'previewPassword', 'referralCode'];
     const { loadingArray } = this.props.nsUiStore;
-    const { collectionMappingOfferings } = this.props.collectionStore;
     if (loadingArray.includes('getCollections')) {
       return <InlineLoader />;
     }
@@ -91,16 +75,7 @@ export default class Overview extends Component {
               </div>
             )
           }
-          <FormDropDown
-            name="collection"
-            fielddata={OFFERING_DETAILS_FRM.fields.collection}
-            options={collectionMappingOfferings.map(c => ({ key: c.name, text: c.name, value: c.id }))}
-            multiple
-            selection
-            fluid
-            containerclassname="dropdown-field"
-            onChange={(e, res) => this.handleCollectionChange(e, res)}
-          />
+          <AddToCollection isOffering referenceId={currentOfferingId} />
           {isLaunchContingency
             && <Contingency formArrayChange={formArrayChange} isIssuer={isIssuer} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
           }

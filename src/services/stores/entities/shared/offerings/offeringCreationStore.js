@@ -553,18 +553,6 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
-  setSelectedCollections = (collections) => {
-    const {
-      OFFERING_DETAILS_FRM,
-      formChange,
-    } = this;
-    formChange(undefined, { value: [], name: 'collection' }, 'OFFERING_DETAILS_FRM', false, 'dropdown');
-    const selectedCollections = collections.slice(0, 4).map(c => c.id);
-    const mergedCollections = [...[...OFFERING_DETAILS_FRM.fields.collection.value], ...selectedCollections];
-    formChange(undefined, { value: mergedCollections, name: 'collection' }, 'OFFERING_DETAILS_FRM', false, 'dropdown');
-  }
-
-  @action
   verifyExpDate = (date) => {
     this.ADD_NEW_BONUS_REWARD_FRM = Validator.onChange(
       this.ADD_NEW_BONUS_REWARD_FRM,

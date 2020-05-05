@@ -7,11 +7,15 @@ import { Form, Divider, Header, Icon, Confirm } from 'semantic-ui-react';
 // import Updates from '../../Updates';
 import formHOC from '../../../../../theme/form/formHOC';
 import Listing from '../../offerings/components/Listing';
+import AllInsights from '../../insights/components/AllInsights';
 
 
 const metaInfo = {
   store: 'collectionStore',
   form: 'COLLECTION_CONTENT_FRM',
+};
+const offeringMeta = {
+  live: 'ACTIVE_INVESTMENTS', complete: 'COMPLETE_INVESTMENTS',
 };
 @inject('collectionStore', 'nsUiStore')
 @withRouter
@@ -58,9 +62,6 @@ class CollectionContent extends Component {
     const isReadOnly = get(collection, 'lock');
     const { value: contentTypeValue } = COLLECTION_CONTENT_FRM.fields.content[index].contentType;
     const { loadingArray } = this.props.nsUiStore;
-    const offeringMeta = {
-      live: 'ACTIVE_INVESTMENTS', complete: 'COMPLETE_INVESTMENTS',
-    };
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -88,25 +89,24 @@ class CollectionContent extends Component {
               </Form.Group>
             )}
           <Divider hidden />
-          {Object.keys(offeringMeta).map(key => (
-            contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
+          {get(collectionMapping, 'OFFERING')
+            && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
+              && (
+                <>
+                  <Listing allLiveOfferingsList={collectionMapping.OFFERING[key]} isLoading={loadingArray.includes('getCollectionMapping')} />
+                </>
+              ))))}
+
+          {(contentTypeValue === 'INSIGHTS' && collectionMapping.INSIGHT && collectionMapping.INSIGHT.length > 0
             && (
               <>
-                <Listing allLiveOfferingsList={collectionMapping.OFFERING[key]} isLoading={loadingArray.includes('getCollectionMapping')} />
+                <AllInsights insightsList={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
               </>
-            )))
+            ))
           }
-          {/* {(this.state.editable || COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM' || onDragSaveEnable)
-            && (
-            <OfferingButtonGroup
-              updateOffer={this.handleFormSubmit}
-            />
-          )}
 
           <Divider section />
-          {COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'DATA_ROOM' && <DataRoom {...this.props} />}
-          {COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'GALLERY' && <Gallery {...this.props} />}
-          {/* {COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'UPDATES' && <Updates {...this.props} />} */}
+
           <Divider hidden />
         </Form>
         <Confirm

@@ -21,10 +21,6 @@ export const getCollectionMapping = gql`
     getCollectionMapping(
       collectionId: $collectionId
       type: $type
-      # referenceId: "030a5595-a5a2-4140-b65a-d74c063838bf" # Optional, use it if you want to fetch a single collection mapping
-      # type: OFFERING # optional, use it if you want to filter mappings by type
-      # scope: PUBLIC # optional, use it if you want to filter mappings by scope
-      # challenge: "nextseed" # optional, use it if you want to unlock LOCKED mappings for non-admins
     ) {
       collectionId
       referenceId
@@ -35,8 +31,24 @@ export const getCollectionMapping = gql`
         ${common.offeringBasics}
       }
       insight {
+        id
+        content
+        isFeatured
+        category
+        featuredImage
+        tags
+        articleStatus
+        minuteRead
         title
-        # ... any insight article details you want to retrieve (will only be available if mapping's type is INSIGHT
+        slug
+        updated {
+          date
+        }
+        created {
+          date
+        }
+        banner
+        createdDate
       }
     }
   }`;

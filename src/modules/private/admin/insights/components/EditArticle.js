@@ -7,9 +7,10 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/article';
 import { Image64, InlineLoader } from '../../../../../theme/shared';
 import Actions from './Actions';
+import AddToCollection from '../../../shared/marketing/AddToCollection';
 
 
-@inject('articleStore', 'userStore', 'uiStore')
+@inject('articleStore', 'userStore', 'uiStore', 'collectionStore')
 @withRouter
 @observer
 export default class EditArticle extends Component {
@@ -17,6 +18,10 @@ export default class EditArticle extends Component {
     super(props);
     this.state = { displayMode: false };
     const { id } = this.props.match.params;
+
+    if (this.props.match.isExact) {
+      this.props.collectionStore.initRequest();
+    }
 
     if (id !== 'new') {
       this.props.articleStore.getSingleInsightAdmin(id);
@@ -63,7 +68,7 @@ export default class EditArticle extends Component {
 
   handleCloseModal = () => {
     if (this.props.match.params.id !== 'new') {
-      this.props.artiActionscleStore.reset();
+      this.props.articleStore.reset();
     }
     this.props.history.replace(this.props.refLink);
   };
@@ -124,13 +129,18 @@ export default class EditArticle extends Component {
                     name="content"
                     content={ARTICLE_FRM.fields.content.value}
                   />
+                  <Card fluid>
+                    <Card.Content>
+                      <AddToCollection referenceId={this.props.match.params.id} />
+                    </Card.Content>
+                  </Card>
                 </Form>
               </Grid.Column>
               <Grid.Column width={4}>
                 <Card fluid>
                   <Card.Content>
                     <Header as="h4">
-                    Article settings
+                      Article settings
                     </Header>
                     <Form>
                       <div className="field">
@@ -201,32 +211,32 @@ export default class EditArticle extends Component {
                 </Card>
                 {isNew ? ''
                   : (
-<Card fluid>
-                  <Card.Content>
-                    <Header as="h4">Thumbnail</Header>
-                    <Form className="cropper-wrap tombstone-img">
-                      {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
-                        <div className="file-uploader attached">
-                          <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
-                          <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
-                        </div>
-                      ) : (
-                        <ImageCropper
-                          fieldData={ARTICLE_FRM.fields.featuredImage}
-                          setData={(attr, value) => this.setData(attr, value, 'featuredImage')}
-                          verifyExtension={handleVerifyFileExtension}
-                          handelReset={() => this.handleresetProfilePhoto('featuredImage')}
-                          verifyImageDimension={this.handelImageDeimension}
-                          field={ARTICLE_FRM.fields.featuredImage}
-                          modalUploadAction={this.uploadMedia}
-                          name="featuredImage"
-                          cropInModal
-                          aspect={3 / 2}
-                        />
-                      )}
-                    </Form>
-                  </Card.Content>
-                </Card>
+                    <Card fluid>
+                      <Card.Content>
+                        <Header as="h4">Thumbnail</Header>
+                        <Form className="cropper-wrap tombstone-img">
+                          {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
+                            <div className="file-uploader attached">
+                              <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
+                              <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
+                            </div>
+                          ) : (
+                              <ImageCropper
+                                fieldData={ARTICLE_FRM.fields.featuredImage}
+                                setData={(attr, value) => this.setData(attr, value, 'featuredImage')}
+                                verifyExtension={handleVerifyFileExtension}
+                                handelReset={() => this.handleresetProfilePhoto('featuredImage')}
+                                verifyImageDimension={this.handelImageDeimension}
+                                field={ARTICLE_FRM.fields.featuredImage}
+                                modalUploadAction={this.uploadMedia}
+                                name="featuredImage"
+                                cropInModal
+                                aspect={3 / 2}
+                              />
+                            )}
+                        </Form>
+                      </Card.Content>
+                    </Card>
                   )}
               </Grid.Column>
             </Grid.Row>
