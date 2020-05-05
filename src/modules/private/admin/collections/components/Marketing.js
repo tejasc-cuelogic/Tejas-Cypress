@@ -23,43 +23,44 @@ const navItems = [
   },
 ];
 
-  function Marketing(props) {
-    const history = useHistory();
+function Marketing(props) {
+  const history = useHistory();
 
-    useEffect(() => {
-      if (props.match.isExact) {
-        history.push(`${props.match.url}/content`);
-      }
-    }, []);
-    const { match } = props;
-    return (
-      <>
-        <SecondaryMenu force2ary match={match} navItems={navItems} />
-        <SuspenseBoundary fallback={<InlineLoader styledAs={{ marginTop: '100px' }} />}>
-          <Switch>
+  useEffect(() => {
+    if (props.match.isExact) {
+      history.push(`${props.match.url}/content`);
+    }
+    props.collectionStore.setFormData('TOMBSTONE_FRM', 'marketing.tombstone');
+  }, []);
+  const { match } = props;
+  return (
+    <>
+      <SecondaryMenu force2ary match={match} navItems={navItems} />
+      <SuspenseBoundary fallback={<InlineLoader styledAs={{ marginTop: '100px' }} />}>
+        <Switch>
           <Route exact path={match.url} component={Content} />
-            {navItems.map((item) => {
-              const CurrentComponent = getModule(item.component);
-              return (
-                <Route
-                  exact={false}
-                  key={item.to}
-                  path={`${match.url}/${item.to}`}
-                  render={renderProps => (
-                    <CurrentComponent
-                      {...renderProps}
-                      {...item.additionalProps}
-                    />
-                  )
-                  }
-                />
-              );
-            })
-            }
-          </Switch>
-        </SuspenseBoundary>
-      </>
-    );
-  }
+          {navItems.map((item) => {
+            const CurrentComponent = getModule(item.component);
+            return (
+              <Route
+                exact={false}
+                key={item.to}
+                path={`${match.url}/${item.to}`}
+                render={renderProps => (
+                  <CurrentComponent
+                    {...renderProps}
+                    {...item.additionalProps}
+                  />
+                )
+                }
+              />
+            );
+          })
+          }
+        </Switch>
+      </SuspenseBoundary>
+    </>
+  );
+}
 
 export default inject('collectionStore')(observer(Marketing));
