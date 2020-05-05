@@ -140,7 +140,7 @@ function TransferRequest(props) {
         )
       }
 
-      <p className="mt-50">
+      <p className="note mt-40">
         {!transferRequestMethod
           ? showTransferRequest === 'basic'
             ? `By clicking the “Confirm” button, I authorize the transfer from
@@ -172,7 +172,7 @@ function TransferRequest(props) {
           : (
             <>
               <Button primary content="Transfer Funds Via ACH" type="button" onClick={() => renderTransferStep('ACH')} />
-              <Button primary content="WIre Funds" onClick={() => renderTransferStep('WIRE')} />
+              <Button primary content="Wire Funds" onClick={() => renderTransferStep('WIRE')} />
             </>
           )
         }

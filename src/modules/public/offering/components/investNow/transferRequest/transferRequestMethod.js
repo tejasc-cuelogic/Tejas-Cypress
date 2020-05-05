@@ -30,7 +30,7 @@ function TransferRequestMethod(props) {
           && (
             <>
               <Grid columns="equal">
-                <Grid.Row className={isMobile ? 'mt-20' : 'mt-30'}>
+                <Grid.Row className={`bg-offwhite pb-20 pt-20 ${isMobile ? 'mt-20 pl-10 pr-10' : 'mt-30 pl-30 pr-30'}`}>
                   <Grid.Column>
                     <p><b>Wire Amount:</b></p>
                   </Grid.Column>
@@ -43,24 +43,30 @@ function TransferRequestMethod(props) {
                     <p><b>Wire Instructions:</b></p>
                   </Grid.Column>
                 </Grid.Row>
-                <Grid.Row>
+                <Grid.Row className="pb-0 pt-0">
                   <Grid.Column>
-                    <p>Please print these instructions for your records
+                    <p>Please print these instructions for your records<br />
                     A copy will also been sent to you via email after you confirm.
                 </p>
                   </Grid.Column>
                 </Grid.Row>
-                <Grid.Row>
+                <Grid.Row className="pt-30">
                   <Grid.Column width={5}>
                     <p className="mb-0">Happy State Bank</p>
                     <p className="mb-0">100 E. Main Street</p>
                     <p className="mb-0">Happy, Texas  79042</p>
                   </Grid.Column>
                   <Grid.Column width={10}>
-                    <p className="mb-0">Routing Number: 111310870</p>
+                    <p className="mb-0">
+                      Routing Number: 111310870 <br />
+                      Account Number: 6002000773 <br />
+                      Memo - For further credit to: Goldstar Trust Operating <br />
+                      {`FBO: ${accountDetailsMeta.userFullName} ${accountDetailsMeta.goldstarAccountNumber}`}
+                    </p>
+                    {/* <p className="mb-0">Routing Number: 111310870</p>
                     <p className="mb-0">Account Number: 6002000773</p>
                     <p className="mb-0">Memo - For further credit to: Goldstar Trust Operating</p>
-                    <p className="mb-0">{`FBO: ${accountDetailsMeta.userFullName} ${accountDetailsMeta.goldstarAccountNumber}`}</p>
+                    <p className="mb-0">{`FBO: ${accountDetailsMeta.userFullName} ${accountDetailsMeta.goldstarAccountNumber}`}</p> */}
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
