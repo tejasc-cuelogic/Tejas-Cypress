@@ -98,7 +98,6 @@ export default class Content extends React.Component {
     if (!this.props.collectionStore.initLoad.includes('COLLECTION_CONTENT_FRM')) {
       this.props.collectionStore.setFormData('COLLECTION_CONTENT_FRM', 'marketing');
     }
-    this.props.collectionStore.setFormData('TOMBSTONE_FRM', 'marketing.tombstone');
   }
 
   toggleModal = (val, index = false) => {

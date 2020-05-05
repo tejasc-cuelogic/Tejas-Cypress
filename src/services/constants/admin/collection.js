@@ -14,7 +14,7 @@ export const OVERVIEW = FormHelper.generateMeta([
 const COMMON_TOMBSTONE_META = {
   ...FormHelper.generateMeta([
     ['title', 'Title', '', 'required', 'Enter Here'],
-    ['bgColor', 'Background Colour', '', 'optional', 'Enter Here'],
+    ['bgColor', 'Background Color', '', 'optional', 'Enter Here'],
     ['description', 'Description', '', 'required', 'Describe your project and what you`re raising funds to accomplish.'],
     ['bgImage', 'BackGround Image', '', 'required', '', { s3Upload: true }],
     ['image', 'Featured Image', '', 'required', '', { s3Upload: true }],
@@ -22,11 +22,10 @@ const COMMON_TOMBSTONE_META = {
 };
 
 export const TOMBSTONE_BASIC = {
-  tag: {
-    ...FormHelper.generateMeta([
-      ['color', 'Colour', '', '', 'Enter Here'], ['text', 'text', '', '', 'Enter Here'],
-    ]),
-  },
+  ...FormHelper.generateMeta([
+    ['color', 'Tag Color', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag', objRef: 'tag' } }],
+    ['text', 'Tag Text', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag', objRef: 'tag' } }],
+  ]),
   ...COMMON_TOMBSTONE_META,
 };
 
@@ -79,7 +78,7 @@ export const CONTENT = {
       placeHolder: 'Enter here',
     },
     meta: {
-     ...COMMON_TOMBSTONE_META,
+      ...COMMON_TOMBSTONE_META,
     },
     customValue: {
       label: 'Custom Value',
