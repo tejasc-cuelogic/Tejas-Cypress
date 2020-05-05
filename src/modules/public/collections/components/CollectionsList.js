@@ -6,10 +6,13 @@ import { Grid, Container, Button, Header } from 'semantic-ui-react';
 import { Image64, InlineLoader } from '../../../../theme/shared';
 import HtmlEditor from '../../../shared/HtmlEditor';
 
-const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionUrl, collectionLength, handleNavigate }) => (
+const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionUrl, collectionLength, handleNavigate, expandCollection }) => (
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
+        expandCollection ? (
+          <div>Small card logic</div>
+        ) : (
         <section style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} key={get(collection, 'id')} className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
           {get(collection, 'marketing.tombstone.bgImage.url')
             && <Image64 bg originalImg className="collection-bg-image" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
@@ -33,11 +36,14 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
             </Grid>
           </Container>
         </section>
+        )
       ))
     }
+    {!expandCollection && (
     <div className="mt-50 center-align">
       <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Collections" onClick={handleNavigate} />
     </div>
+    )}
   </>
 );
 
@@ -52,15 +58,18 @@ const Heading = ({ responsiveVars }) => (
 @withRouter
 @observer
 export default class CollectionsList extends Component {
+  state = { expandCollection: false }
+
   handleNavigate = () => {
     if (this.props.offering) {
       this.props.history.push('/collections');
     } else {
-      console.log('clicked');
+      this.setState({ expandCollection: true });
     }
   }
 
   render() {
+    const { expandCollection } = this.state;
     const { match, collectionLength, nsUiStore } = this.props;
     const { loadingArray } = nsUiStore;
     const { responsiveVars } = this.props.uiStore;
@@ -82,6 +91,7 @@ export default class CollectionsList extends Component {
           isTablet={isTablet}
           responsiveVars={responsiveVars}
           collectionUrl={match.url}
+          expandCollection={expandCollection}
         />
         ) : <InlineLoader text="No record to display." />}
       </>
