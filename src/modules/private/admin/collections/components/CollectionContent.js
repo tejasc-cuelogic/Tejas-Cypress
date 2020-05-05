@@ -1,102 +1,132 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { get } from 'lodash';
+import { Link, withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm } from 'semantic-ui-react';
 // import Comments from '../../Comments';
 // import Updates from '../../Updates';
 import formHOC from '../../../../../theme/form/formHOC';
+import Listing from '../../offerings/components/Listing';
+import AllInsights from '../../insights/components/AllInsights';
+
 
 const metaInfo = {
   store: 'collectionStore',
   form: 'COLLECTION_CONTENT_FRM',
 };
+const offeringMeta = {
+  live: 'ACTIVE_INVESTMENTS', complete: 'COMPLETE_INVESTMENTS',
+};
+@inject('collectionStore', 'nsUiStore')
+@withRouter
+@observer
+class CollectionContent extends Component {
+  state = {
+    editable: false,
+    showConfirm: false,
+  }
 
-function CollectionContent(props) {
-  const [editable, setEditable] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const updateState = (val, key = 'editable') => {
-    // eslint-disable-next-line no-unused-expressions
-    key === 'editable' ? setEditable(val) : setShowConfirm(val);
-  };
-
-  const handleFormSubmit = (reOrder = false) => {
-    // const params = {
-    //   keyName: false,
-    //   forms: ['COLLECTION_CONTENT_FRM'],
-    // };
-    if (reOrder) {
-      props.collectionStore.reOrderHandle(props.collectionStore.COLLECTION_CONTENT_FRM.fields.content, 'COLLECTION_CONTENT_FRM', 'content');
+  constructor(props) {
+    super(props);
+    const { index } = this.props.match.params;
+    if (index) {
+      this.props.collectionStore.getCollectionMapping(parseInt(index, 10) - 1);
     }
-    // props.collectionStore.updateOffering(params);
-  };
+  }
 
-  const handleDeleteAction = () => {
-    props.collectionStore.removeOne('COLLECTION_CONTENT_FRM', 'content', props.index);
-    handleFormSubmit(true);
-    props.history.push(props.refLink);
-  };
+  updateState = (val, key = 'editable') => {
+    this.setState({ [key]: val });
+  }
 
-    const { smartElement, index, offeringCreationStore, collectionStore } = props;
-    const { currentOfferingId } = offeringCreationStore;
-    const { COLLECTION_CONTENT_FRM } = collectionStore;
-    // const isReadOnly = campaignStatus.lock;
+  handleFormSubmit = (reOrder = false) => {
+    const params = {
+      keyName: false,
+      forms: ['COLLECTION_CONTENT_FRM'],
+    };
+    if (reOrder) {
+      this.props.collectionStore.reOrderHandle(this.props.collectionStore.COLLECTION_CONTENT_FRM.fields.content, 'COLLECTION_CONTENT_FRM', 'content');
+    }
+    this.props.collectionStore.updateOffering(params);
+  }
+
+  handleDeleteAction = () => {
+    this.props.collectionStore.removeOne('COLLECTION_CONTENT_FRM', 'content', this.props.index);
+    this.handleFormSubmit(true);
+    this.props.history.push(this.props.refLink);
+  }
+
+  render() {
+    const { smartElement, collectionStore } = this.props;
+    const index = parseInt(this.props.match.params.index, 10) - 1 || 0;
+    const { COLLECTION_CONTENT_FRM, collection, collectionId, collectionMapping } = collectionStore;
+    const isReadOnly = get(collection, 'lock');
+    const { value: contentTypeValue } = COLLECTION_CONTENT_FRM.fields.content[index].contentType;
+    const { loadingArray } = this.props.nsUiStore;
     return (
       <div className="inner-content-spacer">
         <Form>
           <small className="pull-right">
-            {!editable
-              ? <Link to="/" onClick={(e) => { e.preventDefault(); updateState(true); }}><Icon className="ns-pencil" />Edit</Link>
-              : <Link to="/" className="text-link mr-10" onClick={(e) => { e.preventDefault(); updateState(false); }}>Cancel</Link>
+            {!this.state.editable
+              ? <Link to="/" onClick={(e) => { e.preventDefault(); this.updateState(true); }}><Icon className="ns-pencil" />Edit</Link>
+              : <Link to="/" className="text-link mr-10" onClick={(e) => { e.preventDefault(); this.updateState(false); }}>Cancel</Link>
             }
-            {COLLECTION_CONTENT_FRM.fields.content.length > 1 && <Link to="/" className="ml-10 negative-text" onClick={(e) => { e.preventDefault(); updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>}
+            {COLLECTION_CONTENT_FRM.fields.content.length > 1 && <Link to="/" className="ml-10 negative-text" onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>}
           </small>
           <Form.Group widths={2}>
-            {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: !editable })}
-            {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !editable })}
+            {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
+            {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: true })}
-            {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !editable })}
+            {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
           </Form.Group>
           <Divider hidden />
-          {['CUSTOM', 'ISSUER_STATEMENT'].includes(COLLECTION_CONTENT_FRM.fields.content[index].contentType.value)
+          {['CUSTOM', 'HEADER'].includes(COLLECTION_CONTENT_FRM.fields.content[index].contentType.value)
             && (
               <Form.Group widths={1}>
                 <Form.Field>
                   <Header as="h6">{COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM' ? COLLECTION_CONTENT_FRM.fields.content[index].customValue.label : 'Issuer Statement'}</Header>
-                  {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: false, imageUploadPath: `offerings/${currentOfferingId}` })}
+                  {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: isReadOnly, imageUploadPath: `collections/${collectionId}` })}
                 </Form.Field>
               </Form.Group>
             )}
           <Divider hidden />
-          {/* {(editable|| COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM' || onDragSaveEnable)
+          {get(collectionMapping, 'OFFERING')
+            && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
+              && (
+                <>
+                  <Listing allLiveOfferingsList={collectionMapping.OFFERING[key]} isLoading={loadingArray.includes('getCollectionMapping')} />
+                </>
+              ))))}
+
+          {(contentTypeValue === 'INSIGHTS' && collectionMapping.INSIGHT && collectionMapping.INSIGHT.length > 0
             && (
-            <OfferingButtonGroup
-              updateOffer={this.handleFormSubmit}
-            />
-          )} */}
+              <>
+                <AllInsights insightsList={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
+              </>
+            ))
+          }
+
+          {/* {contentTypeValue === 'HEADER'
+           &&(
+
+           )
+          } */}
+
           <Divider section />
-          {/* {COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'BONUS_REWARDS'
-          && (
-            <>
-              <BonusRewards {...props} />
-              <Misc />
-            </>
-          )} */}
-          {/* {COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'DATA_ROOM' && <DataRoom {...props} />}
-          {COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'GALLERY' && <Gallery {...props} />} */}
-          {/* {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'UPDATES' && <Updates {...props} />} */}
+
           <Divider hidden />
         </Form>
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this component?"
-          open={showConfirm}
-          onCancel={() => updateState(false, 'showConfirm')}
-          onConfirm={handleDeleteAction}
+          open={this.state.showConfirm}
+          onCancel={() => this.updateState(false, 'showConfirm')}
+          onConfirm={this.handleDeleteAction}
           size="mini"
           className="deletion"
         />
       </div>
     );
+  }
 }
 
-export default inject('collectionStore', 'offeringCreationStore')(observer((formHOC(CollectionContent, metaInfo))));
+export default formHOC(CollectionContent, metaInfo);

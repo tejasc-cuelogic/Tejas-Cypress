@@ -2,15 +2,15 @@ import { decorate, observable, action } from 'mobx';
 import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
-import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC } from '../../../constants/admin/collection';
-import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert } from '../../queries/collection';
+import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING } from '../../../constants/admin/collection';
+import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, getCollectionMapping } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../index';
 
 
 class CollectionsStore extends DataModelStore {
   constructor() {
-    super({ adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert });
+    super({ adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, getCollectionMapping });
   }
 
   collections = [];
@@ -19,7 +19,9 @@ class CollectionsStore extends DataModelStore {
 
   collection = {};
 
-  collectionMappingOfferings = []
+  collectionMapping = {};
+
+  collectionIndex = null;
 
   COLLECTION_FRM = Validator.prepareFormObject(COLLECTION);
 
@@ -29,7 +31,9 @@ class CollectionsStore extends DataModelStore {
 
   TOMBSTONE_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
 
-  contentId = null;
+  COLLECTION_MAPPING_FRM = Validator.prepareFormObject(COLLECTION_MAPPING);
+
+  collectionId = null;
 
   initRequest = () => {
     if (!this.apiHit) {
@@ -38,13 +42,23 @@ class CollectionsStore extends DataModelStore {
         setLoader: 'getCollections',
       }).then((res) => {
         if (get(res, 'getCollections')) {
-          ['collectionMappingOfferings', 'collections'].forEach(obs => (
-            this.setFieldValue(obs, res.getCollections)));
+          this.setSelectedCollections((get(res, 'getCollections')));
+          this.setFieldValue('collections', res.getCollections);
         }
         this.setFieldValue('apiHit', false);
       });
     }
   };
+
+  setSelectedCollections = (collections) => {
+    this.COLLECTION_MAPPING_FRM.fields.collection.value = [];
+    const selectedCollections = collections.slice(0, 4).map(c => c.id);
+    this.COLLECTION_MAPPING_FRM.fields.collection.value = [
+      ...this.COLLECTION_MAPPING_FRM.fields.collection.value,
+      ...selectedCollections,
+    ];
+  }
+
 
   setFormData = (form, ref, keepAtLeastOne) => {
     Validator.resetFormData(this[form]);
@@ -84,8 +98,8 @@ class CollectionsStore extends DataModelStore {
         }
       });
     }
-    if (this.contentId !== null) {
-      data.id = this.contentId;
+    if (this.collectionId !== null) {
+      data.id = this.collectionId;
     }
     return data;
   }
@@ -102,16 +116,61 @@ class CollectionsStore extends DataModelStore {
       setLoader: 'getCollection',
     }).then((res) => {
       if (get(res, 'getCollection')) {
-        this.setFieldValue('contentId', res.getCollection.id);
+        this.setFieldValue('collectionId', res.getCollection.id);
         this.setFieldValue('collection', res.getCollection);
         this.COLLECTION_OVERVIEW_FRM = Validator.setFormData(this.COLLECTION_OVERVIEW_FRM, res.getCollection);
       }
     });
   }
 
+  getContentType = (contentType) => {
+    if (['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS'].includes(contentType)) {
+      return 'OFFERING';
+    }
+    return 'INSIGHT';
+  }
+
+  getCollectionMapping = (index) => {
+    const { value } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
+    if (this.collectionIndex !== index
+      && ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(value)) {
+      const params = {
+        type: this.getContentType(value),
+        collectionId: this.collectionId,
+      };
+      this.executeQuery({
+        query: 'getCollectionMapping',
+        variables: { ...params },
+        setLoader: 'getCollectionMapping',
+      }).then((res) => {
+        if (get(res, 'getCollectionMapping')) {
+          let data = get(res, 'getCollectionMapping');
+          const tempData = {};
+          if (params.type === 'OFFERING') {
+            data = {
+              live: data.filter(d => d.offering.stage === 'LIVE').map(d => d.offering),
+              complete: data.filter(d => d.offering.stage === 'COMPLETE').map(d => d.offering),
+            };
+            tempData[params.type] = data;
+          } else if (params.type === 'INSIGHT') {
+            tempData[params.type] = data.map(d => d.insight);
+          } else {
+            tempData[params.type] = data;
+          }
+          this.setFieldValue('collectionIndex', index);
+          this.collectionMapping = { ...tempData };
+        }
+      }).catch(() => {
+        this.setFieldValue('collectionIndex', null);
+      });
+    } else {
+      this.setFieldValue('collectionIndex', index);
+    }
+  }
+
   adminLockOrUnlockCollection = lockAction => new Promise(async (res, rej) => {
     const variables = {
-      id: this.contentId,
+      id: this.collectionId,
       action: lockAction,
     };
     try {
@@ -133,7 +192,7 @@ class CollectionsStore extends DataModelStore {
     }
   });
 
-  adminCollectionMappingUpsert = (params, mappingObj) => new Promise(async (res, rej) => {
+  adminCollectionMappingUpsert = params => new Promise(async (res, rej) => {
     const variables = {
       ...params,
     };
@@ -144,7 +203,6 @@ class CollectionsStore extends DataModelStore {
         variables,
       });
       window.logger(data);
-      this[mappingObj] = mappingObj.filter(obj => obj.id !== params.id);
       res();
     } catch (error) {
       rej(error);
@@ -161,8 +219,8 @@ class CollectionsStore extends DataModelStore {
         variables: this.formPayLoad(params),
       });
       // if (get(res, 'adminCollectionUpsert')) {
-      //   this.setFieldValue('contentId', res.adminCollectionUpsert.id);
-      //   if (this.contentId === null) {
+      //   this.setFieldValue('collectionId', res.adminCollectionUpsert.id);
+      //   if (this.collectionId === null) {
       //     this.mergeCollection(res.adminCollectionUpsert);
       //   }
       // }
@@ -186,6 +244,10 @@ decorate(CollectionsStore, {
   PARTNER_FRM: observable,
   OVERVIEW_FRM: observable,
   COLLECTION_CONTENT_FRM: observable,
+  COLLECTION_MAPPING_FRM: observable,
+  collectionMapping: observable,
+  collectionId: observable,
+  collectionIndex: observable,
   TOMBSTONE_FRM: observable,
   contentId: observable,
   collection: observable,
@@ -196,5 +258,6 @@ decorate(CollectionsStore, {
   mergeCollection: action,
   setFormData: action,
   getActionType: action,
+  setSelectedCollections: action,
 });
 export default new CollectionsStore();

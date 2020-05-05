@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { common } from './offerings/manage';
 
 export const adminCollectionUpsert = gql`
   mutation adminCollectionUpsert($id: String, $collectionDetails: CollectionInputType!) {
@@ -12,6 +13,43 @@ export const adminCollectionUpsert = gql`
           by
           date
         } 
+    }
+  }`;
+
+export const getCollectionMapping = gql`
+  query getCollectionMapping($collectionId: String!, $type: CollectionMappingTypeEnum) {
+    getCollectionMapping(
+      collectionId: $collectionId
+      type: $type
+    ) {
+      collectionId
+      referenceId
+      type
+      order
+      scope
+      offering {
+        ${common.offeringBasics}
+      }
+      insight {
+        id
+        content
+        isFeatured
+        category
+        featuredImage
+        tags
+        articleStatus
+        minuteRead
+        title
+        slug
+        updated {
+          date
+        }
+        created {
+          date
+        }
+        banner
+        createdDate
+      }
     }
   }`;
 

@@ -6,6 +6,7 @@ import { Button, Grid } from 'semantic-ui-react';
 import DraggableMenu from '../../../../../theme/layout/DraggableMenu';
 import NewContentModal from './NewContentModal';
 import CollectionContent from './CollectionContent';
+import { InlineLoader } from '../../../../../theme/shared';
 
 // function Content(props) {
 //   useEffect(() => {
@@ -80,7 +81,7 @@ import CollectionContent from './CollectionContent';
 // }
 // export default inject('collectionStore')(observer(Content));
 
-@inject('collectionStore')
+@inject('collectionStore', 'nsUiStore')
 @withRouter
 @observer
 export default class Content extends React.Component {
@@ -128,6 +129,10 @@ export default class Content extends React.Component {
     const { match } = this.props;
     const { COLLECTION_CONTENT_FRM } = this.props.collectionStore;
     const navItems = [];
+    const { loadingArray } = this.props.nsUiStore;
+    if (loadingArray.includes('getCollectionMapping')) {
+      return <InlineLoader />;
+    }
     COLLECTION_CONTENT_FRM.fields.content.map((content, index) => {
       navItems.push({ title: `${content.title.value !== '' ? content.title.value : `Content Block ${index + 1}`}`, to: `${index + 1}`, index });
       return navItems;
@@ -140,7 +145,7 @@ export default class Content extends React.Component {
             <div className="sticky-sidebar">
               <DraggableMenu secondary vertical match={match} onSortEnd={this.onSortEnd} navItems={navItems} />
               {COLLECTION_CONTENT_FRM.fields.content.length < 10
-              && <Button size="small" color="blue" className="link-button mt-20" onClick={this.addMore}>+ Add another content block</Button>
+                && <Button size="small" color="blue" className="link-button mt-20" onClick={this.addMore}>+ Add another content block</Button>
               }
             </div>
           </Grid.Column>
@@ -153,7 +158,7 @@ export default class Content extends React.Component {
               />
               {
                 navItems.map(item => (
-                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} render={props => <CollectionContent refLink={match.url} {...props} index={item.index || 0} />} />
+                  <Route exact key={item.to} path={`${match.url}/:index`} render={props => <CollectionContent refLink={match.url} {...props} index={item.index || 0} />} />
                 ))
               }
             </Switch>

@@ -45,6 +45,7 @@ const DraggableContainer = SortableContainer(({
 @withRouter
 class DraggableMenu extends Component {
   navClick = (e, { name }) => {
+    console.log('navclick inside');
     if (e.target && e.target.name !== 'byPass') {
       this.props.history.replace(`${this.props.match.url}/${name}`);
     }
