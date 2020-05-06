@@ -7,25 +7,26 @@ import { InlineLoader } from '../../../../theme/shared';
 @observer
 export default class AddToCollection extends React.Component {
   handleCollectionChange = (e, res) => {
-    const { adminCollectionMappingUpsert, setCollectionMapping } = this.props.collectionStore;
+    const { collectionMapping, setFieldValue } = this.props.collectionStore;
     const { referenceId, isOffering } = this.props;
-    const collectionId = res.value[res.value.length - 1];
+
+    const { value } = this.props.collectionStore.COLLECTION_MAPPING_FRM.fields.collection;
+    const mutation = res.value.length > value.length ? 'adminCollectionMappingUpsert' : 'adminDeleteCollectionMapping';
+    const collectionId = mutation === 'adminCollectionMappingUpsert' ? res.value[res.value.length - 1] : value[value.length - 1];
+
     const params = {
       collectionId,
       referenceId,
       type: isOffering ? 'OFFERING' : 'INSIGHT',
       scope: 'PUBLIC',
     };
-    const { value } = this.props.collectionStore.COLLECTION_MAPPING_FRM.fields.collections;
-    if (value.length > res.value.length) {
-      adminCollectionMappingUpsert(params)
+    collectionMapping(mutation, params)
       .then(() => {
-        setCollectionMapping(collectionId);
+        setFieldValue('COLLECTION_MAPPING_FRM', res.value, 'fields.collection.value');
       })
       .catch(() => {
-        setCollectionMapping();
+        setFieldValue('COLLECTION_MAPPING_FRM', value, 'fields.collection.value');
       });
-    }
   }
 
   render() {

@@ -1,6 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { intersection } from 'lodash';
 import { observer, inject } from 'mobx-react';
 import { Form, Header, Button } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
@@ -15,7 +16,10 @@ export default class Overview extends Component {
   constructor(props) {
     super(props);
     if (this.props.match.isExact) {
-      this.props.collectionStore.initRequest();
+      const {
+        currentOfferingId,
+      } = this.props.offeringCreationStore;
+      this.props.collectionStore.initRequest('ACTIVE_INVESTMENTS', currentOfferingId);
     }
   }
 
@@ -48,7 +52,7 @@ export default class Overview extends Component {
       && CLOSING_CONTITNGENCIES_FRM.fields.close.length > 0;
     const offeringMetaFields = isIssuer ? ['previewPassword', 'referralCode'] : ['offeringSlug', 'previewPassword', 'referralCode'];
     const { loadingArray } = this.props.nsUiStore;
-    if (loadingArray.includes('getCollections')) {
+    if (intersection(loadingArray, ['getCollections', 'getCollectionMapping']).length > 0) {
       return <InlineLoader />;
     }
     return (
@@ -78,9 +82,9 @@ export default class Overview extends Component {
           }
           {
             ['LIVE', 'COMPLETE'].includes(offer.stage)
-              && (
-                <AddToCollection isOffering referenceId={currentOfferingId} />
-              )
+            && (
+              <AddToCollection isOffering referenceId={currentOfferingId} />
+            )
           }
           {isLaunchContingency
             && <Contingency formArrayChange={formArrayChange} isIssuer={isIssuer} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />

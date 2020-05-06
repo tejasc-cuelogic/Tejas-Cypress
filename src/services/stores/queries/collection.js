@@ -17,9 +17,10 @@ export const adminCollectionUpsert = gql`
   }`;
 
 export const getCollectionMapping = gql`
-  query getCollectionMapping($collectionId: String!, $type: CollectionMappingTypeEnum) {
+  query getCollectionMapping($collectionId: String, $referenceId: String, $type: CollectionMappingTypeEnum) {
     getCollectionMapping(
       collectionId: $collectionId
+      referenceId: $referenceId
       type: $type
     ) {
       collectionId
@@ -133,6 +134,26 @@ mutation adminCollectionMappingUpsert(
     type: $type,
     order: $order,
     scope: $scope,
+    ) {
+      collectionId
+      referenceId
+      type
+      order
+      scope
+      offering {
+        offeringSlug
+      }
+      insight {
+        title
+      }
+    }
+}`;
+
+export const adminDeleteCollectionMapping = gql`
+mutation adminDeleteCollectionMapping($collectionId: String, !$referenceId: String!){
+  adminDeleteCollectionMapping(
+    collectionId: $collectionId,
+    referenceId: $referenceId,
     ) {
       collectionId
       referenceId

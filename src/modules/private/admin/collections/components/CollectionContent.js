@@ -28,7 +28,8 @@ class CollectionContent extends Component {
     super(props);
     const { index } = this.props.match.params;
     if (index) {
-      this.props.collectionStore.getCollectionMapping(parseInt(index, 10) - 1);
+      const { value } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
+      this.props.collectionStore.getCollectionMapping(value, parseInt(index, 10) - 1);
     }
   }
 

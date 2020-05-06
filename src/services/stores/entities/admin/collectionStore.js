@@ -1,17 +1,18 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { decorate, observable, action } from 'mobx';
 import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING, HEADER_META } from '../../../constants/admin/collection';
-import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, getCollectionMapping } from '../../queries/collection';
+import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../index';
 
 
 class CollectionsStore extends DataModelStore {
   constructor() {
-    super({ adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, getCollectionMapping });
+    super({ adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping });
   }
 
   collections = [];
@@ -40,29 +41,42 @@ class CollectionsStore extends DataModelStore {
 
   collectionLoading = [];
 
-  initRequest = () => {
+  initRequest = (type = false, referenceId = undefined) => {
     if (!this.apiHit) {
       this.executeQuery({
         query: 'getCollections',
         setLoader: 'getCollections',
       }).then((res) => {
         if (get(res, 'getCollections')) {
-          this.setSelectedCollections((get(res, 'getCollections')));
-          this.setFieldValue('collections', res.getCollections);
+          if (type) {
+            this.setSelectedCollections(type, referenceId).then(() => {
+              this.setFieldValue('collections', res.getCollections);
+            });
+          }
         }
         this.setFieldValue('apiHit', false);
       });
     }
-  };
-
-  setSelectedCollections = (collections) => {
-    this.COLLECTION_MAPPING_FRM.fields.collection.value = [];
-    const selectedCollections = collections.slice(0, 4).map(c => c.id);
-    this.COLLECTION_MAPPING_FRM.fields.collection.value = [
-      ...this.COLLECTION_MAPPING_FRM.fields.collection.value,
-      ...selectedCollections,
-    ];
   }
+
+  setSelectedCollections = (type, referenceId) => new Promise(async (resolve) => {
+    const params = {
+      type: this.getContentType(type),
+      referenceId,
+    };
+    this.collectionMappingWrapper(params).then(action((res) => {
+      const data = get(res, 'getCollectionMapping');
+      if (data) {
+        this.COLLECTION_MAPPING_FRM.fields.collection.value = [];
+        const selectedCollections = data.map(c => c.collectionId);
+        this.COLLECTION_MAPPING_FRM.fields.collection.value = [
+          ...this.COLLECTION_MAPPING_FRM.fields.collection.value,
+          ...selectedCollections,
+        ];
+      }
+      resolve();
+    }));
+  })
 
 
   setFormData = (form, ref, keepAtLeastOne) => {
@@ -157,43 +171,52 @@ class CollectionsStore extends DataModelStore {
     return 'INSIGHT';
   }
 
-  getCollectionMapping = (index) => {
-    const { value } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
+  getCollectionMapping = (type, index) => {
     if (this.collectionIndex !== index
-      && ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(value)) {
+      && ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(type)) {
       const params = {
-        type: this.getContentType(value),
+        type: this.getContentType(type),
         collectionId: this.collectionId,
       };
-      this.executeQuery({
-        query: 'getCollectionMapping',
-        variables: { ...params },
-        setLoader: 'getCollectionMapping',
-      }).then((res) => {
-        if (get(res, 'getCollectionMapping')) {
-          let data = get(res, 'getCollectionMapping');
-          const tempData = {};
-          if (params.type === 'OFFERING') {
-            data = {
-              live: data.filter(d => d.offering.stage === 'LIVE').map(d => d.offering),
-              complete: data.filter(d => d.offering.stage === 'COMPLETE').map(d => d.offering),
-            };
-            tempData[params.type] = data;
-          } else if (params.type === 'INSIGHT') {
-            tempData[params.type] = data.map(d => d.insight);
-          } else {
-            tempData[params.type] = data;
+      this.collectionMappingWrapper(params)
+        .then((res) => {
+          if (get(res, 'getCollectionMapping')) {
+            let data = get(res, 'getCollectionMapping');
+            const tempData = {};
+            if (params.type === 'OFFERING') {
+              data = {
+                live: data.filter(d => d.offering.stage === 'LIVE').map(d => d.offering),
+                complete: data.filter(d => d.offering.stage === 'COMPLETE').map(d => d.offering),
+              };
+              tempData[params.type] = data;
+            } else if (params.type === 'INSIGHT') {
+              tempData[params.type] = data.map(d => d.insight);
+            } else {
+              tempData[params.type] = data;
+            }
+            this.setFieldValue('collectionIndex', index);
+            this.collectionMapping = { ...tempData };
           }
-          this.setFieldValue('collectionIndex', index);
-          this.collectionMapping = { ...tempData };
-        }
-      }).catch(() => {
-        this.setFieldValue('collectionIndex', null);
-      });
+        })
+        .catch(() => {
+          this.setFieldValue('collectionIndex', null);
+        });
     } else {
       this.setFieldValue('collectionIndex', index);
     }
   }
+
+  collectionMappingWrapper = params => new Promise(async (resolve, rej) => {
+    this.executeQuery({
+      query: 'getCollectionMapping',
+      variables: { ...params },
+      setLoader: 'getCollectionMapping',
+    }).then((res) => {
+      resolve(res);
+    }).catch(() => {
+      rej();
+    });
+  })
 
   adminLockOrUnlockCollection = lockAction => new Promise(async (res, rej) => {
     const variables = {
@@ -224,30 +247,23 @@ class CollectionsStore extends DataModelStore {
     this.collection.marketing.content = [...this.collection.marketing.content, ...Validator.evaluateFormData(this.COLLECTION_CONTENT_FRM.fields).content];
   }
 
-  adminCollectionMappingUpsert = params => new Promise(async (res, rej) => {
+  collectionMapping = (mutation, params) => new Promise(async (res, rej) => {
     const variables = {
       ...params,
     };
     try {
       const data = await this.executeMutation({
-        mutation: 'adminCollectionMappingUpsert',
-        setLoader: 'adminCollectionMappingUpsert',
+        mutation,
+        setLoader: mutation,
         variables,
       });
       window.logger(data);
       res();
     } catch (error) {
       rej(error);
+      Helper.toast('Collection cannot be added', 'error');
     }
   });
-
-  setCollectionMapping = (val, add = true) => {
-    if (add) {
-      this.COLLECTION_MAPPING_FRM.fields.collection.value.push(val);
-    } else {
-      this.COLLECTION_MAPPING_FRM.fields.collection.value.pop();
-    }
-  }
 
   upsertCollection = async (params) => {
     try {
@@ -297,7 +313,6 @@ decorate(CollectionsStore, {
   setFormData: action,
   getActionType: action,
   setSelectedCollections: action,
-  setCollectionMapping: action,
   collectionLoading: observable,
   getCollection: action,
 });

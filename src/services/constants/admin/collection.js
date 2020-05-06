@@ -36,6 +36,13 @@ export const COLLECTION_MAPPING = FormHelper.generateMeta([
 export const HEADER_META = {
   meta: [{
     ...COMMON_TOMBSTONE_META,
+    social: [FormHelper.generateMeta([
+      ['type', 'Type', '', '', ''],
+      ['icon', 'Icon', '', '', ''],
+      ['iconColor', 'Icon Color', '', '', ''],
+      ['url', 'URL', '', '', ''],
+    ]),
+    ],
   }],
 };
 
@@ -85,6 +92,13 @@ export const CONTENT = {
     },
     meta: {
       ...COMMON_TOMBSTONE_META,
+      social: [FormHelper.generateMeta([
+        ['type', 'Type', '', '', ''],
+        ['icon', 'Icon', '', '', ''],
+        ['iconColor', 'Icon Color', '', '', ''],
+        ['url', 'URL', '', '', ''],
+      ]),
+      ],
     },
     customValue: {
       label: 'Custom Value',
