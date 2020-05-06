@@ -1484,9 +1484,13 @@ export class BusinessAppStore {
 
   @computed get getBusinessApplicationGoal() {
     let prevBusinessGoal = false;
-    if (this.businessApplicationDetailsAdmin
+    if (this.businessApplicationDetailsAdmin && this.businessApplicationDetailsAdmin.prequalDetails
       && (this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'BRAND_NEW' || this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'UPGRADE')) {
-      prevBusinessGoal = true;
+        prevBusinessGoal = true;
+      }
+    if (this.businessApplicationDetailsAdmin && this.businessApplicationDetailsAdmin.businessGoal
+      && (this.businessApplicationDetailsAdmin.businessGoal === 'BRAND_NEW' || this.businessApplicationDetailsAdmin.businessGoal === 'UPGRADE')) {
+        prevBusinessGoal = true;
     }
     return prevBusinessGoal;
   }
