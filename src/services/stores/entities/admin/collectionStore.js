@@ -38,6 +38,8 @@ class CollectionsStore extends DataModelStore {
 
   collectionId = null;
 
+  collectionLoading = [];
+
   initRequest = () => {
     if (!this.apiHit) {
       this.executeQuery({
@@ -130,16 +132,21 @@ class CollectionsStore extends DataModelStore {
 
   getCollection = (slug) => {
     this.initLoad.push('getCollection');
+    this.collectionLoading.push('getCollection');
     this.executeQuery({
       query: 'getCollection',
       variables: { slug },
-      setLoader: 'getCollection',
+      // setLoader: 'getCollection',
     }).then((res) => {
       if (get(res, 'getCollection')) {
         this.setFieldValue('collectionId', res.getCollection.id);
         this.setFieldValue('collection', this.parseData(res.getCollection));
+        this.setFieldValue('collectionLoading', []);
         this.COLLECTION_OVERVIEW_FRM = Validator.setFormData(this.COLLECTION_OVERVIEW_FRM, res.getCollection);
+        this.loading = false;
       }
+    }).catch(() => {
+      this.setFieldValue('collectionLoading', []);
     });
   }
 
@@ -291,5 +298,7 @@ decorate(CollectionsStore, {
   getActionType: action,
   setSelectedCollections: action,
   setCollectionMapping: action,
+  collectionLoading: observable,
+  getCollection: action,
 });
 export default new CollectionsStore();
