@@ -93,7 +93,7 @@ export default class CollectionsList extends Component {
       <div className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
         <Heading responsiveVars={responsiveVars} />
         {collections && collections.length
-          ? (expandCollection ? (
+          ? (expandCollection || isMobile ? (
             <CollectionCards
               collections={collections}
               responsiveVars={responsiveVars}
