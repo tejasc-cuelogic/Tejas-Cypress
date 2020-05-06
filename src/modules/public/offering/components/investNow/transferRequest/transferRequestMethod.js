@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Grid } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 
 function TransferRequestMethod(props) {
   const { isPreferredEquity, getTransferRequestAmount, transferMethod, accountDetailsMeta, isMobile } = props;
@@ -18,7 +19,7 @@ function TransferRequestMethod(props) {
               <Table.Row>
                 <Table.HeaderCell colspan="6">Transfer Date: </Table.HeaderCell>
                 <Table.Cell collapsing className="right-align">
-                  04/23/2020
+                  {DataFormatter.getCurrentCSTDateInFormat()}
                 </Table.Cell>
               </Table.Row>
             </Table.Body>
@@ -27,48 +28,48 @@ function TransferRequestMethod(props) {
       }
 
       {transferMethod === 'WIRE'
-          && (
-            <>
-              <Grid columns="equal">
-                <Grid.Row className={isMobile ? 'mt-20' : 'mt-30'}>
-                  <Grid.Column>
-                    <p><b>Wire Amount:</b></p>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <p className="right-align"><b>{isPreferredEquity ? Helper.CurrencyFormat(getTransferRequestAmount) : Helper.CurrencyFormat(getTransferRequestAmount, 0)}</b></p>
-                  </Grid.Column>
-                </Grid.Row>
-                <Grid.Row className={isMobile ? 'mt-0' : 'mt-30'}>
-                  <Grid.Column>
-                    <p><b>Wire Instructions:</b></p>
-                  </Grid.Column>
-                </Grid.Row>
-                <Grid.Row>
-                  <Grid.Column>
-                    <p>Please print these instructions for your records
-                    A copy will also been sent to you via email after you confirm.
+        && (
+          <>
+            <Grid columns="equal">
+              <Grid.Row className={isMobile ? 'mt-20' : 'mt-30'}>
+                <Grid.Column>
+                  <p><b>Wire Amount:</b></p>
+                </Grid.Column>
+                <Grid.Column>
+                  <p className="right-align"><b>{isPreferredEquity ? Helper.CurrencyFormat(getTransferRequestAmount) : Helper.CurrencyFormat(getTransferRequestAmount, 0)}</b></p>
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row className={isMobile ? 'mt-0' : 'mt-30'}>
+                <Grid.Column>
+                  <p><b>Wire Instructions:</b></p>
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column>
+                  <p>Please print these instructions for your records
+                  A copy will also been sent to you via email after you confirm.
                 </p>
-                  </Grid.Column>
-                </Grid.Row>
-                <Grid.Row>
-                  <Grid.Column width={5}>
-                    <p className="mb-0">Happy State Bank</p>
-                    <p className="mb-0">100 E. Main Street</p>
-                    <p className="mb-0">Happy, Texas  79042</p>
-                  </Grid.Column>
-                  <Grid.Column width={10}>
-                    <p className="mb-0">Routing Number: 111310870</p>
-                    <p className="mb-0">Account Number: 6002000773</p>
-                    <p className="mb-0">Memo - For further credit to: Goldstar Trust Operating</p>
-                    <p className="mb-0">{`FBO: ${accountDetailsMeta.userFullName} ${accountDetailsMeta.goldstarAccountNumber}`}</p>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </>
-          )
-        }
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column width={5}>
+                  <p className="mb-0">Happy State Bank</p>
+                  <p className="mb-0">100 E. Main Street</p>
+                  <p className="mb-0">Happy, Texas  79042</p>
+                </Grid.Column>
+                <Grid.Column width={10}>
+                  <p className="mb-0">Routing Number: 111310870</p>
+                  <p className="mb-0">Account Number: 6002000773</p>
+                  <p className="mb-0">Memo - For further credit to: Goldstar Trust Operating</p>
+                  <p className="mb-0">{`FBO: ${accountDetailsMeta.userFullName} ${accountDetailsMeta.goldstarAccountNumber}`}</p>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </>
+        )
+      }
 
-        {/* <Table basic="very" className="confirm-transfer-table mt-30" compact>
+      {/* <Table basic="very" className="confirm-transfer-table mt-30" compact>
           <Table.Body>
             <Table.Row>
               <Table.HeaderCell colspan="6">Transfer Request: </Table.HeaderCell>

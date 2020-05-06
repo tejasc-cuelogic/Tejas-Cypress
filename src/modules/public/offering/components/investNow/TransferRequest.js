@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Message } from 'semantic-ui-react';
 import money from 'money-math';
-import { get } from 'lodash';
+import { get, includes } from 'lodash';
 import BasicTransferRequest from './transferRequest/basicTransferRequest';
 import TransferRequestMethod from './transferRequest/transferRequestMethod';
 import Helper from '../../../../../helper/utility';
@@ -17,12 +17,15 @@ function TransferRequest(props) {
   const [transferRequestMethod, setTransferRequestMethod] = useState(null);
 
   const getTransferRequestMethod = (transferAmount) => {
-    const { campaignStore, portfolioStore } = props;
+    const { campaignStore, portfolioStore, accreditationStore } = props;
+    const { userDetails, userAccredetiationState } = accreditationStore;
     const offeringReuglation = get(campaignStore.campaign, 'keyTerms.regulation') || get(portfolioStore.getInvestorAccountById, 'offering.keyTerms.regulation');
+    const accreditationStatus = get(userDetails, 'accreditation.status');
+    const isValidForParallelOfferinng = !!((offeringReuglation === 'BD_CF_506C' && includes(['CONFIRMED'], accreditationStatus) && userAccredetiationState !== 'EXPIRED'));
     const formatedTransferAmount = money.floatToAmount(transferAmount);
     const formatedBaseAmount = money.floatToAmount(MINIMUM_AUTODRAFT_AMOUNT_WIRE);
     const comairResult = money.cmp(formatedTransferAmount, formatedBaseAmount);
-    if (Math.sign(comairResult) >= 0 && ['BD_506B', 'BD_506C'].includes(offeringReuglation)) {
+    if (Math.sign(comairResult) >= 0 && (['BD_506B', 'BD_506C'].includes(offeringReuglation) || isValidForParallelOfferinng)) {
       setShowTransferRequest('advance');
     }
   };
