@@ -97,7 +97,7 @@ class Tombstone extends Component {
             </Grid.Column>
           </Grid>
           <Divider section />
-          <OfferingButtonGroup updateOffer={this.handleFormSubmit} />
+          <OfferingButtonGroup isDisable={!(TOMBSTONE_FRM.meta.isValid)} updateOffer={this.handleFormSubmit} />
         </Form>
       </div>
     );
