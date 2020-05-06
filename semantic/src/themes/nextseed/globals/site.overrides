@@ -498,7 +498,7 @@ i.icon.right {
 			margin-bottom: @30px;
 		}
 		//Desktop only
-		@media only screen and (min-width : @largeMonitorBreakpoint){
+		@media only screen and (min-width : @monitorBreakpoint){
 			.fr-editor-desktop{
 				display: block;
 			}
@@ -516,7 +516,7 @@ i.icon.right {
 			}
 		}
 		//Tablet only
-		@media only screen and (min-width : @tabletBreakpoint) and (max-width : @monitorBreakpoint){
+		@media only screen and (min-width : @tabletBreakpoint) and (max-width : @computerBreakpoint){
 			.fr-editor-tablet{
 				display: block;
 			}
