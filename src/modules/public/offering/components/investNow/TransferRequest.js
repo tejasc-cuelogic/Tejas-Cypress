@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Header, Button, Message } from 'semantic-ui-react';
+import { Header, Button, Message, Responsive } from 'semantic-ui-react';
 import money from 'money-math';
 import { get } from 'lodash';
 import BasicTransferRequest from './transferRequest/basicTransferRequest';
@@ -139,8 +139,7 @@ function TransferRequest(props) {
           />
         )
       }
-
-      <p className="note mt-40">
+      <p className="note mt-30">
         {!transferRequestMethod
           ? showTransferRequest === 'basic'
             ? `By clicking the “Confirm” button, I authorize the transfer from
@@ -153,7 +152,6 @@ function TransferRequest(props) {
             : <span>By clicking the “Confirm” button, I acknowledge that <span className="positive-text">I will initiate a wire transfer with these instructions within 5 business days.</span> If funds are not received by GoldStar Trust within this time period, my investment will be canceled.</span>
         }
       </p>
-
       {investmentFlowErrorMessage
         && (
           <Message error className="mt-30">
@@ -161,22 +159,25 @@ function TransferRequest(props) {
           </Message>
         )
       }
-      <Button.Group>
+      <>
         {showTransferRequest === 'basic' || transferRequestMethod
           ? (
-            <>
-              <Button content="Back" type="button" onClick={transferRequestMethod ? () => renderTransferStep(null) : props.cancel} />
-              <Button primary content="Confirm" onClick={props.confirm} />
-            </>
+            <div className="center-align mt-30">
+              <Button.Group>
+                <Button content="Back" type="button" onClick={transferRequestMethod ? () => renderTransferStep(null) : props.cancel} />
+                <Button primary content="Confirm" onClick={props.confirm} />
+              </Button.Group>
+            </div>
           )
           : (
-            <>
-              <Button primary content="Transfer Funds Via ACH" type="button" onClick={() => renderTransferStep('ACH')} />
-              <Button primary content="Wire Funds" onClick={() => renderTransferStep('WIRE')} />
-            </>
+            <div className={isMobile ? 'mt-20' : 'center-align'}>
+              <Button primary fluid={isMobile ? true : ''} content="Transfer Funds Via ACH" type="button" onClick={() => renderTransferStep('ACH')} />
+              <Responsive maxWidth={768} as="br" />
+              <Button primary fluid={isMobile ? true : ''} content="Wire Funds" onClick={() => renderTransferStep('WIRE')} />
+            </div>
           )
         }
-      </Button.Group>
+      </>
     </>
   );
 }

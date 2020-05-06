@@ -279,7 +279,7 @@ export default class InvestNow extends React.Component {
         disablePrevButton: changeInvest || !(accountToConsider.length > 1),
       },
       {
-        name: 'TransferRequest',
+        name: 'Transfer Request',
         component: <TransferRequest
           changeInvest={changeInvest || this.state.isInvestmentUpdate}
           isPreferredEquity={campaignStatus.isPreferredEquity}
