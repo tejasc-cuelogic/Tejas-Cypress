@@ -41,6 +41,7 @@ class Tombstone extends Component {
             <Grid.Column>
               {smartElement.Input('title', {
                 readOnly: isReadOnly,
+                // fielddata: TOMBSTONE_FRM.fields.title,
               })}
             </Grid.Column>
           </Grid>
@@ -96,7 +97,7 @@ class Tombstone extends Component {
             </Grid.Column>
           </Grid>
           <Divider section />
-          <OfferingButtonGroup updateOffer={() => this.handleFormSubmit()} />
+          <OfferingButtonGroup updateOffer={this.handleFormSubmit} />
         </Form>
       </div>
     );

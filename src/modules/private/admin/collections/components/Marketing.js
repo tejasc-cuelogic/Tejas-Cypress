@@ -25,7 +25,6 @@ const navItems = [
 
 function Marketing(props) {
   const { match } = props;
-
   useEffect(() => {
     props.collectionStore.setFormData('TOMBSTONE_FRM', 'marketing.tombstone');
   }, []);
