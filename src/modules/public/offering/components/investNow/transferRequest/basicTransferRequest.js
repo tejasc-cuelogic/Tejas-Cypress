@@ -17,7 +17,7 @@ function BasicTransferRequest(props) {
 
   return (
     <>
-      <Table basic="very" className="confirm-transfer-table mt-30" compact>
+      <Table basic="very" className="confirm-transfer-table unstackable mt-30" compact>
         <Table.Body>
           <Table.Row>
             <Table.Cell>Investment Amount:</Table.Cell>
@@ -39,7 +39,7 @@ function BasicTransferRequest(props) {
             <Table.Cell>
               <PopUpModal
                 wide
-                customTrigger={<span className="popup-label">Available Cash:</span>}
+                customTrigger={<span className="popup-label">Cash Available:</span>}
                 content="If this investment is a request to change an existing investment in this offering, then Cash Available also includes any dollars currently reserved or invested in the same offering."
                 position="top center"
                 showOnlyPopup={!isMobile}
