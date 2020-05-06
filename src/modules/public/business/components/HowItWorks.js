@@ -181,7 +181,7 @@ class HowItWorks extends Component {
                     </Header>
                     <p className={responsiveVars.isMobile ? 'ml-30' : 'ml-45'}>
                       <span className="highlight-text"><b>New!</b></span>
-                      <Link to="/insights/community-bridge-notes" className="neutral-text no-decoration ml-18">Learn More <Icon size="small" className="ns-chevron-right" /></Link>
+                      <Link to="/insights/community-bridge-notes" className="neutral-text green-hover no-decoration ml-18">Learn More <Icon size="small" className="ns-chevron-right" /></Link>
                     </p>
                     </List.Item>
                   </List>

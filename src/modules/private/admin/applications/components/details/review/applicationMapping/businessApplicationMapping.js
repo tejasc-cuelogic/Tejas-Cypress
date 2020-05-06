@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Header, Form, Accordion, Icon, Button, Confirm, Divider } from 'semantic-ui-react';
 import { FormInput, FormDropDown, MaskedInput } from '../../../../../../../../theme/form';
-import { REGULATION_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../../../../services/constants/admin/offerings';
+import { REGULATION_VALUES, BUSINESS_TYPE_VALUES, OFFERING_TEMPLATE_VALUES } from '../../../../../../../../services/constants/admin/offerings';
 import Helper from '../../../../../../../../helper/utility';
 import Contingencies from '../Contingencies';
 
@@ -121,6 +121,15 @@ export default class BusinessApplicationMapping extends Component {
                   name="regulation"
                   placeholder="Choose here"
                   options={REGULATION_VALUES}
+                  onChange={(e, result) => formArrayChange(e, result, formName)}
+                />
+                <FormDropDown
+                  fielddata={APPLICATION_MAPPED_OFFERING_FORM.fields.template}
+                  selection
+                  value={APPLICATION_MAPPED_OFFERING_FORM.fields.template.value}
+                  name="template"
+                  placeholder="Choose here"
+                  options={OFFERING_TEMPLATE_VALUES}
                   onChange={(e, result) => formArrayChange(e, result, formName)}
                 />
               </Form.Group>
