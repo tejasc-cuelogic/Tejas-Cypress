@@ -12,7 +12,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
         <Container key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-50 pb-50 pl-20 pr-20' : 'pt-30 pb-30'}`}>
           <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className="p-36 collection-box">
-            <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16} className="show-top">
+            <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16} className="zi-9">
               {/* {get(collection, 'marketing.tombstone.tag.text')}
                 {get(collection, 'marketing.tombstone.tag.color')} */}
               <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
@@ -20,7 +20,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
                 <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
               </div>
             </Grid.Column>
-            <Grid.Column widescreen={11} computer={11} tablet={16} mobile={16} className="show-top">
+            <Grid.Column widescreen={11} computer={11} tablet={16} mobile={16} className="zi-9">
               <Header as="h3">{get(collection, 'marketing.tombstone.title')}</Header>
               <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
               {!isMobile && !isTablet

@@ -372,6 +372,9 @@ h6{
 .show-top{
 	z-index: 99999 !important;
 }
+.zi-9{
+	z-index: 9 !important;
+}
 .error{
 	font-style: normal;
 }
@@ -3566,7 +3569,18 @@ h3.ui.header.error-2{
 	}
 	.collection-bg-image{
 		height: 100%;
+	}
+	@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+		&.ui.container{
+			margin-left: 0 !important;
+			margin-right: 0 !important;
+			.ui.card{
+				margin-left: 0 !important;
+				margin-right: 0 !important;
+			}
+		}
 	}	
+	
 }
 .collection-bg-image {
 	height: 326px;
