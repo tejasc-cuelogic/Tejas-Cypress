@@ -35,6 +35,7 @@ class FinancialInfo extends Component {
       const investorTotalAmountInvested = get(this.props.investmentLimitStore.getCurrentInvestNowHealthCheck, 'investorTotalAmountInvested') || '0';
       this.props.investmentLimitStore.setFieldValue('investorTotalAmountInvested', investorTotalAmountInvested);
     }
+    this.props.investmentStore.validateMaskedInputForAmount();
   }
 
   render() {

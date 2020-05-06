@@ -1043,6 +1043,12 @@ export class UserDetailsStore {
   @computed get userEmails() {
     return this.emailListArr && this.emailListArr.data.adminFetchEmails && this.emailListArr.data.adminFetchEmails.emails;
   }
+
+  @computed get investorActiveAccountDetails() {
+    const selectedAccountType = get(investmentStore, 'investAccTypes.value');
+    const activeAccounts = this.getActiveAccounts;
+    return find(activeAccounts, acc => acc.name === selectedAccountType);
+  }
 }
 
 export default new UserDetailsStore();
