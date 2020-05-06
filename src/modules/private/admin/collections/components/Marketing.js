@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 // import Content from '../../../shared/marketing/Content';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
@@ -25,9 +25,14 @@ const navItems = [
 
 function Marketing(props) {
   const { match } = props;
+  const history = useHistory();
 
   useEffect(() => {
     props.collectionStore.setFormData('TOMBSTONE_FRM', 'marketing.tombstone');
+    const { url, isExact } = match;
+    if (isExact) {
+      history.push(`${url}/content`);
+    }
   }, []);
 
   return (

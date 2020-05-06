@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
-import { Form, Divider, Header, Icon, Confirm } from 'semantic-ui-react';
-// import Comments from '../../Comments';
-// import Updates from '../../Updates';
+import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
 import Listing from '../../offerings/components/Listing';
 import AllInsights from '../../insights/components/AllInsights';
@@ -17,7 +15,7 @@ const metaInfo = {
 const offeringMeta = {
   live: 'ACTIVE_INVESTMENTS', complete: 'COMPLETE_INVESTMENTS',
 };
-@inject('collectionStore', 'nsUiStore')
+@inject('collectionStore', 'nsUiStore', 'uiStore')
 @withRouter
 @observer
 class CollectionContent extends Component {
@@ -34,6 +32,10 @@ class CollectionContent extends Component {
     }
   }
 
+  removeMedia = (form, name) => {
+    window.logger(form, name);
+  }
+
   updateState = (val, key = 'editable') => {
     this.setState({ [key]: val });
   }
@@ -46,7 +48,7 @@ class CollectionContent extends Component {
     if (reOrder) {
       this.props.collectionStore.reOrderHandle(this.props.collectionStore.COLLECTION_CONTENT_FRM.fields.content, 'COLLECTION_CONTENT_FRM', 'content');
     }
-    this.props.collectionStore.updateOffering(params);
+    this.props.collectionStore.upsertCollection(params);
   }
 
   handleDeleteAction = () => {
@@ -56,9 +58,9 @@ class CollectionContent extends Component {
   }
 
   render() {
-    const { smartElement, collectionStore } = this.props;
+    const { smartElement, collectionStore, uiStore } = this.props;
     const index = parseInt(this.props.match.params.index, 10) - 1 || 0;
-    const { COLLECTION_CONTENT_FRM, collection, collectionId, collectionMapping } = collectionStore;
+    const { COLLECTION_CONTENT_FRM, collection, collectionId, collectionMapping, HEADER_META_FRM } = collectionStore;
     const isReadOnly = get(collection, 'lock');
     const { value: contentTypeValue } = COLLECTION_CONTENT_FRM.fields.content[index].contentType;
     const { loadingArray } = this.props.nsUiStore;
@@ -75,7 +77,7 @@ class CollectionContent extends Component {
           <Form.Group widths={2}>
             {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
-            {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: true })}
+            {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
           </Form.Group>
           <Divider hidden />
@@ -105,12 +107,36 @@ class CollectionContent extends Component {
             ))
           }
 
-          {/* {contentTypeValue === 'HEADER'
-           &&(
-
-           )
-          } */}
-
+          {contentTypeValue === 'HEADER'
+            && (
+              <>
+                {smartElement.Input('title', { multiForm: ['HEADER_META_FRM', 'meta', index], displayMode: !this.state.editable })}
+                {smartElement.Input('bgColor', { multiForm: ['HEADER_META_FRM', 'meta', index], displayMode: !this.state.editable })}
+                <Header as="h4">{HEADER_META_FRM.fields.meta[index].bgImage.label}</Header>
+                {smartElement.ImageCropper('bgImage', {
+                  multiForm: ['HEADER_META_FRM', 'meta', index],
+                  displayMode: !this.state.editable,
+                  uploadPath: `offerings/${collectionId}`,
+                  removeMedia: this.removeMedia,
+                  isImagePreviewDisabled: true,
+                })}
+                <Divider hidden />
+                <Header as="h4">{HEADER_META_FRM.fields.meta[index].image.label}</Header>
+                {smartElement.ImageCropper('image', { multiForm: ['HEADER_META_FRM', 'meta', index], displayMode: !this.state.editable, uploadPath: `offerings/${collectionId}`, removeMedia: this.removeMedia, isImagePreviewDisabled: true })}
+                <Divider hidden />
+              </>
+            )
+          }
+          {(this.state.editable)
+            && (
+              <>
+              <div className="sticky-actions">
+                <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
+                  <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                </Button.Group>
+              </div>
+            </>
+          )}
           <Divider section />
 
           <Divider hidden />

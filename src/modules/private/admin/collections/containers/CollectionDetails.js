@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
+import { isEmpty } from 'lodash';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { Modal, Card, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -40,7 +41,7 @@ function CollectionDetails(props) {
   const { loadingArray } = props.nsUiStore;
   const { responsiveVars } = props.uiStore;
   const { collection } = props.collectionStore;
-  if (loadingArray.includes('getCollection')) {
+  if (loadingArray.includes('getCollection') || isEmpty(collection)) {
     return <InlineLoader />;
   }
   return (

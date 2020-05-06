@@ -9,7 +9,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 import AddToCollection from '../../marketing/AddToCollection';
 
 @withRouter
-@inject('offeringCreationStore', 'userStore', 'uiStore', 'nsUiStore', 'collectionStore')
+@inject('offeringCreationStore', 'userStore', 'uiStore', 'nsUiStore', 'collectionStore', 'offeringsStore')
 @observer
 export default class Overview extends Component {
   constructor(props) {
@@ -39,6 +39,7 @@ export default class Overview extends Component {
       formArrayChange,
       currentOfferingId,
     } = this.props.offeringCreationStore;
+    const { offer } = this.props.offeringsStore;
     const { isIssuer } = this.props.userStore;
     const { inProgress } = this.props.uiStore;
     const isLaunchContingency = !isIssuer ? true
@@ -75,7 +76,12 @@ export default class Overview extends Component {
               </div>
             )
           }
-          <AddToCollection isOffering referenceId={currentOfferingId} />
+          {
+            ['LIVE', 'COMPLETE'].includes(offer.stage)
+              && (
+                <AddToCollection isOffering referenceId={currentOfferingId} />
+              )
+          }
           {isLaunchContingency
             && <Contingency formArrayChange={formArrayChange} isIssuer={isIssuer} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
           }

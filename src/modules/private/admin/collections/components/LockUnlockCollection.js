@@ -9,7 +9,7 @@ function LockUnlockCollection(props) {
   useEffect(() => {
     const { collection } = props.collectionStore;
     const lock = get(collection, 'lock');
-    if (lock) {
+    if (lock && !lockStatus) {
       setLockStatus(true);
     }
   }, [lockStatus]);
@@ -59,4 +59,4 @@ function LockUnlockCollection(props) {
   );
 }
 
-export default inject('nsUiStore', 'collectionStore', 'collectionStore', 'userDetailsStore')(observer(LockUnlockCollection));
+export default inject('nsUiStore', 'collectionStore', 'userDetailsStore')(observer(LockUnlockCollection));

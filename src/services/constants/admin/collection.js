@@ -33,6 +33,12 @@ export const COLLECTION_MAPPING = FormHelper.generateMeta([
   ['collection', 'Collections', '', '', ''],
 ]);
 
+export const HEADER_META = {
+  meta: [{
+    ...COMMON_TOMBSTONE_META,
+  }],
+};
+
 export const CONTENT = {
   content: [{
     title: {

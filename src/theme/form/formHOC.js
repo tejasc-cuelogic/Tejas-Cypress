@@ -20,7 +20,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     Input = (name, props) => {
-      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.props[metaInfo.store][props.multiForm[0]].fields[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormInput
           name={name}
@@ -268,7 +268,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     ImageCropper = (name, props) => {
-      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.props[metaInfo.store][props.multiForm[0]].fields[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       const arrayName = Array.isArray(get(props, 'multiForm')) ? get(props, 'multiForm')[1] : false;
       const index = Array.isArray(get(props, 'multiForm')) ? get(props, 'multiForm')[2] : -1;
       const handleVerifyFileExtension = (fileExt, field) => {
@@ -276,32 +276,32 @@ function formHoc(WrappedComponent, metaInfo) {
         if (validate.isInvalid) {
           const attr = 'error';
           const { errorMsg } = validate;
-          this.props[metaInfo.store].setMediaAttribute(metaInfo.form, attr, errorMsg, field, index, arrayName);
-          this.props[metaInfo.store].setMediaAttribute(metaInfo.form, 'value', '', field, index, arrayName);
+          this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, attr, errorMsg, field, index, arrayName);
+          this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, 'value', '', field, index, arrayName);
         }
       };
       const handelImageDimension = (width, height, field) => {
         if (width < 200 || height < 200) {
           const attr = 'error';
           const errorMsg = 'Image size should not be less than 200 x 200.';
-          this.props[metaInfo.store].setMediaAttribute(metaInfo.form, attr, errorMsg, field, index, arrayName);
-          this.props[metaInfo.store].setMediaAttribute(metaInfo.form, 'value', '', field, index, arrayName);
+          this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, attr, errorMsg, field, index, arrayName);
+          this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, 'value', '', field, index, arrayName);
         }
       };
       const setData = (attr, value) => {
-        this.props[metaInfo.store].setMediaAttribute(metaInfo.form, attr, value, name, index, arrayName);
+        this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, attr, value, name, index, arrayName);
       };
       const handleResetImageCropper = () => {
-        this.props[metaInfo.store].resetImageCropper(metaInfo.form, name, index, arrayName);
+        this.props[metaInfo.store].resetImageCropper(get(props, 'multiForm') || metaInfo.form, name, index, arrayName);
       };
       const setConfirmModal = (val) => {
-        this.props[metaInfo.store].setMediaAttribute(metaInfo.form, 'confirmModal', val, name, index, arrayName);
+        this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, 'confirmModal', val, name, index, arrayName);
       };
       const handleRemoveConfirm = () => {
         if (props.removeMedia) {
-          props.removeMedia(metaInfo.form, name);
+          props.removeMedia(get(props, 'multiForm') || metaInfo.form, name);
         }
-        this.props[metaInfo.store].resetImageCropper(metaInfo.form, name, index, arrayName);
+        this.props[metaInfo.store].resetImageCropper(get(props, 'multiForm') || metaInfo.form, name, index, arrayName);
       };
       const handleFileUploadLoader = fileId => this.props[metaInfo.store].handleUploadLoader(fileId);
       return (
@@ -361,7 +361,7 @@ function formHoc(WrappedComponent, metaInfo) {
                   handelReset={handleResetImageCropper}
                   verifyImageDimension={handelImageDimension}
                   field={fieldData}
-                  modalUploadAction={fieldName => this.props[metaInfo.store].uploadMedia(fieldName, (get(props, 'multiForm') || metaInfo.form), props.uploadPath)}
+                  modalUploadAction={fieldName => this.props[metaInfo.store].uploadMedia(fieldName, (get(props, 'multiForm') || get(props, 'multiForm') || metaInfo.form), props.uploadPath)}
                   name={name}
                   cropInModal
                   aspect={3 / 2}

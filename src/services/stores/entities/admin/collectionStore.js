@@ -1,8 +1,9 @@
+/* eslint-disable no-param-reassign */
 import { decorate, observable, action } from 'mobx';
 import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
-import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING } from '../../../constants/admin/collection';
+import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING, HEADER_META } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, getCollectionMapping } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../index';
@@ -30,6 +31,8 @@ class CollectionsStore extends DataModelStore {
   COLLECTION_CONTENT_FRM = Validator.prepareFormObject(CONTENT);
 
   TOMBSTONE_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
+
+  HEADER_META_FRM = Validator.prepareFormObject(HEADER_META);
 
   COLLECTION_MAPPING_FRM = Validator.prepareFormObject(COLLECTION_MAPPING);
 
@@ -67,11 +70,18 @@ class CollectionsStore extends DataModelStore {
     if (!collection) {
       return false;
     }
-    this[form] = Validator.setFormData(this[form], collection, ref, keepAtLeastOne);
+    if (form === 'HEADER_META_FRM') {
+      const metaList = collection.marketing.content.map(c => c.meta);
+      this[form] = Validator.setFormData(this[form], { meta: metaList }, ref, keepAtLeastOne);
+    } else {
+      this[form] = Validator.setFormData(this[form], collection, ref, keepAtLeastOne);
+    }
     const multiForm = this.getActionType(form, 'isMultiForm');
     this[form] = Validator.validateForm(this[form], multiForm, false, false);
     return false;
   }
+
+  collectionMeta = index => this.collection.marketing.content[index]
 
   getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {
@@ -90,7 +100,13 @@ class CollectionsStore extends DataModelStore {
     if (Array.isArray(forms)) {
       forms.forEach((f) => {
         if (f === 'COLLECTION_CONTENT_FRM') {
-          data = { collectionDetails: { marketing: Validator.evaluateFormData(this[f].fields) } };
+          const headerFields = Validator.evaluateFormData(this.HEADER_META_FRM.fields);
+          const contentObj = Validator.evaluateFormData(this[f].fields);
+          const contentWithMeta = contentObj.content.map((c, index) => {
+            c.meta = JSON.stringify(headerFields.meta[index]);
+            return c;
+          });
+          data = { collectionDetails: { marketing: { content: contentWithMeta } } };
         } else if (f === 'TOMBSTONE_FRM') {
           data = { collectionDetails: { marketing: { tombstone: Validator.evaluateFormData(this[f].fields) } } };
         } else {
@@ -104,8 +120,12 @@ class CollectionsStore extends DataModelStore {
     return data;
   }
 
-  mergeCollection = (data) => {
-    this.collections = [...this.collections, [...data]];
+  parseData = (data) => {
+    data.marketing.content.forEach((c) => {
+      // eslint-disable-next-line no-param-reassign
+      c.meta = JSON.parse(c.meta);
+    });
+    return data;
   }
 
   getCollection = (slug) => {
@@ -117,7 +137,7 @@ class CollectionsStore extends DataModelStore {
     }).then((res) => {
       if (get(res, 'getCollection')) {
         this.setFieldValue('collectionId', res.getCollection.id);
-        this.setFieldValue('collection', res.getCollection);
+        this.setFieldValue('collection', this.parseData(res.getCollection));
         this.COLLECTION_OVERVIEW_FRM = Validator.setFormData(this.COLLECTION_OVERVIEW_FRM, res.getCollection);
       }
     });
@@ -192,6 +212,11 @@ class CollectionsStore extends DataModelStore {
     }
   });
 
+
+  updateContent = () => {
+    this.collection.marketing.content = [...this.collection.marketing.content, ...Validator.evaluateFormData(this.COLLECTION_CONTENT_FRM.fields).content];
+  }
+
   adminCollectionMappingUpsert = params => new Promise(async (res, rej) => {
     const variables = {
       ...params,
@@ -209,6 +234,14 @@ class CollectionsStore extends DataModelStore {
     }
   });
 
+  setCollectionMapping = (val, add = true) => {
+    if (add) {
+      this.COLLECTION_MAPPING_FRM.fields.collection.value.push(val);
+    } else {
+      this.COLLECTION_MAPPING_FRM.fields.collection.value.pop();
+    }
+  }
+
   upsertCollection = async (params) => {
     try {
       uiStore.setProgress('save');
@@ -218,13 +251,10 @@ class CollectionsStore extends DataModelStore {
         setLoader: 'adminCollectionUpsert',
         variables: this.formPayLoad(params),
       });
-      // if (get(res, 'adminCollectionUpsert')) {
-      //   this.setFieldValue('collectionId', res.adminCollectionUpsert.id);
-      //   if (this.collectionId === null) {
-      //     this.mergeCollection(res.adminCollectionUpsert);
-      //   }
-      // }
-      this.getCollection(get(collection, 'slug'));
+      if ((params.forms[0] === 'TOMBSTONE')) {
+        this.getCollection(get(collection, 'slug'));
+      }
+      this.updateContent();
       uiStore.setProgress(false);
       return res;
     } catch (err) {
@@ -248,6 +278,7 @@ decorate(CollectionsStore, {
   collectionMapping: observable,
   collectionId: observable,
   collectionIndex: observable,
+  HEADER_META_FRM: observable,
   TOMBSTONE_FRM: observable,
   contentId: observable,
   collection: observable,
@@ -255,9 +286,10 @@ decorate(CollectionsStore, {
   initRequest: action,
   upsertCollection: action,
   filterInitLoad: action,
-  mergeCollection: action,
+  parseData: action,
   setFormData: action,
   getActionType: action,
   setSelectedCollections: action,
+  setCollectionMapping: action,
 });
 export default new CollectionsStore();
