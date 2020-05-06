@@ -712,6 +712,11 @@ export class BusinessAppStore {
       && this.BUSINESS_APP_FRM.fields.businessGoal.value === BUSINESS_GOAL.NEW_BUSINESS);
   }
 
+  @computed get getEstablishedBusinessTypeCondtion() {
+    return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value
+      && this.BUSINESS_APP_FRM.fields.businessGoal.value === BUSINESS_GOAL.ESTABLISHED);
+  }
+
   @computed get getOwnPropertyCondtion() {
     return (this.currentApplicationType !== 'business' && this.BUSINESS_APP_FRM.fields.ownOrOperateProperty.value);
   }
