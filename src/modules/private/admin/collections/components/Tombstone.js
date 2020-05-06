@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { Form, Header, Divider, Grid } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../../shared/offerings/components/OfferingButtonGroup';
 import formHOC from '../../../../../theme/form/formHOC';
-import TombstonePreview from '../../../shared/offerings/components/marketing/TombstonePreview';
+import TombstonePreview from './TombstonePreview';
 
 const metaInfo = {
   store: 'collectionStore',
@@ -35,6 +35,7 @@ class Tombstone extends Component {
     return (
       <div className="inner-content-spacer">
         <Form>
+          <Header as="h3">Tombstone Preview</Header>
           <TombstonePreview />
           <Grid columns="2">
             <Grid.Column>
