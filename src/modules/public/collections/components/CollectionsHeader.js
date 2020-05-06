@@ -5,9 +5,9 @@ import { Header, Card, Container, Responsive } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
 const HeaderItem = ({ collectionHeader, responsiveVars }) => (
-  <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-    <Header as="h2" className={responsiveVars.isMobile ? 'mb-40' : 'mb-40 center-align'}>NextSeed Collections</Header>
-    <p className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-70 center-align'}>
+  <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50 ' : 'pt-100 pb-100'}>
+    <Header as="h2" className={responsiveVars.isMobile ? 'mb-40 pl-20 pr-20' : 'mb-40 center-align'}>NextSeed Collections</Header>
+    <p className={responsiveVars.uptoTablet ? 'mb-20 pl-20 pr-20' : 'mb-70 center-align'}>
       NextSeed Collections represent curated combinations of investment opportunities<Responsive minWidth={992} as="br" /> and businesses, categorized by the communities that matter to you most.
     </p>
     {

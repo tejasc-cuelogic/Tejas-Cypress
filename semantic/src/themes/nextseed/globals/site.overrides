@@ -233,6 +233,12 @@ h6{
 .pb-100{
 	padding-bottom: 100px !important;
 }
+.pr-20{
+	padding-right: 20px !important;
+}
+.pl-20{
+	padding-left: 20px !important;
+}
 .pl-50{
 	padding-left: @50px !important;
 }
@@ -243,8 +249,8 @@ h6{
 	padding-left: 0 !important;
 	padding-right: 0 !important;
 }
-.p-64{
-	padding: 64px !important;
+.p-36{
+	padding: 36px !important;
 }
 .line-height-24{
 	line-height: 24px !important;
@@ -3511,10 +3517,39 @@ h3.ui.header.error-2{
 		color: @neutral-offwhite;
 	}
 }
+.offerings-container{
+	position: relative !important;
+	height: 328px !important;
+	margin-bottom: 30px !important;
+	@media only screen and (min-width : @tabletBreakpoint) and (max-width: @computerBreakpoint){
+		max-height: 658px !important;
+		min-height: 328px !important;
+		height: 100%;
+		.collection-bg-image{
+			height: 100% !important;
+		}
+
+	}
+}
 .collection-box{
+	position: absolute;
+    top: 0;
+    right: 0;
+	left: 0;
+	margin: 0 !important;
+	background-color: rgba(000, 000, 000, 0.8);
+	.ui.grid{
+		margin-left: 0  !important;
+		margin-right: 0  !important;
+	}
 	color: @neutral-midwhite !important;
 	.ui.header{
 		color: @neutral-offwhite !important;
+	}
+	.ns_flgs_box{
+		top: 24px !important;
+		left: 14px !important;
+		width: 450px !important;
 	}
 }
 .collection-listings-box{
@@ -3525,4 +3560,25 @@ h3.ui.header.error-2{
 		font-size: @15px;
 		line-height: @24px;
 	}
+	.ui.cards>.card .ui.image{
+		border-radius: 0 !important;
+	}
+	.ns_flgs_box{
+		width: 450px !important;
+	}
+	.collection-bg-image{
+		height: 100%;
+	}	
+}
+.collection-bg-image {
+	height: 326px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+	right: 0;
+	opacity: 0.1 !important;
+    left: 0;
 }
