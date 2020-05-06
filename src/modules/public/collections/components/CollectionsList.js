@@ -6,15 +6,13 @@ import { Grid, Container, Button, Header, Card } from 'semantic-ui-react';
 import { Image64, InlineLoader } from '../../../../theme/shared';
 import HtmlEditor from '../../../shared/HtmlEditor';
 
-const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionUrl, collectionLength, handleNavigate }) => (
+const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionLength, handleNavigate }) => (
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
         <Container key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-50 pb-50 pl-20 pr-20' : 'pt-30 pb-30'}`}>
           <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className="p-36 collection-box">
             <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16} className="zi-9">
-              {/* {get(collection, 'marketing.tombstone.tag.text')}
-                {get(collection, 'marketing.tombstone.tag.color')} */}
               <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
               <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
                 <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
@@ -25,7 +23,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
               <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
               {!isMobile && !isTablet
                 && (
-                  <Button as={Link} to={`${collectionUrl}/${get(collection, 'slug')}`} inverted color="white" className="mt-30 mb-30">Explore</Button>
+                  <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30 mb-30">Explore</Button>
                 )
               }
             </Grid.Column>
@@ -41,12 +39,12 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
   </>
 );
 
-const CollectionCards = ({ responsiveVars, collections, collectionUrl, collectionLength }) => (
+const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
   <Container className="collection-listings-box">
     <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : 3}>
       {
         collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-          <Card as={Link} to={`${collectionUrl}/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
+          <Card as={Link} to={`/collections/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
             <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
             <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
               <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
@@ -57,7 +55,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionUrl, collectio
               }
               <Header as="h5">{get(collection, 'marketing.tombstone.title')}</Header>
               <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
-              <Button as={Link} to={`${collectionUrl}/${get(collection, 'slug')}`} inverted color="white" className="mt-30 full-width">Explore</Button>
+              <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30 full-width">Explore</Button>
             </div>
           </Card>
         ))}
@@ -88,7 +86,7 @@ export default class CollectionsList extends Component {
 
   render() {
     const { expandCollection } = this.state;
-    const { match, collectionLength, nsUiStore } = this.props;
+    const { collectionLength, nsUiStore } = this.props;
     const { loadingArray } = nsUiStore;
     const { responsiveVars } = this.props.uiStore;
     const { isMobile, isTablet } = responsiveVars;
@@ -104,7 +102,6 @@ export default class CollectionsList extends Component {
             <CollectionCards
               collections={collections}
               responsiveVars={responsiveVars}
-              collectionUrl={match.url}
             />
           ) : (
               <CollectionItem
@@ -114,7 +111,6 @@ export default class CollectionsList extends Component {
                 isMobile={isMobile}
                 isTablet={isTablet}
                 responsiveVars={responsiveVars}
-                collectionUrl={match.url}
               />
             )
           ) : <InlineLoader text="No record to display." />}

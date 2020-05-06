@@ -18,7 +18,7 @@ class CollectionInsights extends Component {
             <Grid stackable doubling columns={3}>
               {InsightArticles.map(article => (
                 <Grid.Column>
-                  <Card className="campaign insights" fluid>
+                  <Card as={Link} to={`/insights/${article.slug}`} className="campaign insights" fluid>
                     <Image64
                       centered
                       srcUrl={article.featuredImage ? article.featuredImage : null
