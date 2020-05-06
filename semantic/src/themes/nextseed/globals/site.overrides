@@ -3522,9 +3522,7 @@ h3.ui.header.error-2{
 	height: 328px !important;
 	margin-bottom: 30px !important;
 	@media only screen and (min-width : @tabletBreakpoint) and (max-width: @computerBreakpoint){
-		max-height: 658px !important;
-		min-height: 328px !important;
-		height: 100%;
+		height: 658px !important;
 		.collection-bg-image{
 			height: 100% !important;
 		}
