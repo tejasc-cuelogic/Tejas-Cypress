@@ -14,7 +14,7 @@ const metaInfo = {
 @inject('offeringCreationStore')
 @withRouter
 @observer
-class Tombstone extends Component {
+class CollectionHeader extends Component {
   removeMedia = (form, name) => {
     window.logger(form, name);
   }
@@ -35,7 +35,7 @@ class Tombstone extends Component {
     return (
       <div className="inner-content-spacer">
         <Form>
-          <Header as="h3">Card Preview</Header>
+          <Header as="h3">Header Preview</Header>
           <TombstonePreview />
           <Grid columns="2">
             <Grid.Column>
@@ -104,4 +104,4 @@ class Tombstone extends Component {
   }
 }
 
-export default formHOC(Tombstone, metaInfo);
+export default formHOC(CollectionHeader, metaInfo);

@@ -276,7 +276,7 @@ class CollectionsStore extends DataModelStore {
         setLoader: 'adminCollectionUpsert',
         variables: this.formPayLoad(params),
       });
-      if ((params.forms[0] === 'TOMBSTONE')) {
+      if ((params.forms[0] === 'TOMBSTONE_FRM')) {
         this.getCollection(get(collection, 'slug'));
       }
       this.updateContent();
