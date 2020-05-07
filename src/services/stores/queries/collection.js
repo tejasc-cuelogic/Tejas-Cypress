@@ -190,7 +190,6 @@ export const getCollection = gql`
         by
         date
       }
-<<<<<<< HEAD
       marketing {
         content {
           contentType
@@ -199,18 +198,6 @@ export const getCollection = gql`
           scope
           title
           meta
-=======
-      tombstone {
-        title
-        description
-        descriptionColor
-        bgColor
-        image {
-          id
-          url
-          isPublic
-          fileName
->>>>>>> be0b7092d492798f2fef9b88c912492eaa3a35fa
         }
         tombstone {
           title
