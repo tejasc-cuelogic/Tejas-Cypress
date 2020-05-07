@@ -216,6 +216,8 @@ export class UpdateStore {
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       delete data.allInvestor;
       delete data.shouldSendInvestorNotifications;
+      delete data.notificationBy;
+      delete data.notificationDate;
       data.status = status;
       data.postUpdateAs = this.TEMPLATE_POST_UPDATE_FRM.fields.postUpdate.value;
       data.lastUpdate = this.lastUpdateText;
@@ -315,6 +317,10 @@ export class UpdateStore {
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
       this.PBUILDER_FRM.fields.allInvestor.value = offeringUpdatesById.tiers && offeringUpdatesById.tiers.length === 0;
       this.PBUILDER_FRM.fields.updatedDate.value = offeringUpdatesById.updatedDate;
+      if (offeringUpdatesById.notificationSent) {
+        this.PBUILDER_FRM.fields.notificationBy.value = offeringUpdatesById.notificationSent.by || '';
+        this.PBUILDER_FRM.fields.notificationDate.value = offeringUpdatesById.notificationSent.date || '';
+      }
       Validator.validateForm(this.PBUILDER_FRM);
     }
 

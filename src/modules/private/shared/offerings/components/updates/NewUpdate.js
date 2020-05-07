@@ -12,6 +12,7 @@ import { InlineLoader, Image64, UserAvatar } from '../../../../../../theme/share
 import Actions from './Actions';
 import Status from './Status';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
 @withRouter
@@ -264,7 +265,13 @@ export default class NewUpdate extends Component {
                               changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                               dateOfBirth
                             />
-                            {this.sendInvestorNotificationTemplate(isReadonly, isManager)}
+                            {
+                              PBUILDER_FRM.fields.notificationDate.value
+                              ? <p>{`Notification sent on ${DataFormatter.formatedDate(PBUILDER_FRM.fields.notificationDate.value)} by ${PBUILDER_FRM.fields.notificationBy.value}.`}</p>
+                              : isPublished
+                                ? <p>No notifications were sent.</p>
+                                : this.sendInvestorNotificationTemplate(isReadonly, isManager)
+                            }
                             {this.postUpdateAsTemplate()}
                           </Form>
                         )
