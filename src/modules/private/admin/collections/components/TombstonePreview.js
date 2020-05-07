@@ -15,8 +15,8 @@ export default class TombstonePreview extends Component {
     const { TOMBSTONE_FRM } = collectionStore;
     const collection = TOMBSTONE_FRM.fields;
     return (
-      <div className="bg-offwhite pt-30 pb-30 mb-20">
-        <Container className="offerings-container pt-30 pb-30">
+      <div className="bg-offwhite pt-30 pb-30">
+        <Container className="offerings-container">
           <Grid style={{ backgroundColor: get(collection, 'bgColor.value') }} className="p-36 collection-box">
             <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16} className="zi-9">
               <Image64 srcUrl={get(collection, 'image.preSignedUrl')} />

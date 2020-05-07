@@ -10,8 +10,8 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-        <Container key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-50 pb-50 pl-20 pr-20' : 'pt-30 pb-30'}`}>
-          <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className="p-36 collection-box">
+        <Container key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-50 pb-50 pl-20 pr-20' : ''}`}>
+          <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className={`collection-box ${responsiveVars.uptoTablet ? 'p-0' : 'p-36'}`}>
             <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16} className="zi-9">
               <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
               <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
@@ -23,7 +23,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
               <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
               {!isMobile && !isTablet
                 && (
-                  <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30 mb-30">Explore</Button>
+                  <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30">Explore</Button>
                 )
               }
             </Grid.Column>

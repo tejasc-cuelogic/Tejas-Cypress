@@ -420,6 +420,9 @@ a:not(.item), a:not(.ui.button){
 		text-decoration:underline !important;
 	}
 }
+.border-red{
+	border-color: #e84b0f !important;
+}
 .info-card{
 	.ui.button>.icon:not(.button){
 		line-height: 1;
@@ -3506,7 +3509,7 @@ h3.ui.header.error-2{
 	}
 	p{
 		word-wrap: break-word;
-		width: 100px;
+		width: 70px;
 		line-height: @16px;
 		font-size: @14px;
 		margin-bottom: 0px !important;
@@ -3537,10 +3540,13 @@ h3.ui.header.error-2{
 }
 .offerings-container{
 	position: relative !important;
-	height: 328px !important;
+	height: 414px !important;
 	margin-bottom: 30px !important;
+	&:last-child{
+		margin-bottom: 0 !important;
+	}
 	@media only screen and (min-width : @tabletBreakpoint) and (max-width: @computerBreakpoint){
-		height: 658px !important;
+		height: 726px !important;
 		.collection-bg-image{
 			height: 100% !important;
 		}
@@ -3553,7 +3559,8 @@ h3.ui.header.error-2{
     right: 0;
 	left: 0;
 	margin: 0 !important;
-	background-color: rgba(000, 000, 000, 0.8);
+	border-width:5px !important;
+	border-style:solid !important;
 	.ui.grid{
 		margin-left: 0  !important;
 		margin-right: 0  !important;
@@ -3566,11 +3573,27 @@ h3.ui.header.error-2{
 		top: 24px !important;
 		left: 14px !important;
 		width: 450px !important;
+		p{
+			word-wrap: break-word;
+			width: 70px;
+			line-height: @16px;
+			font-size: @14px;
+			margin-bottom: 0px !important;
+			text-align: left;
+			text-transform: uppercase;
+			font-weight: 700;
+		}
 	}
 }
 .collection-listings-box{
 	a,.ui.header{
 		color:#EDEEF2;
+	}
+	.ui.cards{
+		>a{
+			border-width:5px !important;
+			border-style: solid !important;
+		}
 	}
 	p{
 		font-size: @15px;
@@ -3581,6 +3604,16 @@ h3.ui.header.error-2{
 	}
 	.ns_flgs_box{
 		width: 450px !important;
+		p{
+			word-wrap: break-word;
+			width: 70px;
+			line-height: @16px;
+			font-size: @14px;
+			margin-bottom: 0px !important;
+			text-align: left;
+			text-transform: uppercase;
+			font-weight: 700;
+		}
 	}
 	.collection-bg-image{
 		height: 100%;
@@ -3597,7 +3630,7 @@ h3.ui.header.error-2{
 	}
 }
 .collection-bg-image {
-	height: 326px;
+	height: 374px;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
