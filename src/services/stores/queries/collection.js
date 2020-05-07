@@ -94,6 +94,7 @@ query getCollections {
     name
     slug
     order
+    status
     marketing {
       tombstone {
         image {

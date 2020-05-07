@@ -54,7 +54,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    props.collectionStore.getCollections();
+    // props.collectionStore.getCollections();
     window.addEventListener('resize', this.handleResize);
     this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
     const urlParameter = queryString.parse(this.props.location.search);
@@ -100,6 +100,7 @@ class App extends Component {
         window.logger('Catch error in app.js verifySession. ', err);
       }).finally(() => {
         this.setState({ authChecked: true });
+        this.props.collectionStore.getCollections();
       });
     if (this.props.uiStore.devBanner) {
       activityActions.log({ action: 'APP_LOAD', status: 'SUCCESS' });
