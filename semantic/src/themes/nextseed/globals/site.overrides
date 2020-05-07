@@ -194,6 +194,9 @@ h6{
 .pt-10{
 	padding-top:10px !important;
 }
+.pt-20{
+	padding-top:20px !important;
+}
 .pt-30{
 	padding-top:30px !important;
 }
@@ -238,12 +241,23 @@ h6{
 }
 .pl-20{
 	padding-left: 20px !important;
+.pl-10{
+	padding-left: 10px !important;
+}
+.pl-30{
+	padding-left: 30px !important;
 }
 .pl-50{
 	padding-left: @50px !important;
 }
 .pl-60{
 	padding-left: @60px !important;
+}
+.pr-10{
+	padding-right: 10px !important;
+}
+.pr-30{
+	padding-right: 30px !important;
 }
 .plr-0{
 	padding-left: 0 !important;
@@ -501,7 +515,7 @@ i.icon.right {
 			margin-bottom: @30px;
 		}
 		//Desktop only
-		@media only screen and (min-width : @largeMonitorBreakpoint){
+		@media only screen and (min-width : @monitorBreakpoint){
 			.fr-editor-desktop{
 				display: block;
 			}
@@ -519,7 +533,7 @@ i.icon.right {
 			}
 		}
 		//Tablet only
-		@media only screen and (min-width : @tabletBreakpoint) and (max-width : @monitorBreakpoint){
+		@media only screen and (min-width : @tabletBreakpoint) and (max-width : @computerBreakpoint){
 			.fr-editor-tablet{
 				display: block;
 			}
@@ -3579,8 +3593,7 @@ h3.ui.header.error-2{
 				margin-right: 0 !important;
 			}
 		}
-	}	
-	
+	}
 }
 .collection-bg-image {
 	height: 326px;
@@ -3593,4 +3606,5 @@ h3.ui.header.error-2{
 	right: 0;
 	opacity: 0.1 !important;
     left: 0;
+}
 }
