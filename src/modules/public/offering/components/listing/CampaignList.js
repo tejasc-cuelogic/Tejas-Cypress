@@ -86,7 +86,7 @@ export default class CampaignList extends Component {
   }
 
   render() {
-    const { campaigns, loading, isFunded } = this.props;
+    const { campaigns, loading, isFunded, collection } = this.props;
     const isTemplate2 = template => template === 2;
     const tombstoneImage = offering => (isTemplate2(get(offering, 'template')) ? get(offering, 'tombstone.image.url') : get(offering, 'media.tombstoneImage.url'));
     const getTombstoneDescription = offering => (isTemplate2(get(offering, 'template')) ? get(offering, 'tombstone.description') : get(offering, 'offering.overview.tombstoneDescription'));
@@ -102,7 +102,7 @@ export default class CampaignList extends Component {
             {loading ? <InlineLoader />
               : campaigns && campaigns.length
                 ? (
-                  <Grid doubling columns={3} stackable>
+                  <Grid doubling columns={collection ? 2 : 3} stackable>
                     {campaigns.map(offering => (
                       <Grid.Column key={offering.id} data-cy={offering.offeringSlug}>
                         <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}`}>

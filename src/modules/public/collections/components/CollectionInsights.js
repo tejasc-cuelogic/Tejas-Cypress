@@ -15,7 +15,7 @@ class CollectionInsights extends Component {
         {this.props.subheading}
         {InsightArticles && InsightArticles.length
           ? (
-            <Grid stackable doubling columns={3}>
+            <Grid stackable doubling columns={2}>
               {InsightArticles.map(article => (
                 <Grid.Column>
                   <Card as={Link} to={`/insights/${article.slug}`} className="campaign insights" fluid>
