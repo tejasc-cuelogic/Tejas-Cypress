@@ -36,7 +36,7 @@
 @menuTextAlign: left;
 
 @menuBorderWidth: 1px;
-@menuBorderColor: @borderColor;
+@menuBorderColor: @dropdownMenuBorderColor;
 @menuBorder: @menuBorderWidth solid @menuBorderColor;
 @menuBoxShadow: @raisedShadow;
 @menuBorderRadius: @borderRadius;
