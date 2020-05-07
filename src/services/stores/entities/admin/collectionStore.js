@@ -2,9 +2,11 @@
 /* eslint-disable no-param-reassign */
 import { decorate, observable, action, computed, toJS } from 'mobx';
 import { get, orderBy } from 'lodash';
+import cleanDeep from 'clean-deep';
+import omitDeep from 'omit-deep';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
-import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING, HEADER_META } from '../../../constants/admin/collection';
+import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, getPublicCollections, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 import { uiStore, authStore } from '../../index';
@@ -44,6 +46,10 @@ class CollectionsStore extends DataModelStore {
   TOMBSTONE_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
 
   HEADER_META_FRM = Validator.prepareFormObject(HEADER_META);
+
+  CARD_HEADER_META_FRM = Validator.prepareFormObject(CARD_HEADER_META);
+
+  CARD_HEADER_SOCIAL_FRM = Validator.prepareFormObject(CARD_HEADER_SOCIAL_META);
 
   COLLECTION_MAPPING_FRM = Validator.prepareFormObject(COLLECTION_MAPPING);
 
@@ -124,7 +130,7 @@ class CollectionsStore extends DataModelStore {
       if (get(res, 'getCollection')) {
         this.setFieldValue('collectionDetails', res.getCollection);
         // if (authStore.isUserLoggedIn) {
-          this.getCollectionMappingPublic(res.getCollection.id);
+        this.getCollectionMappingPublic(res.getCollection.id);
         // }
       }
     });
@@ -206,8 +212,9 @@ class CollectionsStore extends DataModelStore {
   }
 
   formPayLoad = (params) => {
-    const { forms } = params;
+    const { forms, cleanData } = params;
     let data = {};
+    let collectionData = {};
     if (Array.isArray(forms)) {
       forms.forEach((f) => {
         if (f === 'COLLECTION_CONTENT_FRM') {
@@ -220,6 +227,9 @@ class CollectionsStore extends DataModelStore {
           data = { collectionDetails: { marketing: { content: contentWithMeta } } };
         } else if (f === 'TOMBSTONE_FRM') {
           data = { collectionDetails: { marketing: { tombstone: Validator.evaluateFormData(this[f].fields) } } };
+        } else if (['CARD_HEADER_META_FRM', 'CARD_HEADER_SOCIAL_FRM'].includes(f)) {
+          data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
+          // data = { collectionDetails: { marketing: { header: Validator.evaluateFormData(this[f].fields) } } };
         } else {
           data = { collectionDetails: Validator.evaluateFormData(this[f].fields) };
         }
@@ -228,7 +238,21 @@ class CollectionsStore extends DataModelStore {
     if (this.collectionId !== null) {
       data.id = this.collectionId;
     }
-    return data;
+    if (cleanData) {
+      data = cleanDeep(data);
+      data = omitDeep(data, ['__typename', 'fileHandle']);
+    }
+    if (forms.includes('CARD_HEADER_META_FRM')) {
+      collectionData = { collectionDetails: { marketing: { header: { ...data } } } };
+    } else {
+      collectionData = { ...data };
+    }
+    // if (keyName) {
+    //   collectionData[keyName] = data;
+    // } else {
+    //   collectionData = { ...data };
+    // }
+    return collectionData;
   }
 
   parseData = (data) => {
@@ -251,7 +275,8 @@ class CollectionsStore extends DataModelStore {
     }).then((res) => {
       if (get(res, 'getCollection')) {
         this.setFieldValue('collectionId', res.getCollection.id);
-        this.setFieldValue('collection', this.parseData(res.getCollection));
+        // this.setFieldValue('collection', this.parseData(res.getCollection));
+        this.setFieldValue('collection', res.getCollection);
         this.setFieldValue('collectionLoading', []);
         this.COLLECTION_OVERVIEW_FRM = Validator.setFormData(this.COLLECTION_OVERVIEW_FRM, res.getCollection);
         this.loading = false;
@@ -374,7 +399,7 @@ class CollectionsStore extends DataModelStore {
         setLoader: 'adminCollectionUpsert',
         variables: this.formPayLoad(params),
       });
-      if ((params.forms[0] === 'TOMBSTONE')) {
+      if ((params.forms[0] === 'TOMBSTONE_FRM')) {
         this.getCollection(get(collection, 'slug'));
       }
       this.updateContent();
@@ -390,6 +415,11 @@ class CollectionsStore extends DataModelStore {
       return false;
     }
   };
+
+  reOrderHandle = (orderedForm, form, arrayName) => {
+    const content = toJS(orderedForm).map(d => ({ ...d }));
+    this.setFieldValue(form, content, `fields.${arrayName}`);
+  }
 
   // @computed get active() {
   //   const collectionList = this.orderedActiveList.slice();
@@ -428,5 +458,8 @@ decorate(CollectionsStore, {
   setSelectedCollections: action,
   collectionLoading: observable,
   getCollection: action,
+  CARD_HEADER_META_FRM: observable,
+  CARD_HEADER_SOCIAL_FRM: observable,
+  reOrderHandle: action,
 });
 export default new CollectionsStore();

@@ -46,6 +46,45 @@ export const HEADER_META = {
   }],
 };
 
+export const CARD_HEADER_META = {
+  ...TOMBSTONE_BASIC,
+  // social: [FormHelper.generateMeta([
+  //   ['type', 'Type', '', 'optional', '', { asIn: true, props: { values: [] } }],
+  //   ['url', 'URL', '', 'optional', ''],
+  //   // ['icon', 'Icon', '', 'optional', ''],
+  //   // ['iconColor', 'Icon Color', '', 'optional', ''],
+  // ]),
+  // ],
+};
+
+export const CARD_HEADER_SOCIAL_META = {
+  social: [{
+    url: {
+      label: 'Url',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: '',
+    },
+    type: {
+      label: 'Type',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: '',
+      options: [
+        { key: 'facebook', value: 'facebook', text: 'facebook' },
+        { key: 'linkedin', value: 'linkedin', text: 'linkedin' },
+        { key: 'twitter', value: 'twitter', text: 'twitter' },
+        { key: 'instagram', value: 'instagram', text: 'instagram' },
+        { key: 'yelp', value: 'yelp', text: 'yelp' },
+        { key: 'website', value: 'website', text: 'website' },
+      ],
+    },
+  }],
+};
+
+
 export const CONTENT = {
   content: [{
     title: {

@@ -4,43 +4,47 @@ import { withRouter } from 'react-router-dom';
 import { Form, Header, Divider, Grid } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../../shared/offerings/components/OfferingButtonGroup';
 import formHOC from '../../../../../theme/form/formHOC';
-import TombstonePreview from './TombstonePreview';
+import CardHeaderMeta from './CardHeaderMeta';
 
 const metaInfo = {
   store: 'collectionStore',
-  form: 'TOMBSTONE_FRM',
+  form: 'CARD_HEADER_META_FRM',
 };
 
 @inject('offeringCreationStore')
 @withRouter
 @observer
-class Tombstone extends Component {
+class CollectionHeader extends Component {
+  constructor(props) {
+    super(props);
+    this.props.collectionStore.setFormData('CARD_HEADER_SOCIAL_FRM', 'marketing.header');
+  }
+
   removeMedia = (form, name) => {
     window.logger(form, name);
   }
 
   handleFormSubmit = () => {
     const params = {
-      keyName: 'tombstone',
-      forms: ['TOMBSTONE_FRM'], // 'TOMBSTONE_HEADER_META_FRM'
+      keyName: 'header',
+      forms: ['CARD_HEADER_META_FRM', 'CARD_HEADER_SOCIAL_FRM'],
     };
     this.props.collectionStore.upsertCollection(params);
   }
 
   render() {
     const { collectionStore, smartElement } = this.props;
-    const { TOMBSTONE_FRM, collectionId } = collectionStore;
+    const { CARD_HEADER_META_FRM, collectionId } = collectionStore;
     const isReadOnly = false;
     return (
       <div className="inner-content-spacer">
         <Form>
-          <Header as="h3">Card Preview</Header>
-          <TombstonePreview />
+          <Header as="h3">Header Preview</Header>
           <Grid columns="2">
             <Grid.Column>
               {smartElement.Input('title', {
                 readOnly: isReadOnly,
-                // fielddata: TOMBSTONE_FRM.fields.title,
+                // fielddata: CARD_HEADER_META_FRM.fields.title,
               })}
             </Grid.Column>
             <Grid.Column>
@@ -51,7 +55,7 @@ class Tombstone extends Component {
           </Grid>
           <Grid columns="2">
             <Grid.Column>
-              <Header as="h4">{TOMBSTONE_FRM.fields.image.label}</Header>
+              <Header as="h4">{CARD_HEADER_META_FRM.fields.image.label}</Header>
               {smartElement.ImageCropper('image', {
                 uploadPath: `collection/${collectionId}`,
                 removeMedia: this.removeMedia,
@@ -59,7 +63,7 @@ class Tombstone extends Component {
               })}
             </Grid.Column>
             <Grid.Column>
-              <Header as="h4">{TOMBSTONE_FRM.fields.bgImage.label}</Header>
+              <Header as="h4">{CARD_HEADER_META_FRM.fields.bgImage.label}</Header>
               {smartElement.ImageCropper('bgImage', {
                 uploadPath: `collection/${collectionId}`,
                 removeMedia: this.removeMedia,
@@ -72,7 +76,7 @@ class Tombstone extends Component {
             <Header as="h4">Tombstone</Header>
             <Form.Group widths={1}>
               <Form.Field>
-                <Header as="h6">{TOMBSTONE_FRM.fields.description.label}</Header>
+                <Header as="h6">{CARD_HEADER_META_FRM.fields.description.label}</Header>
                 {smartElement.HtmlEditor('description', {
                   imageUploadPath: `collection/${collectionId}`,
                 })}
@@ -91,12 +95,13 @@ class Tombstone extends Component {
               })}
             </Grid.Column>
           </Grid>
+          <CardHeaderMeta />
           <Divider section />
-          <OfferingButtonGroup isDisable={!(TOMBSTONE_FRM.meta.isValid)} updateOffer={this.handleFormSubmit} />
+          <OfferingButtonGroup isDisable={!(CARD_HEADER_META_FRM.meta.isValid)} updateOffer={this.handleFormSubmit} />
         </Form>
       </div>
     );
   }
 }
 
-export default formHOC(Tombstone, metaInfo);
+export default formHOC(CollectionHeader, metaInfo);
