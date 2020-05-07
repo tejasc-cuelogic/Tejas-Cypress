@@ -82,6 +82,7 @@ class CollectionsStore extends DataModelStore {
     if (data) {
       this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [];
       const selectedCollections = data.map(c => c[mappingId]);
+      console.log('data', data);
       this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [
         ...this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value,
         ...selectedCollections,
@@ -210,8 +211,8 @@ class CollectionsStore extends DataModelStore {
             this.setFieldValue('collectionIndex', index);
             this.collectionMapping = { ...tempData };
             await offeringsStore.initRequest({ stage: 'live' });
-            this.setCollectionMetaList(this.mapDataByContentType(data.live), true);
-            }
+            this.setCollectionMetaList(data.live, true);
+          }
         })
         .catch(() => {
           this.setFieldValue('collectionIndex', index);
