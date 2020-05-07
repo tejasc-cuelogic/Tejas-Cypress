@@ -22,7 +22,7 @@ class CollectionHeader extends Component {
   handleFormSubmit = () => {
     const params = {
       keyName: 'tombstone',
-      forms: ['TOMBSTONE_FRM'], // 'TOMBSTONE_HEADER_META_FRM'
+      forms: ['TOMBSTONE_HEADER_META_FRM'], // 'TOMBSTONE_HEADER_META_FRM'
     };
     this.props.collectionStore.upsertCollection(params);
   }
@@ -97,7 +97,7 @@ class CollectionHeader extends Component {
             </Grid.Column>
           </Grid>
           <Divider section />
-          <OfferingButtonGroup isDisable={!(TOMBSTONE_FRM.meta.isValid)} updateOffer={this.handleFormSubmit} />
+          <OfferingButtonGroup isDisable={!(TOMBSTONE_FRM.meta.isValid)} />
         </Form>
       </div>
     );
