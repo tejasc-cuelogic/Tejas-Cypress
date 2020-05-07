@@ -58,21 +58,6 @@ class CollectionDetails extends Component {
       content = orderBy(content, c => c.order, ['ASC']);
       content.forEach((c, i) => navItems.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }
-    // const navItems = [{
-    //   title: 'History', to: '#history', useRefLink: true, key: 'history',
-    // },
-    // {
-    //   title: 'The Team', to: '#team', useRefLink: true, key: 'team',
-    // },
-    // {
-    //   title: 'Bonus Rewards', to: '#bonus-rewards', useRefLink: true, key: 'isBonusReward',
-    // },
-    // {
-    //   title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallery',
-    // },
-    // {
-    //   title: 'Documents', to: '#data-room', useRefLink: true, key: 'dataRooms',
-    // }];
     return (
       <>
         {!isMobile && <CollectionHeader scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />}
@@ -111,6 +96,7 @@ class CollectionDetails extends Component {
                     c.contentType === 'ACTIVE_INVESTMENTS'
                       ? (
                         <>
+                          <span id="offeringsShow" />
                           <span id={camelCase(c.title)} />
                           <CampaignList
                             collection

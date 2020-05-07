@@ -4,6 +4,7 @@ import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Grid, Menu } from 'semantic-ui-react';
 import { Image64 } from '../../../../theme/shared';
+import HtmlEditor from '../../../shared/HtmlEditor';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 
 @inject('uiStore')
@@ -15,7 +16,6 @@ export default class CollectionHeader extends Component {
     const { responsiveVars } = uiStore;
     const { isMobile } = responsiveVars;
     const title = get(data, 'title');
-    const description = get(data, 'description');
     const headerDownClick = (
       <div className="current-projects-box">
         <p className="mb-0">View our current and past projects below.</p>
@@ -60,7 +60,7 @@ export default class CollectionHeader extends Component {
                         <Header as="h3" inverted>
                           {title}
                         </Header>
-                        <p>{description}</p>
+                        <span style={{ backgroundColor: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
                       </Grid.Column>
                     </Grid>
                   </Responsive>
@@ -84,7 +84,7 @@ export default class CollectionHeader extends Component {
                   <Header as="h4" inverted>
                     {title}
                   </Header>
-                  <p>{description}</p>
+                  <span style={{ backgroundColor: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
                   <div className="clearfix social-links mt-10">
                     {get(data, 'social[0]')
                       ? get(data, 'social').map(site => (

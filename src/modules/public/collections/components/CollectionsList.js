@@ -14,9 +14,12 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
           <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className={`${get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} collection-box ${responsiveVars.uptoTablet ? 'p-0' : 'p-36'}`}>
             <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16} className="zi-9">
               <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
-              <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
-                <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
-              </div>
+              {get(collection, 'marketing.tombstone.tag.text')
+                && (
+                  <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
+                    <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
+                  </div>
+                )}
             </Grid.Column>
             <Grid.Column widescreen={11} computer={11} tablet={16} mobile={16} className="zi-9">
               <Header as="h3">{get(collection, 'marketing.tombstone.title')}</Header>
@@ -46,9 +49,12 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
         collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
           <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/collections/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
             <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
-            <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
-              <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
-            </div>
+            {get(collection, 'marketing.tombstone.tag.text')
+              && (
+                <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
+                  <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
+                </div>
+              )}
             <div className="full-width mt-0 p-36">
               {get(collection, 'marketing.tombstone.bgImage.url')
                 && <Image64 bg originalImg className="collection-bg-image" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
