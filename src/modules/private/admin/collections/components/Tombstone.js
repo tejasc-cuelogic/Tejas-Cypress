@@ -68,16 +68,22 @@ class Tombstone extends Component {
               <Divider hidden />
             </Grid.Column>
           </Grid>
-          <Grid>
-            <Header as="h4">Tombstone</Header>
-            <Form.Group widths={1}>
-              <Form.Field>
-                <Header as="h6">{TOMBSTONE_FRM.fields.description.label}</Header>
-                {smartElement.HtmlEditor('description', {
-                  imageUploadPath: `collection/${collectionId}`,
-                })}
-              </Form.Field>
-            </Form.Group>
+          <Grid columns="2">
+            <Grid.Column>
+              {smartElement.Input('descriptionColor', {
+                readOnly: isReadOnly,
+              })}
+            </Grid.Column>
+            <Grid.Column>
+              <Form.Group widths={1}>
+                <Form.Field>
+                  <Header as="h6">{TOMBSTONE_FRM.fields.description.label}</Header>
+                  {smartElement.HtmlEditor('description', {
+                    imageUploadPath: `collection/${collectionId}`,
+                  })}
+                </Form.Field>
+              </Form.Group>
+            </Grid.Column>
           </Grid>
           <Grid columns="2">
             <Grid.Column>
