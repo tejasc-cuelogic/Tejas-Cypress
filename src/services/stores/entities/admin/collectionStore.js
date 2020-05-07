@@ -52,6 +52,8 @@ class CollectionsStore extends DataModelStore {
             this.setSelectedCollections(type, referenceId).then(() => {
               this.setFieldValue('collections', res.getCollections);
             });
+          } else {
+            this.setFieldValue('collections', res.getCollections);
           }
         }
         this.setFieldValue('apiHit', false);
