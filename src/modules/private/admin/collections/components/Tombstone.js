@@ -28,9 +28,8 @@ class Tombstone extends Component {
   }
 
   render() {
-    const { collectionStore, offeringCreationStore, smartElement } = this.props;
-    const { TOMBSTONE_FRM } = collectionStore;
-    const { currentOfferingId } = offeringCreationStore;
+    const { collectionStore, smartElement } = this.props;
+    const { TOMBSTONE_FRM, collectionId } = collectionStore;
     const isReadOnly = false;
     return (
       <div className="inner-content-spacer">
@@ -44,56 +43,52 @@ class Tombstone extends Component {
                 // fielddata: TOMBSTONE_FRM.fields.title,
               })}
             </Grid.Column>
-          </Grid>
-          <Grid columns="2">
-            <Grid.Column>
-              {smartElement.Input('color', {
-                readOnly: isReadOnly,
-              })}
-            </Grid.Column>
-            <Grid.Column>
-              {smartElement.Input('text', {
-                readOnly: isReadOnly,
-              })}
-            </Grid.Column>
-          </Grid>
-          <Grid columns="2">
             <Grid.Column>
               {smartElement.Input('bgColor', {
                 readOnly: isReadOnly,
               })}
-            </Grid.Column>
-            <Grid.Column>
-              <Header as="h4">{TOMBSTONE_FRM.fields.bgImage.label}</Header>
-              {smartElement.ImageCropper('bgImage', {
-                uploadPath: `offerings/${currentOfferingId}`,
-                removeMedia: this.removeMedia,
-                isImagePreviewDisabled: true,
-              })}
-              <Divider hidden />
             </Grid.Column>
           </Grid>
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{TOMBSTONE_FRM.fields.image.label}</Header>
               {smartElement.ImageCropper('image', {
-                uploadPath: `offerings/${currentOfferingId}`,
+                uploadPath: `collection/${collectionId}`,
                 removeMedia: this.removeMedia,
                 isImagePreviewDisabled: true,
               })}
-              {/* <Divider hidden /> */}
             </Grid.Column>
             <Grid.Column>
-              <Header as="h4">Tombstone</Header>
-              <Form.Group widths={1}>
-                <Form.Field>
-                  <Header as="h6">{TOMBSTONE_FRM.fields.description.label}</Header>
-                  {smartElement.HtmlEditor('description', {
-                    imageUploadPath: `offerings/${currentOfferingId}`,
-                  })}
-                </Form.Field>
-              </Form.Group>
+              <Header as="h4">{TOMBSTONE_FRM.fields.bgImage.label}</Header>
+              {smartElement.ImageCropper('bgImage', {
+                uploadPath: `collection/${collectionId}`,
+                removeMedia: this.removeMedia,
+                isImagePreviewDisabled: true,
+              })}
               <Divider hidden />
+            </Grid.Column>
+          </Grid>
+          <Grid>
+            <Header as="h4">Tombstone</Header>
+            <Form.Group widths={1}>
+              <Form.Field>
+                <Header as="h6">{TOMBSTONE_FRM.fields.description.label}</Header>
+                {smartElement.HtmlEditor('description', {
+                  imageUploadPath: `collection/${collectionId}`,
+                })}
+              </Form.Field>
+            </Form.Group>
+          </Grid>
+          <Grid columns="2">
+            <Grid.Column>
+              {smartElement.Input('text', {
+                readOnly: isReadOnly,
+              })}
+            </Grid.Column>
+            <Grid.Column>
+              {smartElement.Input('color', {
+                readOnly: isReadOnly,
+              })}
             </Grid.Column>
           </Grid>
           <Divider section />

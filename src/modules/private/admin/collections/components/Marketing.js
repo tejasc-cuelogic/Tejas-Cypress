@@ -34,6 +34,7 @@ function Marketing(props) {
 
   useEffect(() => {
     props.collectionStore.setFormData('TOMBSTONE_FRM', 'marketing.tombstone');
+    props.collectionStore.setFormData('CARD_HEADER_META_FRM', 'marketing.header');
     const { url, isExact } = match;
     if (isExact) {
       history.push(`${url}/card`);

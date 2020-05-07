@@ -196,6 +196,31 @@ query getCollection($slug: String, $id: String, $previewPassword: String) {
           text
         }
       }
+      header {
+        title
+        description
+        bgColor
+        social {
+          type
+          url
+        }
+        image {
+          id
+          url
+          isPublic
+          fileName
+        }
+        bgImage {
+          id
+          url
+          isPublic
+          fileName
+        }
+        tag {
+          color
+          text
+        }
+      }
     }
   }
 }`;
