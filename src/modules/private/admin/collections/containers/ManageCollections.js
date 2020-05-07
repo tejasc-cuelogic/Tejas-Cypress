@@ -9,6 +9,7 @@ import CollectionsListing from '../components/CollectionsListing';
 function ManageCollections(props) {
   useEffect(() => {
     props.collectionStore.initRequest();
+    props.collectionStore.setFieldValue('initLoad', []);
   }, []);
 
   const search = (e) => {
@@ -34,7 +35,7 @@ function ManageCollections(props) {
           addon={(
             <Grid.Column width={3} textAlign="right" floated="right">
               <Button color="green" as={Link} floated="right" to={`${match.url}/new/`}>
-                Add new article
+                Add new collection
                 </Button>
             </Grid.Column>
           )}

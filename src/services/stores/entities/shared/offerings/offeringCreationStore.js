@@ -15,10 +15,12 @@ import {
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore from '../dataModelStore';
-import { deleteBonusReward, updateOffering,
+import {
+  deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
-  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted, getOfferingClosureProcess } from '../../../queries/offerings/manage';
+  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted, getOfferingClosureProcess,
+} from '../../../queries/offerings/manage';
 import { adminInvokeProcessorDriver } from '../../../queries/data';
 import { updateBusinessApplicationInformation, adminBusinessApplicationsDetails } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -1832,14 +1834,14 @@ export class OfferingCreationStore extends DataModelStore {
     const result = await this.executeMutation({
       mutation: 'adminInvokeProcessorDriver',
       variables: {
-                    method: 'OFFERING_CLOSE',
-                    payload: requestVariable,
-                 },
+        method: 'OFFERING_CLOSE',
+        payload: requestVariable,
+      },
       setLoader: adminInvokeProcessorDriver,
       message: {
-                success: 'Your request is processed.',
-                error: 'Error while performing operation.',
-              },
+        success: 'Your request is processed.',
+        error: 'Error while performing operation.',
+      },
     });
     uiStore.setProgress(false);
   });
@@ -2269,19 +2271,19 @@ export class OfferingCreationStore extends DataModelStore {
 
   getOfferingClosureProcessMeta = id => new Promise((resolve) => {
     graphql({
-        client,
-        query: getOfferingClosureProcess,
-        fetchPolicy: 'no-cache',
-        variables: { id },
-        onFetch: (res) => {
-          if (res !== undefined) {
-            resolve(res.getOfferingDetailsBySlug.closureProcess);
-          }
-        },
-        onError: () => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        },
-      });
+      client,
+      query: getOfferingClosureProcess,
+      fetchPolicy: 'no-cache',
+      variables: { id },
+      onFetch: (res) => {
+        if (res !== undefined) {
+          resolve(res.getOfferingDetailsBySlug.closureProcess);
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
   });
 }
 

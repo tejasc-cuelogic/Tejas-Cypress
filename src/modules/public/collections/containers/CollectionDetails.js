@@ -15,7 +15,7 @@ import { InlineLoader } from '../../../../theme/shared';
 class CollectionDetails extends Component {
   componentDidMount() {
     const { slug } = this.props.match.params;
-    this.props.collectionStore.getCollection(slug);
+    this.props.collectionStore.getPublicCollection(slug);
   }
 
   scrollToActiveOfferings = () => {

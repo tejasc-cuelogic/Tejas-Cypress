@@ -5,7 +5,6 @@ import { inject, observer } from 'mobx-react';
 import { Container, Icon, Menu, Dropdown, Label, Button, Accordion, Divider } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo, TopBanner } from '../shared';
-import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
 const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
@@ -257,8 +256,7 @@ export class NavigationItems extends Component {
   render() {
     const {
       stepInRoute, location, currentUser, loading, isMobBussinessApp,
-      isPrequalQulify, canSubmitApp, preQualSubmit, navStore, uiStore,
-      isMobile,
+      navStore, uiStore, isMobile,
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
     const logInSignUp = stepInRoute.to !== 'login' ? [
@@ -303,14 +301,6 @@ export class NavigationItems extends Component {
               <Menu.Item position={isMobBussinessApp ? 'right' : ''}>
                 <Button.Group>
                   <Button as={Link} to="/business" loading={loading} inverted color="red">Cancel</Button>
-                  {(isPrequalQulify || location.pathname.endsWith('/pre-qualification'))
-                    && (
-                      <SubmitButton
-                        canSubmitApp={canSubmitApp}
-                        click={preQualSubmit}
-                        loading={loading}
-                      />
-                    )}
                 </Button.Group>
               </Menu.Item>
             )

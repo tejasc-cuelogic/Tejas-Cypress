@@ -48,7 +48,7 @@ class Offering extends Component {
           heading={<Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>Active Campaigns</Header>}
           subheading={<p className={responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}>Browse the newest investment opportunities on NextSeed. {!responsiveVars.isMobile && <br /> }The next big thing may be inviting you to participate.</p>}
         />
-        <Divider section hidden />
+        <Divider as={Container} fitted />
         <CollectionsList collectionLength={3} offering />
         <Divider section hidden />
         {(!hideCreationList && showCreationList && !loading)

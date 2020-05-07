@@ -11,8 +11,8 @@ export default class Collections extends Component {
     return (
       <Switch>
         <Route exact path={`${match.url}`} render={props => <ManageCollections refMatch={refMatch} {...props} />} />
-        <Route path={`${match.url}/:id/:status`} render={props => <CollectionDetails refLink={match.url} {...props} />} />
-        <Route path={`${match.url}/:new`} render={props => <NewCollection refLink={match.url} {...props} />} />
+        <Route exact path={`${match.url}/new`} render={props => <NewCollection refLink={match.url} {...props} />} />
+        <Route path={`${match.url}/:slug`} render={props => <CollectionDetails refLink={match.url} {...props} />} />
       </Switch>
     );
   }
