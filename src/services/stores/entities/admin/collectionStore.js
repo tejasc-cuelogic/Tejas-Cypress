@@ -147,10 +147,12 @@ class CollectionsStore extends DataModelStore {
   }
 
   parseData = (data) => {
-    data.marketing.content.forEach((c) => {
-      // eslint-disable-next-line no-param-reassign
-      c.meta = JSON.parse(c.meta);
-    });
+    if (get(data, 'marketing.content')) {
+      data.marketing.content.forEach((c) => {
+        // eslint-disable-next-line no-param-reassign
+        c.meta = JSON.parse(c.meta);
+      });
+    }
     return data;
   }
 
