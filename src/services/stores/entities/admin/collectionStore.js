@@ -211,8 +211,7 @@ class CollectionsStore extends DataModelStore {
             this.collectionMapping = { ...tempData };
             await offeringsStore.initRequest({ stage: 'live' });
             this.setCollectionMetaList(this.mapDataByContentType(data.live), true);
-            this.setFieldValue('collectionMappingList', this.mapDataByContentType(data.live));
-          }
+            }
         })
         .catch(() => {
           this.setFieldValue('collectionIndex', index);
@@ -304,6 +303,9 @@ class CollectionsStore extends DataModelStore {
             this.collectionMapping.OFFERING.live = this.collectionMapping.OFFERING.live.filter(c => c.id !== id);
           });
         }
+        runInAction(() => {
+          this.collectionMapping.OFFERING.live = [...this.collectionMapping.OFFERING.live, [...data[mutation]]];
+        });
       }
       res();
     } catch (error) {
