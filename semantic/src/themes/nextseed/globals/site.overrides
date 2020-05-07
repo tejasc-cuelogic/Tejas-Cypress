@@ -405,6 +405,9 @@ a:not(.item), a:not(.ui.button){
 		text-decoration:underline !important;
 	}
 }
+.border-red{
+	border-color: #e84b0f !important;
+}
 .info-card{
 	.ui.button>.icon:not(.button){
 		line-height: 1;
@@ -3538,7 +3541,7 @@ h3.ui.header.error-2{
     right: 0;
 	left: 0;
 	margin: 0 !important;
-	background-color: rgba(000, 000, 000, 0.8);
+	border:5px solid transparent !important;
 	.ui.grid{
 		margin-left: 0  !important;
 		margin-right: 0  !important;
