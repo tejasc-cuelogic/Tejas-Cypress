@@ -82,7 +82,6 @@ class CollectionsStore extends DataModelStore {
     if (data) {
       this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [];
       const selectedCollections = data.map(c => c[mappingId]);
-      console.log('data', data);
       this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [
         ...this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value,
         ...selectedCollections,
