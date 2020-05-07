@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
-import Listing from '../../offerings/components/Listing';
+import Offerings from './Offerings';
 import AllInsights from '../../insights/components/AllInsights';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
 
@@ -114,7 +114,7 @@ class CollectionContent extends Component {
             && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
               && (
                 <>
-                  <Listing allLiveOfferingsList={collectionMapping.OFFERING[key]} isLoading={loadingArray.includes('getCollectionMapping')} />
+                  <Offerings allLiveOfferingsList={collectionMapping.OFFERING[key]} isLoading={loadingArray.includes('getCollectionMapping')} />
                 </>
               ))))}
 

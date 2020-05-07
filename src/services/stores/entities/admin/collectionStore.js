@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
-import { decorate, observable, action } from 'mobx';
+import { decorate, observable, action, runInAction } from 'mobx';
 import { get } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
@@ -192,7 +192,7 @@ class CollectionsStore extends DataModelStore {
         collectionId: this.collectionId,
       };
       this.collectionMappingWrapper(params)
-        .then((res) => {
+        .then(async (res) => {
           if (get(res, 'getCollectionMapping')) {
             let data = get(res, 'getCollectionMapping');
             const tempData = {};
@@ -209,8 +209,8 @@ class CollectionsStore extends DataModelStore {
             }
             this.setFieldValue('collectionIndex', index);
             this.collectionMapping = { ...tempData };
+            await offeringsStore.initRequest({ stage: 'live' });
             this.setCollectionMetaList(this.mapDataByContentType(data.live), true);
-            offeringsStore.initRequest({ stage: 'LIVE' });
             this.setFieldValue('collectionMappingList', this.mapDataByContentType(data.live));
           }
         })
@@ -223,18 +223,6 @@ class CollectionsStore extends DataModelStore {
   }
 
   mapDataByContentType = data => data.map(c => ({ key: c.id, text: c.offeringSlug, value: c.id }))
-  // switch (type) {
-  //   case 'OFFERING':
-  //     data.map(c => ({ key: c.id, text: c.offeringSlug, value: c.id }));
-  //     break;
-  //   case 'INSIGHT':
-  //     data.map(c => ({ key: c.id, text: c.name, value: c.id }));
-  //     break;
-  //   default:
-  //     data.map(c => ({ key: c.id, text: c.name, value: c.id }));
-  //     break;
-  // }
-
 
   collectionMappingWrapper = params => new Promise(async (resolve, rej) => {
     this.executeQuery({
@@ -298,7 +286,8 @@ class CollectionsStore extends DataModelStore {
     }
   }
 
-  collectionMappingMutation = (mutation, params) => new Promise(async (res, rej) => {
+  collectionMappingMutation = (mutation, params, additionalParams = {}) => new Promise(async (res, rej) => {
+    const { isContentMapping, id } = additionalParams;
     const variables = {
       ...params,
     };
@@ -309,6 +298,13 @@ class CollectionsStore extends DataModelStore {
         variables,
       });
       window.logger(data);
+      if (isContentMapping) {
+        if (mutation === 'adminDeleteCollectionMapping') {
+          runInAction(() => {
+            this.collectionMapping.OFFERING.live = this.collectionMapping.OFFERING.live.filter(c => c.id !== id);
+          });
+        }
+      }
       res();
     } catch (error) {
       rej(error);

@@ -10,10 +10,9 @@ import {
   allOfferings, allOfferingsCompact, updateOffering,
   adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings, getofferingById,
 } from '../../../queries/offerings/manage';
-import { offeringCreationStore, userStore, uiStore, campaignStore } from '../../../index';
+import { offeringCreationStore, userStore, uiStore, campaignStore, collectionStore } from '../../../index';
 import { ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
-import collectionStore from '../../admin/collectionStore';
 
 export class OfferingsStore {
   @observable data = {};
