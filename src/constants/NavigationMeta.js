@@ -611,11 +611,25 @@ export const PUBLIC_NAV = [
     headerMobile: false,
     subNavigations: NEW_OFFERING_LAYOUT,
   },
-  // {
-  //   title: 'Investment opportunities',
-  //   to: 'offerings/',
-  //   subNavigations: NEW_OFFERING_LAYOUT,
-  // },
+  {
+    title: 'Investment opportunities',
+    to: 'offerings/',
+    // header: false,
+    // headerMobile: false,
+    subNavigations: NEW_OFFERING_LAYOUT,
+  },
+  {
+    title: 'Investment opportunities',
+    to: '',
+    subPanel: 1,
+    exact: true,
+    // header: false,
+    // headerMobile: false,
+    subNavigations: [
+      { title: 'NextSeed Offerings', to: 'offerings' },
+      { title: 'Investment Collections', to: 'collections' },
+    ],
+  },
   {
     title: 'Investment opportunities',
     to: 'offerings-v1',
@@ -704,16 +718,6 @@ export const PUBLIC_NAV = [
       {
         clickable: true, title: 'Comments', to: 'comments', component: 'Comments',
       },
-    ],
-  },
-  {
-    title: 'Investment opportunities',
-    to: '',
-    subPanel: 1,
-    exact: true,
-    subNavigations: [
-      { title: 'NextSeed Offerings', to: 'offerings' },
-      { title: 'Investment Collections', to: 'collections' },
     ],
   },
   {
