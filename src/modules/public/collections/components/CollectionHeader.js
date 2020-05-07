@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import { Responsive, Icon, Header, Container, Grid } from 'semantic-ui-react';
+import { Responsive, Icon, Header, Container, Grid, Menu } from 'semantic-ui-react';
 import { Image64 } from '../../../../theme/shared';
+import HtmlEditor from '../../../shared/HtmlEditor';
+import { NavItems } from '../../../../theme/layout/NavigationItems';
 
 @inject('uiStore')
 @withRouter
@@ -13,9 +15,7 @@ export default class CollectionHeader extends Component {
     const { uiStore, data, scrollToActiveOfferings } = this.props;
     const { responsiveVars } = uiStore;
     const { isMobile } = responsiveVars;
-    const meta = JSON.parse(get(data, 'meta') || '{}');
-    const title = get(meta, 'title');
-    const description = get(meta, 'description');
+    const title = get(data, 'title');
     const headerDownClick = (
       <div className="current-projects-box">
         <p className="mb-0">View our current and past projects below.</p>
@@ -29,8 +29,8 @@ export default class CollectionHeader extends Component {
           ? (
             <>
               <div className="campaign-banner">
-                {get(meta, 'bgImage')
-                  && <Image64 bg originalImg className="campaign-details-banner" srcUrl={get(meta, 'bgImage')} />
+                {get(data, 'bgImage.url')
+                  && <Image64 bg originalImg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
                 }
                 <section className="banner">
                   <Responsive minWidth={768} as={Container}>
@@ -40,14 +40,14 @@ export default class CollectionHeader extends Component {
                           <Image64
                             originalImg
                             bg
-                            srcUrl={get(meta, 'image')}
+                            srcUrl={get(data, 'image.url')}
                             imgType="heroImage"
                           />
-                          {get(meta, 'tag.text') && <div style={{ backgroundColor: get(meta, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(meta, 'tag.text')}</p></div>}
+                          {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(data, 'tag.text')}</p></div>}
                         </div>
                         <div className="clearfix social-links mt-20">
-                          {get(meta, 'social[0]')
-                            ? get(meta, 'social').map(site => (
+                          {get(data, 'social[0]')
+                            ? get(data, 'social').map(site => (
                               <React.Fragment key={site.type}>
                                 {site.url
                                   && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
@@ -60,7 +60,7 @@ export default class CollectionHeader extends Component {
                         <Header as="h3" inverted>
                           {title}
                         </Header>
-                        <p>{description}</p>
+                        <span style={{ backgroundColor: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
                       </Grid.Column>
                     </Grid>
                   </Responsive>
@@ -76,18 +76,18 @@ export default class CollectionHeader extends Component {
                     <Image64
                       originalImg
                       bg
-                      srcUrl={get(meta, 'image')}
+                      srcUrl={get(data, 'image.url')}
                       imgType="heroImage"
                     />
-                    {get(meta, 'tag.text') && <div style={{ backgroundColor: get(meta, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(meta, 'tag.text')}</p></div>}
+                    {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(data, 'tag.text')}</p></div>}
                   </div>
                   <Header as="h4" inverted>
                     {title}
                   </Header>
-                  <p>{description}</p>
+                  <span style={{ backgroundColor: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
                   <div className="clearfix social-links mt-10">
-                    {get(meta, 'social[0]')
-                      ? get(meta, 'social').map(site => (
+                    {get(data, 'social[0]')
+                      ? get(data, 'social').map(site => (
                         <React.Fragment key={site.type}>
                           {site.url
                             && <a className="ml-30" target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
@@ -98,6 +98,15 @@ export default class CollectionHeader extends Component {
                 </div>
               </Responsive>
               {headerDownClick}
+              {!isMobile
+                && (
+                  <>
+                    <Menu vertical>
+                      <NavItems needNavLink sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} />
+                    </Menu>
+                  </>
+                )
+              }
             </div>
           )}
       </>

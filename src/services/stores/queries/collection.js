@@ -142,6 +142,28 @@ query getCollection($slug: String!) {
           text
         }
       }
+      header {
+        image {
+          url
+          isPublic
+        }
+        bgImage {
+          url
+          isPublic
+        }
+        bgColor
+        title
+        description
+        descriptionColor
+        tag {
+          color
+          text
+        }
+        social {
+          type
+          url
+        }
+      }
       content {
         contentType
         customValue
