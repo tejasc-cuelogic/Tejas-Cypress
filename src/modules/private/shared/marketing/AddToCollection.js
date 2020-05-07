@@ -7,19 +7,21 @@ import { InlineLoader } from '../../../../theme/shared';
 @observer
 export default class AddToCollection extends React.Component {
   handleCollectionChange = (e, res) => {
-    const { collectionMapping, setFieldValue } = this.props.collectionStore;
+    const { collectionMappingMutation, setFieldValue } = this.props.collectionStore;
     const { referenceId, isOffering, isContentMapping, collectionId } = this.props;
 
     const { value } = this.props.collectionStore.COLLECTION_MAPPING_FRM.fields.mappingMeta;
     const mutation = res.value.length > value.length ? 'adminCollectionMappingUpsert' : 'adminDeleteCollectionMapping';
-    const doropdownItem = mutation === 'adminCollectionMappingUpsert' ? res.value[res.value.length - 1] : value[value.length - 1];
-    const groupIds = isContentMapping ? { collectionId, referenceId: doropdownItem } : { collectionId: doropdownItem, referenceId };
+    const dropdownItem = mutation === 'adminCollectionMappingUpsert' ? res.value[res.value.length - 1] : value[value.length - 1];
+    console.log('dropdownItem', dropdownItem);
+    const groupIds = isContentMapping ? { collectionId, referenceId: dropdownItem } : { collectionId: dropdownItem, referenceId };
     const params = {
       ...groupIds,
       type: isOffering ? 'OFFERING' : 'INSIGHT',
       scope: 'PUBLIC',
     };
-    collectionMapping(mutation, params)
+    console.log('params', params);
+    collectionMappingMutation(mutation, params)
       .then(() => {
         setFieldValue('COLLECTION_MAPPING_FRM', res.value, 'fields.mappingMeta.value');
       })
@@ -38,7 +40,7 @@ export default class AddToCollection extends React.Component {
       <FormDropDown
         name="collection"
         fielddata={COLLECTION_MAPPING_FRM.fields.mappingMeta}
-        options={collectionMappingList.map(c => ({ key: c.name, text: c.name, value: c.id }))}
+        options={collectionMappingList}
         multiple
         selection
         fluid
