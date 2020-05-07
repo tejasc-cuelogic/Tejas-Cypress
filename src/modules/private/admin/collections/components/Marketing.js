@@ -12,14 +12,19 @@ const getModule = component => lazyRetry(() => import(`../components/${component
 
 const navItems = [
   {
+    to: 'card',
+    title: 'Card',
+    component: 'Tombstone',
+  },
+  {
+    to: 'header',
+    title: 'Header',
+    component: 'CollectionHeader',
+  },
+  {
     to: 'content',
     title: 'Content',
     component: 'Content',
-  },
-  {
-    to: 'tombstone',
-    title: 'Tombstone',
-    component: 'Tombstone',
   },
 ];
 
@@ -31,7 +36,7 @@ function Marketing(props) {
     props.collectionStore.setFormData('TOMBSTONE_FRM', 'marketing.tombstone');
     const { url, isExact } = match;
     if (isExact) {
-      history.push(`${url}/content`);
+      history.push(`${url}/card`);
     }
   }, []);
 
