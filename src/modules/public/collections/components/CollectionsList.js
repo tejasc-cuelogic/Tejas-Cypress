@@ -90,23 +90,23 @@ export default class CollectionsList extends Component {
     const { loadingArray } = nsUiStore;
     const { responsiveVars } = this.props.uiStore;
     const { isMobile, isTablet } = responsiveVars;
-    const { collections } = this.props.collectionStore;
+    const { publicCollections } = this.props.collectionStore;
     if (loadingArray.includes('getCollections')) {
       return <InlineLoader />;
     }
     return (
       <div className={`${offering ? '' : 'bg-offwhite'} ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-50 pb-50' : 'pt-100 pb-100'}`}>
         <Heading responsiveVars={responsiveVars} />
-        {collections && collections.length
+        {publicCollections && publicCollections.length
           ? (expandCollection || isMobile ? (
             <CollectionCards
-              collections={collections}
+              collections={publicCollections}
               responsiveVars={responsiveVars}
             />
           ) : (
               <CollectionItem
                 handleNavigate={this.handleNavigate}
-                collections={collections}
+                collections={publicCollections}
                 collectionLength={collectionLength}
                 isMobile={isMobile}
                 isTablet={isTablet}

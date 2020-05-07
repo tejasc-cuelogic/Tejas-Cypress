@@ -23,6 +23,8 @@ class CollectionsStore extends DataModelStore {
 
   collections = [];
 
+  publicCollections = [];
+
   initLoad = [];
 
   collection = {};
@@ -71,14 +73,14 @@ class CollectionsStore extends DataModelStore {
 
   getCollections = () => {
     if (!this.collectionApiHit) {
-      this.setFieldValue('collections', []);
+      this.setFieldValue('publicCollections', []);
       this.executeQuery({
         clientType: 'PUBLIC',
         query: 'getPublicCollections',
         setLoader: 'getCollections',
       }).then((res) => {
         if (get(res, 'getCollections')) {
-            this.setFieldValue('collections', res.getCollections);
+            this.setFieldValue('publicCollections', res.getCollections);
         }
         this.setFieldValue('collectionApiHit', true);
       });
@@ -150,6 +152,10 @@ class CollectionsStore extends DataModelStore {
         this.setFieldValue('collectionMappingsData', data);
       }
     });
+  }
+
+  get getCollectionLength() {
+    return get(this.publicCollections, '[0]') ? this.publicCollections.length : 0;
   }
 
   get getOfferingsList() {
@@ -393,6 +399,7 @@ class CollectionsStore extends DataModelStore {
 decorate(CollectionsStore, {
   ...dataModelStore.decorateDefault,
   collections: observable,
+  publicCollections: observable,
   collectionMappingsData: observable,
   collectionApiHit: observable,
   getOfferingsList: computed,

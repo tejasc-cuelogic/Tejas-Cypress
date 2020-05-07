@@ -614,8 +614,8 @@ export const PUBLIC_NAV = [
   {
     title: 'Investment opportunities',
     to: 'offerings/',
-    header: false,
-    headerMobile: false,
+    // header: false,
+    // headerMobile: false,
     subNavigations: NEW_OFFERING_LAYOUT,
     validateNav: 'OFFERING',
   },

@@ -10,10 +10,10 @@ import CollectionsFooter from '../components/CollectionsFooter';
 @observer
 @withRouter
 class Collections extends Component {
-  constructor(props) {
-    super(props);
-    props.collectionStore.getCollections();
-  }
+  // constructor(props) {
+  //   super(props);
+  //   props.collectionStore.getCollections();
+  // }
 
   handleExploreBtn = () => {
     this.props.history.push('/offerings');

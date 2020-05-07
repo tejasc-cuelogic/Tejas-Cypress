@@ -44,7 +44,7 @@ const metaTagsData = [
 ];
 const isMobile = document.documentElement.clientWidth < 768;
 const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/insights/category/', '/dashboard/resources/knowledge-base/', '/space/'];
-@inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore', 'referralsStore')
+@inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore', 'referralsStore', 'collectionStore')
 @withRouter
 @observer
 class App extends Component {
@@ -54,6 +54,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
+    props.collectionStore.getCollections();
     window.addEventListener('resize', this.handleResize);
     this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
     const urlParameter = queryString.parse(this.props.location.search);
@@ -265,7 +266,6 @@ class App extends Component {
     const { authChecked } = this.state;
     const { isTablet } = uiStore.responsiveVars;
     const { isInvestor } = userStore;
-
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
       return (
         <Route path="/secure-gateway" component={SecureGateway} />
