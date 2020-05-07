@@ -55,6 +55,8 @@ export class InvestmentStore {
 
   @observable isUpdateLimitReflect = false;
 
+  @observable transferRequestDraft = 'ACH';
+
   @action
   setShowTransferRequestErr = (status) => {
     this.showTransferRequestErr = status;
@@ -311,6 +313,7 @@ export class InvestmentStore {
               offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
               accountId: this.getSelectedAccountTypeId,
               transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
+              draftMethod: this.transferRequestDraft,
               // creditToSpend: this.getSpendCreditValue,
               callbackUrl: `${window.location.origin}/secure-gateway`,
             },
@@ -430,6 +433,7 @@ export class InvestmentStore {
         investmentAmount: this.investmentAmount.toString(),
         agreementId: this.agreementDetails.agreementId,
         transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
+        draftMethod: this.transferRequestDraft,
       };
       if (addUncheckedToc) {
         variables.uncheckedToc = agreementsStore.getUncheckedOptionalToc || [];
