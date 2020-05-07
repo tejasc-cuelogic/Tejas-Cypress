@@ -575,7 +575,11 @@ export class BusinessAppStore {
 
         ['bankStatements', 'businessTaxReturns', 'leaseAgreementsOrLOIs', 'personalTaxReturns'].forEach((field, key) => {
           const formField = ['bankStatements', 'businessTaxReturn', 'leaseAgreementsOrLOIs', 'personalTaxReturn'];
-          if (this.currentApplicationType === 'business') {
+          if (this.currentApplicationType === 'business' && this.getBusinessTypeCondtion) {
+            if (data[field] && data[field].length) {
+              this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', formField[key]);
+            }
+          } else if (this.currentApplicationType === 'business' && !this.getBusinessTypeCondtion && formField[key] !== 'bankStatements') {
             if (data[field] && data[field].length) {
               this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', formField[key]);
             }
@@ -706,6 +710,11 @@ export class BusinessAppStore {
   @computed get getNewBusinessTypeCondtion() {
     return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value
       && this.BUSINESS_APP_FRM.fields.businessGoal.value === BUSINESS_GOAL.NEW_BUSINESS);
+  }
+
+  @computed get getEstablishedBusinessTypeCondtion() {
+    return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value
+      && this.BUSINESS_APP_FRM.fields.businessGoal.value === BUSINESS_GOAL.ESTABLISHED);
   }
 
   @computed get getOwnPropertyCondtion() {
@@ -1484,9 +1493,13 @@ export class BusinessAppStore {
 
   @computed get getBusinessApplicationGoal() {
     let prevBusinessGoal = false;
-    if (this.businessApplicationDetailsAdmin
+    if (this.businessApplicationDetailsAdmin && this.businessApplicationDetailsAdmin.prequalDetails
       && (this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'BRAND_NEW' || this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'UPGRADE')) {
-      prevBusinessGoal = true;
+        prevBusinessGoal = true;
+      }
+    if (this.businessApplicationDetailsAdmin && this.businessApplicationDetailsAdmin.businessGoal
+      && (this.businessApplicationDetailsAdmin.businessGoal === 'BRAND_NEW' || this.businessApplicationDetailsAdmin.businessGoal === 'UPGRADE')) {
+        prevBusinessGoal = true;
     }
     return prevBusinessGoal;
   }
