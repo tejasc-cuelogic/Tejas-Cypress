@@ -3540,13 +3540,14 @@ h3.ui.header.error-2{
 }
 .offerings-container{
 	position: relative !important;
-	height: 414px !important;
 	margin-bottom: 30px !important;
 	&:last-child{
 		margin-bottom: 0 !important;
 	}
 	@media only screen and (min-width : @tabletBreakpoint) and (max-width: @computerBreakpoint){
-		height: 726px !important;
+		.collection-box{
+			height: 100% !important;
+		}
 		.collection-bg-image{
 			height: 100% !important;
 		}
@@ -3554,13 +3555,11 @@ h3.ui.header.error-2{
 	}
 }
 .collection-box{
-	position: absolute;
-    top: 0;
-    right: 0;
-	left: 0;
 	margin: 0 !important;
+	height: 100% !important;
 	border-width:5px !important;
 	border-style:solid !important;
+	border-color: transparent;
 	.ui.grid{
 		margin-left: 0  !important;
 		margin-right: 0  !important;
@@ -3583,6 +3582,9 @@ h3.ui.header.error-2{
 			text-transform: uppercase;
 			font-weight: 700;
 		}
+	}
+	img.ui.image{
+		width: 100%;
 	}
 }
 .collection-listings-box{
@@ -3622,15 +3624,11 @@ h3.ui.header.error-2{
 		&.ui.container{
 			margin-left: 0 !important;
 			margin-right: 0 !important;
-			.ui.card{
-				margin-left: 0 !important;
-				margin-right: 0 !important;
-			}
 		}
 	}
 }
 .collection-bg-image {
-	height: 374px;
+	height: 100% !important;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
