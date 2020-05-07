@@ -241,6 +241,7 @@ h6{
 }
 .pl-20{
 	padding-left: 20px !important;
+}
 .pl-10{
 	padding-left: 10px !important;
 }
@@ -3606,5 +3607,4 @@ h3.ui.header.error-2{
 	right: 0;
 	opacity: 0.1 !important;
     left: 0;
-}
 }
