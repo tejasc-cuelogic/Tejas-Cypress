@@ -11,7 +11,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
         <Container key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-50 pb-50 pl-20 pr-20' : ''}`}>
-          <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className={`collection-box ${responsiveVars.uptoTablet ? 'p-0' : 'p-36'}`}>
+          <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className={`${get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} collection-box ${responsiveVars.uptoTablet ? 'p-0' : 'p-36'}`}>
             <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16} className="zi-9">
               <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
               <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
@@ -44,7 +44,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
     <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
       {
         collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-          <Card as={Link} to={`/collections/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
+          <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/collections/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
             <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
             <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
               <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
