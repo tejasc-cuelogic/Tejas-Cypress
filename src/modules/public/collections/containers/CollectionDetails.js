@@ -12,7 +12,7 @@ import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
-@inject('collectionStore', 'uiStore', 'nsUiStore')
+@inject('collectionStore', 'uiStore', 'nsUiStore', 'navStore')
 @withRouter
 @observer
 class CollectionDetails extends Component {
