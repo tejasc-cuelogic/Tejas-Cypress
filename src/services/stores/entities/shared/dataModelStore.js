@@ -230,28 +230,30 @@ export default class DataModelStore {
   }
 
   setMediaAttribute = (form, attr, value, field, index = -1, arrayName) => {
+    const formName = Array.isArray(form) ? form[0] : form;
     if (index > -1) {
-      this[form].fields[arrayName][index][field][attr] = value;
+      this[formName].fields[arrayName][index][field][attr] = value;
     } else {
-      this[form].fields[field][attr] = value;
+      this[formName].fields[field][attr] = value;
     }
     this.currTime = +new Date();
   }
 
   resetImageCropper = (form, field, index = -1, arrayName) => {
+    const formName = Array.isArray(form) ? form[0] : form;
     const attributes = ['src', 'error', 'meta', 'base64String', 'responseUrl', 'value', 'preSignedUrl', 'confirmModal'];
     attributes.forEach((val) => {
-      const typeCheck = index > -1 ? this[form].fields[arrayName][index][field][val] : this[form].fields[field][val];
+      const typeCheck = index > -1 ? this[formName].fields[arrayName][index][field][val] : this[formName].fields[field][val];
       if ((typeof typeCheck === 'object') && (typeCheck !== null)) {
         if (index > -1) {
-          this[form].fields[arrayName][index][field][val] = {};
+          this[formName].fields[arrayName][index][field][val] = {};
         } else {
-          this[form].fields[field][val] = {};
+          this[formName].fields[field][val] = {};
         }
       } else if (index > -1) {
-        this[form].fields[arrayName][index][field][val] = val === 'confirmModal' ? false : '';
+        this[formName].fields[arrayName][index][field][val] = val === 'confirmModal' ? false : '';
       } else {
-        this[form].fields[field][val] = val === 'confirmModal' ? false : '';
+        this[formName].fields[field][val] = val === 'confirmModal' ? false : '';
       }
     });
     this.currTime = +new Date();

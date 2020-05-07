@@ -12,7 +12,7 @@ import CollectionsFooter from '../components/CollectionsFooter';
 class Collections extends Component {
   constructor(props) {
     super(props);
-    props.collectionStore.initRequest('ACTIVE');
+    props.collectionStore.getCollections();
   }
 
   handleExploreBtn = () => {

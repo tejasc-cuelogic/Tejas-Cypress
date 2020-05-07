@@ -1,14 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { Modal, Card, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-// import { InlineLoader } from '../../../../../theme/shared';
-import LockUnlockOffering from '../../offerings/components/LockUnlockOffering';
-// import CreationSummary from '../components/CreationSummary';
+import LockUnlockCollection from '../components/LockUnlockCollection';
 import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
-
-import Overview from '../components/Overview';
 
 const getModule = component => lazyRetry(() => import(`../components/${component}`));
 
@@ -26,23 +22,40 @@ const navItems = [
 ];
 function CollectionDetails(props) {
   // const isLocked = true;
-  const { match, refLink } = props;
   const history = useHistory();
+
+  useEffect(() => {
+    const { getCollection, initLoad } = props.collectionStore;
+    if (!initLoad.includes('getCollection')) {
+      getCollection(props.match.params.slug);
+    }
+  }, []);
+
+  const handleCloseModal = () => {
+    props.collectionStore.setFieldValue('initLoad', []);
+    history.push(props.refLink);
+  };
+
+  const { match } = props;
   const { responsiveVars } = props.uiStore;
+  const { collection, collectionLoading } = props.collectionStore;
+
+  if (collectionLoading.includes('getCollection')) {
+    return <InlineLoader />;
+  }
+
   return (
     <>
-      <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={() => history.push(refLink)} centered={false}>
+      <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={() => handleCloseModal()} centered={false}>
         <Modal.Content className="transaction-details">
-          {/* Lock unlock component */}
           <Header as="h3">
-            Collection Details
+            {collection.name}
           </Header>
-          <LockUnlockOffering />
+          <LockUnlockCollection />
           <Card fluid>
             <SecondaryMenu isBonusReward bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
             <SuspenseBoundary fallback={<InlineLoader styledAs={{ marginTop: '100px' }} />}>
               <Switch>
-                <Route exact path={match.url} component={Overview} />
                 {navItems.map((item) => {
                   const CurrentComponent = getModule(item.component);
                   return (
@@ -68,4 +81,4 @@ function CollectionDetails(props) {
     </>
   );
 }
-export default inject('collectionStore', 'uiStore')(observer(CollectionDetails));
+export default inject('collectionStore', 'uiStore', 'nsUiStore')(observer(CollectionDetails));

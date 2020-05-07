@@ -7,24 +7,43 @@ export const COLLECTION = FormHelper.generateMeta([
 ]);
 
 export const OVERVIEW = FormHelper.generateMeta([
-  ['offeringSlug', 'Collection URL', '', 'required', 'Enter here'],
+  ['slug', 'Slug', '', 'required', 'Enter here'],
   ['previewPassword', 'Preview Password', '', 'required', 'Enter here'],
-  ['offeringreferralCodeSlug', 'Issuer Referral Code', '', 'required', 'Enter here'],
 ]);
 
-export const TOMBSTONE_BASIC = {
-  tag: {
-    ...FormHelper.generateMeta([
-      ['color', 'Colour', '', '', 'Enter Here'], ['text', 'text', '', '', 'Enter Here'],
-    ]),
-  },
+const COMMON_TOMBSTONE_META = {
   ...FormHelper.generateMeta([
-  ['title', 'Title', '', 'required', 'Enter Here'],
-  ['bgColor', 'Background Colour', '', 'optional', 'Enter Here'],
-  ['description', 'Description', '', 'required', 'Describe your project and what you`re raising funds to accomplish.'],
-  ['bgImage', 'BackGround Image', '', 'required', '', { s3Upload: true }],
-  ['image', 'Featured Image', '', 'required', '', { s3Upload: true }],
-]),
+    ['title', 'Title', '', 'required', 'Enter Here'],
+    ['bgColor', 'Background Color', '', 'optional', 'Enter Here'],
+    ['description', 'Description', '', 'required', 'Describe your project and what you`re raising funds to accomplish.'],
+    ['bgImage', 'BackGround Image', '', 'required', '', { s3Upload: true }],
+    ['image', 'Featured Image', '', 'required', '', { s3Upload: true }],
+  ]),
+};
+
+export const TOMBSTONE_BASIC = {
+  ...FormHelper.generateMeta([
+    ['color', 'Tag Color', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag', objRef: 'tag' } }],
+    ['text', 'Tag Text', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag', objRef: 'tag' } }],
+  ]),
+  ...COMMON_TOMBSTONE_META,
+};
+
+export const COLLECTION_MAPPING = FormHelper.generateMeta([
+  ['mappingMeta', 'Collection Mapping', '', '', ''],
+]);
+
+export const HEADER_META = {
+  meta: [{
+    ...COMMON_TOMBSTONE_META,
+    social: [FormHelper.generateMeta([
+      ['type', 'Type', '', '', ''],
+      ['icon', 'Icon', '', '', ''],
+      ['iconColor', 'Icon Color', '', '', ''],
+      ['url', 'URL', '', '', ''],
+    ]),
+    ],
+  }],
 };
 
 export const CONTENT = {
@@ -64,11 +83,22 @@ export const CONTENT = {
       rule: 'required',
       options: [
         { key: 'CUSTOM', value: 'CUSTOM', text: 'Custom' },
-        { key: 'INVESTMENT_DETAILS', value: 'INVESTMENT_DETAILS', text: 'Investment Details' },
-        { key: 'BONUS_REWARDS', value: 'BONUS_REWARDS', text: 'Bonus Rewards' },
-        { key: 'DATA_ROOM', value: 'DATA_ROOM', text: 'Data Room' },
+        { key: 'ACTIVE_INVESTMENTS', value: 'ACTIVE_INVESTMENTS', text: 'Active Investments' },
+        { key: 'COMPLETE_INVESTMENTS', value: 'COMPLETE_INVESTMENTS', text: 'Complete Investments' },
+        { key: 'INSIGHTS', value: 'INSIGHTS', text: 'Insights' },
+        { key: 'HEADER', value: 'HEADER', text: 'Header' },
       ],
       placeHolder: 'Enter here',
+    },
+    meta: {
+      ...COMMON_TOMBSTONE_META,
+      social: [FormHelper.generateMeta([
+        ['type', 'Type', '', '', ''],
+        ['icon', 'Icon', '', '', ''],
+        ['iconColor', 'Icon Color', '', '', ''],
+        ['url', 'URL', '', '', ''],
+      ]),
+      ],
     },
     customValue: {
       label: 'Custom Value',

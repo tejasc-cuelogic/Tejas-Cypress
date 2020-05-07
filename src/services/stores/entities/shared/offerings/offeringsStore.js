@@ -437,7 +437,7 @@ export class OfferingsStore {
   }
 
   @computed get loading() {
-    return this.data[this.requestState.stage].loading;
+    return this.data[this.requestState.stage] && this.data[this.requestState.stage].loading;
   }
 
   @action resetInitLoad() {
