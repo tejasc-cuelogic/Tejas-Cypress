@@ -303,6 +303,18 @@
                 margin-bottom: 0;
             }
         }
+        &.campaign{
+            >.content{
+                position: relative;
+                .description{
+                    margin-bottom: 42px !important;
+                }
+                a{
+                    position: absolute;
+                    bottom: 14px;
+                }
+            }
+        }
     }
     &.bordered{
         box-shadow: none;

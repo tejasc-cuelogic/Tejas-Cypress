@@ -10,8 +10,8 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-        <Container key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-50 pb-50 pl-20 pr-20' : 'pt-30 pb-30'}`}>
-          <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className="p-36 collection-box">
+        <Container key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-0 pb-0 pl-0 pr-0' : ''}`}>
+          <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className={`${get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} collection-box ${responsiveVars.uptoTablet ? 'p-0' : 'p-36'}`}>
             <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16} className="zi-9">
               <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
               <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
@@ -23,7 +23,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
               <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
               {!isMobile && !isTablet
                 && (
-                  <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30 mb-30">Explore</Button>
+                  <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30">Explore</Button>
                 )
               }
             </Grid.Column>
@@ -41,10 +41,10 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
 
 const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
   <Container className="collection-listings-box">
-    <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : 3}>
+    <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
       {
         collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-          <Card as={Link} to={`/collections/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
+          <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/collections/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
             <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
             <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
               <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
@@ -90,23 +90,23 @@ export default class CollectionsList extends Component {
     const { loadingArray } = nsUiStore;
     const { responsiveVars } = this.props.uiStore;
     const { isMobile, isTablet } = responsiveVars;
-    const { collections } = this.props.collectionStore;
+    const { publicCollections } = this.props.collectionStore;
     if (loadingArray.includes('getCollections')) {
       return <InlineLoader />;
     }
     return (
       <div className={`${offering ? '' : 'bg-offwhite'} ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-50 pb-50' : 'pt-100 pb-100'}`}>
         <Heading responsiveVars={responsiveVars} />
-        {collections && collections.length
+        {publicCollections && publicCollections.length
           ? (expandCollection || isMobile ? (
             <CollectionCards
-              collections={collections}
+              collections={publicCollections}
               responsiveVars={responsiveVars}
             />
           ) : (
               <CollectionItem
                 handleNavigate={this.handleNavigate}
-                collections={collections}
+                collections={publicCollections}
                 collectionLength={collectionLength}
                 isMobile={isMobile}
                 isTablet={isTablet}
