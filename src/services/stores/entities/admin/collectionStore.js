@@ -7,7 +7,7 @@ import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING, HEADER_META } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, getPublicCollections, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
-import { uiStore } from '../../index';
+import { uiStore, authStore } from '../../index';
 
 
 class CollectionsStore extends DataModelStore {
@@ -75,7 +75,7 @@ class CollectionsStore extends DataModelStore {
     if (!this.collectionApiHit) {
       this.setFieldValue('publicCollections', []);
       this.executeQuery({
-        clientType: 'PUBLIC',
+        clientType: authStore.isUserLoggedIn ? 'PRIVATE' : 'PUBLIC',
         query: 'getPublicCollections',
         setLoader: 'getCollections',
       }).then((res) => {
@@ -116,7 +116,7 @@ class CollectionsStore extends DataModelStore {
   getPublicCollection = (slug) => {
     this.setFieldValue('collectionMappingsData', null);
     this.executeQuery({
-      clientType: 'PUBLIC',
+      clientType: authStore.isUserLoggedIn ? 'PRIVATE' : 'PUBLIC',
       query: 'getPublicCollection',
       setLoader: 'getCollection',
       variables: { slug },
@@ -132,7 +132,7 @@ class CollectionsStore extends DataModelStore {
 
   getCollectionMappingPublic = (collectionId) => {
     this.executeQuery({
-      clientType: 'PUBLIC',
+      clientType: authStore.isUserLoggedIn ? 'PRIVATE' : 'PUBLIC',
       query: 'getPublicCollectionMapping',
       setLoader: 'getCollectionMapping',
       variables: { collectionId },

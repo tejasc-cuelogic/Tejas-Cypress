@@ -41,7 +41,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
 
 const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
   <Container className="collection-listings-box">
-    <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : 3}>
+    <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
       {
         collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
           <Card as={Link} to={`/collections/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>

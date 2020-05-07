@@ -29,8 +29,8 @@ export default class TombstonePreview extends Component {
               <HtmlEditor readOnly content={get(collection, 'description.value')} />
               <Button inverted color="white" className="mt-30 mb-30">Explore</Button>
             </Grid.Column>
-            {get(collection, 'bgImage.value')
-              && <Image64 bg originalImg className="collection-bg-image" srcUrl={get(collection, 'bgImage.value')} />
+            {get(collection, 'bgImage.preSignedUrl')
+              && <Image64 bg originalImg className="collection-bg-image" srcUrl={get(collection, 'bgImage.preSignedUrl')} />
             }
           </Grid>
         </Container>
