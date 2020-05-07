@@ -10,7 +10,7 @@ import {
   allOfferings, allOfferingsCompact, updateOffering,
   adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings, getofferingById,
 } from '../../../queries/offerings/manage';
-import { offeringCreationStore, userStore, uiStore, campaignStore } from '../../../index';
+import { offeringCreationStore, userStore, uiStore, campaignStore, collectionStore } from '../../../index';
 import { ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -73,6 +73,8 @@ export class OfferingsStore {
           if (stage === 'live') {
             this.orderedActiveListArr();
           }
+          collectionStore.setFieldValue('collectionMappingList',
+            res.getOfferings.map(c => ({ key: c.id, text: c.offeringSlug, value: c.id })));
         }
       },
       onError: (err) => {
@@ -290,17 +292,17 @@ export class OfferingsStore {
       fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: (res) => {
-          if (!this.offerDataLoading) {
-            this.currentId = id;
-            this.offerLoading = false;
-            this.oldOfferData = {};
-            const { setFormData, setCurrentOfferingId, setFieldValue } = offeringCreationStore;
-            setFieldValue('currentOfferingSlug', id);
-            setCurrentOfferingId(res.getOfferingDetailsBySlug.id);
-            setFormData('OFFERING_DETAILS_FRM', false);
-            setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
-            setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
-          }
+        if (!this.offerDataLoading) {
+          this.currentId = id;
+          this.offerLoading = false;
+          this.oldOfferData = {};
+          const { setFormData, setCurrentOfferingId, setFieldValue } = offeringCreationStore;
+          setFieldValue('currentOfferingSlug', id);
+          setCurrentOfferingId(res.getOfferingDetailsBySlug.id);
+          setFormData('OFFERING_DETAILS_FRM', false);
+          setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
+          setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');

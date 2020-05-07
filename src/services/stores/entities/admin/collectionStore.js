@@ -1,20 +1,20 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
-import { decorate, observable, action, computed, toJS } from 'mobx';
+import { decorate, observable, action, computed, toJS, runInAction } from 'mobx';
 import { get, orderBy } from 'lodash';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META } from '../../../constants/admin/collection';
-import { adminCollectionUpsert, getCollections, getPublicCollections, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping } from '../../queries/collection';
+import { adminCollectionUpsert, getCollections, getPublicCollections, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
-import { uiStore, authStore } from '../../index';
+import { uiStore, authStore, offeringsStore } from '../../index';
 
 
 class CollectionsStore extends DataModelStore {
   constructor() {
-    super({ adminCollectionUpsert, getCollections, getPublicCollections, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping });
+    super({ adminCollectionUpsert, getCollections, getPublicCollections, getPublicCollection, adminDeleteCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping });
   }
 
   collectionApiHit = false;
@@ -65,11 +65,13 @@ class CollectionsStore extends DataModelStore {
       }).then((res) => {
         if (get(res, 'getCollections')) {
           if (type) {
-            this.setSelectedCollections(type, referenceId).then(() => {
-              this.setFieldValue('collectionMappingList', res.getCollections);
-            });
+            this.setSelectedCollections(type, referenceId).then(action(() => {
+              this.setFieldValue('collectionMappingList',
+                get(res, 'getCollections').map(c => ({ key: c.id, text: c.name, value: c.id })));
+            }));
           } else {
-            this.setFieldValue('collections', res.getCollections);
+            this.setCollectionMetaList(get(res, 'getCollections'));
+            this.setFieldValue('collections', get(res, 'getCollections'));
           }
         }
         this.setFieldValue('apiHit', false);
@@ -99,15 +101,13 @@ class CollectionsStore extends DataModelStore {
       referenceId,
     };
     this.collectionMappingWrapper(params).then(action((res) => {
-      this.setCollectionMetaList(res, params, isContentMapping);
+      this.setCollectionMetaList(get(res, 'getCollectionMapping'), isContentMapping);
       resolve();
     }));
   })
 
-  setCollectionMetaList = (res, params, isContentMapping) => {
-    const field = isContentMapping ? params.type.toLocaleLowerCase() : null;
-    const data = field ? get(res, 'getCollectionMapping')[field] : get(res, 'getCollectionMapping');
-    const mappingId = field ? 'id' : 'collectionId';
+  setCollectionMetaList = (data, isContentMapping) => {
+    const mappingId = isContentMapping ? 'id' : 'collectionId';
     if (data) {
       this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [];
       const selectedCollections = data.map(c => c[mappingId]);
@@ -188,7 +188,7 @@ class CollectionsStore extends DataModelStore {
       return false;
     }
     if (form === 'HEADER_META_FRM') {
-      const metaList = collection.marketing.content.map(c => c.meta);
+      const metaList = get(collection, 'marketing.content') ? collection.marketing.content.map(c => c.meta) : [];
       this[form] = Validator.setFormData(this[form], { meta: metaList }, ref, keepAtLeastOne);
     } else {
       this[form] = Validator.setFormData(this[form], collection, ref, keepAtLeastOne);
@@ -301,7 +301,7 @@ class CollectionsStore extends DataModelStore {
         collectionId: this.collectionId,
       };
       this.collectionMappingWrapper(params)
-        .then((res) => {
+        .then(async (res) => {
           if (get(res, 'getCollectionMapping')) {
             let data = get(res, 'getCollectionMapping');
             const tempData = {};
@@ -318,18 +318,19 @@ class CollectionsStore extends DataModelStore {
             }
             this.setFieldValue('collectionIndex', index);
             this.collectionMapping = { ...tempData };
+            await offeringsStore.initRequest({ stage: 'live' });
+            this.setCollectionMetaList(data.live, true);
           }
-          // this.setSelectedCollections(type, referenceId).then(() => {
-          //   this.setFieldValue('collectionMappingList', res.getCollections);
-          // });
         })
         .catch(() => {
-          this.setFieldValue('collectionIndex', null);
+          this.setFieldValue('collectionIndex', index);
         });
     } else {
       this.setFieldValue('collectionIndex', index);
     }
   }
+
+  mapDataByContentType = data => data.map(c => ({ key: c.id, text: c.offeringSlug, value: c.id }))
 
   collectionMappingWrapper = params => new Promise(async (resolve, rej) => {
     this.executeQuery({
@@ -368,11 +369,33 @@ class CollectionsStore extends DataModelStore {
   });
 
 
+  adminDeleteCollection = id => new Promise(async (res, rej) => {
+    const variables = {
+      id,
+    };
+    try {
+      const data = await this.executeMutation({
+        mutation: 'adminDeleteCollection',
+        setLoader: 'adminDeleteCollection',
+        variables,
+      });
+      window.logger(data);
+      res();
+    } catch (error) {
+      Helper.toast('Something went wrong.', 'error');
+      rej(error);
+    }
+  });
+
+
   updateContent = () => {
-    this.collection.marketing.content = [...this.collection.marketing.content, ...Validator.evaluateFormData(this.COLLECTION_CONTENT_FRM.fields).content];
+    if (get(this.collection, 'marketing.content')) {
+      this.collection.marketing.content = [...this.collection.marketing.content, ...Validator.evaluateFormData(this.COLLECTION_CONTENT_FRM.fields).content];
+    }
   }
 
-  collectionMapping = (mutation, params) => new Promise(async (res, rej) => {
+  collectionMappingMutation = (mutation, params, additionalParams = {}) => new Promise(async (res, rej) => {
+    const { isContentMapping, id } = additionalParams;
     const variables = {
       ...params,
     };
@@ -383,10 +406,20 @@ class CollectionsStore extends DataModelStore {
         variables,
       });
       window.logger(data);
+      if (isContentMapping) {
+        if (mutation === 'adminDeleteCollectionMapping') {
+          runInAction(() => {
+            this.collectionMapping.OFFERING.live = this.collectionMapping.OFFERING.live.filter(c => c.id !== id);
+          });
+        }
+        runInAction(() => {
+          this.collectionMapping.OFFERING.live = [...this.collectionMapping.OFFERING.live, [...data[mutation]]];
+        });
+      }
       res();
     } catch (error) {
       rej(error);
-      Helper.toast('Collection cannot be added', 'error');
+      Helper.toast('Something went wrong.', 'error');
     }
   });
 
@@ -452,6 +485,7 @@ decorate(CollectionsStore, {
   upsertCollection: action,
   setCollectionMetaList: action,
   filterInitLoad: action,
+  collectionMappingMutation: action,
   parseData: action,
   setFormData: action,
   getActionType: action,
