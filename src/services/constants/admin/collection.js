@@ -30,7 +30,7 @@ export const TOMBSTONE_BASIC = {
 };
 
 export const COLLECTION_MAPPING = FormHelper.generateMeta([
-  ['collection', 'Collections', '', '', ''],
+  ['mappingMeta', 'Collection Mapping', '', '', ''],
 ]);
 
 export const HEADER_META = {
