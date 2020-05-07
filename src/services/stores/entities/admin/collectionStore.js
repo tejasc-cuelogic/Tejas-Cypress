@@ -23,6 +23,8 @@ class CollectionsStore extends DataModelStore {
 
   collectionMapping = {};
 
+  collectionMappingList = [];
+
   collectionIndex = null;
 
   COLLECTION_FRM = Validator.prepareFormObject(COLLECTION);
@@ -50,7 +52,7 @@ class CollectionsStore extends DataModelStore {
         if (get(res, 'getCollections')) {
           if (type) {
             this.setSelectedCollections(type, referenceId).then(() => {
-              this.setFieldValue('collections', res.getCollections);
+              this.setFieldValue('collectionMappingList', res.getCollections);
             });
           } else {
             this.setFieldValue('collections', res.getCollections);
@@ -61,24 +63,30 @@ class CollectionsStore extends DataModelStore {
     }
   }
 
-  setSelectedCollections = (type, referenceId) => new Promise(async (resolve) => {
+  setSelectedCollections = (type, referenceId, isContentMapping = false) => new Promise(async (resolve) => {
     const params = {
       type: this.getContentType(type),
       referenceId,
     };
     this.collectionMappingWrapper(params).then(action((res) => {
-      const data = get(res, 'getCollectionMapping');
-      if (data) {
-        this.COLLECTION_MAPPING_FRM.fields.collection.value = [];
-        const selectedCollections = data.map(c => c.collectionId);
-        this.COLLECTION_MAPPING_FRM.fields.collection.value = [
-          ...this.COLLECTION_MAPPING_FRM.fields.collection.value,
-          ...selectedCollections,
-        ];
-      }
+      this.setCollectionMetaList(res, params, isContentMapping);
       resolve();
     }));
   })
+
+  setCollectionMetaList = (res, params, isContentMapping) => {
+    const field = isContentMapping ? params.type.toLocaleLowerCase() : null;
+    const data = field ? get(res, 'getCollectionMapping')[field] : get(res, 'getCollectionMapping');
+    const mappingId = field ? 'id' : 'collectionId';
+    if (data) {
+      this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [];
+      const selectedCollections = data.map(c => c[mappingId]);
+      this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [
+        ...this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value,
+        ...selectedCollections,
+      ];
+    }
+  }
 
 
   setFormData = (form, ref, keepAtLeastOne) => {
@@ -139,10 +147,12 @@ class CollectionsStore extends DataModelStore {
   }
 
   parseData = (data) => {
-    data.marketing.content.forEach((c) => {
-      // eslint-disable-next-line no-param-reassign
-      c.meta = JSON.parse(c.meta);
-    });
+    if (get(data, 'marketing.content')) {
+      data.marketing.content.forEach((c) => {
+        // eslint-disable-next-line no-param-reassign
+        c.meta = JSON.parse(c.meta);
+      });
+    }
     return data;
   }
 
@@ -199,6 +209,9 @@ class CollectionsStore extends DataModelStore {
             this.setFieldValue('collectionIndex', index);
             this.collectionMapping = { ...tempData };
           }
+          // this.setSelectedCollections(type, referenceId).then(() => {
+          //   this.setFieldValue('collectionMappingList', res.getCollections);
+          // });
         })
         .catch(() => {
           this.setFieldValue('collectionIndex', null);
@@ -301,6 +314,7 @@ decorate(CollectionsStore, {
   COLLECTION_CONTENT_FRM: observable,
   COLLECTION_MAPPING_FRM: observable,
   collectionMapping: observable,
+  collectionMappingList: observable,
   collectionId: observable,
   collectionIndex: observable,
   HEADER_META_FRM: observable,
@@ -310,6 +324,7 @@ decorate(CollectionsStore, {
   initLoad: observable,
   initRequest: action,
   upsertCollection: action,
+  setCollectionMetaList: action,
   filterInitLoad: action,
   parseData: action,
   setFormData: action,
