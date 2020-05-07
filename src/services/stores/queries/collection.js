@@ -179,6 +179,7 @@ query getCollection($slug: String, $id: String, $previewPassword: String) {
       tombstone {
         title
         description
+        descriptionColor
         bgColor
         image {
           id
@@ -200,6 +201,7 @@ query getCollection($slug: String, $id: String, $previewPassword: String) {
       header {
         title
         description
+        descriptionColor
         bgColor
         social {
           type

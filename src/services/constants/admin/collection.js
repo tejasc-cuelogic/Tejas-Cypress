@@ -15,6 +15,7 @@ const COMMON_TOMBSTONE_META = {
   ...FormHelper.generateMeta([
     ['title', 'Title', '', 'required', 'Enter Here'],
     ['bgColor', 'Background Color', '', 'optional', 'Enter Here'],
+    ['descriptionColor', 'Description Color', '', 'optional', 'Enter Here'],
     ['description', 'Description', '', 'required', 'Describe your project and what you`re raising funds to accomplish.'],
     ['bgImage', 'BackGround Image', '', 'required', '', { s3Upload: true }],
     ['image', 'Featured Image', '', 'required', '', { s3Upload: true }],

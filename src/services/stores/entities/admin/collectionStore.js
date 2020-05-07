@@ -235,9 +235,7 @@ class CollectionsStore extends DataModelStore {
         }
       });
     }
-    if (this.collectionId !== null) {
-      data.id = this.collectionId;
-    }
+
     if (cleanData) {
       data = cleanDeep(data);
       data = omitDeep(data, ['__typename', 'fileHandle']);
@@ -246,6 +244,10 @@ class CollectionsStore extends DataModelStore {
       collectionData = { collectionDetails: { marketing: { header: { ...data } } } };
     } else {
       collectionData = { ...data };
+    }
+
+    if (this.collectionId !== null) {
+      collectionData.id = this.collectionId;
     }
     // if (keyName) {
     //   collectionData[keyName] = data;
@@ -399,7 +401,8 @@ class CollectionsStore extends DataModelStore {
         setLoader: 'adminCollectionUpsert',
         variables: this.formPayLoad(params),
       });
-      if ((params.forms[0] === 'TOMBSTONE_FRM')) {
+
+      if (['TOMBSTONE_FRM', 'CARD_HEADER_META_FRM', 'CARD_HEADER_SOCIAL_FRM'].includes(params.forms[0])) {
         this.getCollection(get(collection, 'slug'));
       }
       this.updateContent();
