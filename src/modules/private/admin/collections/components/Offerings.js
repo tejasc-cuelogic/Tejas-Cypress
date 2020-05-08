@@ -1,259 +1,204 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import { get, includes } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
+import { Button, Icon, Confirm } from 'semantic-ui-react';
+import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
 import { DataFormatter } from '../../../../../helper';
 import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
-import { STAGES, SECURITIES_VALUES } from '../../../../../services/constants/admin/offerings';
+import { STAGES } from '../../../../../services/constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES, OFFERING_REGULATIONS } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 
 const actions = {
-  edit: { label: 'Edit', icon: 'pencil' },
-  delete: { label: 'Delete', icon: 'trash' },
   publish: { label: 'Publish', icon: 'view', icon1: 'no-view' },
 };
+const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
+const SortableItem = SortableElement(({
+  offering, handleAction, stage,
+}) => (
+    <div className={(offering.isAvailablePublicly) ? 'row-wrap striped-table' : 'row-wrap row-highlight striped-table'}>
+      <div className="balance first-column">
+        <DragHandle />
+        <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
+          <b>
+            {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
+              ? offering.keyTerms.shorthandBusinessName : (
+                (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
+              ))}
+          </b>
+          <br />
+          {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
+        </Link>
+      </div>
+      <div className="balance width-130">
+        {offering && offering.stage
+          ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0
+            ? STAGES.PROCESSING.label
+            : stage === 'live' && get(offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
+              ? STAGES.LOCK.label
+              : STAGES[offering.stage].label
+          : STAGES[offering.stage].label
+        }
+      </div>
+      <div className="balance width-250">
+        Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
+        Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
+        {stage === 'live' ? 'Days till close' : 'Closed'}: {stage === 'live' ? (offering.closureSummary && offering.closureSummary.processingDate
+          ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A')
+          : (get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false)} /> : 'N/A')}
+      </div>
+      <div className="balance" onClick={() => handleAction('Edit', offering)}>
+        <p className="overflow-text">
+          {offering.issuerDetails
+            ? (
+              <>
+                <b>
+                  {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
+                </b>
+                <br />
+                {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
+                <br />
+                {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
+              </>
+            )
+            : <b>N/A</b>
+          }
+        </p>
+      </div>
+      <div className="action right-align width-70">
+        <Button.Group>
+          {Object.keys(actions).map(action => (
+            <Button icon className="link-button">
+              <Icon className={`ns-${offering.isAvailablePublicly === 'PUBLIC' ? actions[action].icon : actions[action].icon1}`} onClick={() => handleAction(actions[action].label, offering, offering.isAvailablePublicly !== 'PUBLIC')} />
+            </Button>
+          ))}
 
-@inject('uiStore', 'offeringsStore', 'offeringCreationStore', 'manageOfferingStore', 'collectionStore')
+          <Button icon className="link-button">
+            <Icon className="ns-trash" onClick={() => handleAction('Delete', offering, !offering.isAvailablePublicly)} />
+          </Button>
+        </Button.Group>
+      </div>
+    </div>
+  ));
+const SortableList = SortableContainer(({
+  allOfferingsList, handleAction, stage, listIndex,
+}) => (
+    <div className="tbody">
+      {allOfferingsList.map((offering, index) => (
+        <SortableItem
+          // eslint-disable-next-line react/no-array-index-key
+          key={`item-${index}`}
+          docIndx={index}
+          offering={offering}
+          handleAction={handleAction}
+          index={index}
+          stage={stage}
+          listIndex={listIndex}
+        />
+      ))}
+    </div>
+  ));
+@inject('uiStore', 'offeringsStore', 'collectionStore')
 @withRouter
 @observer
-export default class Offerings extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { isPublic: false, loadingOfferId: '' };
-    this.props.offeringCreationStore.setFieldValue('isListingPage', true);
-    this.props.offeringsStore.resetInitLoad();
-    this.props.offeringCreationStore.resetInitLoad();
-    this.props.manageOfferingStore.resetInitLoad();
-    this.props.offeringsStore.resetPagination();
+export default class DraggableListing extends Component {
+  state = { isPublic: false };
+
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    const { allOfferingsSorted, setOrderForOfferings } = this.props.offeringsStore;
+    const { allLiveOfferingsList, stage } = this.props;
+    const offeringList = stage === 'live' && allLiveOfferingsList ? allLiveOfferingsList : allOfferingsSorted;
+    const isArrayNeedToMerge = !!(stage === 'live' && allLiveOfferingsList);
+    if (oldIndex !== newIndex) {
+      setOrderForOfferings(arrayMove(offeringList, oldIndex, newIndex), this.props.stage, isArrayNeedToMerge, this.props.offeringListIndex);
+    }
   }
 
   handleAction = (action, offering, isPublished = false) => {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offering.id);
-    } else if (action === 'Edit') {
-      this.props.history.push(`/dashboard/offering/${offering.offeringSlug}`);
     } else if (action === 'Publish') {
-      this.setState({ isPublic: isPublished, loadingOfferId: offering.id });
+       console.log('isPublished', isPublished);
+      this.setState({ isPublic: isPublished });
       this.props.uiStore.setConfirmBox(action, offering.id, isPublished);
     }
   }
-
-  paginate = params => this.props.offeringsStore.pageRequest(params);
 
   handleDeleteCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
 
-  handlePublishOffering = () => {
-    const { offeringsStore, uiStore } = this.props;
-    offeringsStore.updateOfferingPublicaly(uiStore.confirmBox.refId, uiStore.confirmBox.subRefId);
+  handlePublishOffering = async () => {
+    const { collectionStore, uiStore } = this.props;
+    const params = {
+      type: 'OFFERING',
+      collectionId: collectionStore.collectionId,
+      referenceId: uiStore.confirmBox.refId,
+      scope: this.state.isPublic ? 'PUBLIC' : 'HIDDEN',
+    };
+    await collectionStore.collectionMappingMutation('adminCollectionMappingUpsert', params);
+    collectionStore.setFieldValue('collectionIndex', null);
+    this.props.history.push(`${this.props.match.url}`);
     this.props.uiStore.setConfirmBox('');
   }
 
-  handleDeleteOffering = async () => {
+  handleDeleteCollection = async () => {
     const { collectionStore, uiStore } = this.props;
-    this.setState({ loadingOfferId: uiStore.confirmBox.refId });
     const params = {
       type: 'OFFERING',
       collectionId: collectionStore.collectionId,
       referenceId: uiStore.confirmBox.refId,
     };
     await collectionStore.collectionMappingMutation('adminDeleteCollectionMapping', params, { isContentMapping: true, id: uiStore.confirmBox.refId });
+    collectionStore.setFieldValue('collectionIndex', null);
     this.props.history.push(`${this.props.match.url}`);
     this.props.uiStore.setConfirmBox('');
   }
 
   render() {
     const {
-      uiStore, stage, allLiveOfferingsList, isLoading,
+      uiStore, stage, offeringsList, isLoading,
     } = this.props;
 
     const { confirmBox } = uiStore;
-    const offeringList = allLiveOfferingsList;
     if (isLoading) {
       return <InlineLoader />;
     }
     return (
-      <Card fluid>
-        <div className="table-wrapper">
-          <Table unstackable className="application-list clickable striped">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Offering Name</Table.HeaderCell>
-                <Table.HeaderCell>Security Type</Table.HeaderCell>
-                <Table.HeaderCell>Exemption</Table.HeaderCell>
-                {stage !== 'creation'
-                  && <Table.HeaderCell>Status</Table.HeaderCell>
-                }
-                {stage === 'live'
-                  ? (
-                    <Table.HeaderCell></Table.HeaderCell>
-                  )
-                  : (stage !== 'engagement'
-                    ? (
-                      <>
-                        <Table.HeaderCell>Date Created</Table.HeaderCell>
-                        <Table.HeaderCell>{stage === 'creation' ? 'Days Until Launch' : 'Launch Date'}</Table.HeaderCell>
-                      </>
-                    )
-                    : <Table.HeaderCell>Hard Close Date</Table.HeaderCell>
-                  )}
-                {/* {stage === 'live'
-                  && <Table.HeaderCell>Days till close</Table.HeaderCell>
-                } */}
-                {stage !== 'engagement'
-                  && <Table.HeaderCell>Lead</Table.HeaderCell>
-                }
-                <Table.HeaderCell>POC</Table.HeaderCell>
-                {stage === 'engagement'
-                  && <Table.HeaderCell>Repayment Amount</Table.HeaderCell>
-                }
-                <Table.HeaderCell textAlign="center" />
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {offeringList.length === 0 ? (
-                <Table.Row><Table.Cell colSpan={8} textAlign="center">No Offering to display !</Table.Cell></Table.Row>
-              )
-                : offeringList.map(offering => (
-                  <Table.Row key={offering.offeringSlug} className={(offering.isAvailablePublicly) ? (this.props.uiStore.inProgressArray.length && offering.offeringId === this.state.loadingOfferId) ? 'disabled' : '' : 'row-highlight'}>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
-                      <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
-                        <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
-                          ? offering.keyTerms.shorthandBusinessName : (
-                            (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
-                          ))}
-                        </b>
-                      </Link>
-                    </Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
-                      {(() => {
-                        const security = SECURITIES_VALUES.find(s => s.value === get(offering, 'keyTerms.securities'));
-                        return security ? security.text : 'N/A';
-                      })()}
-                    </Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
-                      {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
-                    </Table.Cell>
-                    {stage !== 'creation'
-                      && (
-                        <Table.Cell className="text-capitalize">
-                          {offering && offering.stage
-                            ? stage === 'live' && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0 && get(offering, 'category') && ['processing'].includes(get(offering, 'category'))
-                              ? STAGES.PROCESSING.label
-                              : stage === 'live' && get(offering, 'category') && !['processing', 'reachedMax'].includes(get(offering, 'category')) && get(offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
-                                ? STAGES.LOCK.label
-                                : stage === 'live' && get(offering, 'category') && ['reachedMax'].includes(get(offering, 'category'))
-                                  ? 'Reached Max'
-                                  : STAGES[offering.stage].label
-                            : STAGES[offering.stage].label
-                          }
-                        </Table.Cell>
-                      )
-                    }
-                    {stage === 'live'
-                      ? (
-                        <Table.Cell>
-                          <div className="balance width-250">
-                            Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
-                            Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
-                            Days till close: {offering.closureSummary && offering.closureSummary.processingDate
-                              ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
-                            }
-                          </div>
-                        </Table.Cell>
-                      )
-                      : (
-                        stage !== 'engagement'
-                          ? (
-                            <>
-                              <Table.Cell onClick={() => this.handleAction('Edit', offering)}>{get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}</Table.Cell>
-                              <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
-                                {get(offering, 'closureSummary.launchDate')
-                                  ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), false, false, false) : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
-                                }
-                              </Table.Cell>
-                            </>
-                          )
-                          : <Table.Cell onClick={() => this.handleAction('Edit', offering)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}</Table.Cell>
-                      )
-                    }
-                    {/* {stage !== 'engagement'
-                      ? (
-                        <>
-                          <Table.Cell onClick={() => this.handleAction('Edit', offeringfering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}</Table.Cell>
-                          <Table.Cell onClick={() => this.handleAction('Edit', offer                      {offering.offering && offering.offering.launch
-                              && offering.closureSummary.launchDate
-                              ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), false, false, false) : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
-                            }
-                          </Table.Cell>
-                        </>
-                      )
-                      : <Table.Cell onClick={() => this.handleAction('Edit', offeringfering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}</Table.Cell>
-                    }
-                    {stage === 'live'
-                      && (
-                        <Table.Cell>
-                          {offering.closureSummary && offering.closureSummary.processingDate
-                            ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
-                          }
-                        </Table.Cell>
-                      )
-                    } */}
-                    {stage !== 'engagement'
-                      && <Table.Cell onClick={() => this.handleAction('Edit', offering)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
-                    }
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
-                      <p>
-                        {offering.issuerDetails
-                          ? (
-                            <>
-                              <b>
-                                {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
-                              </b>
-                              <br />
-                              {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
-                              <br />
-                              {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
-                            </>
-                          )
-                          : <b>N/A</b>
-                        }
-                      </p>
-                    </Table.Cell>
-                    {stage === 'engagement'
-                      && <Table.Cell onClick={() => this.handleAction('Edit', offering)}>{offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? `${Helper.CurrencyFormat(get(offering, 'closureSummary.repayment.currentRepaidAmount'))} (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}</Table.Cell>
-                    }
-                    <Table.Cell collapsing textAlign="center">
-                      <Button.Group>
-                        {Object.keys(actions).map(action => (
-                          actions[action].label === 'Publish' && stage === 'creation' ? ''
-                            : (
-                              <Button icon className="link-button">
-                                <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering, !offering.isAvailablePublicly)} />
-                              </Button>
-                            )
-                        ))}
-                      </Button.Group>
-                    </Table.Cell>
-                  </Table.Row>
-                ))
-              }
-            </Table.Body>
-          </Table>
+      <>
+        <div className="ui card fluid">
+          <div className="ui basic table">
+            <div className="row-wrap striped-table thead">
+              <div className="balance first-column">Name</div>
+              <div className="balance width-130">Status</div>
+              <div className="balance width-250" />
+              <div className="balance">POC</div>
+              <div className="action right-align width-70" />
+            </div>
+            <SortableList
+              allOfferingsList={offeringsList}
+              pressDelay={100}
+              handleAction={this.handleAction}
+              onSortEnd={e => this.onSortEnd(e)}
+              stage={stage}
+              lockAxis="y"
+              useDragHandle
+            />
+          </div>
         </div>
         <Confirm
           header="Confirm"
           content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this offering ${this.state.isPublic ? 'Public' : 'Non-Public'}?` : 'Are you sure you want to delete this offering?'}
           open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
           onCancel={this.handleDeleteCancel}
-          onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteOffering}
+          onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteCollection}
           size="mini"
           className="deletion"
         />
-      </Card>
+      </>
     );
   }
 }
