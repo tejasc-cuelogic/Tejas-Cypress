@@ -216,7 +216,7 @@ h6{
 	padding-top:@70px !important;
 }
 .pt-100{
-	padding-top: @100px !important;
+	padding-top: 100px !important;
 }
 .pb-0{
 	padding-bottom:0 !important;
@@ -243,7 +243,7 @@ h6{
 	padding-bottom: @70px !important;
 }
 .pb-100{
-	padding-bottom: @100px !important;
+	padding-bottom: 100px !important;
 }
 .pr-20{
 	padding-right: @20px !important;
@@ -272,6 +272,9 @@ h6{
 .plr-0{
 	padding-left: 0 !important;
 	padding-right: 0 !important;
+}
+.p-36{
+	padding: 36px !important;
 }
 .p-60{
 	padding: @60px !important;
@@ -3576,11 +3579,17 @@ h3.ui.header.error-2{
 		img{
 			width:310px !important;
 			height:200px !important;
-
+			@media only screen and (min-width:@tabletBreakpoint) and (max-width:@computerBreakpoint){
+				width: 100% !important;
+				height: auto !important;
+			}
 		}
 	}
 	.collection-content{
-		padding: 0 0 0 50px !important;
+		padding: 0 0 0 45px !important;
+		@media only screen and (min-width:@tabletBreakpoint) and (max-width:@computerBreakpoint){
+			padding: 25px !important;
+		}
 	}
 	.ui.grid{
 		margin-left: 0  !important;
@@ -3601,17 +3610,32 @@ h3.ui.header.error-2{
 	}
 }
 .collection-listings-box{
-	a,.ui.header{
-		color:#EDEEF2;
+	.ui.header{
+		color:@white;
+		margin-top: 0 !important;
+	}
+	a{
+		text-decoration: none !important;
 	}
 	.ui.cards{
 		>a{
-			border-width:5px !important;
-			border-style: solid !important;
+			border:1px solid #E6E6E8;
+			box-shadow: none !important;
+			@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+				margin-bottom: 20px !important;
+				margin-top: 0 !important;
+				&:last-child{
+					margin-bottom: 0 !important;
+				}
+			}
+			&.border-red{
+			border:5px solid #e84b0f!important;
+			}
 		}
 	}
 	p{
 		font-size: @15px;
+		color: #EDEEF2 !important;
 		line-height: @24px;
 	}
 	.ui.cards>.card .ui.image{
@@ -3619,6 +3643,13 @@ h3.ui.header.error-2{
 	}
 	.ns_flgs_box{
 		width: 450px !important;
+		@media only screen and (min-width:@tabletBreakpoint) and (max-width:@computerBreakpoint){
+			left: -1px !important;
+		}
+		p{
+			font-size: @12px !important;
+			line-height: 13px !important;
+		}
 	}
 	.collection-bg-image{
 		height: 100%;

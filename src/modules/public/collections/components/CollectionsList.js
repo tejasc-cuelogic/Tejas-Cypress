@@ -55,13 +55,13 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
                   <p style={{ color: get(collection, 'marketing.tombstone.tag.textColor') }}>{get(collection, 'marketing.tombstone.tag.text')}</p>
                 </div>
               )}
-            <div className="full-width mt-0 p-60">
+            <div className="full-width mt-0 p-36">
               {get(collection, 'marketing.tombstone.bgImage.url')
                 && <Image64 bg originalImg className="collection-bg-image" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
               }
               <Header as="h5">{get(collection, 'marketing.tombstone.title')}</Header>
               <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
-              <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-20 full-width">Explore</Button>
+              <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30 full-width">Explore</Button>
             </div>
           </Card>
         ))}
@@ -71,7 +71,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
 
 const Heading = ({ responsiveVars }) => (
   <>
-    <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`${responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-40 mb-12'}`}>Explore Popular Collections</Header>
+    <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`${responsiveVars.isMobile ? 'mb-30 mt-20' : 'mt-40 mb-12'}`}>Explore Popular Collections</Header>
     <p className={`${responsiveVars.isMobile ? 'mb-40' : 'center-align mb-42'}`}>Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br />} Partner Organizations, as well as offerings grouped by theme, such as location or security type.</p>
   </>
 );
@@ -101,7 +101,7 @@ export default class CollectionsList extends Component {
       return <InlineLoader />;
     }
     return (
-      <div className={`${offering ? '' : 'bg-offwhite'} ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-50 pb-50' : 'pt-50 pb-50'}`}>
+      <div className={`${offering ? '' : 'bg-offwhite'} ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-20 pb-70' : 'pt-50 pb-50'}`}>
         <Heading responsiveVars={responsiveVars} />
         {publicCollections && publicCollections.length
           ? (expandCollection || isMobile ? (

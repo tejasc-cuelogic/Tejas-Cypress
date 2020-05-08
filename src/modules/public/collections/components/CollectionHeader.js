@@ -29,13 +29,11 @@ export default class CollectionHeader extends Component {
           ? (
             <>
               <div className="campaign-banner collection-banner">
-                {get(data, 'bgImage.url')
-                  && <Image64 bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
-                }
+
                 <section className="banner">
                   <Responsive minWidth={768} as={Container}>
                     <Grid relaxed stackable centered>
-                      <Grid.Column width={7}>
+                      <Grid.Column width={7} className="zi-9">
                         <div className="video-wrapper campaign">
                           <Image64
                             bg
@@ -55,12 +53,15 @@ export default class CollectionHeader extends Component {
                             )) : ''}
                         </div>
                       </Grid.Column>
-                      <Grid.Column width={8}>
+                      <Grid.Column width={8} className="zi-9">
                         <Header as="h3" inverted>
                           {title}
                         </Header>
                         <span style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
                       </Grid.Column>
+                      {get(data, 'bgImage.url')
+                        && <Image64 bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
+                      }
                     </Grid>
                   </Responsive>
                   {headerDownClick}
