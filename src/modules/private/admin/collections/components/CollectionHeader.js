@@ -77,6 +77,15 @@ class CollectionHeader extends Component {
               {smartElement.Input('descriptionColor', {
                 readOnly: isReadOnly,
               })}
+              <Divider hidden />
+              {smartElement.Input('text', {
+                readOnly: isReadOnly,
+              })}
+              <Divider hidden />
+              {smartElement.Input('color', {
+                readOnly: isReadOnly,
+              })}
+              <Divider hidden />
             </Grid.Column>
             <Grid.Column>
               <Form.Group widths={1}>
@@ -89,7 +98,7 @@ class CollectionHeader extends Component {
               </Form.Group>
             </Grid.Column>
           </Grid>
-          <Grid columns="2">
+          {/* <Grid columns="2">
             <Grid.Column>
               {smartElement.Input('text', {
                 readOnly: isReadOnly,
@@ -100,7 +109,7 @@ class CollectionHeader extends Component {
                 readOnly: isReadOnly,
               })}
             </Grid.Column>
-          </Grid>
+          </Grid> */}
           <CardHeaderMeta />
           <Divider section />
           <OfferingButtonGroup isDisable={!(CARD_HEADER_META_FRM.meta.isValid)} updateOffer={this.handleFormSubmit} />
