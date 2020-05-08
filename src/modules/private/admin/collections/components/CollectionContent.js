@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
 import Offerings from './Offerings';
-import AllInsights from '../../insights/components/AllInsights';
+import Insights from './Insights';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
 
 
@@ -14,7 +14,7 @@ const metaInfo = {
   form: 'COLLECTION_CONTENT_FRM',
 };
 const offeringMeta = {
-  live: 'ACTIVE_INVESTMENTS', complete: 'COMPLETE_INVESTMENTS',
+  live: 'ACTIVE_INVESTMENTS', completed: 'COMPLETE_INVESTMENTS',
 };
 @inject('collectionStore', 'nsUiStore', 'uiStore')
 @withRouter
@@ -64,8 +64,7 @@ class CollectionContent extends Component {
   render() {
     const { smartElement, collectionStore, uiStore } = this.props;
     const index = parseInt(this.props.match.params.index, 10) - 1 || 0;
-    const { COLLECTION_CONTENT_FRM, collection, collectionId, collectionMapping } = collectionStore;
-    const isReadOnly = get(collection, 'lock');
+    const { COLLECTION_CONTENT_FRM, collectionId, collectionMapping } = collectionStore;
     const { value: contentTypeValue } = COLLECTION_CONTENT_FRM.fields.content[index].contentType;
     const { loadingArray } = this.props.nsUiStore;
     return (
@@ -95,17 +94,17 @@ class CollectionContent extends Component {
               <Form.Group widths={1}>
                 <Form.Field>
                   <Header as="h6">Description</Header>
-                  {smartElement.HtmlEditor('description', { multiForm: [metaInfo.form, 'content', index], index, readOnly: isReadOnly, imageUploadPath: `collections/${collectionId}` })}
+                  {smartElement.HtmlEditor('description', { multiForm: [metaInfo.form, 'content', index], index, readOnly: !this.state.editable, imageUploadPath: `collections/${collectionId}` })}
                 </Form.Field>
               </Form.Group>
             )}
-          <Divider />
+          <Divider hidden />
           {['CUSTOM', 'HEADER'].includes(COLLECTION_CONTENT_FRM.fields.content[index].contentType.value)
             && (
               <Form.Group widths={1}>
                 <Form.Field>
                   <Header as="h6">{COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM' ? COLLECTION_CONTENT_FRM.fields.content[index].customValue.label : 'Issuer Statement'}</Header>
-                  {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: isReadOnly, imageUploadPath: `collections/${collectionId}` })}
+                  {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: !this.state.editable, imageUploadPath: `collections/${collectionId}` })}
                 </Form.Field>
               </Form.Group>
             )}
@@ -114,14 +113,14 @@ class CollectionContent extends Component {
             && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
               && (
                 <>
-                  <Offerings allLiveOfferingsList={collectionMapping.OFFERING[key]} isLoading={loadingArray.includes('getCollectionMapping')} />
+                  <Offerings offeringsList={collectionMapping.OFFERING[key]} isLoading={loadingArray.includes('getCollectionMapping')} />
                 </>
               ))))}
 
           {(contentTypeValue === 'INSIGHTS' && collectionMapping.INSIGHT && collectionMapping.INSIGHT.length > 0
             && (
               <>
-                <AllInsights insightsList={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
+                <Insights insightsList={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
               </>
             ))
           }

@@ -17,13 +17,13 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
               {get(collection, 'marketing.tombstone.tag.text')
                 && (
                   <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
-                    <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
+                    <p style={{ color: get(collection, 'marketing.tombstone.tag.textColor') }}>{get(collection, 'marketing.tombstone.tag.text')}</p>
                   </div>
                 )}
             </Grid.Column>
             <Grid.Column widescreen={12} computer={11} tablet={16} mobile={16} className="zi-9 collection-content">
               <Header as="h3">{get(collection, 'marketing.tombstone.title')}</Header>
-              <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
+              <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
               {!isMobile && !isTablet
                 && (
                   <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30">Explore</Button>
@@ -52,7 +52,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
             {get(collection, 'marketing.tombstone.tag.text')
               && (
                 <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
-                  <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
+                  <p style={{ color: get(collection, 'marketing.tombstone.tag.textColor') }}>{get(collection, 'marketing.tombstone.tag.text')}</p>
                 </div>
               )}
             <div className="full-width mt-0 p-60">

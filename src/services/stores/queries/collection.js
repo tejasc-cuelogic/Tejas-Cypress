@@ -85,6 +85,8 @@ export const getCollections = gql`
       id
       name
       slug
+      status
+      order
     }
   }`;
 
@@ -109,9 +111,11 @@ query getCollections {
         bgColor
         title
         description
+        descriptionColor
         tag {
           color
           text
+          textColor
         }
       }
     }
@@ -126,23 +130,6 @@ query getCollection($slug: String!) {
     slug
     status
     marketing {
-      tombstone {
-        image {
-          url
-          isPublic
-        }
-        bgImage {
-          url
-          isPublic
-        }
-        bgColor
-        title
-        description
-        tag {
-          color
-          text
-        }
-      }
       header {
         image {
           url
@@ -159,6 +146,7 @@ query getCollection($slug: String!) {
         tag {
           color
           text
+          textColor
         }
         social {
           type
@@ -172,6 +160,7 @@ query getCollection($slug: String!) {
         scope
         title
         meta
+        description
       }
     }
   }
@@ -198,10 +187,12 @@ export const getCollection = gql`
           scope
           title
           meta
+          description
         }
         tombstone {
           title
           description
+          descriptionColor
           bgColor
           image {
             id
@@ -220,8 +211,7 @@ export const getCollection = gql`
             text
           }
         }
-      }
-      header {
+        header {
         title
         description
         descriptionColor
@@ -246,6 +236,7 @@ export const getCollection = gql`
           color
           text
         }
+      }
       }
     }
   }`;
