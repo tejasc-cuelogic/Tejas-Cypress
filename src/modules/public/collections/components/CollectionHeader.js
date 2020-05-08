@@ -28,9 +28,9 @@ export default class CollectionHeader extends Component {
         {!isMobile
           ? (
             <>
-              <div className="campaign-banner">
+              <div className="campaign-banner collection-banner">
                 {get(data, 'bgImage.url')
-                  && <Image64 bg originalImg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
+                  && <Image64 bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
                 }
                 <section className="banner">
                   <Responsive minWidth={768} as={Container}>
@@ -38,12 +38,11 @@ export default class CollectionHeader extends Component {
                       <Grid.Column width={7}>
                         <div className="video-wrapper campaign">
                           <Image64
-                            originalImg
                             bg
                             srcUrl={get(data, 'image.url')}
                             imgType="heroImage"
                           />
-                          {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(data, 'tag.text')}</p></div>}
+                          {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p style={{ color: get(data, 'tag.textColor') }}>{get(data, 'tag.text')}</p></div>}
                         </div>
                         <div className="clearfix social-links mt-20">
                           {get(data, 'social[0]')
@@ -74,12 +73,11 @@ export default class CollectionHeader extends Component {
                 <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
                   <div className="video-wrapper campaign">
                     <Image64
-                      originalImg
                       bg
                       srcUrl={get(data, 'image.url')}
                       imgType="heroImage"
                     />
-                    {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p>{get(data, 'tag.text')}</p></div>}
+                    {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p style={{ color: get(data, 'tag.textColor') }}>{get(data, 'tag.text')}</p></div>}
                   </div>
                   <Header as="h4" inverted>
                     {title}

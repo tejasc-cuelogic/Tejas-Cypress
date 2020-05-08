@@ -17,7 +17,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
               {get(collection, 'marketing.tombstone.tag.text')
                 && (
                   <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
-                    <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
+                    <p style={{ color: get(collection, 'marketing.tombstone.tag.textColor') }}>{get(collection, 'marketing.tombstone.tag.text')}</p>
                   </div>
                 )}
             </Grid.Column>
@@ -52,7 +52,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
             {get(collection, 'marketing.tombstone.tag.text')
               && (
                 <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
-                  <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
+                  <p style={{ color: get(collection, 'marketing.tombstone.tag.textColor') }}>{get(collection, 'marketing.tombstone.tag.text')}</p>
                 </div>
               )}
             <div className="full-width mt-0 p-36">

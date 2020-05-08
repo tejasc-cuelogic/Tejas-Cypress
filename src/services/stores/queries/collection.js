@@ -114,6 +114,7 @@ query getCollections {
         tag {
           color
           text
+          textColor
         }
       }
     }
@@ -143,6 +144,7 @@ query getCollection($slug: String!) {
         tag {
           color
           text
+          textColor
         }
       }
       header {
@@ -161,6 +163,7 @@ query getCollection($slug: String!) {
         tag {
           color
           text
+          textColor
         }
         social {
           type
