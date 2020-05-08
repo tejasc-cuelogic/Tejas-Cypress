@@ -97,6 +97,13 @@ export const adminSetOrderForCollection = gql`
     )
   }`;
 
+export const adminSetOrderForCollectionMapping = gql`
+  mutation adminSetOrderForCollectionMapping($collectionMappingItems: [CollectionMappingOrderInput]){
+    adminSetOrderForCollectionMapping(
+      collectionMappingItems: $collectionMappingItems,
+    )
+  }`;
+
 export const getPublicCollections = gql`
 query getCollections {
   getCollections{
