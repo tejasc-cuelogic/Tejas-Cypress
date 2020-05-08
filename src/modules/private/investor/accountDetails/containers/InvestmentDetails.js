@@ -60,6 +60,7 @@ class InvestmentDetails extends PureComponent {
     const { campaign, details, dataRoomDocs } = this.props.campaignStore;
     const { responsiveVars } = this.props.uiStore;
     let filterLabel;
+
     const hardCloseDate = moment(new Date(`${get(campaign, 'closureSummary.hardCloseDate')} 23:59:59`)).format('MM/DD/YYYY HH:mm:ss');
     const summaryDetails = {
       accountType: 'individual',
@@ -102,6 +103,8 @@ class InvestmentDetails extends PureComponent {
         : filterLabel !== sum.title));
     }
 
+    const stage = (![details.loading, loadingInvestDetails, get(details, 'data')].includes(undefined) && (!details.loading || !loadingInvestDetails)) ? get(details, 'data.getOfferingDetailsBySlug.stage') : '';
+
     return (
       <Modal closeOnDimmerClick={false} closeIcon={!responsiveVars.isMobile} size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         {responsiveVars.isMobile && (
@@ -112,7 +115,7 @@ class InvestmentDetails extends PureComponent {
         <Modal.Content className={`${responsiveVars.isMobile ? 'mt-30' : ''} transaction-details`}>
           {[details.loading, loadingInvestDetails].includes(undefined) || details.loading || loadingInvestDetails ? <InlineLoader /> : (
             <>
-              <SummaryHeader details={summaryDetails} loading={details.loading || loadingInvestDetails} />
+              <SummaryHeader stage={stage} details={summaryDetails} loading={details.loading || loadingInvestDetails} />
               <Card fluid className={responsiveVars.isMobile ? 'mt-0' : ''}>
                 {!responsiveVars.isMobile
                   && <SecondaryMenu match={match} navItems={navItems} />
