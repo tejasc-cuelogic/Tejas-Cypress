@@ -37,7 +37,7 @@ export default class AddToCollection extends React.Component {
         name="collection"
         fielddata={COLLECTION_MAPPING_FRM.fields.mappingMeta}
         options={collectionMappingList}
-        disabled={intersection(loadingArray, ['adminCollectionMappingUpsert', 'adminDeleteCollectionMapping']).length > 0}
+        disabled={intersection(loadingArray, ['adminCollectionMappingUpsert', 'adminDeleteCollectionMapping']).length > 0 || this.props.isdisabled}
         multiple
         selection
         fluid
