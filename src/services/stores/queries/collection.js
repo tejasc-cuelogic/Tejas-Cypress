@@ -90,6 +90,13 @@ export const getCollections = gql`
     }
   }`;
 
+export const adminSetOrderForCollection = gql`
+  mutation adminSetOrderForCollection($collectionItemsList: [CollectionOrderInput]){
+    adminSetOrderForCollection(
+      collectionItemsList: $collectionItemsList,
+    )
+  }`;
+
 export const getPublicCollections = gql`
 query getCollections {
   getCollections{
@@ -115,7 +122,6 @@ query getCollections {
         tag {
           color
           text
-          textColor
         }
       }
     }
@@ -146,7 +152,6 @@ query getCollection($slug: String!) {
         tag {
           color
           text
-          textColor
         }
         social {
           type
@@ -209,6 +214,7 @@ export const getCollection = gql`
           tag {
             color
             text
+            textColor
           }
         }
         header {
@@ -235,6 +241,7 @@ export const getCollection = gql`
         tag {
           color
           text
+          textColor
         }
       }
       }

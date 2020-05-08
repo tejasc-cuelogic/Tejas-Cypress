@@ -62,12 +62,9 @@ export default class CollectionsListing extends Component {
   state = { isACTIVE: false };
 
   onSortEnd = ({ oldIndex, newIndex }) => {
-    const { allOfferingsSorted, setOrderForOfferings } = this.props.offeringsStore;
-    const { allLiveInsightsList, stage } = this.props;
-    const offeringList = stage === 'live' && allLiveInsightsList ? allLiveInsightsList : allOfferingsSorted;
-    const isArrayNeedToMerge = !!(stage === 'live' && allLiveInsightsList);
+    const { collections, setOrderForCollections } = this.props.collectionStore;
     if (oldIndex !== newIndex) {
-      setOrderForOfferings(arrayMove(offeringList, oldIndex, newIndex), this.props.stage, isArrayNeedToMerge, this.props.offeringListIndex);
+      setOrderForCollections(arrayMove(collections, oldIndex, newIndex));
     }
   }
 
