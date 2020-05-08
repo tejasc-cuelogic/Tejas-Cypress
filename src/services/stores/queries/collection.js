@@ -30,6 +30,7 @@ export const getCollectionMapping = gql`
       order
       scope
       offering {
+        id
         ${common.offeringBasics}
       }
       insight {
@@ -79,13 +80,13 @@ query getCollectionMapping($collectionId: String!) {
 }`;
 
 export const getCollections = gql`
-query getCollections {
-  getCollections{
-    id
-    name
-    slug
-  }
-}`;
+  query getCollections {
+    getCollections{
+      id
+      name
+      slug
+    }
+  }`;
 
 export const getPublicCollections = gql`
 query getCollections {
@@ -178,46 +179,46 @@ query getCollection($slug: String!) {
 
 
 export const getCollection = gql`
-query getCollection($slug: String, $id: String, $previewPassword: String) {
-  getCollection(id: $id, slug: $slug, previewPassword: $previewPassword){
-    id
-    name
-    slug
-    previewPassword
-    lock{
+  query getCollection($slug: String, $id: String, $previewPassword: String) {
+    getCollection(id: $id, slug: $slug, previewPassword: $previewPassword){
       id
-      by
-      date
-    }
-    marketing {
-      content {
-        contentType
-        customValue
-        order
-        scope
-        title
-        meta
+      name
+      slug
+      previewPassword
+      lock{
+        id
+        by
+        date
       }
-      tombstone {
-        title
-        description
-        descriptionColor
-        bgColor
-        image {
-          id
-          url
-          isPublic
-          fileName
+      marketing {
+        content {
+          contentType
+          customValue
+          order
+          scope
+          title
+          meta
         }
-        bgImage {
-          id
-          url
-          isPublic
-          fileName
-        }
-        tag {
-          color
-          text
+        tombstone {
+          title
+          description
+          bgColor
+          image {
+            id
+            url
+            isPublic
+            fileName
+          }
+          bgImage {
+            id
+            url
+            isPublic
+            fileName
+          }
+          tag {
+            color
+            text
+          }
         }
       }
       header {
@@ -247,8 +248,7 @@ query getCollection($slug: String, $id: String, $previewPassword: String) {
         }
       }
     }
-  }
-}`;
+  }`;
 
 export const adminLockOrUnlockCollection = gql`
 mutation adminLockOrUnlockCollection($id: String!, $action: CollectionLockActionEnum!){
@@ -264,49 +264,57 @@ mutation adminLockOrUnlockCollection($id: String!, $action: CollectionLockAction
 
 
 export const adminCollectionMappingUpsert = gql`
-mutation adminCollectionMappingUpsert(
-  $collectionId: String!
-  $referenceId: String!
-  $type: CollectionMappingTypeEnum!
-  $order: Int
-  $scope: ScopeEnumType!){
-  adminCollectionMappingUpsert(
-    collectionId: $collectionId,
-    referenceId: $referenceId,
-    type: $type,
-    order: $order,
-    scope: $scope,
-    ) {
-      collectionId
-      referenceId
-      type
-      order
-      scope
-      offering {
-        offeringSlug
+  mutation adminCollectionMappingUpsert(
+    $collectionId: String!
+    $referenceId: String!
+    $type: CollectionMappingTypeEnum!
+    $order: Int
+    $scope: ScopeEnumType!){
+    adminCollectionMappingUpsert(
+      collectionId: $collectionId,
+      referenceId: $referenceId,
+      type: $type,
+      order: $order,
+      scope: $scope,
+      ) {
+        collectionId
+        referenceId
+        type
+        order
+        scope
+        offering {
+          offeringSlug
+        }
+        insight {
+          title
+        }
       }
-      insight {
-        title
-      }
-    }
-}`;
+  }`;
 
 export const adminDeleteCollectionMapping = gql`
-mutation adminDeleteCollectionMapping($collectionId: String, !$referenceId: String!){
-  adminDeleteCollectionMapping(
-    collectionId: $collectionId,
-    referenceId: $referenceId,
-    ) {
-      collectionId
-      referenceId
-      type
-      order
-      scope
-      offering {
-        offeringSlug
+  mutation adminDeleteCollectionMapping($collectionId: String, !$referenceId: String!){
+    adminDeleteCollectionMapping(
+      collectionId: $collectionId,
+      referenceId: $referenceId,
+      ) {
+        collectionId
+        referenceId
+        type
+        order
+        scope
+        offering {
+          offeringSlug
+        }
+        insight {
+          title
+        }
       }
-      insight {
-        title
-      }
+  }`;
+
+export const adminDeleteCollection = gql`
+  mutation adminDeleteCollection($id: String!){
+    adminDeleteCollection (id: $id) {
+      id
+      name
     }
-}`;
+  }`;

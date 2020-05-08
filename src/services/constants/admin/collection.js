@@ -95,6 +95,13 @@ export const CONTENT = {
       rule: 'required',
       placeHolder: 'e.g. Investment Term',
     },
+    description: {
+      label: 'Description',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'Enter Here',
+    },
     order: {
       label: 'Order',
       value: 1,
@@ -126,7 +133,6 @@ export const CONTENT = {
         { key: 'ACTIVE_INVESTMENTS', value: 'ACTIVE_INVESTMENTS', text: 'Active Investments' },
         { key: 'COMPLETE_INVESTMENTS', value: 'COMPLETE_INVESTMENTS', text: 'Complete Investments' },
         { key: 'INSIGHTS', value: 'INSIGHTS', text: 'Insights' },
-        { key: 'HEADER', value: 'HEADER', text: 'Header' },
       ],
       placeHolder: 'Enter here',
     },

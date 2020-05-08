@@ -19,7 +19,7 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   offering, handleAction, stage,
 }) => (
-    <div className={(offering.scope) ? 'row-wrap striped-table' : 'row-wrap row-highlight striped-table'}>
+    <div className={(offering.isAvailablePublicly) ? 'row-wrap striped-table' : 'row-wrap row-highlight striped-table'}>
       <div className="balance first-column">
         <DragHandle />
         <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
@@ -72,20 +72,17 @@ const SortableItem = SortableElement(({
         <Button.Group>
           {Object.keys(actions).map(action => (
             <Button icon className="link-button">
-              <Icon className={`ns-${actions[action].label === 'Publish' ? offering.scope ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => handleAction(actions[action].label, offering, !offering.scope)} />
+              <Icon className={`ns-${offering.isAvailablePublicly === 'PUBLIC' ? actions[action].icon : actions[action].icon1}`} onClick={() => handleAction(actions[action].label, offering, offering.isAvailablePublicly !== 'PUBLIC')} />
             </Button>
           ))}
-          {['live'].includes(stage)
-            && (
-              <Button icon className="link-button">
-                <Icon className="ns-trash" onClick={() => handleAction('Delete', offering, !offering.scope)} />
-              </Button>
-            )
-          }
+
+          <Button icon className="link-button">
+            <Icon className="ns-trash" onClick={() => handleAction('Delete', offering, !offering.isAvailablePublicly)} />
+          </Button>
         </Button.Group>
       </div>
     </div>
-));
+  ));
 const SortableList = SortableContainer(({
   allOfferingsList, handleAction, stage, listIndex,
 }) => (
@@ -103,21 +100,12 @@ const SortableList = SortableContainer(({
         />
       ))}
     </div>
-));
-@inject('uiStore', 'offeringsStore', 'offeringCreationStore', 'manageOfferingStore')
+  ));
+@inject('uiStore', 'offeringsStore', 'collectionStore')
 @withRouter
 @observer
 export default class DraggableListing extends Component {
   state = { isPublic: false };
-
-  constructor(props) {
-    super(props);
-    this.props.offeringCreationStore.setFieldValue('isListingPage', true);
-    this.props.offeringsStore.resetInitLoad();
-    this.props.offeringCreationStore.resetInitLoad();
-    this.props.manageOfferingStore.resetInitLoad();
-    this.props.offeringsStore.resetPagination();
-  }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { allOfferingsSorted, setOrderForOfferings } = this.props.offeringsStore;
@@ -132,9 +120,8 @@ export default class DraggableListing extends Component {
   handleAction = (action, offering, isPublished = false) => {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offering.id);
-    } else if (action === 'Edit') {
-      this.props.history.push(`/dashboard/offering/${offering.offeringSlug}`);
     } else if (action === 'Publish') {
+       console.log('isPublished', isPublished);
       this.setState({ isPublic: isPublished });
       this.props.uiStore.setConfirmBox(action, offering.id, isPublished);
     }
@@ -144,29 +131,40 @@ export default class DraggableListing extends Component {
     this.props.uiStore.setConfirmBox('');
   }
 
-  handlePublishOffering = () => {
-    const { offeringsStore, uiStore } = this.props;
-    offeringsStore.updateOfferingPublicaly(uiStore.confirmBox.refId, uiStore.confirmBox.subRefId);
+  handlePublishOffering = async () => {
+    const { collectionStore, uiStore } = this.props;
+    const params = {
+      type: 'OFFERING',
+      collectionId: collectionStore.collectionId,
+      referenceId: uiStore.confirmBox.refId,
+      scope: this.state.isPublic ? 'PUBLIC' : 'HIDDEN',
+    };
+    await collectionStore.collectionMappingMutation('adminCollectionMappingUpsert', params);
+    collectionStore.setFieldValue('collectionIndex', null);
+    this.props.history.push(`${this.props.match.url}`);
     this.props.uiStore.setConfirmBox('');
   }
 
-  handleDeleteOffering = () => {
-    const { offeringsStore, uiStore, stage, listIndex } = this.props;
-    if (stage && stage === 'live') {
-      offeringsStore.deleteOffering(uiStore.confirmBox.refId, listIndex);
-    } else {
-      offeringsStore.deleteOffering(uiStore.confirmBox.refId);
-    }
+  handleDeleteCollection = async () => {
+    const { collectionStore, uiStore } = this.props;
+    const params = {
+      type: 'OFFERING',
+      collectionId: collectionStore.collectionId,
+      referenceId: uiStore.confirmBox.refId,
+    };
+    await collectionStore.collectionMappingMutation('adminDeleteCollectionMapping', params, { isContentMapping: true, id: uiStore.confirmBox.refId });
+    collectionStore.setFieldValue('collectionIndex', null);
+    this.props.history.push(`${this.props.match.url}`);
     this.props.uiStore.setConfirmBox('');
   }
 
   render() {
     const {
-      uiStore, offeringsStore, stage, allLiveOfferingsList, offeringListIndex,
+      uiStore, stage, offeringsList, isLoading,
     } = this.props;
-    const { allOfferingsSorted, loading } = offeringsStore;
-    const { confirmBox, inProgress } = uiStore;
-    if (loading || inProgress) {
+
+    const { confirmBox } = uiStore;
+    if (isLoading) {
       return <InlineLoader />;
     }
     return (
@@ -181,14 +179,13 @@ export default class DraggableListing extends Component {
               <div className="action right-align width-70" />
             </div>
             <SortableList
-              allOfferingsList={stage === 'live' && allLiveOfferingsList ? allLiveOfferingsList : allOfferingsSorted}
+              allOfferingsList={offeringsList}
               pressDelay={100}
               handleAction={this.handleAction}
               onSortEnd={e => this.onSortEnd(e)}
               stage={stage}
               lockAxis="y"
               useDragHandle
-              listIndex={offeringListIndex}
             />
           </div>
         </div>
@@ -197,7 +194,7 @@ export default class DraggableListing extends Component {
           content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this offering ${this.state.isPublic ? 'Public' : 'Non-Public'}?` : 'Are you sure you want to delete this offering?'}
           open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
           onCancel={this.handleDeleteCancel}
-          onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteOffering}
+          onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteCollection}
           size="mini"
           className="deletion"
         />

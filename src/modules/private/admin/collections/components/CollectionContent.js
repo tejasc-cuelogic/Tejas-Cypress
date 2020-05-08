@@ -4,8 +4,9 @@ import { get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
-import Listing from '../../offerings/components/Listing';
+import Offerings from './Offerings';
 import AllInsights from '../../insights/components/AllInsights';
+import AddToCollection from '../../../shared/marketing/AddToCollection';
 
 
 const metaInfo = {
@@ -13,7 +14,7 @@ const metaInfo = {
   form: 'COLLECTION_CONTENT_FRM',
 };
 const offeringMeta = {
-  live: 'ACTIVE_INVESTMENTS', complete: 'COMPLETE_INVESTMENTS',
+  live: 'ACTIVE_INVESTMENTS', completed: 'COMPLETE_INVESTMENTS',
 };
 @inject('collectionStore', 'nsUiStore', 'uiStore')
 @withRouter
@@ -28,8 +29,10 @@ class CollectionContent extends Component {
     super(props);
     const { index } = this.props.match.params;
     if (index) {
-      const { value } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
-      this.props.collectionStore.getCollectionMapping(value, parseInt(index, 10) - 1);
+      const { COLLECTION_CONTENT_FRM } = this.props.collectionStore;
+      const currIndex = parseInt(index, 10) - 1;
+      const { value } = COLLECTION_CONTENT_FRM.fields.content[currIndex].contentType;
+      this.props.collectionStore.getCollectionMapping(value, currIndex);
     }
   }
 
@@ -61,8 +64,7 @@ class CollectionContent extends Component {
   render() {
     const { smartElement, collectionStore, uiStore } = this.props;
     const index = parseInt(this.props.match.params.index, 10) - 1 || 0;
-    const { COLLECTION_CONTENT_FRM, collection, collectionId, collectionMapping, HEADER_META_FRM } = collectionStore;
-    const isReadOnly = get(collection, 'lock');
+    const { COLLECTION_CONTENT_FRM, collectionId, collectionMapping } = collectionStore;
     const { value: contentTypeValue } = COLLECTION_CONTENT_FRM.fields.content[index].contentType;
     const { loadingArray } = this.props.nsUiStore;
     return (
@@ -80,14 +82,29 @@ class CollectionContent extends Component {
             {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
+            {
+              ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
+              && (
+                <AddToCollection collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} />
+              )
+            }
           </Form.Group>
-          <Divider hidden />
+          {['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
+            && (
+              <Form.Group widths={1}>
+                <Form.Field>
+                  <Header as="h6">Description</Header>
+                  {smartElement.HtmlEditor('description', { multiForm: [metaInfo.form, 'content', index], index, readOnly: !this.state.editable, imageUploadPath: `collections/${collectionId}` })}
+                </Form.Field>
+              </Form.Group>
+            )}
+          <Divider />
           {['CUSTOM', 'HEADER'].includes(COLLECTION_CONTENT_FRM.fields.content[index].contentType.value)
             && (
               <Form.Group widths={1}>
                 <Form.Field>
                   <Header as="h6">{COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM' ? COLLECTION_CONTENT_FRM.fields.content[index].customValue.label : 'Issuer Statement'}</Header>
-                  {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: isReadOnly, imageUploadPath: `collections/${collectionId}` })}
+                  {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: !this.state.editable, imageUploadPath: `collections/${collectionId}` })}
                 </Form.Field>
               </Form.Group>
             )}
@@ -96,7 +113,7 @@ class CollectionContent extends Component {
             && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
               && (
                 <>
-                  <Listing allLiveOfferingsList={collectionMapping.OFFERING[key]} isLoading={loadingArray.includes('getCollectionMapping')} />
+                  <Offerings offeringsList={collectionMapping.OFFERING[key]} isLoading={loadingArray.includes('getCollectionMapping')} />
                 </>
               ))))}
 
@@ -107,37 +124,16 @@ class CollectionContent extends Component {
               </>
             ))
           }
-
-          {contentTypeValue === 'HEADER'
-            && (
-              <>
-                {smartElement.Input('title', { multiForm: ['HEADER_META_FRM', 'meta', index], displayMode: !this.state.editable })}
-                {smartElement.Input('bgColor', { multiForm: ['HEADER_META_FRM', 'meta', index], displayMode: !this.state.editable })}
-                <Header as="h4">{HEADER_META_FRM.fields.meta[index].bgImage.label}</Header>
-                {smartElement.ImageCropper('bgImage', {
-                  multiForm: ['HEADER_META_FRM', 'meta', index],
-                  displayMode: !this.state.editable,
-                  uploadPath: `offerings/${collectionId}`,
-                  removeMedia: this.removeMedia,
-                  isImagePreviewDisabled: true,
-                })}
-                <Divider hidden />
-                <Header as="h4">{HEADER_META_FRM.fields.meta[index].image.label}</Header>
-                {smartElement.ImageCropper('image', { multiForm: ['HEADER_META_FRM', 'meta', index], displayMode: !this.state.editable, uploadPath: `offerings/${collectionId}`, removeMedia: this.removeMedia, isImagePreviewDisabled: true })}
-                <Divider hidden />
-              </>
-            )
-          }
           {(this.state.editable)
             && (
               <>
-              <div className="sticky-actions">
-                <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
-                  <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
-                </Button.Group>
-              </div>
-            </>
-          )}
+                <div className="sticky-actions">
+                  <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
+                    <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                  </Button.Group>
+                </div>
+              </>
+            )}
           <Divider section />
 
           <Divider hidden />
