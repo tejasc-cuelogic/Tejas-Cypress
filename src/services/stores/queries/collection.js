@@ -90,6 +90,13 @@ export const getCollections = gql`
     }
   }`;
 
+export const adminSetOrderForCollection = gql`
+  mutation adminSetOrderForCollection($collectionItemsList: [CollectionOrderInput]){
+    adminSetOrderForCollection(
+      collectionItemsList: $collectionItemsList,
+    )
+  }`;
+
 export const getPublicCollections = gql`
 query getCollections {
   getCollections{
