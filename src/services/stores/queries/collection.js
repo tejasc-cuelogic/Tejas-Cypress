@@ -122,7 +122,6 @@ query getCollections {
         tag {
           color
           text
-          textColor
         }
       }
     }
@@ -153,7 +152,6 @@ query getCollection($slug: String!) {
         tag {
           color
           text
-          textColor
         }
         social {
           type
@@ -216,6 +214,7 @@ export const getCollection = gql`
           tag {
             color
             text
+            textColor
           }
         }
         header {
@@ -242,6 +241,7 @@ export const getCollection = gql`
         tag {
           color
           text
+          textColor
         }
       }
       }

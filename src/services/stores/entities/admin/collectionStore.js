@@ -508,6 +508,16 @@ class CollectionsStore extends DataModelStore {
     this.setFieldValue(form, content, `fields.${arrayName}`);
   }
 
+  getCaseSensetiveFieldvalue = (formValue, caseValue) => {
+    if (caseValue === 'LOWERCASE') {
+      formValue.toLowerCase();
+    }
+
+    if (caseValue === 'CAPITAL') {
+      formValue.toUpperCase();
+    }
+  }
+
   // @computed get active() {
   //   const collectionList = this.orderedActiveList.slice();
   //   return collectionList.splice(0, this.activeToDisplay);
@@ -550,5 +560,6 @@ decorate(CollectionsStore, {
   CARD_HEADER_META_FRM: observable,
   CARD_HEADER_SOCIAL_FRM: observable,
   reOrderHandle: action,
+  getCaseSensetiveFieldvalue: action,
 });
 export default new CollectionsStore();

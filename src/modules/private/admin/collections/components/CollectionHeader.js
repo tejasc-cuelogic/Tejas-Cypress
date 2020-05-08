@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { Form, Header, Divider, Grid } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../../shared/offerings/components/OfferingButtonGroup';
 import formHOC from '../../../../../theme/form/formHOC';
+import CardHeaderPreview from './CardHeaderPreview';
 import CardHeaderMeta from './CardHeaderMeta';
 
 const metaInfo = {
@@ -40,6 +41,8 @@ class CollectionHeader extends Component {
       <div className="inner-content-spacer">
         <Form>
           <Header as="h3">Header Preview</Header>
+          <CardHeaderPreview />
+          <Divider hidden />
           <Grid columns="2">
             <Grid.Column>
               {smartElement.Input('title', {
@@ -86,6 +89,10 @@ class CollectionHeader extends Component {
                 readOnly: isReadOnly,
               })}
               <Divider hidden />
+              {smartElement.Input('textColor', {
+                readOnly: isReadOnly,
+              })}
+              <Divider hidden />
             </Grid.Column>
             <Grid.Column>
               <Form.Group widths={1}>
@@ -110,7 +117,7 @@ class CollectionHeader extends Component {
               })}
             </Grid.Column>
           </Grid> */}
-          <CardHeaderMeta />
+          <CardHeaderMeta additinalInfoLenght={6} />
           <Divider section />
           <OfferingButtonGroup isDisable={!(CARD_HEADER_META_FRM.meta.isValid)} updateOffer={this.handleFormSubmit} />
         </Form>
