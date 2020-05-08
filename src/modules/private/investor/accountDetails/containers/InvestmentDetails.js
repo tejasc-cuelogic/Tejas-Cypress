@@ -48,7 +48,7 @@ class InvestmentDetails extends PureComponent {
   };
 
   render() {
-    const { match, portfolioStore } = this.props;
+    const { match, portfolioStore, isAdmin } = this.props;
     const { getInvestor, loadingInvestDetails } = portfolioStore;
     let navItems = [
       { title: 'Overview', to: 'overview', component: 'Overview' },
@@ -101,7 +101,7 @@ class InvestmentDetails extends PureComponent {
         ? !['Principal Remaining', 'Payments Remaining'].includes(sum.title)
         : filterLabel !== sum.title));
     }
-
+    const stage = (![details.loading, loadingInvestDetails, get(details, 'data')].includes(undefined) && (!details.loading || !loadingInvestDetails)) ? get(details, 'data.getOfferingDetailsBySlug.stage') : '';
     return (
       <Modal closeOnDimmerClick={false} closeIcon={!responsiveVars.isMobile} size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         {responsiveVars.isMobile && (
@@ -112,7 +112,7 @@ class InvestmentDetails extends PureComponent {
         <Modal.Content className={`${responsiveVars.isMobile ? 'mt-30' : ''} transaction-details`}>
           {[details.loading, loadingInvestDetails].includes(undefined) || details.loading || loadingInvestDetails ? <InlineLoader /> : (
             <>
-              <SummaryHeader details={summaryDetails} loading={details.loading || loadingInvestDetails} />
+              <SummaryHeader stage={stage} isAdmin={isAdmin} details={summaryDetails} loading={details.loading || loadingInvestDetails} />
               <Card fluid className={responsiveVars.isMobile ? 'mt-0' : ''}>
                 {!responsiveVars.isMobile
                   && <SecondaryMenu match={match} navItems={navItems} />
