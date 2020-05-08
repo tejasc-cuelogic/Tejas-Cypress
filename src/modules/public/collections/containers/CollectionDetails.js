@@ -113,7 +113,7 @@ class CollectionDetails extends Component {
     }
     const validate = (con) => {
       let isValid = false;
-      if (con.contentType === 'ACTIVE_INVESTMENTS' && getActiveOfferingsList & getActiveOfferingsList.length) {
+      if (con.contentType === 'ACTIVE_INVESTMENTS' && getActiveOfferingsList && getActiveOfferingsList.length) {
         isValid = true;
       } else if (con.contentType === 'COMPLETE_INVESTMENTS' && getPastOfferingsList && getPastOfferingsList.length) {
         isValid = true;
