@@ -202,22 +202,20 @@ export const getCollection = gql`
         tombstone {
           title
           description
+          descriptionColor
           bgColor
           image {
-            id
             url
-            isPublic
-            fileName
+            isPublic            
           }
-          bgImage {
-            id
+          bgImage {            
             url
-            isPublic
-            fileName
+            isPublic            
           }
           tag {
             color
             text
+            textColor
           }
         }
         header {
@@ -229,21 +227,18 @@ export const getCollection = gql`
           type
           url
         }
-        image {
-          id
+        image {          
           url
-          isPublic
-          fileName
+          isPublic          
         }
-        bgImage {
-          id
+        bgImage {          
           url
-          isPublic
-          fileName
+          isPublic          
         }
         tag {
           color
           text
+          textColor
         }
       }
       }

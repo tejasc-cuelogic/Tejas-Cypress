@@ -26,6 +26,7 @@ export const TOMBSTONE_BASIC = {
   ...FormHelper.generateMeta([
     ['color', 'Tag Color', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag', objRef: 'tag' } }],
     ['text', 'Tag Text', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag', objRef: 'tag' } }],
+    ['textColor', 'Tag Text Color', '', 'optional', 'Enter Here', { asIn: true, props: { objRefOutput: 'tag', objRef: 'tag' } }],
   ]),
   ...COMMON_TOMBSTONE_META,
 };

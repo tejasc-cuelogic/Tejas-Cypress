@@ -76,7 +76,7 @@ const MetaList = ({ collection, CARD_HEADER_SOCIAL_FRM, isReadOnly, onSortEnd, s
 );
 
 function CardHeaderMeta(props) {
-  const { smartElement, collectionStore, title, noAddMore } = props;
+  const { smartElement, collectionStore, title, noAddMore, additinalInfoLenght } = props;
   const { CARD_HEADER_SOCIAL_FRM, removeOne, addMore, collection } = collectionStore;
   const isReadOnly = get(collection, 'lock');
 
@@ -89,7 +89,7 @@ function CardHeaderMeta(props) {
     <>
       <Header as="h4">
         {title || 'Social Links'}
-        {(!isReadOnly && !noAddMore && CARD_HEADER_SOCIAL_FRM.fields.social.length < 5)
+        {(!isReadOnly && !noAddMore && CARD_HEADER_SOCIAL_FRM.fields.social.length < additinalInfoLenght)
         && <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMore('CARD_HEADER_SOCIAL_FRM', 'social')}>+ Add</Button>
         }
       </Header>
