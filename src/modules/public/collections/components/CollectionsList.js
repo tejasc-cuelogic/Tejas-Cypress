@@ -11,8 +11,8 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
         <Container key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-0 pb-0 pl-0 pr-0' : ''}`}>
-          <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className={`${get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} collection-box ${responsiveVars.uptoTablet ? 'p-0' : 'p-36'}`}>
-            <Grid.Column widescreen={4} computer={4} tablet={16} mobile={16} className="zi-9">
+          <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className={`${get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} collection-box ${responsiveVars.uptoTablet ? 'p-0' : 'p-60'}`}>
+            <Grid.Column widescreen={5} computer={5} tablet={16} mobile={16} className="zi-9 p-0 collection-thumbnail-img">
               <Image64 srcUrl={get(collection, 'marketing.tombstone.image.url')} />
               {get(collection, 'marketing.tombstone.tag.text')
                 && (
@@ -21,7 +21,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
                   </div>
                 )}
             </Grid.Column>
-            <Grid.Column widescreen={11} computer={11} tablet={16} mobile={16} className="zi-9">
+            <Grid.Column widescreen={12} computer={11} tablet={16} mobile={16} className="zi-9 collection-content">
               <Header as="h3">{get(collection, 'marketing.tombstone.title')}</Header>
               <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
               {!isMobile && !isTablet
@@ -36,7 +36,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
           </Grid>
         </Container>
       ))}
-    <div className="mt-50 center-align">
+    <div className="mt-80 center-align">
       <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Collections" onClick={handleNavigate} />
     </div>
   </>
@@ -55,13 +55,13 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
                   <p>{get(collection, 'marketing.tombstone.tag.text')}</p>
                 </div>
               )}
-            <div className="full-width mt-0 p-36">
+            <div className="full-width mt-0 p-60">
               {get(collection, 'marketing.tombstone.bgImage.url')
                 && <Image64 bg originalImg className="collection-bg-image" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
               }
               <Header as="h5">{get(collection, 'marketing.tombstone.title')}</Header>
               <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
-              <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30 full-width">Explore</Button>
+              <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-20 full-width">Explore</Button>
             </div>
           </Card>
         ))}
@@ -71,8 +71,8 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
 
 const Heading = ({ responsiveVars }) => (
   <>
-    <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`${responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}`}>Explore Popular Collections</Header>
-    <p className={`${responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}`}>Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br />} Partner Organizations, as well as offerings grouped by theme, such as location or security type.</p>
+    <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`${responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-40 mb-12'}`}>Explore Popular Collections</Header>
+    <p className={`${responsiveVars.isMobile ? 'mb-40' : 'center-align mb-42'}`}>Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br />} Partner Organizations, as well as offerings grouped by theme, such as location or security type.</p>
   </>
 );
 
@@ -101,7 +101,7 @@ export default class CollectionsList extends Component {
       return <InlineLoader />;
     }
     return (
-      <div className={`${offering ? '' : 'bg-offwhite'} ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-50 pb-50' : 'pt-100 pb-100'}`}>
+      <div className={`${offering ? '' : 'bg-offwhite'} ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-50 pb-50' : 'pt-50 pb-50'}`}>
         <Heading responsiveVars={responsiveVars} />
         {publicCollections && publicCollections.length
           ? (expandCollection || isMobile ? (
