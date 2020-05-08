@@ -347,6 +347,15 @@ export const PRIVATE_NAV = [
     ],
   },
   {
+    icon: 'wpforms',
+    title: 'Collections',
+    capability: 'COLLECTIONS_ANY',
+    to: 'collections',
+    path: 'admin/collections',
+    accessibleTo: ['admin', 'manager', 'support'],
+    subPanel: 0,
+  },
+  {
     icon: 'list layout',
     title: 'Content',
     capability: 'CONTENT_ANY',
@@ -500,15 +509,6 @@ export const PRIVATE_NAV = [
       { title: 'Complete', to: 'complete', component: 'AllTransactions' },
       { title: 'Failed', to: 'failed', component: 'AllTransactions' },
     ],
-  },
-  {
-    icon: 'credit card',
-    title: 'Collections',
-    capability: 'COLLECTIONS_ANY',
-    to: 'collections',
-    path: 'admin/collections',
-    accessibleTo: ['admin', 'manager', 'support'],
-    subPanel: 0,
   },
   {
     icon: 'user plus',
