@@ -23,7 +23,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
             </Grid.Column>
             <Grid.Column widescreen={11} computer={11} tablet={16} mobile={16} className="zi-9">
               <Header as="h3">{get(collection, 'marketing.tombstone.title')}</Header>
-              <HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} />
+              <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
               {!isMobile && !isTablet
                 && (
                   <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30">Explore</Button>

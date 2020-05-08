@@ -129,16 +129,16 @@ export const CONTENT = {
       ],
       placeHolder: 'Enter here',
     },
-    meta: {
-      ...COMMON_TOMBSTONE_META,
-      social: [FormHelper.generateMeta([
-        ['type', 'Type', '', '', ''],
-        ['icon', 'Icon', '', '', ''],
-        ['iconColor', 'Icon Color', '', '', ''],
-        ['url', 'URL', '', '', ''],
-      ]),
-      ],
-    },
+    // meta: {
+    //   ...COMMON_TOMBSTONE_META,
+    //   social: [FormHelper.generateMeta([
+    //     ['type', 'Type', '', '', ''],
+    //     ['icon', 'Icon', '', '', ''],
+    //     ['iconColor', 'Icon Color', '', '', ''],
+    //     ['url', 'URL', '', '', ''],
+    //   ]),
+    //   ],
+    // },
     customValue: {
       label: 'Custom Value',
       value: '',
