@@ -177,7 +177,7 @@ const investorSummaryData = summaryValues => [
 
 const SummaryTerms = props => (
   <>
-    <Card.Group stackable itemsPerRow="2" className="application-cards">
+    <Card.Group stackable itemsPerRow="2" className={`application-cards ${!props.isAdmin ? 'mt-10' : ''}`}>
       { props.isAdmin ? AccountSummary(adminSummaryData(props.details)) : AccountSummary(investorSummaryData(props.details))}
     </Card.Group>
   </>
