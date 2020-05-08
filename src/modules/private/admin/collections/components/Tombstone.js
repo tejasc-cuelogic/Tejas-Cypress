@@ -82,6 +82,10 @@ class Tombstone extends Component {
                 readOnly: isReadOnly,
               })}
               <Divider hidden />
+              {smartElement.Input('textColor', {
+                readOnly: isReadOnly,
+              })}
+              <Divider hidden />
             </Grid.Column>
             <Grid.Column>
               <Form.Group widths={1}>
