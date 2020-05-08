@@ -29,7 +29,7 @@ export default class CollectionHeader extends Component {
           ? (
             <>
               <div className="campaign-banner collection-banner">
-                <section className="banner">
+                <section className="banner" style={{ backgroundColor: get(data, 'bgColor') }}>
                   <Responsive minWidth={768} as={Container}>
                     <Grid relaxed stackable centered>
                       <Grid.Column width={7} className="zi-9">
