@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Button, Icon, Confirm } from 'semantic-ui-react';
@@ -16,7 +16,9 @@ const SortableItem = SortableElement(({
     <div className="row-wrap row-highlight striped-table">
       <div className="balance first-column">
         <DragHandle />
-        {get(item, 'name') || 'N/A'}
+        <Link to={`/dashboard/collections/${item.slug}/overview`}>
+          {get(item, 'name') || 'N/A'}
+        </Link>
       </div>
       <div className="balance width-250">
         {get(item, 'slug') || 'N/A'}
@@ -129,15 +131,15 @@ export default class CollectionsListing extends Component {
             useDragHandle
           />
         </div>
-      <Confirm
-        header="Confirm"
-        content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this Collection ${this.state.isACTIVE ? 'ACTIVE' : 'Non-ACTIVE'}?` : 'Are you sure you want to delete this Collection?'}
-        open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
-        onCancel={this.handleDeleteCancel}
-        onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishCollection : this.handleDeleteCollection}
-        size="mini"
-        className="deletion"
-      />
+        <Confirm
+          header="Confirm"
+          content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this Collection ${this.state.isACTIVE ? 'ACTIVE' : 'Non-ACTIVE'}?` : 'Are you sure you want to delete this Collection?'}
+          open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
+          onCancel={this.handleDeleteCancel}
+          onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishCollection : this.handleDeleteCollection}
+          size="mini"
+          className="deletion"
+        />
       </>
     );
   }
