@@ -108,7 +108,6 @@ class CollectionsStore extends DataModelStore {
 
   setCollectionMetaList = (data, isContentMapping) => {
     const mappingId = isContentMapping ? 'id' : 'collectionId';
-    console.log(data);
     if (data) {
       this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [];
       const selectedCollections = data.map(c => c[mappingId]);

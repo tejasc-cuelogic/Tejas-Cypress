@@ -73,6 +73,15 @@ class Tombstone extends Component {
               {smartElement.Input('descriptionColor', {
                 readOnly: isReadOnly,
               })}
+              <Divider hidden />
+              {smartElement.Input('text', {
+                readOnly: isReadOnly,
+              })}
+              <Divider hidden />
+              {smartElement.Input('color', {
+                readOnly: isReadOnly,
+              })}
+              <Divider hidden />
             </Grid.Column>
             <Grid.Column>
               <Form.Group widths={1}>
@@ -85,7 +94,7 @@ class Tombstone extends Component {
               </Form.Group>
             </Grid.Column>
           </Grid>
-          <Grid columns="2">
+          {/* <Grid columns="2">
             <Grid.Column>
               {smartElement.Input('text', {
                 readOnly: isReadOnly,
@@ -96,7 +105,7 @@ class Tombstone extends Component {
                 readOnly: isReadOnly,
               })}
             </Grid.Column>
-          </Grid>
+          </Grid> */}
           <Divider section />
           <OfferingButtonGroup isDisable={!(TOMBSTONE_FRM.meta.isValid)} updateOffer={this.handleFormSubmit} />
         </Form>
