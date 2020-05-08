@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { find, get, filter, camelCase, orderBy } from 'lodash';
+import { get, camelCase, orderBy } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { Header, Responsive, Visibility, Container, Grid, Menu } from 'semantic-ui-react';
 import CollectionHeader from '../components/CollectionHeader';
@@ -45,10 +44,6 @@ class CollectionDetails extends Component {
     const { responsiveVars } = uiStore;
     const { isTablet, isMobile } = responsiveVars;
     const collectionHeader = get(collectionDetails, 'marketing.header');
-    const activeInvestment = find((get(collectionDetails, 'marketing.content') || []), c => c.contentType === 'ACTIVE_INVESTMENTS');
-    const completedInvestment = find((get(collectionDetails, 'marketing.content') || []), c => c.contentType === 'COMPLETE_INVESTMENTS');
-    const collectionInsight = find((get(collectionDetails, 'marketing.content') || []), c => c.contentType === 'INSIGHTS');
-    const customContent = filter((get(collectionDetails, 'marketing.content') || []), c => c.contentType === 'CUSTOM');
     let content = get(collectionDetails, 'marketing.content') || [];
     if (loadingArray.includes('getCollection')) {
       return <InlineLoader />;
@@ -103,7 +98,7 @@ class CollectionDetails extends Component {
                             refLink={this.props.match.url}
                             loading={loadingArray.includes('getCollectionMapping')}
                             campaigns={getActiveOfferingsList}
-                            heading={get(activeInvestment, 'title') && <Header id="offeringsShowd" as="h2" textAlign={isMobile ? '' : 'center'} caption className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>{get(activeInvestment, 'title')}</Header>}
+                            heading={get(this.componentWillMount, 'title') && <Header id="offeringsShowd" as="h2" textAlign={isMobile ? '' : 'center'} caption className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>{get(c, 'title')}</Header>}
                           />
                         </>
                       ) : c.contentType === 'COMPLETE_INVESTMENTS'
@@ -115,7 +110,7 @@ class CollectionDetails extends Component {
                               refLink={this.props.match.url}
                               loading={loadingArray.includes('getCollectionMapping')}
                               campaigns={getPastOfferingsList}
-                              heading={get(completedInvestment, 'title') && <Header as="h2" textAlign={isMobile ? '' : 'center'} caption className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>{get(completedInvestment, 'title')}</Header>}
+                              heading={get(c, 'title') && <Header as="h2" textAlign={isMobile ? '' : 'center'} caption className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>{get(c, 'title')}</Header>}
                             // subheading={<p className={isMobile ? 'mb-40' : 'center-align mb-80'}>Browse the newest investment opportunities on NextSeed. {!isMobile && <br /> }The next big thing may be inviting you to participate.</p>}
                             />
                           </>
@@ -124,7 +119,7 @@ class CollectionDetails extends Component {
                             <>
                               <span id={camelCase(c.title)} />
                               <CollectionInsights
-                                heading={get(collectionInsight, 'title') && <Header as="h2" textAlign={isMobile ? '' : 'center'} caption className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>{get(collectionInsight, 'title')}</Header>}
+                                heading={get(c, 'title') && <Header as="h2" textAlign={isMobile ? '' : 'center'} caption className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>{get(c, 'title')}</Header>}
                                 loading={loadingArray.includes('getCollectionMapping')}
                                 InsightArticles={getInsightsList}
                               />
@@ -134,7 +129,7 @@ class CollectionDetails extends Component {
                             ? (
                               <>
                                 <span id={camelCase(c.title)} />
-                                <CustomContent title={c.title} content={c.customValue} isTablet={isTablet} />
+                                <CustomContent content={c.customValue} isTablet={isTablet} />
                               </>
                             )
                             : null
