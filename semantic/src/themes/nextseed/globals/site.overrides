@@ -3553,6 +3553,7 @@ h3.ui.header.error-2{
 .offerings-container{
 	position: relative !important;
 	margin-bottom: 30px !important;
+	text-decoration: none !important;
 	&:last-child{
 		margin-bottom: 0 !important;
 	}
@@ -3597,7 +3598,7 @@ h3.ui.header.error-2{
 	}
 	color: @neutral-midwhite !important;
 	.ui.header{
-		color: @neutral-offwhite !important;
+		color: @neutral-offwhite;
 		margin-bottom: 0 !important;
 	}
 	.ns_flgs_box{
