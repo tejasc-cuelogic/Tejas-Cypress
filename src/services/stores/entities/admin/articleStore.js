@@ -12,7 +12,7 @@ import { ARTICLES, THUMBNAIL_EXTENSIONS } from '../../../constants/admin/article
 import { getArticleDetailsBySlug, adminDeleteArticle, allInsightArticles, getArticleDetails, adminInsightsArticle, adminCreateArticle, adminUpdateArticleInfo, adminInsightArticlesListByFilter } from '../../queries/insightArticle';
 import { getCategories, adminCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
-import { uiStore, commonStore } from '../..';
+import { uiStore, commonStore, collectionStore } from '../..';
 import { fileUpload } from '../../../actions';
 
 export class ArticleStore {
@@ -100,6 +100,21 @@ export class ArticleStore {
         query: allInsightArticles,
         fetchPolicy: 'network-only',
         variables: { sortByCreationDateAsc: sortAsc, categoryId },
+      });
+    }
+
+    @action
+    requestAllArticlesForCollections = () => {
+      graphql({
+        client,
+        query: adminInsightArticlesListByFilter,
+        fetchPolicy: 'network-only',
+        onFetch: (res) => {
+          if (res && res.adminInsightArticlesListByFilter) {
+            collectionStore.setFieldValue('collectionMappingList',
+            res.adminInsightArticlesListByFilter.map(c => ({ key: c.id, text: c.title, value: c.id })).flat());
+          }
+        },
       });
     }
 

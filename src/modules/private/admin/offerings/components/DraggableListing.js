@@ -19,7 +19,7 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   offering, handleAction, stage,
 }) => (
-    <div className={(offering.isAvailablePublicly) ? 'row-wrap striped-table' : 'row-wrap row-highlight striped-table'}>
+    <div className={(offering.scope) ? 'row-wrap striped-table' : 'row-wrap row-highlight striped-table'}>
       <div className="balance first-column">
         <DragHandle />
         <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
@@ -72,13 +72,13 @@ const SortableItem = SortableElement(({
         <Button.Group>
           {Object.keys(actions).map(action => (
             <Button icon className="link-button">
-              <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => handleAction(actions[action].label, offering, !offering.isAvailablePublicly)} />
+              <Icon className={`ns-${actions[action].label === 'Publish' ? offering.scope ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => handleAction(actions[action].label, offering, !offering.scope)} />
             </Button>
           ))}
           {['live'].includes(stage)
             && (
               <Button icon className="link-button">
-                <Icon className="ns-trash" onClick={() => handleAction('Delete', offering, !offering.isAvailablePublicly)} />
+                <Icon className="ns-trash" onClick={() => handleAction('Delete', offering, !offering.scope)} />
               </Button>
             )
           }
