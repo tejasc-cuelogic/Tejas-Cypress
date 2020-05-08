@@ -25,7 +25,7 @@ const SortableItem = SortableElement(({ CARD_HEADER_SOCIAL_FRM, isReadOnly, fiel
               {smartElement.Input('url', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'social', fieldIndex] })}
             </Table.Cell>
             <Table.Cell>
-              {smartElement.FormSelect('type', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'social', fieldIndex] })}
+              {smartElement.FormSelect('type', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'social', fieldIndex], containerwidth: 8 })}
             </Table.Cell>
             {!isReadOnly && CARD_HEADER_SOCIAL_FRM.fields.social.length > 1 && (
               <Table.Cell collapsing>
