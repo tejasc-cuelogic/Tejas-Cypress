@@ -513,4 +513,5 @@ export const decorateDefault = {
   handleUploadLoader: action,
   resetStoreData: action,
   resetAllForms: action,
+  resetLoader: action,
 };

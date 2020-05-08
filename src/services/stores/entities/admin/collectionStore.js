@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
-import { decorate, observable, action, computed, toJS, runInAction } from 'mobx';
+import { decorate, observable, action, computed, toJS } from 'mobx';
 import { get, orderBy } from 'lodash';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
@@ -10,6 +10,7 @@ import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING, HEA
 import { adminCollectionUpsert, getCollections, getPublicCollections, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 import { uiStore, authStore, offeringsStore } from '../../index';
+import articleStore from './articleStore';
 
 
 class CollectionsStore extends DataModelStore {
@@ -22,6 +23,8 @@ class CollectionsStore extends DataModelStore {
   collectionDetails = null;
 
   collectionMappingsData = null;
+
+  selectedCollectionArray = []
 
   collections = [];
 
@@ -115,6 +118,7 @@ class CollectionsStore extends DataModelStore {
         ...this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value,
         ...selectedCollections,
       ];
+      this.setFieldValue('selectedCollectionArray', selectedCollections);
     }
   }
 
@@ -333,9 +337,13 @@ class CollectionsStore extends DataModelStore {
               tempData[params.type] = data;
             } else if (params.type === 'INSIGHT') {
               tempData[params.type] = data.map((d) => {
+                d.insight.collectionId = d.collectionId;
+                d.insight.order = d.order;
                 d.insight.scope = d.scope;
                 return d.insight;
               });
+               articleStore.requestAllArticlesForCollections();
+               this.setCollectionMetaList(tempData[params.type], true);
             } else {
               tempData[params.type] = data;
             }
@@ -494,8 +502,7 @@ class CollectionsStore extends DataModelStore {
     }
   }
 
-  collectionMappingMutation = (mutation, params, additionalParams = {}) => new Promise(async (res, rej) => {
-    const { isContentMapping, id } = additionalParams;
+  collectionMappingMutation = (mutation, params) => new Promise(async (res, rej) => {
     const variables = {
       ...params,
     };
@@ -506,13 +513,6 @@ class CollectionsStore extends DataModelStore {
         variables,
       });
       window.logger(data);
-      if (isContentMapping) {
-        if (mutation === 'adminDeleteCollectionMapping') {
-          runInAction(() => {
-            this.collectionMapping.OFFERING.live = this.collectionMapping.OFFERING.live.filter(c => c.id !== id);
-          });
-        }
-      }
       res();
     } catch (error) {
       rej(error);
@@ -586,6 +586,7 @@ decorate(CollectionsStore, {
   collectionIndex: observable,
   HEADER_META_FRM: observable,
   TOMBSTONE_FRM: observable,
+  selectedCollectionArray: observable,
   contentId: observable,
   collection: observable,
   initLoad: observable,

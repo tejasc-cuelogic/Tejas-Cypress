@@ -152,7 +152,7 @@ export default class Offerings extends Component {
       collectionId: collectionStore.collectionId,
       referenceId: uiStore.confirmBox.refId,
     };
-    await collectionStore.collectionMappingMutation('adminDeleteCollectionMapping', params, { isContentMapping: true, id: uiStore.confirmBox.refId });
+    await collectionStore.collectionMappingMutation('adminDeleteCollectionMapping', params);
     collectionStore.setFieldValue('collectionIndex', null);
     this.props.history.push(`${this.props.match.url}`);
     this.props.uiStore.setConfirmBox('');
