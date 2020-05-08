@@ -85,6 +85,8 @@ export const getCollections = gql`
       id
       name
       slug
+      status
+      order
     }
   }`;
 

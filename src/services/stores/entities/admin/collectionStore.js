@@ -400,6 +400,23 @@ class CollectionsStore extends DataModelStore {
     }
   });
 
+  adminPublishCollection = async (params) => {
+    try {
+      uiStore.setProgress('save');
+      await this.executeMutation({
+        mutation: 'adminCollectionUpsert',
+        setLoader: 'adminCollectionUpsert',
+        variables: { ...params },
+      });
+    } catch (err) {
+      if (get(err, 'message')) {
+        Helper.toast(get(err, 'message'), 'error');
+      } else {
+        Helper.toast('Something went wrong.', 'error');
+      }
+    }
+  }
+
   updateContent = () => {
     if (get(this.collection, 'marketing.content')) {
       this.collection.marketing.content = [...this.collection.marketing.content, ...Validator.evaluateFormData(this.COLLECTION_CONTENT_FRM.fields).content];
