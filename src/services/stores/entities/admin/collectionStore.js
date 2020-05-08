@@ -123,7 +123,7 @@ class CollectionsStore extends DataModelStore {
   }
 
 
-  getPublicCollection = (slug) => {
+  getPublicCollection = slug => new Promise((resolve, reject) => {
     this.setFieldValue('collectionMappingsData', null);
     this.executeQuery({
       clientType: authStore.isUserLoggedIn ? 'PRIVATE' : 'PUBLIC',
@@ -133,12 +133,10 @@ class CollectionsStore extends DataModelStore {
     }).then((res) => {
       if (get(res, 'getCollection')) {
         this.setFieldValue('collectionDetails', res.getCollection);
-        // if (authStore.isUserLoggedIn) {
         this.getCollectionMappingPublic(res.getCollection.id);
-        // }
       }
-    });
-  };
+    }).catch((e) => { reject(e); });
+  });
 
   getCollectionMappingPublic = (collectionId) => {
     this.executeQuery({
@@ -154,9 +152,9 @@ class CollectionsStore extends DataModelStore {
         };
         res.getCollectionMapping.forEach((c) => {
           if (c.referenceId === get(c.offering, 'id')) {
-            data.offerings.push({ ...c.offering, sortOrder: c.order });
+            data.offerings.push({ ...c.offering, sortOrder: c.order, scope: c.scope });
           } else if (c.referenceId === get(c.insight, 'id')) {
-            data.insights.push({ ...c.insight, sortOrder: c.order });
+            data.insights.push({ ...c.insight, sortOrder: c.order, scope: c.scope });
           }
         });
         this.setFieldValue('collectionMappingsData', data);

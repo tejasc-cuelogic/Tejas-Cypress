@@ -25,7 +25,17 @@ class CollectionDetails extends Component {
 
   componentDidMount() {
     const { slug } = this.props.match.params;
-    this.props.collectionStore.getPublicCollection(slug);
+    this.props.collectionStore.getPublicCollection(slug).catch((err) => {
+      let exception = null;
+      try {
+        exception = JSON.parse(get(err, 'graphQLErrors[0].message'));
+        if (get(exception, 'code') === 'COLLECTION_EXCEPTION') {
+          this.props.history.push('/collections');
+        }
+      } catch {
+        this.props.history.push('/collections');
+      }
+    });
     this.processScroll();
   }
 
@@ -101,10 +111,23 @@ class CollectionDetails extends Component {
     if (loadingArray.includes('getCollection')) {
       return <InlineLoader />;
     }
+    const validate = (con) => {
+      let isValid = false;
+      if (con.contentType === 'ACTIVE_INVESTMENTS' && getActiveOfferingsList & getActiveOfferingsList.length) {
+        isValid = true;
+      } else if (con.contentType === 'COMPLETE_INVESTMENTS' && getPastOfferingsList && getPastOfferingsList.length) {
+        isValid = true;
+      } else if (con.contentType === 'INSIGHTS' && getInsightsList && getInsightsList.length) {
+        isValid = true;
+      } else if (con.contentType === 'CUSTOM' && con.customValue) {
+        isValid = true;
+      }
+      return isValid;
+    };
     const navItems = [];
     if (get(content, '[0]')) {
       content = orderBy(content, c => c.order, ['ASC']);
-      content.forEach((c, i) => navItems.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
+      content.forEach((c, i) => validate(c) && navItems.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }
     const renderHeading = (contentData) => {
       if (contentData) {
@@ -146,13 +169,13 @@ class CollectionDetails extends Component {
                   )
                 }
                 <Grid.Column computer={9} mobile={16} className="left-align offer-details-v2">
-                  {content.map(c => (
-                    c.contentType === 'ACTIVE_INVESTMENTS'
+                  {content.map((c, i) => (
+                    c.contentType === 'ACTIVE_INVESTMENTS' && getActiveOfferingsList & getActiveOfferingsList.length
                       ? (
                         <>
                           <span id="offeringsShow" />
                           <span id={camelCase(c.title)} />
-                          <Divider hidden section />
+                          {i !== 0 && <Divider hidden section />}
                           <CampaignList
                             collection
                             refLink={this.props.match.url}
@@ -161,11 +184,11 @@ class CollectionDetails extends Component {
                             heading={renderHeading(get(c, 'description'))}
                           />
                         </>
-                      ) : c.contentType === 'COMPLETE_INVESTMENTS'
+                      ) : c.contentType === 'COMPLETE_INVESTMENTS' && getPastOfferingsList && getPastOfferingsList.length
                         ? (
                           <>
                             <span id={camelCase(c.title)} />
-                            <Divider hidden section />
+                            {i !== 0 && <Divider hidden section />}
                             <CampaignList
                               collection
                               refLink={this.props.match.url}
@@ -174,12 +197,12 @@ class CollectionDetails extends Component {
                               heading={renderHeading(get(c, 'description'))}
                             />
                           </>
-                        ) : c.contentType === 'INSIGHTS'
+                        ) : c.contentType === 'INSIGHTS' && getInsightsList && getInsightsList.length
                           ? (
                             <>
                               <span id={camelCase(c.title)} />
-                              <Divider hidden section />
-                              <Divider hidden section />
+                              {i !== 0 && <Divider hidden section />}
+                              {i !== 0 && <Divider hidden section />}
                               <CollectionInsights
                                 heading={renderHeading(get(c, 'description'))}
                                 loading={loadingArray.includes('getCollectionMapping')}
@@ -187,12 +210,12 @@ class CollectionDetails extends Component {
                               />
                             </>
                           )
-                          : c.contentType === 'CUSTOM'
+                          : c.contentType === 'CUSTOM' && c.customValue
                             ? (
                               <>
                                 <span id={camelCase(c.title)} />
-                                <Divider hidden section />
-                                <Divider hidden section />
+                                {i !== 0 && <Divider hidden section />}
+                                {i !== 0 && <Divider hidden section />}
                                 <CustomContent content={c.customValue} isTablet={isTablet} />
                               </>
                             )
