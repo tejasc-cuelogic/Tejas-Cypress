@@ -51,9 +51,12 @@ class CollectionHeader extends Component {
               })}
             </Grid.Column>
             <Grid.Column>
-              {smartElement.Input('bgColor', {
+              {smartElement.ColorPikcer('bgColor', {
                 readOnly: isReadOnly,
               })}
+              {/* {smartElement.Input('bgColor', {
+                readOnly: isReadOnly,
+              })} */}
             </Grid.Column>
           </Grid>
           <Grid columns="2">

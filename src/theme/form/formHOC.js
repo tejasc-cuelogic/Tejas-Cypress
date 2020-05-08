@@ -4,7 +4,7 @@ import { get, pick } from 'lodash';
 import ReactCodeInput from 'react-code-input';
 import { Button, Form, Confirm, Header, Responsive, Icon } from 'semantic-ui-react';
 import {
-  ImageCropper, FormTextarea, FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown,
+  ImageCropper, FormTextarea, FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown, FormColorPikcer,
 } from '.';
 import Address from './src/Address';
 import HtmlEditor from '../../modules/shared/HtmlEditor';
@@ -373,6 +373,21 @@ function formHoc(WrappedComponent, metaInfo) {
       );
     }
 
+    ColorPikcer = (name, props) => {
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
+      return (
+        <FormColorPikcer
+          fieldData={fieldData}
+          name={name}
+          // props={props}
+          onblur={get(props, 'handleBlur') || false}
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form))}
+          metaInfo={metaInfo}
+          {... props}
+        />
+      );
+    }
+
     render() {
       const { currTime } = this.props[metaInfo.store];
       const smartElement = {
@@ -391,6 +406,7 @@ function formHoc(WrappedComponent, metaInfo) {
         ImageCropper: this.ImageCropper,
         HtmlEditor: this.HtmlEditor,
         TextArea: this.TextArea,
+        ColorPikcer: this.ColorPikcer,
       };
       return (
         <WrappedComponent
