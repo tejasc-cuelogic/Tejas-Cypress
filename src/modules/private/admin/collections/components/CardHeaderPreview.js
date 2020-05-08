@@ -15,12 +15,18 @@ export default class CardHeaderPreview extends Component {
     const { CARD_HEADER_META_FRM, CARD_HEADER_SOCIAL_FRM } = collectionStore;
     const collection = CARD_HEADER_META_FRM.fields;
     const socialDetails = CARD_HEADER_SOCIAL_FRM.fields.social;
-    // console.log(site);
+    const headerDownClick = (
+      <div className="current-projects-box">
+        <p className="mb-0">View our current and past projects below.</p>
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+        <i className="icon ns-chevron-down" />
+      </div>
+    );
     return (
 
-      <div className="campaign-banner collection-banner">
+      <div className="campaign-banner collection-banner" style={{ backgroundColor: get(collection, 'bgColor.value') }}>
         {get(collection, 'bgImage.preSignedUrl')
-          && <Image64 bg className="campaign-details-banner" srcUrl={get(collection, 'bgImage.preSignedUrl')} />
+          && <Image64 bg className="collection-bg-image" srcUrl={get(collection, 'bgImage.preSignedUrl')} />
         }
         <section className="banner">
           <Responsive minWidth={768} as={Container}>
@@ -39,7 +45,7 @@ export default class CardHeaderPreview extends Component {
                     ? socialDetails.map(site => (
                       <React.Fragment key={site.type.value}>
                         {site.url.value
-                          && <a target="_blank" rel="noopener noreferrer" href={site.url.value.includes('http') ? site.url.value : `http://${site.url.value}`}><Icon name={site.type.value.toLowerCase()} /></a>
+                          && <a target="_blank" rel="noopener noreferrer" href={site.url.value.includes('http') ? site.url.value : `http://${site.url.value}`}><Icon name={site.type.value.toLowerCase() === 'website' ? 'globe' : site.type.value.toLowerCase()} /></a>
                         }
                       </React.Fragment>
                     )) : ''
@@ -50,11 +56,11 @@ export default class CardHeaderPreview extends Component {
                 <Header as="h3" inverted>
                   {get(collection, 'title.value')}
                 </Header>
-                <span style={{ backgroundColor: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} /></span>
+                <span style={{ color: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} /></span>
               </Grid.Column>
             </Grid>
           </Responsive>
-          {/* {headerDownClick} */}
+          {headerDownClick}
         </section>
       </div>
 
