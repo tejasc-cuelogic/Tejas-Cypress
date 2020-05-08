@@ -98,7 +98,7 @@ class CollectionDetails extends Component {
                             refLink={this.props.match.url}
                             loading={loadingArray.includes('getCollectionMapping')}
                             campaigns={getActiveOfferingsList}
-                            heading={get(this.componentWillMount, 'title') && <Header id="offeringsShowd" as="h2" textAlign={isMobile ? '' : 'center'} caption className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>{get(c, 'title')}</Header>}
+                            heading={get(c, 'title') && <Header id="offeringsShowd" as="h2" textAlign={isMobile ? '' : 'center'} caption className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>{get(c, 'title')}</Header>}
                           />
                         </>
                       ) : c.contentType === 'COMPLETE_INVESTMENTS'

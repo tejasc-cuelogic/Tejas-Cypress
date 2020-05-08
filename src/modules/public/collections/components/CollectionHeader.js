@@ -49,7 +49,7 @@ export default class CollectionHeader extends Component {
                             ? get(data, 'social').map(site => (
                               <React.Fragment key={site.type}>
                                 {site.url
-                                  && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
+                                  && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase() === 'website' ? 'globe' : site.type.toLowerCase()} /></a>
                                 }
                               </React.Fragment>
                             )) : ''}
@@ -59,7 +59,7 @@ export default class CollectionHeader extends Component {
                         <Header as="h3" inverted>
                           {title}
                         </Header>
-                        <span style={{ backgroundColor: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
+                        <span style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
                       </Grid.Column>
                     </Grid>
                   </Responsive>
@@ -82,7 +82,7 @@ export default class CollectionHeader extends Component {
                   <Header as="h4" inverted>
                     {title}
                   </Header>
-                  <span style={{ backgroundColor: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
+                  <span style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
                   <div className="clearfix social-links mt-10">
                     {get(data, 'social[0]')
                       ? get(data, 'social').map(site => (
