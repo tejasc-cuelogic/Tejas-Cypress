@@ -1,20 +1,21 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
-import { decorate, observable, action, computed, toJS, runInAction } from 'mobx';
+import { decorate, observable, action, computed, toJS } from 'mobx';
 import { get, orderBy } from 'lodash';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META } from '../../../constants/admin/collection';
-import { adminCollectionUpsert, getCollections, getPublicCollections, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
+import { adminCollectionUpsert, getCollections, getPublicCollections, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 import { uiStore, authStore, offeringsStore } from '../../index';
+import articleStore from './articleStore';
 
 
 class CollectionsStore extends DataModelStore {
   constructor() {
-    super({ adminCollectionUpsert, getCollections, adminSetOrderForCollection, getPublicCollections, getPublicCollection, adminDeleteCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping });
+    super({ adminCollectionUpsert, getCollections, adminSetOrderForCollection, adminSetOrderForCollectionMapping, getPublicCollections, getPublicCollection, adminDeleteCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping });
   }
 
   collectionApiHit = false;
@@ -22,6 +23,8 @@ class CollectionsStore extends DataModelStore {
   collectionDetails = null;
 
   collectionMappingsData = null;
+
+  selectedCollectionArray = []
 
   collections = [];
 
@@ -115,11 +118,12 @@ class CollectionsStore extends DataModelStore {
         ...this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value,
         ...selectedCollections,
       ];
+      this.setFieldValue('selectedCollectionArray', selectedCollections);
     }
   }
 
 
-  getPublicCollection = (slug) => {
+  getPublicCollection = slug => new Promise((resolve, reject) => {
     this.setFieldValue('collectionMappingsData', null);
     this.executeQuery({
       clientType: authStore.isUserLoggedIn ? 'PRIVATE' : 'PUBLIC',
@@ -129,12 +133,10 @@ class CollectionsStore extends DataModelStore {
     }).then((res) => {
       if (get(res, 'getCollection')) {
         this.setFieldValue('collectionDetails', res.getCollection);
-        // if (authStore.isUserLoggedIn) {
         this.getCollectionMappingPublic(res.getCollection.id);
-        // }
       }
-    });
-  };
+    }).catch((e) => { reject(e); });
+  });
 
   getCollectionMappingPublic = (collectionId) => {
     this.executeQuery({
@@ -150,9 +152,9 @@ class CollectionsStore extends DataModelStore {
         };
         res.getCollectionMapping.forEach((c) => {
           if (c.referenceId === get(c.offering, 'id')) {
-            data.offerings.push({ ...c.offering, sortOrder: c.order });
+            data.offerings.push({ ...c.offering, sortOrder: c.order, scope: c.scope });
           } else if (c.referenceId === get(c.insight, 'id')) {
-            data.insights.push({ ...c.insight, sortOrder: c.order });
+            data.insights.push({ ...c.insight, sortOrder: c.order, scope: c.scope });
           }
         });
         this.setFieldValue('collectionMappingsData', data);
@@ -162,6 +164,10 @@ class CollectionsStore extends DataModelStore {
 
   get getCollectionLength() {
     return get(this.publicCollections, '[0]') ? this.publicCollections.length : 0;
+  }
+
+  get getActiveCollectionLength() {
+    return get(this.publicCollections, '[0]') ? this.publicCollections.filter(c => c.status === 'ACTIVE').length : 0;
   }
 
   get getOfferingsList() {
@@ -303,18 +309,22 @@ class CollectionsStore extends DataModelStore {
         collectionId: this.collectionId,
       };
       this.collectionMappingWrapper(params)
-        .then((res) => {
+        .then(action((res) => {
           if (get(res, 'getCollectionMapping')) {
-            let data = get(res, 'getCollectionMapping');
+            let data = orderBy(get(res, 'getCollectionMapping'), ['order', 'asc']);
             const { value: contentValue } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
             const tempData = {};
             if (params.type === 'OFFERING') {
               data = {
                 live: data.filter(d => d.offering.stage === 'LIVE').map((d) => {
+                  d.offering.collectionId = d.collectionId;
+                  d.offering.order = d.order;
                   d.offering.isAvailablePublicly = d.scope;
                   return d.offering;
                 }),
                 completed: data.filter(d => d.offering.stage === 'COMPLETE').map((d) => {
+                  d.offering.collectionId = d.collectionId;
+                  d.offering.order = d.order;
                   d.offering.isAvailablePublicly = d.scope;
                   return d.offering;
                 }),
@@ -325,16 +335,20 @@ class CollectionsStore extends DataModelStore {
               tempData[params.type] = data;
             } else if (params.type === 'INSIGHT') {
               tempData[params.type] = data.map((d) => {
+                d.insight.collectionId = d.collectionId;
+                d.insight.order = d.order;
                 d.insight.scope = d.scope;
                 return d.insight;
               });
+               articleStore.requestAllArticlesForCollections();
+               this.setCollectionMetaList(tempData[params.type], true);
             } else {
               tempData[params.type] = data;
             }
             this.setFieldValue('collectionIndex', index);
             this.collectionMapping = { ...tempData };
           }
-        })
+        }))
         .catch(() => {
           this.setFieldValue('collectionIndex', index);
         });
@@ -344,6 +358,17 @@ class CollectionsStore extends DataModelStore {
   }
 
   mapDataByContentType = data => data.map(c => ({ key: c.id, text: c.offeringSlug, value: c.id }))
+
+  // trimContentOptions = () => {
+  //   const { content } = this.COLLECTION_CONTENT_FRM.fields;
+  //   const contentValArr = content.map(c => c.contentType.value);
+  //   // eslint-disable-next-line array-callback-return
+  //   ['COMPLETE_INVESTMENTS', 'ACTIVE_INVESTMENTS', 'INSIGHTS'].map((contentValue) => {
+  //     if (contentValArr.filter(c => c === contentValue).length >= 2) {
+  //       this.COLLECTION_CONTENT_FRM.fields.content[0].contentType.options = content[0].contentType.options.filter(c => c.value !== contentValue);
+  //     }
+  //   });
+  // }
 
   collectionMappingWrapper = params => new Promise(async (resolve, rej) => {
     this.executeQuery({
@@ -429,9 +454,9 @@ class CollectionsStore extends DataModelStore {
     try {
       let collectionItemsList = [];
       collectionItemsList = newArr.map((item, index) => ({
-          id: item.id,
-          order: index + 1,
-        }));
+        id: item.id,
+        order: index + 1,
+      }));
       await this.executeMutation({
         mutation: 'adminSetOrderForCollection',
         setLoader: 'adminSetOrderForCollection',
@@ -450,8 +475,32 @@ class CollectionsStore extends DataModelStore {
     }
   }
 
-  collectionMappingMutation = (mutation, params, additionalParams = {}) => new Promise(async (res, rej) => {
-    const { isContentMapping, id } = additionalParams;
+  setOrderForCollectionsMapping = async (newArr) => {
+    try {
+      let collectionMappingItems = [];
+      collectionMappingItems = newArr.map((item, index) => ({
+        collectionId: item.collectionId,
+        referenceId: item.id,
+        order: index + 1,
+      }));
+      await this.executeMutation({
+        mutation: 'adminSetOrderForCollectionMapping',
+        setLoader: 'adminSetOrderForCollectionMapping',
+        variables: { collectionMappingItems },
+      });
+      return true;
+    } catch (err) {
+      uiStore.setProgress(false);
+      if (get(err, 'message')) {
+        Helper.toast(get(err, 'message'), 'error');
+      } else {
+        Helper.toast('Something went wrong.', 'error');
+      }
+      return false;
+    }
+  }
+
+  collectionMappingMutation = (mutation, params) => new Promise(async (res, rej) => {
     const variables = {
       ...params,
     };
@@ -462,13 +511,6 @@ class CollectionsStore extends DataModelStore {
         variables,
       });
       window.logger(data);
-      if (isContentMapping) {
-        if (mutation === 'adminDeleteCollectionMapping') {
-          runInAction(() => {
-            this.collectionMapping.OFFERING.live = this.collectionMapping.OFFERING.live.filter(c => c.id !== id);
-          });
-        }
-      }
       res();
     } catch (error) {
       rej(error);
@@ -542,6 +584,7 @@ decorate(CollectionsStore, {
   collectionIndex: observable,
   HEADER_META_FRM: observable,
   TOMBSTONE_FRM: observable,
+  selectedCollectionArray: observable,
   contentId: observable,
   collection: observable,
   initLoad: observable,
@@ -549,6 +592,8 @@ decorate(CollectionsStore, {
   updateContent: action,
   upsertCollection: action,
   setCollectionMetaList: action,
+  getActiveCollectionLength: computed,
+  getCollectionLength: computed,
   filterInitLoad: action,
   collectionMappingMutation: action,
   parseData: action,
@@ -561,5 +606,7 @@ decorate(CollectionsStore, {
   CARD_HEADER_SOCIAL_FRM: observable,
   reOrderHandle: action,
   getCaseSensetiveFieldvalue: action,
+  setOrderForCollectionsMapping: action,
+  setOrderForCollections: action,
 });
 export default new CollectionsStore();

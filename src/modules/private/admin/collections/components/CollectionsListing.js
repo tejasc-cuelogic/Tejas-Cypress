@@ -13,7 +13,7 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   item, handleAction,
 }) => (
-    <div className="row-wrap row-highlight striped-table">
+    <div className="row-wrap striped-table">
       <div className="balance first-column">
         <DragHandle />
         <Link to={`/dashboard/collections/${item.slug}/overview`}>

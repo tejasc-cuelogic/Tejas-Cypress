@@ -101,19 +101,20 @@ const SortableList = SortableContainer(({
       ))}
     </div>
   ));
-@inject('uiStore', 'offeringsStore', 'collectionStore')
+@inject('uiStore', 'collectionStore')
 @withRouter
 @observer
-export default class DraggableListing extends Component {
-  state = { isPublic: false };
+export default class Offerings extends Component {
+  state = { isPublic: false, loading: false };
 
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    const { allOfferingsSorted, setOrderForOfferings } = this.props.offeringsStore;
-    const { allLiveOfferingsList, stage } = this.props;
-    const offeringList = stage === 'live' && allLiveOfferingsList ? allLiveOfferingsList : allOfferingsSorted;
-    const isArrayNeedToMerge = !!(stage === 'live' && allLiveOfferingsList);
+  onSortEnd = async ({ oldIndex, newIndex }) => {
+  const { setOrderForCollectionsMapping, setFieldValue } = this.props.collectionStore;
     if (oldIndex !== newIndex) {
-      setOrderForOfferings(arrayMove(offeringList, oldIndex, newIndex), this.props.stage, isArrayNeedToMerge, this.props.offeringListIndex);
+      this.setState({ loading: true });
+      await setOrderForCollectionsMapping(arrayMove(this.props.offeringsList, oldIndex, newIndex));
+      this.setState({ loading: false });
+      setFieldValue('collectionIndex', null);
+      this.props.history.push(`${this.props.match.url}`);
     }
   }
 
@@ -151,7 +152,7 @@ export default class DraggableListing extends Component {
       collectionId: collectionStore.collectionId,
       referenceId: uiStore.confirmBox.refId,
     };
-    await collectionStore.collectionMappingMutation('adminDeleteCollectionMapping', params, { isContentMapping: true, id: uiStore.confirmBox.refId });
+    await collectionStore.collectionMappingMutation('adminDeleteCollectionMapping', params);
     collectionStore.setFieldValue('collectionIndex', null);
     this.props.history.push(`${this.props.match.url}`);
     this.props.uiStore.setConfirmBox('');
@@ -163,7 +164,7 @@ export default class DraggableListing extends Component {
     } = this.props;
 
     const { confirmBox } = uiStore;
-    if (isLoading) {
+    if (isLoading || this.state.loading) {
       return <InlineLoader />;
     }
     return (

@@ -97,6 +97,13 @@ export const adminSetOrderForCollection = gql`
     )
   }`;
 
+export const adminSetOrderForCollectionMapping = gql`
+  mutation adminSetOrderForCollectionMapping($collectionMappingItems: [CollectionMappingOrderInput]){
+    adminSetOrderForCollectionMapping(
+      collectionMappingItems: $collectionMappingItems,
+    )
+  }`;
+
 export const getPublicCollections = gql`
 query getCollections {
   getCollections{
@@ -122,6 +129,7 @@ query getCollections {
         tag {
           color
           text
+          textColor
         }
       }
     }
@@ -152,6 +160,7 @@ query getCollection($slug: String!) {
         tag {
           color
           text
+          textColor
         }
         social {
           type

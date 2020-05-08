@@ -75,19 +75,13 @@ class CollectionContent extends Component {
               ? <Link to="/" onClick={(e) => { e.preventDefault(); this.updateState(true); }}><Icon className="ns-pencil" />Edit</Link>
               : <Link to="/" className="text-link mr-10" onClick={(e) => { e.preventDefault(); this.updateState(false); }}>Cancel</Link>
             }
-            {COLLECTION_CONTENT_FRM.fields.content.length > 1 && <Link to="/" className="ml-10 negative-text" onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>}
+            {/* {COLLECTION_CONTENT_FRM.fields.content.length > 1 && <Link to="/" className="ml-10 negative-text" disabled onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>} */}
           </small>
           <Form.Group widths={2}>
             {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
-            {
-              ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
-              && (
-                <AddToCollection collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} />
-              )
-            }
           </Form.Group>
           {['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
             && (
@@ -134,7 +128,12 @@ class CollectionContent extends Component {
                 </div>
               </>
             )}
-          <Divider section />
+          {
+            ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
+            && (
+              <AddToCollection isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
+            )
+          }
 
           <Divider hidden />
         </Form>

@@ -91,16 +91,17 @@ export class NavItems extends Component {
   render() {
     const { activeIndex } = this.state;
     const {
-      location, isApp, roles, refMatch, isMobile, onToggle, refLink, newLayout, userDetailsStore, needNavLink, collectionStore,
+      location, isApp, roles, refMatch, isMobile, onToggle, refLink, newLayout, userDetailsStore, needNavLink,
+      // collectionStore,
     } = this.props;
     let { match } = this.props;
-    const { getCollectionLength } = collectionStore;
+    // const { getActiveCollectionLength } = collectionStore;
     const { signupStatus, hasAnyAccount } = userDetailsStore;
     const app = (isApp) ? 'dashboard' : '';
-    let myNavItems = this.props.navItems.filter(n => (n.headerMobile !== false && n.title === 'My Account' ? this.props.userStore.isInvestor : n.headerMobile !== false && n.noNav !== true));
-    if (!getCollectionLength) {
-      myNavItems = myNavItems.filter(n => n.to !== 'collections');
-    }
+    const myNavItems = this.props.navItems.filter(n => (n.headerMobile !== false && n.title === 'My Account' ? this.props.userStore.isInvestor : n.headerMobile !== false && n.noNav !== true));
+    // if (!getActiveCollectionLength) {
+    //   myNavItems = myNavItems.filter(n => n.to !== 'collections');
+    // }
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     const hideSetupNav = signupStatus.investorProfileCompleted && (hasAnyAccount);
@@ -262,7 +263,7 @@ export class NavigationItems extends Component {
       stepInRoute, location, currentUser, loading, isMobBussinessApp,
       navStore, uiStore, isMobile, collectionStore,
     } = this.props;
-    const { getCollectionLength } = collectionStore;
+    const { getActiveCollectionLength } = collectionStore;
     const { navStatus, subNavStatus } = navStore;
     const logInSignUp = stepInRoute.to !== 'login' ? [
       { to: 'login', title: 'Log In', className: 'basic primary', cypressAttr: 'auth-login' },
@@ -280,7 +281,7 @@ export class NavigationItems extends Component {
       }
       return data;
     };
-    if (getCollectionLength) {
+    if (getActiveCollectionLength) {
       publicNavs = publicNavs.map(n => (n.validateNav ? validateNav(n) : n));
     }
     const publicNavList = isMobile ? publicNavs.filter(nav => nav.header !== false)

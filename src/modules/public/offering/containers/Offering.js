@@ -53,7 +53,7 @@ class Offering extends Component {
         {getCollectionLength
         && (
          <>
-          <CollectionsList collectionLength={3} offering />
+          <CollectionsList collectionLength={4} offering />
           <Divider section hidden />
           </>
          )

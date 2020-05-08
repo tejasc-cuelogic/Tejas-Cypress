@@ -16,7 +16,7 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   insight, handleAction,
 }) => (
-    <div className="row-wrap row-highlight striped-table">
+    <div className="row-wrap striped-table">
       <div className="balance first-column">
         <DragHandle />
         {insight.title}
@@ -64,15 +64,15 @@ const SortableList = SortableContainer(({
 @withRouter
 @observer
 export default class Insights extends Component {
-  state = { isPublic: false };
+  state = { isPublic: false, loading: false };
 
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    const { allOfferingsSorted, setOrderForOfferings } = this.props.offeringsStore;
-    const { allLiveInsightsList, stage } = this.props;
-    const offeringList = stage === 'live' && allLiveInsightsList ? allLiveInsightsList : allOfferingsSorted;
-    const isArrayNeedToMerge = !!(stage === 'live' && allLiveInsightsList);
+  onSortEnd = async ({ oldIndex, newIndex }) => {
     if (oldIndex !== newIndex) {
-      setOrderForOfferings(arrayMove(offeringList, oldIndex, newIndex), this.props.stage, isArrayNeedToMerge, this.props.offeringListIndex);
+      this.setState({ loading: true });
+      await this.props.collectionStore.setOrderForCollectionsMapping(arrayMove(this.props.insightsList, oldIndex, newIndex));
+      this.setState({ loading: false });
+      this.props.collectionStore.setFieldValue('collectionIndex', null);
+      this.props.history.push(`${this.props.match.url}`);
     }
   }
 
@@ -110,7 +110,7 @@ export default class Insights extends Component {
       collectionId: collectionStore.collectionId,
       referenceId: uiStore.confirmBox.refId,
     };
-    await collectionStore.collectionMappingMutation('adminDeleteCollectionMapping', params, { isContentMapping: true, id: uiStore.confirmBox.refId });
+    await collectionStore.collectionMappingMutation('adminDeleteCollectionMapping', params);
     collectionStore.setFieldValue('collectionIndex', null);
     this.props.history.push(`${this.props.match.url}`);
     this.props.uiStore.setConfirmBox('');
@@ -122,7 +122,7 @@ export default class Insights extends Component {
     } = this.props;
 
     const { confirmBox } = uiStore;
-    if (isLoading) {
+    if (isLoading || this.state.loading) {
       return <InlineLoader />;
     }
     return (
@@ -146,15 +146,15 @@ export default class Insights extends Component {
             useDragHandle
           />
         </div>
-      <Confirm
-        header="Confirm"
-        content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this offering ${this.state.isPublic ? 'Public' : 'Non-Public'}?` : 'Are you sure you want to delete this offering?'}
-        open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
-        onCancel={this.handleDeleteCancel}
-        onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteCollection}
-        size="mini"
-        className="deletion"
-      />
+        <Confirm
+          header="Confirm"
+          content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this offering ${this.state.isPublic ? 'Public' : 'Non-Public'}?` : 'Are you sure you want to delete this offering?'}
+          open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
+          onCancel={this.handleDeleteCancel}
+          onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteCollection}
+          size="mini"
+          className="deletion"
+        />
       </>
     );
   }

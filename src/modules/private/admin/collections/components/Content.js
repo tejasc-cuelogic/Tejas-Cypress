@@ -58,8 +58,9 @@ export default class Content extends React.Component {
     const { match } = this.props;
     const { COLLECTION_CONTENT_FRM } = this.props.collectionStore;
     const navItems = [];
+    const loadeingList = ['getCollectionMapping', 'adminCollectionUpsert', 'adminCollectionMappingUpsert', 'adminDeleteCollectionMapping'];
     const { loadingArray } = this.props.nsUiStore;
-    if (intersection(loadingArray, ['getCollectionMapping', 'adminCollectionUpsert']).length > 0) {
+    if (intersection(loadingArray, loadeingList).length > 0) {
       return <InlineLoader />;
     }
     COLLECTION_CONTENT_FRM.fields.content.map((content, index) => {
