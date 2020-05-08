@@ -26,7 +26,9 @@ const meta = [
 export default class AllInsights extends Component {
   constructor(props) {
     super(props);
-    this.props.articleStore.sortArticlesByFilter();
+    if (!this.props.insightsList) {
+      this.props.articleStore.sortArticlesByFilter();
+    }
   }
 
   globalActionChange = (e, { name, value }) => this.props.articleStore.setGlobalAction(name, value);
@@ -79,17 +81,18 @@ export default class AllInsights extends Component {
 
 
   render() {
-    const { articleStore } = this.props;
+    const { articleStore, insightsList } = this.props;
     const { confirmBox, inProgress } = this.props.uiStore;
     const {
       articleListingLoader,
       sortOrder,
       adminInsightList,
     } = articleStore;
+    const list = insightsList || adminInsightList;
     if (articleListingLoader || inProgress) {
       return <InlineLoader />;
     }
-    if (adminInsightList.length === 0) {
+    if (list.length === 0) {
       return <InlineLoader text="No data found." />;
     }
     return (
@@ -113,7 +116,7 @@ export default class AllInsights extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {adminInsightList ? adminInsightList.map(record => (
+                {list ? list.map(record => (
                   <Table.Row key={record.id}>
                     <Table.Cell><Link to={`${this.props.match.url}/${record.id}/${record.articleStatus}`}>{record.title || '-'}</Link></Table.Cell>
                     <Table.Cell>{record.category || 'N/A'}</Table.Cell>
@@ -137,11 +140,11 @@ export default class AllInsights extends Component {
                   </Table.Row>
                 ))
                   : (
-<Table.Row>
-                  <Table.Cell colSpan="7">
-                    <InlineLoader text="No data available." />
-                  </Table.Cell>
-                </Table.Row>
+                    <Table.Row>
+                      <Table.Cell colSpan="7">
+                        <InlineLoader text="No data available." />
+                      </Table.Cell>
+                    </Table.Row>
                   )}
               </Table.Body>
             </Table>

@@ -53,7 +53,7 @@ export default class HtmlEditor extends React.Component {
   getConfig = (keyStart, overrides) => {
     const config = {
       placeholderText: 'Enter here..',
-      toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen', '|', 'popup-btn'],
+      toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'fontSize', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', '|', 'popup-btn'],
       charCounterCount: false,
       editorClass: 'html-editor',
       key: FROALA_EDITOR_LICENSE,

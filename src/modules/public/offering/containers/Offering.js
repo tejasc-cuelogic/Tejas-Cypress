@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash';
 import { Header, Container, Button, Grid, Responsive, Divider, Icon } from 'semantic-ui-react';
 // import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
+import CollectionsList from '../../collections/components/CollectionsList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -12,11 +13,12 @@ const LoadMoreBtn = ({ action, param }) => (
     <Button fluid={isMobile} primary basic content="View More" onClick={() => action(param)} />
   </div>
 );
-@inject('campaignStore', 'userStore', 'uiStore')
+@inject('campaignStore', 'userStore', 'uiStore', 'collectionStore')
 @observer
 class Offering extends Component {
   constructor(props) {
     super(props);
+    this.props.collectionStore.getCollections();
     this.props.campaignStore.setFieldValue('isPostedNewComment', false);
     this.props.campaignStore.initRequest('LIVE').finally(() => {
       const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -33,6 +35,7 @@ class Offering extends Component {
     const {
       orderedActiveList, creation, creationList, creationToDisplay, completed, loading, completedLoading, loadMoreRecord, completedList, completedToDisplay, RECORDS_TO_DISPLAY, hideCreationList,
     } = this.props.campaignStore;
+    const { getCollectionLength } = this.props.collectionStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const showCreationList = this.props.userStore.isAdmin && !isEmpty(access);
     const { responsiveVars } = this.props.uiStore;
@@ -47,6 +50,14 @@ class Offering extends Component {
           subheading={<p className={responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}>Browse the newest investment opportunities on NextSeed. {!responsiveVars.isMobile && <br /> }The next big thing may be inviting you to participate.</p>}
         />
         <Divider section hidden />
+        {getCollectionLength
+        && (
+         <>
+          <CollectionsList collectionLength={4} offering />
+          <Divider section hidden />
+          </>
+         )
+        }
         {(!hideCreationList && showCreationList && !loading)
         && (
           <>

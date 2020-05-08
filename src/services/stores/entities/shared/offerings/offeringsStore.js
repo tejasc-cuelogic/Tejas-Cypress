@@ -10,7 +10,7 @@ import {
   allOfferings, allOfferingsCompact, updateOffering,
   adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings, getofferingById,
 } from '../../../queries/offerings/manage';
-import { offeringCreationStore, userStore, uiStore, campaignStore } from '../../../index';
+import { offeringCreationStore, userStore, uiStore, campaignStore, collectionStore } from '../../../index';
 import { ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -53,7 +53,7 @@ export class OfferingsStore {
   @observable orderedActiveLiveList = [];
 
   @action
-  initRequest = (props, forceResetDb = false) => {
+  initRequest = (props, forceResetDb = false) => new Promise(async (resolve) => {
     const {
       stage,
     } = props;
@@ -73,6 +73,10 @@ export class OfferingsStore {
           if (stage === 'live') {
             this.orderedActiveListArr();
           }
+          const stageValue = stage === 'live' ? 'LIVE' : 'COMPLETE';
+          collectionStore.setFieldValue('collectionMappingList',
+            res.getOfferings.filter(d => d.stage === stageValue).map(c => ({ key: c.id, text: c.offeringSlug, value: c.id })));
+          resolve();
         }
       },
       onError: (err) => {
@@ -80,7 +84,34 @@ export class OfferingsStore {
         window.logger(err);
       },
     });
-  }
+  });
+
+  @action
+  getOfferingsForCollection = props => new Promise(async (resolve) => {
+    const {
+      stage,
+    } = props;
+    const reqStages = Object.keys(pickBy(STAGES, s => s.ref === stage));
+    graphql({
+      client,
+      query: stage === 'active' ? allOfferingsCompact : allOfferings,
+      variables: stage !== 'active' ? { stage: reqStages }
+        : { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
+      fetchPolicy: 'network-only',
+      onFetch: (res) => {
+        if (get(res, 'getOfferings')) {
+          const stageValue = stage === 'live' ? 'LIVE' : 'COMPLETE';
+          collectionStore.setFieldValue('collectionMappingList',
+            res.getOfferings.filter(d => d.stage === stageValue).map(c => ({ key: c.id, text: c.offeringSlug, value: c.id })));
+          resolve();
+        }
+      },
+      onError: (err) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        window.logger(err);
+      },
+    });
+  });
 
   @action
   setFieldValue = (field, value) => {
@@ -290,17 +321,17 @@ export class OfferingsStore {
       fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: (res) => {
-          if (!this.offerDataLoading) {
-            this.currentId = id;
-            this.offerLoading = false;
-            this.oldOfferData = {};
-            const { setFormData, setCurrentOfferingId, setFieldValue } = offeringCreationStore;
-            setFieldValue('currentOfferingSlug', id);
-            setCurrentOfferingId(res.getOfferingDetailsBySlug.id);
-            setFormData('OFFERING_DETAILS_FRM', false);
-            setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
-            setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
-          }
+        if (!this.offerDataLoading) {
+          this.currentId = id;
+          this.offerLoading = false;
+          this.oldOfferData = {};
+          const { setFormData, setCurrentOfferingId, setFieldValue } = offeringCreationStore;
+          setFieldValue('currentOfferingSlug', id);
+          setCurrentOfferingId(res.getOfferingDetailsBySlug.id);
+          setFormData('OFFERING_DETAILS_FRM', false);
+          setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
+          setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -437,7 +468,7 @@ export class OfferingsStore {
   }
 
   @computed get loading() {
-    return this.data[this.requestState.stage].loading;
+    return this.data[this.requestState.stage] && this.data[this.requestState.stage].loading;
   }
 
   @action resetInitLoad() {
