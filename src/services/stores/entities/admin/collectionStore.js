@@ -108,7 +108,6 @@ class CollectionsStore extends DataModelStore {
 
   setCollectionMetaList = (data, isContentMapping) => {
     const mappingId = isContentMapping ? 'id' : 'collectionId';
-    console.log(data);
     if (data) {
       this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [];
       const selectedCollections = data.map(c => c[mappingId]);
@@ -325,7 +324,10 @@ class CollectionsStore extends DataModelStore {
               this.setCollectionMetaList(data[stage], true);
               tempData[params.type] = data;
             } else if (params.type === 'INSIGHT') {
-              tempData[params.type] = data.map(d => d.insight);
+              tempData[params.type] = data.map((d) => {
+                d.insight.scope = d.scope;
+                return d.insight;
+              });
             } else {
               tempData[params.type] = data;
             }

@@ -21,17 +21,11 @@ const SortableItem = SortableElement(({
         <DragHandle />
         {insight.title}
       </div>
-      <div className="balance width-130">
+      <div className="balance width-250">
         {insight.category}
       </div>
-      <div className="balance width-130">
+      <div className="balance width-250">
         {insight.tags ? insight.tags.join(', ') : '-'}
-      </div>
-      <div className="balance width-130">
-        {insight.author}
-      </div>
-      <div className="balance width-130">
-        {insight.author || 'N/A'}
       </div>
       <div className="action right-align width-70">
         <Button.Group>
@@ -49,15 +43,15 @@ const SortableItem = SortableElement(({
     </div>
   ));
 const SortableList = SortableContainer(({
-  allOfferingsList, handleAction, stage, listIndex,
+  allInsightsList, handleAction, stage, listIndex,
 }) => (
     <div className="tbody">
-      {allOfferingsList.map((offering, index) => (
+      {allInsightsList.map((insight, index) => (
         <SortableItem
           // eslint-disable-next-line react/no-array-index-key
           key={`item-${index}`}
           docIndx={index}
-          offering={offering}
+          insight={insight}
           handleAction={handleAction}
           index={index}
           stage={stage}
@@ -74,9 +68,9 @@ export default class Insights extends Component {
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { allOfferingsSorted, setOrderForOfferings } = this.props.offeringsStore;
-    const { allLiveOfferingsList, stage } = this.props;
-    const offeringList = stage === 'live' && allLiveOfferingsList ? allLiveOfferingsList : allOfferingsSorted;
-    const isArrayNeedToMerge = !!(stage === 'live' && allLiveOfferingsList);
+    const { allLiveInsightsList, stage } = this.props;
+    const offeringList = stage === 'live' && allLiveInsightsList ? allLiveInsightsList : allOfferingsSorted;
+    const isArrayNeedToMerge = !!(stage === 'live' && allLiveInsightsList);
     if (oldIndex !== newIndex) {
       setOrderForOfferings(arrayMove(offeringList, oldIndex, newIndex), this.props.stage, isArrayNeedToMerge, this.props.offeringListIndex);
     }
@@ -86,7 +80,6 @@ export default class Insights extends Component {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offering.id);
     } else if (action === 'Publish') {
-      console.log('isPublished', isPublished);
       this.setState({ isPublic: isPublished });
       this.props.uiStore.setConfirmBox(action, offering.id, isPublished);
     }
@@ -99,7 +92,7 @@ export default class Insights extends Component {
   handlePublishOffering = async () => {
     const { collectionStore, uiStore } = this.props;
     const params = {
-      type: 'OFFERING',
+      type: 'INSIGHT',
       collectionId: collectionStore.collectionId,
       referenceId: uiStore.confirmBox.refId,
       scope: this.state.isPublic ? 'PUBLIC' : 'HIDDEN',
@@ -113,7 +106,7 @@ export default class Insights extends Component {
   handleDeleteCollection = async () => {
     const { collectionStore, uiStore } = this.props;
     const params = {
-      type: 'OFFERING',
+      type: 'INSIGHT',
       collectionId: collectionStore.collectionId,
       referenceId: uiStore.confirmBox.refId,
     };
@@ -125,7 +118,7 @@ export default class Insights extends Component {
 
   render() {
     const {
-      uiStore, stage, offeringsList, isLoading,
+      uiStore, stage, insightsList, isLoading,
     } = this.props;
 
     const { confirmBox } = uiStore;
@@ -137,15 +130,14 @@ export default class Insights extends Component {
         <div className="ui card fluid">
           <div className="ui basic table">
             <div className="row-wrap striped-table thead">
-              <div className="balance first-column">Name</div>
-              <div className="balance width-130">Category</div>
-              <div className="balance width-130" /> Tags</div>
-            <div className="balance width-130">Author</div>
-            <div className="balance">POC</div>
+              <div className="balance first-column">Title</div>
+              <div className="balance width-250">Category</div>
+              <div className="balance width-250"> Tags</div>
+            </div>
             <div className="action right-align width-70" />
           </div>
           <SortableList
-            allOfferingsList={offeringsList}
+            allInsightsList={insightsList}
             pressDelay={100}
             handleAction={this.handleAction}
             onSortEnd={e => this.onSortEnd(e)}

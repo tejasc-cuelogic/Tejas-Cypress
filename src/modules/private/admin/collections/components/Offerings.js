@@ -121,7 +121,6 @@ export default class DraggableListing extends Component {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offering.id);
     } else if (action === 'Publish') {
-       console.log('isPublished', isPublished);
       this.setState({ isPublic: isPublished });
       this.props.uiStore.setConfirmBox(action, offering.id, isPublished);
     }
