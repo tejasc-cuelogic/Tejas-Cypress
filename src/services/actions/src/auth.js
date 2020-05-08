@@ -26,6 +26,7 @@ import {
   transactionStore,
   offeringsStore,
   multiFactorAuthStore,
+  collectionStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -454,6 +455,7 @@ export class Auth {
     window.sessionStorage.removeItem(`${uKey}_pInfo`);
     authStore.setUserLoggedIn(false);
     userStore.forgetUser();
+    collectionStore.setFieldValue('collectionApiHit', false);
     this.segmentTrackLogout(logoutType);
     this.clearMobxStore();
   }

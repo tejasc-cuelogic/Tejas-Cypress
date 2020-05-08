@@ -23,7 +23,7 @@ export default class TombstonePreview extends Component {
               {get(collection, 'text.value')
               && (
               <div style={{ backgroundColor: get(collection, 'color.value') }} className="ns_flgs_box">
-                <p style={{ backgroundColor: get(collection, 'color.value') }}>{get(collection, 'text.value')}</p>
+                <p style={{ color: get(collection, 'textColor.value') }}>{get(collection, 'text.value')}</p>
               </div>
               )}
             </Grid.Column>
