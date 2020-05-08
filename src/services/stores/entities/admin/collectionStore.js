@@ -164,6 +164,10 @@ class CollectionsStore extends DataModelStore {
     return get(this.publicCollections, '[0]') ? this.publicCollections.length : 0;
   }
 
+  get getActiveCollectionLength() {
+    return get(this.publicCollections, '[0]') ? this.publicCollections.filter(c => c.status === 'ACTIVE').length : 0;
+  }
+
   get getOfferingsList() {
     return get(this.collectionMappingsData, 'offerings[0]') ? toJS(get(this.collectionMappingsData, 'offerings')) : [];
   }
@@ -549,6 +553,8 @@ decorate(CollectionsStore, {
   updateContent: action,
   upsertCollection: action,
   setCollectionMetaList: action,
+  getActiveCollectionLength: computed,
+  getCollectionLength: computed,
   filterInitLoad: action,
   collectionMappingMutation: action,
   parseData: action,
