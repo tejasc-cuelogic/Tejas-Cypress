@@ -22,10 +22,10 @@ const SortableItem = SortableElement(({ CARD_HEADER_SOCIAL_FRM, isReadOnly, fiel
               {!isReadOnly && <DragHandle />}
             </Table.Cell>
             <Table.Cell>
-              {smartElement.Input('url', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'social', fieldIndex] })}
+              {smartElement.FormSelect('type', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'social', fieldIndex], containerwidth: 8 })}
             </Table.Cell>
             <Table.Cell>
-              {smartElement.FormSelect('type', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'social', fieldIndex], containerwidth: 8 })}
+              {smartElement.Input('url', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'social', fieldIndex] })}
             </Table.Cell>
             {!isReadOnly && CARD_HEADER_SOCIAL_FRM.fields.social.length > 1 && (
               <Table.Cell collapsing>
@@ -90,7 +90,7 @@ function CardHeaderMeta(props) {
       <Header as="h4">
         {title || 'Social Links'}
         {(!isReadOnly && !noAddMore && CARD_HEADER_SOCIAL_FRM.fields.social.length < additinalInfoLenght)
-        && <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMore('CARD_HEADER_SOCIAL_FRM', 'social')}>+ Add</Button>
+          && <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMore('CARD_HEADER_SOCIAL_FRM', 'social')}>+ Add</Button>
         }
       </Header>
       <MetaList
