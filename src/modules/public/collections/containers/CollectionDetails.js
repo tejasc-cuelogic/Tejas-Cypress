@@ -146,13 +146,13 @@ class CollectionDetails extends Component {
                   )
                 }
                 <Grid.Column computer={9} mobile={16} className="left-align offer-details-v2">
-                  {content.map(c => (
-                    c.contentType === 'ACTIVE_INVESTMENTS'
+                  {content.map((c, i) => (
+                    c.contentType === 'ACTIVE_INVESTMENTS' && getActiveOfferingsList & getActiveOfferingsList.length
                       ? (
                         <>
                           <span id="offeringsShow" />
                           <span id={camelCase(c.title)} />
-                          <Divider hidden section />
+                          {i !== 0 && <Divider hidden section />}
                           <CampaignList
                             collection
                             refLink={this.props.match.url}
@@ -161,11 +161,11 @@ class CollectionDetails extends Component {
                             heading={renderHeading(get(c, 'description'))}
                           />
                         </>
-                      ) : c.contentType === 'COMPLETE_INVESTMENTS'
+                      ) : c.contentType === 'COMPLETE_INVESTMENTS' && getPastOfferingsList && getPastOfferingsList.length
                         ? (
                           <>
                             <span id={camelCase(c.title)} />
-                            <Divider hidden section />
+                            {i !== 0 && <Divider hidden section />}
                             <CampaignList
                               collection
                               refLink={this.props.match.url}
@@ -174,12 +174,12 @@ class CollectionDetails extends Component {
                               heading={renderHeading(get(c, 'description'))}
                             />
                           </>
-                        ) : c.contentType === 'INSIGHTS'
+                        ) : c.contentType === 'INSIGHTS' && getInsightsList && getInsightsList.length
                           ? (
                             <>
                               <span id={camelCase(c.title)} />
-                              <Divider hidden section />
-                              <Divider hidden section />
+                              {i !== 0 && <Divider hidden section />}
+                              {i !== 0 && <Divider hidden section />}
                               <CollectionInsights
                                 heading={renderHeading(get(c, 'description'))}
                                 loading={loadingArray.includes('getCollectionMapping')}
@@ -187,12 +187,12 @@ class CollectionDetails extends Component {
                               />
                             </>
                           )
-                          : c.contentType === 'CUSTOM'
+                          : c.contentType === 'CUSTOM' && c.customValue
                             ? (
                               <>
                                 <span id={camelCase(c.title)} />
-                                <Divider hidden section />
-                                <Divider hidden section />
+                                {i !== 0 && <Divider hidden section />}
+                                {i !== 0 && <Divider hidden section />}
                                 <CustomContent content={c.customValue} isTablet={isTablet} />
                               </>
                             )

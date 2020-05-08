@@ -24,7 +24,7 @@ class Collections extends Component {
     return (
       <>
         <CollectionsHeader />
-        <CollectionsList collectionLength={5} />
+        <CollectionsList collectionLength={7} />
         <CollectionsFooter />
       </>
     );

@@ -122,6 +122,7 @@ query getCollections {
         tag {
           color
           text
+          textColor
         }
       }
     }
@@ -152,6 +153,7 @@ query getCollection($slug: String!) {
         tag {
           color
           text
+          textColor
         }
         social {
           type

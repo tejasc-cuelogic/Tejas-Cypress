@@ -30,7 +30,7 @@ export default class CollectionHeader extends Component {
             <>
               <div className="campaign-banner collection-banner">
                 {get(data, 'bgImage.url')
-                  && <Image64 bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
+                  && <Image64 reRender originalImg bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
                 }
                 <section className="banner">
                   <Responsive minWidth={768} as={Container}>
@@ -38,7 +38,9 @@ export default class CollectionHeader extends Component {
                       <Grid.Column width={7}>
                         <div className="video-wrapper campaign">
                           <Image64
+                            reRender
                             bg
+                            originalImg
                             srcUrl={get(data, 'image.url')}
                             imgType="heroImage"
                           />
@@ -55,11 +57,11 @@ export default class CollectionHeader extends Component {
                             )) : ''}
                         </div>
                       </Grid.Column>
-                      <Grid.Column width={8}>
+                      <Grid.Column style={{ color: get(data, 'descriptionColor') }} width={8}>
                         <Header as="h3" inverted>
                           {title}
                         </Header>
-                        <span style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
+                        <HtmlEditor readOnly content={get(data, 'description')} />
                       </Grid.Column>
                     </Grid>
                   </Responsive>
@@ -74,12 +76,14 @@ export default class CollectionHeader extends Component {
                   <div className="video-wrapper campaign">
                     <Image64
                       bg
+                      reRender
+                      originalImg
                       srcUrl={get(data, 'image.url')}
                       imgType="heroImage"
                     />
                     {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p style={{ color: get(data, 'tag.textColor') }}>{get(data, 'tag.text')}</p></div>}
                   </div>
-                  <Header as="h4" inverted>
+                  <Header style={{ color: get(data, 'descriptionColor') }} as="h4" inverted>
                     {title}
                   </Header>
                   <span style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
