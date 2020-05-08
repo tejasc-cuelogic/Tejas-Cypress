@@ -42,6 +42,7 @@ class CollectionHeader extends Component {
         <Form>
           <Header as="h3">Header Preview</Header>
           <CardHeaderPreview />
+          <Divider hidden />
           <Grid columns="2">
             <Grid.Column>
               {smartElement.Input('title', {

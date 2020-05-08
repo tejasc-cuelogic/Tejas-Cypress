@@ -112,7 +112,6 @@ query getCollections {
         tag {
           color
           text
-          textColor
         }
       }
     }
@@ -142,7 +141,6 @@ query getCollection($slug: String!) {
         tag {
           color
           text
-          textColor
         }
       }
       header {
@@ -161,7 +159,6 @@ query getCollection($slug: String!) {
         tag {
           color
           text
-          textColor
         }
         social {
           type
@@ -208,12 +205,16 @@ export const getCollection = gql`
           descriptionColor
           bgColor
           image {
+            id
             url
-            isPublic            
+            isPublic
+            fileName
           }
-          bgImage {            
+          bgImage {
+            id
             url
-            isPublic            
+            isPublic
+            fileName
           }
           tag {
             color
@@ -230,13 +231,17 @@ export const getCollection = gql`
           type
           url
         }
-        image {          
+        image {
+          id
           url
-          isPublic          
+          isPublic
+          fileName
         }
-        bgImage {          
+        bgImage {
+          id
           url
-          isPublic          
+          isPublic
+          fileName
         }
         tag {
           color
