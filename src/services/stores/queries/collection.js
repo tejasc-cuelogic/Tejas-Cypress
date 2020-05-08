@@ -220,8 +220,7 @@ export const getCollection = gql`
             text
           }
         }
-      }
-      header {
+        header {
         title
         description
         descriptionColor
@@ -246,6 +245,7 @@ export const getCollection = gql`
           color
           text
         }
+      }
       }
     }
   }`;
