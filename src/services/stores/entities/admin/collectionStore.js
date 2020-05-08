@@ -79,6 +79,7 @@ class CollectionsStore extends DataModelStore {
 
   setCollectionMetaList = (data, isContentMapping) => {
     const mappingId = isContentMapping ? 'id' : 'collectionId';
+    console.log(data);
     if (data) {
       this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [];
       const selectedCollections = data.map(c => c[mappingId]);
@@ -192,15 +193,25 @@ class CollectionsStore extends DataModelStore {
         collectionId: this.collectionId,
       };
       this.collectionMappingWrapper(params)
-        .then(async (res) => {
+        .then((res) => {
           if (get(res, 'getCollectionMapping')) {
             let data = get(res, 'getCollectionMapping');
+            const { value: contentValue } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
             const tempData = {};
             if (params.type === 'OFFERING') {
               data = {
-                live: data.filter(d => d.offering.stage === 'LIVE').map(d => d.offering),
-                complete: data.filter(d => d.offering.stage === 'COMPLETE').map(d => d.offering),
+                live: data.filter(d => d.offering.stage === 'LIVE').map((d) => {
+                  d.offering.isAvailablePublicly = d.scope;
+                  return d.offering;
+                }),
+                completed: data.filter(d => d.offering.stage === 'COMPLETE').map((d) => {
+                  d.offering.isAvailablePublicly = d.scope;
+                  return d.offering;
+                }),
               };
+              const stage = contentValue === 'ACTIVE_INVESTMENTS' ? 'live' : 'completed';
+              offeringsStore.getOfferingsForCollection({ stage });
+              this.setCollectionMetaList(data[stage], true);
               tempData[params.type] = data;
             } else if (params.type === 'INSIGHT') {
               tempData[params.type] = data.map(d => d.insight);
@@ -209,8 +220,6 @@ class CollectionsStore extends DataModelStore {
             }
             this.setFieldValue('collectionIndex', index);
             this.collectionMapping = { ...tempData };
-            await offeringsStore.initRequest({ stage: 'live' });
-            this.setCollectionMetaList(data.live, true);
           }
         })
         .catch(() => {
@@ -278,12 +287,33 @@ class CollectionsStore extends DataModelStore {
     }
   });
 
-
   updateContent = () => {
     if (get(this.collection, 'marketing.content')) {
       this.collection.marketing.content = [...this.collection.marketing.content, ...Validator.evaluateFormData(this.COLLECTION_CONTENT_FRM.fields).content];
     }
   }
+
+  // setOrderForCOllectionMappingOffering = (newArr, stage) => {
+  //   const offeringOrderDetails = [];
+  //   newArr.forEach((item, index) => {
+  //     offeringOrderDetails.push({
+  //       offeringId: item.id,
+  //       order: index + 1,
+  //     });
+  //     // eslint-disable-next-line no-param-reassign
+  //     newArr[index].order = index + 1;
+  //   });
+  //   client
+  //     .mutate({
+  //       mutation: setOrderForOfferings,
+  //       variables: { offeringOrderDetails },
+  //     }).then(() => {
+  //       Helper.toast('Order updated successfully.', 'success');
+  //       this.initRequest({ stage });
+  //     }).catch(() => {
+  //       Helper.toast('Error while updating order', 'error');
+  //     });
+  // }
 
   collectionMappingMutation = (mutation, params, additionalParams = {}) => new Promise(async (res, rej) => {
     const { isContentMapping, id } = additionalParams;
@@ -303,9 +333,6 @@ class CollectionsStore extends DataModelStore {
             this.collectionMapping.OFFERING.live = this.collectionMapping.OFFERING.live.filter(c => c.id !== id);
           });
         }
-        runInAction(() => {
-          this.collectionMapping.OFFERING.live = [...this.collectionMapping.OFFERING.live, [...data[mutation]]];
-        });
       }
       res();
     } catch (error) {

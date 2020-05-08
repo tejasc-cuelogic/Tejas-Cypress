@@ -53,7 +53,7 @@ export class OfferingsStore {
   @observable orderedActiveLiveList = [];
 
   @action
-  initRequest = (props, forceResetDb = false) => {
+  initRequest = (props, forceResetDb = false) => new Promise(async (resolve) => {
     const {
       stage,
     } = props;
@@ -73,8 +73,10 @@ export class OfferingsStore {
           if (stage === 'live') {
             this.orderedActiveListArr();
           }
+          const stageValue = stage === 'live' ? 'LIVE' : 'COMPLETE';
           collectionStore.setFieldValue('collectionMappingList',
-            res.getOfferings.map(c => ({ key: c.id, text: c.offeringSlug, value: c.id })));
+            res.getOfferings.filter(d => d.stage === stageValue).map(c => ({ key: c.id, text: c.offeringSlug, value: c.id })));
+          resolve();
         }
       },
       onError: (err) => {
@@ -82,7 +84,34 @@ export class OfferingsStore {
         window.logger(err);
       },
     });
-  }
+  });
+
+  @action
+  getOfferingsForCollection = props => new Promise(async (resolve) => {
+    const {
+      stage,
+    } = props;
+    const reqStages = Object.keys(pickBy(STAGES, s => s.ref === stage));
+    graphql({
+      client,
+      query: stage === 'active' ? allOfferingsCompact : allOfferings,
+      variables: stage !== 'active' ? { stage: reqStages }
+        : { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
+      fetchPolicy: 'network-only',
+      onFetch: (res) => {
+        if (get(res, 'getOfferings')) {
+          const stageValue = stage === 'live' ? 'LIVE' : 'COMPLETE';
+          collectionStore.setFieldValue('collectionMappingList',
+            res.getOfferings.filter(d => d.stage === stageValue).map(c => ({ key: c.id, text: c.offeringSlug, value: c.id })));
+          resolve();
+        }
+      },
+      onError: (err) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        window.logger(err);
+      },
+    });
+  });
 
   @action
   setFieldValue = (field, value) => {
