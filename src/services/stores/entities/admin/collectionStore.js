@@ -218,13 +218,13 @@ class CollectionsStore extends DataModelStore {
     if (Array.isArray(forms)) {
       forms.forEach((f) => {
         if (f === 'COLLECTION_CONTENT_FRM') {
-          const headerFields = Validator.evaluateFormData(this.HEADER_META_FRM.fields);
+          // const headerFields = Validator.evaluateFormData(this.HEADER_META_FRM.fields);
           const contentObj = Validator.evaluateFormData(this[f].fields);
-          const contentWithMeta = contentObj.content.map((c, index) => {
-            c.meta = JSON.stringify(headerFields.meta[index]);
-            return c;
-          });
-          data = { collectionDetails: { marketing: { content: contentWithMeta } } };
+          // const contentWithMeta = contentObj.content.map((c, index) => {
+          //   c.meta = JSON.stringify(headerFields.meta[index]);
+          //   return c;
+          // });
+          data = { collectionDetails: { marketing: contentObj } };
         } else if (f === 'TOMBSTONE_FRM') {
           data = { collectionDetails: { marketing: { tombstone: Validator.evaluateFormData(this[f].fields) } } };
         } else if (['CARD_HEADER_META_FRM', 'CARD_HEADER_SOCIAL_FRM'].includes(f)) {
@@ -400,6 +400,23 @@ class CollectionsStore extends DataModelStore {
     }
   });
 
+  adminPublishCollection = async (params) => {
+    try {
+      uiStore.setProgress('save');
+      await this.executeMutation({
+        mutation: 'adminCollectionUpsert',
+        setLoader: 'adminCollectionUpsert',
+        variables: { ...params },
+      });
+    } catch (err) {
+      if (get(err, 'message')) {
+        Helper.toast(get(err, 'message'), 'error');
+      } else {
+        Helper.toast('Something went wrong.', 'error');
+      }
+    }
+  }
+
   updateContent = () => {
     if (get(this.collection, 'marketing.content')) {
       this.collection.marketing.content = [...this.collection.marketing.content, ...Validator.evaluateFormData(this.COLLECTION_CONTENT_FRM.fields).content];
@@ -524,6 +541,7 @@ decorate(CollectionsStore, {
   collection: observable,
   initLoad: observable,
   initRequest: action,
+  updateContent: action,
   upsertCollection: action,
   setCollectionMetaList: action,
   filterInitLoad: action,
