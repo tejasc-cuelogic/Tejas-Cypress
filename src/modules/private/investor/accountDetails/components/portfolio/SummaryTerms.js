@@ -40,7 +40,7 @@ const AccountSummary = summaryData => (
     </Card>
   )));
 
-const summaryData = summaryValues => [
+const adminSummaryData = summaryValues => [
   [
     {
       title: 'Total Account Value',
@@ -115,10 +115,70 @@ const summaryData = summaryValues => [
   ],
 ];
 
+const investorSummaryData = summaryValues => [
+  [
+    {
+      title: 'Total Account Value',
+      value: Helper.CurrencyFormat(summaryValues.totalAccountValue),
+      tooltip: 'Includes your Current Portfolio Value, Pending Investments, Available Cash, and Rewards Balance.',
+      subitems: [
+        {
+          title: 'Outstanding Portfolio Value',
+          value: Helper.CurrencyFormat(summaryValues.outstandingPortfolioValue),
+          tooltip: 'This calculates the total unrealized value of securities in your portfolio.',
+        },
+        {
+          title: 'Pending Investments',
+          value: Helper.CurrencyFormat(summaryValues.pendingInvestments),
+          tooltip: 'Reservations in live offerings that have not closed or have not been processed.',
+        },
+        {
+          title: 'Available Cash',
+          value: Helper.MoneyMathDisplayCurrency(summaryValues.availableCash),
+          tooltip: 'Cash that is immediately available for investment in your account.',
+        },
+        {
+          title: 'Rewards Balance',
+          value: Helper.CurrencyFormat(summaryValues.rewardsBalance),
+          tooltip: 'Available investment credits that will be applied to your next investments.',
+        },
+      ],
+    },
+  ],
+  [
+    {
+      title: 'Lifetime Investments',
+      value: Helper.CurrencyFormat(summaryValues.lifetimeInvestments),
+      tooltip: 'Total investments made on NextSeed.',
+      subitems: [
+        {
+          title: 'Cash Investments',
+          value: Helper.CurrencyFormat(summaryValues.cashInvestments),
+          tooltip: 'Investments made from net new cash deposits. Does not include investments made from payments received.',
+        },
+        {
+          title: 'Reinvested Earnings',
+          value: Helper.CurrencyFormat(summaryValues.reinvestedEarnings),
+          tooltip: 'Investments made using cash received from prior payments.',
+        },
+        {
+          title: 'Credits Applied',
+          value: Helper.CurrencyFormat(summaryValues.creditsApplied),
+        },
+      ],
+    },
+    {
+      title: 'Lifetime Payments Received',
+      value: Helper.MoneyMathDisplayCurrency(summaryValues.lifetimePaymentsReceived),
+      tooltip: 'Total payments received from your investments on NextSeed, net of fees.',
+    },
+  ],
+];
+
 const SummaryTerms = props => (
   <>
     <Card.Group stackable itemsPerRow="2" className="application-cards">
-      {AccountSummary(summaryData(props.details))}
+      { props.isAdmin ? AccountSummary(adminSummaryData(props.details)) : AccountSummary(investorSummaryData(props.details))}
     </Card.Group>
   </>
 );
