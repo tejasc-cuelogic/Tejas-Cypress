@@ -170,7 +170,7 @@ class CollectionDetails extends Component {
                 }
                 <Grid.Column computer={9} mobile={16} className="left-align offer-details-v2">
                   {content.map((c, i) => (
-                    c.contentType === 'ACTIVE_INVESTMENTS' && getActiveOfferingsList & getActiveOfferingsList.length
+                    c.contentType === 'ACTIVE_INVESTMENTS' && getActiveOfferingsList && getActiveOfferingsList.length
                       ? (
                         <>
                           <span id="offeringsShow" />
