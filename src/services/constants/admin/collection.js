@@ -13,12 +13,12 @@ export const OVERVIEW = FormHelper.generateMeta([
 
 const COMMON_TOMBSTONE_META = {
   ...FormHelper.generateMeta([
-    ['title', 'Title', '', 'required', 'Enter Here'],
+    ['title', 'Title', '', 'optional', 'Enter Here'],
     ['bgColor', 'Background Color', '', 'optional', 'Enter Here'],
     ['descriptionColor', 'Description Color', '', 'optional', 'Enter Here'],
-    ['description', 'Description', '', 'required', 'Describe your project and what you`re raising funds to accomplish.'],
-    ['bgImage', 'BackGround Image', '', 'required', '', { s3Upload: true }],
-    ['image', 'Featured Image', '', 'required', '', { s3Upload: true }],
+    ['description', 'Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
+    ['bgImage', 'BackGround Image', '', 'optional', '', { s3Upload: true }],
+    ['image', 'Featured Image', '', 'optional', '', { s3Upload: true }],
   ]),
 };
 
@@ -49,13 +49,6 @@ export const HEADER_META = {
 
 export const CARD_HEADER_META = {
   ...TOMBSTONE_BASIC,
-  // social: [FormHelper.generateMeta([
-  //   ['type', 'Type', '', 'optional', '', { asIn: true, props: { values: [] } }],
-  //   ['url', 'URL', '', 'optional', ''],
-  //   // ['icon', 'Icon', '', 'optional', ''],
-  //   // ['iconColor', 'Icon Color', '', 'optional', ''],
-  // ]),
-  // ],
 };
 
 export const CARD_HEADER_SOCIAL_META = {

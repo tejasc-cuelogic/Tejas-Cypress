@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
 import Offerings from './Offerings';
-import AllInsights from '../../insights/components/AllInsights';
+import Insights from './Insights';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
 
 
@@ -98,7 +98,7 @@ class CollectionContent extends Component {
                 </Form.Field>
               </Form.Group>
             )}
-          <Divider />
+          <Divider hidden />
           {['CUSTOM', 'HEADER'].includes(COLLECTION_CONTENT_FRM.fields.content[index].contentType.value)
             && (
               <Form.Group widths={1}>
@@ -120,7 +120,7 @@ class CollectionContent extends Component {
           {(contentTypeValue === 'INSIGHTS' && collectionMapping.INSIGHT && collectionMapping.INSIGHT.length > 0
             && (
               <>
-                <AllInsights insightsList={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
+                <Insights insightsList={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
               </>
             ))
           }

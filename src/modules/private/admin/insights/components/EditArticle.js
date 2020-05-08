@@ -20,7 +20,7 @@ export default class EditArticle extends Component {
     const { id } = this.props.match.params;
 
     if (this.props.match.isExact) {
-      this.props.collectionStore.initRequest();
+      this.props.collectionStore.initRequest('INSIGHTS', id);
     }
 
     if (id !== 'new') {
