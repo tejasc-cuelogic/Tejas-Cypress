@@ -164,7 +164,9 @@
             }
         }
     }
+   
 }
+
 .featured-statistic {
 	counter-reset: section;
 	.ui.celled.grid {

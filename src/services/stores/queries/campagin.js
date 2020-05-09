@@ -88,10 +88,7 @@ const offeringTemplate2 = {
   }`,
 };
 
-export const allOfferings = gql`
-query getOfferingList($filters: OfferingListFilterInputType){
-    getOfferingList(filters: $filters) {
-      id
+export const offeringFields = `id
       template
       isAvailablePublicly
       watchListStatus
@@ -167,7 +164,12 @@ query getOfferingList($filters: OfferingListFilterInputType){
         state
         city
       }
-      regulation
+      regulation`;
+
+export const allOfferings = gql`
+query getOfferingList($filters: OfferingListFilterInputType){
+    getOfferingList(filters: $filters) {
+      ${offeringFields}
     }
   }
 `;

@@ -347,6 +347,15 @@ export const PRIVATE_NAV = [
     ],
   },
   {
+    icon: 'wpforms',
+    title: 'Collections',
+    capability: 'COLLECTIONS_ANY',
+    to: 'collections',
+    path: 'admin/collections',
+    accessibleTo: ['admin', 'manager', 'support'],
+    subPanel: 0,
+  },
+  {
     icon: 'list layout',
     title: 'Content',
     capability: 'CONTENT_ANY',
@@ -605,7 +614,23 @@ export const PUBLIC_NAV = [
   {
     title: 'Investment opportunities',
     to: 'offerings/',
+    // header: false,
+    // headerMobile: false,
     subNavigations: NEW_OFFERING_LAYOUT,
+    validateNav: 'OFFERING',
+  },
+  {
+    title: 'Investment opportunities',
+    to: '',
+    subPanel: 1,
+    exact: true,
+    header: false,
+    headerMobile: false,
+    validateNav: 'COLLECTION',
+    subNavigations: [
+      { title: 'NextSeed Offerings', to: 'offerings' },
+      { title: 'Investment Collections', to: 'collections' },
+    ],
   },
   {
     title: 'Investment opportunities',
@@ -769,6 +794,7 @@ export const MOBILE_NAV = [
     isLoggedIn: true,
   },
   { title: 'Investment Opportunities', to: 'offerings', isLoggedIn: true },
+  { title: 'Collections', to: 'collections', isLoggedIn: true },
   {
     title: 'Refer a Friend',
     to: 'app/referrals',

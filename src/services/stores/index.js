@@ -60,3 +60,4 @@ export { default as factoryStore } from './entities/dev/factoryStore';
 export { default as emailStore } from './entities/dev/emailStore';
 export { default as manageOfferingStore } from './entities/shared/offerings/manageOfferingStore';
 export { default as spaceStore } from './entities/public/spaceStore';
+export { default as collectionStore } from './entities/admin/collectionStore';
