@@ -51,12 +51,12 @@ class Offering extends Component {
         />
         <Divider section hidden />
         {getCollectionLength
-        && (
+        ? (
          <>
           <CollectionsList collectionLength={4} offering />
           <Divider section hidden />
           </>
-         )
+         ) : null
         }
         {(!hideCreationList && showCreationList && !loading)
         && (
