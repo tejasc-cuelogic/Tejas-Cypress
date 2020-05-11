@@ -100,16 +100,16 @@ export class NavItems extends Component {
     const app = (isApp) ? 'dashboard' : '';
     const validateNav = (nav) => {
       let data = false;
-      if (nav.to === 'collections' && getActiveCollectionLength) {
+      if (nav.validateNav === 'COLLECTION' && getActiveCollectionLength) {
         data = true;
-      } else if (nav.to !== 'collections') {
+      } else if (!nav.validateNav || nav.validateNav !== 'COLLECTION') {
         data = true;
       }
       return data;
     };
     const myNavItems = this.props.navItems.filter(n => (validateNav(n) && (n.headerMobile !== false && n.title === 'My Account' ? this.props.userStore.isInvestor : n.headerMobile !== false && n.noNav !== true)));
     // if (!getActiveCollectionLength) {
-    //   myNavItems = myNavItems.filter(n => n.to !== 'collections');
+    //   myNavItems = myNavItems.filter(n => n.to !== 'collections-testing');
     // }
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
