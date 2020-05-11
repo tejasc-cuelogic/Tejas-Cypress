@@ -12,7 +12,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
         <Container as={Link} to={`/collections/${get(collection, 'slug')}`} key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-0 pb-0 pl-0 pr-0' : ''}`}>
           <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className={`${get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} collection-box ${responsiveVars.uptoTablet ? 'p-0' : 'p-60'}`}>
-            <Grid.Column widescreen={5} computer={5} tablet={16} mobile={16} className="zi-9 p-0 collection-thumbnail-img">
+            <Grid.Column widescreen={4} computer={5} tablet={16} mobile={16} className="zi-9 p-0 collection-thumbnail-img">
               <Image64 reRender originalImg srcUrl={get(collection, 'marketing.tombstone.image.url')} />
               {get(collection, 'marketing.tombstone.tag.text')
                 && (

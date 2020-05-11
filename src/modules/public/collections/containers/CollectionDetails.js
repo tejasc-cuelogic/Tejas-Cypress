@@ -141,7 +141,7 @@ class CollectionDetails extends Component {
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
-              <CollectionHeader scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />
+              <CollectionHeader activeOffering={getActiveOfferingsList && getActiveOfferingsList.length} scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />
               <MobileDropDownNav
                 inverted
                 refMatch={match}

@@ -456,6 +456,7 @@ export class Auth {
     authStore.setUserLoggedIn(false);
     userStore.forgetUser();
     collectionStore.setFieldValue('collectionApiHit', false);
+    collectionStore.getCollections();
     this.segmentTrackLogout(logoutType);
     this.clearMobxStore();
   }
