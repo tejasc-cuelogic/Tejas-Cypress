@@ -90,6 +90,25 @@ export const getCollections = gql`
     }
   }`;
 
+export const allOfferings = gql`
+  query getOfferingList($filters: OfferingListFilterInputType){
+      getOfferingList(filters: $filters) {
+        offeringSlug
+        stage
+        id
+        isAvailablePublicly
+        keyTerms {
+          targetInvestmentPeriod
+          regulation
+          shorthandBusinessName
+          legalBusinessName
+          securities
+        }
+      }
+    }
+  `;
+
+
 export const adminSetOrderForCollection = gql`
   mutation adminSetOrderForCollection($collectionItemsList: [CollectionOrderInput]){
     adminSetOrderForCollection(

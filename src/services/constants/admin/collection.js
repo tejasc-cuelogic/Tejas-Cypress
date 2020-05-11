@@ -31,9 +31,17 @@ export const TOMBSTONE_BASIC = {
   ...COMMON_TOMBSTONE_META,
 };
 
-export const COLLECTION_MAPPING = FormHelper.generateMeta([
+export const COLLECTION_MAPPING_DROPDOWN = FormHelper.generateMeta([
   ['mappingMeta', 'Collection Mapping', '', '', ''],
 ]);
+
+export const COLLECTION_MAPPING_CONTENT = {
+  mappingContent: [
+    FormHelper.generateMeta([
+      ['image', 'Featured Image', '', 'optional', '', { s3Upload: true }],
+    ]),
+  ],
+};
 
 export const HEADER_META = {
   meta: [{
