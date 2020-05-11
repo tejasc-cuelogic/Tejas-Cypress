@@ -29,7 +29,7 @@ const Summary = props => (
                 new way of investing.
               </Card.Description>
             </Card.Content>
-            <Card.Content extra>
+            <Card.Content extra className="ed-center">
               <Button color="black" className="link-button">
                 For Investors
                 <Icon className="ns-arrow-right right" color="green" />
@@ -46,7 +46,7 @@ const Summary = props => (
                 how to add NextSeed to your capital stack and how to get started.
               </Card.Description>
             </Card.Content>
-            <Card.Content extra>
+            <Card.Content extra className="ed-center">
               <Button color="black" className="link-button">
                 For Businesses
                 <Icon className="ns-arrow-right right" color="green" />
