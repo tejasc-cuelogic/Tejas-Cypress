@@ -10,7 +10,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-        <Container as={Link} to={`/collections/${get(collection, 'slug')}`} key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-0 pb-0 pl-0 pr-0' : ''}`}>
+        <Container as={Link} to={`/collections-testing/${get(collection, 'slug')}`} key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-0 pb-0 pl-0 pr-0' : ''}`}>
           <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className={`${get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} collection-box ${responsiveVars.uptoTablet ? 'p-0' : 'p-60'}`}>
             <Grid.Column widescreen={4} computer={5} tablet={16} mobile={16} className="zi-9 p-0 collection-thumbnail-img">
               <Image64 reRender originalImg srcUrl={get(collection, 'marketing.tombstone.image.url')} />
@@ -26,7 +26,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
               <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
               {!isMobile && !isTablet
                 && (
-                  <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor') }} as={Link} to={`/collections/${get(collection, 'slug')}`} className="mt-30 collectionExplore">Explore</Button>
+                  <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor') }} as={Link} to={`/collections-testing/${get(collection, 'slug')}`} className="mt-30 collectionExplore">Explore</Button>
                 )
               }
             </Grid.Column>
@@ -49,7 +49,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
     <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
       {
         collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-          <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/collections/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
+          <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/collections-testing/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
             <Image64 reRender originalImg srcUrl={get(collection, 'marketing.tombstone.image.url')} />
             {get(collection, 'marketing.tombstone.tag.text')
               && (
@@ -63,7 +63,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
               }
               <Header style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }} as="h5">{get(collection, 'marketing.tombstone.title')}</Header>
               <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
-              <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor') }} as={Link} to={`/collections/${get(collection, 'slug')}`} className="mt-30 full-width collectionExplore">Explore</Button>
+              <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor') }} as={Link} to={`/collections-testing/${get(collection, 'slug')}`} className="mt-30 full-width collectionExplore">Explore</Button>
             </div>
           </Card>
         ))}
@@ -86,7 +86,7 @@ export default class CollectionsList extends Component {
 
   handleNavigate = () => {
     if (this.props.offering) {
-      this.props.history.push('/collections');
+      this.props.history.push('/collections-testing');
     } else {
       this.setState({ expandCollection: true });
     }

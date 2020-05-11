@@ -16,7 +16,7 @@ const SortableItem = SortableElement(({
     <div className="row-wrap striped-table">
       <div className="balance first-column">
         <DragHandle />
-        <Link to={`/dashboard/collections/${item.slug}/overview`}>
+        <Link to={`/dashboard/collections-testing/${item.slug}/overview`}>
           {get(item, 'name') || 'N/A'}
         </Link>
       </div>
