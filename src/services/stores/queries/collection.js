@@ -253,7 +253,16 @@ export const getCollection = gql`
           textColor
         }
       }
+      social {
+        type
+        shareLink
+        blurb
+        featuredImageUpload {
+          url          
+          fileName
+        }
       }
+     }
     }
   }`;
 
