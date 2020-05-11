@@ -23,6 +23,8 @@ class CollectionDetails extends Component {
     window.addEventListener('scroll', this.handleOnScroll);
   }
 
+  state = { firstHash: '' };
+
   componentDidMount() {
     const { slug } = this.props.match.params;
     this.props.collectionStore.getPublicCollection(slug).catch((err) => {
@@ -89,7 +91,8 @@ class CollectionDetails extends Component {
   processScroll = () => {
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      const hash = this.state.firstHash === this.props.location.hash ? '#firstContent' : this.props.location.hash;
+      document.querySelector(`${hash}`).scrollIntoView({
         block: 'start',
         // behavior: 'smooth',
       });
@@ -129,19 +132,23 @@ class CollectionDetails extends Component {
       content = orderBy(content, c => c.order, ['ASC']);
       content.forEach((c, i) => validate(c) && navItems.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }
+    if (navItems.length && this.state.firstHash === '') {
+      this.setState({ firstHash: get(navItems, '[0].to') });
+    }
     const renderHeading = (contentData) => {
       if (contentData) {
         return <p className="mb-30"><HtmlEditor readOnly content={contentData} /></p>;
       }
       return null;
     };
+    const collectionHeaderComponent = (<CollectionHeader activeOffering={getActiveOfferingsList && getActiveOfferingsList.length} scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />);
     return (
       <>
-        {!isMobile && <CollectionHeader scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />}
+        {!isMobile && collectionHeaderComponent}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
-              <CollectionHeader scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />
+              {collectionHeaderComponent}
               <MobileDropDownNav
                 inverted
                 refMatch={match}
@@ -155,6 +162,7 @@ class CollectionDetails extends Component {
             </Visibility>
           </Responsive>
           <Container>
+            <span id="firstContent" />
             <section>
               <Grid centered>
                 {!isMobile
@@ -202,12 +210,14 @@ class CollectionDetails extends Component {
                             <>
                               <span id={camelCase(c.title)} />
                               {i !== 0 && <Divider hidden section />}
-                              {i !== 0 && <Divider hidden section />}
+                              {/* {i !== 0 && <Divider hidden section />} */}
+                              <section>
                               <CollectionInsights
                                 heading={renderHeading(get(c, 'description'))}
                                 loading={loadingArray.includes('getCollectionMapping')}
                                 InsightArticles={getInsightsList}
                               />
+                              </section>
                             </>
                           )
                           : c.contentType === 'CUSTOM' && c.customValue
@@ -215,8 +225,10 @@ class CollectionDetails extends Component {
                               <>
                                 <span id={camelCase(c.title)} />
                                 {i !== 0 && <Divider hidden section />}
-                                {i !== 0 && <Divider hidden section />}
-                                <CustomContent content={c.customValue} isTablet={isTablet} />
+                                {/* {i !== 0 && <Divider hidden section />} */}
+                                <section>
+                                  <CustomContent content={c.customValue} isTablet={isTablet} />
+                                </section>
                               </>
                             )
                             : null

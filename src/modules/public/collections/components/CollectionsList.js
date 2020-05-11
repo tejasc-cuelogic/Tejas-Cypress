@@ -6,13 +6,13 @@ import { Grid, Container, Button, Header, Card } from 'semantic-ui-react';
 import { Image64, InlineLoader } from '../../../../theme/shared';
 import HtmlEditor from '../../../shared/HtmlEditor';
 
-const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionLength, handleNavigate }) => (
+const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionLength, handleNavigate, offering }) => (
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
         <Container as={Link} to={`/collections/${get(collection, 'slug')}`} key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-0 pb-0 pl-0 pr-0' : ''}`}>
           <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className={`${get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} collection-box ${responsiveVars.uptoTablet ? 'p-0' : 'p-60'}`}>
-            <Grid.Column widescreen={5} computer={5} tablet={16} mobile={16} className="zi-9 p-0 collection-thumbnail-img">
+            <Grid.Column widescreen={4} computer={5} tablet={16} mobile={16} className="zi-9 p-0 collection-thumbnail-img">
               <Image64 reRender originalImg srcUrl={get(collection, 'marketing.tombstone.image.url')} />
               {get(collection, 'marketing.tombstone.tag.text')
                 && (
@@ -26,7 +26,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
               <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
               {!isMobile && !isTablet
                 && (
-                  <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30">Explore</Button>
+                  <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor') }} as={Link} to={`/collections/${get(collection, 'slug')}`} className="mt-30 collectionExplore">Explore</Button>
                 )
               }
             </Grid.Column>
@@ -36,7 +36,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
           </Grid>
         </Container>
       ))}
-    {((collections.length > collectionLength) || (collections.length && !collectionLength)) && (
+    {((collections.length > collectionLength) || (collections.length && !collectionLength) || offering) && (
       <div className="mt-80 center-align">
         <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Collections" onClick={handleNavigate} />
       </div>
@@ -63,7 +63,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
               }
               <Header style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }} as="h5">{get(collection, 'marketing.tombstone.title')}</Header>
               <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
-              <Button as={Link} to={`/collections/${get(collection, 'slug')}`} inverted color="white" className="mt-30 full-width">Explore</Button>
+              <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor') }} as={Link} to={`/collections/${get(collection, 'slug')}`} className="mt-30 full-width collectionExplore">Explore</Button>
             </div>
           </Card>
         ))}
@@ -113,6 +113,7 @@ export default class CollectionsList extends Component {
             />
           ) : (
               <CollectionItem
+                offering={offering}
                 handleNavigate={this.handleNavigate}
                 collections={publicCollections}
                 collectionLength={collectionLength}

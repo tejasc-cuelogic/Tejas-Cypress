@@ -98,6 +98,11 @@ class CollectionHeader extends Component {
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
+              <Divider hidden />
+              {smartElement.Input('actionText', {
+                readOnly: isReadOnly,
+              })}
+              <Divider hidden />
               <Form.Group widths={1}>
                 <Form.Field>
                   <Header as="h6">{CARD_HEADER_META_FRM.fields.description.label}</Header>

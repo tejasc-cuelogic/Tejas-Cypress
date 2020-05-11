@@ -1,21 +1,21 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { get, orderBy, map } from 'lodash';
+import { get, orderBy, isArray, pickBy, map } from 'lodash';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
-import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META, COLLECTION_MISC } from '../../../constants/admin/collection';
-import { adminCollectionUpsert, getCollections, getPublicCollections, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
+import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING_DROPDOWN, COLLECTION_MAPPING_CONTENT, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META, COLLECTION_MISC } from '../../../constants/admin/collection';
+import { adminCollectionUpsert, getCollections, getPublicCollections, allOfferings, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
-import { uiStore, authStore, offeringsStore } from '../../index';
+import { uiStore, authStore } from '../../index';
 import articleStore from './articleStore';
-
+import { STAGES } from '../../../constants/admin/offerings';
 
 class CollectionsStore extends DataModelStore {
   constructor() {
-    super({ adminCollectionUpsert, getCollections, adminSetOrderForCollection, adminSetOrderForCollectionMapping, getPublicCollections, getPublicCollection, adminDeleteCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping });
+    super({ adminCollectionUpsert, getCollections, adminSetOrderForCollection, allOfferings, adminSetOrderForCollectionMapping, getPublicCollections, getPublicCollection, adminDeleteCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping });
   }
 
   collectionApiHit = false;
@@ -54,7 +54,10 @@ class CollectionsStore extends DataModelStore {
 
   CARD_HEADER_SOCIAL_FRM = Validator.prepareFormObject(CARD_HEADER_SOCIAL_META);
 
-  COLLECTION_MAPPING_FRM = Validator.prepareFormObject(COLLECTION_MAPPING);
+  COLLECTION_MAP_DROPDOWN = Validator.prepareFormObject(COLLECTION_MAPPING_DROPDOWN);
+
+  COLLECTION_MAPPING_CONTENT_FRM = Validator.prepareFormObject(COLLECTION_MAPPING_CONTENT);
+
 
   COLLECTION_MISC_FRM = Validator.prepareFormObject(COLLECTION_MISC);
 
@@ -115,10 +118,10 @@ class CollectionsStore extends DataModelStore {
   setCollectionMetaList = (data, isContentMapping) => {
     const mappingId = isContentMapping ? 'id' : 'collectionId';
     if (data) {
-      this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [];
+      this.COLLECTION_MAP_DROPDOWN.fields.mappingMeta.value = [];
       const selectedCollections = data.map(c => c[mappingId]);
-      this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value = [
-        ...this.COLLECTION_MAPPING_FRM.fields.mappingMeta.value,
+      this.COLLECTION_MAP_DROPDOWN.fields.mappingMeta.value = [
+        ...this.COLLECTION_MAP_DROPDOWN.fields.mappingMeta.value,
         ...selectedCollections,
       ];
       this.setFieldValue('selectedCollectionArray', selectedCollections);
@@ -189,7 +192,7 @@ class CollectionsStore extends DataModelStore {
     return get(this.collectionMappingsData, 'insights[0]') ? orderBy(toJS(get(this.collectionMappingsData, 'insights')), 'sortOrder', ['ASC']) : [];
   }
 
-  setFormData = (form, ref, keepAtLeastOne) => {
+  setFormData = (form, ref, keepAtLeastOne, data = undefined) => {
     Validator.resetFormData(this[form]);
     this.initLoad.push(form);
     const { collection } = this;
@@ -199,6 +202,9 @@ class CollectionsStore extends DataModelStore {
     if (form === 'HEADER_META_FRM') {
       const metaList = get(collection, 'marketing.content') ? collection.marketing.content.map(c => c.meta) : [];
       this[form] = Validator.setFormData(this[form], { meta: metaList }, ref, keepAtLeastOne);
+    } else if (form === 'COLLECTION_MAPPING_CONTENT_FRM') {
+      const mappingContentList = data ? data.map(c => c.image) : [];
+      this[form] = Validator.setFormData(this[form], { mappingContent: mappingContentList }, ref, keepAtLeastOne);
     } else {
       this[form] = Validator.setFormData(this[form], collection, ref, keepAtLeastOne);
     }
@@ -218,6 +224,36 @@ class CollectionsStore extends DataModelStore {
 
   filterInitLoad = (formName) => {
     this.initLoad = this.initLoad.filter(f => f !== formName);
+  }
+
+  getOfferings = async (group) => {
+    try {
+      let stageGroup = group;
+      let groupKey = 'group';
+      if (isArray(group)) {
+        groupKey = 'stage';
+        stageGroup = Object.keys(pickBy(STAGES, s => group.includes(s.publicRef)));
+      }
+      const variables = { filters: { [groupKey]: stageGroup } };
+      const res = await this.executeQuery({
+        query: 'allOfferings',
+        variables,
+        // setLoader: 'getCollection',
+      });
+      if (get(res, 'getOfferingList')) {
+        const stageValue = stageGroup === 'LIVE' ? 'LIVE' : 'COMPLETE';
+        let data = get(res, 'getOfferingList');
+        if (stageValue === 'LIVE') {
+          data = res.getOfferingList.filter(d => d.stage === stageValue);
+        }
+        this.setFieldValue('collectionMappingList',
+          data.map(c => ({ key: c.id, text: c.offeringSlug, value: c.id })));
+      }
+      return true;
+    } catch {
+      Helper.toast('Something went wrong.', 'error');
+      return false;
+    }
   }
 
   formPayLoad = (params) => {
@@ -324,21 +360,21 @@ class CollectionsStore extends DataModelStore {
             const tempData = {};
             if (params.type === 'OFFERING') {
               data = {
-                live: data.filter(d => d.offering.stage === 'LIVE').map((d) => {
+                LIVE: data.filter(d => d.offering.stage === 'LIVE').map((d) => {
                   d.offering.collectionId = d.collectionId;
                   d.offering.order = d.order;
                   d.offering.isAvailablePublicly = d.scope;
                   return d.offering;
                 }),
-                completed: data.filter(d => d.offering.stage === 'COMPLETE').map((d) => {
+                COMPLETE: data.filter(d => d.offering.stage !== 'LIVE').map((d) => {
                   d.offering.collectionId = d.collectionId;
                   d.offering.order = d.order;
                   d.offering.isAvailablePublicly = d.scope;
                   return d.offering;
                 }),
               };
-              const stage = contentValue === 'ACTIVE_INVESTMENTS' ? 'live' : 'completed';
-              offeringsStore.getOfferingsForCollection({ stage });
+              const stage = contentValue === 'ACTIVE_INVESTMENTS' ? 'LIVE' : 'COMPLETE';
+              this.getOfferings(stage);
               this.setCollectionMetaList(data[stage], true);
               tempData[params.type] = data;
             } else if (params.type === 'INSIGHT') {
@@ -647,7 +683,7 @@ decorate(CollectionsStore, {
   PARTNER_FRM: observable,
   OVERVIEW_FRM: observable,
   COLLECTION_CONTENT_FRM: observable,
-  COLLECTION_MAPPING_FRM: observable,
+  COLLECTION_MAP_DROPDOWN: observable,
   collectionMapping: observable,
   collectionMappingList: observable,
   collectionId: observable,

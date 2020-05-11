@@ -14,7 +14,7 @@ const metaInfo = {
   form: 'COLLECTION_CONTENT_FRM',
 };
 const offeringMeta = {
-  live: 'ACTIVE_INVESTMENTS', completed: 'COMPLETE_INVESTMENTS',
+  LIVE: 'ACTIVE_INVESTMENTS', COMPLETE: 'COMPLETE_INVESTMENTS',
 };
 @inject('collectionStore', 'nsUiStore', 'uiStore')
 @withRouter
