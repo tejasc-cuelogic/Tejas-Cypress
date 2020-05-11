@@ -100,7 +100,6 @@ class App extends Component {
         window.logger('Catch error in app.js verifySession. ', err);
       }).finally(() => {
         this.setState({ authChecked: true });
-        console.log('Mount collection');
         this.props.collectionStore.getCollections();
       });
     if (this.props.uiStore.devBanner) {
