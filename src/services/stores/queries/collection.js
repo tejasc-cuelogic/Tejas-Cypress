@@ -157,8 +157,7 @@ query getCollection($slug: String!) {
         title
         description
         actionText
-        descriptionColor
-        actionText
+        descriptionColor        
         tag {
           color
           text
