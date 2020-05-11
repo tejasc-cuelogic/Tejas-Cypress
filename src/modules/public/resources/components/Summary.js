@@ -22,7 +22,7 @@ const Summary = props => (
         <Grid.Column textAlign="center" width={6}>
           <Card as={Link} to={`${props.refUrl}/investor`} className="info-card campaign">
             <Card.Content>
-              <NSImage path="icons/resources_1.svg" centered className="mb-20" />
+              <NSImage path="icons/resources_1.svg" centered className="lightbulb mb-20" />
               <Card.Description>
                 Understand how to add local businesses to your investment portfolio, how NextSeed
                 investments work, and the risks and opportunities offered by this

@@ -453,6 +453,9 @@ a:not(.item), a:not(.ui.button){
 	&.campaign img.ui.image {
 		height: auto !important;
 	}
+	&.campaign img.ui.image.lightbulb {
+		height: 54px !important;
+	}
 }
 a{
 	&.inverted{
