@@ -159,12 +159,13 @@ export default class NewUpdate extends Component {
         >
           <Modal.Content className="new-update-modal">
             <Header as="h4">Investor Notification List</Header>
-            <HtmlEditor
-              readOnly
-              content={
-                PBUILDER_FRM.fields.notificationTo.value && PBUILDER_FRM.fields.notificationTo.value
+            <List ordered relaxed>
+              {
+                PBUILDER_FRM.fields.notificationTo.value && PBUILDER_FRM.fields.notificationTo.value.map(investor => (
+                  <List.Item>{ investor }</List.Item>
+                ))
               }
-            />
+            </List>
           </Modal.Content>
         </Modal>
       </>
@@ -293,14 +294,17 @@ export default class NewUpdate extends Component {
                               changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                               dateOfBirth
                             />
-                            {
-                              PBUILDER_FRM.fields.notificationDate.value
-                              ? <p>{`Notification sent on ${DataFormatter.formatedDate(PBUILDER_FRM.fields.notificationDate.value)} by ${PBUILDER_FRM.fields.notificationBy.value}.`}</p>
-                              : isPublished
-                                ? <p>No notifications were sent.</p>
-                                : this.sendInvestorNotificationTemplate(isReadonly, isManager)
-                            }
                             {PBUILDER_FRM.fields.notificationDate.value && this.showInvestorList()}
+                            {
+                              <div className="mb-10">
+                                {PBUILDER_FRM.fields.notificationDate.value
+                                ? <p>{`Notification sent on ${DataFormatter.formatedDate(PBUILDER_FRM.fields.notificationDate.value)} by ${PBUILDER_FRM.fields.notificationBy.value}.`}</p>
+                                : isPublished
+                                  ? <p>No notifications were sent.</p>
+                                  : this.sendInvestorNotificationTemplate(isReadonly, isManager)
+                                }
+                              </div>
+                            }
                             {this.postUpdateAsTemplate()}
                           </Form>
                         )
