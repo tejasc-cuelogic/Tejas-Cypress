@@ -12,17 +12,18 @@ import { NavItems } from '../../../../theme/layout/NavigationItems';
 @observer
 export default class CollectionHeader extends Component {
   render() {
-    const { uiStore, data, scrollToActiveOfferings } = this.props;
+    const { uiStore, data, scrollToActiveOfferings, activeOffering } = this.props;
     const { responsiveVars } = uiStore;
     const { isMobile } = responsiveVars;
     const title = get(data, 'title');
-    const headerDownClick = (
-      <div className="current-projects-box">
-        <p className="mb-0">View our current and past projects below.</p>
+    const actionText = get(data, 'actionText');
+    const headerDownClick = activeOffering && actionText ? (
+      <div className="current-projects-box" style={{ color: get(data, 'descriptionColor') }}>
+        <p style={{ color: get(data, 'descriptionColor') }} className="mb-0">{actionText}</p>
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
         <i className="icon ns-chevron-down" onClick={scrollToActiveOfferings} />
       </div>
-    );
+    ) : null;
     return (
       <>
         {!isMobile

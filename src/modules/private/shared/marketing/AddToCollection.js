@@ -16,7 +16,7 @@ export default class AddToCollection extends React.Component {
   handleCollectionChange = (e, res) => {
     const { collectionMappingMutation, setFieldValue } = this.props.collectionStore;
     const { referenceId, isOffering, isContentMapping, collectionId } = this.props;
-    const { value } = this.props.collectionStore.COLLECTION_MAPPING_FRM.fields.mappingMeta;
+    const { value } = this.props.collectionStore.COLLECTION_MAP_DROPDOWN.fields.mappingMeta;
     const mutation = res.value.length > value.length ? 'adminCollectionMappingUpsert' : 'adminDeleteCollectionMapping';
     const dropdownItem = mutation === 'adminCollectionMappingUpsert' ? res.value[res.value.length - 1] : this.getCollectionId(res.value);
     const groupIds = isContentMapping ? { collectionId, referenceId: dropdownItem } : { collectionId: dropdownItem, referenceId };
@@ -31,22 +31,22 @@ export default class AddToCollection extends React.Component {
         if (mutation === 'adminCollectionMappingUpsert') {
           setFieldValue('selectedCollectionArray', res.value);
         }
-        setFieldValue('COLLECTION_MAPPING_FRM', res.value, 'fields.mappingMeta.value');
+        setFieldValue('COLLECTION_MAP_DROPDOWN', res.value, 'fields.mappingMeta.value');
         setFieldValue('collectionIndex', null);
         this.props.history.push(`${this.props.match.url}`);
       })
       .catch(() => {
-        setFieldValue('COLLECTION_MAPPING_FRM', value, 'fields.collection.value');
+        setFieldValue('COLLECTION_MAP_DROPDOWN', value, 'fields.collection.value');
       });
   }
 
   render() {
-    const { collectionMappingList, COLLECTION_MAPPING_FRM } = this.props.collectionStore;
+    const { collectionMappingList, COLLECTION_MAP_DROPDOWN } = this.props.collectionStore;
     const { loadingArray } = this.props.nsUiStore;
     return (
       <FormDropDown
         name="collection"
-        fielddata={COLLECTION_MAPPING_FRM.fields.mappingMeta}
+        fielddata={COLLECTION_MAP_DROPDOWN.fields.mappingMeta}
         options={collectionMappingList}
         disabled={intersection(loadingArray, ['adminCollectionMappingUpsert', 'adminDeleteCollectionMapping']).length > 0 || this.props.isdisabled}
         multiple

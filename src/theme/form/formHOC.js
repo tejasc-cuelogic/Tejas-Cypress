@@ -361,8 +361,9 @@ function formHoc(WrappedComponent, metaInfo) {
                   handelReset={handleResetImageCropper}
                   verifyImageDimension={handelImageDimension}
                   field={fieldData}
-                  modalUploadAction={fieldName => this.props[metaInfo.store].uploadMedia(fieldName, (get(props, 'multiForm') || get(props, 'multiForm') || metaInfo.form), props.uploadPath)}
+                  modalUploadAction={fieldName => this.props[metaInfo.store].uploadMedia(fieldName, (get(props, 'multiForm') || metaInfo.form), props.uploadPath)}
                   name={name}
+                  key={props.key || name}
                   cropInModal
                   aspect={3 / 2}
                   size="small"

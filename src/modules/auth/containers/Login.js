@@ -55,6 +55,7 @@ class Login extends Component {
     authActions.login()
       .then(() => {
         this.props.collectionStore.setFieldValue('collectionApiHit', false);
+        this.props.collectionStore.getCollections();
         const { newPasswordRequired, setCredentials, resetForm } = this.props.authStore;
         if (appUpdated) {
           window.location.reload();

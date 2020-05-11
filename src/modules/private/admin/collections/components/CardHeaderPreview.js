@@ -15,13 +15,16 @@ export default class CardHeaderPreview extends Component {
     const { CARD_HEADER_META_FRM, CARD_HEADER_SOCIAL_FRM } = collectionStore;
     const collection = CARD_HEADER_META_FRM.fields;
     const socialDetails = CARD_HEADER_SOCIAL_FRM.fields.social;
-    const headerDownClick = (
-      <div className="current-projects-box">
-        <p className="mb-0">View our current and past projects below.</p>
-        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-        <i className="icon ns-chevron-down" />
-      </div>
-    );
+    const actionText = get(collection, 'actionText.value');
+    const headerDownClick = (actionText && actionText !== '')
+      ? (
+        <div className="current-projects-box">
+          <p className="mb-0">{actionText}</p>
+          {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+          <i className="icon ns-chevron-down" />
+        </div>
+      )
+      : null;
     return (
 
       <div className="campaign-banner collection-banner" style={{ backgroundColor: get(collection, 'bgColor.value') }}>
@@ -53,7 +56,7 @@ export default class CardHeaderPreview extends Component {
                 </div>
               </Grid.Column>
               <Grid.Column width={8}>
-                <Header as="h3" inverted>
+                <Header style={{ color: get(collection, 'descriptionColor.value') }} as="h3" inverted>
                   {get(collection, 'title.value')}
                 </Header>
                 <span style={{ color: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} /></span>
