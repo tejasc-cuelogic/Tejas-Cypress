@@ -18,7 +18,7 @@ export default class TombstonePreview extends Component {
       <div className="bg-offwhite pt-30 pb-30 mb-20">
         <Container className="offerings-container">
           <Grid style={{ backgroundColor: get(collection, 'bgColor.value') }} className="p-60 collection-box">
-            <Grid.Column widescreen={5} computer={5} tablet={16} mobile={16} className="zi-9 collection-thumbnail-img p-0">
+            <Grid.Column widescreen={4} computer={5} tablet={16} mobile={16} className="zi-9 collection-thumbnail-img p-0">
               <Image64 reRender originalImg srcUrl={get(collection, 'image.preSignedUrl')} />
                 {get(collection, 'text.value')
                 && (
