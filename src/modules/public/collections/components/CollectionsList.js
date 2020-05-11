@@ -6,7 +6,7 @@ import { Grid, Container, Button, Header, Card } from 'semantic-ui-react';
 import { Image64, InlineLoader } from '../../../../theme/shared';
 import HtmlEditor from '../../../shared/HtmlEditor';
 
-const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionLength, handleNavigate }) => (
+const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionLength, handleNavigate, offering }) => (
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
@@ -36,7 +36,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
           </Grid>
         </Container>
       ))}
-    {((collections.length > collectionLength) || (collections.length && !collectionLength)) && (
+    {((collections.length > collectionLength) || (collections.length && !collectionLength) || offering) && (
       <div className="mt-80 center-align">
         <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Collections" onClick={handleNavigate} />
       </div>
@@ -113,6 +113,7 @@ export default class CollectionsList extends Component {
             />
           ) : (
               <CollectionItem
+                offering={offering}
                 handleNavigate={this.handleNavigate}
                 collections={publicCollections}
                 collectionLength={collectionLength}
