@@ -157,6 +157,7 @@ query getCollection($slug: String!) {
         title
         description
         descriptionColor
+        actionText
         tag {
           color
           text
@@ -231,6 +232,7 @@ export const getCollection = gql`
         description
         descriptionColor
         bgColor
+        actionText
         social {
           type
           url
