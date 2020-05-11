@@ -1,13 +1,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import { get, includes } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Button, Icon, Confirm } from 'semantic-ui-react';
 import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
-import { DataFormatter } from '../../../../../helper';
-import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, OFFERING_REGULATIONS } from '../../../../../constants/offering';
 import formHoc from '../../../../../theme/form/formHOC';
 
@@ -20,14 +18,14 @@ const metaInfo = {
   form: 'COLLECTION_MAPPING_CONTENT_FRM',
 };
 
-const removeMedia = (form, name) => {
-  window.logger(form, name);
-};
+// const removeMedia = (form, name) => {
+//   window.logger(form, name);
+// };
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 
 const SortableItem = SortableElement(({
-  offering, handleAction, stage,
+  offering, handleAction,
 }) => (
     <div className={(offering.isAvailablePublicly) ? 'row-wrap striped-table' : 'row-wrap row-highlight striped-table'}>
       <div className="balance first-column">
@@ -53,13 +51,6 @@ const SortableItem = SortableElement(({
           isImagePreviewDisabled: true,
         })}
       </div> */}
-      <div className="balance width-250">
-        Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
-        Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
-        {stage === 'live' ? 'Days till close' : 'Closed'}: {stage === 'live' ? (offering.closureSummary && offering.closureSummary.processingDate
-          ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A')
-          : (get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false)} /> : 'N/A')}
-      </div>
       <div className="action right-align width-70">
         <Button.Group>
           {Object.keys(actions).map(action => (
@@ -176,7 +167,6 @@ class Offerings extends Component {
           <div className="ui basic table">
             <div className="row-wrap striped-table thead">
               <div className="balance first-column">Name</div>
-              <div className="balance width-250" />
               <div className="action right-align width-70" />
             </div>
             <SortableList
