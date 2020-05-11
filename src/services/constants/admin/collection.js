@@ -49,6 +49,9 @@ export const HEADER_META = {
 };
 
 export const CARD_HEADER_META = {
+  ...FormHelper.generateMeta([
+    ['actionText', 'Action Text', '', 'optional', 'Enter Here'],
+  ]),
   ...TOMBSTONE_BASIC,
 };
 
