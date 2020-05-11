@@ -350,7 +350,7 @@ export const PRIVATE_NAV = [
     icon: 'wpforms',
     title: 'Collections',
     capability: 'COLLECTIONS_ANY',
-    to: 'collections',
+    to: 'collections-testing',
     path: 'admin/collections',
     accessibleTo: ['admin', 'manager', 'support'],
     subPanel: 0,
@@ -629,7 +629,7 @@ export const PUBLIC_NAV = [
     validateNav: 'COLLECTION',
     subNavigations: [
       { title: 'NextSeed Offerings', to: 'offerings' },
-      { title: 'Investment Collections', to: 'collections' },
+      { title: 'Investment Collections', to: 'collections-testing' },
     ],
   },
   {
@@ -794,7 +794,7 @@ export const MOBILE_NAV = [
     isLoggedIn: true,
   },
   { title: 'Investment Opportunities', to: 'offerings', isLoggedIn: true },
-  { title: 'Collections', to: 'collections', isLoggedIn: true },
+  { title: 'Collections', to: 'collections-testing', validateNav: 'COLLECTION', isLoggedIn: true },
   {
     title: 'Refer a Friend',
     to: 'app/referrals',
