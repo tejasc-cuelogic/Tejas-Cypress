@@ -1,23 +1,31 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import { get, includes } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Button, Icon, Confirm } from 'semantic-ui-react';
 import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
-import { DataFormatter } from '../../../../../helper';
-import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
-import { STAGES } from '../../../../../services/constants/admin/offerings';
+import { InlineLoader } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, OFFERING_REGULATIONS } from '../../../../../constants/offering';
-import Helper from '../../../../../helper/utility';
+import formHoc from '../../../../../theme/form/formHOC';
 
 const actions = {
   publish: { label: 'Publish', icon: 'view', icon1: 'no-view' },
 };
+
+const metaInfo = {
+  store: 'collectionStore',
+  form: 'COLLECTION_MAPPING_CONTENT_FRM',
+};
+
+// const removeMedia = (form, name) => {
+//   window.logger(form, name);
+// };
+
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
+
 const SortableItem = SortableElement(({
-  offering, handleAction, stage,
+  offering, handleAction,
 }) => (
     <div className={(offering.isAvailablePublicly) ? 'row-wrap striped-table' : 'row-wrap row-highlight striped-table'}>
       <div className="balance first-column">
@@ -33,41 +41,16 @@ const SortableItem = SortableElement(({
           {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
         </Link>
       </div>
-      <div className="balance width-130">
-        {offering && offering.stage
-          ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0
-            ? STAGES.PROCESSING.label
-            : stage === 'live' && get(offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
-              ? STAGES.LOCK.label
-              : STAGES[offering.stage].label
-          : STAGES[offering.stage].label
-        }
-      </div>
-      <div className="balance width-250">
-        Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
-        Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
-        {stage === 'live' ? 'Days till close' : 'Closed'}: {stage === 'live' ? (offering.closureSummary && offering.closureSummary.processingDate
-          ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A')
-          : (get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false)} /> : 'N/A')}
-      </div>
-      <div className="balance" onClick={() => handleAction('Edit', offering)}>
-        <p className="overflow-text">
-          {offering.issuerDetails
-            ? (
-              <>
-                <b>
-                  {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
-                </b>
-                <br />
-                {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
-                <br />
-                {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
-              </>
-            )
-            : <b>N/A</b>
-          }
-        </p>
-      </div>
+      {}
+      {/* <div className="balance">
+        {smartElement.ImageCropper('image', {
+          multiForm: [metaInfo.form, 'mappingContent', itemIndex],
+          uploadPath: `collection/${collectionId}`,
+          removeMedia,
+          key: `item${itemIndex}`,
+          isImagePreviewDisabled: true,
+        })}
+      </div> */}
       <div className="action right-align width-70">
         <Button.Group>
           {Object.keys(actions).map(action => (
@@ -83,9 +66,10 @@ const SortableItem = SortableElement(({
       </div>
     </div>
   ));
-const SortableList = SortableContainer(({
-  allOfferingsList, handleAction, stage, listIndex,
-}) => (
+
+const SortableList = SortableContainer((props) => {
+  const { allOfferingsList, handleAction, stage, listIndex } = props;
+  return (
     <div className="tbody">
       {allOfferingsList.map((offering, index) => (
         <SortableItem
@@ -94,21 +78,31 @@ const SortableList = SortableContainer(({
           docIndx={index}
           offering={offering}
           handleAction={handleAction}
-          index={index}
+          itemIndex={index}
           stage={stage}
           listIndex={listIndex}
+          {...props}
         />
       ))}
     </div>
-  ));
+);
+});
+
 @inject('uiStore', 'collectionStore')
 @withRouter
 @observer
-export default class Offerings extends Component {
+class Offerings extends Component {
   state = { isPublic: false, loading: false };
 
+  constructor(props) {
+    super(props);
+    if (!props.collectionStore.initLoad.includes('COLLECTION_MAPPING_CONTENT_FRM')) {
+      props.collectionStore.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, this.props.offeringsList);
+    }
+  }
+
   onSortEnd = async ({ oldIndex, newIndex }) => {
-  const { setOrderForCollectionsMapping, setFieldValue } = this.props.collectionStore;
+    const { setOrderForCollectionsMapping, setFieldValue } = this.props.collectionStore;
     if (oldIndex !== newIndex) {
       this.setState({ loading: true });
       await setOrderForCollectionsMapping(arrayMove(this.props.offeringsList, oldIndex, newIndex));
@@ -173,9 +167,6 @@ export default class Offerings extends Component {
           <div className="ui basic table">
             <div className="row-wrap striped-table thead">
               <div className="balance first-column">Name</div>
-              <div className="balance width-130">Status</div>
-              <div className="balance width-250" />
-              <div className="balance">POC</div>
               <div className="action right-align width-70" />
             </div>
             <SortableList
@@ -186,6 +177,7 @@ export default class Offerings extends Component {
               stage={stage}
               lockAxis="y"
               useDragHandle
+              {...this.props}
             />
           </div>
         </div>
@@ -202,3 +194,5 @@ export default class Offerings extends Component {
     );
   }
 }
+
+export default inject('collectionStore')(observer(formHoc(Offerings, metaInfo)));
