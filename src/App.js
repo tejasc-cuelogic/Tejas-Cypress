@@ -100,6 +100,7 @@ class App extends Component {
         window.logger('Catch error in app.js verifySession. ', err);
       }).finally(() => {
         this.setState({ authChecked: true });
+        console.log('Mount collection');
         this.props.collectionStore.getCollections();
       });
     if (this.props.uiStore.devBanner) {
@@ -127,8 +128,6 @@ class App extends Component {
       this.props.authStore.setUserLoggedIn(false);
       localStorage.removeItem('lastActiveTime');
       window.logger('error in app.js - getUserSession', err);
-    }).finally(() => {
-      this.props.collectionStore.getCollections();
     });
     if (this.props.location !== prevProps.location) {
       this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
