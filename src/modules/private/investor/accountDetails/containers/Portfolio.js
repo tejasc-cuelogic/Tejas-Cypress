@@ -229,10 +229,10 @@ export default class Portfolio extends PureComponent {
           />
         )
         }
-        <SummaryHeader refLink={refLink} isAdmin={this.props.isAdmin} details={summaryDetails} />
         {this.props.isAdmin
-          && <SummaryTerms refLink={refLink} isAdmin={this.props.isAdmin} details={getInvestorAccounts} />
+          && <SummaryHeader refLink={refLink} isAdmin={this.props.isAdmin} details={summaryDetails} />
         }
+        <SummaryTerms refLink={refLink} isAdmin={this.props.isAdmin} details={getInvestorAccounts} />
         {(getPieChartData.investmentType.length || getPieChartData.industry.length)
           ? <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }

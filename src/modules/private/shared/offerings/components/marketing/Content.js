@@ -17,7 +17,7 @@ export default class Content extends Component {
 
   constructor(props) {
     super(props);
-    if (props.isExact) {
+    if (props.match.isExact) {
       props.history.push('1');
     }
     if (!props.manageOfferingStore.initLoad.includes('OFFERING_CONTENT_FRM')) {

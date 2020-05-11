@@ -6,6 +6,7 @@ import Home from './public/home/containers/Home';
 import Invest from './public/invest/containers/Invest';
 import Offering from './public/offering/containers/Offering';
 import OfferDetails from './public/offering/containers/OfferDetails';
+import CollectionDetails from './public/collections/containers/CollectionDetails';
 // import VideoModal from './public/offering/components/campaignDetails/Overview/VideoModal';
 import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
@@ -26,6 +27,7 @@ import XmlForm from './private/admin/edgar/containers/XmlForm';
 import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
 import UserManagement from './private/admin/userManagement';
 import DashboardCta from './shared/DashboardCta';
+import Collections from './public/collections/containers/Collections';
 
 import {
   AdminAuthorization,
@@ -114,6 +116,10 @@ export const publicRoutes = [
     props: 'newLayout',
   },
   {
+    path: '/collections-testing/:slug',
+    component: CollectionDetails,
+  },
+  {
     path: '/offerings-v1/preview/:id',
     component: OfferDetails,
   },
@@ -124,6 +130,10 @@ export const publicRoutes = [
   {
     path: '/offerings',
     component: Offering,
+  },
+  {
+    path: '/collections-testing',
+    component: Collections,
   },
   {
     path: '/business',

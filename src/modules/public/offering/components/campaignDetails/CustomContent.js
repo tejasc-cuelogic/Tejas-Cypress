@@ -7,10 +7,12 @@ import { InlineLoader } from '../../../../../theme/shared';
 function CustomContent({ title, content, isTablet }) {
     return (
       <>
-        <Header as="h3" className={`${isTablet ? 'mb-20 mt-40' : 'mt-40 mb-30'} anchor-wrap`}>
+        {title ? (
+          <Header as="h3" className={`${isTablet ? 'mb-20 mt-40' : 'mt-40 mb-30'} anchor-wrap`}>
           {title}
-          <span className="anchor" id={camelCase(title)} />
+          <span className="anchor" id={title ? camelCase(title) : ''} />
         </Header>
+        ) : null}
         {content
           ? (
             <p className="mb-40 copyright-info">

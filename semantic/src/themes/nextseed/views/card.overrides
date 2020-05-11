@@ -284,6 +284,7 @@
     }
     &.insights{
         height: 100%;
+        padding-bottom: 0px !important;
         &:hover{
             text-decoration: none;
         }
@@ -300,6 +301,18 @@
             .description{
                 height:auto;
                 margin-bottom: 0;
+            }
+        }
+        &.campaign{
+            >.content{
+                position: relative;
+                .description{
+                    margin-bottom: 42px !important;
+                }
+                a{
+                    position: absolute;
+                    bottom: 14px;
+                }
             }
         }
     }

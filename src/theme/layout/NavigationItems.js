@@ -8,7 +8,7 @@ import { Logo, TopBanner } from '../shared';
 
 const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
-@inject('navStore', 'uiStore', 'userDetailsStore', 'userStore')
+@inject('navStore', 'uiStore', 'userDetailsStore', 'userStore', 'collectionStore')
 @observer
 export class NavItems extends Component {
   state = {
@@ -92,11 +92,25 @@ export class NavItems extends Component {
     const { activeIndex } = this.state;
     const {
       location, isApp, roles, refMatch, isMobile, onToggle, refLink, newLayout, userDetailsStore, needNavLink,
+      collectionStore,
     } = this.props;
     let { match } = this.props;
+    const { getActiveCollectionLength } = collectionStore;
     const { signupStatus, hasAnyAccount } = userDetailsStore;
     const app = (isApp) ? 'dashboard' : '';
-    const myNavItems = this.props.navItems.filter(n => (n.headerMobile !== false && n.title === 'My Account' ? this.props.userStore.isInvestor : n.headerMobile !== false && n.noNav !== true));
+    const validateNav = (nav) => {
+      let data = false;
+      if (nav.validateNav === 'COLLECTION' && getActiveCollectionLength) {
+        data = true;
+      } else if (!nav.validateNav || nav.validateNav !== 'COLLECTION') {
+        data = true;
+      }
+      return data;
+    };
+    const myNavItems = this.props.navItems.filter(n => (validateNav(n) && (n.headerMobile !== false && n.title === 'My Account' ? this.props.userStore.isInvestor : n.headerMobile !== false && n.noNav !== true)));
+    // if (!getActiveCollectionLength) {
+    //   myNavItems = myNavItems.filter(n => n.to !== 'collections-testing');
+    // }
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     const hideSetupNav = signupStatus.investorProfileCompleted && (hasAnyAccount);
@@ -239,7 +253,7 @@ const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : 'LogoGre
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
 
-@inject('navStore', 'uiStore', 'userStore', 'userDetailsStore')
+@inject('navStore', 'uiStore', 'userStore', 'userDetailsStore', 'collectionStore')
 @withRouter
 @observer
 export class NavigationItems extends Component {
@@ -256,8 +270,9 @@ export class NavigationItems extends Component {
   render() {
     const {
       stepInRoute, location, currentUser, loading, isMobBussinessApp,
-      navStore, uiStore, isMobile,
+      navStore, uiStore, isMobile, collectionStore,
     } = this.props;
+    const { getActiveCollectionLength } = collectionStore;
     const { navStatus, subNavStatus } = navStore;
     const logInSignUp = stepInRoute.to !== 'login' ? [
       { to: 'login', title: 'Log In', className: 'basic primary', cypressAttr: 'auth-login' },
@@ -265,6 +280,21 @@ export class NavigationItems extends Component {
     ]
       : [{ ...stepInRoute, className: 'primary basic', cypressAttr: 'auth-login' }];
     const { topBanner } = uiStore;
+    let publicNavs = PUBLIC_NAV;
+    const validateNav = (nav) => {
+      let data;
+      if (nav.validateNav === 'OFFERING') {
+        data = { ...nav, header: false, headerMobile: false };
+      } else if (nav.validateNav === 'COLLECTION') {
+        data = { ...nav, header: true, headerMobile: true };
+      }
+      return data;
+    };
+    if (getActiveCollectionLength) {
+      publicNavs = publicNavs.map(n => (n.validateNav ? validateNav(n) : n));
+    }
+    const publicNavList = isMobile ? publicNavs.filter(nav => nav.header !== false)
+    : publicNavs.filter(nav => nav.header !== false && nav.title !== 'Legal');
     return (
       <Menu
         stackable={!isMobBussinessApp}
@@ -290,10 +320,7 @@ export class NavigationItems extends Component {
               refLoc="public"
               currentUser={currentUser}
               location={location}
-              navItems={
-                isMobile ? PUBLIC_NAV.filter(nav => nav.header !== false)
-                  : PUBLIC_NAV.filter(nav => nav.header !== false && nav.title !== 'Legal')
-              }
+              navItems={publicNavList}
             />
           </Menu.Menu>
           {location.pathname.includes('/business-application') && !location.pathname.includes('commercial-real-estate/')
