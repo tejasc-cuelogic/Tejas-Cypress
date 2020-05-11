@@ -116,6 +116,10 @@ export const publicRoutes = [
     props: 'newLayout',
   },
   {
+    path: '/collections/preview/:slug',
+    component: CollectionDetails,
+  },
+  {
     path: '/collections/:slug',
     component: CollectionDetails,
   },

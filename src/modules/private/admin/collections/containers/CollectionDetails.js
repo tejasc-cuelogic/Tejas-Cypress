@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Switch, Route, useHistory } from 'react-router-dom';
-import { Modal, Card, Header } from 'semantic-ui-react';
+import { Switch, Route, useHistory, Link } from 'react-router-dom';
+import { Modal, Card, Header, Icon } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import LockUnlockCollection from '../components/LockUnlockCollection';
 import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
@@ -50,6 +50,11 @@ function CollectionDetails(props) {
         <Modal.Content className="transaction-details">
           <Header as="h3">
             {collection.name}
+            <Header.Subheader className="mt-10">
+              <Link target="_blank" to={`/collections/preview/${collection.slug}`}>
+                <Icon className="ns-view" /><b>Preview collection page</b>
+              </Link>
+            </Header.Subheader>
           </Header>
           <LockUnlockCollection />
           <Card fluid>
