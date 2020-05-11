@@ -141,13 +141,14 @@ class CollectionDetails extends Component {
       }
       return null;
     };
+    const collectionHeaderComponent = (<CollectionHeader activeOffering={getActiveOfferingsList && getActiveOfferingsList.length} scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />);
     return (
       <>
-        {!isMobile && <CollectionHeader scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />}
+        {!isMobile && collectionHeaderComponent}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
-              <CollectionHeader activeOffering={getActiveOfferingsList && getActiveOfferingsList.length} scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />
+              {collectionHeaderComponent}
               <MobileDropDownNav
                 inverted
                 refMatch={match}
