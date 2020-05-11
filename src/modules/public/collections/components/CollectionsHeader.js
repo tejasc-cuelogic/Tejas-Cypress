@@ -41,12 +41,12 @@ class CollectionsHeader extends Component {
         id: 1,
         title: 'Locations',
         description: 'Explore investments in your neighborhood, hometown, or a region that you know well.',
-        image: 'collections/skyline.jpg',
+        image: 'collections/skyline.png',
       }, {
         id: 2,
         title: 'Interests & Industries',
         description: 'Identify investments by themes that you find most relevant.',
-        image: 'collections/bar.jpg',
+        image: 'collections/bar.png',
       }, {
         id: 3,
         title: 'Partners',

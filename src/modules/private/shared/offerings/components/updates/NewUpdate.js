@@ -143,6 +143,34 @@ export default class NewUpdate extends Component {
     );
   }
 
+  showInvestorList = () => {
+    const { PBUILDER_FRM } = this.props.updateStore;
+    return (
+      <>
+        <Modal
+          closeOnDimmerClick={false}
+          closeIcon
+          trigger={(
+            <Button color="green" className="link-button">
+              <Icon className="ns-view" />
+              Investor Notification List
+            </Button>
+          )}
+        >
+          <Modal.Content className="new-update-modal">
+            <Header as="h4">Investor Notification List</Header>
+            <HtmlEditor
+              readOnly
+              content={
+                PBUILDER_FRM.fields.notificationTo.value && PBUILDER_FRM.fields.notificationTo.value
+              }
+            />
+          </Modal.Content>
+        </Modal>
+      </>
+    );
+  }
+
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, maskChange, newUpdateId,
@@ -272,6 +300,7 @@ export default class NewUpdate extends Component {
                                 ? <p>No notifications were sent.</p>
                                 : this.sendInvestorNotificationTemplate(isReadonly, isManager)
                             }
+                            {PBUILDER_FRM.fields.notificationDate.value && this.showInvestorList()}
                             {this.postUpdateAsTemplate()}
                           </Form>
                         )

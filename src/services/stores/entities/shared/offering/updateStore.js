@@ -218,6 +218,7 @@ export class UpdateStore {
       delete data.shouldSendInvestorNotifications;
       delete data.notificationBy;
       delete data.notificationDate;
+      delete data.notificationTo;
       data.status = status;
       data.postUpdateAs = this.TEMPLATE_POST_UPDATE_FRM.fields.postUpdate.value;
       data.lastUpdate = this.lastUpdateText;
@@ -320,6 +321,7 @@ export class UpdateStore {
       if (offeringUpdatesById.notificationSent) {
         this.PBUILDER_FRM.fields.notificationBy.value = offeringUpdatesById.notificationSent.by || '';
         this.PBUILDER_FRM.fields.notificationDate.value = offeringUpdatesById.notificationSent.date || '';
+        this.PBUILDER_FRM.fields.notificationTo.value = offeringUpdatesById.notificationSent.to || [];
       }
       Validator.validateForm(this.PBUILDER_FRM);
     }

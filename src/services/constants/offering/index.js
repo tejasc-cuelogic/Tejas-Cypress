@@ -46,6 +46,13 @@ export const UPDATES = {
   notificationDate: {
     value: '', error: undefined, rule: 'optional',
   },
+  notificationTo: {
+    value: [],
+    values: [],
+    error: undefined,
+    rule: 'optional',
+    key: 0,
+  },
 };
 
 export const TEMPLATE = {
