@@ -1,7 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { get } from 'lodash';
 import { arrayMove, SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
 import { Form, Button, Icon, Header, Divider } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
