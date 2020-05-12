@@ -435,6 +435,9 @@ a:not(.item), a:not(.ui.button){
 .border-red{
 	border-color: #e84b0f !important;
 }
+.pos-relative{
+	position: relative !important;
+}
 .info-card{
 	.ui.button>.icon:not(.button){
 		line-height: 1;
@@ -3687,4 +3690,17 @@ h3.ui.header.error-2{
 	right: 0;
 	opacity: 0.1 !important;
     left: 0;
+}
+.header-bg {
+	position: relative;
+	button{
+		position: absolute;
+		top: 38px;
+		right: 0;
+		height: 24px;
+		padding:5px 14px !important;
+		.icon{
+			margin: 0 !important;
+		}
+	}
 }

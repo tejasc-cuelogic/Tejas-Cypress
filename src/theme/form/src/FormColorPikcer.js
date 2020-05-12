@@ -51,7 +51,7 @@ const FormColorPikcer = (props) => {
   };
 
   return (
-    <Form.Field width={props.containerwidth || false}>
+    <Form.Field width={props.containerwidth || false} className="pos-relative header-bg">
       <FormInput
         name={name}
         key={name}
@@ -70,7 +70,11 @@ const FormColorPikcer = (props) => {
           </Button>
         )
         : (
-          <span><Button onClick={handleClick}>Pick Color</Button></span>
+          <span>
+            <Button onClick={handleClick}>
+              <i aria-hidden="true" className="eyedropper icon" />
+            </Button>
+          </span>
         )
       }
       {
