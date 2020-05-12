@@ -6,7 +6,7 @@ import { Grid, Container, Button, Header, Card } from 'semantic-ui-react';
 import { Image64, InlineLoader } from '../../../../theme/shared';
 import HtmlEditor from '../../../shared/HtmlEditor';
 
-const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionLength, handleNavigate, offering }) => (
+const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, collectionLength, handleNavigate, offering, toggleHover, isHovered }) => (
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
@@ -26,7 +26,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
               <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
               {!isMobile && !isTablet
                 && (
-                  <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor') }} as={Link} to={`/collections-testing/${get(collection, 'slug')}`} className="mt-30 collectionExplore">Explore</Button>
+                  <Button inverted onMouseLeave={() => toggleHover(false)} onMouseEnter={() => toggleHover(get(collection, 'id'))} style={{ backgroundColor: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.descriptionColor') : '', color: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.bgColor') : get(collection, 'marketing.tombstone.descriptionColor'), borderColor: get(collection, 'marketing.tombstone.descriptionColor') }} as={Link} to={`/collections-testing/${get(collection, 'slug')}`} className="mt-30 collectionExplore">Explore</Button>
                 )
               }
             </Grid.Column>
@@ -44,7 +44,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
   </>
 );
 
-const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
+const CollectionCards = ({ responsiveVars, collections, collectionLength, toggleHover, isHovered }) => (
   <Container className="collection-listings-box">
     <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
       {
@@ -63,7 +63,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
               }
               <Header style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }} as="h5">{get(collection, 'marketing.tombstone.title')}</Header>
               <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
-              <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor') }} as={Link} to={`/collections-testing/${get(collection, 'slug')}`} className="mt-30 full-width collectionExplore">Explore</Button>
+              <Button inverted onMouseLeave={() => toggleHover(false)} onMouseEnter={() => toggleHover(get(collection, 'id'))} style={{ backgroundColor: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.descriptionColor') : '', color: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.bgColor') : get(collection, 'marketing.tombstone.descriptionColor'), borderColor: get(collection, 'marketing.tombstone.descriptionColor') }} as={Link} to={`/collections-testing/${get(collection, 'slug')}`} className="mt-30 full-width collectionExplore">Explore</Button>
             </div>
           </Card>
         ))}
@@ -82,7 +82,11 @@ const Heading = ({ responsiveVars }) => (
 @withRouter
 @observer
 export default class CollectionsList extends Component {
-  state = { expandCollection: false }
+  state = { expandCollection: false, isHovered: false }
+
+  toggleHover = (id) => {
+    this.setState({ isHovered: id });
+  }
 
   handleNavigate = () => {
     if (this.props.offering) {
@@ -110,9 +114,13 @@ export default class CollectionsList extends Component {
             <CollectionCards
               collections={publicCollections}
               responsiveVars={responsiveVars}
+              toggleHover={this.toggleHover}
+              isHovered={this.state.isHovered}
             />
           ) : (
               <CollectionItem
+                toggleHover={this.toggleHover}
+                isHovered={this.state.isHovered}
                 offering={offering}
                 handleNavigate={this.handleNavigate}
                 collections={publicCollections}

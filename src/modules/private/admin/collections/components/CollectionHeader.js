@@ -54,9 +54,6 @@ class CollectionHeader extends Component {
               {smartElement.ColorPikcer('bgColor', {
                 readOnly: isReadOnly,
               })}
-              {/* {smartElement.Input('bgColor', {
-                readOnly: isReadOnly,
-              })} */}
             </Grid.Column>
           </Grid>
           <Grid columns="2">
@@ -80,7 +77,7 @@ class CollectionHeader extends Component {
           </Grid>
           <Grid columns="2">
             <Grid.Column>
-              {smartElement.Input('descriptionColor', {
+              {smartElement.ColorPikcer('descriptionColor', {
                 readOnly: isReadOnly,
               })}
               <Divider hidden />
@@ -88,11 +85,11 @@ class CollectionHeader extends Component {
                 readOnly: isReadOnly,
               })}
               <Divider hidden />
-              {smartElement.Input('color', {
+              {smartElement.ColorPikcer('color', {
                 readOnly: isReadOnly,
               })}
               <Divider hidden />
-              {smartElement.Input('textColor', {
+              {smartElement.ColorPikcer('textColor', {
                 readOnly: isReadOnly,
               })}
               <Divider hidden />

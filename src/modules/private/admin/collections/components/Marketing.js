@@ -26,6 +26,11 @@ const navItems = [
     title: 'Content',
     component: 'Content',
   },
+  {
+    to: 'misc',
+    title: 'Misc',
+    component: 'CollectionMisc',
+  },
 ];
 
 function Marketing(props) {
@@ -35,6 +40,7 @@ function Marketing(props) {
   useEffect(() => {
     props.collectionStore.setFormData('TOMBSTONE_FRM', 'marketing.tombstone');
     props.collectionStore.setFormData('CARD_HEADER_META_FRM', 'marketing.header');
+    props.collectionStore.setFormData('COLLECTION_MISC_FRM', 'marketing');
     const { url, isExact } = match;
     if (isExact) {
       history.push(`${url}/card`);
