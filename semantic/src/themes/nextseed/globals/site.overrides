@@ -3611,6 +3611,9 @@ h3.ui.header.error-2{
 	}
 	.collectionExplore{
 		color:@neutral;
+		border-width:2px !important;
+		border-style: solid !important;
+		border-color: transparent;
 	}
 }
 .collection-listings-box{
@@ -3666,6 +3669,9 @@ h3.ui.header.error-2{
 	}
 	.collectionExplore{
 		color:@neutral;
+		border-width:2px !important;
+		border-style: solid !important;
+		border-color: transparent;
 	}
 }
 .collection-bg-image {

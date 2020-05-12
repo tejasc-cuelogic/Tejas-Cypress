@@ -26,7 +26,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
               <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
               {!isMobile && !isTablet
                 && (
-                  <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor') }} as={Link} to={`/collections-testing/${get(collection, 'slug')}`} className="mt-30 collectionExplore">Explore</Button>
+                  <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor'), borderColor: get(collection, 'marketing.tombstone.descriptionColor') }} as={Link} to={`/collections-testing/${get(collection, 'slug')}`} className="mt-30 collectionExplore">Explore</Button>
                 )
               }
             </Grid.Column>
@@ -63,7 +63,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength }) => (
               }
               <Header style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }} as="h5">{get(collection, 'marketing.tombstone.title')}</Header>
               <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
-              <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor') }} as={Link} to={`/collections-testing/${get(collection, 'slug')}`} className="mt-30 full-width collectionExplore">Explore</Button>
+              <Button style={{ backgroundColor: get(collection, 'marketing.tombstone.descriptionColor'), color: get(collection, 'marketing.tombstone.bgColor'), borderColor: get(collection, 'marketing.tombstone.descriptionColor') }} as={Link} to={`/collections-testing/${get(collection, 'slug')}`} className="mt-30 full-width collectionExplore">Explore</Button>
             </div>
           </Card>
         ))}
