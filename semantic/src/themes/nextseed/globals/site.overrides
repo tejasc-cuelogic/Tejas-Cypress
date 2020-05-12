@@ -3609,11 +3609,12 @@ h3.ui.header.error-2{
 	img.ui.image{
 		width: 100%;
 	}
-	.collectionExplore{
+	.ui.inverted.button.collectionExplore{
 		color:@neutral;
 		border-width:2px !important;
 		border-style: solid !important;
 		border-color: transparent;
+		box-shadow: none !important;
 	}
 }
 .collection-listings-box{
@@ -3667,11 +3668,12 @@ h3.ui.header.error-2{
 			margin-right: 0 !important;
 		}
 	}
-	.collectionExplore{
+	.ui.inverted.button.collectionExplore{
 		color:@neutral;
 		border-width:2px !important;
 		border-style: solid !important;
 		border-color: transparent;
+		box-shadow: none !important;
 	}
 }
 .collection-bg-image {
