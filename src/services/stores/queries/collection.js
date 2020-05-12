@@ -196,6 +196,14 @@ query getCollection($slug: String!) {
         meta
         description
       }
+      social {
+        type
+        shareLink
+        blurb
+        featuredImageUpload {
+          url          
+        }
+      }
     }
   }
 }`;
