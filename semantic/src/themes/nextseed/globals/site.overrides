@@ -3703,4 +3703,9 @@ h3.ui.header.error-2{
 			margin: 0 !important;
 		}
 	}
+	.sketch-picker{
+		position: absolute;
+		z-index: 10;
+		right: 0;
+	}
 }
