@@ -44,7 +44,7 @@ class Tombstone extends Component {
               })}
             </Grid.Column>
             <Grid.Column>
-              {smartElement.Input('bgColor', {
+              {smartElement.ColorPikcer('bgColor', {
                 readOnly: isReadOnly,
               })}
             </Grid.Column>
@@ -70,7 +70,7 @@ class Tombstone extends Component {
           </Grid>
           <Grid columns="2">
             <Grid.Column>
-              {smartElement.Input('descriptionColor', {
+              {smartElement.ColorPikcer('descriptionColor', {
                 readOnly: isReadOnly,
               })}
               <Divider hidden />
@@ -78,11 +78,11 @@ class Tombstone extends Component {
                 readOnly: isReadOnly,
               })}
               <Divider hidden />
-              {smartElement.Input('color', {
+              {smartElement.ColorPikcer('color', {
                 readOnly: isReadOnly,
               })}
               <Divider hidden />
-              {smartElement.Input('textColor', {
+              {smartElement.ColorPikcer('textColor', {
                 readOnly: isReadOnly,
               })}
               <Divider hidden />
