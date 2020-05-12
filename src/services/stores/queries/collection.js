@@ -96,14 +96,6 @@ export const allOfferings = gql`
         offeringSlug
         stage
         id
-        isAvailablePublicly
-        keyTerms {
-          targetInvestmentPeriod
-          regulation
-          shorthandBusinessName
-          legalBusinessName
-          securities
-        }
       }
     }
   `;

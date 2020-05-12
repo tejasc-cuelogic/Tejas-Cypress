@@ -368,6 +368,7 @@ class CollectionsStore extends DataModelStore {
               const stage = contentValue === 'ACTIVE_INVESTMENTS' ? 'LIVE' : 'COMPLETE';
               this.getOfferings(stage);
               this.setCollectionMetaList(data[stage], true);
+              this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data[stage]);
               tempData[params.type] = data;
             } else if (params.type === 'INSIGHT') {
               tempData[params.type] = data.map((d) => {

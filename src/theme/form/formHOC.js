@@ -354,6 +354,7 @@ function formHoc(WrappedComponent, metaInfo) {
             </div>
           ) : (
                 <ImageCropper
+                  keyName={props.key || name}
                   disabled={props.isReadonly}
                   fieldData={fieldData}
                   setData={(attr, value) => setData(attr, value)}
@@ -363,8 +364,8 @@ function formHoc(WrappedComponent, metaInfo) {
                   field={fieldData}
                   modalUploadAction={fieldName => this.props[metaInfo.store].uploadMedia(fieldName, (get(props, 'multiForm') || metaInfo.form), props.uploadPath)}
                   name={name}
-                  key={props.key || name}
                   cropInModal
+                  index={index}
                   aspect={3 / 2}
                   size="small"
                 />
@@ -384,7 +385,7 @@ function formHoc(WrappedComponent, metaInfo) {
           onblur={get(props, 'handleBlur') || false}
           changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form))}
           metaInfo={metaInfo}
-          {... props}
+          {...props}
         />
       );
     }
