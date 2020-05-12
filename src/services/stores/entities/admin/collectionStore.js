@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { get, orderBy, isArray, pickBy } from 'lodash';
+import { get, orderBy, isArray, pickBy, map } from 'lodash';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
-import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING_DROPDOWN, COLLECTION_MAPPING_CONTENT, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META } from '../../../constants/admin/collection';
+import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING_DROPDOWN, COLLECTION_MAPPING_CONTENT, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META, COLLECTION_MISC } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, getPublicCollections, allOfferings, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 import { uiStore, authStore } from '../../index';
@@ -57,6 +57,9 @@ class CollectionsStore extends DataModelStore {
   COLLECTION_MAP_DROPDOWN = Validator.prepareFormObject(COLLECTION_MAPPING_DROPDOWN);
 
   COLLECTION_MAPPING_CONTENT_FRM = Validator.prepareFormObject(COLLECTION_MAPPING_CONTENT);
+
+
+  COLLECTION_MISC_FRM = Validator.prepareFormObject(COLLECTION_MISC);
 
 
   collectionId = null;
@@ -271,7 +274,10 @@ class CollectionsStore extends DataModelStore {
           data = { collectionDetails: { marketing: { tombstone: Validator.evaluateFormData(this[f].fields) } } };
         } else if (['CARD_HEADER_META_FRM', 'CARD_HEADER_SOCIAL_FRM'].includes(f)) {
           data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
-          // data = { collectionDetails: { marketing: { header: Validator.evaluateFormData(this[f].fields) } } };
+        } else if (f === 'COLLECTION_MISC_FRM') {
+          data = this.evaluateFormFieldToArray(this[f].fields, false);
+          data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
+          // data = { collectionDetails: { marketing: { social: Validator.evaluateFormData(this[f].fields) } } };
         } else {
           data = { collectionDetails: Validator.evaluateFormData(this[f].fields) };
         }
@@ -284,6 +290,8 @@ class CollectionsStore extends DataModelStore {
     }
     if (forms.includes('CARD_HEADER_META_FRM')) {
       collectionData = { collectionDetails: { marketing: { header: { ...data } } } };
+    } else if (forms.includes('COLLECTION_MISC_FRM')) {
+      collectionData = { collectionDetails: { marketing: { ...data } } };
     } else {
       collectionData = { ...data };
     }
@@ -355,13 +363,13 @@ class CollectionsStore extends DataModelStore {
                 LIVE: data.filter(d => d.offering.stage === 'LIVE').map((d) => {
                   d.offering.collectionId = d.collectionId;
                   d.offering.order = d.order;
-                  d.offering.isAvailablePublicly = d.scope;
+                  d.offering.scope = d.scope;
                   return d.offering;
                 }),
                 COMPLETE: data.filter(d => d.offering.stage !== 'LIVE').map((d) => {
                   d.offering.collectionId = d.collectionId;
                   d.offering.order = d.order;
-                  d.offering.isAvailablePublicly = d.scope;
+                  d.offering.scope = d.scope;
                   return d.offering;
                 }),
               };
@@ -564,7 +572,7 @@ class CollectionsStore extends DataModelStore {
         variables: this.formPayLoad(params),
       });
 
-      if (['TOMBSTONE_FRM', 'CARD_HEADER_META_FRM', 'CARD_HEADER_SOCIAL_FRM'].includes(params.forms[0])) {
+      if (['TOMBSTONE_FRM', 'CARD_HEADER_META_FRM', 'CARD_HEADER_SOCIAL_FRM', 'COLLECTION_MISC_FRM'].includes(params.forms[0])) {
         this.getCollection(get(collection, 'slug'));
       }
       this.updateContent();
@@ -594,6 +602,68 @@ class CollectionsStore extends DataModelStore {
     if (caseValue === 'CAPITAL') {
       formValue.toUpperCase();
     }
+  }
+
+  evaluateFormFieldToArray = (fields, includeHighlight = true) => {
+    const social = [];
+    const highlight = [];
+    map(fields, (ele, key) => {
+      try {
+        const records = toJS(fields[key]);
+        if (fields[key].ArrayObjItem) {
+          const toObj = social.find(obj => obj.type === records.type);
+          if (toObj) {
+            if (key === `${records.type}_url`) {
+              toObj.url = records.value || null;
+            }
+            if (key === `${records.type}_shareLink`) {
+              toObj.shareLink = records.value || null;
+            }
+            if (key === `${records.type}_blurb`) {
+              toObj.blurb = records.value || null;
+            }
+            if (key === `${records.type}_featuredImageUpload`) {
+              toObj.featuredImageUpload = {
+                id: records.fileId,
+                url: records.preSignedUrl,
+                fileName: records.value,
+                isPublic: true,
+              };
+            }
+          } else {
+            const object = {};
+            object.type = records.type;
+            if (key === `${records.type}_url`) {
+              object.url = records.value || null;
+            }
+            if (key === `${records.type}_shareLink`) {
+              object.shareLink = records.value || null;
+            }
+            if (key === `${records.type}_blurb`) {
+              object.blurb = records.value || null;
+            }
+            if (key === `${records.type}_featuredImageUpload`) {
+              object.featuredImageUpload = {
+                id: records.fileId,
+                url: records.preSignedUrl,
+                fileName: records.fileName,
+                isPublic: true,
+              };
+            }
+            social.push(object);
+          }
+        }
+        if (includeHighlight && Array.isArray(toJS(fields[key]))) {
+          records.forEach((field) => {
+            highlight.push(field.highlight.value);
+          });
+        }
+      } catch (e) {
+        window.logger(e);
+      }
+    });
+    const socialData = includeHighlight ? { social, highlight } : { social };
+    return socialData;
   }
 
   // @computed get active() {
@@ -644,5 +714,6 @@ decorate(CollectionsStore, {
   getCaseSensetiveFieldvalue: action,
   setOrderForCollectionsMapping: action,
   setOrderForCollections: action,
+  evaluateFormFieldToArray: action,
 });
 export default new CollectionsStore();

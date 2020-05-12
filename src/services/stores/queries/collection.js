@@ -196,6 +196,14 @@ query getCollection($slug: String!) {
         meta
         description
       }
+      social {
+        type
+        shareLink
+        blurb
+        featuredImageUpload {
+          url          
+        }
+      }
     }
   }
 }`;
@@ -274,7 +282,16 @@ export const getCollection = gql`
           textColor
         }
       }
+      social {
+        type
+        shareLink
+        blurb
+        featuredImageUpload {
+          url          
+          fileName
+        }
       }
+     }
     }
   }`;
 
