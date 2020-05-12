@@ -355,13 +355,13 @@ class CollectionsStore extends DataModelStore {
                 LIVE: data.filter(d => d.offering.stage === 'LIVE').map((d) => {
                   d.offering.collectionId = d.collectionId;
                   d.offering.order = d.order;
-                  d.offering.isAvailablePublicly = d.scope;
+                  d.offering.scope = d.scope;
                   return d.offering;
                 }),
                 COMPLETE: data.filter(d => d.offering.stage !== 'LIVE').map((d) => {
                   d.offering.collectionId = d.collectionId;
                   d.offering.order = d.order;
-                  d.offering.isAvailablePublicly = d.scope;
+                  d.offering.scope = d.scope;
                   return d.offering;
                 }),
               };
