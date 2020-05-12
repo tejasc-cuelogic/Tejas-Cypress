@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Button, Icon, Confirm } from 'semantic-ui-react';
 import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
@@ -18,10 +18,9 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   offering, handleAction,
 }) => (
-    <div className="row-wrap striped-table">
+    <div className={`row-wrap striped-table ${offering.scope === 'PUBLIC' ? '' : 'row-highlight'}`}>
       <div className="balance first-column">
         <DragHandle />
-        <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
           <b>
             {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
               ? offering.keyTerms.shorthandBusinessName : (
@@ -29,7 +28,6 @@ const SortableItem = SortableElement(({
               ))}
           </b>
           <br />
-        </Link>
       </div>
       <div className="action right-align width-70">
         <Button.Group>
@@ -83,7 +81,7 @@ function Offerings(props) {
     if (action === 'Delete') {
       props.uiStore.setConfirmBox(action, offering.id);
     } else if (action === 'Publish') {
-      setisPublic(isPublished);
+      setisPublic(isPublished ? 'PUBLIC' : 'HIDDEN');
       props.uiStore.setConfirmBox(action, offering.id, isPublished);
     }
   };
@@ -160,152 +158,3 @@ function Offerings(props) {
   );
 }
 export default inject('uiStore', 'collectionStore')(withRouter(observer(Offerings)));
-
-// import React from 'react';
-// import { observer, inject } from 'mobx-react';
-// import { withRouter } from 'react-router-dom';
-// import { arrayMove, SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
-// import { Form, Button, Icon, Header, Table, Divider } from 'semantic-ui-react';
-// import { formHOC } from '../../../../../theme/form/formHOC';
-
-// const metaInfo = {
-//   store: 'manageOfferingStore',
-//   form: 'GALLERY_FRM',
-// };
-
-// const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-large mr-10" />);
-// const SortableItem = SortableElement(({ toggleVisible, GALLERY_FRM, isReadOnly, fieldIndex, smartElement, removeOne, currentOfferingId, removeMedia }) => (
-//   <div className="row-wrap">
-//     <Form.Group className="mlr-0 plr-0 pt-0 pb-0">
-//       <Table basic compact className="form-table bg-white">
-//         <Table.Body>
-//           <Table.Row className={GALLERY_FRM.fields.gallery[fieldIndex].isVisible.value ? '' : 'bg-offwhite'}>
-//             <Table.Cell collapsing>
-//               {!isReadOnly && <DragHandle />}
-//             </Table.Cell>
-//             <Table.Cell>
-//               {smartElement.Input('caption', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex] })}
-//             </Table.Cell>
-//             <Table.Cell>
-//               <Header as="h4">{GALLERY_FRM.fields.gallery[fieldIndex].image.label}</Header>
-//               {smartElement.ImageCropper('image', { style: { height: '125px' }, disabled: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], uploadPath: `offerings/${currentOfferingId}`, removeMedia })}
-//             </Table.Cell>
-//             <Table.Cell collapsing>
-//               <Button className="link-button">
-//                 <Icon onClick={() => toggleVisible(fieldIndex)} color="blue" name={GALLERY_FRM.fields.gallery[fieldIndex].isVisible.value ? 'ns-view' : 'ns-no-view'} />
-//               </Button>
-//               {/* {smartElement.FormCheckBox('isVisible', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], toggle: true, defaults: true })} */}
-//             </Table.Cell>
-//             {!isReadOnly && GALLERY_FRM.fields.gallery.length > 1 && (
-//               <Table.Cell collapsing>
-//                 <Button icon circular floated="right" className="link-button">
-//                   <Icon className="ns-trash" onClick={e => removeOne(metaInfo.form, 'gallery', fieldIndex, e)} />
-//                 </Button>
-//               </Table.Cell>
-//             )}
-//           </Table.Row>
-//         </Table.Body>
-//       </Table>
-//     </Form.Group>
-//   </div>
-// ));
-// const SortableList = SortableContainer(({ toggleVisible, allOfferingsList, COLLECTION_MAPPING_CONTENT_FRM,  isReadOnly, smartElement, currentOfferingId, removeMedia, removeOne }) => (
-//   <div className="tbody">
-//     {allOfferingsList.map((field, index) => (
-//       <SortableItem
-//         // eslint-disable-next-line react/no-array-index-key
-//         key={`item-${index}`}
-//         field={field}
-//         fieldIndex={index}
-//         index={index}
-//         isReadOnly={isReadOnly}
-//         smartElement={smartElement}
-//         COLLECTION_MAPPING_CONTENT_FRM={COLLECTION_MAPPING_CONTENT_FRM}
-//         currentOfferingId={currentOfferingId}
-//         removeMedia={removeMedia}
-//         removeOne={removeOne}
-//         toggleVisible={toggleVisible}
-//       />
-//     ))}
-//   </div>
-// ));
-
-// const OfferingList = ({ handleAction, offeringsList, onSortEnd, smartElement, removeMedia, collectionId, COLLECTION_MAPPING_CONTENT_FRM }) => (
-//   <div className="ui card fluid">
-//     <SortableList
-//       allOfferingsList={offeringsList}
-//       pressDelay={100}
-//       handleAction={handleAction}
-//       onSortEnd={onSortEnd}
-//       removeMedia={removeMedia}
-//       smartElement={smartElement}
-//       lockAxis="y"
-//       useDragHandle
-//       COLLECTION_MAPPING_CONTENT_FRM={COLLECTION_MAPPING_CONTENT_FRM}
-//       collectionId={collectionId}
-//     />
-//   </div>
-// );
-
-// function Offerings(props) {
-//   const { smartElement, offeringsList } = props;
-//   const { COLLECTION_MAPPING_CONTENT_FRM, collectionId } = props.collectionStore;
-//   const removeMedia = (form, name) => {
-//     window.logger(form, name);
-//   };
-
-//   const onSortEnd = async ({ oldIndex, newIndex }) => {
-//     const { setOrderForCollectionsMapping, setFieldValue } = this.props.collectionStore;
-//     if (oldIndex !== newIndex) {
-//       this.setState({ loading: true });
-//       await setOrderForCollectionsMapping(arrayMove(this.props.offeringsList, oldIndex, newIndex));
-//       this.setState({ loading: false });
-//       setFieldValue('collectionIndex', null);
-//       this.props.history.push(`${this.props.match.url}`);
-//     }
-//   };
-//   return (
-//     <>
-//       <OfferingList
-//         allOfferingsList={offeringsList}
-//         pressDelay={100}
-//         handleAction={this.handleAction}
-//         onSortEnd={e => onSortEnd(e)}
-//         removeMedia={removeMedia}
-//         smartElement={smartElement}
-//         lockAxis="y"
-//         useDragHandle
-//         collectionId={collectionId}
-//         COLLECTION_MAPPING_CONTENT_FRM={COLLECTION_MAPPING_CONTENT_FRM}
-//       />
-//       {/* {GALLERY_FRM.fields.gallery.map((field, i) => (
-//         <Form.Group>
-//           <Table basic compact className="form-table">
-//           <Table.Body>
-//             <Table.Cell collapsing>
-//             {smartElement.FormCheckBox('isVisible', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', i], toggle: true, defaults: true })}
-//             </Table.Cell>
-//             <Table.Cell>
-//             {smartElement.Input('caption', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', i] })}
-//             </Table.Cell>
-//             <Table.Cell>
-//             <Header as="h4">{GALLERY_FRM.fields.gallery[i].image.label}</Header>
-//             {smartElement.ImageCropper('image', { style: { height: '125px' }, disabled: isReadOnly, multiForm: [metaInfo.form, 'gallery', i], uploadPath: `offerings/${currentOfferingId}`, removeMedia })}
-//             </Table.Cell>
-//             {!isReadOnly && GALLERY_FRM.fields.gallery.length > 1 && (
-//             <Table.Cell collapsing>
-//               <Button icon circular floated="right" className="link-button">
-//               <Icon className="ns-trash" onClick={e => removeOne(metaInfo.form, 'gallery', i, e)} />
-//               </Button>
-//             </Table.Cell>
-//             )}
-//           </Table.Body>
-//           </Table>
-//         </Form.Group>
-//       ))} */}
-//       <Divider section />
-//     </>
-//   );
-// }
-
-// export default inject('collectionStore')(withRouter(formHOC(observer(Offerings), metaInfo)));
