@@ -116,7 +116,7 @@ export const publicRoutes = [
     props: 'newLayout',
   },
   {
-    path: '/collections/:slug',
+    path: '/collections-testing/:slug',
     component: CollectionDetails,
   },
   {
@@ -132,7 +132,7 @@ export const publicRoutes = [
     component: Offering,
   },
   {
-    path: '/collections',
+    path: '/collections-testing',
     component: Collections,
   },
   {

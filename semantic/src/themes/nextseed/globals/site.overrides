@@ -3609,6 +3609,13 @@ h3.ui.header.error-2{
 	img.ui.image{
 		width: 100%;
 	}
+	.ui.inverted.button.collectionExplore{
+		color:@neutral;
+		border-width:2px !important;
+		border-style: solid !important;
+		border-color: transparent;
+		box-shadow: none !important;
+	}
 }
 .collection-listings-box{
 	.ui.header{
@@ -3636,7 +3643,7 @@ h3.ui.header.error-2{
 	}
 	p{
 		font-size: @15px;
-		color: #EDEEF2 !important;
+		color:@neutral;
 		line-height: @24px;
 	}
 	.ui.cards>.card .ui.image{
@@ -3660,6 +3667,13 @@ h3.ui.header.error-2{
 			margin-left: 0 !important;
 			margin-right: 0 !important;
 		}
+	}
+	.ui.inverted.button.collectionExplore{
+		color:@neutral;
+		border-width:2px !important;
+		border-style: solid !important;
+		border-color: transparent;
+		box-shadow: none !important;
 	}
 }
 .collection-bg-image {
