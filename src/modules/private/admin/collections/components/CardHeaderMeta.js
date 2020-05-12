@@ -93,7 +93,7 @@ const MetaList = ({ collection, CARD_HEADER_SOCIAL_FRM, isReadOnly, onSortEnd, s
 function CardHeaderMeta(props) {
   const { smartElement, collectionStore, title, noAddMore, additinalInfoLenght } = props;
   const { CARD_HEADER_SOCIAL_FRM, removeOne, addMore, collection } = collectionStore;
-  const isReadOnly = get(collection, 'lock');
+  const isReadOnly = false;
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const social = [...props.collectionStore.CARD_HEADER_SOCIAL_FRM.fields.social];
