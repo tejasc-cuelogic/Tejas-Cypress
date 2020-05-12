@@ -65,14 +65,14 @@ const FormColorPikcer = (props) => {
       />
       {fieldData.value && fieldData.value !== ''
         ? (
-          <Button style={styles.swatch} onClick={handleClick}>
+          <Button className="btn-color-picker" style={styles.swatch} onClick={handleClick}>
             <div style={styles.color} />
           </Button>
         )
         : (
           <span>
             <Button onClick={handleClick}>
-              <i aria-hidden="true" className="eyedropper icon" />
+              <i aria-hidden="true" className="eyedropper icon btn-color-picker" />
             </Button>
           </span>
         )

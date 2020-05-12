@@ -3693,7 +3693,7 @@ h3.ui.header.error-2{
 }
 .header-bg {
 	position: relative;
-	button{
+	.btn-color-picker{
 		position: absolute;
 		top: 38px;
 		right: 0;
