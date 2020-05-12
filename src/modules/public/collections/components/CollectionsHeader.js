@@ -51,7 +51,7 @@ class CollectionsHeader extends Component {
         id: 3,
         title: 'Partners',
         description: 'Get exclusive access to investment opportunities from vetted Partners in the NextSeed network.',
-        image: 'collections/partners.jpg',
+        image: 'collections/partners.png',
       },
     ];
     return (
