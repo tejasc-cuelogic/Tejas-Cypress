@@ -19,7 +19,7 @@ export default class CardHeaderPreview extends Component {
     const headerDownClick = (actionText && actionText !== '')
       ? (
         <div className="current-projects-box">
-          <p className="mb-0">{actionText}</p>
+          <p style={{ color: get(collection, 'descriptionColor.value') }} className="mb-0">{actionText}</p>
           {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
           <i className="icon ns-chevron-down" />
         </div>

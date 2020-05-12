@@ -435,6 +435,9 @@ a:not(.item), a:not(.ui.button){
 .border-red{
 	border-color: #e84b0f !important;
 }
+.pos-relative{
+	position: relative !important;
+}
 .info-card{
 	.ui.button>.icon:not(.button){
 		line-height: 1;
@@ -3609,8 +3612,12 @@ h3.ui.header.error-2{
 	img.ui.image{
 		width: 100%;
 	}
-	.collectionExplore{
+	.ui.inverted.button.collectionExplore{
 		color:@neutral;
+		border-width:2px !important;
+		border-style: solid !important;
+		border-color: transparent;
+		box-shadow: none !important;
 	}
 }
 .collection-listings-box{
@@ -3664,8 +3671,12 @@ h3.ui.header.error-2{
 			margin-right: 0 !important;
 		}
 	}
-	.collectionExplore{
+	.ui.inverted.button.collectionExplore{
 		color:@neutral;
+		border-width:2px !important;
+		border-style: solid !important;
+		border-color: transparent;
+		box-shadow: none !important;
 	}
 }
 .collection-bg-image {
@@ -3679,4 +3690,22 @@ h3.ui.header.error-2{
 	right: 0;
 	opacity: 0.1 !important;
     left: 0;
+}
+.header-bg {
+	position: relative;
+	.btn-color-picker{
+		position: absolute;
+		top: 38px;
+		right: 0;
+		height: 24px;
+		padding:5px 14px !important;
+		.icon{
+			margin: 0 !important;
+		}
+	}
+	.sketch-picker{
+		position: absolute;
+		z-index: 10;
+		right: 0;
+	}
 }

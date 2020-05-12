@@ -16,7 +16,7 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   insight, handleAction,
 }) => (
-    <div className="row-wrap striped-table">
+    <div className={`row-wrap striped-table ${insight.scope === 'PUBLIC' ? '' : 'row-highlight'}`}>
       <div className="balance first-column">
         <DragHandle />
         {insight.title}
