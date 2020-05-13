@@ -182,7 +182,7 @@ class CollectionsStore extends DataModelStore {
   }
 
   get getPastOfferingsList() {
-    return orderBy(this.getOfferingsList.filter(o => ['COMPLETE', 'IN_REPAYMENT', 'STARTUP_PERIOD'].includes(o.stage)), 'sortOrder', ['ASC']);
+    return orderBy(this.getOfferingsList.filter(o => ['COMPLETE', 'IN_REPAYMENT', 'STARTUP_PERIOD', 'DEFAULTED'].includes(o.stage)), 'sortOrder', ['ASC']);
   }
 
   get getInsightsList() {
