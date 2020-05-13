@@ -17,7 +17,7 @@ const FormColorPikcer = (props) => {
   }, []);
 
   useEffect(() => {
-    setBackground(props.fieldData.value);
+    setBackground(props.fieldData.value || '#fff');
   }, [props.fieldData.value]);
 
   const handleClick = () => {
@@ -25,8 +25,9 @@ const FormColorPikcer = (props) => {
   };
 
   const handleChangeComplete = (color, e) => {
+    const { name } = props;
     setBackground(color.hex);
-    props.changed(e, { name: 'bgColor', value: color.hex });
+    props.changed(e, { name, value: color.hex });
   };
 
   const { name, fieldData, changed, onblur } = props;
@@ -64,14 +65,14 @@ const FormColorPikcer = (props) => {
       />
       {fieldData.value && fieldData.value !== ''
         ? (
-          <Button style={styles.swatch} onClick={handleClick}>
+          <Button className="btn-color-picker" style={styles.swatch} onClick={handleClick}>
             <div style={styles.color} />
           </Button>
         )
         : (
           <span>
             <Button onClick={handleClick}>
-              <i aria-hidden="true" className="eyedropper icon" />
+              <i aria-hidden="true" className="eyedropper icon btn-color-picker" />
             </Button>
           </span>
         )
