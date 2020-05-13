@@ -71,8 +71,8 @@ const FormColorPikcer = (props) => {
         )
         : (
           <span>
-            <Button onClick={handleClick}>
-              <i aria-hidden="true" className="eyedropper icon btn-color-picker" />
+            <Button onClick={handleClick} className="btn-color-picker">
+              <i aria-hidden="true" className="eyedropper icon" />
             </Button>
           </span>
         )
