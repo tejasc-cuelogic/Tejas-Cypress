@@ -3698,10 +3698,10 @@ h3.ui.header.error-2{
 	position: relative;
 	.btn-color-picker{
 		position: absolute;
-		top: 38px;
+		top: 27px;
 		right: 0;
-		height: 24px;
-		padding:5px 14px !important;
+		height: auto;
+		padding: 10px!important;
 		.icon{
 			margin: 0 !important;
 		}
