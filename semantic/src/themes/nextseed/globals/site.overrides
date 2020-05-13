@@ -456,6 +456,9 @@ a:not(.item), a:not(.ui.button){
 	&.campaign img.ui.image {
 		height: auto !important;
 	}
+	&.campaign img.ui.image.lightbulb {
+		height: 54px !important;
+	}
 }
 a{
 	&.inverted{
@@ -3692,7 +3695,7 @@ h3.ui.header.error-2{
 }
 .header-bg {
 	position: relative;
-	button{
+	.btn-color-picker{
 		position: absolute;
 		top: 27px;
 		right: 0;

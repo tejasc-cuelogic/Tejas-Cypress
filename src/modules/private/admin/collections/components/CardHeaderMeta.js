@@ -1,7 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { get } from 'lodash';
 import { arrayMove, SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
 import { Form, Button, Icon, Header, Divider } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
@@ -93,7 +92,7 @@ const MetaList = ({ collection, CARD_HEADER_SOCIAL_FRM, isReadOnly, onSortEnd, s
 function CardHeaderMeta(props) {
   const { smartElement, collectionStore, title, noAddMore, additinalInfoLenght } = props;
   const { CARD_HEADER_SOCIAL_FRM, removeOne, addMore, collection } = collectionStore;
-  const isReadOnly = get(collection, 'lock');
+  const isReadOnly = false;
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const social = [...props.collectionStore.CARD_HEADER_SOCIAL_FRM.fields.social];

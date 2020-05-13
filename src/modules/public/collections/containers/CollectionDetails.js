@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get, camelCase, orderBy } from 'lodash';
+import { get, camelCase, orderBy, find } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import scrollIntoView from 'scroll-into-view';
 import { Responsive, Visibility, Container, Grid, Menu, Divider } from 'semantic-ui-react';
@@ -11,6 +11,8 @@ import CampaignList from '../../offering/components/listing/CampaignList';
 import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import HtmlEditor from '../../../shared/HtmlEditor';
+import CollectionMetaTags from '../components/CollectionMetaTags';
+
 
 const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
@@ -103,6 +105,12 @@ class CollectionDetails extends Component {
     this.props.navStore.setMobileNavStatus(calculations);
   }
 
+  getOgDataFromSocial = (obj, type, att) => {
+    const data = find(obj, o => o.type === type);
+    return get(data, att) || '';
+  };
+
+
   render() {
     const { collectionStore, uiStore, nsUiStore, location, match } = this.props;
     const { loadingArray } = nsUiStore;
@@ -144,6 +152,9 @@ class CollectionDetails extends Component {
     const collectionHeaderComponent = (<CollectionHeader activeOffering={getActiveOfferingsList && getActiveOfferingsList.length} scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />);
     return (
       <>
+        {collectionDetails
+          && <CollectionMetaTags collection={collectionDetails} getOgDataFromSocial={this.getOgDataFromSocial} />
+        }
         {!isMobile && collectionHeaderComponent}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <Responsive maxWidth={991} as={React.Fragment}>
@@ -212,11 +223,11 @@ class CollectionDetails extends Component {
                               {i !== 0 && <Divider hidden section />}
                               {/* {i !== 0 && <Divider hidden section />} */}
                               <section>
-                              <CollectionInsights
-                                heading={renderHeading(get(c, 'description'))}
-                                loading={loadingArray.includes('getCollectionMapping')}
-                                InsightArticles={getInsightsList}
-                              />
+                                <CollectionInsights
+                                  heading={renderHeading(get(c, 'description'))}
+                                  loading={loadingArray.includes('getCollectionMapping')}
+                                  InsightArticles={getInsightsList}
+                                />
                               </section>
                             </>
                           )

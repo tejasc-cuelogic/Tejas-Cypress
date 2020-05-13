@@ -45,6 +45,12 @@ export const getUpdate = gql`
       id: $id
     ) {
       ${updateField}
+      notificationSent {
+        by
+        date
+        id
+        to
+      }
     }
   }
 `;
