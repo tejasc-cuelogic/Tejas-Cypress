@@ -354,7 +354,6 @@ function formHoc(WrappedComponent, metaInfo) {
             </div>
           ) : (
                 <ImageCropper
-                  keyName={props.key || name}
                   disabled={props.isReadonly}
                   fieldData={fieldData}
                   setData={(attr, value) => setData(attr, value)}
@@ -365,7 +364,6 @@ function formHoc(WrappedComponent, metaInfo) {
                   modalUploadAction={fieldName => this.props[metaInfo.store].uploadMedia(fieldName, (get(props, 'multiForm') || metaInfo.form), props.uploadPath)}
                   name={name}
                   cropInModal
-                  index={index}
                   aspect={3 / 2}
                   size="small"
                 />

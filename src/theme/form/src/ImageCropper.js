@@ -126,7 +126,7 @@ export default class ImageCropper extends Component {
 
   render() {
     // const { profilePhoto } = this.props.fieldData.fields;
-    const { field, cropInModal, disabled, size, keyName } = this.props;
+    const { field, cropInModal, disabled, size } = this.props;
     return (
       <>
         {field.src && !field.error ? cropInModal
@@ -137,7 +137,6 @@ export default class ImageCropper extends Component {
                 <ReactCrop
                   {...this.state}
                   src={field.src}
-                  key={keyName}
                   onImageLoaded={this.onImageLoaded}
                   onComplete={this.onCropComplete}
                   onChange={this.onCropChange}
@@ -152,7 +151,6 @@ export default class ImageCropper extends Component {
           : (
             <ReactCrop
               {...this.state}
-              key={keyName}
               src={field.src}
               onImageLoaded={this.onImageLoaded}
               onComplete={this.onCropComplete}
