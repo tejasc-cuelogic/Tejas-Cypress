@@ -3581,11 +3581,10 @@ h3.ui.header.error-2{
 	align-items: center !important;
 	.collection-thumbnail-img{
 		img{
-			width:310px !important;
-			height:200px !important;
+			max-width:310px !important;
+			width:100% !important;
 			@media only screen and (min-width:@tabletBreakpoint) and (max-width:@computerBreakpoint){
 				width: 100% !important;
-				height: auto !important;
 			}
 		}
 	}

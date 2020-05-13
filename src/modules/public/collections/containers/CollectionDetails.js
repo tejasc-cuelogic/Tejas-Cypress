@@ -176,7 +176,7 @@ class CollectionDetails extends Component {
                     </Grid.Column>
                   )
                 }
-                <Grid.Column computer={9} mobile={16} className="left-align offer-details-v2">
+                <Grid.Column computer={11} mobile={16} className="left-align offer-details-v2">
                   {content.map((c, i) => (
                     c.contentType === 'ACTIVE_INVESTMENTS' && getActiveOfferingsList && getActiveOfferingsList.length
                       ? (
