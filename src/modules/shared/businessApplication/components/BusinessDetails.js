@@ -112,7 +112,7 @@ export default class BusinessDetails extends Component {
             header={currentApplicationType === 'business' ? 'Business Plan or Investment Prospectus' : 'Business Plan'}
             subHeader={(
               <>
-                {currentApplicationType === 'business' ? <>This document is intended to describe the who, what, when, where, how and why of your project.*<br /> If you are applying for the Community Bridge Note, complete and submit <a href="https://nextseed.box.com/shared/static/5zmjfblvolcrtg9fvzkmnjufafyig8v4.docx"><b>this worksheet</b></a> in addition to or in lieu of your business plan.*</> : 'Upload your Investment Summary or Business Plan.'}
+                {currentApplicationType === 'business' ? <>This document is intended to describe the who, what, when, where, how and why of your project.*<br /> If you are applying for the Community Bridge Note, complete and submit <a href="https://nextseed.box.com/shared/static/5zmjfblvolcrtg9fvzkmnjufafyig8v4.docx"><b>this worksheet</b></a> in addition to or in lieu of your business plan.</> : 'Upload your Investment Summary or Business Plan.'}
                 {!hideFields && currentApplicationType !== 'business' && (
                   <Popup
                     trigger={<Icon className="ns-help-circle" />}

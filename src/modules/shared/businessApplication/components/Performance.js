@@ -20,7 +20,7 @@ export default class Performance extends Component {
       businessPerfMaskingChange, getBusinessTypeCondtion, getOwnPropertyCondtion,
       businessAppUploadFiles, businessAppRemoveFiles,
       businessAppParitalSubmit, enableSave, businessApplicationDetailsAdmin,
-      getNewBusinessTypeCondtion,
+      getNewBusinessTypeCondtion, getEstablishedBusinessTypeCondtion,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     const { fields } = BUSINESS_PERF_FRM;
@@ -59,7 +59,7 @@ export default class Performance extends Component {
                       multiple
                       key={field}
                       name={field}
-                      asterisk={fields[field].rule.includes('required') ? 'true' : ''}
+                      asterisk={(fields[field].rule.includes('required') || getEstablishedBusinessTypeCondtion) ? 'true' : ''}
                       uploadtitle={fields[field].uploadtitle}
                       fielddata={fields[field]}
                       ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM', null, this.props.userStore.isApplicationManager)}

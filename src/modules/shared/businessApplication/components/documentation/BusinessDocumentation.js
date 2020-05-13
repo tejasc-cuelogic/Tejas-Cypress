@@ -24,6 +24,7 @@ export default class BusinessDocumentation extends Component {
       businessAppParitalSubmit,
       enableSave,
       businessApplicationDetailsAdmin,
+      getBusinessTypeCondtion,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_DOC_FRM;
     const { hideFields } = this.props;
@@ -66,7 +67,7 @@ export default class BusinessDocumentation extends Component {
                     multiple
                     key={field}
                     name={field}
-                    asterisk={fields[field].rule.includes('required') ? 'true' : ''}
+                    asterisk={((fields[field].rule.includes('required') && getBusinessTypeCondtion) ? 'true' : '')}
                     fielddata={fields[field]}
                     ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                     onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}

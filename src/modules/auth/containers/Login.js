@@ -54,6 +54,8 @@ class Login extends Component {
     const userCredentials = { email: lowerCasedEmail, password: password.value };
     authActions.login()
       .then(() => {
+        this.props.collectionStore.setFieldValue('collectionApiHit', false);
+        this.props.collectionStore.getCollections();
         const { newPasswordRequired, setCredentials, resetForm } = this.props.authStore;
         if (appUpdated) {
           window.location.reload();
@@ -154,4 +156,4 @@ class Login extends Component {
     );
   }
 }
-export default inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')(withRouter(formHOC(observer(Login), metaInfo)));
+export default inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'collectionStore')(withRouter(formHOC(observer(Login), metaInfo)));

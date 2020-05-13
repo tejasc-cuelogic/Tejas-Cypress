@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const common = {
+export const common = {
   offeringBasics: `
   isAvailablePublicly
   offeringSlug
