@@ -29,6 +29,11 @@ export const getCollectionMapping = gql`
       type
       order
       scope
+      image {
+        id
+        url
+        fileName
+      }
       offering {
         id
         ${common.offeringBasics}
@@ -306,12 +311,14 @@ export const adminCollectionMappingUpsert = gql`
     $referenceId: String!
     $type: CollectionMappingTypeEnum!
     $order: Int
+    $image: CollectionMappingMediaInput
     $scope: ScopeEnumType!){
     adminCollectionMappingUpsert(
       collectionId: $collectionId,
       referenceId: $referenceId,
       type: $type,
       order: $order,
+      image: $image,
       scope: $scope,
       ) {
         collectionId
@@ -319,6 +326,11 @@ export const adminCollectionMappingUpsert = gql`
         type
         order
         scope
+        image {
+          id
+          url
+          fileName
+        }
         offering {
           offeringSlug
         }
