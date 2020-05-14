@@ -1,5 +1,5 @@
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { startCase, get, includes, filter, orderBy } from 'lodash';
+import { startCase, get, includes, filter, orderBy, forEach } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
@@ -45,7 +45,11 @@ export class ManageOfferingStore extends DataModelStore {
 
   onDragSaveEnable = false;
 
+  DOCUMENT_UPLOAD_MAPPING_FRM = [];
+
   initLoad = [];
+
+  DOCUMENT_MAPPING_OPTIONS = [];
 
   getInvestNowTocDefaults = (isPublic = false) => {
     const { offer } = offeringsStore;
@@ -320,6 +324,23 @@ export class ManageOfferingStore extends DataModelStore {
     return labelBannerSecond;
   }
 
+  updateDocument = payloadData => new Promise(async (res) => {
+    const mappingForm = this.DOCUMENT_UPLOAD_MAPPING_FRM;
+    const uploadDocumentArry = payloadData.doc;
+    forEach(uploadDocumentArry, (value, index) => {
+      const documentObj = value;
+      const mappedArray = Validator.evaluateFormData(mappingForm[index].fields).mapping || [];
+      documentObj.mapping = mappedArray;
+    });
+    // console.log(uploadDocumentArry);
+    const payload = {
+      template: 2,
+      doc: cleanDeep(uploadDocumentArry),
+    };
+    const result = await this.updateOffering({ keyName: 'investNow', offeringData: { docuSign: payload } });
+    res(result);
+  });
+
   updateOffering = params => new Promise((res) => {
     const { keyName, forms, cleanData, offeringData, tocAction } = params;
     let offeringDetails = {};
@@ -505,7 +526,7 @@ export class ManageOfferingStore extends DataModelStore {
       });
       if (get(res, 'adminGetInvestNowMappings')) {
         // console.log('lit obtained');
-        this.setFieldValue('DOCUMENT_MAPPING_FRM', this.dropDownValuesForPlugin(get(res, 'adminGetInvestNowMappings')), 'fields.type.options');
+        this.setFieldValue('DOCUMENT_MAPPING_OPTIONS', this.dropDownValuesForPlugin(get(res, 'adminGetInvestNowMappings')));
       }
     } catch (error) {
       Helper.toast('Something went wrong, please try again later.', 'error');
@@ -524,6 +545,44 @@ export class ManageOfferingStore extends DataModelStore {
     });
     return pluginArr;
   }
+
+  prepareDocumentMappingForm = (form, index = 0) => {
+    const mappingFields = DOCUMENT_MAPPING.mapping;
+    forEach(mappingFields, (val) => {
+      const formField = val;
+      formField.value.options = this.DOCUMENT_MAPPING_OPTIONS;
+    });
+    this[form][index] = Validator.prepareFormObject(DOCUMENT_MAPPING);
+  }
+
+  setMappingFormData = (form, ref, index = 0, keepAtLeastOne) => {
+    const { offer } = offeringsStore;
+    const mappingData = get(offer, `investNow.docuSign.doc[${index}]`);
+    this[form][index] = Validator.setFormData(this[form][index], mappingData, ref, keepAtLeastOne);
+  }
+
+  formChangeForMultilevelArray = (e, res, form, subForm, index, isArrayChange = false) => {
+    if (isArrayChange) {
+      this[form.parentForm][form.childForm] = Validator.onArrayFieldChange(
+        this[form.parentForm][form.childForm],
+        Validator.pullValues(e, res),
+        subForm,
+        index,
+      );
+    } else {
+      this[form.parentForm][form.childForm] = Validator.onChange(this[form.parentForm][form.childForm], Validator.pullValues(e, res));
+    }
+    // const dynamicFormFields = { ...this[form.parentForm][form.childForm].fields };
+    // const mappedArr = [];
+    // Object.keys(dynamicFormFields).forEach((key) => {
+    //   const validObj = pickBy(dynamicFormFields[key], identity);
+    //   const hasKey = has(validObj, 'defaultValuesMapping');
+    //   if (hasKey) {
+    //     const mappedOBj = { mappedKey: key, mappedVal: dynamicFormFields[key].defaultValuesMapping };
+    //     mappedArr.push(mappedOBj);
+    //   }
+    // });
+  };
 }
 
 decorate(ManageOfferingStore, {
@@ -551,6 +610,11 @@ decorate(ManageOfferingStore, {
   setFormDataV2: action,
   adminGetInvestNowMappings: action,
   DOCUMENT_MAPPING_FRM: observable,
+  DOCUMENT_UPLOAD_MAPPING_FRM: observable,
+  prepareDocumentMappingForm: action,
+  formChangeForMultilevelArray: action,
+  DOCUMENT_MAPPING_OPTIONS: observable,
+  setMappingFormData: action,
 });
 
 export default new ManageOfferingStore();

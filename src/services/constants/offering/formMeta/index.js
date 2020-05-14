@@ -60,13 +60,14 @@ export const DOCUMENT_MAPPING = {
       rule: 'optional',
       placeHolder: '',
     },
-    type: {
+    value: {
       label: 'Type',
       value: '',
       error: undefined,
       rule: 'optional',
       placeHolder: '',
       options: [],
+      asField: true,
     },
   }],
 };

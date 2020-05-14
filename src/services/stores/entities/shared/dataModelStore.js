@@ -383,6 +383,19 @@ export default class DataModelStore {
     this.currTime = +new Date();
   }
 
+  addMoreForNlevelForm = (form, subForm, key, count = 1) => {
+    this[form][subForm] = FormValidator.addMoreRecordToSubSection(this[form][subForm], key, count, true);
+    this.currTime = +new Date();
+  }
+
+  removeOneForNlevelForm = (form, subForm, arrayName, index, e = undefined) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this[form][subForm].fields[arrayName].splice(index, 1);
+    this.currTime = +new Date();
+  }
+
   resetAll = () => {
     this.client.clearStore();
     this.currTime = +new Date();
@@ -514,4 +527,6 @@ export const decorateDefault = {
   resetStoreData: action,
   resetAllForms: action,
   resetLoader: action,
+  addMoreForNlevelForm: action,
+  removeOneForNlevelForm: action,
 };

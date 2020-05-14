@@ -1541,7 +1541,8 @@ export class OfferingCreationStore extends DataModelStore {
           template: 2,
           doc: cleanDeep(finalDataRoomDocs),
         };
-        manageOfferingStore.updateOffering({ keyName: 'investNow', offeringData: { docuSign: payloadData } })
+        // manageOfferingStore.updateOffering({ keyName: 'investNow', offeringData: { docuSign: payloadData } })
+        manageOfferingStore.updateDocument(payloadData)
           .then(() => {
             this.removeUploadedFiles(fromS3);
             // Helper.toast('Document has been saved successfully.', 'success');

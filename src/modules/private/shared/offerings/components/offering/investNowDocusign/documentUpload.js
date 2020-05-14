@@ -77,6 +77,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
           isSaveOnly
           header="Document Mapping"
           uploadFormKey="mapping"
+          mapIndex={docIndx}
           mappingData={document.mapping}
         />
       </div>

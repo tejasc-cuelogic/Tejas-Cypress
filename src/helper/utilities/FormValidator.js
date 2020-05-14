@@ -465,6 +465,8 @@ class FormValidator {
               ? tempRef.find(o => o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]]
               : tempRef[key];
           }
+        } else if (key === 'value' && fields[key].asField) {
+          fields[key].value = data && typeof data === 'string' ? data : data[key];
         } else if (key === 'value') {
           fields[key] = data && typeof data === 'string' ? data : data[key];
         } else if (fields[key].objType === 'FileObjectType') {
