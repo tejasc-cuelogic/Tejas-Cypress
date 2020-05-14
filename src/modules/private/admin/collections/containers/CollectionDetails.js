@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route, useHistory, Link } from 'react-router-dom';
 import { Modal, Card, Header, Icon } from 'semantic-ui-react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import LockUnlockCollection from '../components/LockUnlockCollection';
 import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
@@ -38,7 +39,7 @@ function CollectionDetails(props) {
 
   const { match } = props;
   const { responsiveVars } = props.uiStore;
-  const { collection, collectionLoading } = props.collectionStore;
+  const { collection, collectionLoading, collectionId } = props.collectionStore;
 
   if (collectionLoading.includes('getCollection')) {
     return <InlineLoader />;
@@ -48,14 +49,19 @@ function CollectionDetails(props) {
     <>
       <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={() => handleCloseModal()} centered={false}>
         <Modal.Content className="transaction-details">
-          <Header as="h3">
-            {collection.name}
-            <Header.Subheader className="mt-10">
-              <Link target="_blank" to={`/collections-testing/${collection.slug}`}>
-                <Icon className="ns-view" /><b>Preview collection page</b>
-              </Link>
-            </Header.Subheader>
-          </Header>
+          <CopyToClipboard
+            text={collectionId}
+            onCopy={() => window.logger('copied')}
+          >
+            <Header as="h3">
+              {collection.name}
+              <Header.Subheader className="mt-10">
+                <Link target="_blank" to={`/collections-testing/${collection.slug}`}>
+                  <Icon className="ns-view" /><b>Preview collection page</b>
+                </Link>
+              </Header.Subheader>
+            </Header>
+          </CopyToClipboard>
           <LockUnlockCollection />
           <Card fluid>
             <SecondaryMenu isBonusReward bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
