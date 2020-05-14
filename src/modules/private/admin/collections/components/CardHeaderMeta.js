@@ -109,7 +109,7 @@ function CardHeaderMeta(props) {
           }
         </Header>
         <Divider hidden />
-        <div className="ui basic compact table form-table">
+        <div className="ui basic compact table form-table social-links-table">
           <div className="row-wrap thead">
             <div className="balance-half">Type</div>
             <div className="balance-half">Url</div>

@@ -363,7 +363,6 @@ function formHoc(WrappedComponent, metaInfo) {
                   field={fieldData}
                   modalUploadAction={fieldName => this.props[metaInfo.store].uploadMedia(fieldName, (get(props, 'multiForm') || metaInfo.form), props.uploadPath)}
                   name={name}
-                  key={props.key || name}
                   cropInModal
                   aspect={3 / 2}
                   size="small"
@@ -384,7 +383,7 @@ function formHoc(WrappedComponent, metaInfo) {
           onblur={get(props, 'handleBlur') || false}
           changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form))}
           metaInfo={metaInfo}
-          {... props}
+          {...props}
         />
       );
     }
