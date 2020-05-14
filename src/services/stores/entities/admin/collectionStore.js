@@ -209,7 +209,7 @@ class CollectionsStore extends DataModelStore {
           type: c.stage ? 'OFFERING' : 'INSIGHT',
           collectionId: c.collectionId,
           scope: c.scope,
-          referenceId: c.id,
+          referenceId: c.referenceId,
         }))
       : [];
       this[form] = Validator.setFormData(this[form], { mappingContent: mappingContentList }, ref, keepAtLeastOne);
