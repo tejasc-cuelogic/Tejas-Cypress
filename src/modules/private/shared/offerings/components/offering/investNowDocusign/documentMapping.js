@@ -19,9 +19,9 @@ const SortableItem = SortableElement(({ offer, currentForm, isReadOnly, fieldInd
       <Table basic compact className="form-table">
         <Table.Body>
           <Table.Row>
-            <Table.Cell collapsing>
+            {/* <Table.Cell collapsing>
               {!isReadOnly && <DragHandle />}
-            </Table.Cell>
+            </Table.Cell> */}
             <Table.Cell>
               {/* {smartElement.Input('key', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'mapping', fieldIndex] })} */}
               {smartElement.Input('key', {
@@ -145,7 +145,7 @@ class DocumentMapping extends Component {
     return (
       <>
         <Header as="h4">
-          {title || 'Additional Fields'}
+          {title || 'Mapping Fields'}
           <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMoreForNlevelForm(metaInfo.form, mapIndex, 'mapping')}>+ Add another field</Button>
         </Header>
         <MetaList
