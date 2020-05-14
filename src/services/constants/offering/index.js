@@ -40,6 +40,19 @@ export const UPDATES = {
   postUpdateAs: {
     value: 'ISSUER', label: 'post', error: undefined, rule: 'required',
   },
+  notificationBy: {
+    value: '', error: undefined, rule: 'optional',
+  },
+  notificationDate: {
+    value: '', error: undefined, rule: 'optional',
+  },
+  notificationTo: {
+    value: [],
+    values: [],
+    error: undefined,
+    rule: 'optional',
+    key: 0,
+  },
 };
 
 export const TEMPLATE = {
