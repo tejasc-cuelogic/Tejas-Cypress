@@ -50,7 +50,7 @@ class Footer extends Component {
               </div>
               <div className="footer-social grey-header">
                 <SocialLinks />
-                <p className={isMobile && 'mt-20'}>© 2019 NextSeed Technologies LLC</p>
+                <p className={isMobile && 'mt-20'}>© 2020 NextSeed Technologies LLC</p>
               </div>
             </Grid.Column>
             <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info grey-header">

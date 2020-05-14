@@ -207,6 +207,9 @@
                 background: @neutral-darkwhite;
             }
         }
+        >.content.extra.ed-center {
+            min-height: 0px !important;
+        }
         .message {
             padding: @6px @30px;
             font-size: @12px;

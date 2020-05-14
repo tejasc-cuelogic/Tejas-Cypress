@@ -25,7 +25,7 @@ export default class TombstonePreview extends Component {
       <div className="bg-offwhite pt-30 pb-30 mb-20">
         <Container className="offerings-container">
           <Grid style={{ backgroundColor: get(collection, 'bgColor.value') }} className="p-60 collection-box">
-            <Grid.Column widescreen={4} computer={5} tablet={16} mobile={16} className="zi-9 collection-thumbnail-img p-0">
+            <Grid.Column widescreen={4} computer={5} tablet={5} mobile={16} className="zi-9 collection-thumbnail-img p-0">
               <Image64 reRender originalImg srcUrl={get(collection, 'image.preSignedUrl')} />
                 {get(collection, 'text.value')
                 && (
@@ -34,7 +34,7 @@ export default class TombstonePreview extends Component {
               </div>
               )}
             </Grid.Column>
-            <Grid.Column widescreen={12} computer={11} tablet={16} mobile={16} className="zi-9 collection-content">
+            <Grid.Column widescreen={12} computer={11} tablet={11} mobile={16} className="zi-9 collection-content">
               <Header style={{ color: get(collection, 'descriptionColor.value') }} as="h3">{get(collection, 'title.value')}</Header>
               <p style={{ color: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} /></p>
               <Button inverted onMouseLeave={this.toggleHover} onMouseEnter={this.toggleHover} style={{ color: isHovered ? get(collection, 'bgColor.value') : get(collection, 'descriptionColor.value'), backgroundColor: isHovered ? get(collection, 'descriptionColor.value') : '', borderColor: get(collection, 'descriptionColor.value') }} className="mt-20 mb-30 collectionExplore">Explore</Button>
