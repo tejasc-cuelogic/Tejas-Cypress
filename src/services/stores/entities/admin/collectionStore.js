@@ -12,6 +12,8 @@ import Helper from '../../../../helper/utility';
 import { uiStore, authStore } from '../../index';
 import articleStore from './articleStore';
 import { STAGES } from '../../../constants/admin/offerings';
+import { fileUpload } from '../../../actions';
+
 
 class CollectionsStore extends DataModelStore {
   constructor() {
@@ -203,7 +205,13 @@ class CollectionsStore extends DataModelStore {
       const metaList = get(collection, 'marketing.content') ? collection.marketing.content.map(c => c.meta) : [];
       this[form] = Validator.setFormData(this[form], { meta: metaList }, ref, keepAtLeastOne);
     } else if (form === 'COLLECTION_MAPPING_CONTENT_FRM') {
-      const mappingContentList = data ? data.map(c => c.image) : [];
+      const mappingContentList = data ? data.map(c => ({
+          image: c.image,
+          type: c.stage ? 'OFFERING' : 'INSIGHT',
+          collectionId: c.collectionId,
+          referenceId: c.id,
+        }))
+      : [];
       this[form] = Validator.setFormData(this[form], { mappingContent: mappingContentList }, ref, keepAtLeastOne);
     } else {
       this[form] = Validator.setFormData(this[form], collection, ref, keepAtLeastOne);
@@ -362,6 +370,7 @@ class CollectionsStore extends DataModelStore {
               data = {
                 LIVE: data.filter(d => d.offering.stage === 'LIVE').map((d) => {
                   d.offering.collectionId = d.collectionId;
+                  d.offering.image = d.image;
                   d.offering.order = d.order;
                   d.offering.scope = d.scope;
                   return d.offering;
@@ -369,6 +378,7 @@ class CollectionsStore extends DataModelStore {
                 COMPLETE: data.filter(d => d.offering.stage !== 'LIVE').map((d) => {
                   d.offering.collectionId = d.collectionId;
                   d.offering.order = d.order;
+                  d.offering.image = d.image;
                   d.offering.scope = d.scope;
                   return d.offering;
                 }),
@@ -387,6 +397,7 @@ class CollectionsStore extends DataModelStore {
               });
               articleStore.requestAllArticlesForCollections();
               this.setCollectionMetaList(tempData[params.type], true);
+              this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data);
             } else {
               tempData[params.type] = data;
             }
@@ -403,17 +414,6 @@ class CollectionsStore extends DataModelStore {
   }
 
   mapDataByContentType = data => data.map(c => ({ key: c.id, text: c.offeringSlug, value: c.id }))
-
-  // trimContentOptions = () => {
-  //   const { content } = this.COLLECTION_CONTENT_FRM.fields;
-  //   const contentValArr = content.map(c => c.contentType.value);
-  //   // eslint-disable-next-line array-callback-return
-  //   ['COMPLETE_INVESTMENTS', 'ACTIVE_INVESTMENTS', 'INSIGHTS'].map((contentValue) => {
-  //     if (contentValArr.filter(c => c === contentValue).length >= 2) {
-  //       this.COLLECTION_CONTENT_FRM.fields.content[0].contentType.options = content[0].contentType.options.filter(c => c.value !== contentValue);
-  //     }
-  //   });
-  // }
 
   collectionMappingWrapper = params => new Promise(async (resolve, rej) => {
     this.executeQuery({
@@ -667,6 +667,40 @@ class CollectionsStore extends DataModelStore {
     return socialData;
   }
 
+  uploadMedia = (name, form, path, files = false) => {
+    const formName = Array.isArray(form) ? form[0] : form;
+    const arrayName = Array.isArray(form) ? form[1] : false;
+    const index = Array.isArray(form) ? form[2] : -1;
+    const fileObj = {
+      obj: files ? files[0] : index > -1 ? this[formName].fields[arrayName][index][name].base64String : this[formName].fields[name].base64String,
+      name: Helper.sanitize(files ? files[0].name : index > -1 ? this[formName].fields[arrayName][index][name].fileName : this[formName].fields[name].fileName),
+    };
+    this.setMediaAttribute(formName, 'showLoader', true, name, index, arrayName);
+    fileUpload.uploadToS3(fileObj, path)
+      .then(async (res) => {
+        window.logger(res);
+        const url = res.split('/');
+        this.setMediaAttribute(formName, 'value', url[url.length - 1], name, index, arrayName);
+        this.setMediaAttribute(formName, 'preSignedUrl', res, name, index, arrayName);
+        this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
+        const { collectionId, referenceId, image, type } = this.COLLECTION_MAPPING_CONTENT_FRM.fields.mappingContent[index];
+        const params = {
+          collectionId: collectionId.value,
+          referenceId: referenceId.value,
+          image: {
+            url: image.preSignedUrl,
+          },
+          type: type.value,
+          scope: 'PUBLIC',
+        };
+        await this.collectionMappingMutation('adminCollectionMappingUpsert', params);
+      })
+      .catch((err) => {
+        this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
+        window.logger(err);
+      });
+  };
+
   // @computed get active() {
   //   const collectionList = this.orderedActiveList.slice();
   //   return collectionList.splice(0, this.activeToDisplay);
@@ -692,6 +726,7 @@ decorate(CollectionsStore, {
   HEADER_META_FRM: observable,
   TOMBSTONE_FRM: observable,
   selectedCollectionArray: observable,
+  COLLECTION_MAPPING_CONTENT_FRM: observable,
   contentId: observable,
   collection: observable,
   initLoad: observable,
