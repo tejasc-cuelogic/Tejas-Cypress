@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 @observer
 @withRouter
@@ -20,12 +20,10 @@ export default class InterstitialModal extends Component {
   }
 
   lastStep() {
-    this.props.steps.map((s) => {
-      if (s.stepToBeRendered === this.props.steps.length) {
-        return this.setState({ lastStep: true });
-      }
-      return null;
-    });
+    const arrLength = this.props.steps.length;
+    if (this.props.stepToBeRendered === this.props.steps[arrLength - 1]) {
+      this.setState({ lastStep: true });
+    }
   }
 
   render() {
@@ -41,8 +39,11 @@ export default class InterstitialModal extends Component {
           centered={false}
           className="bg-white dimmer-visible multistep-modal"
         >
-          {currentStep && currentStep.component}
-          <Button content={!this.state.lastStep ? 'Next' : 'Explore All Offerings'} onClick={this.handleNextStep} />
+          {this.props.steps.length && currentStep.component}
+          {this.state.lastStep
+            ? <Button content="Explore All Offerings" as={Link} to="/offerings" />
+            : <Button content="Next" onClick={this.handleNextStep} />
+          }
         </Modal>
       </>
     );

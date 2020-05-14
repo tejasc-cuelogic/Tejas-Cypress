@@ -25,7 +25,8 @@ export default class AccountCreation extends React.Component {
     if (this.props.refUrl) {
       this.props.history.push(this.props.refUrl);
     } else {
-      this.props.history.push('/dashboard/setup');
+      this.props.history.push('/interstitial');
+      this.props.uiStore.showInterstitial = true;
     }
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }

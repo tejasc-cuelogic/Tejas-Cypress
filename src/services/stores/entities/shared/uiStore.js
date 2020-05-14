@@ -16,6 +16,8 @@ export class UiStore {
     notificationPanel: false,
   };
 
+  @observable showInterstitial = false;
+
   @observable leftPanelMobileMenu = false;
 
   @observable submitButtonDisabled = false;

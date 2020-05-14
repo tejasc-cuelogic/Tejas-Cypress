@@ -1,6 +1,5 @@
 import React from 'react';
 import { Grid, Modal, Card, Header } from 'semantic-ui-react';
-// import { Image64 } from '../../../../theme/shared';
 import HtmlEditor from '../../HtmlEditor';
 import NSImage from '../../NSImage';
 
@@ -42,7 +41,7 @@ const offeringsToDisplay = [
 
 const OfferingStep = () => (
   <Grid>
-    <Grid.Column computer={4}>
+    <Grid.Column computer={6}>
       <Grid.Row>
         <Modal.Header>{OfferingStepMeta.header}</Modal.Header>
       </Grid.Row>
@@ -50,7 +49,7 @@ const OfferingStep = () => (
         <Modal.Content>{OfferingStepMeta.content}</Modal.Content>
       </Grid.Row>
     </Grid.Column>
-    <Grid.Column computer={12}>
+    <Grid.Column computer={10}>
       <Card.Group itemsPerRow={isMobile ? 1 : 3}>
         {offeringsToDisplay.map(offering => (
           <Card className="bordered center-align">
@@ -61,10 +60,7 @@ const OfferingStep = () => (
                 {offering.location}
               </Card.Meta>
               <Card.Description>
-                <HtmlEditor
-                  readOnly
-                  content={offering.description}
-                />
+                <HtmlEditor readOnly content={offering.description} />
               </Card.Description>
               <p><b>{offering.meta1}</b></p>
               <p><b>{offering.meta2}</b></p>

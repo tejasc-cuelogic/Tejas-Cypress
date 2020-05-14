@@ -20,6 +20,7 @@ export default class SignupInterstitial extends Component {
 
   render() {
       const { stepToBeRendered } = this.props.individualAccountStore;
+      const { showInterstitial } = this.props.uiStore;
       const steps = [
         {
           component: <PortfolioStep />,
@@ -36,9 +37,13 @@ export default class SignupInterstitial extends Component {
     ];
     return (
       <>
-        <div className="step-progress">
-          <InterstitialModal setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} steps={steps} handleModalclose={this.handleModalclose} />
-        </div>
+        {showInterstitial
+          && (
+          <div className="step-progress">
+            <InterstitialModal setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} steps={steps} handleModalclose={this.handleModalclose} />
+          </div>
+          )
+        }
       </>
     );
   }
