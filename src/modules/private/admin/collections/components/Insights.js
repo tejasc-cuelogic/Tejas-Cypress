@@ -1,33 +1,33 @@
 
-
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { inject, observer } from 'mobx-react';
-import { Button, Icon, Confirm } from 'semantic-ui-react';
-import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
+import { arrayMove, SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
+import { Icon, Divider, Button, Confirm, Table, Form } from 'semantic-ui-react';
+import formHOC from '../../../../../theme/form/formHOC';
 import { InlineLoader } from '../../../../../theme/shared';
 
+const metaInfo = {
+  store: 'collectionStore',
+  form: 'COLLECTION_MAPPING_CONTENT_FRM',
+};
 const actions = {
   publish: { label: 'Publish', icon: 'view', icon1: 'no-view' },
 };
-const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
+
+const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  insight, handleAction,
+  insight, handleAction, smartElement, removeMedia, fieldIndex,
 }) => (
-    <div className={`row-wrap striped-table ${insight.scope === 'PUBLIC' ? '' : 'row-highlight'}`}>
-      <div className="balance first-column">
+    <Table.Row className={(insight.scope === 'PUBLIC') ? '' : 'row-highlight'} collapsing>
+      <Table.Cell collapsing>
         <DragHandle />
         {insight.title}
-      </div>
-      <div className="balance width-250">
-        {insight.category}
-      </div>
-      <div className="balance width-250">
-        {insight.tags ? insight.tags.join(', ') : '-'}
-      </div>
-      <div className="action right-align width-70">
+      </Table.Cell>
+      <Table.Cell>
+        {smartElement.ImageCropper('image', { style: { height: '125px' }, multiForm: [metaInfo.form, 'mappingContent', fieldIndex], uploadPath: `collections/${fieldIndex}`, removeMedia })}
+      </Table.Cell>
+      <Table.Cell collapsing>
         <Button.Group>
           {Object.keys(actions).map(action => (
             <Button icon className="link-button">
@@ -39,123 +39,144 @@ const SortableItem = SortableElement(({
             <Icon className="ns-trash" onClick={() => handleAction('Delete', insight, !insight.scope)} />
           </Button>
         </Button.Group>
-      </div>
-    </div>
+      </Table.Cell>
+    </Table.Row>
   ));
-const SortableList = SortableContainer(({
-  allInsightsList, handleAction, stage, listIndex,
-}) => (
-    <div className="tbody">
-      {allInsightsList.map((insight, index) => (
-        <SortableItem
-          // eslint-disable-next-line react/no-array-index-key
-          key={`item-${index}`}
-          docIndx={index}
-          insight={insight}
-          handleAction={handleAction}
-          index={index}
-          stage={stage}
-          listIndex={listIndex}
-        />
-      ))}
+const SortableList = SortableContainer(({ toggleVisible, allInsightsList, handleAction, isReadOnly, smartElement, removeMedia, removeOne }) => (
+  <div className="tbody">
+    <div className="row-wrap">
+      <Form.Group className="mlr-0 plr-0 pt-0 pb-0">
+        <Table basic compact className="form-table bg-white striped">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Title</Table.HeaderCell>
+              <Table.HeaderCell>Image</Table.HeaderCell>
+              <Table.HeaderCell textAlign="right">Action</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {allInsightsList.map((insight, index) => (
+              <SortableItem
+                // eslint-disable-next-line react/no-array-index-key
+                key={`item-${index}`}
+                insight={insight}
+                fieldIndex={index}
+                index={index}
+                isReadOnly={isReadOnly}
+                smartElement={smartElement}
+                handleAction={handleAction}
+                removeMedia={removeMedia}
+                removeOne={removeOne}
+                toggleVisible={toggleVisible}
+              />
+            ))}
+          </Table.Body>
+        </Table>
+      </Form.Group>
     </div>
-  ));
-@inject('uiStore', 'offeringsStore', 'collectionStore')
-@withRouter
-@observer
-export default class Insights extends Component {
-  state = { isPublic: false, loading: false };
+  </div>
+));
+const InsightsList = ({ toggleVisible, allInsightsList, handleAction, isReadOnly, onSortEnd, smartElement, removeMedia, removeOne }) => (
+  <div className="ui card fluid">
+    <SortableList
+      allInsightsList={allInsightsList}
+      pressDelay={100}
+      onSortEnd={onSortEnd}
+      lockAxis="y"
+      useDragHandle
+      isReadOnly={isReadOnly}
+      handleAction={handleAction}
+      smartElement={smartElement}
+      removeMedia={removeMedia}
+      removeOne={removeOne}
+      toggleVisible={toggleVisible}
+    />
+  </div>
+);
 
-  onSortEnd = async ({ oldIndex, newIndex }) => {
+function Offerings(props) {
+  const [loading, setLoading] = useState(false);
+  const [isPublic, setisPublic] = useState(false);
+
+  const { smartElement, insightsList, isLoading } = props;
+  const { confirmBox } = props.uiStore;
+  const removeMedia = (form, name) => {
+    window.logger(form, name);
+  };
+
+  const onSortEnd = async ({ oldIndex, newIndex }) => {
     if (oldIndex !== newIndex) {
-      this.setState({ loading: true });
-      await this.props.collectionStore.setOrderForCollectionsMapping(arrayMove(this.props.insightsList, oldIndex, newIndex));
-      this.setState({ loading: false });
-      this.props.collectionStore.setFieldValue('collectionIndex', null);
-      this.props.history.push(`${this.props.match.url}`);
+      setLoading(true);
+      await props.collectionStore.setOrderForCollectionsMapping(arrayMove(props.insightsList, oldIndex, newIndex));
+      setLoading(false);
+      props.collectionStore.setFieldValue('collectionIndex', null);
+      props.history.push(`${props.match.url}`);
     }
-  }
+  };
 
-  handleAction = (action, offering, isPublished = false) => {
+  const handleAction = (action, offering, isPublished = false) => {
     if (action === 'Delete') {
-      this.props.uiStore.setConfirmBox(action, offering.id);
+      props.uiStore.setConfirmBox(action, offering.id);
     } else if (action === 'Publish') {
-      this.setState({ isPublic: isPublished });
-      this.props.uiStore.setConfirmBox(action, offering.id, isPublished);
+      setisPublic(isPublished === 'PUBLIC' ? 'PUBLIC' : 'HIDDEN');
+      props.uiStore.setConfirmBox(action, offering.id, isPublished);
     }
-  }
+  };
 
-  handleDeleteCancel = () => {
-    this.props.uiStore.setConfirmBox('');
-  }
-
-  handlePublishOffering = async () => {
-    const { collectionStore, uiStore } = this.props;
+  const handlePublishOffering = async () => {
+    const { collectionStore, uiStore } = props;
     const params = {
-      type: 'INSIGHT',
+      type: 'OFFERING',
       collectionId: collectionStore.collectionId,
       referenceId: uiStore.confirmBox.refId,
-      scope: this.state.isPublic ? 'PUBLIC' : 'HIDDEN',
+      scope: isPublic === 'PUBLIC' ? 'PUBLIC' : 'HIDDEN',
     };
     await collectionStore.collectionMappingMutation('adminCollectionMappingUpsert', params);
     collectionStore.setFieldValue('collectionIndex', null);
-    this.props.history.push(`${this.props.match.url}`);
-    this.props.uiStore.setConfirmBox('');
-  }
+    props.history.push(`${props.match.url}`);
+    props.uiStore.setConfirmBox('');
+  };
 
-  handleDeleteCollection = async () => {
-    const { collectionStore, uiStore } = this.props;
+  const handleDeleteCancel = () => {
+    props.uiStore.setConfirmBox('');
+  };
+
+  const handleDeleteCollection = async () => {
+    const { collectionStore, uiStore } = props;
     const params = {
-      type: 'INSIGHT',
+      type: 'OFFERING',
       collectionId: collectionStore.collectionId,
       referenceId: uiStore.confirmBox.refId,
     };
     await collectionStore.collectionMappingMutation('adminDeleteCollectionMapping', params);
     collectionStore.setFieldValue('collectionIndex', null);
-    this.props.history.push(`${this.props.match.url}`);
-    this.props.uiStore.setConfirmBox('');
+    props.history.push(`${props.match.url}`);
+    props.uiStore.setConfirmBox('');
+  };
+  if (isLoading || loading) {
+    return <InlineLoader />;
   }
-
-  render() {
-    const {
-      uiStore, stage, insightsList, isLoading,
-    } = this.props;
-
-    const { confirmBox } = uiStore;
-    if (isLoading || this.state.loading) {
-      return <InlineLoader />;
-    }
-    return (
-      <>
-        <div className="ui card fluid">
-          <div className="ui basic table">
-            <div className="row-wrap striped-table thead">
-              <div className="balance first-column">Title</div>
-              <div className="balance width-250">Category</div>
-              <div className="balance width-250"> Tags</div>
-            </div>
-            <div className="action right-align width-70" />
-          </div>
-          <SortableList
-            allInsightsList={insightsList}
-            pressDelay={100}
-            handleAction={this.handleAction}
-            onSortEnd={e => this.onSortEnd(e)}
-            stage={stage}
-            lockAxis="y"
-            useDragHandle
-          />
-        </div>
-        <Confirm
-          header="Confirm"
-          content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this offering ${this.state.isPublic ? 'Public' : 'Non-Public'}?` : 'Are you sure you want to delete this offering?'}
-          open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
-          onCancel={this.handleDeleteCancel}
-          onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteCollection}
-          size="mini"
-          className="deletion"
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <InsightsList
+        allInsightsList={insightsList}
+        removeMedia={removeMedia}
+        smartElement={smartElement}
+        handleAction={handleAction}
+        onSortEnd={onSortEnd}
+      />
+      <Confirm
+        header="Confirm"
+        content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this offering ${isPublic ? 'Public' : 'Non-Public'}?` : 'Are you sure you want to delete this offering?'}
+        open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
+        onCancel={handleDeleteCancel}
+        onConfirm={confirmBox.entity === 'Publish' ? handlePublishOffering : handleDeleteCollection}
+        size="mini"
+        className="deletion"
+      />
+      <Divider section />
+    </>
+  );
 }
+
+export default inject('collectionStore', 'uiStore')(withRouter(formHOC(observer(Offerings), metaInfo)));

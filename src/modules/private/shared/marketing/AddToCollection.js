@@ -51,6 +51,7 @@ export default class AddToCollection extends React.Component {
         disabled={intersection(loadingArray, ['adminCollectionMappingUpsert', 'adminDeleteCollectionMapping']).length > 0 || this.props.isdisabled}
         multiple
         selection
+        search
         fluid
         containerclassname="dropdown-field"
         onChange={(e, res) => this.handleCollectionChange(e, res)}
