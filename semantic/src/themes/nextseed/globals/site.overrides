@@ -582,6 +582,9 @@ i.icon.right {
 			}
 		}
 	}
+	&.overflow-wrap{
+		overflow-wrap: anywhere;
+	}
 	.wp-caption {
 		max-width: 100%;
 		height: auto;
