@@ -354,6 +354,11 @@ export const getOfferingDetails = gql`
           doc {
             name
             mappingRequired
+            mapping {
+              key
+              value
+              customValue
+            }
             upload {
               fileId
               fileName

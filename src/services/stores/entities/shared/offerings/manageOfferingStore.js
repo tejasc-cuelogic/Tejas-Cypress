@@ -504,7 +504,8 @@ export class ManageOfferingStore extends DataModelStore {
         // fetchPolicy: 'cache-first',
       });
       if (get(res, 'adminGetInvestNowMappings')) {
-        this.setFieldValue('DOCUMENT_MAPPING_FRM', this.dropDownValuesForPlugin('adminGetInvestNowMappings'), 'fields.type.values');
+        // console.log('lit obtained');
+        this.setFieldValue('DOCUMENT_MAPPING_FRM', this.dropDownValuesForPlugin(get(res, 'adminGetInvestNowMappings')), 'fields.type.options');
       }
     } catch (error) {
       Helper.toast('Something went wrong, please try again later.', 'error');

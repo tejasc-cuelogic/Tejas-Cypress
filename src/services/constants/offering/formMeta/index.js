@@ -39,14 +39,34 @@ export const INVEST_NOW_PAGE = FormHelper.generateMeta([
   // asIn: true }],
 ]);
 
-export const DOCUMENT_MAPPING = FormHelper.generateMeta([
-  ['key', 'Key', '', 'optional', 'Enter Here'],
-  ['type', 'Type', '', 'required', '',
-   {
-    asIn: true,
-    props: {
-      values: [],
+// export const DOCUMENT_MAPPING = FormHelper.generateMeta([
+//   ['key', 'Key', '', 'optional', 'Enter Here'],
+//   ['type', 'Type', '', 'required', '',
+//    {
+//     asIn: true,
+//     props: {
+//       values: [],
+//     },
+//   },
+//  ],
+// ]);
+
+export const DOCUMENT_MAPPING = {
+  mapping: [{
+    key: {
+      label: 'Key',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: '',
     },
-  },
- ],
-]);
+    type: {
+      label: 'Type',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: '',
+      options: [],
+    },
+  }],
+};
