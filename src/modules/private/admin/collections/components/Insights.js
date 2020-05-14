@@ -19,57 +19,63 @@ const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-la
 const SortableItem = SortableElement(({
   insight, handleAction, smartElement, removeMedia, fieldIndex,
 }) => (
+    <Table.Row className={(insight.scope === 'PUBLIC') ? '' : 'row-highlight'} collapsing>
+      <Table.Cell collapsing>
+        <DragHandle />
+        {insight.title}
+      </Table.Cell>
+      <Table.Cell>
+        {smartElement.ImageCropper('image', { style: { height: '125px' }, multiForm: [metaInfo.form, 'mappingContent', fieldIndex], uploadPath: `collections/${fieldIndex}`, removeMedia })}
+      </Table.Cell>
+      <Table.Cell collapsing>
+        <Button.Group>
+          {Object.keys(actions).map(action => (
+            <Button icon className="link-button">
+              <Icon className={`ns-${insight.scope === 'PUBLIC' ? actions[action].icon : actions[action].icon1}`} onClick={() => handleAction(actions[action].label, insight, insight.scope !== 'PUBLIC')} />
+            </Button>
+          ))}
+
+          <Button icon className="link-button">
+            <Icon className="ns-trash" onClick={() => handleAction('Delete', insight, !insight.scope)} />
+          </Button>
+        </Button.Group>
+      </Table.Cell>
+    </Table.Row>
+  ));
+const SortableList = SortableContainer(({ toggleVisible, allInsightsList, handleAction, isReadOnly, smartElement, removeMedia, removeOne }) => (
+  <div className="tbody">
     <div className="row-wrap">
       <Form.Group className="mlr-0 plr-0 pt-0 pb-0">
-        <Table basic compact className="form-table bg-white">
-          <Table.Body>
+        <Table basic compact className="form-table bg-white striped">
+          <Table.Header>
             <Table.Row>
-              <Table.Cell collapsing>
-                <DragHandle />
-                {insight.title}
-              </Table.Cell>
-              <Table.Cell>
-                {smartElement.ImageCropper('image', { style: { height: '125px' }, multiForm: [metaInfo.form, 'mappingContent', fieldIndex], uploadPath: `collections/${fieldIndex}`, removeMedia })}
-              </Table.Cell>
-              <Table.Cell collapsing>
-                <Button.Group>
-                  {Object.keys(actions).map(action => (
-                    <Button icon className="link-button">
-                      <Icon className={`ns-${insight.scope === 'PUBLIC' ? actions[action].icon : actions[action].icon1}`} onClick={() => handleAction(actions[action].label, insight, insight.scope !== 'PUBLIC')} />
-                    </Button>
-                  ))}
-
-                  <Button icon className="link-button">
-                    <Icon className="ns-trash" onClick={() => handleAction('Delete', insight, !insight.scope)} />
-                  </Button>
-                </Button.Group>
-              </Table.Cell>
+              <Table.HeaderCell>Title</Table.HeaderCell>
+              <Table.HeaderCell>Image</Table.HeaderCell>
+              <Table.HeaderCell textAlign="right">Action</Table.HeaderCell>
             </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {allInsightsList.map((insight, index) => (
+              <SortableItem
+                // eslint-disable-next-line react/no-array-index-key
+                key={`item-${index}`}
+                insight={insight}
+                fieldIndex={index}
+                index={index}
+                isReadOnly={isReadOnly}
+                smartElement={smartElement}
+                handleAction={handleAction}
+                removeMedia={removeMedia}
+                removeOne={removeOne}
+                toggleVisible={toggleVisible}
+              />
+            ))}
           </Table.Body>
         </Table>
       </Form.Group>
     </div>
-  ));
-const SortableList = SortableContainer(({ toggleVisible, allInsightsList, handleAction, isReadOnly, smartElement, removeMedia, removeOne }) => (
-  <div className="tbody">
-    {allInsightsList.map((insight, index) => (
-      <SortableItem
-        // eslint-disable-next-line react/no-array-index-key
-        key={`item-${index}`}
-        insight={insight}
-        fieldIndex={index}
-        index={index}
-        isReadOnly={isReadOnly}
-        smartElement={smartElement}
-        handleAction={handleAction}
-        removeMedia={removeMedia}
-        removeOne={removeOne}
-        toggleVisible={toggleVisible}
-      />
-    ))}
   </div>
 ));
-
 const InsightsList = ({ toggleVisible, allInsightsList, handleAction, isReadOnly, onSortEnd, smartElement, removeMedia, removeOne }) => (
   <div className="ui card fluid">
     <SortableList

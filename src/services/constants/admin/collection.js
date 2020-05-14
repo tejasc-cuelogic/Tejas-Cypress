@@ -42,6 +42,7 @@ export const COLLECTION_MAPPING_CONTENT = {
       ['collectionId', '', '', 'optional', ''],
       ['referenceId', '', '', 'optional', ''],
       ['type', '', '', 'optional', ''],
+      ['scope', '', '', 'optional', ''],
     ]),
   ],
 };

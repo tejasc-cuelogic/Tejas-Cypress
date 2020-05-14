@@ -130,7 +130,6 @@ class CollectionsStore extends DataModelStore {
     }
   }
 
-
   getPublicCollection = slug => new Promise((resolve, reject) => {
     this.setFieldValue('collectionMappingsData', null);
     this.executeQuery({
@@ -683,17 +682,14 @@ class CollectionsStore extends DataModelStore {
         this.setMediaAttribute(formName, 'value', url[url.length - 1], name, index, arrayName);
         this.setMediaAttribute(formName, 'preSignedUrl', res, name, index, arrayName);
         this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
-        const { collectionId, referenceId, image, type } = this.COLLECTION_MAPPING_CONTENT_FRM.fields.mappingContent[index];
-        const params = {
-          collectionId: collectionId.value,
-          referenceId: referenceId.value,
-          image: {
-            url: image.preSignedUrl,
-          },
-          type: type.value,
-          scope: 'PUBLIC',
-        };
-        await this.collectionMappingMutation('adminCollectionMappingUpsert', params);
+        if (formName === 'COLLECTION_MAPPING_CONTENT_FRM') {
+          const imageObj = Validator.evaluateFormData(this[formName].fields);
+          delete imageObj.mappingContent[index].image.isPublic;
+          const params = {
+            ...imageObj.mappingContent[index],
+          };
+          await this.collectionMappingMutation('adminCollectionMappingUpsert', params);
+        }
       })
       .catch((err) => {
         this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);

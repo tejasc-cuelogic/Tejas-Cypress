@@ -228,60 +228,68 @@ const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-la
 const SortableItem = SortableElement(({
   offering, handleAction, smartElement, removeMedia, fieldIndex,
 }) => (
+    <Table.Row className={(offering.scope === 'PUBLIC') ? '' : 'row-highlight'} collapsing>
+      <Table.Cell collapsing>
+        <DragHandle />
+        <b>
+          {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
+            ? offering.keyTerms.shorthandBusinessName : (
+              (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
+            ))}
+        </b>
+      </Table.Cell>
+      <Table.Cell>
+        {smartElement.ImageCropper('image', { style: { height: '125px' }, multiForm: [metaInfo.form, 'mappingContent', fieldIndex], uploadPath: `collections/${fieldIndex}`, removeMedia })}
+      </Table.Cell>
+      <Table.Cell collapsing>
+        <Button.Group>
+          {Object.keys(actions).map(action => (
+            <Button icon className="link-button">
+              <Icon className={`ns-${offering.scope === 'PUBLIC' ? actions[action].icon : actions[action].icon1}`} onClick={() => handleAction(actions[action].label, offering, offering.scope !== 'PUBLIC')} />
+            </Button>
+          ))}
+
+          <Button icon className="link-button">
+            <Icon className="ns-trash" onClick={() => handleAction('Delete', offering, !offering.scope)} />
+          </Button>
+        </Button.Group>
+      </Table.Cell>
+    </Table.Row>
+  ));
+const SortableList = SortableContainer(({ toggleVisible, allOfferingsList, handleAction, isReadOnly, smartElement, currentOfferingId, removeMedia, removeOne }) => (
+  <div className="tbody">
     <div className="row-wrap">
       <Form.Group className="mlr-0 plr-0 pt-0 pb-0">
-        <Table basic compact className="form-table bg-white">
-          <Table.Body>
+        <Table basic compact className="form-table bg-white striped">
+          <Table.Header>
             <Table.Row>
-              <Table.Cell collapsing>
-                <DragHandle />
-                <b>
-                  {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
-                    ? offering.keyTerms.shorthandBusinessName : (
-                      (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
-                    ))}
-                </b>
-              </Table.Cell>
-              <Table.Cell>
-                {smartElement.ImageCropper('image', { style: { height: '125px' }, multiForm: [metaInfo.form, 'mappingContent', fieldIndex], uploadPath: `collections/${fieldIndex}`, removeMedia })}
-              </Table.Cell>
-              <Table.Cell collapsing>
-                <Button.Group>
-                  {Object.keys(actions).map(action => (
-                    <Button icon className="link-button">
-                      <Icon className={`ns-${offering.scope === 'PUBLIC' ? actions[action].icon : actions[action].icon1}`} onClick={() => handleAction(actions[action].label, offering, offering.scope !== 'PUBLIC')} />
-                    </Button>
-                  ))}
-
-                  <Button icon className="link-button">
-                    <Icon className="ns-trash" onClick={() => handleAction('Delete', offering, !offering.scope)} />
-                  </Button>
-                </Button.Group>
-              </Table.Cell>
+              <Table.HeaderCell>Offering</Table.HeaderCell>
+              <Table.HeaderCell>Image</Table.HeaderCell>
+              <Table.HeaderCell textAlign="right">Action</Table.HeaderCell>
             </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {allOfferingsList.map((offering, index) => (
+
+              <SortableItem
+                // eslint-disable-next-line react/no-array-index-key
+                key={`item-${index}`}
+                offering={offering}
+                fieldIndex={index}
+                index={index}
+                isReadOnly={isReadOnly}
+                smartElement={smartElement}
+                currentOfferingId={currentOfferingId}
+                handleAction={handleAction}
+                removeMedia={removeMedia}
+                removeOne={removeOne}
+                toggleVisible={toggleVisible}
+              />
+            ))}
           </Table.Body>
         </Table>
       </Form.Group>
     </div>
-  ));
-const SortableList = SortableContainer(({ toggleVisible, allOfferingsList, handleAction, isReadOnly, smartElement, currentOfferingId, removeMedia, removeOne }) => (
-  <div className="tbody">
-    {allOfferingsList.map((offering, index) => (
-      <SortableItem
-        // eslint-disable-next-line react/no-array-index-key
-        key={`item-${index}`}
-        offering={offering}
-        fieldIndex={index}
-        index={index}
-        isReadOnly={isReadOnly}
-        smartElement={smartElement}
-        currentOfferingId={currentOfferingId}
-        handleAction={handleAction}
-        removeMedia={removeMedia}
-        removeOne={removeOne}
-        toggleVisible={toggleVisible}
-      />
-    ))}
   </div>
 ));
 
