@@ -208,6 +208,7 @@ class CollectionsStore extends DataModelStore {
           image: c.image,
           type: c.stage ? 'OFFERING' : 'INSIGHT',
           collectionId: c.collectionId,
+          scope: c.scope,
           referenceId: c.id,
         }))
       : [];
