@@ -115,6 +115,7 @@ query adminInsightArticlesListByFilter($categoryId: String, $articleStatus: Arti
     featuredImage
     tags
     articleStatus
+    visible
     minuteRead
     title
     author
