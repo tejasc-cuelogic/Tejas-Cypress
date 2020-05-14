@@ -129,7 +129,7 @@ export default class HtmlEditor extends React.Component {
     const { keyStart, readOnly, tag, noDivWrap } = this.props;
     if (readOnly) {
     const FroalaView = <FroalaEditorView tag={tag} model={this.props.content} />;
-    return noDivWrap ? FroalaView : <div className="parsed-data">{FroalaView}</div>;
+    return noDivWrap ? FroalaView : <div className="parsed-data overflow-wrap">{FroalaView}</div>;
     }
     return (
       <div>
