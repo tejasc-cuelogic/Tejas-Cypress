@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'semantic-ui-react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 
 @observer
-@inject('uiStore', 'userStore')
+@withRouter
 export default class InterstitialModal extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +35,8 @@ export default class InterstitialModal extends Component {
         <Modal
           basic
           open
+          closeIcon
+          onClose={() => this.props.handleModalclose()}
           size="large"
           centered={false}
           className="bg-white dimmer-visible multistep-modal"

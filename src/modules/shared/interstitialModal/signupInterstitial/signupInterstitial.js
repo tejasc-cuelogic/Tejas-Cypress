@@ -6,11 +6,16 @@ import AccountsStep from './AccountsStep';
 import OfferingsStep from './OfferingsStep';
 import InterstitialModal from '../InterstitialModal';
 @observer
-@inject('uiStore', 'userStore', 'accountStore', 'individualAccountStore')
+@inject('uiStore', 'individualAccountStore')
 @withRouter
 export default class SignupInterstitial extends Component {
   handleStepChange = (step) => {
     this.props.individualAccountStore.setStepToBeRendered(step);
+  }
+
+  handleModalclose = () => {
+    this.props.history.push('/dashboard/setup');
+    this.props.uiStore.clearErrors();
   }
 
   render() {
