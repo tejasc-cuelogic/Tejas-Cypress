@@ -16,7 +16,7 @@ const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-la
 const SortableItem = SortableElement(({ offer, currentForm, isReadOnly, fieldIndex, smartElement, removeOne, hideHighlight, mapIndex, formChangeForMultilevelArray }) => (
   <div className="row-wrap">
     <Form.Group className="mlr-0 plr-0 pt-0 pb-0">
-      <Table basic compact className="form-table">
+      <Table basic compact className="form-table doc-mapfile-table">
         <Table.Body>
           <Table.Row>
             {/* <Table.Cell collapsing>

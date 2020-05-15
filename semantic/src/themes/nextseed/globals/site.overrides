@@ -3723,3 +3723,15 @@ h3.ui.header.error-2{
 		right: 0;
 	}
 }
+.upload-docs-subsection{
+	.ui.card.fluid{
+		box-shadow: none !important;
+		border:none !important;
+		.row-wrap{
+			&:first-child{
+				border-color: #b5b8c5 !important;
+			}
+		}
+	}
+	
+}

@@ -182,6 +182,8 @@ export class OfferingCreationStore extends DataModelStore {
 
   @observable oldFormDetails = {}
 
+  @observable currTime = false;
+
   constructor() {
     super({ adminInvokeProcessorDriver });
   }
@@ -584,6 +586,7 @@ export class OfferingCreationStore extends DataModelStore {
         this.leadershipExperience[index2] = this[form];
       }
     }
+    this.currTime = +new Date();
   }
 
   @action
