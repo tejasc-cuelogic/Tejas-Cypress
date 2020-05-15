@@ -359,12 +359,6 @@ export class BankAccountStore {
     return !isEmpty(accountNumber) && !isEmpty(routingNumber);
   }
 
-  @computed get isChangeLinkBankParamsPresent() {
-    const { account_id } = this.newPlaidAccDetails;
-    const { accountNumber: manualAccountNumber } = Validator.ExtractValues(this.formLinkBankManually.fields);
-    return !isEmpty(account_id) || !isEmpty(manualAccountNumber);
-  }
-
   @action
   resetPlaidAccData = () => {
     this.plaidAccDetails = {};
