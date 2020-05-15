@@ -28,7 +28,6 @@ import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
 import UserManagement from './private/admin/userManagement';
 import DashboardCta from './shared/DashboardCta';
 import Collections from './public/collections/containers/Collections';
-import SignupInterstitial from './shared/interstitialModal/signupInterstitial/signupInterstitial';
 
 import {
   AdminAuthorization,
@@ -41,11 +40,6 @@ export const publicRoutes = [
   {
     path: '/',
     component: Home,
-    exact: true,
-  },
-  {
-    path: '/interstitial',
-    component: SignupInterstitial,
     exact: true,
   },
   {
