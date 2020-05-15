@@ -126,7 +126,7 @@ function Offerings(props) {
   const handlePublishOffering = async () => {
     const { collectionStore, uiStore } = props;
     const params = {
-      type: 'OFFERING',
+      type: 'INSIGHT',
       collectionId: collectionStore.collectionId,
       referenceId: uiStore.confirmBox.refId,
       scope: isPublic === 'PUBLIC' ? 'PUBLIC' : 'HIDDEN',
@@ -144,7 +144,7 @@ function Offerings(props) {
   const handleDeleteCollection = async () => {
     const { collectionStore, uiStore } = props;
     const params = {
-      type: 'OFFERING',
+      type: 'INSIGHT',
       collectionId: collectionStore.collectionId,
       referenceId: uiStore.confirmBox.refId,
     };

@@ -105,6 +105,13 @@ export const allOfferings = gql`
     }
   `;
 
+export const adminInsightArticlesListByFilter = gql`
+  query adminInsightArticlesListByFilter($categoryId: String, $articleStatus: ArticleStatusEnum, $title: String, $tags: [String], $author: String, $fromDate: String, $toDate: String){
+    adminInsightArticlesListByFilter(categoryId: $categoryId, articleStatus: $articleStatus, title: $title, tags: $tags, author: $author, fromDate: $fromDate, toDate: $toDate){
+      id
+      title
+    }
+  }`;
 
 export const adminSetOrderForCollection = gql`
   mutation adminSetOrderForCollection($collectionItemsList: [CollectionOrderInput]){
