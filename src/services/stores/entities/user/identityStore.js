@@ -452,7 +452,7 @@ export class IdentityStore {
     const phone = phoneNumber.value || get(user, 'phone.number');
     const { value: multiFactorMfaValue } = multiFactorAuthStore.MFA_MODE_TYPE_META.fields.mfaModeTypes;
     const emailAddress = authStore.CONFIRM_FRM.fields.email.value || get(user, 'email.address');
-    if (type.startsWith('EMAIL') || [mfaMethod.value, multiFactorMfaValue].includes('EMAIL')) {
+    if (type.startsWith('EMAIL') || [mfaMethod.value, multiFactorMfaValue, user.mfaMode].includes('EMAIL')) {
       to = emailAddress.toLowerCase();
       method = 'EMAIL';
     } else if (type === 'BANK_CHANGE') {
