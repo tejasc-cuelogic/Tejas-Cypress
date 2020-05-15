@@ -560,29 +560,6 @@ export class ManageOfferingStore extends DataModelStore {
     const mappingData = get(offer, `investNow.docuSign.doc[${index}]`);
     this[form][index] = Validator.setFormData(this[form][index], mappingData, ref, keepAtLeastOne);
   }
-
-  formChangeForMultilevelArray = (e, res, form, subForm, index, isArrayChange = false) => {
-    if (isArrayChange) {
-      this[form.parentForm][form.childForm] = Validator.onArrayFieldChange(
-        this[form.parentForm][form.childForm],
-        Validator.pullValues(e, res),
-        subForm,
-        index,
-      );
-    } else {
-      this[form.parentForm][form.childForm] = Validator.onChange(this[form.parentForm][form.childForm], Validator.pullValues(e, res));
-    }
-    // const dynamicFormFields = { ...this[form.parentForm][form.childForm].fields };
-    // const mappedArr = [];
-    // Object.keys(dynamicFormFields).forEach((key) => {
-    //   const validObj = pickBy(dynamicFormFields[key], identity);
-    //   const hasKey = has(validObj, 'defaultValuesMapping');
-    //   if (hasKey) {
-    //     const mappedOBj = { mappedKey: key, mappedVal: dynamicFormFields[key].defaultValuesMapping };
-    //     mappedArr.push(mappedOBj);
-    //   }
-    // });
-  };
 }
 
 decorate(ManageOfferingStore, {
@@ -612,7 +589,6 @@ decorate(ManageOfferingStore, {
   DOCUMENT_MAPPING_FRM: observable,
   DOCUMENT_UPLOAD_MAPPING_FRM: observable,
   prepareDocumentMappingForm: action,
-  formChangeForMultilevelArray: action,
   DOCUMENT_MAPPING_OPTIONS: observable,
   setMappingFormData: action,
 });

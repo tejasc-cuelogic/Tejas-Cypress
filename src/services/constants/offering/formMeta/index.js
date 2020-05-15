@@ -69,5 +69,12 @@ export const DOCUMENT_MAPPING = {
       options: [],
       asField: true,
     },
+    customValue: {
+      label: 'Custom Value',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: '',
+    },
   }],
 };

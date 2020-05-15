@@ -205,6 +205,30 @@ export default class DataModelStore {
     this.currTime = +new Date();
   };
 
+  formChangeForMultilevelArray = (e, res, form, subForm, index, isArrayChange = false) => {
+    if (isArrayChange) {
+      this[form.parentForm][form.childForm] = FormValidator.onArrayFieldChange(
+        this[form.parentForm][form.childForm],
+        FormValidator.pullValues(e, res),
+        subForm,
+        index,
+      );
+    } else {
+      this[form.parentForm][form.childForm] = FormValidator.onChange(this[form.parentForm][form.childForm], FormValidator.pullValues(e, res));
+    }
+    this.currTime = +new Date();
+    // const dynamicFormFields = { ...this[form.parentForm][form.childForm].fields };
+    // const mappedArr = [];
+    // Object.keys(dynamicFormFields).forEach((key) => {
+    //   const validObj = pickBy(dynamicFormFields[key], identity);
+    //   const hasKey = has(validObj, 'defaultValuesMapping');
+    //   if (hasKey) {
+    //     const mappedOBj = { mappedKey: key, mappedVal: dynamicFormFields[key].defaultValuesMapping };
+    //     mappedArr.push(mappedOBj);
+    //   }
+    // });
+  };
+
   passwordChange = (e, result, form) => {
     FormValidator.onChange(this[form], FormValidator.pullValuesForPassword(e, result));
     if (e.score !== undefined) {
@@ -529,4 +553,5 @@ export const decorateDefault = {
   resetLoader: action,
   addMoreForNlevelForm: action,
   removeOneForNlevelForm: action,
+  formChangeForMultilevelArray: action,
 };

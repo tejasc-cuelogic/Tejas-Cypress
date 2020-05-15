@@ -16,7 +16,7 @@ const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-la
 const SortableItem = SortableElement(({ offer, currentForm, isReadOnly, fieldIndex, smartElement, removeOne, hideHighlight, mapIndex, formChangeForMultilevelArray }) => (
   <div className="row-wrap">
     <Form.Group className="mlr-0 plr-0 pt-0 pb-0">
-      <Table basic compact className="form-table doc-mapfile-table">
+      <Table basic compact className="form-table">
         <Table.Body>
           <Table.Row>
             {/* <Table.Cell collapsing>
@@ -37,12 +37,16 @@ const SortableItem = SortableElement(({ offer, currentForm, isReadOnly, fieldInd
                 changed: (e, result) => formChangeForMultilevelArray(e, result, { parentForm: metaInfo.form, childForm: mapIndex }, 'mapping', fieldIndex, true),
               })}
             </Table.Cell>
-            {/* {DOCUMENT_MAPPING_FRM.fields.mapping[fieldIndex].keyType.value === 'custom' && (
+            {currentForm.fields.mapping[fieldIndex].value.value === 'CUSTOM' && (
               <Table.Cell>
-                {smartElement.Input('keyValue', { label: 'Custom Value', displayMode: isReadOnly, multiForm: [metaInfo.form, 'mapping', fieldIndex] })}
+                {smartElement.Input('customValue', {
+                  displayMode: isReadOnly,
+                  fielddata: currentForm.fields.mapping[fieldIndex].customValue,
+                  changed: (e, result) => formChangeForMultilevelArray(e, result, { parentForm: metaInfo.form, childForm: mapIndex }, 'mapping', fieldIndex, true),
+                })}
               </Table.Cell>
             )}
-            {DOCUMENT_MAPPING_FRM.fields.mapping[fieldIndex].keyType.value === 'mapped' && (
+            {/*{DOCUMENT_MAPPING_FRM.fields.mapping[fieldIndex].keyType.value === 'mapped' && (
               <Table.Cell>
                 {smartElement.FormSelect('keyValue', { label: 'Key List', displayMode: isReadOnly, multiForm: [metaInfo.form, 'mapping', fieldIndex] })}
               </Table.Cell>
