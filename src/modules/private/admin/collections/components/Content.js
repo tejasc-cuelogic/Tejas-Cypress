@@ -74,7 +74,7 @@ export default class Content extends React.Component {
           <Grid.Column widescreen={4} computer={4} tablet={3} mobile={16}>
             <div className="sticky-sidebar">
               <DraggableMenu secondary vertical match={match} onSortEnd={this.onSortEnd} navItems={navItems} />
-              {COLLECTION_CONTENT_FRM.fields.content.length < 10
+              {COLLECTION_CONTENT_FRM.fields.content.length < 15
                 && <Button size="small" color="blue" className="link-button mt-20" onClick={this.addMore}>+ Add another content block</Button>
               }
             </div>
