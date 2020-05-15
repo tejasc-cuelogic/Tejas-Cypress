@@ -11,7 +11,7 @@ import DocumentMapping from './documentMapping';
 let uploadFileArr = [];
 let removedArr = [];
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
-const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length, showLockActivity, isBusinessApplication, docValidationArr }) => {
+const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length, showLockActivity, isBusinessApplication, docValidationArr, UPLOAD_DATA_FRM, radioButtonChangeAction }) => {
   return (
     <>
       <div className="row-wrap">
@@ -57,7 +57,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
             default
             name={`mappingRequired[${docIndx}]`}
             eleName="mappingRequired"
-            changed={(e, result) => formArrayChange(e, result, formName, 'documents', docIndx)}
+            changed={(e, result) => radioButtonChangeAction(e, result, formName, docIndx)}
           />
         </div>
         <div className="action">
@@ -71,24 +71,28 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
           </Button>
         </div>
       </div>
-      <div>
-        <DocumentMapping
-          isReadOnlyFlag={false}
-          isSaveOnly
-          header="Document Mapping"
-          uploadFormKey="mapping"
-          mapIndex={docIndx}
-          mappingData={document.mapping}
-        />
-      </div>
+      {UPLOAD_DATA_FRM.fields.documents[docIndx].mappingRequired.value && UPLOAD_DATA_FRM.fields.documents[docIndx].mappingRequired.value !== ''
+        && (
+          <div>
+            <DocumentMapping
+              isReadOnlyFlag={false}
+              isSaveOnly
+              header="Document Mapping"
+              uploadFormKey="mapping"
+              mapIndex={docIndx}
+              mappingData={document.mapping}
+            />
+          </div>
+        )
+      }
     </>
   );
 });
 
-const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName, showLockActivity, isBusinessApplication, docValidationArr }) => {
+const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName, showLockActivity, isBusinessApplication, docValidationArr, UPLOAD_DATA_FRM, radioButtonChangeAction }) => {
   return (
     <div>
-      {docs.map((doc, index) => (
+      {UPLOAD_DATA_FRM.fields.documents.map((doc, index) => (        
         <SortableItem
           offeringClose={offeringClose}
           closingBinder={closingBinder}
@@ -107,6 +111,8 @@ const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, is
           showLockActivity={showLockActivity}
           isBusinessApplication={isBusinessApplication}
           docValidationArr={docValidationArr}
+          UPLOAD_DATA_FRM={UPLOAD_DATA_FRM}
+          radioButtonChangeAction={radioButtonChangeAction}
         />
       ))}
     </div>
@@ -161,13 +167,7 @@ export default class DocumentUpload extends Component {
       fieldName: 'upload',
       uploadEnum: uploadEnum,
     };
-    remove(uploadFileArr, n => removedArr.includes(n.currentIndex));
-    // console.log('uploadFileArr passing==>', uploadFileArr);
-    // console.log('removedArr==>', removedArr);
-    // forEach(docs, function(value, key) {
-    //   console.log(key);
-    //   console.log(value);
-    // });
+    remove(uploadFileArr, n => removedArr.includes(n.currentIndex));    
     updateUploadDocs(uploadMeta, uploadFileArr);
     uploadFileArr = [];
     removedArr = [];
@@ -180,6 +180,12 @@ export default class DocumentUpload extends Component {
       this.props.offeringCreationStore.setUploadDocsOrder(arrayMove(docs, oldIndex, newIndex), metaInfo.form);
     }
   };
+
+  radioButtonChangeAction = (e, result, formName, docIndx) => {
+    // this.props.offeringCreationStore.setFieldValue('mappingRequired', result.name, docIndx );
+    this.props.offeringCreationStore.formArrayChange(e, result, formName, 'documents', docIndx);
+  };
+
   render() {
     const {
       match,
@@ -208,6 +214,7 @@ export default class DocumentUpload extends Component {
       confirmModal,
       confirmModalName,
       removeData,
+      UPLOAD_DATA_FRM,
     } = this.props.offeringCreationStore;
     const formName = metaInfo.form;
     const docs = [...(this.props[metaInfo.store][metaInfo.form].fields.documents)];
@@ -249,6 +256,8 @@ export default class DocumentUpload extends Component {
               showLockActivity={false}
               isBusinessApplication={true}
               docValidationArr={docValidationArr}
+              UPLOAD_DATA_FRM={UPLOAD_DATA_FRM}
+              radioButtonChangeAction={this.radioButtonChangeAction}
             />
           </div>
           <Divider hidden />
