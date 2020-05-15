@@ -7,17 +7,16 @@ import omitDeep from 'omit-deep';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING_DROPDOWN, COLLECTION_MAPPING_CONTENT, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META, COLLECTION_MISC } from '../../../constants/admin/collection';
-import { adminCollectionUpsert, getCollections, getPublicCollections, allOfferings, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
+import { adminCollectionUpsert, getCollections, adminInsightArticlesListByFilter, getPublicCollections, allOfferings, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 import { uiStore, authStore } from '../../index';
-import articleStore from './articleStore';
 import { STAGES } from '../../../constants/admin/offerings';
 import { fileUpload } from '../../../actions';
 
 
 class CollectionsStore extends DataModelStore {
   constructor() {
-    super({ adminCollectionUpsert, getCollections, adminSetOrderForCollection, allOfferings, adminSetOrderForCollectionMapping, getPublicCollections, getPublicCollection, adminDeleteCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping });
+    super({ adminCollectionUpsert, getCollections, adminInsightArticlesListByFilter, adminSetOrderForCollection, allOfferings, adminSetOrderForCollectionMapping, getPublicCollections, getPublicCollection, adminDeleteCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping });
   }
 
   collectionApiHit = false;
@@ -205,13 +204,13 @@ class CollectionsStore extends DataModelStore {
       this[form] = Validator.setFormData(this[form], { meta: metaList }, ref, keepAtLeastOne);
     } else if (form === 'COLLECTION_MAPPING_CONTENT_FRM') {
       const mappingContentList = data ? data.map(c => ({
-          image: c.image,
-          type: c.stage ? 'OFFERING' : 'INSIGHT',
-          collectionId: c.collectionId,
-          scope: c.scope,
-          referenceId: c.referenceId,
-        }))
-      : [];
+        image: c.image,
+        type: c.stage ? 'OFFERING' : 'INSIGHT',
+        collectionId: c.collectionId,
+        scope: c.scope,
+        referenceId: c.referenceId,
+      }))
+        : [];
       this[form] = Validator.setFormData(this[form], { mappingContent: mappingContentList }, ref, keepAtLeastOne);
     } else {
       this[form] = Validator.setFormData(this[form], collection, ref, keepAtLeastOne);
@@ -255,11 +254,30 @@ class CollectionsStore extends DataModelStore {
           data = res.getOfferingList.filter(d => d.stage === stageValue);
         }
         this.setFieldValue('collectionMappingList',
-          data.map(c => ({ key: c.id, text: c.offeringSlug, value: c.id })));
+          data.map(c => (
+            { key: c.id, text: c.offeringSlug, value: c.id })));
       }
       return true;
     } catch {
-      Helper.toast('Something went wrong.', 'error');
+      return false;
+    }
+  }
+
+  requestAllArticlesForCollections = async () => {
+    try {
+      const res = await this.executeQuery({
+        query: 'adminInsightArticlesListByFilter',
+      });
+      if (res && res.adminInsightArticlesListByFilter) {
+        this.setFieldValue('collectionMappingList',
+          res.adminInsightArticlesListByFilter.map(c => (
+            {
+              key: c.id, text: c.title, value: c.id,
+            }
+          )).flat());
+      }
+      return true;
+    } catch {
       return false;
     }
   }
@@ -363,46 +381,8 @@ class CollectionsStore extends DataModelStore {
       this.collectionMappingWrapper(params)
         .then(action((res) => {
           if (get(res, 'getCollectionMapping')) {
-            let data = orderBy(get(res, 'getCollectionMapping'), ['order', 'asc']);
-            const { value: contentValue } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
-            const tempData = {};
-            if (params.type === 'OFFERING') {
-              data = {
-                LIVE: data.filter(d => d.offering.stage === 'LIVE').map((d) => {
-                  d.offering.collectionId = d.collectionId;
-                  d.offering.image = d.image;
-                  d.offering.order = d.order;
-                  d.offering.scope = d.scope;
-                  return d.offering;
-                }),
-                COMPLETE: data.filter(d => d.offering.stage !== 'LIVE').map((d) => {
-                  d.offering.collectionId = d.collectionId;
-                  d.offering.order = d.order;
-                  d.offering.image = d.image;
-                  d.offering.scope = d.scope;
-                  return d.offering;
-                }),
-              };
-              const stage = contentValue === 'ACTIVE_INVESTMENTS' ? 'LIVE' : 'COMPLETE';
-              this.getOfferings(stage);
-              this.setCollectionMetaList(data[stage], true);
-              this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data[stage]);
-              tempData[params.type] = data;
-            } else if (params.type === 'INSIGHT') {
-              tempData[params.type] = data.map((d) => {
-                d.insight.collectionId = d.collectionId;
-                d.insight.order = d.order;
-                d.insight.scope = d.scope;
-                return d.insight;
-              });
-              articleStore.requestAllArticlesForCollections();
-              this.setCollectionMetaList(tempData[params.type], true);
-              this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data);
-            } else {
-              tempData[params.type] = data;
-            }
             this.setFieldValue('collectionIndex', index);
-            this.collectionMapping = { ...tempData };
+            this.collectionMapping = { ...this.getMappedData(res, params, index) };
           }
         }))
         .catch(() => {
@@ -412,6 +392,44 @@ class CollectionsStore extends DataModelStore {
       this.setFieldValue('collectionIndex', index);
     }
   }
+
+  getMappedData = (res, params, index) => {
+    let data = orderBy(get(res, 'getCollectionMapping'), ['order', 'asc']);
+    const { value: contentValue } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
+    const tempData = {};
+    if (params.type === 'OFFERING') {
+      data = this.mapdataByField(data, 'offering');
+      data = {
+        LIVE: data.filter(d => d.stage === 'LIVE'),
+        COMPLETE: data.filter(d => d.stage !== 'LIVE'),
+      };
+      const stage = contentValue === 'ACTIVE_INVESTMENTS' ? 'LIVE' : 'COMPLETE';
+      this.getOfferings(stage);
+      this.setCollectionMetaList(data[stage], true);
+      this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data[stage]);
+      tempData[params.type] = data;
+    } else if (params.type === 'INSIGHT') {
+      tempData[params.type] = this.mapdataByField(data, 'insight');
+      this.requestAllArticlesForCollections();
+      this.setCollectionMetaList(tempData[params.type], true);
+      this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data);
+    } else {
+      tempData[params.type] = data;
+    }
+    return tempData;
+  }
+
+  mapdataByField = (data, type) => (
+    data.map((d) => {
+      d[type].collectionId = d.collectionId;
+      d[type].referenceId = d[type].id;
+      d[type].image = d.image;
+      d[type].order = d.order;
+      d[type].scope = d.scope;
+      return d[type];
+    })
+  )
+
 
   mapDataByContentType = data => data.map(c => ({ key: c.id, text: c.offeringSlug, value: c.id }))
 
