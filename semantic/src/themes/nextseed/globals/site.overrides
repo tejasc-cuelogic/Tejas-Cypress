@@ -3730,5 +3730,8 @@ h3.ui.header.error-2{
 			}
 		}
 	}
-	
+	+ .row-wrap{
+		border-color: #b5b8c5 !important;
+		padding-top: 15px !important;
+	}	
 }
