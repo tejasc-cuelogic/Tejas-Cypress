@@ -17,7 +17,7 @@ const actions = {
 
 const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  insight, handleAction, smartElement, removeMedia, fieldIndex,
+  insight, handleAction, smartElement, removeMedia, fieldIndex, collectionId,
 }) => (
     <Table.Row className={(insight.scope === 'PUBLIC') ? '' : 'row-highlight'} collapsing>
       <Table.Cell collapsing>
@@ -25,7 +25,7 @@ const SortableItem = SortableElement(({
         {insight.title}
       </Table.Cell>
       <Table.Cell>
-        {smartElement.ImageCropper('image', { style: { height: '125px' }, multiForm: [metaInfo.form, 'mappingContent', fieldIndex], uploadPath: `collections/${fieldIndex}`, removeMedia })}
+        {smartElement.ImageCropper('image', { style: { height: '125px' }, multiForm: [metaInfo.form, 'mappingContent', fieldIndex], uploadPath: `collections/${collectionId}`, removeMedia })}
       </Table.Cell>
       <Table.Cell collapsing>
         <Button.Group>
@@ -42,7 +42,7 @@ const SortableItem = SortableElement(({
       </Table.Cell>
     </Table.Row>
   ));
-const SortableList = SortableContainer(({ toggleVisible, allInsightsList, handleAction, isReadOnly, smartElement, removeMedia, removeOne }) => (
+const SortableList = SortableContainer(({ toggleVisible, collectionId, allInsightsList, handleAction, isReadOnly, smartElement, removeMedia, removeOne }) => (
   <div className="tbody">
     <div className="row-wrap">
       <Form.Group className="mlr-0 plr-0 pt-0 pb-0">
@@ -62,6 +62,7 @@ const SortableList = SortableContainer(({ toggleVisible, allInsightsList, handle
                 insight={insight}
                 fieldIndex={index}
                 index={index}
+                collectionId={collectionId}
                 isReadOnly={isReadOnly}
                 smartElement={smartElement}
                 handleAction={handleAction}
@@ -76,7 +77,7 @@ const SortableList = SortableContainer(({ toggleVisible, allInsightsList, handle
     </div>
   </div>
 ));
-const InsightsList = ({ toggleVisible, allInsightsList, handleAction, isReadOnly, onSortEnd, smartElement, removeMedia, removeOne }) => (
+const InsightsList = ({ toggleVisible, collectionId, allInsightsList, handleAction, isReadOnly, onSortEnd, smartElement, removeMedia, removeOne }) => (
   <div className="ui card fluid">
     <SortableList
       allInsightsList={allInsightsList}
@@ -89,6 +90,7 @@ const InsightsList = ({ toggleVisible, allInsightsList, handleAction, isReadOnly
       smartElement={smartElement}
       removeMedia={removeMedia}
       removeOne={removeOne}
+      collectionId={collectionId}
       toggleVisible={toggleVisible}
     />
   </div>
@@ -164,6 +166,7 @@ function Offerings(props) {
         smartElement={smartElement}
         handleAction={handleAction}
         onSortEnd={onSortEnd}
+        collectionId={props.collectionStore.collectionId}
       />
       <Confirm
         header="Confirm"

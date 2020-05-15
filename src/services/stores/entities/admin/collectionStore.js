@@ -255,11 +255,10 @@ class CollectionsStore extends DataModelStore {
         }
         this.setFieldValue('collectionMappingList',
           data.map(c => (
-            { key: c.id, text: c.offeringSlug, value: c.id }).flat()));
+            { key: c.id, text: c.offeringSlug, value: c.id })));
       }
       return true;
     } catch {
-      Helper.toast('Something went wrong.', 'error');
       return false;
     }
   }
@@ -279,7 +278,6 @@ class CollectionsStore extends DataModelStore {
       }
       return true;
     } catch {
-      Helper.toast('Something went wrong.', 'error');
       return false;
     }
   }
@@ -402,8 +400,8 @@ class CollectionsStore extends DataModelStore {
     if (params.type === 'OFFERING') {
       data = this.mapdataByField(data, 'offering');
       data = {
-        LIVE: data.filter(d => d.offering.stage === 'LIVE'),
-        COMPLETE: data.filter(d => d.offering.stage !== 'LIVE'),
+        LIVE: data.filter(d => d.stage === 'LIVE'),
+        COMPLETE: data.filter(d => d.stage !== 'LIVE'),
       };
       const stage = contentValue === 'ACTIVE_INVESTMENTS' ? 'LIVE' : 'COMPLETE';
       this.getOfferings(stage);
@@ -424,6 +422,7 @@ class CollectionsStore extends DataModelStore {
   mapdataByField = (data, type) => (
     data.map((d) => {
       d[type].collectionId = d.collectionId;
+      d[type].referenceId = d[type].id;
       d[type].image = d.image;
       d[type].order = d.order;
       d[type].scope = d.scope;
