@@ -328,8 +328,11 @@ export class ManageOfferingStore extends DataModelStore {
     const mappingForm = this.DOCUMENT_UPLOAD_MAPPING_FRM;
     const uploadDocumentArry = payloadData.doc;
     forEach(uploadDocumentArry, (value, index) => {
+      let mappedArray = [];
       const documentObj = value;
-      const mappedArray = Validator.evaluateFormData(mappingForm[index].fields).mapping || [];
+      if (value.mappingRequired) {
+        mappedArray = Validator.evaluateFormData(mappingForm[index].fields).mapping || [];
+      }
       documentObj.mapping = mappedArray;
     });
     // console.log(uploadDocumentArry);
@@ -337,6 +340,7 @@ export class ManageOfferingStore extends DataModelStore {
       template: 2,
       doc: cleanDeep(uploadDocumentArry),
     };
+    // console.log(payload);
     const result = await this.updateOffering({ keyName: 'investNow', offeringData: { docuSign: payload } });
     res(result);
   });
