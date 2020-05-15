@@ -71,7 +71,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
           </Button>
         </div>
       </div>
-      <div>
+      <div className="pl-30 upload-docs-subsection">
         <DocumentMapping
           isReadOnlyFlag={false}
           isSaveOnly
