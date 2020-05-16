@@ -4,8 +4,9 @@ import { get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
-import Offerings from './Offerings';
-import Insights from './Insights';
+// import Offerings from './Offerings';
+// import Insights from './Insights';
+import DraggableListing from './DraggableListing';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
 
 
@@ -25,13 +26,17 @@ class CollectionContent extends Component {
     showConfirm: false,
   }
 
-  componentDidMount() {
-    const { index } = this.props.match.params;
+  constructor(props) {
+    super(props);
+    const { params, url } = this.props.match;
+    const { index } = params;
     if (index) {
       const { COLLECTION_CONTENT_FRM } = this.props.collectionStore;
       const currIndex = parseInt(index, 10) - 1;
       const { value } = COLLECTION_CONTENT_FRM.fields.content[currIndex].contentType;
       this.props.collectionStore.getCollectionMapping(value, currIndex);
+    } else {
+      this.props.history.push(`${url}/1`);
     }
   }
 
@@ -55,7 +60,9 @@ class CollectionContent extends Component {
   }
 
   handleDeleteAction = () => {
-    this.props.collectionStore.removeOne('COLLECTION_CONTENT_FRM', 'content', this.props.index);
+    const { index } = this.props.match.params;
+    const currIndex = parseInt(index, 10) - 1;
+    this.props.collectionStore.removeOne('COLLECTION_CONTENT_FRM', 'content', currIndex);
     this.handleFormSubmit(true);
     this.props.collectionStore.setFieldValue('collectionIndex', null);
     this.props.history.push(`${this.props.refLink}/1`);
@@ -107,14 +114,14 @@ class CollectionContent extends Component {
             && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
               && (
                 <>
-                  <Offerings offeringsList={collectionMapping.OFFERING[key]} isLoading={loadingArray.includes('getCollectionMapping')} />
+                  <DraggableListing allRecords={collectionMapping.OFFERING[key]} isOffering isLoading={loadingArray.includes('getCollectionMapping')} />
                 </>
               ))))}
 
           {(contentTypeValue === 'INSIGHTS' && collectionMapping.INSIGHT && collectionMapping.INSIGHT.length > 0
             && (
               <>
-                <Insights insightsList={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
+                <DraggableListing allRecords={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
               </>
             ))
           }
