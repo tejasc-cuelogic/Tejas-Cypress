@@ -34,6 +34,7 @@ function CollectionDetails(props) {
 
   const handleCloseModal = () => {
     props.collectionStore.setFieldValue('initLoad', []);
+    props.collectionStore.setFieldValue('collectionIndex', null);
     history.push(props.refLink);
   };
 
