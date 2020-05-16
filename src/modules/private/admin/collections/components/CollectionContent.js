@@ -4,8 +4,7 @@ import { get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
-import Offerings from './Offerings';
-import Insights from './Insights';
+import DraggableListing from './DraggableListing';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
 
 
@@ -27,12 +26,15 @@ class CollectionContent extends Component {
 
   constructor(props) {
     super(props);
-    const { index } = this.props.match.params;
+    const { params, url } = this.props.match;
+    const { index } = params;
     if (index) {
       const { COLLECTION_CONTENT_FRM } = this.props.collectionStore;
       const currIndex = parseInt(index, 10) - 1;
       const { value } = COLLECTION_CONTENT_FRM.fields.content[currIndex].contentType;
       this.props.collectionStore.getCollectionMapping(value, currIndex);
+    } else {
+      this.props.history.push(`${url}/1`);
     }
   }
 
@@ -56,9 +58,12 @@ class CollectionContent extends Component {
   }
 
   handleDeleteAction = () => {
-    this.props.collectionStore.removeOne('COLLECTION_CONTENT_FRM', 'content', this.props.index);
+    const { index } = this.props.match.params;
+    const currIndex = parseInt(index, 10) - 1;
+    this.props.collectionStore.removeOne('COLLECTION_CONTENT_FRM', 'content', currIndex);
     this.handleFormSubmit(true);
-    this.props.history.push(this.props.refLink);
+    this.props.collectionStore.setFieldValue('collectionIndex', null);
+    this.props.history.push(`${this.props.refLink}/1`);
   }
 
   render() {
@@ -75,12 +80,12 @@ class CollectionContent extends Component {
               ? <Link to="/" onClick={(e) => { e.preventDefault(); this.updateState(true); }}><Icon className="ns-pencil" />Edit</Link>
               : <Link to="/" className="text-link mr-10" onClick={(e) => { e.preventDefault(); this.updateState(false); }}>Cancel</Link>
             }
-            {/* {COLLECTION_CONTENT_FRM.fields.content.length > 1 && <Link to="/" className="ml-10 negative-text" disabled onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>} */}
+            {COLLECTION_CONTENT_FRM.fields.content.length > 1 && <Link to="/" className="ml-10 negative-text" disabled onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>}
           </small>
           <Form.Group widths={2}>
             {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
-            {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
+            {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: true })}
             {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
           </Form.Group>
           {['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
@@ -107,14 +112,14 @@ class CollectionContent extends Component {
             && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
               && (
                 <>
-                  <Offerings offeringsList={collectionMapping.OFFERING[key]} isLoading={loadingArray.includes('getCollectionMapping')} />
+                  <DraggableListing allRecords={collectionMapping.OFFERING[key]} isOffering isLoading={loadingArray.includes('getCollectionMapping')} />
                 </>
               ))))}
 
           {(contentTypeValue === 'INSIGHTS' && collectionMapping.INSIGHT && collectionMapping.INSIGHT.length > 0
             && (
               <>
-                <Insights insightsList={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
+                <DraggableListing allRecords={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
               </>
             ))
           }
