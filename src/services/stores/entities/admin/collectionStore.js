@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { get, orderBy, isArray, pickBy, map } from 'lodash';
+import { get, orderBy, isArray, pickBy, map, countBy } from 'lodash';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator } from '../../../../helper';
@@ -609,7 +609,12 @@ class CollectionsStore extends DataModelStore {
   };
 
   reOrderHandle = (orderedForm, form, arrayName) => {
-    const content = toJS(orderedForm).map(d => ({ ...d }));
+    let content = [];
+    if (form === 'CARD_HEADER_SOCIAL_FRM') {
+      content = toJS(orderedForm).map(d => ({ ...d }));
+    } else {
+      content = toJS(orderedForm).map((d, index) => ({ ...d, order: { ...d.order, value: index + 1 } }));
+    }
     this.setFieldValue(form, content, `fields.${arrayName}`);
   }
 
@@ -716,6 +721,15 @@ class CollectionsStore extends DataModelStore {
       });
   };
 
+  filterContentType = (index) => {
+    const allContentValues = this.COLLECTION_CONTENT_FRM.fields.content.map(c => c.contentType.value);
+    const { options } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
+    const countContentType = countBy(allContentValues);
+    const filteredOptions = Object.keys(countContentType).filter(key => countContentType[key] >= 2 && !['CUSTOM', ''].includes(key));
+    const filterOpns = options.filter(c => !filteredOptions.includes(c.value));
+    return { options: filterOpns };
+  }
+
   // @computed get active() {
   //   const collectionList = this.orderedActiveList.slice();
   //   return collectionList.splice(0, this.activeToDisplay);
@@ -759,6 +773,7 @@ decorate(CollectionsStore, {
   setSelectedCollections: action,
   collectionLoading: observable,
   getCollection: action,
+  filterContentType: action,
   CARD_HEADER_META_FRM: observable,
   CARD_HEADER_SOCIAL_FRM: observable,
   reOrderHandle: action,
