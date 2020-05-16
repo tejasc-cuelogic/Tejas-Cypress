@@ -25,8 +25,7 @@ class CollectionContent extends Component {
     showConfirm: false,
   }
 
-  constructor(props) {
-    super(props);
+  componentDidMount() {
     const { index } = this.props.match.params;
     if (index) {
       const { COLLECTION_CONTENT_FRM } = this.props.collectionStore;
@@ -58,7 +57,8 @@ class CollectionContent extends Component {
   handleDeleteAction = () => {
     this.props.collectionStore.removeOne('COLLECTION_CONTENT_FRM', 'content', this.props.index);
     this.handleFormSubmit(true);
-    this.props.history.push(this.props.refLink);
+    this.props.collectionStore.setFieldValue('collectionIndex', null);
+    this.props.history.push(`${this.props.refLink}/1`);
   }
 
   render() {
@@ -75,12 +75,12 @@ class CollectionContent extends Component {
               ? <Link to="/" onClick={(e) => { e.preventDefault(); this.updateState(true); }}><Icon className="ns-pencil" />Edit</Link>
               : <Link to="/" className="text-link mr-10" onClick={(e) => { e.preventDefault(); this.updateState(false); }}>Cancel</Link>
             }
-            {/* {COLLECTION_CONTENT_FRM.fields.content.length > 1 && <Link to="/" className="ml-10 negative-text" disabled onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>} */}
+            {COLLECTION_CONTENT_FRM.fields.content.length > 1 && <Link to="/" className="ml-10 negative-text" disabled onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>}
           </small>
           <Form.Group widths={2}>
             {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
             {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
-            {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
+            {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: true })}
             {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
           </Form.Group>
           {['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)

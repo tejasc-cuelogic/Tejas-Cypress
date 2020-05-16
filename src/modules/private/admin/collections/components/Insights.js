@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { arrayMove, SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
@@ -96,7 +96,7 @@ const InsightsList = ({ toggleVisible, collectionId, allInsightsList, handleActi
   </div>
 );
 
-function Offerings(props) {
+function Insights(props) {
   const [loading, setLoading] = useState(false);
   const [isPublic, setisPublic] = useState(false);
 
@@ -105,6 +105,10 @@ function Offerings(props) {
   const removeMedia = (form, name) => {
     window.logger(form, name);
   };
+
+  useEffect(() => {
+    props.collectionStore.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, props.insightsList);
+  }, []);
 
   const onSortEnd = async ({ oldIndex, newIndex }) => {
     if (oldIndex !== newIndex) {
@@ -116,12 +120,12 @@ function Offerings(props) {
     }
   };
 
-  const handleAction = (action, offering, isPublished = false) => {
+  const handleAction = (action, record, isPublished = false) => {
     if (action === 'Delete') {
-      props.uiStore.setConfirmBox(action, offering.id);
+      props.uiStore.setConfirmBox(action, record.id);
     } else if (action === 'Publish') {
       setisPublic(isPublished === 'PUBLIC' ? 'PUBLIC' : 'HIDDEN');
-      props.uiStore.setConfirmBox(action, offering.id, isPublished);
+      props.uiStore.setConfirmBox(action, record.id, isPublished);
     }
   };
 
@@ -182,4 +186,4 @@ function Offerings(props) {
   );
 }
 
-export default inject('collectionStore', 'uiStore')(withRouter(formHOC(observer(Offerings), metaInfo)));
+export default inject('collectionStore', 'uiStore')(withRouter(formHOC(observer(Insights), metaInfo)));

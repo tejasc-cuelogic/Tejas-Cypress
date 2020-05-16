@@ -609,7 +609,12 @@ class CollectionsStore extends DataModelStore {
   };
 
   reOrderHandle = (orderedForm, form, arrayName) => {
-    const content = toJS(orderedForm).map(d => ({ ...d }));
+    let content = [];
+    if (form === 'CARD_HEADER_SOCIAL_FRM') {
+      content = toJS(orderedForm).map(d => ({ ...d }));
+    } else {
+      content = toJS(orderedForm).map((d, index) => ({ ...d, order: { ...d.order, value: index + 1 } }));
+    }
     this.setFieldValue(form, content, `fields.${arrayName}`);
   }
 
