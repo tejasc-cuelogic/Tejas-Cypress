@@ -4,8 +4,6 @@ import { get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
-// import Offerings from './Offerings';
-// import Insights from './Insights';
 import DraggableListing from './DraggableListing';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
 
