@@ -57,7 +57,7 @@ function CollectionDetails(props) {
             <Header as="h3">
               {collection.name}
               <Header.Subheader className="mt-10">
-                <Link target="_blank" to={`/collections-testing/${collection.slug}`}>
+                <Link target="_blank" to={`/collections/${collection.slug}`}>
                   <Icon className="ns-view" /><b>Preview collection page</b>
                 </Link>
               </Header.Subheader>

@@ -109,7 +109,7 @@ export class NavItems extends Component {
     };
     const myNavItems = this.props.navItems.filter(n => (validateNav(n) && (n.headerMobile !== false && n.title === 'My Account' ? this.props.userStore.isInvestor : n.headerMobile !== false && n.noNav !== true)));
     // if (!getActiveCollectionLength) {
-    //   myNavItems = myNavItems.filter(n => n.to !== 'collections-testing');
+    //   myNavItems = myNavItems.filter(n => n.to !== 'collections');
     // }
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
