@@ -112,7 +112,7 @@ class CipHardFail extends React.Component {
                 <Button primary fluid={isMobile} content="Submit" disabled={!ID_VERIFICATION_DOCS_FRM.meta.isValid} />
               </div>
               <div className={isMobile && 'center-align'}>
-                <Link to="/dashboard/setup">I’ll finish this later</Link>
+                <Link to="/dashboard/setup/establish-profile/confirm">I’ll finish this later</Link>
               </div>
             </Form>
           </Grid.Column>

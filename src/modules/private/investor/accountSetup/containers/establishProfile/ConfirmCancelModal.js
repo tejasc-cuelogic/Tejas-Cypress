@@ -137,22 +137,22 @@ export default class ConfirmCancelModal extends React.Component {
             <p><Link to="/dashboard/setup" onClick={this.handleFinishLater}>Finish later</Link></p>
           </div> */}
           <Container className={`investor-signup-container ${responsiveVars.uptoTablet ? 'pl-10 pr-10 pt-55 pb-55 ' : 'pl-15 pr-15 pt-55 pb-55'}`}>
-            {interstitialSteps.map(step => (
+            {interstitialSteps.map(renderedStep => (
               <Grid>
               <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} className="">
-                <Header as="h3">{step.header}</Header>
-                <p>{step.content}</p>
-                {step.step === 3
+                <Header as="h3">{renderedStep.header}</Header>
+                <p>{renderedStep.content}</p>
+                {renderedStep.step === 3
                   ? <Button primary green className="mt-30" as={Link} to="/offerings">Explore All Offerings</Button>
                   : <Button primary green className="mt-30" onClick={this.handleNextStep}>Next</Button>
                 }
               </Grid.Column>
-              {step === 1 || step === 2
-              ? <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} className="">{step.image}</Grid.Column>
+              {renderedStep.step === 1 || renderedStep.step === 2
+              ? <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} className="">{renderedStep.image}</Grid.Column>
               : (
                 <>
                   <OfferingsCards offerings={offerings} isMobile={isMobile} />
-                  {step.note}
+                  {renderedStep.note}
                 </>
                 )}
             </Grid>

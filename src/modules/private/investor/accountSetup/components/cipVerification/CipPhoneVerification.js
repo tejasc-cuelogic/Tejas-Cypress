@@ -61,7 +61,7 @@ class CipPhoneVerification extends React.Component {
                 <Button primary fluid={isMobile} content="Confirm" disabled={!ID_VERIFICATION_FRM.meta.isValid || isLoading} />
               </div>
               <div className={isMobile && 'center-align'}>
-                <Link to="/dashboard/setup" onClick={this.handleClose}>I’ll finish this later</Link>
+                <Link to="/dashboard/setup/establish-profile/confirm" onClick={this.handleClose}>I’ll finish this later</Link>
               </div>
               {errors
                 && (

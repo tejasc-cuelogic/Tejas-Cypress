@@ -72,7 +72,7 @@ class CipSoftFail extends React.Component {
                 <Button loading={isLoading} color="green" fluid={isMobile} disabled={!ID_VERIFICATION_QUESTIONS.meta.isValid || isLoading}>Verify my identity</Button>
               </div>
               <div className={isMobile && 'center-align'}>
-                <Link to="/dashboard/setup" onClick={() => cipUtility.closeModal()}>I’ll finish this later</Link>
+                <Link to="/dashboard/setup/establish-profile/confirm" onClick={() => cipUtility.closeModal()}>I’ll finish this later</Link>
               </div>
             </Form>
           </Grid.Column>
