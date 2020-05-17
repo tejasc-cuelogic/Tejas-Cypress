@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get, camelCase, orderBy, find } from 'lodash';
+import { get, camelCase, orderBy, find, filter } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import scrollIntoView from 'scroll-into-view';
 import { Responsive, Visibility, Container, Grid, Menu, Divider } from 'semantic-ui-react';
@@ -12,6 +12,7 @@ import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import HtmlEditor from '../../../shared/HtmlEditor';
 import CollectionMetaTags from '../components/CollectionMetaTags';
+import { UPLOADS_CONFIG } from '../../../../constants/aws';
 
 
 const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
@@ -73,7 +74,7 @@ class CollectionDetails extends Component {
     const navs = [];
     let content = get(collectionDetails, 'marketing.content') || [];
     if (get(content, '[0]')) {
-      content = orderBy(content, c => c.order, ['ASC']);
+      content = orderBy(filter(content, con => con.scope !== 'HIDDEN'), c => c.order, ['ASC']);
       content.forEach(c => navs.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true }));
     }
     if (navs && Array.isArray(navs)) {
@@ -107,7 +108,11 @@ class CollectionDetails extends Component {
 
   getOgDataFromSocial = (obj, type, att) => {
     const data = find(obj, o => o.type === type);
-    return get(data, att) || '';
+    let val = get(data, att) || '';
+    if (att === 'featuredImageUpload.url') {
+      val = (val.includes('https://') || val.includes('http://')) ? val : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(val)}`;
+    }
+    return val;
   };
 
 
@@ -137,7 +142,7 @@ class CollectionDetails extends Component {
     };
     const navItems = [];
     if (get(content, '[0]')) {
-      content = orderBy(content, c => c.order, ['ASC']);
+      content = orderBy(filter(content, con => con.scope !== 'HIDDEN'), c => c.order, ['ASC']);
       content.forEach((c, i) => validate(c) && navItems.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }
     if (navItems.length && this.state.firstHash === '') {
