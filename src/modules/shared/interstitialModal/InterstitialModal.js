@@ -27,7 +27,7 @@
 //   }
 
 //   render() {
-//     ;
+//     const currentStep = this.props.steps[this.state.compState];
 //     return (
 //       <>
 //         <Modal
