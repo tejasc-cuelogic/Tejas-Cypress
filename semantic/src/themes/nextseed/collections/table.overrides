@@ -473,11 +473,20 @@
         // }
     }
     &.doc-mapfile-table{
-        tr td{
-            width: 50%;
-        }
+        // tr td{
+        //     width: 50%;
+        // }
+        // .field>.selection.dropdown{
+        //     width: auto !important;
+        // }
+        // .ui.selection.dropdown>.text{
+        //     width: auto !important;
+        // }
+        // .ui.selection.dropdown .menu{
+        //     width: auto !important;
+        //     min-width: auto !important;
+        // }
     }
-
 }
 
 .compare-table {
