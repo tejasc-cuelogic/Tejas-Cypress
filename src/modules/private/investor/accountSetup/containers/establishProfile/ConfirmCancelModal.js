@@ -32,12 +32,9 @@ const OfferingsCards = ({ offerings, isMobile }) => (
             <NSImage path={offering.imageUrl} left />
             <Card.Content>
               <Header as="h5">{offering.title}</Header>
-              <Card.Meta>
-                {offering.meta1}
-              </Card.Meta>
-              <Card.Meta>
-                {offering.meta2}
-              </Card.Meta>
+              <Card.Description>
+                <HtmlEditor readOnly content={offering.meta1} />
+              </Card.Description>
             </Card.Content>
           </>
           )
@@ -46,17 +43,6 @@ const OfferingsCards = ({ offerings, isMobile }) => (
     ))}
   </Card.Group>
 );
-
-// const AccountTypes = ({ accountTypes }) => (
-//   <Grid columns={1}>
-//     {accountTypes.map(acc => (
-//       <Grid.Row>
-//         <h2>{acc.label}</h2>
-//         <p>{acc.labelDescription}</p>
-//       </Grid.Row>
-//     ))}
-//   </Grid>
-// );
 
 @inject('investorProfileStore', 'uiStore', 'individualAccountStore')
 @observer
@@ -86,20 +72,20 @@ export default class ConfirmCancelModal extends React.Component {
         stepToBeRendered: 1,
         header: 'Let’s have a look around your new account',
         content: <>Once you’ve made your first investment on NextSeed, this is where you’ll find information related to your investment portfolio — including payments, updates, returns and more.<br /><br />Also, check your Profile Settings to keep your investment limits and Accredited Investor status up to date.</>,
-        image: `${!isMobile ? 'interstitial/portfolio.png' : 'interstitial/portfolioMobile.png'}`,
+        image: `${!isMobile ? './interstitial/portfolio.png' : './interstitial/portfolioMobile.png'}`,
         button: 'Next',
         to: `${this.handleNextStep}`,
       }, {
         stepToBeRendered: 2,
         header: 'Flexible account options, rigid security',
         content: <>When you invest on NextSeed, you will do so with an FDIC-insured investment account set up with our partner bank, Goldstar Trust.<br /><br />After we verify your identity using bank-level security measures, you will be asked to create one of three types of accounts based on your preference.</>,
-        image: `${isMobile ? 'interstitial/accounts.png' : 'interstitial/accountsMobile.png'}`,
+        image: `${!isMobile ? './interstitial/accounts.png' : './interstitial/accountsMobile.png'}`,
         button: 'Next',
         to: `${this.handleNextStep}`,
       }, {
         stepToBeRendered: 3,
         header: 'Time to explore your investment opportunities!',
-        content: <>Now that you know the basics of your NextSeed account, you can go ahead and <a href={this.props.match.url}>complete your account setup</a>, or start exploring our current investment opportunities.</>,
+        content: <>Now that you know the basics of your NextSeed account, you can go ahead and <a href={this.props.match.refLink}>complete your account setup</a>, or start exploring our current investment opportunities.</>,
         note: <><strong>Pro tip:</strong> Be sure to click the ‘Follow’ button on any campaign that interests you in order to receive regular campaign updates and alerts so that you never miss a chance to invest.</>,
         button: 'Explore All Offerings',
         to: '/offerings',
@@ -113,7 +99,7 @@ export default class ConfirmCancelModal extends React.Component {
         meta1: 'Raised $1,000,000 from 539 investors',
         meta2: 'Funded in May 2018',
         offeredBy: 'Offered by NextSeed Securities LLC',
-        imageUrl: `${isMobile ? 'interstitial/bravery.png' : 'interstitial/braveryMobile.png'}`,
+        imageUrl: `${!isMobile ? 'interstitial/bravery.png' : 'interstitial/braveryMobile.png'}`,
       }, {
         title: 'Citizen Pilates',
         location: 'Houston, TX',
@@ -121,7 +107,7 @@ export default class ConfirmCancelModal extends React.Component {
         meta1: 'Raised $100,000 from 74 investors',
         meta2: 'Funded in October 2016',
         offeredBy: 'Offered by NextSeed Securities LLC',
-        imageUrl: `${isMobile ? 'interstitial/citizens.png' : 'interstitial/citizensMobile.png'}`,
+        imageUrl: `${!isMobile ? 'interstitial/citizens.png' : 'interstitial/citizensMobile.png'}`,
       }, {
         title: 'Buffbrew Taproom',
         location: 'Houston, TX',
@@ -129,7 +115,7 @@ export default class ConfirmCancelModal extends React.Component {
         meta1: 'Raised $1,000,000 from 583 investors',
         meta2: 'Funded in March 2018',
         offeredBy: 'Offered by NextSeed Securities LLC',
-        imageUrl: `${isMobile ? 'interstitial/buffbrew.png' : 'interstitial/buffbrewMobile.png'}`,
+        imageUrl: `${!isMobile ? 'interstitial/buffbrew.png' : 'interstitial/buffbrewMobile.png'}`,
       },
     ];
     const currentStep = interstitialSteps[this.state.compState];
