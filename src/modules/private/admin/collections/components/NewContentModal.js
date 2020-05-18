@@ -13,6 +13,13 @@ const metaInfo = {
 @withRouter
 @observer
 class NewContentModal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      options: this.props.collectionStore.filterContentType(this.props.index),
+    };
+  }
+
   handleFormSubmit = async () => {
     const params = {
       keyName: false,
@@ -22,6 +29,7 @@ class NewContentModal extends React.Component {
     await upsertCollection(params);
     reOrderHandle(COLLECTION_CONTENT_FRM.fields.content);
     setFieldValue('newContentModal', false);
+    this.props.collectionStore.setFieldValue('collectionIndex', null);
     this.props.history.push(`${this.props.refLink}/${this.props.index + 1}`);
   }
 
@@ -40,7 +48,7 @@ class NewContentModal extends React.Component {
               <Form.Group widths={2}>
                 {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index] })}
                 {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index] })}
-                {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index] })}
+                {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], fielddata: { ...COLLECTION_CONTENT_FRM.fields.content[index].contentType, ...this.state.options } })}
               </Form.Group>
               <Divider hidden />
             </Form>
