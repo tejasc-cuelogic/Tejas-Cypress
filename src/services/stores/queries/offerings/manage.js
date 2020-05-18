@@ -349,6 +349,9 @@ export const getOfferingDetails = gql`
             required
           }
         }
+        config {
+          investmentType
+        }
         docuSign {
           template
           doc {

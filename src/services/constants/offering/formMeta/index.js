@@ -78,3 +78,11 @@ export const DOCUMENT_MAPPING = {
     },
   }],
 };
+
+export const INVEST_NOW_CONFIG_META = FormHelper.generateMeta([
+  ['investmentType', 'Investment Type', 'DOLLARS', 'required', 'Investment Type', { props: {
+    values: [{ label: 'DOLLARS', value: 'DOLLARS' }, { label: 'UNITS', value: 'UNITS' }],
+    defaultValue: 'DOLLARS',
+  },
+  asIn: true }],
+]);

@@ -9,7 +9,7 @@ import DataModelStore, * as dataModelStore from '../dataModelStore';
 import {
   TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC, SUB_HEADER_BASIC, GALLERY,
 } from '../../../../constants/offering/formMeta/offering';
-import { INVEST_NOW_TOC, INVEST_NOW_PAGE, DOCUMENT_MAPPING } from '../../../../constants/offering/formMeta';
+import { INVEST_NOW_TOC, INVEST_NOW_PAGE, DOCUMENT_MAPPING, INVEST_NOW_CONFIG_META } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore, userDetailsStore, campaignStore } from '../../../index';
@@ -50,6 +50,8 @@ export class ManageOfferingStore extends DataModelStore {
   initLoad = [];
 
   DOCUMENT_MAPPING_OPTIONS = [];
+
+  INVEST_NOW_CONFIG_FRM = Validator.prepareFormObject(INVEST_NOW_CONFIG_META);
 
   getInvestNowTocDefaults = (isPublic = false) => {
     const { offer } = offeringsStore;
@@ -466,6 +468,7 @@ export class ManageOfferingStore extends DataModelStore {
       OFFERING_MISC_FRM: { isMultiForm: false },
       INVEST_NOW_TOC_FRM: { isMultiForm: true },
       GALLERY_FRM: { isMultiForm: true },
+      INVEST_NOW_CONFIG_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -564,6 +567,11 @@ export class ManageOfferingStore extends DataModelStore {
     const mappingData = get(offer, `investNow.docuSign.doc[${index}]`);
     this[form][index] = Validator.setFormData(this[form][index], mappingData, ref, keepAtLeastOne);
   }
+
+  updateConfig = () => {
+    const configDetails = Validator.evaluateFormData(this.INVEST_NOW_CONFIG_FRM.fields);
+    this.updateOffering({ keyName: 'investNow', offeringData: { config: configDetails } });
+  }
 }
 
 decorate(ManageOfferingStore, {
@@ -595,6 +603,7 @@ decorate(ManageOfferingStore, {
   prepareDocumentMappingForm: action,
   DOCUMENT_MAPPING_OPTIONS: observable,
   setMappingFormData: action,
+  INVEST_NOW_CONFIG_FRM: observable,
 });
 
 export default new ManageOfferingStore();
