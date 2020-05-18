@@ -15,11 +15,11 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
   return (
     <>
       <div className="row-wrap">
-        <div className="width-70">
+        {/* <div className="width-70">
           {!offeringClose
             && <DragHandle />
           }
-        </div>
+        </div> */}
         <div className="balance-half">
           <FormInput
             displayMode={isReadonly}
@@ -71,20 +71,16 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
           </Button>
         </div>
       </div>
-      {UPLOAD_DATA_FRM.fields.documents[docIndx].mappingRequired.value && UPLOAD_DATA_FRM.fields.documents[docIndx].mappingRequired.value !== ''
-        && (
-          <div className="pl-30 upload-docs-subsection">
-            <DocumentMapping
-              isReadOnlyFlag={false}
-              isSaveOnly
-              header="Document Mapping"
-              uploadFormKey="mapping"
-              mapIndex={docIndx}
-              mappingData={document.mapping}
-            />
-          </div>
-        )
-      }
+      <div className="pl-30 upload-docs-subsection">
+        <DocumentMapping
+          isReadOnlyFlag={false}
+          isSaveOnly
+          header="Document Mapping"
+          uploadFormKey="mapping"
+          mapIndex={docIndx}
+          mappingData={document.mapping}
+        />
+      </div>
     </>
   );
 });
@@ -111,7 +107,7 @@ const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, is
           showLockActivity={showLockActivity}
           isBusinessApplication={isBusinessApplication}
           docValidationArr={docValidationArr}
-          UPLOAD_DATA_FRM={UPLOAD_DATA_FRM}          
+          UPLOAD_DATA_FRM={UPLOAD_DATA_FRM}
         />
       ))}
     </div>
@@ -178,7 +174,7 @@ export default class DocumentUpload extends Component {
       const docs = [...this.props[metaInfo.store][metaInfo.form].fields.documents];
       this.props.offeringCreationStore.setUploadDocsOrder(arrayMove(docs, oldIndex, newIndex), metaInfo.form);
     }
-  }; 
+  };
 
   render() {
     const {
@@ -211,7 +207,6 @@ export default class DocumentUpload extends Component {
       UPLOAD_DATA_FRM,
       currTime,
     } = this.props.offeringCreationStore;
-    console.log(UPLOAD_DATA_FRM.meta.isValid);
     const formName = metaInfo.form;
     const docs = [...(this.props[metaInfo.store][metaInfo.form].fields.documents)];
     return (
@@ -252,7 +247,7 @@ export default class DocumentUpload extends Component {
               showLockActivity={false}
               isBusinessApplication={true}
               docValidationArr={docValidationArr}
-              UPLOAD_DATA_FRM={UPLOAD_DATA_FRM}              
+              UPLOAD_DATA_FRM={UPLOAD_DATA_FRM}
             />
           </div>
           <Divider hidden />

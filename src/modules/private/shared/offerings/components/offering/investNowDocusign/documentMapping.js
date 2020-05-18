@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { Form, Header, Button, Icon, Table } from 'semantic-ui-react';
@@ -121,7 +121,7 @@ const MetaList = ({ hideHighlight, offer, currentForm, isReadOnly, onSortEnd, sm
 class DocumentMapping extends Component {
   constructor(props) {
     super(props);
-    const { mapIndex, mappingData } = this.props;
+    const { mapIndex } = this.props;
     this.props.manageOfferingStore.prepareDocumentMappingForm('DOCUMENT_UPLOAD_MAPPING_FRM', mapIndex);
     this.props.manageOfferingStore.setMappingFormData('DOCUMENT_UPLOAD_MAPPING_FRM', null, mapIndex);
   }
@@ -137,36 +137,41 @@ class DocumentMapping extends Component {
     const {
       hideHighlight,
       manageOfferingStore,
+      offeringCreationStore,
       smartElement,
       title,
       mapIndex
     } = this.props;
     const { removeOneForNlevelForm, addMoreForNlevelForm, DOCUMENT_UPLOAD_MAPPING_FRM, formChangeForMultilevelArray } = manageOfferingStore;
+    const { UPLOAD_DATA_FRM } = offeringCreationStore;
     // const isReadonly = false;
     // const formName = metaInfo.form;  
     const docs = [...(this.props[metaInfo.store][metaInfo.form][mapIndex].fields.mapping)];
-    const currentForm = DOCUMENT_UPLOAD_MAPPING_FRM[mapIndex]
+    const currentForm = DOCUMENT_UPLOAD_MAPPING_FRM[mapIndex];
+    const isMappingShow = !!(UPLOAD_DATA_FRM.fields.documents[mapIndex].mappingRequired.value && UPLOAD_DATA_FRM.fields.documents[mapIndex].mappingRequired.value !== '')
     return (
-      <>
-        <Header as="h4">
-          {title || 'Mapping Fields'}
-          <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMoreForNlevelForm(metaInfo.form, mapIndex, 'mapping')}>+ Add another field</Button>
-        </Header>
-        <MetaList
-          smartElement={smartElement}
-          isReadOnly={false}
-          offer={docs}
-          hideHighlight={hideHighlight}
-          removeOne={removeOneForNlevelForm}
-          currentForm={currentForm}
-          onSortEnd={this.onSortEnd}
-          mapIndex={mapIndex}
-          formChangeForMultilevelArray={formChangeForMultilevelArray}
-        />
-      </>
+      !isMappingShow
+        ? null
+        :
+        <>
+          <Header as="h4">
+            {title || 'Mapping Fields'}
+            <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMoreForNlevelForm(metaInfo.form, mapIndex, 'mapping')}>+ Add another field</Button>
+          </Header>
+          <MetaList
+            smartElement={smartElement}
+            isReadOnly={false}
+            offer={docs}
+            hideHighlight={hideHighlight}
+            removeOne={removeOneForNlevelForm}
+            currentForm={currentForm}
+            onSortEnd={this.onSortEnd}
+            mapIndex={mapIndex}
+            formChangeForMultilevelArray={formChangeForMultilevelArray}
+          />
+        </>
     );
   };
-
 }
 
-export default (withRouter(formHOC(observer(DocumentMapping), metaInfo)));
+export default inject('offeringCreationStore')(withRouter(formHOC(observer(DocumentMapping), metaInfo)));
