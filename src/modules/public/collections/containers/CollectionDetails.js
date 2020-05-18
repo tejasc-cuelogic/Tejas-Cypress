@@ -199,6 +199,7 @@ class CollectionDetails extends Component {
                         <>
                           <span id="offeringsShow" />
                           <span id={camelCase(c.title)} />
+                          <Divider hidden section />
                           {i !== 0 && <Divider hidden section />}
                           <CampaignList
                             collection
@@ -212,6 +213,7 @@ class CollectionDetails extends Component {
                         ? (
                           <>
                             <span id={camelCase(c.title)} />
+                            <Divider hidden section />
                             {i !== 0 && <Divider hidden section />}
                             <CampaignList
                               collection
@@ -225,6 +227,7 @@ class CollectionDetails extends Component {
                           ? (
                             <>
                               <span id={camelCase(c.title)} />
+                              <Divider hidden section />
                               {i !== 0 && <Divider hidden section />}
                               {/* {i !== 0 && <Divider hidden section />} */}
                               <section>
@@ -240,6 +243,7 @@ class CollectionDetails extends Component {
                             ? (
                               <>
                                 <span id={camelCase(c.title)} />
+                                <Divider hidden section />
                                 {i !== 0 && <Divider hidden section />}
                                 {/* {i !== 0 && <Divider hidden section />} */}
                                 <section>
