@@ -582,6 +582,9 @@ i.icon.right {
 			}
 		}
 	}
+	&.overflow-wrap{
+		overflow-wrap: anywhere;
+	}
 	.wp-caption {
 		max-width: 100%;
 		height: auto;
@@ -3566,6 +3569,7 @@ h3.ui.header.error-2{
 	@media only screen and (min-width : @tabletBreakpoint) and (max-width: @computerBreakpoint){
 		.collection-box{
 			height: 100% !important;
+			min-height: 100% !important;
 		}
 		.collection-bg-image{
 			height: 100% !important;
@@ -3584,11 +3588,10 @@ h3.ui.header.error-2{
 	align-items: center !important;
 	.collection-thumbnail-img{
 		img{
-			width:310px !important;
-			height:200px !important;
+			max-width:310px !important;
+			width:100% !important;
 			@media only screen and (min-width:@tabletBreakpoint) and (max-width:@computerBreakpoint){
 				width: 100% !important;
-				height: auto !important;
 			}
 		}
 	}
@@ -3670,8 +3673,10 @@ h3.ui.header.error-2{
 	}
 	@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
 		&.ui.container{
-			margin-left: 0 !important;
-			margin-right: 0 !important;
+			// margin-left: 0 !important;
+			// margin-right: 0 !important;
+			max-width: 345px !important;
+			margin:0 auto !important;
 		}
 	}
 	.ui.inverted.button.collectionExplore{
@@ -3698,10 +3703,16 @@ h3.ui.header.error-2{
 	position: relative;
 	.btn-color-picker{
 		position: absolute;
-		top: 38px;
+		top: 26px;
 		right: 0;
-		height: 24px;
-		padding:5px 14px !important;
+		height: auto;
+		padding: 5px!important;
+		width: 66px;
+		height: 34px;
+		>div{
+			width: 56px !important;
+			height: 24px !important;
+		}
 		.icon{
 			margin: 0 !important;
 		}

@@ -29,6 +29,11 @@ export const getCollectionMapping = gql`
       type
       order
       scope
+      image {
+        id
+        url
+        fileName
+      }
       offering {
         id
         ${common.offeringBasics}
@@ -96,18 +101,17 @@ export const allOfferings = gql`
         offeringSlug
         stage
         id
-        isAvailablePublicly
-        keyTerms {
-          targetInvestmentPeriod
-          regulation
-          shorthandBusinessName
-          legalBusinessName
-          securities
-        }
       }
     }
   `;
 
+export const adminInsightArticlesListByFilter = gql`
+  query adminInsightArticlesListByFilter($categoryId: String, $articleStatus: ArticleStatusEnum, $title: String, $tags: [String], $author: String, $fromDate: String, $toDate: String){
+    adminInsightArticlesListByFilter(categoryId: $categoryId, articleStatus: $articleStatus, title: $title, tags: $tags, author: $author, fromDate: $fromDate, toDate: $toDate){
+      id
+      title
+    }
+  }`;
 
 export const adminSetOrderForCollection = gql`
   mutation adminSetOrderForCollection($collectionItemsList: [CollectionOrderInput]){
@@ -314,12 +318,14 @@ export const adminCollectionMappingUpsert = gql`
     $referenceId: String!
     $type: CollectionMappingTypeEnum!
     $order: Int
+    $image: CollectionMappingMediaInput
     $scope: ScopeEnumType!){
     adminCollectionMappingUpsert(
       collectionId: $collectionId,
       referenceId: $referenceId,
       type: $type,
       order: $order,
+      image: $image,
       scope: $scope,
       ) {
         collectionId
@@ -327,6 +333,11 @@ export const adminCollectionMappingUpsert = gql`
         type
         order
         scope
+        image {
+          id
+          url
+          fileName
+        }
         offering {
           offeringSlug
         }

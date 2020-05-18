@@ -39,6 +39,10 @@ export const COLLECTION_MAPPING_CONTENT = {
   mappingContent: [
     FormHelper.generateMeta([
       ['image', 'Featured Image', '', 'optional', '', { s3Upload: true }],
+      ['collectionId', '', '', 'optional', ''],
+      ['referenceId', '', '', 'optional', ''],
+      ['type', '', '', 'optional', ''],
+      ['scope', '', '', 'optional', ''],
     ]),
   ],
 };

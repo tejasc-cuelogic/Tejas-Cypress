@@ -417,7 +417,7 @@ class KeyTermsDetails extends Component {
             {get(keyTerms, 'additionalKeyterms') && get(keyTerms, 'additionalKeyterms').length !== 0
               && keyTerms.additionalKeyterms.map(item => (
                 <Table.Row className="bg-offwhite" verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>{item.label}{' '}</b>
+                  <Table.Cell width={7} className="neutral-text"><div className="parsed-data overflow-wrap"><b>{item.label}{' '}</b></div>
                   </Table.Cell>
                   <Table.Cell>
                     <HtmlEditor

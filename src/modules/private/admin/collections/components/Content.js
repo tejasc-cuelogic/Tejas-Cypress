@@ -25,7 +25,7 @@ export default class Content extends React.Component {
 
     if (!this.props.collectionStore.initLoad.includes('COLLECTION_CONTENT_FRM')) {
       this.props.collectionStore.setFormData('COLLECTION_CONTENT_FRM', 'marketing');
-      this.props.collectionStore.setFormData('HEADER_META_FRM');
+        this.props.collectionStore.setFormData('HEADER_META_FRM');
     }
   }
 
@@ -48,19 +48,26 @@ export default class Content extends React.Component {
     this.toggleModal(true);
   }
 
-  onSortEnd = ({ oldIndex, newIndex }) => {
+  onSortEnd = async ({ oldIndex, newIndex }) => {
     const docs = [...this.props.collectionStore.COLLECTION_CONTENT_FRM.fields.content];
     this.props.collectionStore.reOrderHandle(arrayMove(docs, oldIndex, newIndex), 'COLLECTION_CONTENT_FRM', 'content');
     this.props.collectionStore.setFieldValue('onDragSaveEnable', true);
+    const params = {
+      keyName: false,
+      forms: ['COLLECTION_CONTENT_FRM'],
+    };
+    await this.props.collectionStore.upsertCollection(params);
+    this.props.collectionStore.setFieldValue('collectionIndex', null);
+    this.props.history.push(`${this.props.match.url}/1`);
   };
 
   render() {
     const { match } = this.props;
     const { COLLECTION_CONTENT_FRM } = this.props.collectionStore;
     const navItems = [];
-    const loadeingList = ['getCollectionMapping', 'adminCollectionUpsert', 'adminCollectionMappingUpsert', 'adminDeleteCollectionMapping'];
+    const loadingList = ['getCollectionMapping', 'adminCollectionUpsert', 'adminCollectionMappingUpsert', 'adminDeleteCollectionMapping'];
     const { loadingArray } = this.props.nsUiStore;
-    if (intersection(loadingArray, loadeingList).length > 0) {
+    if (intersection(loadingArray, loadingList).length > 0) {
       return <InlineLoader />;
     }
     COLLECTION_CONTENT_FRM.fields.content.map((content, index) => {
@@ -74,7 +81,7 @@ export default class Content extends React.Component {
           <Grid.Column widescreen={4} computer={4} tablet={3} mobile={16}>
             <div className="sticky-sidebar">
               <DraggableMenu secondary vertical match={match} onSortEnd={this.onSortEnd} navItems={navItems} />
-              {COLLECTION_CONTENT_FRM.fields.content.length < 10
+              {COLLECTION_CONTENT_FRM.fields.content.length < 15
                 && <Button size="small" color="blue" className="link-button mt-20" onClick={this.addMore}>+ Add another content block</Button>
               }
             </div>
