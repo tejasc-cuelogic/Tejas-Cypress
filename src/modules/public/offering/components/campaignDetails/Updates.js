@@ -64,13 +64,13 @@ class Updates extends Component {
                     <Item.Group>
                       <Item>
                         <div className="ui image avatar-image">
-                          {companyAvatarUrl && companyAvatarUrl.length && (dataItem.postUpdateAs !== 'NEXTSEED' && dataItem.postUpdateAs !== 'NS_SECURITIES')
+                          {companyAvatarUrl && companyAvatarUrl.length && (dataItem.postUpdateAs !== 'NS_SERVICES' && dataItem.postUpdateAs !== 'NEXTSEED' && dataItem.postUpdateAs !== 'NS_SECURITIES')
                             ? <Image64 srcUrl={companyAvatarUrl} circular />
-                            : <UserAvatar UserInfo={{ name: (dataItem.postUpdateAs === 'NEXTSEED' || dataItem.postUpdateAs === 'NS_SECURITIES') ? 'NextSeed' : get(campaign, 'keyTerms.shorthandBusinessName'), avatarUrl: (dataItem.postUpdateAs === 'NEXTSEED' || dataItem.postUpdateAs === 'NS_SECURITIES') ? 'logo-icon.svg' : '' }} />
+                            : <UserAvatar UserInfo={{ name: (dataItem.postUpdateAs === 'NS_SERVICES' || dataItem.postUpdateAs === 'NEXTSEED' || dataItem.postUpdateAs === 'NS_SECURITIES') ? 'NextSeed' : get(campaign, 'keyTerms.shorthandBusinessName'), avatarUrl: (dataItem.postUpdateAs === 'NS_SERVICES' || dataItem.postUpdateAs === 'NEXTSEED' || dataItem.postUpdateAs === 'NS_SECURITIES') ? 'logo-icon.svg' : '' }} />
                           }
                         </div>
                         <Item.Content verticalAlign="middle" className="grey-header">
-                          { (dataItem.postUpdateAs === 'NEXTSEED' || dataItem.postUpdateAs === 'NS_SECURITIES') ? 'NextSeed' : get(campaign, 'keyTerms.shorthandBusinessName')}<br />
+                          { (dataItem.postUpdateAs === 'NS_SERVICES' || dataItem.postUpdateAs === 'NEXTSEED' || dataItem.postUpdateAs === 'NS_SECURITIES') ? 'NextSeed' : get(campaign, 'keyTerms.shorthandBusinessName')}<br />
                           <span>{dataItem.updatedDate ? moment(dataItem.updatedDate).format('LL') : '-'}</span>
                         </Item.Content>
                       </Item>

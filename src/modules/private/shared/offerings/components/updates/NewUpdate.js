@@ -120,6 +120,7 @@ export default class NewUpdate extends Component {
             onChange={(e, result) => UpdateChange(e, result)}
             checked={PBUILDER_FRM.fields.shouldSendInvestorNotifications.value}
             label="Send Email Notifications"
+            value={PBUILDER_FRM.fields.shouldSendInvestorNotifications.value}
           />
         </Form.Field>
         <Divider section />

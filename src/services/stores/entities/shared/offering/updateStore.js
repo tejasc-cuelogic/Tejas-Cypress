@@ -215,7 +215,6 @@ export class UpdateStore {
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       delete data.allInvestor;
-      delete data.shouldSendInvestorNotifications;
       delete data.notificationBy;
       delete data.notificationDate;
       delete data.notificationTo;
@@ -224,10 +223,10 @@ export class UpdateStore {
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
-      const shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
+      data.shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
       if (id !== 'new' && (status === 'PUBLISHED' && !updateOnly)) {
         data.isVisible = true;
-        this.offeringUpdatePublish(id, data, shouldSendInvestorNotifications, showToast).then(() => {
+        this.offeringUpdatePublish(id, data, showToast).then(() => {
           uiStore.setProgress(false);
           resolve();
         }).catch(() => uiStore.setProgress(false));

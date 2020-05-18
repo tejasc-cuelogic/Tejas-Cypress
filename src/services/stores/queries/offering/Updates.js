@@ -8,6 +8,7 @@ const updateField = `
       offeringId
       updatedDate
       postUpdateAs
+      sendEmailNotification
       updated {
         date
         by
@@ -71,7 +72,7 @@ mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!, $emailTemplate:
   sendOfferingUpdateTestEmail(
     offeringUpdateId: $offeringUpdateId
     emailTemplate: $emailTemplate
-    shouldSendInvestorNotifications:$shouldSendInvestorNotifications
+    shouldSendInvestorNotifications: $shouldSendInvestorNotifications
   )
 }`;
 
@@ -81,7 +82,6 @@ mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!, $
     id: $id
     updatesInput: $updatesInput
     emailTemplate: $emailTemplate
-    shouldSendInvestorNotifications:$shouldSendInvestorNotifications
   ) {
     id
   }
