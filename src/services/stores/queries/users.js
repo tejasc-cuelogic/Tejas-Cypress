@@ -773,6 +773,16 @@ export const fetchAdminListEmailTypesAndIdentifier = gql`
   adminListEmailType
   adminListEmailPluginsByIndex {
     emailIdentifier
+    config {
+      pluginInputs{   
+        label
+        type
+        key
+        value
+        rule
+        defaultValue
+       }
+    }
   }
 }
 `;
