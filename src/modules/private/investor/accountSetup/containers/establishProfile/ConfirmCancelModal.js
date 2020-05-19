@@ -144,14 +144,13 @@ export default class ConfirmCancelModal extends React.Component {
                   />
                 ))}
               </Grid.Column>
-              {currentStep.stepToBeRendered === 1 || currentStep.stepToBeRendered === 2
-              ? <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} className="">{currentStep.image}</Grid.Column>
-              : (
-                <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} className="">
-                  <OfferingsCards offerings={offerings} isMobile={isMobile} />
-                  {currentStep.note}
-                </Grid.Column>
-                )}
+              <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} className="">
+                {currentStep.stepToBeRendered === 1 || currentStep.stepToBeRendered === 2
+                  ? <>{currentStep.image}</>
+                  : <OfferingsCards offerings={offerings} isMobile={isMobile} />
+                }
+                {currentStep.note && currentStep.note}
+              </Grid.Column>
             </Grid>
           </Container>
         </Modal.Content>
