@@ -49,7 +49,7 @@ export default class CollectionHeader extends Component {
                             ? get(data, 'social').map(site => (
                               <React.Fragment key={site.type}>
                                 {site.url
-                                  && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase() === 'website' ? 'globe' : site.type.toLowerCase()} /></a>
+                                  && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase() === 'website' ? 'globe' : site.type.toLowerCase()} style={{ color: get(data, 'descriptionColor') }} /></a>
                                 }
                               </React.Fragment>
                             )) : ''}
@@ -93,7 +93,7 @@ export default class CollectionHeader extends Component {
                       ? get(data, 'social').map(site => (
                         <React.Fragment key={site.type}>
                           {site.url
-                            && <a className="ml-30" target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
+                            && <a className="ml-30" target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} style={{ color: get(data, 'descriptionColor') }} /></a>
                           }
                         </React.Fragment>
                       )) : ''}
