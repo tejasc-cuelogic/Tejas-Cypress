@@ -18,6 +18,7 @@ import SecondaryMenu from '../components/CampaignSecondaryMenu';
 import AgreementTemplate from '../../../shared/campaign/AgreementTemplate';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
+import OfferingsPassProtected from '../../../auth/containers/OfferingsPassProtected';
 import NotFound from '../../../shared/NotFound';
 import DocumentModal from '../components/campaignDetails/DataRoom/DocumentModal';
 import OfferingMetaTags from '../components/OfferingMetaTags';
@@ -190,20 +191,28 @@ class offerDetails extends Component {
     const {
       match, campaignStore, location, newLayout,
     } = this.props;
+    const { campaign } = campaignStore;
     if (this.state.showPassDialog) {
       return (
-        <DevPassProtected
-          offerPreview
-          authPreviewOffer={this.authPreviewOffer}
-          offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
-        />
+        <>
+          { ['BD_506B'].includes(get(campaign, 'regulation'))
+            ? <OfferingsPassProtected />
+            : (
+              <DevPassProtected
+                offerPreview
+                authPreviewOffer={this.authPreviewOffer}
+                offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
+              />
+            )
+          }
+        </>
       );
     }
     if (campaignStore.loading || (this.state.found !== 2 && !campaignStore.campaignStatus.doneComputing) || this.state.preLoading) {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, campaign, modifySubNavs, campaignStatus,
+      details, modifySubNavs, campaignStatus,
     } = campaignStore;
     const { isWatching } = this.props.watchListStore;
     let navItems = [];
