@@ -44,7 +44,7 @@ function ProcessFactory(props) {
 
   const { factoryStore, smartElement } = props;
   const {
-    PROCESSFACTORY_FRM, formChangeForPlugin, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
+    PROCESSFACTORY_FRM, pluginObj, formChangeForPlugin, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
   } = factoryStore;
 
   return (
@@ -86,8 +86,7 @@ function ProcessFactory(props) {
                     {visibleProp && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
                   </Grid.Column>
                   <Grid.Column width={8}>
-                    <Header as="h5">Payload</Header>
-                    <DynamicFormInput {...props} formPayload={DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'PROCESSFACTORY' }} selectedPlugin={currentPluginSelected} />
+                    <DynamicFormInput {...props} pluginObj={pluginObj} listType="adminListProcessorPlugins" formPayload={DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'PROCESSFACTORY' }} selectedPlugin={currentPluginSelected} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>
