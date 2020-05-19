@@ -13,7 +13,7 @@ const metaInfo = {
 };
 
 const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-large mr-10" />);
-const SortableItem = SortableElement(({ offer, currentForm, isReadOnly, fieldIndex, smartElement, removeOne, hideHighlight, mapIndex, formChangeForMultilevelArray }) => (
+const SortableItem = SortableElement(({ offer, currentForm, isReadOnly, fieldIndex, smartElement, removeOne, hideHighlight, mapIndex, formChangeForMultilevelArray, setDefulatKeyForTypeSelect }) => (
   <div className="row-wrap">
     <Form.Group className="mlr-0 plr-0 pt-0 pb-0">
       <Table basic compact className="form-table doc-mapfile-table">
@@ -23,17 +23,16 @@ const SortableItem = SortableElement(({ offer, currentForm, isReadOnly, fieldInd
               {!isReadOnly && <DragHandle />}
             </Table.Cell> */}
             <Table.Cell>
-              {/* {smartElement.Input('key', { displayMode: isReadOnly, multiForm: [metaInfo.form, 'mapping', fieldIndex] })} */}
-              {smartElement.Input('key', {
-                displayMode: isReadOnly,
-                fielddata: currentForm.fields.mapping[fieldIndex].key,
-                changed: (e, result) => formChangeForMultilevelArray(e, result, { parentForm: metaInfo.form, childForm: mapIndex }, 'mapping', fieldIndex, true),
-              })}
-            </Table.Cell>
-            <Table.Cell>
               {smartElement.FormSelect('value', {
                 displayMode: isReadOnly,
                 fielddata: currentForm.fields.mapping[fieldIndex].value,
+                changed: (e, result) => setDefulatKeyForTypeSelect(e, result, { parentForm: metaInfo.form, childForm: mapIndex }, 'mapping', fieldIndex, true, true),
+              })}
+            </Table.Cell>
+            <Table.Cell>
+              {smartElement.Input('key', {
+                displayMode: isReadOnly,
+                fielddata: currentForm.fields.mapping[fieldIndex].key,
                 changed: (e, result) => formChangeForMultilevelArray(e, result, { parentForm: metaInfo.form, childForm: mapIndex }, 'mapping', fieldIndex, true),
               })}
             </Table.Cell>
@@ -76,7 +75,7 @@ const SortableItem = SortableElement(({ offer, currentForm, isReadOnly, fieldInd
 ));
 
 
-const SortableList = SortableContainer(({ hideHighlight, offer, currentForm, isReadOnly, smartElement, removeOne, mapIndex, formChangeForMultilevelArray }) => (
+const SortableList = SortableContainer(({ hideHighlight, offer, currentForm, isReadOnly, smartElement, removeOne, mapIndex, formChangeForMultilevelArray, setDefulatKeyForTypeSelect }) => (
   <div className="tbody">
     {currentForm.fields.mapping.map((field, index) => (
       <SortableItem
@@ -93,13 +92,14 @@ const SortableList = SortableContainer(({ hideHighlight, offer, currentForm, isR
         hideHighlight={hideHighlight}
         mapIndex={mapIndex}
         formChangeForMultilevelArray={formChangeForMultilevelArray}
+        setDefulatKeyForTypeSelect={setDefulatKeyForTypeSelect}
       />
     ))}
   </div>
 ));
 
 
-const MetaList = ({ hideHighlight, offer, currentForm, isReadOnly, onSortEnd, smartElement, removeOne, mapIndex, formChangeForMultilevelArray }) => (
+const MetaList = ({ hideHighlight, offer, currentForm, isReadOnly, onSortEnd, smartElement, removeOne, mapIndex, formChangeForMultilevelArray, setDefulatKeyForTypeSelect }) => (
   <div className="ui card fluid">
     <SortableList
       currentForm={currentForm}
@@ -114,6 +114,7 @@ const MetaList = ({ hideHighlight, offer, currentForm, isReadOnly, onSortEnd, sm
       hideHighlight={hideHighlight}
       mapIndex={mapIndex}
       formChangeForMultilevelArray={formChangeForMultilevelArray}
+      setDefulatKeyForTypeSelect={setDefulatKeyForTypeSelect}
     />
   </div>
 );
@@ -142,7 +143,7 @@ class DocumentMapping extends Component {
       title,
       mapIndex
     } = this.props;
-    const { removeOneForNlevelForm, addMoreForNlevelForm, DOCUMENT_UPLOAD_MAPPING_FRM, formChangeForMultilevelArray } = manageOfferingStore;
+    const { removeOneForNlevelForm, addMoreForNlevelForm, DOCUMENT_UPLOAD_MAPPING_FRM, formChangeForMultilevelArray, setDefulatKeyForTypeSelect } = manageOfferingStore;
     const { UPLOAD_DATA_FRM } = offeringCreationStore;
     // const isReadonly = false;
     // const formName = metaInfo.form;  
@@ -168,6 +169,7 @@ class DocumentMapping extends Component {
             onSortEnd={this.onSortEnd}
             mapIndex={mapIndex}
             formChangeForMultilevelArray={formChangeForMultilevelArray}
+            setDefulatKeyForTypeSelect={setDefulatKeyForTypeSelect}
           />
         </>
     );

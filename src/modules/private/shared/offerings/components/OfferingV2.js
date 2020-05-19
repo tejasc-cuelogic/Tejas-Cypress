@@ -14,7 +14,8 @@ export default class OfferingV2 extends Component {
   constructor(props) {
     super(props);
     const { offer } = props.offeringsStore;
-    const nav = (!!get(offer, 'investNow.page[0]') || get(offer, 'stage') === 'CREATION') ? 'invest-now-toc' : get(offer, 'stage') === 'CREATION' ? 'launch' : 'close';
+    // const nav = (!!get(offer, 'investNow.page[0]') || get(offer, 'stage') === 'CREATION') ? 'invest-now-toc' : get(offer, 'stage') === 'CREATION' ? 'launch' : 'close';
+    const nav = (!!(get(offer, 'template') && get(offer, 'template') === 2) || get(offer, 'stage') === 'CREATION') ? 'invest-now-config' : get(offer, 'stage') === 'CREATION' ? 'launch' : 'close';
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/${nav}`);
     }
@@ -26,10 +27,11 @@ export default class OfferingV2 extends Component {
     const { offer } = offeringsStore;
     const showInvestNowToc = !!get(offer, 'investNow.page[0]') || get(offer, 'stage') === 'CREATION';
     const navItems = [];
+    navItems.push({ title: 'Config', to: 'invest-now-config', component: 'offering/InvestNowConfig' }, { title: 'DocuSign', to: 'invest-now-docusign-generations', component: 'offering/InvestNowDocusignGenerations' });
     if (showInvestNowToc) {
-      navItems.push({ title: 'Invest ToC', to: 'invest-now-toc', component: 'offering/InvestNowToc' });
+      navItems.push({ title: 'ToC', to: 'invest-now-toc', component: 'offering/InvestNowToc' });
     }
-    navItems.push({ title: 'Invest Config', to: 'invest-now-config', component: 'offering/InvestNowConfig' }, { title: 'Invest DocuSign', to: 'invest-now-docusign-generations', component: 'offering/InvestNowDocusignGenerations' }, { title: 'Launch', to: 'launch', component: 'offering/OfferingLaunch' });
+    navItems.push({ title: 'Launch', to: 'launch', component: 'offering/OfferingLaunch' });
     if (get(offer, 'stage') === 'LIVE') {
       navItems.push({ title: 'Close', to: 'close', component: 'Close' });
     }

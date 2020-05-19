@@ -1,5 +1,5 @@
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { startCase, get, includes, filter, orderBy, forEach } from 'lodash';
+import { startCase, get, includes, filter, orderBy, forEach, find } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
@@ -548,6 +548,7 @@ export class ManageOfferingStore extends DataModelStore {
       tempObj.key = val.label;
       tempObj.text = val.label;
       tempObj.value = val.value;
+      tempObj.defaultKey = val.defaultKey;
       pluginArr.push(tempObj);
     });
     return pluginArr;
@@ -572,6 +573,20 @@ export class ManageOfferingStore extends DataModelStore {
     const configDetails = Validator.evaluateFormData(this.INVEST_NOW_CONFIG_FRM.fields);
     this.updateOffering({ keyName: 'investNow', offeringData: { config: configDetails } });
   }
+
+  setDefulatKeyForTypeSelect = (e, res, form, subForm, index, isArrayChange = false, findDefaultValue = false) => {
+    this.formChangeForMultilevelArray(e, res, form, subForm, index, isArrayChange);
+    if (findDefaultValue) {
+      const defaultKey = this.pullDefaultKeyForInput(e, res);
+      const respObj = { name: 'key', value: defaultKey };
+      this.setDefulatKeyForTypeSelect(e, respObj, form, subForm, index, true, false);
+    }
+  }
+
+  pullDefaultKeyForInput = (e, data) => {
+    const pluginInputData = find(data.fielddata.options, o => o.value === data.value && o.defaultKey);
+    return pluginInputData.defaultKey;
+  };
 }
 
 decorate(ManageOfferingStore, {
@@ -604,6 +619,7 @@ decorate(ManageOfferingStore, {
   DOCUMENT_MAPPING_OPTIONS: observable,
   setMappingFormData: action,
   INVEST_NOW_CONFIG_FRM: observable,
+  setDefulatKeyForTypeSelect: action,
 });
 
 export default new ManageOfferingStore();

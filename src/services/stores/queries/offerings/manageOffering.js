@@ -24,6 +24,7 @@ query _adminGetInvestNowMappings {
   adminGetInvestNowMappings {
     label
     value
+    defaultKey
   }
 }
 `;
