@@ -139,7 +139,7 @@ section{
 }
 .campaign-banner {
     position: relative;
-    height: 568px;
+    height: 448px;
     background-color: @neutral;
     .campaign-details-banner{
         background-position: top center;
@@ -147,7 +147,7 @@ section{
         background-size: cover;
         margin-top: 0;
         padding: 0;
-        height: 568px;
+        height: 448px;
         width: 100%;
         ~ section.banner {
             background-color: fade(@fullBlack, 80%);
@@ -180,8 +180,11 @@ section{
             right: 0 !important;
             top: 0 !important;
             opacity: 0.1!important;
-
         }
+        .ui.inverted.header{
+            margin-bottom: 0 !important;
+        }
+
     }
 }
 .investor-priority-section{
