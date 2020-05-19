@@ -52,13 +52,13 @@ const DynamicFormInput = React.memo((props) => {
 
             {get(pluginObj, 'note')
               && (
-                <Header as="h5">Note: <span>{pluginObj.note}</span>
+                <Header as="h5">Note: <span className="font-weight-normal">{pluginObj.note}</span>
                 </Header>
               )}
 
             {get(pluginObj, 'note')
               && (
-                <Header as="h5">Description: <span>{pluginObj.description}</span>
+                <Header as="h5">Description: <span className="font-weight-normal">{pluginObj.description}</span>
                 </Header>
               )}
             <Header as="h5">Payload</Header>
