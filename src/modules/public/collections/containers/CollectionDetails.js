@@ -197,10 +197,8 @@ class CollectionDetails extends Component {
                     c.contentType === 'ACTIVE_INVESTMENTS' && getActiveOfferingsList && getActiveOfferingsList.length
                       ? (
                         <>
-                          <span id="offeringsShow" />
-                          <span id={camelCase(c.title)} />
-                          <Divider hidden section />
                           {i !== 0 && <Divider hidden section />}
+                          <div className="mt-40 anchor-wrap"><span id="offeringsShow" className="anchor" /><span className="anchor" id={camelCase(c.title)} /></div>
                           <CampaignList
                             collection
                             refLink={this.props.match.url}
@@ -212,9 +210,8 @@ class CollectionDetails extends Component {
                       ) : c.contentType === 'COMPLETE_INVESTMENTS' && getPastOfferingsList && getPastOfferingsList.length
                         ? (
                           <>
-                            <span id={camelCase(c.title)} />
-                            <Divider hidden section />
                             {i !== 0 && <Divider hidden section />}
+                            <div className="mt-40 anchor-wrap"><span className="anchor" id={camelCase(c.title)} /></div>
                             <CampaignList
                               collection
                               refLink={this.props.match.url}
@@ -226,29 +223,21 @@ class CollectionDetails extends Component {
                         ) : c.contentType === 'INSIGHTS' && getInsightsList && getInsightsList.length
                           ? (
                             <>
-                              <span id={camelCase(c.title)} />
-                              <Divider hidden section />
                               {i !== 0 && <Divider hidden section />}
-                              {/* {i !== 0 && <Divider hidden section />} */}
-                              <section>
-                                <CollectionInsights
-                                  heading={renderHeading(get(c, 'description'))}
-                                  loading={loadingArray.includes('getCollectionMapping')}
-                                  InsightArticles={getInsightsList}
-                                />
-                              </section>
+                              <div className="mt-40 anchor-wrap"><span className="anchor" id={camelCase(c.title)} /></div>
+                              <CollectionInsights
+                                heading={renderHeading(get(c, 'description'))}
+                                loading={loadingArray.includes('getCollectionMapping')}
+                                InsightArticles={getInsightsList}
+                              />
                             </>
                           )
                           : c.contentType === 'CUSTOM' && c.customValue
                             ? (
                               <>
-                                <span id={camelCase(c.title)} />
-                                <Divider hidden section />
                                 {i !== 0 && <Divider hidden section />}
-                                {/* {i !== 0 && <Divider hidden section />} */}
-                                <section>
-                                  <CustomContent content={c.customValue} isTablet={isTablet} />
-                                </section>
+                                <div className="mt-40 anchor-wrap"><span className="anchor" id={camelCase(c.title)} /></div>
+                                <CustomContent content={c.customValue} isTablet={isTablet} />
                               </>
                             )
                             : null
