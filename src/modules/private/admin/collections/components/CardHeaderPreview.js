@@ -48,7 +48,7 @@ export default class CardHeaderPreview extends Component {
                     ? socialDetails.map(site => (
                       <React.Fragment key={site.type.value}>
                         {site.url.value
-                          && <a target="_blank" rel="noopener noreferrer" href={site.url.value.includes('http') ? site.url.value : `http://${site.url.value}`}><Icon name={site.type.value.toLowerCase() === 'website' ? 'globe' : site.type.value.toLowerCase()} /></a>
+                          && <a target="_blank" rel="noopener noreferrer" href={site.url.value.includes('http') ? site.url.value : `http://${site.url.value}`}><Icon name={site.type.value.toLowerCase() === 'website' ? 'globe' : site.type.value.toLowerCase()} style={{ color: get(collection, 'descriptionColor.value') }} /></a>
                         }
                       </React.Fragment>
                     )) : ''
