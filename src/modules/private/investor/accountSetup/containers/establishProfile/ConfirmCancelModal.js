@@ -44,6 +44,12 @@ const OfferingsCards = ({ offerings, isMobile }) => (
   </Card.Group>
 );
 
+const ProgressBar = ({ activeStep, activeIndex }) => (
+  <ul style={{ display: 'inline-block' }}>
+    <li style={activeStep === activeIndex ? { color: '#20C86D' } : { color: '#E6E6E8' }}>{' '}</li>
+  </ul>
+);
+
 @inject('investorProfileStore', 'uiStore', 'individualAccountStore')
 @observer
 @withRouter
@@ -72,14 +78,14 @@ export default class ConfirmCancelModal extends React.Component {
         stepToBeRendered: 1,
         header: 'Let’s have a look around your new account',
         content: <>Once you’ve made your first investment on NextSeed, this is where you’ll find information related to your investment portfolio — including payments, updates, returns and more.<br /><br />Also, check your Profile Settings to keep your investment limits and Accredited Investor status up to date.</>,
-        image: `${!isMobile ? './interstitial/portfolio.png' : './interstitial/portfolioMobile.png'}`,
+        image: `${!isMobile ? 'interstitial/portfolio.png' : 'interstitial/portfolioMobile.png'}`,
         button: 'Next',
         to: `${this.handleNextStep}`,
       }, {
         stepToBeRendered: 2,
         header: 'Flexible account options, rigid security',
         content: <>When you invest on NextSeed, you will do so with an FDIC-insured investment account set up with our partner bank, Goldstar Trust.<br /><br />After we verify your identity using bank-level security measures, you will be asked to create one of three types of accounts based on your preference.</>,
-        image: `${!isMobile ? './interstitial/accounts.png' : './interstitial/accountsMobile.png'}`,
+        image: `${!isMobile ? 'interstitial/accounts.png' : 'interstitial/accountsMobile.png'}`,
         button: 'Next',
         to: `${this.handleNextStep}`,
       }, {
@@ -131,14 +137,20 @@ export default class ConfirmCancelModal extends React.Component {
                   ? <Button primary green className="mt-30" as={Link} to={currentStep.to}>{currentStep.button}</Button>
                   : <Button primary green className="mt-30" onClick={() => this.handleNextStep()}>{currentStep.button}</Button>
                 }
+                {interstitialSteps.map((step, index) => (
+                  <ProgressBar
+                    activeStep={this.state.compState}
+                    activeIndex={index}
+                  />
+                ))}
               </Grid.Column>
               {currentStep.stepToBeRendered === 1 || currentStep.stepToBeRendered === 2
               ? <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} className="">{currentStep.image}</Grid.Column>
               : (
-                <>
+                <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} className="">
                   <OfferingsCards offerings={offerings} isMobile={isMobile} />
                   {currentStep.note}
-                </>
+                </Grid.Column>
                 )}
             </Grid>
           </Container>
