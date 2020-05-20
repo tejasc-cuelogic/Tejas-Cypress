@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { startCase, isEmpty } from 'lodash';
+import { startCase, isEmpty, keyBy } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { adminFetchEmails, fetchAdminListEmailTypesAndIdentifier } from '../../queries/users';
 import Helper from '../../../../helper/utility';
@@ -16,6 +16,8 @@ export class EmailStore extends DataModelStore {
   filters = true;
 
   emailLogList = [];
+
+  emailPlugin = {};
 
   listEmailTypes = [];
 
@@ -86,14 +88,14 @@ export class EmailStore extends DataModelStore {
       if (data.adminListEmailPluginsByIndex && data.adminListEmailPluginsByIndex.length) {
         listEmailIdentifiers.push({ key: 'SELECT', value: null, text: 'SELECT' });
         data.adminListEmailPluginsByIndex.forEach((e) => {
-          listEmailIdentifiers.push({ key: e.emailIdentifier, value: e.emailIdentifier, text: e.emailIdentifier, pluginInput: e.config.pluginInputs });
+          listEmailIdentifiers.push({ key: e.emailIdentifier, value: e.emailIdentifier, text: e.emailIdentifier, note: e.config.note, description: e.config.description, pluginInput: e.config.pluginInputs });
         });
       }
       this.setFieldValue('listEmailTypes', listEmailType);
       this.setFieldValue('listEmailIdentifiers', listEmailIdentifiers);
     } catch (error) {
       window.logger(error);
-      Helper.toast('Something went wrong, please try again later.', 'error');
+      Helper.toast('Something went wrong, please try againsetPluginInput later.', 'error');
     }
   }
 
@@ -107,6 +109,16 @@ export class EmailStore extends DataModelStore {
     return (this.emailLogList && this.emailLogList.adminFetchEmails
       && toJS(this.emailLogList.adminFetchEmails.resultCount)
     ) || 0;
+  }
+
+  setPluginInput = (emailIdentifier) => {
+    const pluginObj = this.listEmailIdentifiers.find(
+      e => e.key === emailIdentifier,
+      );
+    this.emailPlugin = {
+      ...pluginObj,
+      pluginInput: keyBy(pluginObj.pluginInput, 'key'),
+    };
   }
 
   reseFilterManually = (currentFilter, currentFilterValue) => {
@@ -133,6 +145,8 @@ decorate(EmailStore, {
   count: computed,
   emailLogList: observable,
   filters: observable,
+  emailPlugin: observable,
+  setPluginInput: action,
   reseFilterManually: action,
 });
 

@@ -1,14 +1,14 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
 import { get, isEmpty, forEach, find, includes, keyBy, has, pickBy, identity } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
-import { adminListFilePlugins, getPluginList, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile } from '../../queries/data';
+import { adminListFilePlugins, getPluginList, adminSendEmail, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile } from '../../queries/data';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META, REQUESTFACTORY_LOG__META, PROCESSFACTORY_LOG__META, FILEFACTORY_META } from '../../../constants/admin/data';
 
 export class FactoryStore extends DataModelStore {
   constructor() {
-    super({ adminListFilePlugins, getPluginList, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile });
+    super({ adminListFilePlugins, getPluginList, adminSendEmail, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile });
   }
 
   REQUESTFACTORY_FRM = Validator.prepareFormObject(REQUESTFACTORY_META);
@@ -27,6 +27,7 @@ export class FactoryStore extends DataModelStore {
     REQUESTFACTORY: {},
     PROCESSFACTORY: {},
     FILEFACTORY: {},
+    EMAIL_LIST: {},
   };
 
   currentPluginSelected = '';
@@ -158,6 +159,10 @@ export class FactoryStore extends DataModelStore {
     this[form.parentForm][form.childForm] = Validator.onChange(this[form.parentForm][form.childForm], Validator.pullValues(e, res));
   }
 
+  setDynamicDataForEmail = (plugnArr, childForm) => {
+    this.createDynamicFormFields(plugnArr, childForm);
+  }
+
   fetchPlugins = async () => {
     try {
       const res = await this.executeQuery({
@@ -198,10 +203,12 @@ export class FactoryStore extends DataModelStore {
     tempData = (!isEmpty(pluginType) && get(this.pluginListArr, pluginType))
       ? get(this.pluginListArr, pluginType).plugins.find(p => p.plugin === plugin)
       : {};
-    if (isSub) {
-      tempData = tempData.pluginInputs[0].options.find(p => p.key === subValue);
+    if (tempData) {
+      if (isSub) {
+        tempData = tempData.pluginInputs[0].options.find(p => p.key === subValue);
+      }
+      this.pluginObj = { ...tempData };
     }
-    this.pluginObj = { ...tempData };
   }
 
   get cronLogs() {
@@ -382,6 +389,34 @@ export class FactoryStore extends DataModelStore {
       }
     }
   });
+
+  emailFactoryPluginTrigger = async (emailIdentifier) => {
+    try {
+      const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.EMAIL_LIST.fields;
+      const formPayloadData = Validator.evaluateFormData(fieldsPayload, true);
+      const testFormData = this.ExtractToJSON(formPayloadData);
+      if ((testFormData !== '') && !this.isValidJson(testFormData)) {
+        this.DYNAMCI_PAYLOAD_FRM.EMAIL_LIST.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
+        this.DYNAMCI_PAYLOAD_FRM.EMAIL_LIST.meta.isValid = false;
+      } else {
+        const variables = {
+          emailIdentifier,
+          payload: testFormData,
+      };
+        const data = await this.executeMutation({
+          mutation: 'adminSendEmail',
+          setLoader: 'adminSendEmail',
+          variables,
+        });
+        window.logger(data);
+        Helper.toast('Your request is processed.', 'success');
+      }
+      return true;
+    } catch (error) {
+      Helper.toast('Something went wrong.', 'error');
+      return false;
+    }
+  }
 
   ExtractToJSON = (param, isDisableStringify = false) => {
     let revampObj = {};

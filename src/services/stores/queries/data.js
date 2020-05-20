@@ -200,6 +200,12 @@ mutation adminInvokeRequest($plugin: String!, $payload: String, $invocationType:
   )
 }`;
 
+export const adminSendEmail = gql`
+  mutation adminSendEmail($emailIdentifier: String!, $payload: String){
+    adminSendEmail(emailIdentifier: $emailIdentifier, payload: $payload)
+  }
+`;
+
 export const adminFetchCronLogs = gql`
 query adminFetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaTypeEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
   adminFetchCronLogs(

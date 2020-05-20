@@ -74,7 +74,7 @@ const EmailsListing = ({ emailList, displyNoEmails, handleModel, loading, handle
                   )}
                 </Table.Cell>
                 <Table.Cell collapsing>
-                  <Button className="ml-10" primary content="Send Email" onClick={e => handleActionModel(e, { recipientId: resp.recipientId, requestDate: resp.requestDate })} />
+                  <Button className="ml-10" primary content="Send Email" onClick={e => handleActionModel(e, { emailIdentifier: resp.emailIdentifier, pluginInputs: resp.pluginInputs })} />
                 </Table.Cell>
               </Table.Row>
             ))

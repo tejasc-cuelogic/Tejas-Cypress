@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card } from 'semantic-ui-react';
+import { Card, Modal, Form, Divider, Button, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import moment from 'moment';
@@ -8,6 +8,7 @@ import formHOC from '../../../../../../theme/form/formHOC';
 import EmailContent from '../../../../shared/EmailContent';
 import EmailsListing from '../../../../shared/EmailsListing';
 import { InlineLoader } from '../../../../../../theme/shared';
+import DynamicFormInput from '../factory/dynamicFormInput';
 
 const metaInfo = {
   store: 'emailStore',
@@ -18,6 +19,7 @@ function EmailList(props) {
   const [displyNoEmails, setdisplyRecord] = useState(false);
   const [showContentModal, toggleModal] = useState(false);
   const [id, setId] = useState(false);
+  const [emailIdentity, setEmailIdentity] = useState(false);
   const [requestDate, setRequestDate] = useState(false);
   const [showActionModal, setShowActionModal] = useState(false);
 
@@ -30,6 +32,7 @@ function EmailList(props) {
     return () => {
       props.emailStore.resetFilters();
       props.emailStore.setFieldValue('emailLogList', []);
+      props.emailStore.setFieldValue('emailPlugin', {});
       setdisplyRecord(false);
     };
   }, []);
@@ -56,19 +59,29 @@ function EmailList(props) {
     toggleModal(true);
   };
 
-  const handleActionModel = (e) => {
+  const handleSubmitForm = () => {
+    props.factoryStore.emailFactoryPluginTrigger(emailIdentity);
+  };
+
+  const handleActionModel = (e, { emailIdentifier }) => {
     e.preventDefault();
+    setEmailIdentity(emailIdentifier);
+    props.emailStore.setPluginInput(emailIdentifier);
+    const { emailPlugin } = props.emailStore;
+    props.factoryStore.setDynamicDataForEmail(emailPlugin.pluginInput, 'EMAIL_LIST');
     setShowActionModal(true);
   };
 
   const handleCloseModal = () => {
     toggleModal(false);
+    setShowActionModal(false);
   };
 
   const { loadingArray } = props.nsUiStore;
   const { emailStore } = props;
+  const { DYNAMCI_PAYLOAD_FRM } = props.factoryStore;
   const {
-    EMAIL_LIST_FRM, requestState, filters, count, emailList,
+    EMAIL_LIST_FRM, requestState, filters, count, emailList, emailPlugin,
   } = emailStore;
   const totalRecords = count || 0;
   return loadingArray.includes('adminListEmailType') ? <InlineLoader /> : (
@@ -97,8 +110,32 @@ function EmailList(props) {
           <EmailsListing loading={loadingArray.includes('adminFetchEmails')} emailList={emailList} displyNoEmails={displyNoEmails} handleModel={handleModel} handleActionModel={handleActionModel} />
         </Card.Description>
       </Card>
+      {showActionModal
+        && (
+          <Card fluid className="elastic-search">
+            <Card.Content>
+              <Card.Description>
+                <Modal closeOnDimmerClick={false} closeIcon open onClose={handleCloseModal} closeOnRootNodeClick={false}>
+                  <Modal.Header className="center-align signup-header">
+                    <Header as="h4">Email Form</Header>
+                  </Modal.Header>
+                  <Modal.Content>
+                    <Form onSubmit={handleSubmitForm}>
+                      <Form.Group>
+                        <DynamicFormInput {...props} pluginObj={emailPlugin} formPayload={DYNAMCI_PAYLOAD_FRM.EMAIL_LIST} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'EMAIL_LIST' }} selectedPlugin={requestState.search.emailIdentifier} />
+                      </Form.Group>
+                      <Divider section hidden />
+                      <Button className="mt-80 ml-10" primary content="Submit" loading={loadingArray.includes('adminSendEmail')} disabled={!DYNAMCI_PAYLOAD_FRM.EMAIL_LIST.meta.isValid} />
+                    </Form>
+                  </Modal.Content>
+                </Modal>
+              </Card.Description>
+            </Card.Content>
+          </Card>
+        )
+      }
     </>
   );
 }
 
-export default inject('nsUiStore')(withRouter(formHOC(observer(EmailList), metaInfo)));
+export default inject('nsUiStore', 'factoryStore')(withRouter(formHOC(observer(EmailList), metaInfo)));
