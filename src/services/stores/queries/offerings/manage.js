@@ -351,6 +351,9 @@ export const getOfferingDetails = gql`
         }
         config {
           investmentType
+          showBonusRewards
+          showExpectedReturn
+          expectedReturnCalc
         }
         docuSign {
           template

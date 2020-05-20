@@ -495,6 +495,18 @@ export class ManageOfferingStore extends DataModelStore {
     if (!offer) {
       return false;
     }
+    if (form === 'INVEST_NOW_CONFIG_FRM') {
+      const configDtails = get(offer, 'investNow.config');
+      if (configDtails) {
+        configDtails.toggleMeta = [];
+        if (configDtails.showExpectedReturn) {
+          configDtails.toggleMeta.push('EXPECTED_RETURN');
+        }
+        if (configDtails.showBonusRewards) {
+          configDtails.toggleMeta.push('BONUS_REWARDS');
+        }
+      }
+    }
     this[form] = Validator.setFormData(this[form], offer, ref, keepAtLeastOne);
     const multiForm = this.getActionType(form, 'isMultiForm');
     this[form] = Validator.validateForm(this[form], multiForm, false, false);
@@ -571,14 +583,18 @@ export class ManageOfferingStore extends DataModelStore {
 
   updateConfig = () => {
     const configDetails = Validator.evaluateFormData(this.INVEST_NOW_CONFIG_FRM.fields);
-    forEach(configDetails.toggleMeta, (value) => {
-      if (value === 'EXPECTED_RETURN') {
-        configDetails.showExpectedReturn = true;
-      }
-      if (value === 'BONUS_REWARDS') {
-        configDetails.showBonusRewards = true;
-      }
-    });
+    configDetails.showExpectedReturn = false;
+    configDetails.showBonusRewards = false;
+    if (configDetails.toggleMeta && configDetails.toggleMeta.length > 0) {
+      forEach(configDetails.toggleMeta, (value) => {
+        if (value === 'EXPECTED_RETURN') {
+          configDetails.showExpectedReturn = true;
+        }
+        if (value === 'BONUS_REWARDS') {
+          configDetails.showBonusRewards = true;
+        }
+      });
+    }
     if (!get(configDetails, 'showExpectedReturn')) {
       delete configDetails.expectedReturnCalc;
     }
