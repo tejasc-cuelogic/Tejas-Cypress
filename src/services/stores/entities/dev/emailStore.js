@@ -86,7 +86,7 @@ export class EmailStore extends DataModelStore {
       if (data.adminListEmailPluginsByIndex && data.adminListEmailPluginsByIndex.length) {
         listEmailIdentifiers.push({ key: 'SELECT', value: null, text: 'SELECT' });
         data.adminListEmailPluginsByIndex.forEach((e) => {
-          listEmailIdentifiers.push({ key: e.emailIdentifier, value: e.emailIdentifier, text: e.emailIdentifier });
+          listEmailIdentifiers.push({ key: e.emailIdentifier, value: e.emailIdentifier, text: e.emailIdentifier, pluginInput: e.config.pluginInputs });
         });
       }
       this.setFieldValue('listEmailTypes', listEmailType);

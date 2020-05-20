@@ -19,6 +19,7 @@ function EmailList(props) {
   const [showContentModal, toggleModal] = useState(false);
   const [id, setId] = useState(false);
   const [requestDate, setRequestDate] = useState(false);
+  const [showActionModal, setShowActionModal] = useState(false);
 
   useEffect(() => {
     props.emailStore.fetchAdminListEmailTypesAndIdentifier().then(() => {
@@ -55,6 +56,11 @@ function EmailList(props) {
     toggleModal(true);
   };
 
+  const handleActionModel = (e) => {
+    e.preventDefault();
+    setShowActionModal(true);
+  };
+
   const handleCloseModal = () => {
     toggleModal(false);
   };
@@ -88,7 +94,7 @@ function EmailList(props) {
       />
       <Card fluid className="elastic-search">
         <Card.Description>
-          <EmailsListing loading={loadingArray.includes('adminFetchEmails')} emailList={emailList} displyNoEmails={displyNoEmails} handleModel={handleModel} />
+          <EmailsListing loading={loadingArray.includes('adminFetchEmails')} emailList={emailList} displyNoEmails={displyNoEmails} handleModel={handleModel} handleActionModel={handleActionModel} />
         </Card.Description>
       </Card>
     </>
