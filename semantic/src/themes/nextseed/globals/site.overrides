@@ -3660,7 +3660,6 @@ h3.ui.header.error-2{
 	}
 	p{
 		font-size: @15px;
-		color:@neutral;
 		line-height: @24px;
 	}
 	.ui.cards>.card .ui.image{
@@ -3688,7 +3687,7 @@ h3.ui.header.error-2{
 		box-shadow: none !important;
 	}
 	.collection-inner-img{
-		max-width: 330px !important;
+		max-width: 360px !important;
 		position: relative !important;
 		margin: 0 auto !important;
 	}
@@ -3733,4 +3732,8 @@ h3.ui.header.error-2{
 	.campaign-list-wrapper{
 		padding-top: 0 !important;
 	}
+}
+.offering-layout-menu .collection-desc p{
+	color: inherit !important;
+	text-align: left !important;
 }
