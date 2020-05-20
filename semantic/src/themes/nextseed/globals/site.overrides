@@ -3743,8 +3743,19 @@ h3.ui.header.error-2{
 		padding-top: 0 !important;
 	}
 }
-.row-wrap-column {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
+.upload-doc-table{
+	.row-wrap.thead{
+		>div.balance-half{
+			width: calc(50% - 140px);
+			margin-right: 0 !important;
+		}
+	}
+	.row-wrap-column {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		  .row-wrap>div.balance-half {
+			  width: calc(50% - 140px);
+		  }
+	}
 }

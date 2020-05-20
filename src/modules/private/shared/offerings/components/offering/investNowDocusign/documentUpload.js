@@ -15,7 +15,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
   return (
     <>
       <div className="row-wrap row-wrap-column">
-        <div className="row-wrap">
+        <div className="row-wrap full-width">
           <div className="width-70">
             {!offeringClose
               && <DragHandle />
@@ -72,7 +72,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
             </Button>
           </div>
         </div>
-        <div>
+        <div className="full-width">
           <div className="pl-30 upload-docs-subsection">
             <DocumentMapping
               isReadOnlyFlag={false}
@@ -226,7 +226,7 @@ export default class DocumentUpload extends Component {
             }
           </Header>
           <Divider hidden />
-          <div className="ui basic compact table form-table">
+          <div className="ui basic compact table form-table upload-doc-table">
             <div className="row-wrap thead">
               <div className="width-70" />
               <div className="balance-half">Document Name</div>
