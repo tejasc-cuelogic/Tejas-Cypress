@@ -41,7 +41,8 @@ class RequestFactory extends Component {
                     {['plugin', 'invocationType'].map(field => (
                       smartElement.FormDropDown(field, {
                         onChange: (e, result) => formChangeForPlugin(e, result, 'REQUESTFACTORY_FRM'),
-                        containerclassname: 'dropdown-field mlr-0',
+                        containerclassname: 'dropdown-field',
+                        containerwidth: 16,
                         placeholder: 'Choose here',
                         options: REQUESTFACTORY_FRM.fields[field].values,
                       })
