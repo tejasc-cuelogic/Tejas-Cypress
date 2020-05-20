@@ -1,7 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Card, Form, Grid, Button } from 'semantic-ui-react';
+import { Form, Grid, Divider } from 'semantic-ui-react';
+import OfferingButtonGroup from '../../OfferingButtonGroup';
 import formHOC from '../../../../../../../theme/form/formHOC';
 
 const metaInfo = {
@@ -27,30 +28,30 @@ function ConfigDetails(props) {
   const isReadOnly = false;
   return (
     <>
-      <Grid>
-        <Grid.Column>
-          <Card fluid className="elastic-search">
-            <Card.Content header="Generate Document" />
-            <Card.Content>
-              <Card.Description>
-                <Form onSubmit={INVEST_NOW_CONFIG_FRM.meta.isValid && onSubmit}>
-                  <Form.Group className="bottom-aligned">
-                    <Form.Field width={12}>
-                      {smartElement.RadioGroup('investmentType', {
-                        readOnly: isReadOnly,
-                      })
-                      }
-                    </Form.Field>
-                    <Form.Field width={4}>
-                      <Button primary content="Submit" disabled={!INVEST_NOW_CONFIG_FRM.meta.isValid || inProgress === 'save'} loading={inProgress === 'save'} />
-                    </Form.Field>
-                  </Form.Group>
-                </Form>
-              </Card.Description>
-            </Card.Content>
-          </Card>
-        </Grid.Column>
-      </Grid>
+      <div className="inner-content-spacer">
+        <Form>
+          <Grid>
+            {smartElement.RadioGroup('investmentType', { displayMode: isReadOnly })}
+          </Grid>
+          <Divider hidden />
+          {/* <TombstonePreview /> */}
+          <Grid columns="2">
+            <Grid.Column>
+              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Display Toggle' })}
+            </Grid.Column>
+            {INVEST_NOW_CONFIG_FRM.fields.toggleMeta.value.includes('EXPECTED_RETURN') && (
+              <Grid.Column>
+                {smartElement.FormDropDown('expectedReturnCalc', { displayMode: isReadOnly })}
+              </Grid.Column>
+            )}
+          </Grid>
+          <Divider section />
+          <OfferingButtonGroup
+            updateOffer={onSubmit}
+            isDisable={!INVEST_NOW_CONFIG_FRM.meta.isValid || inProgress === 'save'}
+          />
+        </Form>
+      </div>
     </>
   );
 }

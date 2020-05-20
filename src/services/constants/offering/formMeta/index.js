@@ -79,10 +79,26 @@ export const DOCUMENT_MAPPING = {
   }],
 };
 
+const CONFIG_TOGGLE_META = [
+  { label: 'Show Expected Return', value: 'EXPECTED_RETURN' },
+  { label: 'Show Bonus Rewards', value: 'BONUS_REWARDS' },
+];
+
+const EXPECTED_RETURN_TYPE = [
+  { key: 'Term Note Calculation', value: 'TERM_NOTE_CALCULATION', text: 'Term Note Calculation' },
+  { key: 'Rev Share Calculation', value: 'REV_SHAR_CALCULATION', text: 'Rev Share Calculation' },
+];
+
 export const INVEST_NOW_CONFIG_META = FormHelper.generateMeta([
   ['investmentType', 'Investment Type', 'DOLLARS', 'required', 'Investment Type', { props: {
     values: [{ label: 'DOLLARS', value: 'DOLLARS' }, { label: 'UNITS', value: 'UNITS' }],
     defaultValue: 'DOLLARS',
+  },
+  asIn: true }],
+  ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { defaultValue: [], values: CONFIG_TOGGLE_META } }],
+  ['expectedReturnCalc', 'Expected Return Type', 'TERM_NOTE_CALCULATION', 'required', 'Investment Type', { props: {
+    options: EXPECTED_RETURN_TYPE,
+    defaultValue: 'TERM_NOTE_CALCULATION',
   },
   asIn: true }],
 ]);
