@@ -38,7 +38,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
       ))}
     {((collections.length > collectionLength) || (collections.length && !collectionLength) || offering) && (
       <div className="mt-80 center-align">
-        <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Collections" onClick={handleNavigate} />
+        <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Communities" onClick={handleNavigate} />
       </div>
     )}
   </>
@@ -73,8 +73,11 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength, toggle
 
 const Heading = ({ responsiveVars }) => (
   <>
-    <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`${responsiveVars.isMobile ? 'mb-30 mt-20' : 'mt-40 mb-12'}`}>Explore Popular Collections</Header>
-    <p className={`${responsiveVars.isMobile ? 'mb-40' : 'center-align mb-42'}`}>Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br />} Partner Organizations, as well as offerings grouped by theme, such as location or security type.</p>
+    <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`${responsiveVars.isMobile ? 'mb-30 mt-20' : 'mt-40 mb-12'}`}>Communities{' & '}Partners</Header>
+    <p className={`${responsiveVars.isMobile ? 'mb-40' : 'center-align mb-70'}`}>
+      Browse investment opportunities and businesses organized by communities that matter to you. These include{!responsiveVars.isMobile && <br />}
+      geographic areas, industries and interests, and partner organizations that highlight their unique offerings.
+    </p>
   </>
 );
 
@@ -107,8 +110,9 @@ export default class CollectionsList extends Component {
       return <InlineLoader />;
     }
     return (
-      <div className={`${offering ? '' : 'bg-offwhite'} ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-20 pb-70' : 'pt-50 pb-50'}`}>
-        <Heading responsiveVars={responsiveVars} />
+      <div className={`${offering ? 'bg-offwhite' : 'bg-offwhite'} ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-20 pb-70' : 'pt-70 pb-50'}`}>
+        {offering
+        && <Heading responsiveVars={responsiveVars} />}
         {publicCollections && publicCollections.length
           ? (expandCollection || isMobile ? (
             <CollectionCards
