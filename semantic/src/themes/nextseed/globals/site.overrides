@@ -215,6 +215,9 @@ h6{
 .pt-70{
 	padding-top:@70px !important;
 }
+.pt-80{
+	padding-top:@80px !important;
+}
 .pt-100{
 	padding-top: 100px !important;
 }
