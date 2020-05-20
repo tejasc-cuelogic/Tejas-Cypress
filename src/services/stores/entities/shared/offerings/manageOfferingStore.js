@@ -571,8 +571,20 @@ export class ManageOfferingStore extends DataModelStore {
 
   updateConfig = () => {
     const configDetails = Validator.evaluateFormData(this.INVEST_NOW_CONFIG_FRM.fields);
-    console.log(configDetails);
-    // this.updateOffering({ keyName: 'investNow', offeringData: { config: configDetails } });
+    forEach(configDetails.toggleMeta, (value) => {
+      if (value === 'EXPECTED_RETURN') {
+        configDetails.showExpectedReturn = true;
+      }
+      if (value === 'BONUS_REWARDS') {
+        configDetails.showBonusRewards = true;
+      }
+    });
+    if (!get(configDetails, 'showExpectedReturn')) {
+      delete configDetails.expectedReturnCalc;
+    }
+    delete configDetails.toggleMeta;
+    // console.log(configDetails);
+    this.updateOffering({ keyName: 'investNow', offeringData: { config: configDetails } });
   }
 
   setDefulatKeyForTypeSelect = (e, res, form, subForm, index, isArrayChange = false, findDefaultValue = false) => {
