@@ -1,25 +1,25 @@
 import gql from 'graphql-tag';
 
 const updateField = `
-      id
-      tiers
-      title
-      isVisible
-      offeringId
-      updatedDate
-      postUpdateAs
-      sendEmailNotification
-      updated {
-        date
-        by
-      }
-      approved {
-        by
-        date
-      }
-      status
-      scope
-      content`;
+  id
+  tiers
+  title
+  isVisible
+  offeringId
+  updatedDate
+  postUpdateAs
+  sendEmailNotification
+  updated {
+    date
+    by
+  }
+  approved {
+    by
+    date
+  }
+  status
+  scope
+  content`;
 
 export const allUpdates = gql`
   query fetchUpdatesByOfferId ($offerId: String!, $userId: String) {
@@ -33,8 +33,8 @@ export const allUpdates = gql`
 `;
 
 export const newUpdate = gql`
-  mutation createOfferingUpdates ($updatesInput: OfferingUpdatesInput! ) {
-    createOfferingUpdates (updatesInput: $updatesInput) {
+  mutation createOfferingUpdates ($updatesInput: OfferingUpdatesInput!, $shouldSendInvestorNotifications:Boolean!) {
+    createOfferingUpdates (updatesInput: $updatesInput, shouldSendInvestorNotifications: $shouldSendInvestorNotifications) {
       ${updateField}
     }
   }
@@ -57,10 +57,11 @@ export const getUpdate = gql`
 `;
 
 export const editUpdate = gql`
-  mutation updateOfferingUpdates ($id: ID!, $updatesInput: OfferingUpdatesInput!) {
+  mutation updateOfferingUpdates ($id: ID!, $updatesInput: OfferingUpdatesInput!, $shouldSendInvestorNotifications:Boolean!) {
     updateOfferingUpdatesInfo (
       id: $id,
       updatesInput: $updatesInput
+      shouldSendInvestorNotifications: $shouldSendInvestorNotifications
       ) {
         ${updateField}
       }
@@ -82,6 +83,7 @@ mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!, $
     id: $id
     updatesInput: $updatesInput
     emailTemplate: $emailTemplate
+    shouldSendInvestorNotifications: $shouldSendInvestorNotifications
   ) {
     id
   }

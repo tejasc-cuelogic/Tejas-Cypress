@@ -215,6 +215,7 @@ export class UpdateStore {
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       delete data.allInvestor;
+      delete data.shouldSendInvestorNotifications;
       delete data.notificationBy;
       delete data.notificationDate;
       delete data.notificationTo;
@@ -223,10 +224,10 @@ export class UpdateStore {
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
-      data.shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
+      const shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
       if (id !== 'new' && (status === 'PUBLISHED' && !updateOnly)) {
         data.isVisible = true;
-        this.offeringUpdatePublish(id, data, showToast).then(() => {
+        this.offeringUpdatePublish(id, data, shouldSendInvestorNotifications, showToast).then(() => {
           uiStore.setProgress(false);
           resolve();
         }).catch(() => uiStore.setProgress(false));
@@ -235,8 +236,8 @@ export class UpdateStore {
       client
         .mutate({
           mutation: id === 'new' ? newUpdate : editUpdate,
-          variables: id === 'new' ? { updatesInput: data }
-            : { ...{ updatesInput: data }, id },
+          variables: id === 'new' ? { updatesInput: data, shouldSendInvestorNotifications }
+            : { ...{ updatesInput: data }, id, shouldSendInvestorNotifications },
         })
         .then((res) => {
           if (id === 'new') {
@@ -309,14 +310,14 @@ export class UpdateStore {
     @action
     setFormData = (offeringUpdatesById) => {
       Object.keys(this.PBUILDER_FRM.fields).map((key) => {
-        if (key !== 'shouldSendInvestorNotifications') {
-          this.PBUILDER_FRM.fields[key].value = offeringUpdatesById[key];
-        }
+        this.PBUILDER_FRM.fields[key].value = offeringUpdatesById[key];
         return null;
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
       this.PBUILDER_FRM.fields.allInvestor.value = offeringUpdatesById.tiers && offeringUpdatesById.tiers.length === 0;
       this.PBUILDER_FRM.fields.updatedDate.value = offeringUpdatesById.updatedDate;
+      this.TEMPLATE_POST_UPDATE_FRM.fields.postUpdate.value = offeringUpdatesById.postUpdateAs;
+      this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value = offeringUpdatesById.sendEmailNotification;
       if (offeringUpdatesById.notificationSent) {
         this.PBUILDER_FRM.fields.notificationBy.value = offeringUpdatesById.notificationSent.by || '';
         this.PBUILDER_FRM.fields.notificationDate.value = offeringUpdatesById.notificationSent.date || '';
