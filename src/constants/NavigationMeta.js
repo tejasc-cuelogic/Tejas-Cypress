@@ -629,7 +629,7 @@ export const PUBLIC_NAV = [
     validateNav: 'COLLECTION',
     subNavigations: [
       { title: 'NextSeed Offerings', to: 'offerings' },
-      { title: 'Investment Collections', to: 'collections' },
+      { title: 'Communities & Partners', to: 'communities' },
     ],
   },
   {
@@ -794,7 +794,7 @@ export const MOBILE_NAV = [
     isLoggedIn: true,
   },
   { title: 'Investment Opportunities', to: 'offerings', isLoggedIn: true },
-  { title: 'Collections', to: 'collections', validateNav: 'COLLECTION', isLoggedIn: true },
+  { title: 'Communities & Partners', to: 'communities', validateNav: 'COLLECTION', isLoggedIn: true },
   {
     title: 'Refer a Friend',
     to: 'app/referrals',
