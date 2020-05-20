@@ -78,6 +78,7 @@ function ProcessFactory(props) {
                       onChange: (e, result) => formChangeForPlugin(e, result, 'PROCESSFACTORY_FRM'),
                       containerclassname: 'dropdown-field mlr-0',
                       placeholder: 'Choose here',
+                      containerwidth: 16,
                       options: PROCESSFACTORY_FRM.fields.method.values,
                       className: 'mb-80',
                     })}
