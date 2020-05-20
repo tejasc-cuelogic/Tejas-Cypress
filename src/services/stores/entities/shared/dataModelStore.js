@@ -508,6 +508,19 @@ export default class DataModelStore {
     const { inProgress } = commonStore;
     return !!(inProgress === fileId);
   }
+
+  moveArray = (form, oldIndex, newIndex) => {
+    const array = this[form];
+    if (newIndex >= array.length) {
+      let k = newIndex - array.length + 1;
+      // eslint-disable-next-line no-plusplus
+      while (k--) {
+        array.push(undefined);
+      }
+    }
+    array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
+    return array;
+  }
 }
 
 export const decorateDefault = {
@@ -554,4 +567,5 @@ export const decorateDefault = {
   addMoreForNlevelForm: action,
   removeOneForNlevelForm: action,
   formChangeForMultilevelArray: action,
+  moveArray: action,
 };

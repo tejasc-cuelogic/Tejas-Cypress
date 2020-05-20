@@ -14,72 +14,76 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" /
 const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length, showLockActivity, isBusinessApplication, docValidationArr, UPLOAD_DATA_FRM }) => {
   return (
     <>
-      <div className="row-wrap">
-        {/* <div className="width-70">
-          {!offeringClose
-            && <DragHandle />
-          }
-        </div> */}
-        <div className="balance-half">
-          <FormInput
-            displayMode={isReadonly}
-            name="name"
-            fielddata={document.name}
-            size="small"
-            changed={(e, result) => formArrayChange(e, result, formName, closingBinder ? 'closingBinder' : 'documents', docIndx)}
-            ishidelabel
-          />
-        </div>
-        <div className="balance-half">
-          {closingBinder && ['PENDING', 'FAILED'].includes(document.status.value) ?
-            document.status.value
-            :
-            <DropZone
-              disabled={isReadonly}
+      <div className="row-wrap row-wrap-column">
+        <div className="row-wrap">
+          <div className="width-70">
+            {!offeringClose
+              && <DragHandle />
+            }
+          </div>
+          <div className="balance-half">
+            <FormInput
+              displayMode={isReadonly}
+              name="name"
+              fielddata={document.name}
               size="small"
-              className="secondary"
-              name="upload"
-              sharableLink
-              hideFields
-              fielddata={document.upload}
-              uploadtitle="Upload"
-              ondrop={(files, name) => onFileDrop(files, name, docIndx)}
-              onremove={fieldName => handleDelDoc(fieldName, docIndx)}
-              customValidExtension={docValidationArr}
+              changed={(e, result) => formArrayChange(e, result, formName, closingBinder ? 'closingBinder' : 'documents', docIndx)}
+              ishidelabel
             />
-          }
+          </div>
+          <div className="balance-half">
+            {closingBinder && ['PENDING', 'FAILED'].includes(document.status.value) ?
+              document.status.value
+              :
+              <DropZone
+                disabled={isReadonly}
+                size="small"
+                className="secondary"
+                name="upload"
+                sharableLink
+                hideFields
+                fielddata={document.upload}
+                uploadtitle="Upload"
+                ondrop={(files, name) => onFileDrop(files, name, docIndx)}
+                onremove={fieldName => handleDelDoc(fieldName, docIndx)}
+                customValidExtension={docValidationArr}
+              />
+            }
+          </div>
+          <div className="width-130">
+            <FormRadioGroup
+              readOnly={isReadonly}
+              containerclassname={isReadonly ? 'display-only' : ''}
+              fielddata={document.mappingRequired}
+              default
+              name={`mappingRequired[${docIndx}]`}
+              eleName="mappingRequired"
+              changed={(e, result) => formArrayChange(e, result, formName, 'documents', docIndx)}
+            />
+          </div>
+          <div className="action">
+            {showLockActivity
+              && (<Button disabled={isReadonly} icon circular color={!offeringClose ? document.accreditedOnly.value ? 'red' : 'green' : ''} className="link-button">
+                <Icon className={!offeringClose ? document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock' : document.accreditedOnly.value ? 'ns-view' : 'ns-no-view'} onClick={() => handleLockUnlock(docIndx)} />
+              </Button>)
+            }
+            <Button disabled={isReadonly || length === 1 || (isBusinessApplication && document.accreditedOnly.value)} icon circular className="link-button">
+              <Icon className="ns-trash" onClick={e => toggleConfirmModal(e, docIndx, formName)} />
+            </Button>
+          </div>
         </div>
-        <div className="width-130">
-          <FormRadioGroup
-            readOnly={isReadonly}
-            containerclassname={isReadonly ? 'display-only' : ''}
-            fielddata={document.mappingRequired}
-            default
-            name={`mappingRequired[${docIndx}]`}
-            eleName="mappingRequired"
-            changed={(e, result) => formArrayChange(e, result, formName, 'documents', docIndx)}
-          />
+        <div>
+          <div className="pl-30 upload-docs-subsection">
+            <DocumentMapping
+              isReadOnlyFlag={false}
+              isSaveOnly
+              header="Document Mapping"
+              uploadFormKey="mapping"
+              mapIndex={docIndx}
+              mappingData={document.mapping}
+            />
+          </div>
         </div>
-        <div className="action">
-          {showLockActivity
-            && (<Button disabled={isReadonly} icon circular color={!offeringClose ? document.accreditedOnly.value ? 'red' : 'green' : ''} className="link-button">
-              <Icon className={!offeringClose ? document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock' : document.accreditedOnly.value ? 'ns-view' : 'ns-no-view'} onClick={() => handleLockUnlock(docIndx)} />
-            </Button>)
-          }
-          <Button disabled={isReadonly || length === 1 || (isBusinessApplication && document.accreditedOnly.value)} icon circular className="link-button">
-            <Icon className="ns-trash" onClick={e => toggleConfirmModal(e, docIndx, formName)} />
-          </Button>
-        </div>
-      </div>
-      <div className="pl-30 upload-docs-subsection">
-        <DocumentMapping
-          isReadOnlyFlag={false}
-          isSaveOnly
-          header="Document Mapping"
-          uploadFormKey="mapping"
-          mapIndex={docIndx}
-          mappingData={document.mapping}
-        />
       </div>
     </>
   );
@@ -114,7 +118,7 @@ const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, is
   );
 });
 
-@inject('offeringCreationStore', 'userStore', 'offeringsStore', 'uiStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore', 'uiStore', 'manageOfferingStore')
 @observer
 export default class DocumentUpload extends Component {
 
@@ -173,6 +177,7 @@ export default class DocumentUpload extends Component {
       const { metaInfo } = this.props;
       const docs = [...this.props[metaInfo.store][metaInfo.form].fields.documents];
       this.props.offeringCreationStore.setUploadDocsOrder(arrayMove(docs, oldIndex, newIndex), metaInfo.form);
+      this.props.manageOfferingStore.moveArray('DOCUMENT_UPLOAD_MAPPING_FRM', oldIndex, newIndex);
     }
   };
 

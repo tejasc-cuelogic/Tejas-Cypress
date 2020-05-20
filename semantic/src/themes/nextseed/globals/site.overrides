@@ -3743,3 +3743,8 @@ h3.ui.header.error-2{
 		padding-top: 0 !important;
 	}
 }
+.row-wrap-column {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+}
