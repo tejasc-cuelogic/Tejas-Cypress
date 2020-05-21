@@ -50,19 +50,6 @@ export const ACTIVITY_HISTORY_SCOPE = {
   DEV: 'DEV',
 };
 
-export const CONTACT_INFO = {
-  emailAddress: {
-    value: '',
-    error: undefined,
-    placeHolder: 'Email',
-    label: 'Email Address',
-    rule: 'required|email',
-    customErrors: {
-      required: '* required field.',
-    },
-  },
-};
-
 export const SAASQUATCH_TENANT_ALIAS = process.env.REACT_APP_SAASQUATCH_TENANT_ALIAS;
 
 export const FROALA_EDITOR_LICENSE = process.env.REACT_APP_FROALA_API_KEY_NEW;

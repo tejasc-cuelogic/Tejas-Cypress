@@ -19,7 +19,6 @@ import InsightsDetails from './public/resources/containers/InsightsDetails';
 import EducationCenter from './public/resources/containers/EducationCenter';
 import Space from './public/space/containers/Space';
 import Group from './public/about/components/Group';
-import Capital from './public/about/components/Capital';
 import Mission from './public/about/components/Mission';
 import Team from './public/about/components/Team';
 import Edgar from './private/admin/edgar/containers/Business';
@@ -117,7 +116,7 @@ export const publicRoutes = [
     props: 'newLayout',
   },
   {
-    path: '/communities/:slug',
+    path: '/collections/:slug',
     component: CollectionDetails,
   },
   {
@@ -133,7 +132,7 @@ export const publicRoutes = [
     component: Offering,
   },
   {
-    path: '/communities',
+    path: '/collections',
     component: Collections,
   },
   {
@@ -172,10 +171,6 @@ export const publicRoutes = [
   {
     path: '/space',
     component: Space,
-  },
-  {
-    path: '/capital',
-    component: Capital,
   },
   {
     path: '/group',

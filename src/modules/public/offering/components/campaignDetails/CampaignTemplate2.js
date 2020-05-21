@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { orderBy, get, camelCase } from 'lodash';
+import { orderBy, get } from 'lodash';
 import moment from 'moment';
 import { Divider, Button, Icon } from 'semantic-ui-react';
 import InvestmentDetails from './InvestmentDetails';
@@ -34,7 +34,7 @@ class CampaignTemplate2 extends Component {
     const content = campaignStatus.templateNavs || [];
     return (
       <>
-        {content.map((c, index) => (
+        {content.map(c => (
           c.contentType === 'INVESTMENT_DETAILS'
             ? <InvestmentDetails title={c.title} newLayout />
             : c.contentType === 'BONUS_REWARDS'
@@ -105,15 +105,8 @@ class CampaignTemplate2 extends Component {
                             <Divider hidden section />
                           </>
                         ))
-
                       : ['CUSTOM', 'ISSUER_STATEMENT'].includes(c.contentType)
-                        ? (
-                          <>
-                            {index !== 0 && <Divider hidden section />}
-                            <div className={`${index !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
-                            <CustomContent content={c.customValue} isTablet={isTablet} />
-                          </>
-                        )
+                        ? <CustomContent title={c.title} content={c.customValue} isTablet={isTablet} />
                         : null
         ))}
       </>

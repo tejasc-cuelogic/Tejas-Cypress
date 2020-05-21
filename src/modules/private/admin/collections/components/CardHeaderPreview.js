@@ -59,7 +59,7 @@ export default class CardHeaderPreview extends Component {
                 <Header style={{ color: get(collection, 'descriptionColor.value') }} as="h3" inverted>
                   {get(collection, 'title.value')}
                 </Header>
-                <span style={{ color: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} style={{ color: get(collection, 'descriptionColor.value') }} /></span>
+                <span style={{ color: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} /></span>
               </Grid.Column>
             </Grid>
           </Responsive>

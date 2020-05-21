@@ -33,10 +33,10 @@ class CollectionDetails extends Component {
       try {
         exception = JSON.parse(get(err, 'graphQLErrors[0].message'));
         if (get(exception, 'code') === 'COLLECTION_EXCEPTION') {
-          this.props.history.push('/communities');
+          this.props.history.push('/collections');
         }
       } catch {
-        this.props.history.push('/communities');
+        this.props.history.push('/collections');
       }
     });
     this.processScroll();
