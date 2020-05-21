@@ -694,6 +694,9 @@ footer{
 			&:hover, &:focus{
 				text-decoration: underline !important;
 			}
+		&.social-links {
+			text-decoration: none !important;
+		}
 		}
 	}
 }
