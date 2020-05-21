@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Grid, Header, Container, List, Icon, Card, Responsive, Button } from 'semantic-ui-react';
+import { Grid, Header, Container, List, Icon, Card, Responsive, Button, Form, Input } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
-import formHoc from '../../../../theme/form/formHOC';
 
 @inject('navStore', 'userStore', 'uiStore')
 @observer
@@ -72,7 +71,6 @@ render() {
                   </List.Item>
                 </List>
               </section>
-              {/* <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} className="capital-sidebg" floated="left" /> */}
             </Grid.Column>
           </Grid>
         </Container>
@@ -117,7 +115,7 @@ render() {
         <Container>
           <Card fluid>
             <Card.Content className={responsiveVars.isMobile ? '' : 'pt-0 pb-0 plr-0'}>
-              <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
+              <Grid stackable className="mt-0 mb-0 mlr-0">
                 <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8}>
                   <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'padded'}`}>
                     <Header as="h2" className="capital-header">Contact Information</Header>
@@ -146,7 +144,9 @@ render() {
                     <Grid centered>
                       <Grid.Row>
                         <Grid.Column computer={12} tablet={12} mobile={16}>
-                          {smartElement.Input('email', { className: 'font-20 display-only no-border', disabled: true })}
+                          <Form>
+                            <Input />
+                          </Form>
                         </Grid.Column>
                         <Grid.Column computer={4} tablet={4} mobile={16}>
                           <Button className="grey-colored" fluid>Notify Me</Button>
@@ -179,8 +179,4 @@ render() {
 }
 }
 
-// <Card fluid>
-  // <Card.Content className={responsiveVars.isMobile ? '' : 'pt-0 pb-0 plr-0'}>
-  // </Card.Content>
-// </Card>
-export default formHoc(Capital);
+export default Capital;
