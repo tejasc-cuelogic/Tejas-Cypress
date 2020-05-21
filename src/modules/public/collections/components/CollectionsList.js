@@ -49,14 +49,16 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength, toggle
     <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
       {
         collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-          <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/communities/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
-            <Image64 reRender originalImg srcUrl={get(collection, 'marketing.tombstone.image.url')} />
-            {get(collection, 'marketing.tombstone.tag.text')
-              && (
-                <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
-                  <p style={{ color: `${get(collection, 'marketing.tombstone.tag.textColor')} !important` }}>{get(collection, 'marketing.tombstone.tag.text')}</p>
-                </div>
-              )}
+          <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/collections/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
+            <div className="collection-inner-img">
+              <Image64 reRender originalImg srcUrl={get(collection, 'marketing.tombstone.image.url')} />
+              {get(collection, 'marketing.tombstone.tag.text')
+                && (
+                  <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
+                    <p style={{ color: `${get(collection, 'marketing.tombstone.tag.textColor')} !important` }}>{get(collection, 'marketing.tombstone.tag.text')}</p>
+                  </div>
+                )}
+            </div>
             <div className="full-width mt-0 p-36">
               {get(collection, 'marketing.tombstone.bgImage.url')
                 && <Image64 reRender bg originalImg className="collection-bg-image" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
@@ -114,7 +116,7 @@ export default class CollectionsList extends Component {
         {offering
         && <Heading responsiveVars={responsiveVars} />}
         {publicCollections && publicCollections.length
-          ? (expandCollection || isMobile ? (
+          ? (expandCollection ? (
             <CollectionCards
               collections={publicCollections}
               responsiveVars={responsiveVars}

@@ -31,9 +31,9 @@ export default class CollectionHeader extends Component {
             <>
               <div className="campaign-banner collection-banner">
                 <section className="banner" style={{ backgroundColor: get(data, 'bgColor') }}>
-                  <Responsive minWidth={768} as={Container}>
+                  <Responsive minWidth={768} as={Container} className="pt-70 pb-70">
                     <Grid relaxed stackable centered>
-                      <Grid.Column width={7} className="zi-9">
+                      <Grid.Column width={6} className="zi-9">
                         <div className="video-wrapper campaign">
                           <Image64
                             reRender
@@ -55,7 +55,7 @@ export default class CollectionHeader extends Component {
                             )) : ''}
                         </div>
                       </Grid.Column>
-                      <Grid.Column width={8} className="zi-9">
+                      <Grid.Column width={10} className="zi-9">
                         <Header style={{ color: get(data, 'descriptionColor') }} as="h3" inverted>
                           {title}
                         </Header>
@@ -84,10 +84,10 @@ export default class CollectionHeader extends Component {
                     />
                     {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p style={{ color: get(data, 'tag.textColor') }}>{get(data, 'tag.text')}</p></div>}
                   </div>
-                  <Header style={{ color: get(data, 'descriptionColor') }} as="h4" inverted>
+                  <Header style={{ color: get(data, 'descriptionColor') }} as="h4" inverted className="left-align">
                     {title}
                   </Header>
-                  <span style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
+                  <p style={{ color: get(data, 'descriptionColor') }} className="collection-desc"><HtmlEditor readOnly content={get(data, 'description')} /></p>
                   <div className="clearfix social-links mt-10">
                     {get(data, 'social[0]')
                       ? get(data, 'social').map(site => (

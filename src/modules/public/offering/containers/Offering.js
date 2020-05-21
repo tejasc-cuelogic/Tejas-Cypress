@@ -17,27 +17,24 @@ const LoadMoreBtn = ({ action, param, isMobile }) => (
 );
 
 const NsCapital = ({ nsCapitalMeta, isMobile, isTablet }) => (
-  <section key={nsCapitalMeta.title} className={`${isMobile || isTablet ? 'pt-20 pb-50' : 'pt-100 pb-100'} bg-white`}>
+  <section key={nsCapitalMeta.title} className={`${isMobile || isTablet ? 'pt-0 pb-50' : 'pt-40 pb-100'} bg-white`}>
     <Container>
       <Grid>
-      <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16} floated={!isMobile ? 'left' : ''}>
         {!isMobile && !isTablet
             && (
-              <div>
+              <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16} floated={!isMobile ? 'left' : ''}>
                 <Header as="h2" className="mb-40 left-align">{nsCapitalMeta.title}</Header>
                 <p className="mb-30 mt-30">{nsCapitalMeta.description}</p>
                 {nsCapitalMeta.disclosure
                   ? <p className="note mt-30">{nsCapitalMeta.disclosure}</p>
                   : <a href="/capital" target="_blank" rel="noopener noreferrer"><Button primary className="mb-30">Learn More</Button></a>
                 }
-              </div>
+              </Grid.Column>
             )
           }
-        </Grid.Column>
-        <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
           {isMobile || isTablet
             ? (
-              <div>
+              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} className="pt-0" floated={!isMobile ? 'right' : ''}>
                 <Header as="h2" className="left-align">{nsCapitalMeta.title}</Header>
                 <p className="mb-30 mt-10">{nsCapitalMeta.date}</p>
                 <p className="mb-30 mt-30">{nsCapitalMeta.description}</p>
@@ -46,11 +43,14 @@ const NsCapital = ({ nsCapitalMeta, isMobile, isTablet }) => (
                   ? <p className="note mt-30">{nsCapitalMeta.disclosure}</p>
                   : <a href="/capital" target="_blank" rel="noopener noreferrer"><Button primary className="mb-30">Learn More</Button></a>
                 }
-              </div>
+              </Grid.Column>
             )
-            : <NSImage path={nsCapitalMeta.image} fluid />
+            : (
+              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
+                <NSImage path={nsCapitalMeta.image} fluid />
+              </Grid.Column>
+            )
           }
-        </Grid.Column>
       </Grid>
     </Container>
   </section>

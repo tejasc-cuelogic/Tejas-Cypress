@@ -215,6 +215,9 @@ h6{
 .pt-70{
 	padding-top:@70px !important;
 }
+.pt-80{
+	padding-top:@80px !important;
+}
 .pt-100{
 	padding-top: 100px !important;
 }
@@ -3627,6 +3630,12 @@ h3.ui.header.error-2{
 	}
 }
 .collection-listings-box{
+	&.ui.container{
+		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+			margin-left: 0 !important;	
+			margin-right: 0 !important;	
+		}
+	}
 	.ui.header{
 		color:@white;
 		margin-top: 0 !important;
@@ -3641,6 +3650,8 @@ h3.ui.header.error-2{
 			@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
 				margin-bottom: 20px !important;
 				margin-top: 0 !important;
+				margin-left: 0 !important;	
+				margin-right: 0 !important;	
 				&:last-child{
 					margin-bottom: 0 !important;
 				}
@@ -3652,7 +3663,6 @@ h3.ui.header.error-2{
 	}
 	p{
 		font-size: @15px;
-		color:@neutral;
 		line-height: @24px;
 	}
 	.ui.cards>.card .ui.image{
@@ -3671,20 +3681,18 @@ h3.ui.header.error-2{
 	.collection-bg-image{
 		height: 100%;
 	}
-	@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
-		&.ui.container{
-			// margin-left: 0 !important;
-			// margin-right: 0 !important;
-			max-width: 345px !important;
-			margin:0 auto !important;
-		}
-	}
+	
 	.ui.inverted.button.collectionExplore{
 		color:@neutral;
 		border-width:2px !important;
 		border-style: solid !important;
 		border-color: transparent;
 		box-shadow: none !important;
+	}
+	.collection-inner-img{
+		max-width: 360px !important;
+		position: relative !important;
+		margin: 0 auto !important;
 	}
 }
 .collection-bg-image {
@@ -3727,4 +3735,8 @@ h3.ui.header.error-2{
 	.campaign-list-wrapper{
 		padding-top: 0 !important;
 	}
+}
+.offering-layout-menu .collection-desc p{
+	color: inherit !important;
+	text-align: left !important;
 }
