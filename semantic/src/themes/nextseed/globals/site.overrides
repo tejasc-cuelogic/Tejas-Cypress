@@ -200,6 +200,12 @@ h6{
 .pr-0{
 	padding-right: 0 !important;
 }
+.pr-15{
+	padding-right: 15px !important;
+}
+.pl-15{
+	padding-left: 15px !important;
+}
 .pl-100{
 	padding-left: 100px !important;
 }
@@ -287,6 +293,9 @@ h6{
 }
 .p-36{
 	padding: 36px !important;
+}
+.p-22{
+	padding: 22px !important;
 }
 .p-60{
 	padding: @60px !important;
@@ -3699,8 +3708,9 @@ h3.ui.header.error-2{
 					right: 0;
 					margin: 0 auto;
 					height: auto;
-					max-width: 270px;
+					max-width: 100 !important;
 					display: block;
+					width: 100% !important;
 				}
 			}
 			@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){

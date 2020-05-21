@@ -60,7 +60,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength, toggle
                     </div>
                   )}
               </div>
-              <div className="full-width mt-0 p-36">
+              <div className="full-width mt-0 p-22">
                 {get(collection, 'marketing.tombstone.bgImage.url')
                   && <Image64 reRender bg originalImg className="collection-bg-image" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
                 }
@@ -119,7 +119,7 @@ export default class CollectionsList extends Component {
       return <InlineLoader />;
     }
     return (
-      <div className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-20 pb-70' : 'pt-70 pb-50'}`}>
+      <div className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pl-15 pr-15 pt-20 pb-70' : 'pt-70 pb-50'}`}>
         {offering
           && <Heading responsiveVars={responsiveVars} />}
         {publicCollections && publicCollections.length

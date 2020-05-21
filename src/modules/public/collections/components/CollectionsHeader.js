@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Item, Container, Responsive } from 'semantic-ui-react';
-// import NSImage from '../../../shared/NSImage';
+import NSImage from '../../../shared/NSImage';
 
 const HeaderItem = ({ collectionHeader, responsiveVars }) => (
   <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50 ' : 'pt-100 pb-100'}>
@@ -16,9 +16,9 @@ const HeaderItem = ({ collectionHeader, responsiveVars }) => (
         <Item.Group className="horizontal-items home-page">
         {collectionHeader.map(b => (
           <Item>
-            {/* <div className="ui mini image">
+            <div className="ui mini image">
               <NSImage path={b.icon} />
-            </div> */}
+            </div>
             <Item.Content>
               <Item.Header as="h6">{b.title}</Item.Header>
               <Item.Meta>{b.description}</Item.Meta>
@@ -56,12 +56,12 @@ class CollectionsHeader extends Component {
         id: 1,
         title: 'Locations',
         description: 'Search in your neighborhood, hometown, or region.',
-        icon: 'icons/locationIcon.svg',
+        icon: 'icons/iconLocation.svg',
       }, {
         id: 2,
         title: 'Interests & Industries',
         description: 'Invest in the categories you find most relevant.',
-        icon: 'icons/interestsIcon.svg',
+        icon: 'icons/iconSearch.svg',
       }, {
         id: 3,
         title: 'Partners',
