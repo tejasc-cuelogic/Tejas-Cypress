@@ -3835,7 +3835,23 @@ h3.ui.header.error-2{
 .capital-wrap{
 	@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
 		img{
-			width: 100% !important;
+			max-width: 100% !important;
+			margin: 0 auto !important;
+			display: block !important;
+			float: none !important;
 		}
+	}
+}
+.contact-divider{
+	top:0 !important;
+	height: 100% !important;
+	&::before{
+		display: none !important;
+	}
+	&:after{
+		height: 100% !important;
+	}
+	@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+		display: none !important;
 	}
 }

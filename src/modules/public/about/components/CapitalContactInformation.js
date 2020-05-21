@@ -69,7 +69,6 @@ export default class CapitalContactInformation extends React.Component {
                 </Grid>
               </section>
             </Grid.Column>
-            <Divider vertical />
             <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8}>
               <section className={`capital-contact-form ${responsiveVars.isMobile ? '' : 'padded'}`}>
                 <p>I want to be notified when the Fund is accepting investments</p>
@@ -92,6 +91,7 @@ export default class CapitalContactInformation extends React.Component {
               </section>
             </Grid.Column>
           </Grid>
+          <Divider className="contact-divider" vertical />
         </Card.Content>
       </Card>
     );

@@ -32,7 +32,7 @@ class Capital extends Component {
           </div>
         </Container>
       </section>
-      <section className={`${responsiveVars.uptoTablet ? 'pt-0 pb-0' : 'pt-70 pb-70'}`}>
+      <section className={`capital-wrap ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-70 pb-70'}`}>
         <Container>
         <p className="mb-30 mt-30">Small businesses have long been applauded as the backbone of our economy. Unfortunately, private capital markets have not treated them with the same regard.</p>
         <p className="mb-30 mt-30">While high-growth technology companies have captured the attention and funding from venture capital, income-based businesses have historically been ignored and underserved by investors. Quite simply, SMB’s with annual revenues below $5 million have been considered “not worth the time” for traditional investors.</p>
@@ -48,14 +48,14 @@ class Capital extends Component {
           </Grid>
         </Container>
       </section>
-      <section className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pt-0 pb-0' : 'pt-100 pb-30'}`}>
+      <section className={`capital-wrap bg-offwhite ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-100 pb-30'}`}>
         <Container>
           <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
             <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} className="capital-sidebg" floated="left">
               <NSImage floated="left" path={responsiveVars.uptoTablet ? 'capital/imgMobile.png' : 'capital/img.png'} />
             </Grid.Column>
             <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} floated="right" className="pt-0">
-              <section className={`capital-wrap ${responsiveVars.isMobile ? '' : 'pl-100 pt-0 pr-0'}`}>
+              <section className={`${responsiveVars.isMobile ? '' : 'pl-100 pt-0 pr-0'}`}>
                 <Header as="h2" className="capital-header">Overview</Header>
                 <List bulleted relaxed="very" className={`${responsiveVars.isMobile ? '' : 'mt-30'} capital`}>
                   <List.Item className="pb-0 mt-0 mb-10 pt-0">
@@ -76,11 +76,11 @@ class Capital extends Component {
           </Grid>
         </Container>
       </section>
-      <section className={`${responsiveVars.uptoTablet ? 'pt-0 pb-0' : 'pt-100 pb-40'}`}>
+      <section className={`capital-wrap ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-100 pb-40'}`}>
         <Container>
-          <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
+          <Grid stackable className="mt-0 mb-0 mlr-0">
             <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left" className="pt-0 pl-0">
-              <section className={`capital-wrap ${responsiveVars.isMobile ? '' : 'pt-0 pl-0'}`}>
+              <section className={`${responsiveVars.isMobile ? '' : 'pt-0 pl-0'}`}>
                 <Header as="h2" className="capital-header">Proposed Investment Strategy</Header>
                 <List className={`${responsiveVars.isMobile ? '' : 'mt-30'} icon-list`}>
                   <List.Item className="pb-0 mt-0 mb-20 pt-0">
