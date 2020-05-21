@@ -23,13 +23,6 @@ mutation updateUserReferralCode($referralCode: String!) {
   )
 }`;
 
-export const fundNotificationSignUp = gql`
-mutation fundNotificationSignUp($emailAddress: String!) {
-  fundNotificationSignUp (
-    emailAddress: $emailAddress
-  )
-}`;
-
 export const getBoxFileDetails = gql`
   query getFileDetails($fileId: String!) {
     getFileDetails (fileId: $fileId) {
