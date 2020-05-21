@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Button, Grid, Header } from 'semantic-ui-react';
+import { Modal, Button, Form, Divider } from 'semantic-ui-react';
 import { activityActions } from '../../../services/actions';
-import { FormCheckbox } from '../../../theme/form';
-
-// import { get } from 'lodash';
+import { Logo, FieldError } from '../../../theme/shared';
 
 @inject('authStore', 'uiStore')
 @withRouter
 @observer
 class OfferingsPassProtected extends Component {
-  // state = { password: '', error: '', previewPassLoader: false };
+  state = { password: '', error: '', previewPassLoader: false };
 
   constructor(props) {
     super(props);
-    // this.state = { password: '', error: '' };
+    this.state = { password: '', error: '' };
   }
 
   submit = () => {
@@ -46,50 +44,32 @@ class OfferingsPassProtected extends Component {
   }
 
   render() {
-    const headerMsg = 'This document is only available to accredited investors.';
-    const paraMsg = <span>Please confirm that you are an accredited<br /> investor to view this document.</span>;
-    return (!this.state.isSelfAccredited || !currentUser) ? (
-      <section className={`no-updates center-align padded ${!currentUser ? 'pt-0 pb-0' : 'bg-offwhite'}`}>
-        <Header as="h3" className="mb-20 mt-50">
-          {headerMsg}
-        </Header>
-        {
-          !currentUser
-            ? <p>Please log in or create an account to view this document.</p>
-            : <p>{paraMsg}</p>
-        }
-        {
-          !currentUser
-            ? <Button primary content="Log in / Sign Up" className="mt-20 mb-50" onClick={this.handleLoginAction} />
-            : (
-            <>
-              {/* <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" /> */}
-              <Button primary content="Confirm Status" className="mt-20 mb-50" onClick={this.selfAccreditedHandle} />
-            </>
-              )}
-      </section>
-    ) : (
-      <section className="no-updates padded plr-0">
-        <Grid columns="2" stackable doubling>
-          <Grid.Column>
-            <Header as="h3" className="mb-20">
-              {headerMsg}
-            </Header>
-            <p className="line-height-24">{paraMsg}</p>
-          </Grid.Column>
-          <Grid.Column>
-            <FormCheckbox
-              defaults
-              fielddata={SELF_ACCREDITATION_FRM.fields.status}
-              name="status"
-              containerclassname="ui very relaxed list"
-              changed={(e, res) => formChange(e, res, 'SELF_ACCREDITATION_FRM')}
-              disabled={this.state.loading}
-            />
-            <Button loading={this.state.loading} primary content="Confirm" className="mt-20" disabled={SELF_ACCREDITATION_FRM.fields.status.value.length !== 2} onClick={e => this.investorSelfVerifyAccreditedStatus(e)} />
-          </Grid.Column>
-        </Grid>
-      </section>
+    return (
+      <>
+        <Modal size="mini" basic open className="multistep-modal">
+          <Logo size="medium" centered dataSrc="LogoWhiteGreen" />
+          <Divider hidden />
+          <Modal.Content className="signup-modal multistep">
+            <Form onSubmit={this.props.offerPreview ? this.authPreviewOffer : this.submit}>
+              <Form.Input
+                onChange={e => this.setState({ password: e.target.value, error: '' })}
+                fluid
+                placeholder="Please enter password here"
+                label="Password"
+                value={this.state.password}
+                type="password"
+                autoFocus
+                name="password"
+                error={this.state.error}
+              />
+              <FieldError error={this.state.error} />
+              <div className="center-align">
+                <Button disabled={!this.state.password} primary size="large" className="very relaxed" loading={this.state.previewPassLoader}>{this.props.offerPreview ? 'Continue' : 'Log in'}</Button>
+              </div>
+            </Form>
+          </Modal.Content>
+        </Modal>
+      </>
     );
   }
 }

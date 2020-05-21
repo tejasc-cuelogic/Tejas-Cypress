@@ -69,7 +69,7 @@ class offerDetails extends Component {
           this.props.history.push('/offerings');
         } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
           this.props.history.push('/offerings');
-        } else if ((['CREATION'].includes(get(exception, 'stage')) || ['BD_506B'].includes(get(campaign, 'regulation'))) && get(exception, 'promptPassword')) {
+        } else if (['BD_506B'].includes(get(campaign, 'regulation')) && get(exception, 'promptPassword')) {
           this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
           this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
@@ -196,8 +196,13 @@ class offerDetails extends Component {
       return (
         <>
           { ['BD_506B'].includes(get(campaign, 'regulation'))
-            ? <OfferingsPassProtected />
-            : (
+            ? (
+              <OfferingsPassProtected
+                offerPreview
+                authPreviewOffer={this.authPreviewOffer}
+                offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
+              />
+            ) : (
               <DevPassProtected
                 offerPreview
                 authPreviewOffer={this.authPreviewOffer}
