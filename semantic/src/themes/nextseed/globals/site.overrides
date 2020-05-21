@@ -3614,6 +3614,9 @@ h3.ui.header.error-2{
 			-webkit-line-clamp: 4;
 			-webkit-box-orient: vertical;
 			margin-bottom: 0;
+			section{
+				padding:0 !important;
+			}
 		}
 	}
 	.ui.grid{
@@ -3665,6 +3668,9 @@ h3.ui.header.error-2{
 			.full-width{
 				position: relative;
 				height: 100%;
+				@media only screen and (min-width:@mobileBreakpoint ) and (max-width:@tabletBreakpoint){
+					position: static;
+				}
 				>p{
 					overflow: hidden;
 					text-overflow: ellipsis;
@@ -3675,13 +3681,14 @@ h3.ui.header.error-2{
 					min-height: 150px;
 				}
 				.collectionExplore{
-					position: absolute;
-					bottom: 36px;
+					position: inherit;
+					bottom: 0px;
 					left: 0;
 					right: 0;
 					margin: 0 auto;
 					height: auto;
 					max-width: 270px;
+					display: block;
 				}
 			}
 			@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
@@ -3730,6 +3737,7 @@ h3.ui.header.error-2{
 		max-width: 360px !important;
 		position: relative !important;
 		margin: 0 auto !important;
+		z-index: 9;
 	}
 }
 .collection-bg-image {
