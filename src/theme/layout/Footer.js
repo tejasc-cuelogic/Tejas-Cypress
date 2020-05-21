@@ -48,7 +48,7 @@ class Footer extends Component {
                   </div>
                 </>
                 <>
-                  <div className="grey-header mt-30">
+                  <div className={`grey-header mt-30 ${isMobile && 'mt-20 center-align'}`}>
                     <b>Have a question?</b>
                     <p className="copyright-info">Contact us at <a className="social-links" href="mailto:support@nextseed.com">support@nextseed.com</a></p>
                   </div>
