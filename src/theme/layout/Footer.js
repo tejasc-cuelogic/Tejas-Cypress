@@ -47,12 +47,10 @@ class Footer extends Component {
                     </a>
                   </div>
                 </>
-                <>
-                  <div className="grey-header mt-30">
-                    <b>Have a question?</b>
-                    <p className="copyright-info">Contact us at <a className="social-links" href="mailto:support@nextseed.com">support@nextseed.com</a></p>
-                  </div>
-                </>
+              </div>
+              <div className="footer-social grey-header">
+                <SocialLinks />
+                <p className={isMobile && 'mt-20'}>© 2020 NextSeed Technologies LLC</p>
               </div>
             </Grid.Column>
             <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info grey-header">
@@ -89,10 +87,6 @@ class Footer extends Component {
                 By accessing this site and any pages thereof, you agree to be bound by the <Link to="/agreements/legal/terms-of-use" target="_blank">Terms of Use</Link> and
                 {' '}<Link to="/agreements/legal/privacy-policy" target="_blank">Privacy Policy</Link>.
               </p>
-              <div className="mt-20 footer-social grey-header">
-                <SocialLinks />
-                <span className={`ml-18 ${isMobile && 'mt-20'}`}>© 2020 NextSeed Technologies LLC</span>
-              </div>
             </Grid.Column>
           </Grid>
         </Container>

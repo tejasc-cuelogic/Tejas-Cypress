@@ -82,13 +82,6 @@
         right: 0;
         top: -40px;
     }
-    &.capital-header{
-        color: #695F54 !important;
-        &.mini{
-            font-size: @38px;
-            line-height: 42px;
-        }
-    }
 }
 
 .notification-panel h4.ui.header{

@@ -32,7 +32,7 @@ const bannerButtonsMeta = [
   {
     label: 'Donate to the LIFE Fund',
     description: 'Make a tax-deductible donation to the Local Impact + Food Entrepreneurs (LIFE) Fund, supporting restaurants and delivering meals to front line healthcare workers.',
-    link: 'https://www.betterunite.com/lifefund',
+    link: 'https://nextseed.link/life-fund',
     showLifeFund: true,
   },
 ];
