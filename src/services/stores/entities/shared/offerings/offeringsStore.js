@@ -556,7 +556,7 @@ export class OfferingsStore {
     offeringStatus.isConvertibleNotes = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.CONVERTIBLE_NOTES;
     offeringStatus.isEquity = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY;
     offeringStatus.isRealEstate = ((this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(offer, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
-    offeringStatus.isPreferredEquity = ((this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(offer, 'keyTerms.equityClass') === 'PREFERRED' || (this.inInvestmentFlow && ['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(offer, 'keyTerms.equityClass'))))));
+    offeringStatus.isPreferredEquity = ((this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(offer, 'keyTerms.equityClass') === 'PREFERRED' || (['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(offer, 'keyTerms.equityClass'))))));
     return offeringStatus;
   }
 }

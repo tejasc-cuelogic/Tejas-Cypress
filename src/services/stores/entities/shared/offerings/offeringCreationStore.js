@@ -184,6 +184,8 @@ export class OfferingCreationStore extends DataModelStore {
 
   @observable currTime = false;
 
+  @observable isMappingValid = true;
+
   constructor() {
     super({ adminInvokeProcessorDriver });
   }
@@ -586,7 +588,25 @@ export class OfferingCreationStore extends DataModelStore {
         this.leadershipExperience[index2] = this[form];
       }
     }
+    if (form === 'UPLOAD_DATA_FRM') {
+      this.validateMultiLevelArrayForm();
+    }
     this.currTime = +new Date();
+  }
+
+  @action
+  validateMultiLevelArrayForm = () => {
+    const uploadform = this.UPLOAD_DATA_FRM.fields.documents;
+    const mappedForm = manageOfferingStore.DOCUMENT_UPLOAD_MAPPING_FRM;
+    if (uploadform && uploadform.length > 0) {
+      forEach(uploadform, (obj, index) => {
+        if (obj.mappingRequired.value) {
+          this.setFieldValue('isMappingValid', mappedForm[index].meta.isValid);
+        }
+      });
+    } else {
+      this.setFieldValue('isMappingValid', true);
+    }
   }
 
   @action

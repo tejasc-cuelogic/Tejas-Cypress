@@ -216,6 +216,9 @@ export default class DataModelStore {
     } else {
       this[form.parentForm][form.childForm] = FormValidator.onChange(this[form.parentForm][form.childForm], FormValidator.pullValues(e, res));
     }
+    if (form.parentForm === 'DOCUMENT_UPLOAD_MAPPING_FRM') {
+      this.validateMappingForm();
+    }
     this.currTime = +new Date();
     // const dynamicFormFields = { ...this[form.parentForm][form.childForm].fields };
     // const mappedArr = [];

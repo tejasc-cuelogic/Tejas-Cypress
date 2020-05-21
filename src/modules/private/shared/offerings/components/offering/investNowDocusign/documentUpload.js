@@ -211,6 +211,7 @@ export default class DocumentUpload extends Component {
       removeData,
       UPLOAD_DATA_FRM,
       currTime,
+      isMappingValid,
     } = this.props.offeringCreationStore;
     const formName = metaInfo.form;
     const docs = [...(this.props[metaInfo.store][metaInfo.form].fields.documents)];
@@ -272,7 +273,7 @@ export default class DocumentUpload extends Component {
             &&
             (
               <div className="right-align mt-20">
-                <Button disabled={!this.props[metaInfo.store][metaInfo.form].meta.isValid || this.props.manageOfferingStore || inProgress === 'save'} loading={inProgress === 'save'} primary className="relaxed" onClick={this.handleFormSubmitForBusinessApplication} >Save</Button>
+                <Button disabled={!this.props[metaInfo.store][metaInfo.form].meta.isValid || !isMappingValid  || inProgress === 'save'} loading={inProgress === 'save'} primary className="relaxed" onClick={this.handleFormSubmitForBusinessApplication} >Save</Button>
               </div>
             )
           }

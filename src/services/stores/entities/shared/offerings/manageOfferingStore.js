@@ -616,6 +616,10 @@ export class ManageOfferingStore extends DataModelStore {
     const pluginInputData = find(data.fielddata.options, o => o.value === data.value && o.defaultKey);
     return pluginInputData.defaultKey;
   };
+
+  validateMappingForm = () => {
+    offeringCreationStore.validateMultiLevelArrayForm();
+  }
 }
 
 decorate(ManageOfferingStore, {
