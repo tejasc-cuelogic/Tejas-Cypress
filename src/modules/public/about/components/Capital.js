@@ -51,10 +51,10 @@ class Capital extends Component {
       <section className={`capital-wrap bg-offwhite ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-100 pb-30'}`}>
         <Container>
           <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} className="capital-sidebg" floated="left">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="capital-sidebg" floated="left">
               <NSImage floated="left" path={responsiveVars.uptoTablet ? 'capital/imgMobile.png' : 'capital/img.png'} />
             </Grid.Column>
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} floated="right" className="pt-0">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right" className="pt-0">
               <section className={`${responsiveVars.isMobile ? '' : 'pl-100 pt-0 pr-0'}`}>
                 <Header as="h2" className="capital-header">Overview</Header>
                 <List bulleted relaxed="very" className={`${responsiveVars.isMobile ? '' : 'mt-30'} capital`}>
@@ -88,7 +88,7 @@ class Capital extends Component {
                     Focus on consumer-facing small businesses
                   </List.Item>
                     <List.Item className="pb-0 mt-0 mb-20 pt-0">
-                      <Icon className="ns-tick" color="grey" size="large" />
+                      <Icon className="ns-tick pr-10" color="grey" size="large" />
                     Tailor investment products to capital needs
                   </List.Item>
                     <List.Item className="pb-0 mt-0 mb-20 pt-0">
@@ -122,13 +122,13 @@ class Capital extends Component {
             <p><b>Important Notices</b></p>
             <p>
               NextSeed Capital is a subsidiary of The Next Seed, Inc., a fast-growing fintech company that enables private companies across the US to raise capital directly from everyday investors. The Next Seed, Inc. operates NextSeed Services, LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.
-          </p>
+            </p>
             <p>
               No Offer: This presentation (“Presentation”) is neither an offer to sell nor a solicitation of an offer to buy any security, nor is it an offer of any sort of investment advice. Instead, it is intended to describe an investment vehicle being developed by NextSeed Capital (“NSC”), the terms of which are under consideration—the Special Situations Local Fund, LP (the “Fund”). An offer may only be made via a written offering document (“Memorandum”) that may be provided by the Fund in the future that offers interests in the Fund (the “Interests”).
-          </p>
+            </p>
             <p>
               Presently, NSC has not yet registered as an investment adviser and does not intend to until the Fund commences operations, and accordingly, NSC does not hold itself out as an investment adviser to any person. Rather, NSC is seeking to obtain indications of interest in potential investments in the Interests, and upon receiving sufficient indications of interest, may finalize the terms of the Fund and commence an offering of Interests via the distribution of the Memorandum.  Until that time, the terms of the offering of the Interests are not certain.
-          </p>
+            </p>
           </Container>
         </section>
       </>
