@@ -200,8 +200,8 @@ h6{
 .pr-0{
 	padding-right: 0 !important;
 }
-.pl-115{
-	padding-left: 115px !important;
+.pl-100{
+	padding-left: 100px !important;
 }
 .pt-half{
 	padding-top: @7px !important;
@@ -389,6 +389,9 @@ h6{
 }
 .regular-text {
 	font-weight: @normal !important;
+}
+.semibold-font{
+	font-weight: 600 !important;
 }
 .more-info {
 	font-size: 12px !important;
@@ -3793,4 +3796,46 @@ h3.ui.header.error-2{
 .offering-layout-menu .collection-desc p{
 	color: inherit !important;
 	text-align: left !important;
+}
+.capital-contact-info{
+	padding: 79px 0 !important;
+	@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+		padding: 0 !important;
+	}
+	text-align: center;
+	section{
+		padding: 0;
+	}
+}
+.capital-contact-form{
+	max-width: 370px;
+	width: 100%;
+	text-align: left;
+	margin: 0 auto;
+	.ui.form{
+		width: 100%;
+		padding-left: 14px;
+		label{
+			display: none !important;
+		}
+		.ui.fluid.input{
+			border: 1px solid #A8A9B0;
+			border-radius: 4px;
+			margin-bottom: 18px;
+			input{
+				border-bottom: none !important;
+				padding: 11px 18px;
+			}
+		}
+		button.ui.button.grey-colored{
+			width: 100%;
+		}
+	}
+}
+.capital-wrap{
+	@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+		img{
+			width: 100% !important;
+		}
+	}
 }
