@@ -228,6 +228,11 @@ section{
             }
         }
    }
+   &.template-two-banner{
+        .campaign-details-banner{
+            height: 448px !important;
+        }
+   }
 }
 .investor-priority-section{
     background:url(../../assets/images/investors/left-phone-mockup.png) no-repeat;
