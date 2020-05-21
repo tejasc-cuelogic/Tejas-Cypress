@@ -3723,3 +3723,8 @@ h3.ui.header.error-2{
 		right: 0;
 	}
 }
+.collection-detail{
+	.campaign-list-wrapper{
+		padding-top: 0 !important;
+	}
+}

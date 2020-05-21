@@ -44,6 +44,8 @@ export class FactoryStore extends DataModelStore {
 
   cronLogList = [];
 
+  pluginObj = {}
+
   requestLogList = [];
 
   processFactoryResponse = {};
@@ -121,8 +123,9 @@ export class FactoryStore extends DataModelStore {
     }
   }
 
-  formChangeForPlugin = (e, res, form, subForm = false) => {
+  formChangeForPlugin = (e, res, form, subForm = false, additionalProps = {}) => {
     if (subForm) {
+      const { listType, selectedPlugin } = additionalProps;
       this[form.parentForm][form.childForm] = Validator.onChange(this[form.parentForm][form.childForm], Validator.pullValues(e, res));
       const dynamicFormFields = { ...this[form.parentForm][form.childForm].fields };
       const mappedArr = [];
@@ -134,6 +137,7 @@ export class FactoryStore extends DataModelStore {
           mappedArr.push(mappedOBj);
         }
       });
+      this.getPluginByType(listType, selectedPlugin, res.value, subForm);
       const defaultValueMappedObj = find(mappedArr, o => o.mappedVal === res.name);
       if (mappedArr.length > 0 && defaultValueMappedObj && !isEmpty(defaultValueMappedObj)) {
         this.setDefaultValueForPayload(form, defaultValueMappedObj);
@@ -189,6 +193,16 @@ export class FactoryStore extends DataModelStore {
     }
   }
 
+  getPluginByType = (pluginType, plugin, subValue = false, isSub = false) => {
+    let tempData = {};
+    tempData = (!isEmpty(pluginType) && get(this.pluginListArr, pluginType))
+      ? get(this.pluginListArr, pluginType).plugins.find(p => p.plugin === plugin)
+      : {};
+    if (isSub) {
+      tempData = tempData.pluginInputs[0].options.find(p => p.key === subValue);
+    }
+    this.pluginObj = { ...tempData };
+  }
 
   get cronLogs() {
     return (this.cronLogList && this.cronLogList.adminFetchCronLogs
@@ -444,6 +458,7 @@ decorate(FactoryStore, {
   processFactoryResponse: observable,
   confirmModal: observable,
   confirmModalName: observable,
+  pluginObj: observable,
   removeIndex: observable,
   initRequest: action,
   formChangeForPlugin: action,
@@ -464,6 +479,7 @@ decorate(FactoryStore, {
   createDynamicFormFields: action,
   fileFactoryPluginTrigger: action,
   fetchPluginsForFileFactory: action,
+  getPluginByType: action,
 });
 
 export default new FactoryStore();
