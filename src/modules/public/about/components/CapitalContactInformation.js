@@ -83,7 +83,7 @@ export default class CapitalContactInformation extends React.Component {
                         />
                       </Grid.Column>
                       <Grid.Column computer={4} tablet={4} mobile={16}>
-                        <Button className="grey-colored" loading={inProgress}>Notify Me</Button>
+                        <Button className="grey-colored" disabled={!CONTACT_INFO_FRM.meta.isValid || inProgress} loading={inProgress}>Notify Me</Button>
                       </Grid.Column>
                     </Form>
                   </Grid.Row>
