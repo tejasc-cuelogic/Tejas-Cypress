@@ -44,33 +44,33 @@ export default class CapitalContactInformation extends React.Component {
     }
 
     return (
-      <Card fluid>
+      <Card fluid className="capital-contact-info">
         <Card.Content className={responsiveVars.isMobile ? '' : 'pt-0 pb-0 plr-0'}>
           <Grid stackable className="mt-0 mb-0 mlr-0">
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8}>
-              <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'padded'}`}>
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} className="pt-0">
+              <section className={` ${responsiveVars.isMobile ? '' : 'padded'}`}>
                 <Header as="h2" className="capital-header">Contact Information</Header>
                 <p>bharat@nextseed.com | 832.533.2700</p>
               </section>
-              <section>
+              <section className="pt-40">
                 <Grid>
-                  <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} floated="right">
+                  <Grid.Column width={responsiveVars.uptoTablet ? 6 : 8} floated="right">
                     <NSImage
                       floated="right"
                       path={responsiveVars.isMobile ? 'capital/bharatMobile.png' : 'capital/bharat.png'}
                       className="mb-0"
                     />
                   </Grid.Column>
-                  <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} floated="left">
-                    <p className="capital-header">Bharat Kesavan</p>
-                    <p className="capital-header">Portfolio Principal</p>
+                  <Grid.Column width={responsiveVars.uptoTablet ? 10 : 8} floated="left" className="left-align">
+                    <p className="capital-header mb-0 semibold-font">Bharat Kesavan</p>
+                    <p className="capital-header mb-0 semibold-font">Portfolio Principal</p>
                     <p>NextSeed Capital</p>
                   </Grid.Column>
                 </Grid>
               </section>
             </Grid.Column>
             <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8}>
-              <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'padded'}`}>
+              <section className={`capital-contact-form ${responsiveVars.isMobile ? '' : 'padded'}`}>
                 <p>I want to be notified when the Fund is accepting investments</p>
                 <Grid>
                   <Grid.Row>
@@ -91,6 +91,7 @@ export default class CapitalContactInformation extends React.Component {
               </section>
             </Grid.Column>
           </Grid>
+          <Divider className="contact-divider" vertical />
         </Card.Content>
       </Card>
     );
