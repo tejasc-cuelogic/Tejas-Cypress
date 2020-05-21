@@ -42,8 +42,9 @@ class Capital extends Component {
               <p>NextSeed Capital is launching in 2020 to invest directly, via flexible debt and equity capital, into small businesses that are vital to their communities. These funds will also provide qualified investors the opportunity to gain direct, diversified exposure to local businesses that provide positive hyper-local impact</p>
               <p className="mb-30 mt-30">NextSeed Capital will operate synergistically with the greater NextSeed platform, which has been a leader in the small business investment space since 2015, to access scalable deal flow and networks while serving as a strategic capital partner for great small businesses.</p>
             </Grid.Column>
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} floated="right">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="center-align" floated="right">
               <NSImage path="capital/slider.png" />
+              <p className="mt-30 note">Small businesses successfully funded on the NextSeed platform</p>
             </Grid.Column>
           </Grid>
         </Container>
