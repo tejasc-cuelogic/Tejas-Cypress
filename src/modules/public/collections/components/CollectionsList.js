@@ -114,7 +114,7 @@ export default class CollectionsList extends Component {
         {offering
         && <Heading responsiveVars={responsiveVars} />}
         {publicCollections && publicCollections.length
-          ? (expandCollection || isMobile ? (
+          ? (expandCollection ? (
             <CollectionCards
               collections={publicCollections}
               responsiveVars={responsiveVars}
