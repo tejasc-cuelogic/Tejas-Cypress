@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import { Header, Container, Button, Grid, Responsive, Divider, Icon } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
@@ -52,7 +52,6 @@ const NsCapital = ({ nsCapitalMeta, isMobile, isTablet }) => (
 
 @inject('campaignStore', 'userStore', 'uiStore', 'collectionStore')
 @observer
-@withRouter
 class Offering extends Component {
   constructor(props) {
     super(props);
