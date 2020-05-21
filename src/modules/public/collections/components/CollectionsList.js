@@ -110,7 +110,7 @@ export default class CollectionsList extends Component {
       return <InlineLoader />;
     }
     return (
-      <div className={`${offering ? 'bg-offwhite' : 'bg-offwhite'} ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-20 pb-70' : 'pt-70 pb-50'}`}>
+      <div className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-20 pb-70' : 'pt-70 pb-50'}`}>
         {offering
         && <Heading responsiveVars={responsiveVars} />}
         {publicCollections && publicCollections.length

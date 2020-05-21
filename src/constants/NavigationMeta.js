@@ -743,6 +743,7 @@ export const PUBLIC_NAV = [
       { title: 'Our Mission', to: 'mission' },
       { title: 'Our Team', to: 'team' },
       { title: 'The NextSeed Group', to: 'group' },
+      { title: 'NextSeed Capital', to: 'capital' },
       { title: 'NextSeed Space', to: 'space' },
     ],
   },
@@ -810,6 +811,7 @@ export const MOBILE_NAV = [
   { title: 'Our Mission', to: 'mission' },
   { title: 'Our Team', to: 'team' },
   { title: 'The NextSeed Group', to: 'group' },
+  { title: 'NextSeed Capital', to: 'capital' },
   { title: 'NextSeed Space', to: 'space' },
 ];
 
