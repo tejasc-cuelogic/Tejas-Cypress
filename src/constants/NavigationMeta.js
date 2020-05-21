@@ -348,7 +348,7 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'wpforms',
-    title: 'Collections',
+    title: 'Communities',
     capability: 'COLLECTIONS_ANY',
     to: 'communities',
     path: 'admin/collections',
