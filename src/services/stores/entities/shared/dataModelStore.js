@@ -217,7 +217,8 @@ export default class DataModelStore {
       this[form.parentForm][form.childForm] = FormValidator.onChange(this[form.parentForm][form.childForm], FormValidator.pullValues(e, res));
     }
     if (form.parentForm === 'DOCUMENT_UPLOAD_MAPPING_FRM') {
-      this.validateMappingForm();
+      // this.validateMappingForm();
+      this.validateMappingForFormChange(form.childForm);
     }
     this.currTime = +new Date();
     // const dynamicFormFields = { ...this[form.parentForm][form.childForm].fields };
@@ -413,6 +414,11 @@ export default class DataModelStore {
   addMoreForNlevelForm = (form, subForm, key, count = 1) => {
     this[form][subForm] = FormValidator.addMoreRecordToSubSection(this[form][subForm], key, count, true);
     this.currTime = +new Date();
+    if (form === 'DOCUMENT_UPLOAD_MAPPING_FRM') {
+      this[form][subForm] = FormValidator.validateForm(this[form][subForm], true, false, false);
+      // this.validateMappingForm();
+      this.validateMappingForFormChange(subForm);
+    }
   }
 
   removeOneForNlevelForm = (form, subForm, arrayName, index, e = undefined) => {
@@ -421,6 +427,11 @@ export default class DataModelStore {
     }
     this[form][subForm].fields[arrayName].splice(index, 1);
     this.currTime = +new Date();
+    if (form === 'DOCUMENT_UPLOAD_MAPPING_FRM') {
+      this[form][subForm] = FormValidator.validateForm(this[form][subForm], true, false, false);
+      // this.validateMappingForm();
+      this.validateMappingForFormChange(subForm);
+    }
   }
 
   resetAll = () => {
@@ -522,6 +533,9 @@ export default class DataModelStore {
       }
     }
     array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
+    if (form === 'DOCUMENT_UPLOAD_MAPPING_FRM') {
+      this.validateMappingForm();
+    }
     return array;
   }
 }

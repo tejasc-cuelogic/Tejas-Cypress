@@ -579,6 +579,7 @@ export class ManageOfferingStore extends DataModelStore {
     const { offer } = offeringsStore;
     const mappingData = get(offer, `investNow.docuSign.doc[${index}]`);
     this[form][index] = Validator.setFormData(this[form][index], mappingData, ref, keepAtLeastOne);
+    this[form][index] = Validator.validateForm(this[form][index], true, false, false);
   }
 
   updateConfig = () => {
@@ -619,6 +620,10 @@ export class ManageOfferingStore extends DataModelStore {
 
   validateMappingForm = () => {
     offeringCreationStore.validateMultiLevelArrayForm();
+  }
+
+  validateMappingForFormChange = (index) => {
+    offeringCreationStore.validateMultiLevelArrayFormChange(index);
   }
 }
 

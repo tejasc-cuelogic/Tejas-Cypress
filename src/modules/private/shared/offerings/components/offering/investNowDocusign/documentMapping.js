@@ -147,7 +147,8 @@ class DocumentMapping extends Component {
     const { UPLOAD_DATA_FRM } = offeringCreationStore;
     // const isReadonly = false;
     // const formName = metaInfo.form;  
-    const docs = [...(this.props[metaInfo.store][metaInfo.form][mapIndex].fields.mapping)];
+    // const docs = [...(this.props[metaInfo.store][metaInfo.form][mapIndex].fields.mapping)];
+    const docs = [];
     const currentForm = DOCUMENT_UPLOAD_MAPPING_FRM[mapIndex];
     const isMappingShow = !!(UPLOAD_DATA_FRM.fields.documents[mapIndex].mappingRequired.value && UPLOAD_DATA_FRM.fields.documents[mapIndex].mappingRequired.value !== '')
     return (

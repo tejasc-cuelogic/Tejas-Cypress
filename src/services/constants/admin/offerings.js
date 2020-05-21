@@ -2903,11 +2903,11 @@ export const UPLOAD_DATA = {
   documents: [{
     ...DATA_ROOM_COMMON,
     mappingRequired: {
-      value: '',
-      values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
+      value: false,
+      values: [{ label: 'No', value: false }, { label: 'Yes', value: true }],
       label: 'Is mapping required?',
       error: undefined,
-      defaultValue: true,
+      defaultValue: false,
       rule: 'optional',
     },
   }],

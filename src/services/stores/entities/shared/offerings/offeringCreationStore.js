@@ -589,9 +589,24 @@ export class OfferingCreationStore extends DataModelStore {
       }
     }
     if (form === 'UPLOAD_DATA_FRM') {
-      this.validateMultiLevelArrayForm();
+      this.validateMultiLevelArrayFormChange(index);
     }
     this.currTime = +new Date();
+  }
+
+  @action
+  validateMultiLevelArrayFormChange = (index) => {
+    const uploadform = this.UPLOAD_DATA_FRM.fields.documents;
+    const mappedForm = manageOfferingStore.DOCUMENT_UPLOAD_MAPPING_FRM;
+    if (uploadform && uploadform.length > 0) {
+      if (!uploadform[index].mappingRequired.value) {
+        this.setFieldValue('isMappingValid', true);
+      } else {
+        this.setFieldValue('isMappingValid', mappedForm[index].meta.isValid);
+      }
+    } else {
+      this.setFieldValue('isMappingValid', true);
+    }
   }
 
   @action
@@ -2295,6 +2310,8 @@ export class OfferingCreationStore extends DataModelStore {
       };
     });
     this[activeForm] = Validator.setFormData(this[activeForm], { documents: uploadDocs });
+    const multiForm = this.getActionType(activeForm, 'isMultiForm');
+    this.checkFormValid(activeForm, multiForm);
   }
 
   @action
