@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { pick } from 'lodash';
 import { Form, Grid } from 'semantic-ui-react';
 import { DropdownFilter, DateRangeFilter } from '../../../../../../theme/form/Filters';
 import { NsPaginationHookType } from '../../../../../../theme/shared';
@@ -25,7 +26,7 @@ export default class Filters extends Component {
                 <DropdownFilter value={requestState.search.emailType} label="Email Type" name="emailType" change={setSearchParam} options={listEmailTypes} />
               </Grid.Column>
               <Grid.Column width={3}>
-                <DropdownFilter value={requestState.search.emailIdentifier} label="Email Identifier" name="emailIdentifier" change={setSearchParam} options={listEmailIdentifiers} />
+                <DropdownFilter value={requestState.search.emailIdentifier} label="Email Identifier" name="emailIdentifier" change={setSearchParam} options={listEmailIdentifiers.length > 0 ? listEmailIdentifiers.map(o => pick(o, ['key', 'value', 'text'])) : []} />
               </Grid.Column>
               <Grid.Column width={6}>
                 <NsPaginationHookType floated="right" initRequest={({ first, page }) => paginate({ first, page, noFilter: true })} meta={{ totalRecords, requestState }} />
