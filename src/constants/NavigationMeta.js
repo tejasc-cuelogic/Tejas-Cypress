@@ -350,7 +350,7 @@ export const PRIVATE_NAV = [
     icon: 'wpforms',
     title: 'Collections',
     capability: 'COLLECTIONS_ANY',
-    to: 'collections',
+    to: 'communities',
     path: 'admin/collections',
     accessibleTo: ['admin', 'manager', 'support'],
     subPanel: 0,

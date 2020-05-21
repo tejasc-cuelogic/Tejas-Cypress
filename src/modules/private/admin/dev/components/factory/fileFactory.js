@@ -40,6 +40,7 @@ function FileFactory(props) {
                       onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
                       containerclassname: 'dropdown-field mlr-0',
                       placeholder: 'Choose here',
+                      containerwidth: 16,
                       options: FILEFACTORY_FRM.fields.method.values,
                       className: 'mb-80',
                     })}
