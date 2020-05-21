@@ -48,9 +48,9 @@ class Footer extends Component {
                   </div>
                 </>
                 <>
-                  <div className="grey-Header mt-30">
+                  <div className="grey-header mt-30">
                     <b>Have a question?</b>
-                    <p>Contact us at <a href="mailto:support@nextseed.com">support@nextseed.com</a></p>
+                    <p className="copyright-info">Contact us at <a className="social-links" href="mailto:support@nextseed.com">support@nextseed.com</a></p>
                   </div>
                 </>
               </div>
@@ -91,7 +91,7 @@ class Footer extends Component {
               </p>
               <div className="mt-20 footer-social grey-header">
                 <SocialLinks />
-                <p className={isMobile && 'mt-20'}>© 2020 NextSeed Technologies LLC</p>
+                <span className={`ml-18 ${isMobile && 'mt-20'}`}>© 2020 NextSeed Technologies LLC</span>
               </div>
             </Grid.Column>
           </Grid>

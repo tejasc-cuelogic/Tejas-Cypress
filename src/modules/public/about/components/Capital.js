@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Grid, Header, Container, List, Icon, Card, Responsive } from 'semantic-ui-react';
+import { Grid, Header, Container, List, Icon, Card, Responsive, Button, Form, Input } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
 @inject('navStore', 'userStore', 'uiStore')
@@ -41,7 +41,7 @@ render() {
               <p>NextSeed Capital is launching in 2020 to invest directly, via flexible debt and equity capital, into small businesses that are vital to their communities. These funds will also provide qualified investors the opportunity to gain direct, diversified exposure to local businesses that provide positive hyper-local impact</p>
               <p className="mb-30 mt-30">NextSeed Capital will operate synergistically with the greater NextSeed platform, which has been a leader in the small business investment space since 2015, to access scalable deal flow and networks while serving as a strategic capital partner for great small businesses.</p>
             </Grid.Column>
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} floated="right">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} floated="right">
               <NSImage path="capital/slider.png" />
             </Grid.Column>
           </Grid>
@@ -50,10 +50,10 @@ render() {
       <section className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
         <Container>
           <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} className="capital-sidebg">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="capital-sidebg" floated="left">
               <NSImage floated="left" path={responsiveVars.uptoTablet ? 'capital/imgMobile.png' : 'capital/img.png'} />
             </Grid.Column>
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} floated="right">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
               <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'padded'}`}>
                 <Header as="h2" className="capital-header">Overview</Header>
                 <List bulleted relaxed="very" className={`${responsiveVars.isMobile ? '' : 'mt-30'} capital`}>
@@ -71,7 +71,6 @@ render() {
                   </List.Item>
                 </List>
               </section>
-              {/* <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} className="capital-sidebg" floated="left" /> */}
             </Grid.Column>
           </Grid>
         </Container>
@@ -79,7 +78,7 @@ render() {
       <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
         <Container>
           <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7}>
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
               <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'padded'}`}>
                 <Header as="h2" className="capital-header">Proposed Investment Strategy</Header>
                 <List className={`${responsiveVars.isMobile ? '' : 'mt-30'} icon-list`}>
@@ -106,75 +105,64 @@ render() {
                 </List>
               </section>
             </Grid.Column>
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="capital-sidebg">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="capital-sidebg" floated="right">
               <NSImage floated="right" path={responsiveVars.uptoTablet ? 'capital/houstonMobile.png' : 'capital/houston.png'} />
             </Grid.Column>
           </Grid>
         </Container>
       </section>
-      {/* <section className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pt-50 pb-0' : 'pt-100 pb-0'}`}>
+      <section className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
         <Container>
           <Card fluid>
-            <section className={responsiveVars.isMobile ? '' : 'padded'}>
-              <Header as="h2" className={`${responsiveVars.isMobile ? 'mb-30' : 'mb-80'} capital-header left-align`}>Contact Information</Header>
-              <Card.Group itemsPerRow="2" stackable>
-                <Card className="capital-card">
-                  <Card.Content>
-                    <NSImage
-                      floated="left"
-                      path="capital/bharat.png"
-                    />
-                    <Card.Header className="capital-header">Bharat Kesavan<br />Portfolio Principal</Card.Header>
-                    <Card.Meta className="text-lowercase">NextSeed Capital</Card.Meta>
-                    <Card.Description>
-                      Broad M&A and capital markets (high yield, investment grade and equities) background with transactions totaling $10bn+ in deal value. Prior to NextSeed, worked at BNP Paribas and BofA Merrill Lynch. Experienced in yield-based limited partnerships. Early career experience in financial monitoring and reporting. BBA from the University of Georgia and an MBA from the University of Texas at Austin.
-                    </Card.Description>
-                  </Card.Content>
-                </Card>
-                <Card className="capital-card">
-                  <Card.Content>
-                    <NSImage
-                      floated="left"
-                      path="capital/yorro_yp.png"
-                    />
-                    <Card.Header className="capital-header">YP Yorro<br />Managing Director</Card.Header>
-                    <Card.Meta className="text-lowercase">NextSeed Securities</Card.Meta>
-                    <Card.Description>
-                      Leads NextSeed’s efforts to originate, evaluate and execute investment opportunities in consumer-facing businesses. Previously served as Vice President of EMG, a $15 billion AUM private equity firm where he closed $5 billion in EMG-led equity commitments and directed portfolio company management teams on organic/inorganic growth.  BA from Boston College and dual MBA/MIA degrees from Columbia University.
-                    </Card.Description>
-                  </Card.Content>
-                </Card>
-              </Card.Group>
-            </section>
+            <Card.Content className={responsiveVars.isMobile ? '' : 'pt-0 pb-0 plr-0'}>
+              <Grid stackable className="mt-0 mb-0 mlr-0">
+                <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8}>
+                  <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'padded'}`}>
+                    <Header as="h2" className="capital-header">Contact Information</Header>
+                    <p>bharat@nextseed.com | 832.533.2700</p>
+                  </section>
+                  <section>
+                    <Grid>
+                      <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} floated="right">
+                        <NSImage
+                          floated="right"
+                          path={responsiveVars.isMobile ? 'capital/bharatMobile.png' : 'capital/bharat.png'}
+                          className="mb-0"
+                        />
+                      </Grid.Column>
+                      <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} floated="left">
+                        <p className="capital-header">Bharat Kesavan</p>
+                        <p className="capital-header">Portfolio Principal</p>
+                        <p>NextSeed Capital</p>
+                      </Grid.Column>
+                    </Grid>
+                  </section>
+                </Grid.Column>
+                <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8}>
+                  <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'padded'}`}>
+                    <p>I want to be notified when the Fund is accepting investments</p>
+                    <Grid centered>
+                      <Grid.Row>
+                        <Grid.Column computer={12} tablet={12} mobile={16}>
+                          <Form>
+                            <Input />
+                          </Form>
+                        </Grid.Column>
+                        <Grid.Column computer={4} tablet={4} mobile={16}>
+                          <Button className="grey-colored" fluid>Notify Me</Button>
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
+                  </section>
+                </Grid.Column>
+              </Grid>
+            </Card.Content>
           </Card>
-        </Container>
-      </section> */}
-      <section className={`capital_contact_info ${responsiveVars.isMobile ? 'pb-50 pt-50' : 'pb-80 pt-80'} bg-offwhite`}>
-        <Container>
-        <Grid stackable centered>
-          <Grid.Column width="8" textAlign="left" verticalAlign="middle">
-            <Header as="h2" className="capital-header mini">Contact for more information</Header>
-            <p>bharat@nextseed.com | 832.533.2700</p>
-          </Grid.Column>
-          <Grid.Column width="7">
-            <Card className="capital-card with-shadow pull-right">
-              <Card.Content>
-                <NSImage
-                  floated="left"
-                  path="capital/bharat.png"
-                  className="mb-0"
-                />
-                <Card.Header>Bharat Kesavan<br />Portfolio Principal</Card.Header>
-                <Card.Meta className="text-lowercase">NextSeed Capital</Card.Meta>
-              </Card.Content>
-            </Card>
-          </Grid.Column>
-        </Grid>
         </Container>
       </section>
       <section className={`contact_info_content ${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
         <Container>
-          <b>Important Notices</b><br />
+          <p><b>Important Notices</b></p>
           <p>
             NextSeed Capital is a subsidiary of The Next Seed, Inc., a fast-growing fintech company that enables private companies across the US to raise capital directly from everyday investors. The Next Seed, Inc. operates NextSeed Services, LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.
           </p>
@@ -191,8 +179,4 @@ render() {
 }
 }
 
-// <Card fluid>
-  // <Card.Content className={responsiveVars.isMobile ? '' : 'pt-0 pb-0 plr-0'}>
-  // </Card.Content>
-// </Card>
 export default Capital;
