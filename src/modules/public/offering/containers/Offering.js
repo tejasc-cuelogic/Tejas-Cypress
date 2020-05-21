@@ -17,7 +17,7 @@ const LoadMoreBtn = ({ action, param, isMobile }) => (
 );
 
 const NsCapital = ({ nsCapitalMeta, isMobile, isTablet }) => (
-  <section key={nsCapitalMeta.title} className={`${isMobile || isTablet ? 'pt-0 pb-50' : 'pt-100 pb-100'} bg-white`}>
+  <section key={nsCapitalMeta.title} className={`${isMobile || isTablet ? 'pt-0 pb-50' : 'pt-40 pb-100'} bg-white`}>
     <Container>
       <Grid>
         {!isMobile && !isTablet
