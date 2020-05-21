@@ -26,13 +26,12 @@ export default class CardHeaderPreview extends Component {
       )
       : null;
     return (
-
       <div className="campaign-banner collection-banner" style={{ backgroundColor: get(collection, 'bgColor.value') }}>
         {get(collection, 'bgImage.preSignedUrl')
           && <Image64 bg className="collection-bg-image" srcUrl={get(collection, 'bgImage.preSignedUrl')} />
         }
         <section className="banner">
-          <Responsive minWidth={768} as={Container}>
+          <Responsive minWidth={768} as={Container} className="pt-70 pb-70">
             <Grid relaxed stackable centered>
               <Grid.Column width={7}>
                 <div className="video-wrapper campaign">
