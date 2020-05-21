@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import { Header, Container, Button, Grid, Responsive, Divider, Icon } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
@@ -25,7 +25,10 @@ const NsCapital = ({ nsCapitalMeta, isMobile, isTablet }) => (
               <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16} floated={!isMobile ? 'left' : ''}>
                 <Header as="h2" className="mb-40 left-align">{nsCapitalMeta.title}</Header>
                 <p className="mb-30 mt-30">{nsCapitalMeta.description}</p>
-                <Button className="mt-30" as={Link} to="/capital" primary content="Learn More" />
+                {nsCapitalMeta.disclosure
+                  ? <p className="note mt-30">{nsCapitalMeta.disclosure}</p>
+                  : <a href="/capital" target="_blank" rel="noopener noreferrer"><Button primary className="mb-30">Learn More</Button></a>
+                }
               </Grid.Column>
             )
           }
@@ -35,8 +38,11 @@ const NsCapital = ({ nsCapitalMeta, isMobile, isTablet }) => (
                 <Header as="h2" className="left-align">{nsCapitalMeta.title}</Header>
                 <p className="mb-30 mt-10">{nsCapitalMeta.date}</p>
                 <p className="mb-30 mt-30">{nsCapitalMeta.description}</p>
-                <NSImage className="mb-30" path={nsCapitalMeta.image} fluid />
-                <Button className="mt-30" as={Link} to="/capital" primary fluid content="Learn More" />
+                <NSImage path={nsCapitalMeta.image} fluid />
+                {nsCapitalMeta.disclosure
+                  ? <p className="note mt-30">{nsCapitalMeta.disclosure}</p>
+                  : <a href="/capital" target="_blank" rel="noopener noreferrer"><Button primary className="mb-30">Learn More</Button></a>
+                }
               </Grid.Column>
             )
             : (
