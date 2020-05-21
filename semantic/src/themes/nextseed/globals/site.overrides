@@ -194,6 +194,15 @@ h6{
 .pt-0{
 	padding-top:0 !important;
 }
+.pl-0{
+	padding-left: 0 !important;
+}
+.pr-0{
+	padding-right: 0 !important;
+}
+.pl-115{
+	padding-left: 115px !important;
+}
 .pt-half{
 	padding-top: @7px !important;
 }

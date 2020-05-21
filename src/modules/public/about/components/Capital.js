@@ -31,13 +31,13 @@ render() {
           </div>
         </Container>
       </section>
-      <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
+      <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-70 pb-70'}`}>
         <Container>
         <p className="mb-30 mt-30">Small businesses have long been applauded as the backbone of our economy. Unfortunately, private capital markets have not treated them with the same regard.</p>
         <p className="mb-30 mt-30">While high-growth technology companies have captured the attention and funding from venture capital, income-based businesses have historically been ignored and underserved by investors. Quite simply, SMB’s with annual revenues below $5 million have been considered “not worth the time” for traditional investors.</p>
           <Grid centered reversed="mobile">
             <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
-              <p className="mb-30 mt-30">NextSeed’s online marketplace has been able to leverage technology and a scalable diligence process to review thousands of businesses, shedding light on this new asset class as inefficiently priced and one that offers potential for strong return opportunities for investors.</p>
+              <p className="mb-30">NextSeed’s online marketplace has been able to leverage technology and a scalable diligence process to review thousands of businesses, shedding light on this new asset class as inefficiently priced and one that offers potential for strong return opportunities for investors.</p>
               <p>NextSeed Capital is launching in 2020 to invest directly, via flexible debt and equity capital, into small businesses that are vital to their communities. These funds will also provide qualified investors the opportunity to gain direct, diversified exposure to local businesses that provide positive hyper-local impact</p>
               <p className="mb-30 mt-30">NextSeed Capital will operate synergistically with the greater NextSeed platform, which has been a leader in the small business investment space since 2015, to access scalable deal flow and networks while serving as a strategic capital partner for great small businesses.</p>
             </Grid.Column>
@@ -47,14 +47,14 @@ render() {
           </Grid>
         </Container>
       </section>
-      <section className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
+      <section className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-30'}`}>
         <Container>
           <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="capital-sidebg" floated="left">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} className="capital-sidebg" floated="left">
               <NSImage floated="left" path={responsiveVars.uptoTablet ? 'capital/imgMobile.png' : 'capital/img.png'} />
             </Grid.Column>
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
-              <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'padded'}`}>
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} floated="right" className="pt-0">
+              <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'pl-115 pt-0 pr-0'}`}>
                 <Header as="h2" className="capital-header">Overview</Header>
                 <List bulleted relaxed="very" className={`${responsiveVars.isMobile ? '' : 'mt-30'} capital`}>
                   <List.Item className="pb-0 mt-0 mb-10 pt-0">
@@ -75,11 +75,11 @@ render() {
           </Grid>
         </Container>
       </section>
-      <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
+      <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-40'}`}>
         <Container>
           <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
-              <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'padded'}`}>
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left" className="pt-0 pl-0">
+              <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'pt-0 pl-0'}`}>
                 <Header as="h2" className="capital-header">Proposed Investment Strategy</Header>
                 <List className={`${responsiveVars.isMobile ? '' : 'mt-30'} icon-list`}>
                   <List.Item className="pb-0 mt-0 mb-20 pt-0">
@@ -117,7 +117,7 @@ render() {
             <Card.Content className={responsiveVars.isMobile ? '' : 'pt-0 pb-0 plr-0'}>
               <Grid stackable className="mt-0 mb-0 mlr-0">
                 <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8}>
-                  <section className={`investment_stat_box ${responsiveVars.isMobile ? '' : 'padded'}`}>
+                  <section className={`investment_stat_box p-0 ${responsiveVars.isMobile ? '' : 'padded'}`}>
                     <Header as="h2" className="capital-header">Contact Information</Header>
                     <p>bharat@nextseed.com | 832.533.2700</p>
                   </section>
