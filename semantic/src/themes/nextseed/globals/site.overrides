@@ -3871,3 +3871,8 @@ h3.ui.header.error-2{
 		display: none !important;
 	}
 }
+.offering-side-menu{
+	&.collection-header-wrap{
+		max-height: 100% !important;
+	}
+}
