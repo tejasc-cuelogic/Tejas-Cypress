@@ -26,7 +26,7 @@ class Capital extends Component {
               <NSImage path="capital/ns-capital-logo.svg" className="mb-20" />
               <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-14' : 'mb-14'}>Invest in Small Businesses</Header>
               <Header as="h4" className="mb-40">
-                Access a diversified portfolio of income-generating<Responsive minWidth="768" as="br" />
+                Access a diversified portfolio of income-generating <Responsive minWidth="768" as="br" />
               businesses with NextSeed’s inaugural fund
             </Header>
           </div>
