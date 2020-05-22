@@ -50,7 +50,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength, toggle
       <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
         {
           collections.map((collection, i) => (!collectionLength || expandCollection || (i < collectionLength)) && (
-            <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/collections/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
+            <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/communities/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
               <div className="collection-inner-img">
                 <Image64 reRender originalImg srcUrl={get(collection, 'marketing.tombstone.image.url')} />
                 {get(collection, 'marketing.tombstone.tag.text')
