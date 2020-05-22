@@ -3541,7 +3541,7 @@ h3.ui.header.error-2{
 	}
 }
 .ns_flgs_box{
-	clip-path: polygon(0 0,21% 0,18% 50%,21% 100%,0 100%);
+	clip-path: polygon(0 0,27% 0,24% 50%,27% 100%,0 100%);
 	background-color:@primary-one-lighten;
 	padding: 6px 15px 6px 8px;
 	color:@white;
