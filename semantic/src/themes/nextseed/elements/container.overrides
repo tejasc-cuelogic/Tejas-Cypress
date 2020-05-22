@@ -229,6 +229,17 @@ section{
             }
         }
    }
+   &.collection-header-wrap{
+       min-height: 468px !important;
+       max-height: 100% !important;
+       height: 100% !important;
+       section.banner{
+           position: relative !important;
+        //    >.ui.container {
+        //        margin-bottom: 30px !important;
+        //    }
+       }
+   }
 }
 .investor-priority-section{
     background:url(../../assets/images/investors/left-phone-mockup.png) no-repeat;
