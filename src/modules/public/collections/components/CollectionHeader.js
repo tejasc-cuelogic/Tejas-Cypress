@@ -29,9 +29,9 @@ export default class CollectionHeader extends Component {
         {!isMobile
           ? (
             <>
-              <div className="campaign-banner collection-banner">
+              <div className="campaign-banner collection-banner collection-header-wrap">
                 <section className="banner" style={{ backgroundColor: get(data, 'bgColor') }}>
-                  <Responsive minWidth={768} as={Container} className="pt-70 pb-70">
+                  <Responsive minWidth={768} as={Container} className={`pt-70 pb-70 ${actionText ? 'mb-30' : 'mb-0'}`}>
                     <Grid relaxed stackable centered>
                       <Grid.Column width={6} className="zi-9">
                         <div className="video-wrapper campaign">
@@ -71,7 +71,7 @@ export default class CollectionHeader extends Component {
               </div>
             </>
           ) : (
-            <div className={`${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu `}>
+            <div className={`${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu collection-header-wrap`}>
               <Responsive maxWidth={991} as={React.Fragment}>
                 <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`} style={{ backgroundColor: get(data, 'bgColor') }}>
                   <div className="video-wrapper campaign">

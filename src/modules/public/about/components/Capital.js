@@ -26,53 +26,84 @@ class Capital extends Component {
               <NSImage path="capital/ns-capital-logo.svg" className="mb-20" />
               <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-14' : 'mb-14'}>Invest in Small Businesses</Header>
               <Header as="h4" className="mb-40">
-                Access a diversified portfolio of income-generating<Responsive minWidth="768" as="br" />
-                businesses with NextSeed’s inaugural fund
-              </Header>
-            </div>
-          </Container>
-        </section>
-        <section className={`capital-wrap ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-70 pb-70'}`}>
-          <Container>
-          <p className="mb-30 mt-30">Small businesses have long been applauded as the backbone of our economy. Unfortunately, private capital markets have not treated them with the same regard.</p>
-          <p className="mb-30 mt-30">While high-growth technology companies have captured the attention and funding from venture capital, income-based businesses have historically been ignored and underserved by investors. Quite simply, SMB’s with annual revenues below $5 million have been considered “not worth the time” for traditional investors.</p>
-            <Grid centered reversed="mobile">
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
-                <p className="mb-30">NextSeed’s online marketplace has been able to leverage technology and a scalable diligence process to review thousands of businesses, shedding light on this new asset class as inefficiently priced and one that offers potential for strong return opportunities for investors.</p>
-                <p>NextSeed Capital is launching in 2020 to invest directly, via flexible debt and equity capital, into small businesses that are vital to their communities. These funds will also provide qualified investors the opportunity to gain direct, diversified exposure to local businesses that provide positive hyper-local impact</p>
-                <p className="mb-30 mt-30">NextSeed Capital will operate synergistically with the greater NextSeed platform, which has been a leader in the small business investment space since 2015, to access scalable deal flow and networks while serving as a strategic capital partner for great small businesses.</p>
-              </Grid.Column>
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="center-align" floated="right">
-                <div floated="right">
-                  <NSImage path="capital/slider.png" />
-                </div>
-                <p className="mt-30 note">Small businesses successfully funded on the NextSeed platform</p>
-              </Grid.Column>
-            </Grid>
-          </Container>
-        </section>
-        <section className={`capital-wrap bg-offwhite ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-100 pb-30'}`}>
-          <Container>
-            <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} className="capital-sidebg" floated="left">
-                <NSImage floated="left" path={responsiveVars.uptoTablet ? 'capital/imgMobile.png' : 'capital/img.png'} />
-              </Grid.Column>
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right" className="pt-0">
-                <section className={`${responsiveVars.isMobile ? '' : 'pl-100 pt-0 pr-0'}`}>
-                  <Header as="h2" className="capital-header">Overview</Header>
-                  <List bulleted relaxed="very" className={`${responsiveVars.isMobile ? '' : 'mt-30'} capital`}>
-                    <List.Item className="pb-0 mt-0 mb-0 pt-0">
-                      NextSeed Capital will invest in local communities through a diversified fund focusing on income producing private debt and equity securities.
-                    </List.Item>
-                      <List.Item className="pb-0 mt-0 mb-0 pt-0">
-                        The Fund will be managed by an investment team with over 50 years of global financial institution experience, paired with an accomplished NextSeed management team and advisory board.
-                    </List.Item>
-                      <List.Item className="pb-0 mt-0 mb-0 pt-0">
-                        Fund Manager will leverage the NextSeed technology platform with robust due diligence and underwriting to access and review a high volume of potential portfolio companies.
-                    </List.Item>
-                      <List.Item className="pb-0 mt-0 mb-0 pt-0">
-                        The Fund will aim to invest in impactful and traditionally underserved businesses such as women- and minority-owned enterprises, and veteran-run management teams.
-                    </List.Item>
+                Access a diversified portfolio of income-generating <Responsive minWidth="768" as="br" />
+              businesses with NextSeed’s inaugural fund
+            </Header>
+          </div>
+        </Container>
+      </section>
+      <section className={`capital-wrap ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-70 pb-70'}`}>
+        <Container>
+        <p className="mb-30 mt-30">Small businesses have long been applauded as the backbone of our economy. Unfortunately, private capital markets have not treated them with the same regard.</p>
+        <p className="mb-30 mt-30">While high-growth technology companies have captured the attention and funding from venture capital, income-based businesses have historically been ignored and underserved by investors. Quite simply, SMB’s with annual revenues below $5 million have been considered “not worth the time” for traditional investors.</p>
+          <Grid centered reversed="mobile">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
+              <p className="mb-30">NextSeed’s online marketplace has been able to leverage technology and a scalable diligence process to review thousands of businesses, shedding light on this new asset class as inefficiently priced and one that offers potential for strong return opportunities for investors.</p>
+              <p>NextSeed Capital is launching in 2020 to invest directly, via flexible debt and equity capital, into small businesses that are vital to their communities. These funds will also provide qualified investors the opportunity to gain direct, diversified exposure to local businesses that provide positive hyper-local impact</p>
+              <p className="mb-30 mt-30">NextSeed Capital will operate synergistically with the greater NextSeed platform, which has been a leader in the small business investment space since 2015, to access scalable deal flow and networks while serving as a strategic capital partner for great small businesses.</p>
+            </Grid.Column>
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="center-align" floated="right">
+              <NSImage path="capital/slider.png" />
+              <p className="mt-30 note">Small businesses successfully funded on the NextSeed platform</p>
+            </Grid.Column>
+          </Grid>
+        </Container>
+      </section>
+      <section className={`capital-wrap bg-offwhite ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-100 pb-30'}`}>
+        <Container>
+          <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="capital-sidebg" floated="left">
+              <NSImage floated="left" path={responsiveVars.uptoTablet ? 'capital/imgMobile.png' : 'capital/img.png'} />
+            </Grid.Column>
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right" className="pt-0">
+              <section className={`${responsiveVars.isMobile ? '' : 'pl-100 pt-0 pr-0'}`}>
+                <Header as="h2" className="capital-header">Overview</Header>
+                <List bulleted relaxed="very" className={`${responsiveVars.isMobile ? '' : 'mt-30'} capital`}>
+                  <List.Item className="pb-0 mt-0 mb-10 pt-0">
+                    NextSeed Capital will invest in local communities through a diversified fund focusing on income producing private debt and equity securities.
+                  </List.Item>
+                    <List.Item className="pb-0 mt-0 mb-10 pt-0">
+                      The Fund will be managed by an investment team with over 50 years of global financial institution experience, paired with an accomplished NextSeed management team and advisory board.
+                  </List.Item>
+                    <List.Item className="pb-0 mt-0 mb-10 pt-0">
+                      Fund Manager will leverage the NextSeed technology platform with robust due diligence and underwriting to access and review a high volume of potential portfolio companies.
+                  </List.Item>
+                    <List.Item className="pb-0 mt-0 mb-10 pt-0">
+                      The Fund will aim to invest in impactful and traditionally underserved businesses such as women- and minority-owned enterprises, and veteran-run management teams.
+                  </List.Item>
+                </List>
+              </section>
+            </Grid.Column>
+          </Grid>
+        </Container>
+      </section>
+      <section className={`capital-wrap ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-100 pb-40'}`}>
+        <Container>
+          <Grid stackable className="mt-0 mb-0 mlr-0">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left" className="pt-0 pl-0">
+              <section className={`${responsiveVars.isMobile ? '' : 'pt-0 pl-0'}`}>
+                <Header as="h2" className="capital-header">Proposed Investment Strategy</Header>
+                <List className={`${responsiveVars.isMobile ? '' : 'mt-30'} icon-list`}>
+                  <List.Item className="pb-0 mt-0 mb-20 pt-0">
+                    <Icon className="ns-tick" color="grey" size="large" />
+                    Focus on consumer-facing small businesses
+                  </List.Item>
+                    <List.Item className="pb-0 mt-0 mb-20 pt-0">
+                      <Icon className="ns-tick pr-10" color="grey" size="large" />
+                    Tailor investment products to capital needs
+                  </List.Item>
+                    <List.Item className="pb-0 mt-0 mb-20 pt-0">
+                      <Icon className="ns-tick" color="grey" size="large" />
+                    Primarily fund small business needs in the areas of working capital, growth capital, refinancing, and recapitalizations.
+                  </List.Item>
+                    <List.Item className="pb-0 mt-0 mb-20 pt-0">
+                      <Icon className="ns-tick" color="grey" size="large" />
+                    Integrate technology into underwriting to access and review a high volume of select portfolio companies.
+                  </List.Item>
+                    <List.Item className="pb-0 mt-0 mb-20 pt-0">
+                      <Icon className="ns-tick" color="grey" size="large" />
+                    Apply institutional diligence standards to underserved and mispriced asset class
+                  </List.Item>
                   </List>
                 </section>
               </Grid.Column>

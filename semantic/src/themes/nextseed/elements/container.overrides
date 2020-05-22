@@ -172,7 +172,7 @@ section{
 }
 .campaign-banner {
     position: relative;
-    height: 448px;
+    height: 568px;
     background-color: @neutral;
     .campaign-details-banner{
         background-position: top center;
@@ -207,7 +207,7 @@ section{
         }
     }
     &.collection-banner{
-        height: 568px;
+        height: 468px;
         section.banner{
             padding: 0 !important;
             >.ui.container{
@@ -215,6 +215,7 @@ section{
             }
         }
         .campaign-details-banner{
+            height: 468px;
             position: absolute !important;
             left: 0 !important;
             right: 0 !important;
@@ -225,16 +226,22 @@ section{
             margin-bottom: 0 !important;
         }
         .ns_flgs_box p{
-            width: 60px !important;
+            width: 80px !important;
             @media only screen and (min-width : @computerBreakpoint) and (max-width: @largeMonitorBreakpoint){
                 width: 50px !important;
             }
         }
    }
-   &.template-two-banner{
-        .campaign-details-banner{
-            height: 448px !important;
-        }
+   &.collection-header-wrap{
+       min-height: 468px !important;
+       max-height: 100% !important;
+       height: 100% !important;
+       section.banner{
+           position: relative !important;
+        //    >.ui.container {
+        //        margin-bottom: 30px !important;
+        //    }
+       }
    }
 }
 .investor-priority-section{

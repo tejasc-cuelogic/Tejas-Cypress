@@ -1,4 +1,4 @@
-# 0.0.0 (2020-05-21)
+# 0.0.0 (2020-05-22)
 
 
 ### Bug Fixes
@@ -1016,6 +1016,7 @@
 
 ### Reverts
 
+* Revert "Revert "Merge branch 'demo' into 'master'"" ([429d272](https://chaos.ns.team/nsv2/ns-client/commits/429d272b0c01ca8a1c1ca8da9d0e478869146af0))
 * Revert "2306 [Enhancement] - env file changes" ([3f1cfed](https://chaos.ns.team/nsv2/ns-client/commits/3f1cfedbae982736693e534bc3680495a667c125))
 * Revert "Revert "Merge branch 'demo' into 'master'"" ([b0a60cc](https://chaos.ns.team/nsv2/ns-client/commits/b0a60cc2613e53b86742407f0a813f20cd564d57))
 * Revert "done changes for state values - in payload" ([46a7a05](https://chaos.ns.team/nsv2/ns-client/commits/46a7a0546e90f1da8949709d71e8eb1ef0a686fc))
