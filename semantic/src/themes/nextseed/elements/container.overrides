@@ -223,7 +223,7 @@ section{
             margin-bottom: 0 !important;
         }
         .ns_flgs_box p{
-            width: 60px !important;
+            width: 80px !important;
             @media only screen and (min-width : @computerBreakpoint) and (max-width: @largeMonitorBreakpoint){
                 width: 50px !important;
             }
