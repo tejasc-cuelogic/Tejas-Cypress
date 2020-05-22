@@ -19,7 +19,7 @@ function EmailList(props) {
   const [displyNoEmails, setdisplyRecord] = useState(false);
   const [showContentModal, toggleModal] = useState(false);
   const [id, setId] = useState(false);
-  const [emailIdentity, setEmailIdentity] = useState(false);
+  const [emailIdentity, setEmailIdentity] = useState(null);
   const [requestDate, setRequestDate] = useState(false);
   const [showActionModal, setShowActionModal] = useState(false);
 
@@ -59,8 +59,17 @@ function EmailList(props) {
     toggleModal(true);
   };
 
-  const handleSubmitForm = () => {
-    props.factoryStore.emailFactoryPluginTrigger(emailIdentity);
+  const handleCloseModal = () => {
+    toggleModal(false);
+    setShowActionModal(false);
+    setEmailIdentity(null);
+  };
+
+  const handleSubmitForm = async () => {
+    const res = await props.factoryStore.emailFactoryPluginTrigger(emailIdentity);
+    if (res) {
+      handleCloseModal();
+    }
   };
 
   const handleActionModel = (e, { emailIdentifier }) => {
@@ -70,11 +79,6 @@ function EmailList(props) {
     const { emailPlugin } = props.emailStore;
     props.factoryStore.setDynamicDataForEmail(emailPlugin.pluginInput, 'EMAIL_LIST');
     setShowActionModal(true);
-  };
-
-  const handleCloseModal = () => {
-    toggleModal(false);
-    setShowActionModal(false);
   };
 
   const { loadingArray } = props.nsUiStore;
