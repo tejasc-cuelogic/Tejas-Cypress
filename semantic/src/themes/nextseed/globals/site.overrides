@@ -3541,7 +3541,7 @@ h3.ui.header.error-2{
 	}
 }
 .ns_flgs_box{
-	clip-path: polygon(0 0,21% 0,18% 50%,21% 100%,0 100%);
+	clip-path: polygon(0 0,27% 0,24% 50%,27% 100%,0 100%);
 	background-color:@primary-one-lighten;
 	padding: 6px 15px 6px 8px;
 	color:@white;
@@ -3681,12 +3681,14 @@ h3.ui.header.error-2{
 	}
 	.ui.cards{
 		>a.ui.card{
+			display: flex;
 			border:1px solid #E6E6E8;
 			box-shadow: none !important;
 			min-height: 575px !important;
 			max-height: 590px !important;
 			height: 100% !important;
 			.full-width{
+				flex: auto;
 				position: relative;
 				height: 100%;
 				@media only screen and (min-width:@mobileBreakpoint ) and (max-width:@tabletBreakpoint){
@@ -3749,8 +3751,9 @@ h3.ui.header.error-2{
 	}
 	.collection-bg-image{
 		height: 99.2%;
+		bottom: 0;
 	}
-	
+
 	.ui.inverted.button.collectionExplore{
 		color:@neutral;
 		border-width:2px !important;
@@ -3866,5 +3869,10 @@ h3.ui.header.error-2{
 	}
 	@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
 		display: none !important;
+	}
+}
+.offering-side-menu{
+	&.collection-header-wrap{
+		max-height: 100% !important;
 	}
 }
