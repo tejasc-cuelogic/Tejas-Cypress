@@ -36,7 +36,7 @@ export default class CampaignHeaderV2 extends Component {
         {!isMobile
           ? (
             <>
-              <div className="campaign-banner">
+              <div className="campaign-banner template-two-banner">
                 {get(campaign, 'header.heroBackgroundImage.url')
                   && <Image64 bg className="campaign-details-banner" srcUrl={get(campaign, 'header.heroBackgroundImage.url')} />
                 }
