@@ -73,7 +73,7 @@ export default class CollectionHeader extends Component {
           ) : (
             <div className={`${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu collection-header-wrap`}>
               <Responsive maxWidth={991} as={React.Fragment}>
-                <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
+                <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`} style={{ backgroundColor: get(data, 'bgColor') }}>
                   <div className="video-wrapper campaign">
                     <Image64
                       bg
