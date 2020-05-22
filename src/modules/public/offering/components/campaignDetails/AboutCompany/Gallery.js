@@ -45,7 +45,7 @@ class Gallery extends Component {
             : <NSImage fluid={!newLayout} className="about-gallery-bg" path="gallery-placeholder-16-9.jpg" />
           }
         </div>
-        {campaignStatus.galleryImages && campaignStatus.galleryImages.length
+        {campaignStatus.galleryImages && campaignStatus.galleryImages.length > 0
           && (
             <Button fluid={!newLayout && isTablet} onClick={e => this.handleViewGallery(e, null)} basic={!newLayout} compact={!newLayout} className={`${newLayout ? 'link-button' : ''} highlight-text mt-40`}>
               View Gallery

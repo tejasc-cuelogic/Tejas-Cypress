@@ -45,6 +45,12 @@
         line-height: 20px;
         min-width: 70px;
     }
+    &.grey-colored{
+        background-color: #567991;
+        border: 1px solid #567991;
+        color: @white;
+        font-weight: @normal
+    }
 }
 //  Public Page Ends
 
