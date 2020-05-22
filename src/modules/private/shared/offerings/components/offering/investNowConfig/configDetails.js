@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { Form, Grid, Divider } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../OfferingButtonGroup';
 import formHOC from '../../../../../../../theme/form/formHOC';
+import ConfigPreview from './configPreview';
 
 const metaInfo = {
   store: 'manageOfferingStore',
@@ -30,11 +31,12 @@ function ConfigDetails(props) {
     <>
       <div className="inner-content-spacer">
         <Form>
+          <Divider section />
+          <ConfigPreview />
+          <Divider section />
           <Grid>
             {smartElement.RadioGroup('investmentType', { displayMode: isReadOnly })}
           </Grid>
-          <Divider hidden />
-          {/* <TombstonePreview /> */}
           <Grid columns="2">
             <Grid.Column>
               {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Display Toggle' })}

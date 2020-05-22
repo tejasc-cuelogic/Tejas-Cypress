@@ -11,8 +11,8 @@ import {
   adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings, getofferingById,
   getOfferingStoreDetails,
 } from '../../../queries/offerings/manage';
-import { offeringCreationStore, userStore, uiStore, campaignStore, collectionStore } from '../../../index';
-import { ClientDb, DataFormatter } from '../../../../../helper';
+import { offeringCreationStore, userStore, uiStore, campaignStore, collectionStore, investmentStore } from '../../../index';
+import { ClientDb, DataFormatter, FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
 export class OfferingsStore {
@@ -543,6 +543,62 @@ export class OfferingsStore {
 
   @computed get offeringSecurity() {
     return get(this.offer, 'keyTerms.securities') || '';
+  }
+
+  adminInvestmentBonusRewards = (investedAmount) => {
+    const { offer } = this;
+    const offeringInvestedAmount = typeof investedAmount === 'string' ? parseFloat(investedAmount || '0.00') : (investedAmount || 0);
+    let rewardsTiers = [];
+    if (offer && offer.bonusRewards) {
+      offer.bonusRewards.map((reward) => {
+        rewardsTiers = reward.tiers.concat(rewardsTiers);
+        return false;
+      });
+    }
+    rewardsTiers = [...new Set(toJS(rewardsTiers))].sort((a, b) => b - a);
+    const matchTier = rewardsTiers ? rewardsTiers.find(t => offeringInvestedAmount >= t) : 0;
+    let bonusRewards = [];
+    bonusRewards = offer && offer.bonusRewards && offer.bonusRewards
+      .filter(reward => reward.tiers.includes(matchTier));
+    return bonusRewards;
+  }
+
+  @action
+  adminInvestMoneyChangeForEquity = (val, field) => {
+    investmentStore.PREFERRED_EQUITY_INVESTMONEY_FORM = Validator.onChange(investmentStore.PREFERRED_EQUITY_INVESTMONEY_FORM, {
+      name: field,
+      value: val.floatValue,
+    });
+    this.adminCalculatedInvestmentAmountForPreferredEquity();
+  }
+
+  @action
+  adminCalculatedInvestmentAmountForPreferredEquity = () => {
+    const { offer } = this;
+    investmentStore.setFieldValue('investmentFlowEquityErrorMessage', null);
+    const pricePerShare = money.floatToAmount(investmentStore.PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares.value || 0);
+    const priceCalculation = get(offer, 'closureSummary.keyTerms.priceCalculation') || '0';
+    const sharePrice = money.floatToAmount(priceCalculation || 0);
+    const resultAmount = money.mul(sharePrice, pricePerShare);
+    const investedAmount = money.isZero(resultAmount) ? '0' : resultAmount;
+    investmentStore.investMoneyChange({ floatValue: investedAmount }, 'investmentAmount', true);
+    const formatedInvestedAmount = Helper.CurrencyFormat(investedAmount);
+    investmentStore.setFieldValue('equityInvestmentAmount', formatedInvestedAmount);
+  }
+
+  @action
+  adminEquityCalculateShareAmount = () => {
+    const { offer } = this;
+    const prefferedEquityLabel = get(offer, 'keyTerms.equityUnitType');
+    const offeringMinInvestmentAmount = Helper.CurrencyFormat((get(offer, 'keyTerms.minInvestAmt') || '0'), 0);
+    const priceCalculation = get(offer, 'closureSummary.keyTerms.priceCalculation') || '0';
+    const offeringMinInvestment = get(offer, 'keyTerms.minInvestAmt') || '0';
+    const formatedUnitPrice = money.floatToAmount(priceCalculation || 0);
+    const formatedMinInvestment = money.floatToAmount(offeringMinInvestment || 0);
+    const result = Math.ceil(money.div(formatedMinInvestment, formatedUnitPrice));
+    const dynamicLabel = result <= 1 ? `${prefferedEquityLabel}` : `${prefferedEquityLabel}s`;
+    const returnStatement = `*Minimum investment amount: ${result} ${dynamicLabel} = ${offeringMinInvestmentAmount}`;
+    return returnStatement;
   }
 
   @computed get offeringStatus() {
