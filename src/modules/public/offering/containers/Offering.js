@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import { Header, Container, Button, Grid, Responsive, Divider, Icon } from 'semantic-ui-react';
-import NSImage from '../../../shared/NSImage';
+// import NSImage from '../../../shared/NSImage';
 // import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
 import CollectionsList from '../../collections/components/CollectionsList';
@@ -16,39 +16,39 @@ const LoadMoreBtn = ({ action, param, isMobile }) => (
   </div>
 );
 
-const NsCapital = ({ nsCapitalMeta, isMobile, isTablet }) => (
-  <section key={nsCapitalMeta.title} className={`${isMobile || isTablet ? 'pt-0 pb-50' : 'pt-40 pb-100'} bg-white`}>
-    <Container>
-      <Grid>
-        {!isMobile && !isTablet
-            && (
-              <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16} floated={!isMobile ? 'left' : ''}>
-                <Header as="h2" className="mb-40 left-align">{nsCapitalMeta.title}</Header>
-                <p className="mb-30 mt-30">{nsCapitalMeta.description}</p>
-                <Button className="mt-30" as={Link} to="/capital" primary content="Learn More" />
-              </Grid.Column>
-            )
-          }
-          {isMobile || isTablet
-            ? (
-              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} className="pt-0" floated={!isMobile ? 'right' : ''}>
-                <Header as="h2" className="left-align">{nsCapitalMeta.title}</Header>
-                <p className="mb-30 mt-10">{nsCapitalMeta.date}</p>
-                <p className="mb-30 mt-30">{nsCapitalMeta.description}</p>
-                <NSImage className="mb-30" path={nsCapitalMeta.image} fluid />
-                <Button className="mt-30" as={Link} to="/capital" primary fluid content="Learn More" />
-              </Grid.Column>
-            )
-            : (
-              <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
-                <NSImage path={nsCapitalMeta.image} fluid />
-              </Grid.Column>
-            )
-          }
-      </Grid>
-    </Container>
-  </section>
-);
+// const NsCapital = ({ nsCapitalMeta, isMobile, isTablet }) => (
+//   <section key={nsCapitalMeta.title} className={`${isMobile || isTablet ? 'pt-0 pb-50' : 'pt-40 pb-100'} bg-white`}>
+//     <Container>
+//       <Grid>
+//         {!isMobile && !isTablet
+//             && (
+//               <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16} floated={!isMobile ? 'left' : ''}>
+//                 <Header as="h2" className="mb-40 left-align">{nsCapitalMeta.title}</Header>
+//                 <p className="mb-30 mt-30">{nsCapitalMeta.description}</p>
+//                 <Button className="mt-30" as={Link} to="/capital" primary content="Learn More" />
+//               </Grid.Column>
+//             )
+//           }
+//           {isMobile || isTablet
+//             ? (
+//               <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} className="pt-0" floated={!isMobile ? 'right' : ''}>
+//                 <Header as="h2" className="left-align">{nsCapitalMeta.title}</Header>
+//                 <p className="mb-30 mt-10">{nsCapitalMeta.date}</p>
+//                 <p className="mb-30 mt-30">{nsCapitalMeta.description}</p>
+//                 <NSImage className="mb-30" path={nsCapitalMeta.image} fluid />
+//                 <Button className="mt-30" as={Link} to="/capital" primary fluid content="Learn More" />
+//               </Grid.Column>
+//             )
+//             : (
+//               <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} floated={!isMobile ? 'right' : ''}>
+//                 <NSImage path={nsCapitalMeta.image} fluid />
+//               </Grid.Column>
+//             )
+//           }
+//       </Grid>
+//     </Container>
+//   </section>
+// );
 
 @inject('campaignStore', 'userStore', 'uiStore', 'collectionStore')
 @observer
@@ -76,14 +76,14 @@ class Offering extends Component {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const showCreationList = this.props.userStore.isAdmin && !isEmpty(access);
     const { responsiveVars } = this.props.uiStore;
-    const { isMobile, isTablet } = responsiveVars;
-    const nsCapitalMeta = {
-      title: 'NextSeed Capital',
-      date: 'Launching in 2020',
-      image: 'group/ns-capital.jpg',
-      disclosure: 'NextSeed Capital and NextSeed Special Situations Local Business Fund have not yet been registered and the fund terms not yet finalized. Final terms and documents will be made available to qualified investors only once finalized and registered, as applicable.',
-      description: 'NextSeed Capital will invest directly, via flexible debt and equity capital, into small businesses that are vital to their communities. These funds will provide qualified investors the opportunity to gain direct, diversified exposure to local businesses that provide positive hyper-local impact.',
-    };
+    const { isMobile } = responsiveVars;
+    // const nsCapitalMeta = {
+    //   title: 'NextSeed Capital',
+    //   date: 'Launching in 2020',
+    //   image: 'group/ns-capital.jpg',
+    //   disclosure: 'NextSeed Capital and NextSeed Special Situations Local Business Fund have not yet been registered and the fund terms not yet finalized. Final terms and documents will be made available to qualified investors only once finalized and registered, as applicable.',
+    //   description: 'NextSeed Capital will invest directly, via flexible debt and equity capital, into small businesses that are vital to their communities. These funds will provide qualified investors the opportunity to gain direct, diversified exposure to local businesses that provide positive hyper-local impact.',
+    // };
     return (
       <>
         <CampaignList
@@ -103,7 +103,7 @@ class Offering extends Component {
           </>
          ) : null
         }
-        <NsCapital isMobile={isMobile} isTablet={isTablet} nsCapitalMeta={nsCapitalMeta} responsiveVars={responsiveVars} />
+        {/* <NsCapital isMobile={isMobile} isTablet={isTablet} nsCapitalMeta={nsCapitalMeta} responsiveVars={responsiveVars} /> */}
         {(!hideCreationList && showCreationList && !loading)
         && (
           <>
