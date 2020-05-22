@@ -22,7 +22,7 @@ const nsGroup = [
       <br /><br />NextSeed Securities is our forward-thinking investment banking practice, which sources exclusive alternative investment offerings for our investment platform. Our proprietary platform manages everything from deal-sourcing and underwriting to investor account management and automatic payment processing.</>,
     logo: 'group/ns-logo.png',
     image: 'group/ns-securities.jpg',
-    link: 'https://www.nextseed.com',
+    link: '/',
     gray: true,
   },
   {
@@ -31,7 +31,8 @@ const nsGroup = [
       <br /><br />We seek to invest in impactful and traditionally underserved enterprises such as women- and minority-owned businesses and veteran-run management teams. Our inaugural fund aspires to serve the capital needs of small businesses recovering from the COVID-19 recession.</>,
     logo: 'group/ns-capital-logo.png',
     image: 'group/ns-capital.jpg',
-    disclosure: 'NextSeed Capital and NextSeed Special Situations Local Business Fund have not yet been registered and the fund terms not yet finalized. Final terms and documents will be made available to qualified investors only once finalized and registered, as applicable.',
+    // disclosure: 'NextSeed Capital and NextSeed Special Situations Local Business Fund have not yet been registered and the fund terms not yet finalized. Final terms and documents will be made available to qualified investors only once finalized and registered, as applicable.',
+    link: '/capital',
   },
   {
     title: 'Collaboration Capital',
@@ -106,7 +107,7 @@ export default class Group extends Component {
                             <NSImage path={i.logo} />
                             <p className="mb-30 mt-30">{i.description}</p>
                             <NSImage path={i.image} fluid />
-                            <p className="note mt-30">{i.disclosure}</p>
+                            {/* <p className="note mt-30">{i.disclosure}</p> */}
                             {i.link && isMobile
                               ? (
                                 <a href={i.link} target="_blank" rel="noopener noreferrer"><Button inverted fluid={isMobile} color="green" className="mt-30">Learn More</Button></a>
