@@ -203,6 +203,12 @@ h6{
 .pr-0{
 	padding-right: 0 !important;
 }
+.pr-13{
+	padding-right: 13px !important;
+}
+.pl-13{
+	padding-left: 13px !important;
+}
 .pr-15{
 	padding-right: 15px !important;
 }
