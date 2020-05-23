@@ -238,6 +238,7 @@ section{
        height: 100% !important;
        section.banner{
            position: relative !important;
+           height: 468px;
         //    >.ui.container {
         //        margin-bottom: 30px !important;
         //    }
