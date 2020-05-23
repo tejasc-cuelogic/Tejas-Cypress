@@ -17,7 +17,7 @@ export default class CollectionHeader extends Component {
     const { isMobile } = responsiveVars;
     const title = get(data, 'title');
     const actionText = get(data, 'actionText');
-    const headerDownClick = activeOfferings || actionText ? (
+    const headerDownClick = (activeOfferings && actionText) ? (
       <div className="current-projects-box" style={{ color: get(data, 'descriptionColor') }}>
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
         <span style={{ cursor: 'pointer' }} onClick={scrollToActiveOfferings}>
@@ -33,8 +33,7 @@ export default class CollectionHeader extends Component {
             <>
               <div className="campaign-banner collection-banner collection-header-wrap">
                 <section className="banner" style={{ backgroundColor: get(data, 'bgColor') }}>
-                  <Responsive minWidth={768} as={Container} className="pt-8rem pb-70">
-                  {/* <Responsive minWidth={768} as={Container} className={`pt-70 pb-70 ${actionText ? 'mb-30' : 'mb-0'}`}> */}
+                  <Responsive minWidth={768} as={Container} className={`pt-100 pb-70 ${actionText ? 'mb-30' : 'mb-0'}`}>
                     <Grid relaxed stackable centered>
                       <Grid.Column width={6} className="zi-9">
                         <div className="video-wrapper campaign">
