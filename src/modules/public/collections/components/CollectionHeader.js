@@ -12,16 +12,18 @@ import { NavItems } from '../../../../theme/layout/NavigationItems';
 @observer
 export default class CollectionHeader extends Component {
   render() {
-    const { uiStore, data, scrollToActiveOfferings, activeOffering } = this.props;
+    const { uiStore, data, scrollToActiveOfferings, activeOfferings } = this.props;
     const { responsiveVars } = uiStore;
     const { isMobile } = responsiveVars;
     const title = get(data, 'title');
     const actionText = get(data, 'actionText');
-    const headerDownClick = activeOffering && actionText ? (
+    const headerDownClick = activeOfferings || actionText ? (
       <div className="current-projects-box" style={{ color: get(data, 'descriptionColor') }}>
-        <p style={{ color: get(data, 'descriptionColor') }} className="mb-0">{actionText}</p>
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-        <i className="icon ns-chevron-down" onClick={scrollToActiveOfferings} />
+        <span style={{ cursor: 'pointer' }} onClick={scrollToActiveOfferings}>
+          <span style={{ color: get(data, 'descriptionColor') }} className="mb-0">{actionText}</span><br />
+          <i className="icon ns-chevron-down" />
+        </span>
       </div>
     ) : null;
     return (
@@ -29,9 +31,10 @@ export default class CollectionHeader extends Component {
         {!isMobile
           ? (
             <>
-              <div className="campaign-banner collection-banner">
+              <div className="campaign-banner collection-banner collection-header-wrap">
                 <section className="banner" style={{ backgroundColor: get(data, 'bgColor') }}>
                   <Responsive minWidth={768} as={Container} className="pt-8rem pb-70">
+                  {/* <Responsive minWidth={768} as={Container} className={`pt-70 pb-70 ${actionText ? 'mb-30' : 'mb-0'}`}> */}
                     <Grid relaxed stackable centered>
                       <Grid.Column width={6} className="zi-9">
                         <div className="video-wrapper campaign">
@@ -66,14 +69,18 @@ export default class CollectionHeader extends Component {
                       }
                     </Grid>
                   </Responsive>
-                  {headerDownClick}
+                  {activeOfferings
+                  && headerDownClick}
                 </section>
               </div>
             </>
           ) : (
-            <div className={`${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu `}>
+            <div className={`${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu collection-header-wrap`}>
               <Responsive maxWidth={991} as={React.Fragment}>
-                <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
+                <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`} style={{ backgroundColor: get(data, 'bgColor') }}>
+                  {get(data, 'bgImage.url')
+                    && <Image64 reRender originalImg bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
+                  }
                   <div className="video-wrapper campaign">
                     <Image64
                       bg
@@ -93,7 +100,7 @@ export default class CollectionHeader extends Component {
                       ? get(data, 'social').map(site => (
                         <React.Fragment key={site.type}>
                           {site.url
-                            && <a className="ml-30" target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} style={{ color: get(data, 'descriptionColor') }} /></a>
+                            && <a className="ml-30" target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase() === 'website' ? 'globe' : site.type.toLowerCase()} style={{ color: get(data, 'descriptionColor') }} /></a>
                           }
                         </React.Fragment>
                       )) : ''}
