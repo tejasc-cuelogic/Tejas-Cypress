@@ -69,8 +69,7 @@ export default class CollectionHeader extends Component {
                       }
                     </Grid>
                   </Responsive>
-                  {activeOfferings
-                  && headerDownClick}
+                  {headerDownClick}
                 </section>
               </div>
             </>
