@@ -38,7 +38,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
       ))}
     {((collections.length > collectionLength) || (collections.length && !collectionLength) || offering) && (
       <div className="mt-80 center-align">
-        <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Communities" onClick={handleNavigate} />
+        <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All" onClick={handleNavigate} />
       </div>
     )}
   </>
@@ -74,7 +74,7 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength, toggle
     </Container>
     {((collections.length > collectionLength) || (collections.length && !collectionLength) || offering) && isMobile && !expandCollection && (
       <div className="mt-80 center-align">
-        <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Communities" onClick={handleNavigate} />
+        <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All" onClick={handleNavigate} />
       </div>
     )}
   </>

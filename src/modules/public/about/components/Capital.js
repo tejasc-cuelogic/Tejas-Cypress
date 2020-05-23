@@ -26,7 +26,7 @@ class Capital extends Component {
               <NSImage path="capital/ns-capital-logo.svg" className="mb-20" />
               <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-14' : 'mb-14'}>Invest in Small Businesses</Header>
               <Header as="h4" className="mb-40">
-                Access a diversified portfolio of income-generating<Responsive minWidth="768" as="br" />
+                Access a diversified portfolio of income-generating <Responsive minWidth="768" as="br" />
               businesses with NextSeed’s inaugural fund
             </Header>
           </div>
@@ -107,12 +107,45 @@ class Capital extends Component {
                   </List>
                 </section>
               </Grid.Column>
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="capital-sidebg" floated="right">
-                <NSImage floated="right" path={responsiveVars.uptoTablet ? 'capital/houstonMobile.png' : 'capital/houston.png'} />
-              </Grid.Column>
             </Grid>
           </Container>
         </section>
+        <section className={`capital-wrap ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-100 pb-40'}`}>
+          <Container>
+            <Grid stackable className="mt-0 mb-0 mlr-0">
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 6} floated="left" className="pt-0 pl-0">
+                <section className={`${responsiveVars.isMobile ? '' : 'pt-0 pl-0'}`}>
+                  <Header as="h2" className="capital-header">Proposed Investment Strategy</Header>
+                  <List className={`${responsiveVars.isMobile ? '' : 'mt-30'} icon-list`}>
+                    <List.Item className="pb-0 mt-0 mb-20 pt-0">
+                      <Icon className="ns-tick" color="grey" size="large" />
+                      Focus on consumer-facing small businesses
+                    </List.Item>
+                      <List.Item className="pb-0 mt-0 mb-20 pt-0">
+                        <Icon className="ns-tick" color="grey" size="large" />
+                      Tailor investment products to capital needs
+                    </List.Item>
+                      <List.Item className="pb-0 mt-0 mb-20 pt-0">
+                        <Icon className="ns-tick" color="grey" size="large" />
+                      Primarily fund small business needs in the areas of working capital, growth capital, refinancing, and recapitalizations.
+                    </List.Item>
+                      <List.Item className="pb-0 mt-0 mb-20 pt-0">
+                        <Icon className="ns-tick" color="grey" size="large" />
+                      Integrate technology into underwriting to access and review a high volume of select portfolio companies.
+                    </List.Item>
+                      <List.Item className="pb-0 mt-0 mb-20 pt-0">
+                        <Icon className="ns-tick" color="grey" size="large" />
+                      Apply institutional diligence standards to underserved and mispriced asset class
+                    </List.Item>
+                    </List>
+                  </section>
+                </Grid.Column>
+                <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} className="capital-sidebg" floated="right">
+                  <NSImage floated="right" path={responsiveVars.uptoTablet ? 'capital/houstonMobile.png' : 'capital/houston.png'} />
+                </Grid.Column>
+              </Grid>
+            </Container>
+          </section>
         <section className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}`}>
           <Container>
             <CapitalContactInformation />
@@ -132,9 +165,9 @@ class Capital extends Component {
             </p>
           </Container>
         </section>
-      </>
-    );
-  }
+        </>
+      );
+    }
 }
 
 export default Capital;
