@@ -107,7 +107,7 @@ export default class CollectionHeader extends Component {
                   </div>
                 </div>
               </Responsive>
-              {headerDownClick}
+              { headerDownClick }
               {!isMobile
                 && (
                   <>
