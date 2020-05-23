@@ -233,7 +233,7 @@ section{
         }
    }
    &.collection-header-wrap{
-       // min-height: 468px !important;
+       min-height: 468px !important;
        max-height: 100% !important;
        height: 100% !important;
        section.banner{
