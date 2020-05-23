@@ -107,7 +107,7 @@ class Capital extends Component {
                   </List>
                 </section>
               </Grid.Column>
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} className="capital-sidebg" floated="right">
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="capital-sidebg" floated="right">
                 <NSImage floated="right" path={responsiveVars.uptoTablet ? 'capital/houstonMobile.png' : 'capital/houston.png'} />
               </Grid.Column>
             </Grid>
