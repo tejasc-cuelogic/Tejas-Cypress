@@ -26,7 +26,6 @@ export default class CardHeaderPreview extends Component {
       )
       : null;
     return (
-
       <div className="campaign-banner collection-banner collection-header-wrap" style={{ backgroundColor: get(collection, 'bgColor.value') }}>
         {get(collection, 'bgImage.preSignedUrl')
           && <Image64 bg className="collection-bg-image" srcUrl={get(collection, 'bgImage.preSignedUrl')} />
