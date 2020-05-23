@@ -22,7 +22,7 @@ class LatestUpdates extends Component {
     } = this.props;
     const update = (updates && updates.length && updates[updates.length - 1]) || null;
     const postUpdateObj = orderBy(updates, o => (o.updated.date ? moment(new Date(o.updated.date)).unix() : ''), ['desc'])[0];
-    const isNextseedUpdatedPost = postUpdateObj && postUpdateObj.postUpdateAs === 'NEXTSEED';
+    const isNextseedUpdatedPost = postUpdateObj && (postUpdateObj.postUpdateAs === 'NS_SERVICES' || postUpdateObj.postUpdateAs === 'NEXTSEED' || postUpdateObj.postUpdateAs === 'NS_SECURITIES');
     const userAvatarObj = {
       name: isNextseedUpdatedPost ? 'NextSeed' : bussinessName || '',
       avatarUrl: isNextseedUpdatedPost ? 'logo-icon.svg' : '',
