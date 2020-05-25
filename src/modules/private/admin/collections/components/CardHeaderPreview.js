@@ -26,13 +26,12 @@ export default class CardHeaderPreview extends Component {
       )
       : null;
     return (
-
-      <div className="campaign-banner collection-banner" style={{ backgroundColor: get(collection, 'bgColor.value') }}>
+      <div className="campaign-banner collection-banner collection-header-wrap" style={{ backgroundColor: get(collection, 'bgColor.value') }}>
         {get(collection, 'bgImage.preSignedUrl')
           && <Image64 bg className="collection-bg-image" srcUrl={get(collection, 'bgImage.preSignedUrl')} />
         }
         <section className="banner">
-          <Responsive minWidth={768} as={Container}>
+          <Responsive minWidth={768} as={Container} className={`pt-70 pb-70 ${actionText ? 'mb-30' : 'mb-0'}`}>
             <Grid relaxed stackable centered>
               <Grid.Column width={7}>
                 <div className="video-wrapper campaign">
@@ -59,7 +58,7 @@ export default class CardHeaderPreview extends Component {
                 <Header style={{ color: get(collection, 'descriptionColor.value') }} as="h3" inverted>
                   {get(collection, 'title.value')}
                 </Header>
-                <span style={{ color: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} /></span>
+                <span style={{ color: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} style={{ color: get(collection, 'descriptionColor.value') }} /></span>
               </Grid.Column>
             </Grid>
           </Responsive>

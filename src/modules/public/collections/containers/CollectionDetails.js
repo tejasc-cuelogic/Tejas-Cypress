@@ -33,10 +33,10 @@ class CollectionDetails extends Component {
       try {
         exception = JSON.parse(get(err, 'graphQLErrors[0].message'));
         if (get(exception, 'code') === 'COLLECTION_EXCEPTION') {
-          this.props.history.push('/collections');
+          this.props.history.push('/communities');
         }
       } catch {
-        this.props.history.push('/collections');
+        this.props.history.push('/communities');
       }
     });
     this.processScroll();
@@ -122,6 +122,7 @@ class CollectionDetails extends Component {
     const { isTablet, isMobile } = responsiveVars;
     const collectionHeader = get(collectionDetails, 'marketing.header');
     let content = get(collectionDetails, 'marketing.content') || [];
+    const getNotHiddenActiveOfferingsList = filter(content, con => con.contentType === 'ACTIVE_INVESTMENTS' && con.scope !== 'HIDDEN');
     if (loadingArray.includes('getCollection')) {
       return <InlineLoader />;
     }
@@ -149,7 +150,7 @@ class CollectionDetails extends Component {
       }
       return null;
     };
-    const collectionHeaderComponent = (<CollectionHeader activeOffering={getActiveOfferingsList && getActiveOfferingsList.length} scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />);
+    const collectionHeaderComponent = (<CollectionHeader activeOfferings={getNotHiddenActiveOfferingsList && getNotHiddenActiveOfferingsList.length} scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />);
     return (
       <>
         {collectionDetails
@@ -186,7 +187,7 @@ class CollectionDetails extends Component {
                     </Grid.Column>
                   )
                 }
-                <Grid.Column computer={11} mobile={16} className="left-align offer-details-v2 collection-detail">
+                <Grid.Column computer={11} mobile={16} className="left-align pl-0 pr-0 offer-details-v2 collection-detail">
                   {content.map((c, i) => (
                     c.contentType === 'ACTIVE_INVESTMENTS' && getActiveOfferingsList && getActiveOfferingsList.length
                       ? (
