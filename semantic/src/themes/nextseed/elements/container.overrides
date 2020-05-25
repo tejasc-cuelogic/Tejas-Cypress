@@ -139,7 +139,10 @@ section{
                     color: @white;
                 }
                 h4.ui.header{
+                    font-style: normal;
                     font-weight: @normal;
+                    line-height: @28px!important;
+                    font-size: @20px!important;
                 }
                 h2.ui.header{
                     line-height:42px;
@@ -148,7 +151,7 @@ section{
             @media only screen and (max-width : @largestMobileScreen){
                 background:url(../../assets/images/capital/capitalBannerMobile.png) center center no-repeat;
                 background-size: cover;
-                height: 400px;
+                height: 311px;
                 .banner-caption{
                     align-items: flex-start !important;
                     text-align: left !important;
@@ -228,6 +231,18 @@ section{
                 width: 50px !important;
             }
         }
+   }
+   &.collection-header-wrap{
+       min-height: 468px !important;
+       max-height: 100% !important;
+       height: 100% !important;
+       section.banner{
+           position: relative !important;
+           height: 468px;
+        //    >.ui.container {
+        //        margin-bottom: 30px !important;
+        //    }
+       }
    }
 }
 .investor-priority-section{

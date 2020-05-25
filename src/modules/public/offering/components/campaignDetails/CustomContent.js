@@ -8,14 +8,14 @@ function CustomContent({ title, content, isTablet }) {
     return (
       <>
         {title ? (
-          <Header as="h3" className={`${isTablet ? 'mb-20 mt-40' : 'mt-40 mb-30'} anchor-wrap`}>
-          {title}
-          <span className="anchor" id={title ? camelCase(title) : ''} />
-        </Header>
+          <Header as="h3" className={` pl-13 pr-13 ${isTablet ? 'mb-20 mt-40' : 'mt-40 mb-30'} anchor-wrap`}>
+            {title}
+            <span className="anchor" id={title ? camelCase(title) : ''} />
+          </Header>
         ) : null}
         {content
           ? (
-            <p className="mb-40 copyright-info">
+            <p className="pr-13 pl-13 mb-40 copyright-info">
               <HtmlEditor readOnly content={(content)} />
             </p>
           )
