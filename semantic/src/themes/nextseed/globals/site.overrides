@@ -3914,6 +3914,13 @@ h3.ui.header.error-2{
 		  .row-wrap.full-width{
 			  z-index: 9 !important;
 		  }
+		  .file-uploader-wrap.undefined{
+			  .downloadable.file-uploader.attached{
+				  button.tiny.ghost-button{
+					  padding-top: 2px !important;
+				  }
+			  }
+		  }
 	}
 }
 .offering-side-menu{
