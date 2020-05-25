@@ -80,7 +80,7 @@ class Capital extends Component {
       <section className={`capital-wrap ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-100 pb-40'}`}>
         <Container>
           <Grid stackable className="mt-0 mb-0 mlr-0">
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left" className="pt-0 pl-0">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 6} floated="left" className="pt-0 pl-0">
               <section className={`${responsiveVars.isMobile ? '' : 'pt-0 pl-0'}`}>
                 <Header as="h2" className="capital-header">Proposed Investment Strategy</Header>
                 <List className={`${responsiveVars.isMobile ? '' : 'mt-30'} icon-list`}>
@@ -89,7 +89,7 @@ class Capital extends Component {
                     Focus on consumer-facing small businesses
                   </List.Item>
                     <List.Item className="pb-0 mt-0 mb-20 pt-0">
-                      <Icon className="ns-tick pr-10" color="grey" size="large" />
+                      <Icon className="ns-tick" color="grey" size="large" />
                     Tailor investment products to capital needs
                   </List.Item>
                     <List.Item className="pb-0 mt-0 mb-20 pt-0">
@@ -132,9 +132,9 @@ class Capital extends Component {
             </p>
           </Container>
         </section>
-      </>
-    );
-  }
+        </>
+      );
+    }
 }
 
 export default Capital;

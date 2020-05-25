@@ -157,7 +157,7 @@ export default class NavBarMobile extends Component {
               </div>
               {this.props.userStore.isInvestor
                 && (
-                  <div className="public-header-nav logged-in-nav">
+                  <div className="public-header-nav pb-30 logged-in-nav">
                     <NavItems
                       refLoc="public"
                       currentUser={currentUser}
@@ -169,7 +169,7 @@ export default class NavBarMobile extends Component {
                     />
                   </div>
                 )}
-              <div className="public-header-nav">
+              <div className="public-header-nav pb-30">
                 <NavItems
                   refLoc="public"
                   currentUser={currentUser}

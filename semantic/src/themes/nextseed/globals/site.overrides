@@ -191,6 +191,9 @@ h6{
 .p-0{
 	padding: 0 !important;
 }
+.pt-8rem{
+	padding-top:8rem!important;
+}
 .pt-0{
 	padding-top:0 !important;
 }
@@ -199,6 +202,12 @@ h6{
 }
 .pr-0{
 	padding-right: 0 !important;
+}
+.pr-13{
+	padding-right: 13px !important;
+}
+.pl-13{
+	padding-left: 13px !important;
 }
 .pr-15{
 	padding-right: 15px !important;

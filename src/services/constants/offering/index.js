@@ -69,7 +69,7 @@ export const TEMPLATE_POST = {
   postUpdate: {
     label: 'Post Update As',
     value: 'ISSUER',
-    values: [{ label: 'Issuer', value: 'ISSUER' }, { label: 'NextSeed', value: 'NEXTSEED' }],
+    values: [{ label: 'Issuer', value: 'ISSUER' }, { label: 'NS Services', value: 'NS_SERVICES' }, { label: 'NS Securities', value: 'NS_SECURITIES' }],
     error: undefined,
     rule: 'required',
   },
