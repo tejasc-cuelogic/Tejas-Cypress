@@ -61,8 +61,8 @@ const DynamicFormInput = React.memo((props) => {
                 <Header as="h5">Description: <span className="regular-text">{pluginObj.description}</span>
                 </Header>
               )}
-            <Header as="h5">Payload</Header>
             <div className="featured-section">
+              <Header as="h5">Payload</Header>
               <SuspenseBoundary>
                 <Header as="h6">Note: Below field(s) are prefilled with dummy values.</Header>
                 <Form>
