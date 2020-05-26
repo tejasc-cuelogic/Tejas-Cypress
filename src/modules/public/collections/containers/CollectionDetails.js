@@ -26,8 +26,6 @@ class CollectionDetails extends Component {
     window.addEventListener('scroll', this.handleOnScroll);
   }
 
-  state = { firstHash: '' };
-
   componentDidMount() {
     const { slug } = this.props.match.params;
     this.props.collectionStore.getPublicCollection(slug).catch((err) => {
@@ -35,10 +33,10 @@ class CollectionDetails extends Component {
       try {
         exception = JSON.parse(get(err, 'graphQLErrors[0].message'));
         if (get(exception, 'code') === 'COLLECTION_EXCEPTION') {
-          this.props.history.push('/collections');
+          this.props.history.push('/communities');
         }
       } catch {
-        this.props.history.push('/collections');
+        this.props.history.push('/communities');
       }
     });
     this.processScroll();
@@ -94,7 +92,7 @@ class CollectionDetails extends Component {
   processScroll = () => {
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      const hash = this.state.firstHash === this.props.location.hash ? '#firstContent' : this.props.location.hash;
+      const { hash } = this.props.location;
       document.querySelector(`${hash}`).scrollIntoView({
         block: 'start',
         // behavior: 'smooth',
@@ -124,6 +122,7 @@ class CollectionDetails extends Component {
     const { isTablet, isMobile } = responsiveVars;
     const collectionHeader = get(collectionDetails, 'marketing.header');
     let content = get(collectionDetails, 'marketing.content') || [];
+    const getNotHiddenActiveOfferingsList = filter(content, con => con.contentType === 'ACTIVE_INVESTMENTS' && con.scope !== 'HIDDEN');
     if (loadingArray.includes('getCollection')) {
       return <InlineLoader />;
     }
@@ -145,16 +144,13 @@ class CollectionDetails extends Component {
       content = orderBy(filter(content, con => con.scope !== 'HIDDEN'), c => c.order, ['ASC']);
       content.forEach((c, i) => validate(c) && navItems.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }
-    if (navItems.length && this.state.firstHash === '') {
-      this.setState({ firstHash: get(navItems, '[0].to') });
-    }
     const renderHeading = (contentData) => {
       if (contentData) {
         return <p className="mb-30"><HtmlEditor readOnly content={contentData} /></p>;
       }
       return null;
     };
-    const collectionHeaderComponent = (<CollectionHeader activeOffering={getActiveOfferingsList && getActiveOfferingsList.length} scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />);
+    const collectionHeaderComponent = (<CollectionHeader activeOfferings={getNotHiddenActiveOfferingsList && getNotHiddenActiveOfferingsList.length} scrollToActiveOfferings={this.scrollToActiveOfferings} data={collectionHeader} />);
     return (
       <>
         {collectionDetails
@@ -178,7 +174,6 @@ class CollectionDetails extends Component {
             </Visibility>
           </Responsive>
           <Container>
-            <span id="firstContent" />
             <section>
               <Grid centered>
                 {!isMobile
@@ -192,14 +187,13 @@ class CollectionDetails extends Component {
                     </Grid.Column>
                   )
                 }
-                <Grid.Column computer={11} mobile={16} className="left-align offer-details-v2">
+                <Grid.Column computer={11} mobile={16} className="left-align pl-0 pr-0 offer-details-v2 collection-detail">
                   {content.map((c, i) => (
                     c.contentType === 'ACTIVE_INVESTMENTS' && getActiveOfferingsList && getActiveOfferingsList.length
                       ? (
                         <>
-                          <span id="offeringsShow" />
-                          <span id={camelCase(c.title)} />
                           {i !== 0 && <Divider hidden section />}
+                          <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span id="offeringsShow" className="anchor" /><span className="anchor" id={camelCase(c.title)} /></div>
                           <CampaignList
                             collection
                             refLink={this.props.match.url}
@@ -211,8 +205,8 @@ class CollectionDetails extends Component {
                       ) : c.contentType === 'COMPLETE_INVESTMENTS' && getPastOfferingsList && getPastOfferingsList.length
                         ? (
                           <>
-                            <span id={camelCase(c.title)} />
                             {i !== 0 && <Divider hidden section />}
+                            <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
                             <CampaignList
                               collection
                               refLink={this.props.match.url}
@@ -224,27 +218,21 @@ class CollectionDetails extends Component {
                         ) : c.contentType === 'INSIGHTS' && getInsightsList && getInsightsList.length
                           ? (
                             <>
-                              <span id={camelCase(c.title)} />
                               {i !== 0 && <Divider hidden section />}
-                              {/* {i !== 0 && <Divider hidden section />} */}
-                              <section>
-                                <CollectionInsights
-                                  heading={renderHeading(get(c, 'description'))}
-                                  loading={loadingArray.includes('getCollectionMapping')}
-                                  InsightArticles={getInsightsList}
-                                />
-                              </section>
+                              <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
+                              <CollectionInsights
+                                heading={renderHeading(get(c, 'description'))}
+                                loading={loadingArray.includes('getCollectionMapping')}
+                                InsightArticles={getInsightsList}
+                              />
                             </>
                           )
                           : c.contentType === 'CUSTOM' && c.customValue
                             ? (
                               <>
-                                <span id={camelCase(c.title)} />
                                 {i !== 0 && <Divider hidden section />}
-                                {/* {i !== 0 && <Divider hidden section />} */}
-                                <section>
-                                  <CustomContent content={c.customValue} isTablet={isTablet} />
-                                </section>
+                                <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
+                                <CustomContent content={c.customValue} isTablet={isTablet} />
                               </>
                             )
                             : null

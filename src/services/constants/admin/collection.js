@@ -17,7 +17,7 @@ const COMMON_TOMBSTONE_META = {
     ['bgColor', 'Background Color', '', 'optional', 'Enter Here'],
     ['descriptionColor', 'Description Color', '', 'optional', 'Enter Here'],
     ['description', 'Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
-    ['bgImage', 'BackGround Image', '', 'optional', '', { s3Upload: true }],
+    ['bgImage', 'Background Image', '', 'optional', '', { s3Upload: true }],
     ['image', 'Featured Image', '', 'optional', '', { s3Upload: true }],
   ]),
 };

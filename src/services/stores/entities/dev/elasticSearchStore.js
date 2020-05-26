@@ -31,14 +31,6 @@ export class ElasticSearchStore {
 
   @observable swapIndex = null;
 
-  @observable mutations = {
-    USERS: ['adminDeleteUserIndices', 'adminPopulateUserIndex'],
-    CROWDPAY: ['adminDeleteCrowdPayIndices', 'adminPopulateCrowdPayIndex'],
-    ACCREDITATIONS: ['adminDeleteAccreditationIndices', 'adminPopulateAccreditationIndex'],
-    LINKEDBANK: ['adminDeleteLinkedBankIndices', 'adminPopulateLinkedBankIndex'],
-    OFFERINGS: ['adminDeleteOfferingIndices', 'adminPopulateOfferingIndices'],
-  }
-
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
@@ -60,17 +52,20 @@ export class ElasticSearchStore {
     if (module === 'SWAP') {
       this.swapIndexAliases(alias);
     } else if (module === 'POPULATE' || module === 'DELETE') {
-      const mutation = this.mutations[alias];
-      this.esMutations(module === 'POPULATE' ? mutation[1] : mutation[0], indexName.toUpperCase());
+      const variables = {
+        indexAliasName: alias,
+        index: indexName.toUpperCase(),
+      };
+      this.esMutations(module === 'POPULATE' ? 'adminPopulateIndex' : 'adminDeleteIndex', variables);
     }
   }
 
   @action
-  esMutations = (mutation, index) => new Promise((resolve, reject) => {
+  esMutations = (mutation, variables) => new Promise((resolve, reject) => {
     client
       .mutate({
         mutation: elasticSearchQueries[mutation],
-        variables: { index },
+        variables,
         refetchQueries: [{ query: elasticSearchQueries.getESAuditList }],
       })
       .then((result) => {

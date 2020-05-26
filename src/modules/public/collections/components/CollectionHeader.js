@@ -12,16 +12,18 @@ import { NavItems } from '../../../../theme/layout/NavigationItems';
 @observer
 export default class CollectionHeader extends Component {
   render() {
-    const { uiStore, data, scrollToActiveOfferings, activeOffering } = this.props;
+    const { uiStore, data, scrollToActiveOfferings, activeOfferings } = this.props;
     const { responsiveVars } = uiStore;
     const { isMobile } = responsiveVars;
     const title = get(data, 'title');
     const actionText = get(data, 'actionText');
-    const headerDownClick = activeOffering && actionText ? (
+    const headerDownClick = (activeOfferings && actionText) ? (
       <div className="current-projects-box" style={{ color: get(data, 'descriptionColor') }}>
-        <p style={{ color: get(data, 'descriptionColor') }} className="mb-0">{actionText}</p>
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-        <i className="icon ns-chevron-down" onClick={scrollToActiveOfferings} />
+        <span style={{ cursor: 'pointer' }} onClick={scrollToActiveOfferings}>
+          <span style={{ color: get(data, 'descriptionColor') }} className="mb-0">{actionText}</span><br />
+          <i className="icon ns-chevron-down" />
+        </span>
       </div>
     ) : null;
     return (
@@ -29,11 +31,11 @@ export default class CollectionHeader extends Component {
         {!isMobile
           ? (
             <>
-              <div className="campaign-banner collection-banner">
+              <div className="campaign-banner collection-banner collection-header-wrap">
                 <section className="banner" style={{ backgroundColor: get(data, 'bgColor') }}>
-                  <Responsive minWidth={768} as={Container}>
+                  <Responsive minWidth={768} as={Container} className="pt-100 pb-100">
                     <Grid relaxed stackable centered>
-                      <Grid.Column width={7} className="zi-9">
+                      <Grid.Column width={6} className="zi-9">
                         <div className="video-wrapper campaign">
                           <Image64
                             reRender
@@ -49,13 +51,13 @@ export default class CollectionHeader extends Component {
                             ? get(data, 'social').map(site => (
                               <React.Fragment key={site.type}>
                                 {site.url
-                                  && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase() === 'website' ? 'globe' : site.type.toLowerCase()} /></a>
+                                  && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase() === 'website' ? 'globe' : site.type.toLowerCase()} style={{ color: get(data, 'descriptionColor') }} /></a>
                                 }
                               </React.Fragment>
                             )) : ''}
                         </div>
                       </Grid.Column>
-                      <Grid.Column width={8} className="zi-9">
+                      <Grid.Column width={10} className="zi-9">
                         <Header style={{ color: get(data, 'descriptionColor') }} as="h3" inverted>
                           {title}
                         </Header>
@@ -71,9 +73,12 @@ export default class CollectionHeader extends Component {
               </div>
             </>
           ) : (
-            <div className={`${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu `}>
+            <div className={`${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu collection-header-wrap`}>
               <Responsive maxWidth={991} as={React.Fragment}>
-                <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
+                <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`} style={{ backgroundColor: get(data, 'bgColor') }}>
+                  {get(data, 'bgImage.url')
+                    && <Image64 reRender originalImg bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
+                  }
                   <div className="video-wrapper campaign">
                     <Image64
                       bg
@@ -84,23 +89,23 @@ export default class CollectionHeader extends Component {
                     />
                     {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p style={{ color: get(data, 'tag.textColor') }}>{get(data, 'tag.text')}</p></div>}
                   </div>
-                  <Header style={{ color: get(data, 'descriptionColor') }} as="h4" inverted>
+                  <Header style={{ color: get(data, 'descriptionColor') }} as="h4" inverted className="left-align">
                     {title}
                   </Header>
-                  <span style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></span>
+                  <p style={{ color: get(data, 'descriptionColor') }} className="collection-desc"><HtmlEditor readOnly content={get(data, 'description')} /></p>
                   <div className="clearfix social-links mt-10">
                     {get(data, 'social[0]')
                       ? get(data, 'social').map(site => (
                         <React.Fragment key={site.type}>
                           {site.url
-                            && <a className="ml-30" target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
+                            && <a className="ml-30" target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase() === 'website' ? 'globe' : site.type.toLowerCase()} style={{ color: get(data, 'descriptionColor') }} /></a>
                           }
                         </React.Fragment>
                       )) : ''}
                   </div>
                 </div>
               </Responsive>
-              {headerDownClick}
+              { headerDownClick }
               {!isMobile
                 && (
                   <>

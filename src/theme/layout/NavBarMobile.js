@@ -66,7 +66,7 @@ export default class NavBarMobile extends Component {
     const { signupStatus, pendingStep } = userDetailsStore;
     const isAddNewAccount = signupStatus && !signupStatus.finalStatus && signupStatus.investorProfileCompleted && signupStatus.inActiveAccounts.length > 0;
     const loggedInNavs = this.props.navStore.myMobileRoutes.filter(e => (e.isLoggedIn && this.props.userStore.isInvestor && (e.title !== 'Add New Account' || (e.title === 'Add New Account' && isAddNewAccount))));
-    const publicNav = this.props.navStore.myMobileRoutes.filter(e => !e.isLoggedIn || (!this.props.userStore.isInvestor && ['offerings', 'collections'].includes(e.to)));
+    const publicNav = this.props.navStore.myMobileRoutes.filter(e => !e.isLoggedIn || (!this.props.userStore.isInvestor && ['offerings', 'communities'].includes(e.to)));
     // const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     const { topBanner } = uiStore;
     return (
@@ -157,7 +157,7 @@ export default class NavBarMobile extends Component {
               </div>
               {this.props.userStore.isInvestor
                 && (
-                  <div className="public-header-nav logged-in-nav">
+                  <div className="public-header-nav pb-30 logged-in-nav">
                     <NavItems
                       refLoc="public"
                       currentUser={currentUser}
@@ -169,7 +169,7 @@ export default class NavBarMobile extends Component {
                     />
                   </div>
                 )}
-              <div className="public-header-nav">
+              <div className="public-header-nav pb-30">
                 <NavItems
                   refLoc="public"
                   currentUser={currentUser}
