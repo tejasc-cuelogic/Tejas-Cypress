@@ -3858,11 +3858,13 @@ h3.ui.header.error-2{
 	}
 }
 .capital-wrap{
+	img{
+		max-width: 100% !important;
+		margin: 0 auto !important;
+		display: block !important;
+	}
 	@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
 		img{
-			max-width: 100% !important;
-			margin: 0 auto !important;
-			display: block !important;
 			float: none !important;
 		}
 	}

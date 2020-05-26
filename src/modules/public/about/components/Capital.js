@@ -52,11 +52,11 @@ class Capital extends Component {
       <section className={`capital-wrap bg-offwhite ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-100 pb-30'}`}>
         <Container>
           <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} className="capital-sidebg" floated="left">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} className="capital-sidebg" floated="left">
               <NSImage floated="left" path={responsiveVars.uptoTablet ? 'capital/imgMobile.png' : 'capital/img.png'} />
             </Grid.Column>
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} floated="right" className="pt-0">
-              <section className={`${responsiveVars.isMobile ? '' : 'pl-100 pt-0 pr-0'}`}>
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right" className="pt-0">
+              <section className={`${responsiveVars.isMobile ? '' : 'pl-1 00 pt-0 pr-0'}`}>
                 <Header as="h2" className="capital-header">Overview</Header>
                 <List bulleted relaxed="very" className={`${responsiveVars.isMobile ? '' : 'mt-30'} capital`}>
                   <List.Item className="pb-0 mt-0 mb-10 pt-0">
