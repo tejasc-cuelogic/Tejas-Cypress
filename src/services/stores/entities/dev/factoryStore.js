@@ -393,8 +393,9 @@ export class FactoryStore extends DataModelStore {
   emailFactoryPluginTrigger = async (emailIdentifier) => {
     try {
       const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.EMAIL_LIST.fields;
-      const formPayloadData = Validator.evaluateFormData(fieldsPayload, true);
-      const testFormData = this.ExtractToJSON(formPayloadData);
+      const formPayloadData = Validator.evaluateFormData(fieldsPayload);
+      const validFormatedPayload = this.evaluateJsonPAyload(formPayloadData);
+      const testFormData = this.ExtractToJSON(validFormatedPayload);
       if ((testFormData !== '') && !this.isValidJson(testFormData)) {
         this.DYNAMCI_PAYLOAD_FRM.EMAIL_LIST.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
         this.DYNAMCI_PAYLOAD_FRM.EMAIL_LIST.meta.isValid = false;
@@ -402,7 +403,7 @@ export class FactoryStore extends DataModelStore {
         const variables = {
           emailIdentifier,
           payload: testFormData,
-      };
+        };
         const data = await this.executeMutation({
           mutation: 'adminSendEmail',
           setLoader: 'adminSendEmail',
@@ -416,6 +417,16 @@ export class FactoryStore extends DataModelStore {
       Helper.toast('Something went wrong.', 'error');
       return false;
     }
+  }
+
+  evaluateJsonPAyload = (formPayload) => {
+    const val = formPayload.viewResponse;
+    let s = `${val}`;
+    // eslint-disable-next-line no-useless-escape
+    s = s.replace(/^\"|\"$/g, '');
+    // s = s.replace(/((?=^)")/g, '');
+    // s = s.replace(/"((^")*)$/, '');
+    return s;
   }
 
   ExtractToJSON = (param, isDisableStringify = false) => {
