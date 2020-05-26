@@ -173,31 +173,11 @@ export const PROCESSFACTORY_META = FormHelper.generateMeta([
   ],
 ]);
 
-export const TABLE_META = FormHelper.generateMeta([
-  ['table', 'Table', '', 'optional', '',
-    {
-      asIn: true,
-      props: {
-        values: [],
-      },
-    },
-  ],
-]);
+const operators = ['=', '!=', '>', '<', '>=', '<=', 'IS', 'IS NOT', 'IN', 'LIKE'].map(o => ({ key: o, value: o, text: o }));
 
-export const COLUMN_TO_REVIEW = FormHelper.generateMeta([
-  ['selectColumns', 'Columns To Review', '', 'optional', '',
-    {
-      asIn: true,
-      props: {
-        values: [],
-      },
-    },
-  ],
-]);
-
-export const QUERY_FILTER = {
+export const QUERY_BUILDER = {
   ...FormHelper.generateMeta([
-    ['selectColumns', 'Columns To Review', '', 'optional', '',
+    ['table', 'Table', '', 'optional', '',
       {
         asIn: true,
         props: {
@@ -206,13 +186,59 @@ export const QUERY_FILTER = {
       },
     ],
   ]),
-  filters: [FormHelper.generateMeta([
-    ['column', 'Column', '', 'optional', ''],
-    ['operator', 'Operator', '', 'optional', '', { props: { values: ['=', '!=', '>', '<', '>=', '<=', 'IS', 'IS NOT', 'IN', 'LIKE'] } }],
-    ['columnValue', 'Value', '', 'optional', ''],
+  ...FormHelper.generateMeta([
+    ['selectColumns', 'Columns To Retrieve', [], 'optional', '',
+      {
+        asIn: true,
+        props: {
+          values: [],
+        },
+      },
+    ],
+  ]),
+  ...FormHelper.generateMeta([
+    ['groupByColumns', 'Group By', [], 'optional', '',
+      {
+        asIn: true,
+        props: {
+          values: [],
+        },
+      },
+    ],
+  ]),
+  where: [FormHelper.generateMeta([
+    ['name', 'Column', '', 'optional', '', {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    }],
+    ['operator', 'Operator', '', 'optional', '', { asIn: true, props: { values: operators, options: operators } }],
+    ['value', 'Value', null, 'optional', ''],
   ])],
+  orderBy: [{
+    ...FormHelper.generateMeta([
+      ['column', 'Column', '', 'optional', '',
+        {
+          asIn: true,
+          props: {
+            values: [],
+          },
+        },
+      ],
+    ]),
+    ...FormHelper.generateMeta([
+      ['order', 'Order', '', 'optional', '',
+        {
+          asIn: true,
+          props: {
+            values: ['ASC', 'DESC'].map(o => ({ key: o, value: o, text: o })),
+          },
+        },
+      ],
+    ]),
+  }],
 };
-
 
 export const PROCESSFACTORY_LOG__META = FormHelper.generateMeta([
   ['plugin', 'Plugin', '', 'required', '',

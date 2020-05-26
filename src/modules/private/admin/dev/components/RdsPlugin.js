@@ -3,7 +3,7 @@ import { Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { InlineLoader } from '../../../../../theme/shared';
-import QueryBuilder from './rdsPlugin/queryBuilder';
+import QueryBuilderContainer from './rdsPlugin/queryBuilderContainer';
 @inject('rdsPluginStore', 'nsUiStore')
 @withRouter
 @observer
@@ -25,7 +25,7 @@ export default class RdsPlugin extends Component {
         : (
           <Grid>
             <Grid.Column>
-              <QueryBuilder />
+              <QueryBuilderContainer />
             </Grid.Column>
           </Grid>
         )

@@ -14,6 +14,18 @@ mutation storageDetailsForInvestor($limit: Int = 0) {
     }
   }`;
 
+export const adminRunRdsQuery = gql`
+query adminRunRdsQuery($table: String!) {
+    adminRunRdsQuery(table: $table) {
+      page
+      totalCount
+      resultCount
+      results
+    }
+  }
+`;
+
+
 export const adminListRdsPlugins = gql`
 query adminListRdsPlugins {
   adminListRdsPlugins {

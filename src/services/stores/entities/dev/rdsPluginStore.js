@@ -1,21 +1,17 @@
-import { observable, action, decorate } from 'mobx';
+import { observable, action, decorate, toJS } from 'mobx';
 import { get, pick } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { FormValidator as Validator } from '../../../../helper';
-import { TABLE_META, COLUMN_TO_REVIEW, QUERY_FILTER } from '../../../constants/admin/data';
+import { QUERY_BUILDER } from '../../../constants/admin/data';
 import Helper from '../../../../helper/utility';
-import { adminListRdsPlugins } from '../../queries/data';
+import { adminListRdsPlugins, adminRunRdsQuery } from '../../queries/data';
 
 export class RdsPluginStore extends DataModelStore {
   constructor() {
-    super({ adminListRdsPlugins });
+    super({ adminListRdsPlugins, adminRunRdsQuery });
   }
 
-  QUERY_FILTER_FRM = Validator.prepareFormObject(QUERY_FILTER);
-
-  COLUMN_TO_REVIEW_FRM = Validator.prepareFormObject(COLUMN_TO_REVIEW);
-
-  TABLE_FRM = Validator.prepareFormObject(TABLE_META);
+  QUERY_BUILDER_FRM = Validator.prepareFormObject(QUERY_BUILDER);
 
   fetchPlugins = async () => {
     try {
@@ -28,35 +24,54 @@ export class RdsPluginStore extends DataModelStore {
 
       const tables = get(res, 'adminListRdsPlugins.tables');
       if (tables) {
-        this.setFieldValue('TABLE_FRM', tables, 'fields.table.values');
+        this.setFieldValue('QUERY_BUILDER_FRM', tables, 'fields.table.values');
       }
     } catch (error) {
       Helper.toast('Something went wrong, please try again later.', 'error');
     }
   }
 
-  formChangeForTable = (e, result, form) => {
-    this[form] = Validator.onChange(this[form], Validator.pullValues(e, result), 'dropdown');
-    // ['COLUMN_TO_REVIEW_FRM', 'QUERY_FILTER_FRM'].forEach((f) => {
-    //   this[f] = Validator.resetFormData(this[f]);
-    // });
-    this.QUERY_FILTER_FRM = Validator.resetFormData(this.QUERY_FILTER_FRM);
-    const { columns } = this.TABLE_FRM.fields.table.values.find(t => t.value === result.value);
-    this.QUERY_FILTER_FRM.fields.selectColumns.values = (columns && columns.map(c => ({ ...pick(c, ['key', 'value']), text: c.value }))) || [];
+  adminRunRdsQuery = async () => {
+    try {
+      const data = Validator.evaluateFormData(this.QUERY_BUILDER_FRM.fields);
+      console.log(toJS(data));
+      data.where.forEach((d) => {
+        // eslint-disable-next-line no-param-reassign
+        d.value = d.value === '' ? null : d.value;
+        return d;
+      });
+      const res = await this.executeQuery({
+        query: 'adminRunRdsQuery',
+        variables: {
+          ...data,
+        },
+        setLoader: 'adminRunRdsQuery',
+      });
+
+      return res;
+    } catch (error) {
+      Helper.toast('Something went wrong, please try again later.', 'error');
+      return false;
+    }
   }
 
-  formChangeForColumns = (e, result, form) => {
-    this[form] = Validator.onChange(this[form], Validator.pullValues(e, result), 'dropdown');
+  formChangeForTable = (e, result, props) => {
+    this.QUERY_BUILDER_FRM = Validator.resetFormData(this.QUERY_BUILDER_FRM);
+    this.formChange(e, result, get(props, 'multiForm'), 'dropdown');
+    const { columns } = this.QUERY_BUILDER_FRM.fields.table.values.find(t => t.value === result.value);
+    const dropDownColumns = (columns && columns.map(c => ({ ...pick(c, ['key', 'value']), text: c.value }))) || [];
+    this.QUERY_BUILDER_FRM.fields.selectColumns.values = dropDownColumns;
+    this.QUERY_BUILDER_FRM.fields.groupByColumns.values = dropDownColumns;
+    this.QUERY_BUILDER_FRM.fields.orderBy[0].column.values = dropDownColumns;
+    this.QUERY_BUILDER_FRM.fields.where[0].name.values = dropDownColumns;
   }
 }
 
 decorate(RdsPluginStore, {
   ...decorateDefault,
-  QUERY_FILTER_FRM: observable,
-  COLUMN_TO_REVIEW_FRM: observable,
-  TABLE_FRM: observable,
+  QUERY_BUILDER_FRM: observable,
   formChangeForTable: action,
-  formChangeForColumns: action,
+  adminRunRdsQuery: action,
   initRequest: action,
 });
 
