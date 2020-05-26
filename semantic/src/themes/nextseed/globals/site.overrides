@@ -3840,6 +3840,9 @@ h3.ui.header.error-2{
 	.ui.form{
 		width: 100%;
 		padding-left: 14px;
+		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+			padding-left: 0 !important;
+		}
 		label{
 			display: none !important;
 		}
