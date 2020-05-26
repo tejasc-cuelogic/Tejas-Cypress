@@ -27,17 +27,29 @@ function QueryFilters(props) {
         search: true,
       })}
       {<>
-        <Header as="h5">
-          Filters
-          <Button size="small" color="blue" className="link-button mt-20" onClick={e => addMore(e)}>
-            + Add more
+        <Grid className="mt-20">
+          <Grid.Column width={8}>
+            <Header as="h5" className="mb-0">
+              Filters
+            </Header>
+          </Grid.Column>
+          <Grid.Column width={8}>
+            <Button size="small" color="blue" className="link-button mt-5" onClick={e => addMore(e)} floated="right">
+              + Add more
           </Button>
-        </Header>
+          </Grid.Column>
+        </Grid>
+
+
         {QUERY_FILTER_FRM.fields.filters.map((_fiter, index) => (
-          <Grid>
-            <Grid.Column width={3}>
+          <Grid columns="3">
+            <Grid.Column>
               {smartElement.Input('column', { multiForm: ['QUERY_FILTER_FRM', 'filters', index] })}
+            </Grid.Column>
+            <Grid.Column>
               {smartElement.FormDropDown('operator', { multiForm: ['QUERY_FILTER_FRM', 'filters', index] })}
+            </Grid.Column>
+            <Grid.Column>
               {smartElement.Input('columnValue', { multiForm: ['QUERY_FILTER_FRM', 'filters', index] })}
             </Grid.Column>
           </Grid>
