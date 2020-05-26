@@ -24,10 +24,10 @@ class Capital extends Component {
           <Container>
             <div className="banner-caption center-align">
               <NSImage path="capital/ns-capital-logo.svg" className="mb-20" />
-              <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-14' : 'mb-14'}>Invest in Small Businesses</Header>
+              <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-14' : 'mb-14'}>Invest in Small<Responsive maxWidth="768" as="br" /> Businesses</Header>
               <Header as="h4" className="mb-40">
-                Access a diversified portfolio of income-generating <Responsive minWidth="768" as="br" />
-              businesses with NextSeed’s inaugural fund
+                Access a diversified portfolio of<Responsive maxWidth="768" as="br" /> income-generating <Responsive minWidth="768" as="br" />
+              businesses with<Responsive maxWidth="768" as="br" /> NextSeed’s inaugural fund
             </Header>
           </div>
         </Container>
@@ -44,7 +44,7 @@ class Capital extends Component {
             </Grid.Column>
             <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="center-align" floated="right">
               <NSImage path="capital/slider.png" />
-              <p className="mt-30 note">Small businesses successfully funded on the NextSeed platform</p>
+              <p className="mt-30 note">Small businesses successfully funded<Responsive maxWidth="768" as="br" /> on the NextSeed platform</p>
             </Grid.Column>
           </Grid>
         </Container>
@@ -53,10 +53,10 @@ class Capital extends Component {
         <Container>
           <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
             <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} className="capital-sidebg" floated="left">
-              <NSImage floated="left" path={responsiveVars.uptoTablet ? 'capital/imgMobile.png' : 'capital/img.png'} />
+              <NSImage floated="left" path={responsiveVars.uptoTablet ? 'capital/img-people-mobile.png' : 'capital/img-people.png'} />
             </Grid.Column>
             <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right" className="pt-0">
-              <section className={`${responsiveVars.isMobile ? '' : 'pl-1 00 pt-0 pr-0'}`}>
+              <section className={`${responsiveVars.isMobile ? '' : 'pt-0 pr-0'}`}>
                 <Header as="h2" className="capital-header">Overview</Header>
                 <List bulleted relaxed="very" className={`${responsiveVars.isMobile ? '' : 'mt-30'} capital`}>
                   <List.Item className="pb-0 mt-0 mb-10 pt-0">
