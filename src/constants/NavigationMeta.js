@@ -581,6 +581,9 @@ export const PRIVATE_NAV = [
       {
         title: 'Email', to: 'email', component: 'Email', capability: 'EMAIL_ANY',
       },
+      {
+        title: 'Rds Plugins', to: 'rds-plugins', component: 'RdsPlugin', capability: 'RDS_ANY',
+      },
     ],
   },
 ];

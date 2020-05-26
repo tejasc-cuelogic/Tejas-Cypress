@@ -14,6 +14,19 @@ mutation storageDetailsForInvestor($limit: Int = 0) {
     }
   }`;
 
+export const adminListRdsPlugins = gql`
+query adminListRdsPlugins {
+  adminListRdsPlugins {
+    tables {
+      key value
+      columns { key value type }
+    }
+    operators
+    orderTypes { key value }
+  }
+}`;
+
+
 export const updateOfferingRepaymentsMeta = gql`
 mutation updateOfferingRepaymentsMeta($audit: Boolean!, $offeringId: String){
     updateOfferingRepaymentsMeta(audit: $audit, offeringId: $offeringId) {

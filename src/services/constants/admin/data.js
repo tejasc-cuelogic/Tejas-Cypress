@@ -173,6 +173,47 @@ export const PROCESSFACTORY_META = FormHelper.generateMeta([
   ],
 ]);
 
+export const TABLE_META = FormHelper.generateMeta([
+  ['table', 'Table', '', 'optional', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+]);
+
+export const COLUMN_TO_REVIEW = FormHelper.generateMeta([
+  ['selectColumns', 'Columns To Review', '', 'optional', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+]);
+
+export const QUERY_FILTER = {
+  ...FormHelper.generateMeta([
+    ['selectColumns', 'Columns To Review', '', 'optional', '',
+      {
+        asIn: true,
+        props: {
+          values: [],
+        },
+      },
+    ],
+  ]),
+  filters: [FormHelper.generateMeta([
+    ['column', 'Column', '', 'optional', ''],
+    ['operator', 'Operator', '', 'optional', '', { props: { values: ['=', '!=', '>', '<', '>=', '<=', 'IS', 'IS NOT', 'IN', 'LIKE'] } }],
+    ['columnValue', 'Value', '', 'optional', ''],
+  ])],
+};
+
+
 export const PROCESSFACTORY_LOG__META = FormHelper.generateMeta([
   ['plugin', 'Plugin', '', 'required', '',
     {
