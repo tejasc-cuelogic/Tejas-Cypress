@@ -3866,6 +3866,14 @@ h3.ui.header.error-2{
 			float: none !important;
 		}
 	}
+	.capital-investment-strategy-wrap{
+		>.item{
+			display: flex !important;
+			p{
+				padding-left:20px !important;
+			}
+		}
+	}
 }
 .contact-divider{
 	top:0 !important;
