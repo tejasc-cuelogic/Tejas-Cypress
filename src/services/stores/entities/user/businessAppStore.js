@@ -503,6 +503,14 @@ export class BusinessAppStore {
             this.setFileObjectToForm(data.financialStatements[field], 'BUSINESS_PERF_FRM', field);
           }
         });
+      } else if (this.currentApplicationType === 'business' && this.getNewBusinessTypeCondtion) {
+        ['priorToThreeYear', 'ytd'].forEach((field) => {
+          if (data.financialStatements[field] && data.financialStatements[field].length) {
+            this.setFileObjectToForm(data.financialStatements[field], 'BUSINESS_PERF_FRM', field);
+          } else {
+            this.BUSINESS_PERF_FRM.fields[field].rule = '';
+          }
+        });
       } else {
         ['priorToThreeYear', 'ytd'].forEach((ele) => {
           this.BUSINESS_PERF_FRM.fields[ele].rule = '';
@@ -536,6 +544,10 @@ export class BusinessAppStore {
             const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
             this.BUSINESS_PERF_FRM.fields[field[key]].value = prequalData.performanceSnapshot.pastYearSnapshot[ele];
           });
+        } else if (this.getNewBusinessTypeCondtion) {
+          ['priorToThreeYear', 'pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'].forEach((ele) => {
+            this.BUSINESS_PERF_FRM.fields[ele].rule = '';
+          });
         } else {
           ['priorToThreeYear', 'ytd', 'pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'].forEach((ele) => {
             this.BUSINESS_PERF_FRM.fields[ele].rule = '';
@@ -563,11 +575,11 @@ export class BusinessAppStore {
 
         ['bankStatements', 'businessTaxReturns', 'leaseAgreementsOrLOIs', 'personalTaxReturns'].forEach((field, key) => {
           const formField = ['bankStatements', 'businessTaxReturn', 'leaseAgreementsOrLOIs', 'personalTaxReturn'];
-          if (this.getBusinessTypeCondtion) {
+          if (this.currentApplicationType === 'business' && this.getBusinessTypeCondtion) {
             if (data[field] && data[field].length) {
               this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', formField[key]);
             }
-          } else if (field === 'leaseAgreementsOrLOIs' || field === 'personalTaxReturns') {
+          } else if (this.currentApplicationType === 'business' && !this.getBusinessTypeCondtion && formField[key] !== 'bankStatements') {
             if (data[field] && data[field].length) {
               this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', formField[key]);
             }
@@ -583,10 +595,6 @@ export class BusinessAppStore {
           }
         });
       }
-    } else if (this.currentApplicationType === 'business' && !this.getBusinessTypeCondtion) {
-      ['bankStatements', 'businessTaxReturn'].forEach((ele) => {
-        this.BUSINESS_DOC_FRM.fields[ele].rule = '';
-      });
     }
     this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM);
     this.BUSINESS_DOC_FRM.meta.isValid = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value
@@ -697,6 +705,16 @@ export class BusinessAppStore {
       && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.PRE_LAUNCH
       && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.NEW_BUSINESS
       && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW);
+  }
+
+  @computed get getNewBusinessTypeCondtion() {
+    return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value
+      && this.BUSINESS_APP_FRM.fields.businessGoal.value === BUSINESS_GOAL.NEW_BUSINESS);
+  }
+
+  @computed get getEstablishedBusinessTypeCondtion() {
+    return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value
+      && this.BUSINESS_APP_FRM.fields.businessGoal.value === BUSINESS_GOAL.ESTABLISHED);
   }
 
   @computed get getOwnPropertyCondtion() {
@@ -1475,9 +1493,13 @@ export class BusinessAppStore {
 
   @computed get getBusinessApplicationGoal() {
     let prevBusinessGoal = false;
-    if (this.businessApplicationDetailsAdmin
+    if (this.businessApplicationDetailsAdmin && this.businessApplicationDetailsAdmin.prequalDetails
       && (this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'BRAND_NEW' || this.businessApplicationDetailsAdmin.prequalDetails.businessGoal === 'UPGRADE')) {
-      prevBusinessGoal = true;
+        prevBusinessGoal = true;
+      }
+    if (this.businessApplicationDetailsAdmin && this.businessApplicationDetailsAdmin.businessGoal
+      && (this.businessApplicationDetailsAdmin.businessGoal === 'BRAND_NEW' || this.businessApplicationDetailsAdmin.businessGoal === 'UPGRADE')) {
+        prevBusinessGoal = true;
     }
     return prevBusinessGoal;
   }

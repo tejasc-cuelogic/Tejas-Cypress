@@ -292,7 +292,7 @@ class Overview extends Component {
                           <Table.Cell>
                             <Button.Group vertical>
                               {agreementIds && agreementIds.length !== 0 && agreementIds.map(agreementId => (
-                                <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
+                                <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> Purchase Agreement </Button>
                               ))}
                               {aggrementDocs && aggrementDocs.length !== 0 && aggrementDocs.map(doc => (
                                 <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>

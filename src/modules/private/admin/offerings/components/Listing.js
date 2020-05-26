@@ -61,7 +61,7 @@ export default class Listing extends Component {
 
   render() {
     const {
-      uiStore, offeringsStore, stage, noPagination, allLiveOfferingsList,
+      uiStore, offeringsStore, stage, noPagination, allLiveOfferingsList, isLoading,
     } = this.props;
     const {
       offerings,
@@ -73,7 +73,7 @@ export default class Listing extends Component {
     const { confirmBox } = uiStore;
     const totalRecords = noPagination ? 0 : (count || 0);
     const offeringList = allLiveOfferingsList || (noPagination ? allOfferings : offerings);
-    if (loading) {
+    if (loading || isLoading) {
       return <InlineLoader />;
     }
     return (

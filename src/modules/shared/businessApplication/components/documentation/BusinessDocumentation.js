@@ -19,18 +19,18 @@ export default class BusinessDocumentation extends Component {
       businessDocChange,
       businessAppUploadFiles,
       businessAppRemoveFiles,
-      getBusinessTypeCondtion,
       getPersonalGuaranteeCondition,
       formReadOnlyMode,
       businessAppParitalSubmit,
       enableSave,
       businessApplicationDetailsAdmin,
+      getBusinessTypeCondtion,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_DOC_FRM;
     const { hideFields } = this.props;
     const userAccess = this.props.userStore.myAccessForModule('APPLICATIONS');
-    const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
-    const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];
+    const statementFileList = ['bankStatements', 'leaseAgreementsOrLOIs'];
+    const taxFileList = ['personalTaxReturn', 'businessTaxReturn'];
     const { inProgress } = this.props.uiStore;
     let disableFileUpload = true;
     if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
@@ -67,7 +67,7 @@ export default class BusinessDocumentation extends Component {
                     multiple
                     key={field}
                     name={field}
-                    asterisk={fields[field].rule.includes('required') ? 'true' : ''}
+                    asterisk={((fields[field].rule.includes('required') && getBusinessTypeCondtion) ? 'true' : '')}
                     fielddata={fields[field]}
                     ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                     onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}

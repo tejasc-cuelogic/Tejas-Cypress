@@ -24,6 +24,8 @@ export default class DataModelStore {
 
   loading = false;
 
+  apiHit = false;
+
   client = publicClient;
 
   currentScore = 0;
@@ -114,7 +116,7 @@ export default class DataModelStore {
     } catch (err) {
       this.loading = false;
       // remove only loaders who are set exlplicity
-      this.resetLoader(payLoad.removeLoader, payLoad.mutation);
+      this.resetLoader(payLoad.removeLoader, loader);
       this.auStatus = 0;
       const errorMessage = { message: get(payLoad, 'message.error') || err.message };
       if (get(payLoad, 'message') && payLoad.showToastError) {
@@ -154,7 +156,7 @@ export default class DataModelStore {
         this.auStatus = 0;
         this.loading = false;
         // remove only loaders who are set exlplicity
-        this.resetLoader(payLoad.removeLoader, payLoad.query);
+        this.resetLoader(payLoad.removeLoader, loader);
         rej(e);
       },
     });
@@ -168,7 +170,7 @@ export default class DataModelStore {
   }
 
   resetLoader = (removeLoader, operation) => {
-    if (removeLoader) {
+    if (Array.isArray(removeLoader)) {
       removeLoader.map(item => (nsUiStore.filterLoaderByOperation(item)));
     } else {
       nsUiStore.filterLoaderByOperation(operation);
@@ -221,29 +223,37 @@ export default class DataModelStore {
     this.currTime = +new Date();
   }
 
+
+  reOrderHandle = (orderedForm, form, arrayName) => {
+    const content = toJS(orderedForm).map((d, index) => ({ ...d, order: { ...d.order, value: index + 1 } }));
+    this.setFieldValue(form, content, `fields.${arrayName}`);
+  }
+
   setMediaAttribute = (form, attr, value, field, index = -1, arrayName) => {
+    const formName = Array.isArray(form) ? form[0] : form;
     if (index > -1) {
-      this[form].fields[arrayName][index][field][attr] = value;
+      this[formName].fields[arrayName][index][field][attr] = value;
     } else {
-      this[form].fields[field][attr] = value;
+      this[formName].fields[field][attr] = value;
     }
     this.currTime = +new Date();
   }
 
   resetImageCropper = (form, field, index = -1, arrayName) => {
+    const formName = Array.isArray(form) ? form[0] : form;
     const attributes = ['src', 'error', 'meta', 'base64String', 'responseUrl', 'value', 'preSignedUrl', 'confirmModal'];
     attributes.forEach((val) => {
-      const typeCheck = index > -1 ? this[form].fields[arrayName][index][field][val] : this[form].fields[field][val];
+      const typeCheck = index > -1 ? this[formName].fields[arrayName][index][field][val] : this[formName].fields[field][val];
       if ((typeof typeCheck === 'object') && (typeCheck !== null)) {
         if (index > -1) {
-          this[form].fields[arrayName][index][field][val] = {};
+          this[formName].fields[arrayName][index][field][val] = {};
         } else {
-          this[form].fields[field][val] = {};
+          this[formName].fields[field][val] = {};
         }
       } else if (index > -1) {
-        this[form].fields[arrayName][index][field][val] = val === 'confirmModal' ? false : '';
+        this[formName].fields[arrayName][index][field][val] = val === 'confirmModal' ? false : '';
       } else {
-        this[form].fields[field][val] = val === 'confirmModal' ? false : '';
+        this[formName].fields[field][val] = val === 'confirmModal' ? false : '';
       }
     });
     this.currTime = +new Date();
@@ -503,4 +513,5 @@ export const decorateDefault = {
   handleUploadLoader: action,
   resetStoreData: action,
   resetAllForms: action,
+  resetLoader: action,
 };

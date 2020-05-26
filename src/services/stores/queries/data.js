@@ -104,6 +104,8 @@ export const getPluginList = gql`
 query adminListRequestPlugins {
   adminListRequestPlugins {
     plugins{
+      note
+      description
       name
       plugin
       pluginInputs{
@@ -128,7 +130,9 @@ query adminListRequestPlugins {
   }
   adminListCronPlugins
   {
-    plugins{   
+    plugins{
+      note
+      description   
       name   
       plugin   
       pluginInputs{   
@@ -144,6 +148,8 @@ query adminListRequestPlugins {
   adminListProcessorPlugins
   {
     plugins{
+      note
+      description
       name
       plugin
       pluginInputs{
@@ -157,6 +163,8 @@ query adminListRequestPlugins {
           key
           value
           text
+          note
+          description
         }
       }
     }
@@ -168,6 +176,8 @@ export const adminListFilePlugins = gql`
 query adminListFilePlugins {
   adminListFilePlugins {
     name
+    note
+    description
     plugin
     pluginInputs {
       label

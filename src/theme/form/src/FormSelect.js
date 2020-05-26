@@ -21,20 +21,24 @@ const FormSelect = observer((props) => {
   const fieldClass = `${props.containerclassname || ''} ${displayMode ? ' display-only' : ''}`;
   return (
     <Form.Field error={error} width={width} className={fieldClass}>
-      <label>
-        {props.tooltip
-          ? (
-            <PopUpModal
-              customTrigger={<span className="popup-label">{label}</span>}
-              content={props.tooltip}
-              position="top center"
-              className="center-align"
-              wide
-              showOnlyPopup={!isMobile}
-            />
-          ) : <span>{label}</span>
-        }
-      </label>
+      {!props.ishidelabel && (label !== '' || props.label !== '')
+        && (
+          <label>
+            {props.tooltip
+              ? (
+                <PopUpModal
+                  customTrigger={<span className="popup-label">{label}</span>}
+                  content={props.tooltip}
+                  position="top center"
+                  className="center-align"
+                  wide
+                  showOnlyPopup={!isMobile}
+                />
+              ) : <span>{label}</span>
+            }
+          </label>
+        )
+      }
       <Select
         fluid
         {...props}

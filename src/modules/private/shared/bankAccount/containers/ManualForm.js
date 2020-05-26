@@ -126,7 +126,7 @@ export default class ManualForm extends Component {
             />
             <FormInput
               name="bankName"
-              type="tel"
+              type="text"
               fielddata={formLinkBankManually.fields.bankName}
               changed={linkBankManualFormChange}
               value={formLinkBankManually.fields.bankName.value}

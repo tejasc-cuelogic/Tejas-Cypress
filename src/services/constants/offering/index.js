@@ -40,6 +40,19 @@ export const UPDATES = {
   postUpdateAs: {
     value: 'ISSUER', label: 'post', error: undefined, rule: 'required',
   },
+  notificationBy: {
+    value: '', error: undefined, rule: 'optional',
+  },
+  notificationDate: {
+    value: '', error: undefined, rule: 'optional',
+  },
+  notificationTo: {
+    value: [],
+    values: [],
+    error: undefined,
+    rule: 'optional',
+    key: 0,
+  },
 };
 
 export const TEMPLATE = {
@@ -56,7 +69,7 @@ export const TEMPLATE_POST = {
   postUpdate: {
     label: 'Post Update As',
     value: 'ISSUER',
-    values: [{ label: 'Issuer', value: 'ISSUER' }, { label: 'NextSeed', value: 'NEXTSEED' }],
+    values: [{ label: 'Issuer', value: 'ISSUER' }, { label: 'NS Services', value: 'NS_SERVICES' }, { label: 'NS Securities', value: 'NS_SECURITIES' }],
     error: undefined,
     rule: 'required',
   },

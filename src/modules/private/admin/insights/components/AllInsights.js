@@ -9,6 +9,7 @@ import { DataFormatter } from '../../../../../helper';
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
   delete: { label: 'Delete', icon: 'trash' },
+  visible: { label: 'Visible', icon: 'view', icon1: 'no-view' },
 };
 const meta = [
   { label: 'Title', value: 'title' },
@@ -26,18 +27,36 @@ const meta = [
 export default class AllInsights extends Component {
   constructor(props) {
     super(props);
-    this.props.articleStore.sortArticlesByFilter();
+    if (!this.props.insightsList) {
+      this.props.articleStore.sortArticlesByFilter();
+    }
+    this.state = { isPublic: false, data: {} };
   }
 
   globalActionChange = (e, { name, value }) => this.props.articleStore.setGlobalAction(name, value);
 
-  handleAction = (action, articleId, status) => {
+  handleAction = (action, articleId, status, data = undefined) => {
     if (action === 'Delete') {
       this.handleDeleteConfirm(articleId);
     } else if (action === 'Edit') {
       this.props.articleStore.currentArticleId = articleId;
       this.props.history.push(`${this.props.match.url}/${articleId}/${status}`);
+    } else if (action === 'Visible') {
+      this.setState({ isPublic: (status !== null && !status), data });
+      this.props.uiStore.setConfirmBox(action, articleId, status);
     }
+  }
+
+  handlePublishArticle = async () => {
+    const { uiStore } = this.props;
+    const payLoad = {
+      visible: this.state.isPublic,
+      title: this.state.data.title,
+      articleStatus: this.state.data.articleStatus,
+    };
+    await this.props.articleStore.toggleArticleVisibility(uiStore.confirmBox.refId, payLoad);
+    this.props.uiStore.setConfirmBox('');
+    this.props.history.replace(this.props.refLink);
   }
 
   handleDeleteConfirm = (id) => {
@@ -79,17 +98,18 @@ export default class AllInsights extends Component {
 
 
   render() {
-    const { articleStore } = this.props;
+    const { articleStore, insightsList } = this.props;
     const { confirmBox, inProgress } = this.props.uiStore;
     const {
       articleListingLoader,
       sortOrder,
       adminInsightList,
     } = articleStore;
+    const list = insightsList || adminInsightList;
     if (articleListingLoader || inProgress) {
       return <InlineLoader />;
     }
-    if (adminInsightList.length === 0) {
+    if (list.length === 0) {
       return <InlineLoader text="No data found." />;
     }
     return (
@@ -113,7 +133,7 @@ export default class AllInsights extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {adminInsightList ? adminInsightList.map(record => (
+                {list ? list.map(record => (
                   <Table.Row key={record.id}>
                     <Table.Cell><Link to={`${this.props.match.url}/${record.id}/${record.articleStatus}`}>{record.title || '-'}</Link></Table.Cell>
                     <Table.Cell>{record.category || 'N/A'}</Table.Cell>
@@ -127,21 +147,24 @@ export default class AllInsights extends Component {
                     </Table.Cell>
                     <Table.Cell textAlign="center">
                       <Button.Group>
-                        {Object.keys(actions).map(action => (
+                        {Object.keys(actions).filter(a => a !== 'visible').map(action => (
                           <Button className="link-button">
                             <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id, record.articleStatus)} />
                           </Button>
                         ))}
+                        <Button className="link-button">
+                          <Icon className={`ns-${(record.visible === null || record.visible) ? actions.visible.icon : actions.visible.icon1}`} onClick={() => this.handleAction('Visible', record.id, record.visible, record)} />
+                        </Button>
                       </Button.Group>
                     </Table.Cell>
                   </Table.Row>
                 ))
                   : (
-<Table.Row>
-                  <Table.Cell colSpan="7">
-                    <InlineLoader text="No data available." />
-                  </Table.Cell>
-                </Table.Row>
+                    <Table.Row>
+                      <Table.Cell colSpan="7">
+                        <InlineLoader text="No data available." />
+                      </Table.Cell>
+                    </Table.Row>
                   )}
               </Table.Body>
             </Table>
@@ -149,10 +172,10 @@ export default class AllInsights extends Component {
         </Card>
         <Confirm
           header="Confirm"
-          content="Are you sure you want to delete this Article?"
-          open={confirmBox.entity === 'Delete'}
+          content={confirmBox.entity === 'Visible' ? `Are you sure you want to make this article ${this.state.isPublic ? 'Public' : 'Non-Public'}?` : 'Are you sure you want to delete this offering?'}
+          open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Visible'}
           onCancel={this.handleDeleteCancel}
-          onConfirm={this.handleDelete}
+          onConfirm={confirmBox.entity === 'Visible' ? this.handlePublishArticle : this.handleDelete}
           size="mini"
           className="deletion"
         />
