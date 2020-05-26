@@ -19,6 +19,10 @@ export const THeader = ({ columns }) => (
 
 const Actions = (props) => {
   let additionalFileIdRef = null;
+  let isK1Present = null;
+  if (props.record.fileName) {
+    isK1Present = Helper.matchRegexWithString(/\bK-1(?![-])\b/, props.record.fileName);
+  }
   if (props.additionalActions && props.dataSet) {
     try {
       additionalFileIdRef = props.dataSet.instructions.find(i => i.key === `instruction${props.dataSet.mapKey}`).id;
@@ -28,13 +32,13 @@ const Actions = (props) => {
   }
   return (
     <>
-      {props.additionalActions && additionalFileIdRef && (
+      {props.additionalActions && additionalFileIdRef && !isK1Present && (
         <Link to="/" style={{ textTransform: 'none' }} onClick={e => props.download(e, additionalFileIdRef)} className="action">
           <Icon className="ns-file" /> Instructions&nbsp;&nbsp;&nbsp;
         </Link>
       )}
       <Link to="/" className="action" onClick={e => props.download(e, props.actions.fileId)}>
-        <Icon className={`ns-file ${props[0]}`} /> {props.label || 'PDF'}
+        <Icon className={`ns-file ${props[0]}`} /> {isK1Present ? 'K-1' : props.label || 'PDF'}
       </Link>
     </>
   );
@@ -74,6 +78,7 @@ export const FillTable = ({
                                 instructions,
                                 mapKey: aRule ? row[aRule.key] : null,
                               }}
+                              record={row}
                               label={col.label}
                             />
                           ) : (

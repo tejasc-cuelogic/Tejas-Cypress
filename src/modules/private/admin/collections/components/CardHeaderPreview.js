@@ -26,13 +26,12 @@ export default class CardHeaderPreview extends Component {
       )
       : null;
     return (
-
-      <div className="campaign-banner collection-banner" style={{ backgroundColor: get(collection, 'bgColor.value') }}>
+      <div className="campaign-banner collection-banner collection-header-wrap" style={{ backgroundColor: get(collection, 'bgColor.value') }}>
         {get(collection, 'bgImage.preSignedUrl')
           && <Image64 bg className="collection-bg-image" srcUrl={get(collection, 'bgImage.preSignedUrl')} />
         }
         <section className="banner">
-          <Responsive minWidth={768} as={Container}>
+          <Responsive minWidth={768} as={Container} className="pt-100 pb-100">
             <Grid relaxed stackable centered>
               <Grid.Column width={7}>
                 <div className="video-wrapper campaign">
@@ -48,7 +47,7 @@ export default class CardHeaderPreview extends Component {
                     ? socialDetails.map(site => (
                       <React.Fragment key={site.type.value}>
                         {site.url.value
-                          && <a target="_blank" rel="noopener noreferrer" href={site.url.value.includes('http') ? site.url.value : `http://${site.url.value}`}><Icon name={site.type.value.toLowerCase() === 'website' ? 'globe' : site.type.value.toLowerCase()} /></a>
+                          && <a target="_blank" rel="noopener noreferrer" href={site.url.value.includes('http') ? site.url.value : `http://${site.url.value}`}><Icon name={site.type.value.toLowerCase() === 'website' ? 'globe' : site.type.value.toLowerCase()} style={{ color: get(collection, 'descriptionColor.value') }} /></a>
                         }
                       </React.Fragment>
                     )) : ''
@@ -59,7 +58,7 @@ export default class CardHeaderPreview extends Component {
                 <Header style={{ color: get(collection, 'descriptionColor.value') }} as="h3" inverted>
                   {get(collection, 'title.value')}
                 </Header>
-                <span style={{ color: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} /></span>
+                <span style={{ color: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} style={{ color: get(collection, 'descriptionColor.value') }} /></span>
               </Grid.Column>
             </Grid>
           </Responsive>

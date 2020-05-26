@@ -154,6 +154,21 @@
             }
         }
     }
+    &.capital>.item{
+        padding-bottom: @20px !important;
+        padding-top: 0 !important;
+        line-height: 26px !important;
+        &:last-child{
+            padding-bottom: 0 !important;
+        }
+    }
+    &.icon-list>.item{
+        padding-left: @30px;
+        line-height: 26px !important;
+        i.icon{
+            margin-left: -@30px;
+        }
+    }
 }
 //  Public page Ends
 
@@ -501,4 +516,9 @@ ul.ui.list li{
 }
 .privacy-policy ul.ui.list li {
 	line-height: 24px;
+}
+.investment_stat_box{
+    .ui.list .item{
+        line-height: 24px !important;
+    }
 }

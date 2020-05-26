@@ -1,13 +1,18 @@
 import { observable, action, reaction } from 'mobx';
 import graphql from 'mobx-apollo';
-import { getBoxFileDetails, updateUserReferralCode, createCdnSignedUrl, deleteCdnS3File, getsharedLink, adminEmailContent } from '../queries/common';
+import { CONTACT_INFO } from '../../../constants/common';
+import { FormValidator as Validator } from '../../../helper';
+import { getBoxFileDetails, updateUserReferralCode, fundNotificationSignUp, createCdnSignedUrl, deleteCdnS3File, getsharedLink, adminEmailContent } from '../queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import Helper from '../../../helper/utility';
+import uiStore from './shared/uiStore';
 
 export class CommonStore {
   @observable appName = 'NextSeed';
 
   @observable token = window.localStorage.getItem('jwt');
+
+  @observable CONTACT_INFO_FRM = Validator.prepareFormObject(CONTACT_INFO);
 
   @observable appLoaded = false;
 
@@ -54,6 +59,33 @@ export class CommonStore {
       .mutate({ mutation: updateUserReferralCode, variables: { referralCode } })
       .then(() => resolve())
       .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      });
+  });
+
+  @action
+  formChange = (e, result, formName) => {
+    this[formName] = Validator.onChange(this[formName], Validator.pullValues(e, result));
+  }
+
+  @action
+  resetFormData = (form) => {
+    this[form] = Validator.resetFormData(this[form]);
+  }
+
+  @action
+  fundNotificationSignUp = () => new Promise((resolve, reject) => {
+    uiStore.setProgress();
+    const { emailAddress } = Validator.ExtractValues(this.CONTACT_INFO_FRM.fields);
+    client
+      .mutate({ mutation: fundNotificationSignUp, variables: { emailAddress } })
+      .then(() => {
+        uiStore.setProgress(false);
+        resolve();
+      })
+      .catch(() => {
+        uiStore.setProgress(false);
         Helper.toast('Something went wrong, please try again later.', 'error');
         reject();
       });

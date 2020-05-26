@@ -10,7 +10,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
   <>
     {
       collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-        <Container as={Link} to={`/collections/${get(collection, 'slug')}`} key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-0 pb-0 pl-0 pr-0' : ''}`}>
+        <Container as={Link} to={`/communities/${get(collection, 'slug')}`} key={get(collection, 'id')} className={` offerings-container ${responsiveVars.uptoTablet ? 'pt-0 pb-0 pl-0 pr-0' : ''}`}>
           <Grid style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }} className={`${get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} collection-box ${responsiveVars.uptoTablet ? 'p-0' : 'p-60'}`}>
             <Grid.Column widescreen={4} computer={5} tablet={5} mobile={16} className="zi-9 p-0 collection-thumbnail-img">
               <Image64 reRender originalImg srcUrl={get(collection, 'marketing.tombstone.image.url')} />
@@ -26,7 +26,7 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
               <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
               {!isMobile && !isTablet
                 && (
-                  <Button inverted onMouseLeave={() => toggleHover(false)} onMouseEnter={() => toggleHover(get(collection, 'id'))} style={{ backgroundColor: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.descriptionColor') : '', color: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.bgColor') : get(collection, 'marketing.tombstone.descriptionColor'), borderColor: get(collection, 'marketing.tombstone.descriptionColor') }} as={Link} to={`/collections/${get(collection, 'slug')}`} className="mt-30 collectionExplore">Explore</Button>
+                  <Button inverted onMouseLeave={() => toggleHover(false)} onMouseEnter={() => toggleHover(get(collection, 'id'))} style={{ backgroundColor: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.descriptionColor') : '', color: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.bgColor') : get(collection, 'marketing.tombstone.descriptionColor'), borderColor: get(collection, 'marketing.tombstone.descriptionColor') }} as={Link} to={`/communities/${get(collection, 'slug')}`} className="mt-30 collectionExplore">Explore</Button>
                 )
               }
             </Grid.Column>
@@ -38,43 +38,55 @@ const CollectionItem = ({ isMobile, isTablet, responsiveVars, collections, colle
       ))}
     {((collections.length > collectionLength) || (collections.length && !collectionLength) || offering) && (
       <div className="mt-80 center-align">
-        <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All Collections" onClick={handleNavigate} />
+        <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All" onClick={handleNavigate} />
       </div>
     )}
   </>
 );
 
-const CollectionCards = ({ responsiveVars, collections, collectionLength, toggleHover, isHovered }) => (
-  <Container className="collection-listings-box">
-    <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
-      {
-        collections.map((collection, i) => (!collectionLength || (i < collectionLength)) && (
-          <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/collections/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
-            <Image64 reRender originalImg srcUrl={get(collection, 'marketing.tombstone.image.url')} />
-            {get(collection, 'marketing.tombstone.tag.text')
-              && (
-                <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
-                  <p style={{ color: `${get(collection, 'marketing.tombstone.tag.textColor')} !important` }}>{get(collection, 'marketing.tombstone.tag.text')}</p>
-                </div>
-              )}
-            <div className="full-width mt-0 p-36">
-              {get(collection, 'marketing.tombstone.bgImage.url')
-                && <Image64 reRender bg originalImg className="collection-bg-image" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
-              }
-              <Header style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }} as="h5">{get(collection, 'marketing.tombstone.title')}</Header>
-              <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
-              <Button inverted onMouseLeave={() => toggleHover(false)} onMouseEnter={() => toggleHover(get(collection, 'id'))} style={{ backgroundColor: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.descriptionColor') : '', color: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.bgColor') : get(collection, 'marketing.tombstone.descriptionColor'), borderColor: get(collection, 'marketing.tombstone.descriptionColor') }} as={Link} to={`/collections/${get(collection, 'slug')}`} className="mt-30 full-width collectionExplore">Explore</Button>
-            </div>
-          </Card>
-        ))}
-    </Card.Group>
-  </Container>
+const CollectionCards = ({ responsiveVars, collections, collectionLength, toggleHover, isHovered, offering, isMobile, expandCollection, handleNavigate }) => (
+  <>
+    <Container className="collection-listings-box">
+      <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
+        {
+          collections.map((collection, i) => (!collectionLength || expandCollection || (i < collectionLength)) && (
+            <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/communities/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
+              <div className="collection-inner-img">
+                <Image64 reRender originalImg srcUrl={get(collection, 'marketing.tombstone.image.url')} />
+                {get(collection, 'marketing.tombstone.tag.text')
+                  && (
+                    <div style={{ backgroundColor: get(collection, 'marketing.tombstone.tag.color') }} className="ns_flgs_box">
+                      <p style={{ color: `${get(collection, 'marketing.tombstone.tag.textColor')} !important` }}>{get(collection, 'marketing.tombstone.tag.text')}</p>
+                    </div>
+                  )}
+              </div>
+              <div className="full-width mt-0 p-22">
+                {get(collection, 'marketing.tombstone.bgImage.url')
+                  && <Image64 reRender bg originalImg className="collection-bg-image" srcUrl={get(collection, 'marketing.tombstone.bgImage.url')} />
+                }
+                <Header style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }} as="h5">{get(collection, 'marketing.tombstone.title')}</Header>
+                <p style={{ color: get(collection, 'marketing.tombstone.descriptionColor') }}><HtmlEditor readOnly content={get(collection, 'marketing.tombstone.description')} /></p>
+                <Button inverted onMouseLeave={() => toggleHover(false)} onMouseEnter={() => toggleHover(get(collection, 'id'))} style={{ backgroundColor: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.descriptionColor') : '', color: isHovered === get(collection, 'id') ? get(collection, 'marketing.tombstone.bgColor') : get(collection, 'marketing.tombstone.descriptionColor'), borderColor: get(collection, 'marketing.tombstone.descriptionColor') }} as={Link} to={`/communities/${get(collection, 'slug')}`} className="mt-30 full-width collectionExplore">Explore</Button>
+              </div>
+            </Card>
+          ))}
+      </Card.Group>
+    </Container>
+    {((collections.length > collectionLength) || (collections.length && !collectionLength) || offering) && isMobile && !expandCollection && (
+      <div className="mt-80 center-align">
+        <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All" onClick={handleNavigate} />
+      </div>
+    )}
+  </>
 );
 
 const Heading = ({ responsiveVars }) => (
   <>
-    <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`${responsiveVars.isMobile ? 'mb-30 mt-20' : 'mt-40 mb-12'}`}>Explore Popular Collections</Header>
-    <p className={`${responsiveVars.isMobile ? 'mb-40' : 'center-align mb-42'}`}>Browse investment opportunities by Collection - featuring exclusive deals from official NextSeed{!responsiveVars.isMobile && <br />} Partner Organizations, as well as offerings grouped by theme, such as location or security type.</p>
+    <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={`${responsiveVars.isMobile ? 'mb-30 mt-20' : 'mt-40 mb-12'}`}>Communities{' & '}Partners</Header>
+    <p className={`${responsiveVars.isMobile ? 'mb-40' : 'center-align mb-70'}`}>
+      Browse investment opportunities and businesses organized by communities that matter to you. These include{!responsiveVars.isMobile && <br />}
+      geographic areas, industries and interests, and partner organizations that highlight their unique offerings.
+    </p>
   </>
 );
 
@@ -90,7 +102,7 @@ export default class CollectionsList extends Component {
 
   handleNavigate = () => {
     if (this.props.offering) {
-      this.props.history.push('/collections');
+      this.props.history.push('/communities');
     } else {
       this.setState({ expandCollection: true });
     }
@@ -107,15 +119,21 @@ export default class CollectionsList extends Component {
       return <InlineLoader />;
     }
     return (
-      <div className={`${offering ? '' : 'bg-offwhite'} ${responsiveVars.uptoTablet ? 'pl-20 pr-20 pt-20 pb-70' : 'pt-50 pb-50'}`}>
-        <Heading responsiveVars={responsiveVars} />
+      <div className={`bg-offwhite ${responsiveVars.uptoTablet ? 'pl-15 pr-15 pt-20 pb-70' : 'pt-70 pb-50'}`}>
+        {offering
+          && <Heading responsiveVars={responsiveVars} />}
         {publicCollections && publicCollections.length
           ? (expandCollection || isMobile ? (
             <CollectionCards
               collections={publicCollections}
+              isMobile={isMobile}
               responsiveVars={responsiveVars}
               toggleHover={this.toggleHover}
               isHovered={this.state.isHovered}
+              offering={offering}
+              handleNavigate={this.handleNavigate}
+              collectionLength={collectionLength}
+              expandCollection={expandCollection}
             />
           ) : (
               <CollectionItem
