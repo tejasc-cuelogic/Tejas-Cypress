@@ -46,13 +46,13 @@ class offerDetails extends Component {
     preLoading: false,
     found: 0,
     offeringSlug: null,
+    offeringRegulation: null,
   }
 
   componentDidMount() {
     const { location, match, newLayout } = this.props;
     const { isUserLoggedIn } = this.props.authStore;
     const { isAdmin } = this.props.userStore;
-    const { campaign } = this.props.campaignStore;
     this.props.campaignStore.getCampaignDetails(this.props.match.params.id).then((data) => {
       if (!data) {
         this.props.history.push('/offerings');
@@ -69,8 +69,8 @@ class offerDetails extends Component {
           this.props.history.push('/offerings');
         } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
           this.props.history.push('/offerings');
-        } else if (['BD_506B'].includes(get(campaign, 'regulation')) && get(exception, 'promptPassword')) {
-          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
+        } else if (['BD_506B'].includes(get(exception, 'regulation')) && get(exception, 'promptPassword')) {
+          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false, offeringRegulation: get(exception, 'regulation') });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
           this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && !get(exception, 'isAvailablePublicly') && !isUserLoggedIn) {
@@ -191,11 +191,10 @@ class offerDetails extends Component {
     const {
       match, campaignStore, location, newLayout,
     } = this.props;
-    const { campaign } = campaignStore;
     if (this.state.showPassDialog) {
       return (
         <>
-          { ['BD_506B'].includes(get(campaign, 'regulation'))
+          { ['BD_506B'].includes(this.state.offeringRegulation)
             ? (
               <OfferingsPassProtected
                 offerPreview
@@ -217,7 +216,7 @@ class offerDetails extends Component {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, modifySubNavs, campaignStatus,
+      details, modifySubNavs, campaignStatus, campaign,
     } = campaignStore;
     const { isWatching } = this.props.watchListStore;
     let navItems = [];
