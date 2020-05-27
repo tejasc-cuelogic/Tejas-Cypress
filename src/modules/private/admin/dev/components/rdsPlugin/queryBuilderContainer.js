@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { pick } from 'lodash';
 import { Card, Button, Form, Grid, Divider } from 'semantic-ui-react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import formHOC from '../../../../../../theme/form/formHOC';
 import QueryBuilder from './queryBuilder';
@@ -17,13 +17,15 @@ function QueryBuilderContainer(props) {
   }, []);
 
   function onSubmit() {
-    props.rdsPluginStore.adminRunRdsQuery();
+    props.rdsPluginStore.initRequest();
   }
 
   const { rdsPluginStore, smartElement } = props;
   const {
     QUERY_BUILDER_FRM, formChangeForTable,
   } = rdsPluginStore;
+
+  const { loadingArray } = props.nsUiStore;
 
   return (
     <>
@@ -47,7 +49,7 @@ function QueryBuilderContainer(props) {
                       className: 'mb-80',
                     })}
                     <Divider section hidden />
-                    <Button className="mt-80 ml-10" primary content="Submit" disabled={!QUERY_BUILDER_FRM.meta.isValid} />
+                    <Button className="mt-80 ml-10" primary content="Submit" disabled={!QUERY_BUILDER_FRM.meta.isValid || loadingArray.includes('adminRunRdsQuery')} />
                   </Grid.Column>
                   <Grid.Column width={8}>
                     {QUERY_BUILDER_FRM.fields.table.value !== ''
@@ -64,4 +66,4 @@ function QueryBuilderContainer(props) {
   );
 }
 
-export default (withRouter(formHOC(observer(QueryBuilderContainer), metaInfo)));
+export default (inject('rdsPluginStore', 'nsUiStore')(withRouter(formHOC(observer(QueryBuilderContainer), metaInfo))));

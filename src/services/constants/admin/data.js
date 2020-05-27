@@ -207,18 +207,18 @@ export const QUERY_BUILDER = {
     ],
   ]),
   where: [FormHelper.generateMeta([
-    ['name', 'Column', '', 'optional', '', {
+    ['name', 'Column', '', 'required', '', {
       asIn: true,
       props: {
         values: [],
       },
     }],
-    ['operator', 'Operator', '', 'optional', '', { asIn: true, props: { values: operators, options: operators } }],
+    ['operator', 'Operator', '', 'required', '', { asIn: true, props: { values: operators, options: operators } }],
     ['value', 'Value', null, 'optional', ''],
   ])],
   orderBy: [{
     ...FormHelper.generateMeta([
-      ['column', 'Column', '', 'optional', '',
+      ['column', 'Column', '', 'required', '',
         {
           asIn: true,
           props: {
@@ -228,7 +228,7 @@ export const QUERY_BUILDER = {
       ],
     ]),
     ...FormHelper.generateMeta([
-      ['order', 'Order', '', 'optional', '',
+      ['order', 'Order', '', 'required', '',
         {
           asIn: true,
           props: {

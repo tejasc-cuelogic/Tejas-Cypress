@@ -1,4 +1,4 @@
-import { observable, action, decorate, toJS } from 'mobx';
+import { observable, action, decorate, computed } from 'mobx';
 import { get, pick } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { FormValidator as Validator } from '../../../../helper';
@@ -10,6 +10,8 @@ export class RdsPluginStore extends DataModelStore {
   constructor() {
     super({ adminListRdsPlugins, adminRunRdsQuery });
   }
+
+  rdsData = {};
 
   QUERY_BUILDER_FRM = Validator.prepareFormObject(QUERY_BUILDER);
 
@@ -31,35 +33,49 @@ export class RdsPluginStore extends DataModelStore {
     }
   }
 
-  adminRunRdsQuery = async () => {
+  initRequest = async (reqParams) => {
     try {
       const data = Validator.evaluateFormData(this.QUERY_BUILDER_FRM.fields);
-      console.log(toJS(data));
-      data.where.forEach((d) => {
-        // eslint-disable-next-line no-param-reassign
-        d.value = d.value === '' ? null : d.value;
-        return d;
-      });
+      this.requestState.page = (reqParams && reqParams.page) || this.requestState.page;
+      this.requestState.perPage = (reqParams && reqParams.first) || 100;
       const res = await this.executeQuery({
         query: 'adminRunRdsQuery',
         variables: {
           ...data,
+          page: this.requestState.page,
+          pageSize: this.requestState.perPage,
         },
         setLoader: 'adminRunRdsQuery',
       });
-
-      return res;
+      this.setFieldValue('rdsData', res);
+      return true;
     } catch (error) {
       Helper.toast('Something went wrong, please try again later.', 'error');
       return false;
     }
   }
 
+  get rdsListingRows() {
+    return get(this.rdsData, 'adminRunRdsQuery.results') || [];
+  }
+
+  get rdsListingColumns() {
+     let columns = get(this.rdsData, 'adminRunRdsQuery.results[0]') ? Object.keys(get(this.rdsData, 'adminRunRdsQuery.results[0]')) : [];
+    if (columns.length > 0) {
+      columns = columns.map(c => ({ title: c.toUpperCase(), field: c }));
+    }
+    return columns;
+  }
+
+  get totalRecords() {
+    return get(this.rdsData, 'adminRunRdsQuery.totalCount') || 0;
+  }
+
   formChangeForTable = (e, result, props) => {
     this.QUERY_BUILDER_FRM = Validator.resetFormData(this.QUERY_BUILDER_FRM);
     this.formChange(e, result, get(props, 'multiForm'), 'dropdown');
     const { columns } = this.QUERY_BUILDER_FRM.fields.table.values.find(t => t.value === result.value);
-    const dropDownColumns = (columns && columns.map(c => ({ ...pick(c, ['key', 'value']), text: c.value }))) || [];
+    const dropDownColumns = (columns && columns.map(c => ({ ...pick(c, ['key']), text: c.value, value: c.key }))) || [];
     this.QUERY_BUILDER_FRM.fields.selectColumns.values = dropDownColumns;
     this.QUERY_BUILDER_FRM.fields.groupByColumns.values = dropDownColumns;
     this.QUERY_BUILDER_FRM.fields.orderBy[0].column.values = dropDownColumns;
@@ -70,9 +86,13 @@ export class RdsPluginStore extends DataModelStore {
 decorate(RdsPluginStore, {
   ...decorateDefault,
   QUERY_BUILDER_FRM: observable,
+  rdsData: observable,
   formChangeForTable: action,
-  adminRunRdsQuery: action,
   initRequest: action,
+  fetchPlugins: action,
+  rdsListingRows: computed,
+  rdsListingColumns: computed,
+  totalRecords: computed,
 });
 
 export default new RdsPluginStore();

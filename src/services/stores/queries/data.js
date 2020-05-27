@@ -15,14 +15,14 @@ mutation storageDetailsForInvestor($limit: Int = 0) {
   }`;
 
 export const adminRunRdsQuery = gql`
-query adminRunRdsQuery($table: String!) {
-    adminRunRdsQuery(table: $table) {
-      page
-      totalCount
-      resultCount
-      results
-    }
+query adminRunRdsQuery($table: String!, $selectColumns: [String], $where: [RdsWhereColumnInput], $groupByColumns: [String], $orderBy: [RdsOrderByInput], $page: Int, $pageSize: Int) {
+  adminRunRdsQuery(table: $table, selectColumns: $selectColumns, where: $where, groupByColumns: $groupByColumns, orderBy: $orderBy, page: $page, pageSize: $pageSize) {
+    page
+    totalCount
+    resultCount
+    results
   }
+}
 `;
 
 
