@@ -3843,6 +3843,9 @@ h3.ui.header.error-2{
 	.ui.form{
 		width: 100%;
 		padding-left: 14px;
+		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+			padding-left: 0 !important;
+		}
 		label{
 			display: none !important;
 		}
@@ -3861,12 +3864,22 @@ h3.ui.header.error-2{
 	}
 }
 .capital-wrap{
+	img{
+		max-width: 100% !important;
+		margin: 0 auto !important;
+		display: block !important;
+	}
 	@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
 		img{
-			max-width: 100% !important;
-			margin: 0 auto !important;
-			display: block !important;
 			float: none !important;
+		}
+	}
+	.capital-investment-strategy-wrap{
+		>.item{
+			display: flex !important;
+			p{
+				padding-left:20px !important;
+			}
 		}
 	}
 }
