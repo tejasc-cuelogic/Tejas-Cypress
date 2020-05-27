@@ -4,7 +4,7 @@ import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { adminListFilePlugins, getPluginList, adminSendEmail, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile } from '../../queries/data';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META, REQUESTFACTORY_LOG__META, PROCESSFACTORY_LOG__META, FILEFACTORY_META } from '../../../constants/admin/data';
+import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META, REQUESTFACTORY_LOG__META, PROCESSFACTORY_LOG__META, FILEFACTORY_META, EMAILFACTORY_META } from '../../../constants/admin/data';
 
 export class FactoryStore extends DataModelStore {
   constructor() {
@@ -23,6 +23,8 @@ export class FactoryStore extends DataModelStore {
 
   FILEFACTORY_FRM = Validator.prepareFormObject(FILEFACTORY_META);
 
+  EMAILFACTORY_FRM = Validator.prepareFormObject(EMAILFACTORY_META);
+
   DYNAMCI_PAYLOAD_FRM = {
     REQUESTFACTORY: {},
     PROCESSFACTORY: {},
@@ -37,6 +39,7 @@ export class FactoryStore extends DataModelStore {
     cronFactory: false,
     processFactory: false,
     fileFactory: false,
+    emailFactory: false,
   };
 
   pluginListArr = null;
@@ -143,12 +146,12 @@ export class FactoryStore extends DataModelStore {
       if (mappedArr.length > 0 && defaultValueMappedObj && !isEmpty(defaultValueMappedObj)) {
         this.setDefaultValueForPayload(form, defaultValueMappedObj);
       }
-    } else if (includes(['REQUESTFACTORY_FRM', 'PROCESSFACTORY_FRM', 'FILEFACTORY_FRM'], form) && includes(['plugin', 'method'], res.name)) {
+    } else if (includes(['REQUESTFACTORY_FRM', 'PROCESSFACTORY_FRM', 'FILEFACTORY_FRM', 'EMAILFACTORY_FRM'], form) && includes(['plugin', 'method'], res.name)) {
       const currentSelectedPlugin = Validator.pullValues(e, res).value;
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
       this.currentPluginSelected = currentSelectedPlugin;
       const plugnArr = this.pullValuesForDynmicInput(e, res);
-      const childForm = form === 'REQUESTFACTORY_FRM' ? 'REQUESTFACTORY' : form === 'PROCESSFACTORY_FRM' ? 'PROCESSFACTORY' : 'FILEFACTORY';
+      const childForm = form === 'REQUESTFACTORY_FRM' ? 'REQUESTFACTORY' : form === 'PROCESSFACTORY_FRM' ? 'PROCESSFACTORY' : form === 'EMAILFACTORY_FRM' ? 'EMAIL_LIST' : 'FILEFACTORY';
       this.createDynamicFormFields(plugnArr, childForm);
     } else {
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
@@ -483,6 +486,10 @@ export class FactoryStore extends DataModelStore {
     const defaultPayloadObj = find(defulatValues, o => o.key === currentMethod);
     this.setFormData(formObj.parentForm, defaultValueMappedObj.mappedKey, defaultPayloadObj.value, formObj.childForm);
   }
+
+  setEmailIdentifier = (identifierArrList) => {
+    this.EMAILFACTORY_FRM.fields.method.values = identifierArrList;
+  }
 }
 
 decorate(FactoryStore, {
@@ -526,6 +533,7 @@ decorate(FactoryStore, {
   fileFactoryPluginTrigger: action,
   fetchPluginsForFileFactory: action,
   getPluginByType: action,
+  setEmailIdentifier: action,
 });
 
 export default new FactoryStore();

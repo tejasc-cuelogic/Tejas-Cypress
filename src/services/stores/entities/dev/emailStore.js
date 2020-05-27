@@ -5,6 +5,8 @@ import { adminFetchEmails, fetchAdminListEmailTypesAndIdentifier } from '../../q
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { EMAILLIST_META } from '../../../constants/admin/data';
+import { factoryStore } from '../../index';
+
 
 export class EmailStore extends DataModelStore {
   constructor() {
@@ -93,6 +95,7 @@ export class EmailStore extends DataModelStore {
       }
       this.setFieldValue('listEmailTypes', listEmailType);
       this.setFieldValue('listEmailIdentifiers', listEmailIdentifiers);
+      factoryStore.setEmailIdentifier(listEmailIdentifiers);
     } catch (error) {
       window.logger(error);
       Helper.toast('Something went wrong, please try againsetPluginInput later.', 'error');

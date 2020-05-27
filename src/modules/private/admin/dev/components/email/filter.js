@@ -11,11 +11,11 @@ export default class Filters extends Component {
   render() {
     const {
       setSearchParam, change, filters,
-      paginate, totalRecords,
+      paginate, totalRecords, isCustomClass,
     } = this.props;
     const { requestState, listEmailTypes, listEmailIdentifiers } = this.props.emailStore;
     return (
-      <div className={`more ${!filters ? 'collapsed' : ''}`}>
+      <div className={`${isCustomClass || ''} more ${!filters ? 'collapsed' : ''}`}>
         <Form>
           <Grid stackable>
             <Grid.Row verticalAlign="bottom">
