@@ -24,10 +24,10 @@ class Capital extends Component {
           <Container>
             <div className="banner-caption center-align">
               <NSImage path="capital/ns-capital-logo.svg" className="mb-20" />
-              <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-14' : 'mb-14'}>Invest in Small Businesses</Header>
+              <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-14' : 'mb-14'}>Invest in Small<Responsive maxWidth="768" as="br" /> Businesses</Header>
               <Header as="h4" className="mb-40">
-                Access a diversified portfolio of income-generating <Responsive minWidth="768" as="br" />
-              businesses with NextSeed’s inaugural fund
+                Access a diversified portfolio of<Responsive maxWidth="768" as="br" /> income-generating <Responsive minWidth="768" as="br" />
+              businesses with<Responsive maxWidth="768" as="br" /> NextSeed’s inaugural fund
             </Header>
           </div>
         </Container>
@@ -44,7 +44,7 @@ class Capital extends Component {
             </Grid.Column>
             <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="center-align" floated="right">
               <NSImage path="capital/slider.png" />
-              <p className="mt-30 note">Small businesses successfully funded on the NextSeed platform</p>
+              <p className="mt-30 note">Small businesses successfully funded<Responsive maxWidth="768" as="br" /> on the NextSeed platform</p>
             </Grid.Column>
           </Grid>
         </Container>
@@ -52,11 +52,11 @@ class Capital extends Component {
       <section className={`capital-wrap bg-offwhite ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-100 pb-30'}`}>
         <Container>
           <Grid stackable className="mt-0 mb-0 mlr-0" reversed="mobile">
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="capital-sidebg" floated="left">
-              <NSImage floated="left" path={responsiveVars.uptoTablet ? 'capital/imgMobile.png' : 'capital/img.png'} />
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} className="capital-sidebg" floated="left">
+              <NSImage floated="left" path={responsiveVars.uptoTablet ? 'capital/img-people-mobile.png' : 'capital/img-people.png'} />
             </Grid.Column>
             <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right" className="pt-0">
-              <section className={`${responsiveVars.isMobile ? '' : 'pl-100 pt-0 pr-0'}`}>
+              <section className={`${responsiveVars.isMobile ? '' : 'pt-0 pr-0'}`}>
                 <Header as="h2" className="capital-header">Overview</Header>
                 <List bulleted relaxed="very" className={`${responsiveVars.isMobile ? '' : 'mt-30'} capital`}>
                   <List.Item className="pb-0 mt-0 mb-10 pt-0">
@@ -80,34 +80,34 @@ class Capital extends Component {
       <section className={`capital-wrap ${responsiveVars.uptoTablet ? 'pt-10 pb-10 mb-20' : 'pt-100 pb-40'}`}>
         <Container>
           <Grid stackable className="mt-0 mb-0 mlr-0">
-            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 6} floated="left" className="pt-0 pl-0">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left" className="pt-0 pl-0">
               <section className={`${responsiveVars.isMobile ? '' : 'pt-0 pl-0'}`}>
                 <Header as="h2" className="capital-header">Proposed Investment Strategy</Header>
-                <List className={`${responsiveVars.isMobile ? '' : 'mt-30'} icon-list`}>
+                <List className={`${responsiveVars.isMobile ? '' : 'mt-30'} capital-investment-strategy-wrap icon-list`}>
                   <List.Item className="pb-0 mt-0 mb-20 pt-0">
                     <Icon className="ns-tick" color="grey" size="large" />
-                    Focus on consumer-facing small businesses
+                    <p>Focus on consumer-facing small businesses</p>
                   </List.Item>
                     <List.Item className="pb-0 mt-0 mb-20 pt-0">
                       <Icon className="ns-tick" color="grey" size="large" />
-                    Tailor investment products to capital needs
+                    <p>Tailor investment products to capital needs</p>
                   </List.Item>
                     <List.Item className="pb-0 mt-0 mb-20 pt-0">
                       <Icon className="ns-tick" color="grey" size="large" />
-                    Primarily fund small business needs in the areas of working capital, growth capital, refinancing, and recapitalizations.
+                    <p>Primarily fund small business needs in the areas of working capital, growth capital, refinancing, and recapitalizations.</p>
                   </List.Item>
                     <List.Item className="pb-0 mt-0 mb-20 pt-0">
                       <Icon className="ns-tick" color="grey" size="large" />
-                    Integrate technology into underwriting to access and review a high volume of select portfolio companies.
+                    <p>Integrate technology into underwriting to access and review a high volume of select portfolio companies.</p>
                   </List.Item>
                     <List.Item className="pb-0 mt-0 mb-20 pt-0">
                       <Icon className="ns-tick" color="grey" size="large" />
-                    Apply institutional diligence standards to underserved and mispriced asset class
+                    <p>Apply institutional diligence standards to underserved and mispriced asset class</p>
                   </List.Item>
                   </List>
                 </section>
               </Grid.Column>
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 9} className="capital-sidebg" floated="right">
+            <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} className="capital-sidebg" floated="right">
                 <NSImage floated="right" path={responsiveVars.uptoTablet ? 'capital/houstonMobile.png' : 'capital/houston.png'} />
               </Grid.Column>
             </Grid>
