@@ -83,8 +83,8 @@ function TransferRequest(props) {
     investmentFlowErrorMessage,
   } = investmentStore;
   const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
-  const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
-  const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
+  const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
+  const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
   const getPreviousInvestedAmount = (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
   const bankAndAccountName = userAmountDetails && userAmountDetails.bankNameAndAccountNumber ? userAmountDetails.bankNameAndAccountNumber : '-';
   let headerTitle = showTransferRequest === 'basic' ? 'Confirm Transfer Request' : 'How would you like to fund this investment?';
