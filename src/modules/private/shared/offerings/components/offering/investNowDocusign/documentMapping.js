@@ -60,7 +60,7 @@ const SortableItem = SortableElement(({ offer, currentForm, isReadOnly, fieldInd
                 {<div className="field">{DOCUMENT_MAPPING_FRM.fields.mapping[fieldIndex].keyLabel.value ? DOCUMENT_MAPPING_FRM.fields.mapping[fieldIndex].keyLabel.value : 'N/A'}:  {get(offer, DOCUMENT_MAPPING_FRM.fields.mapping[fieldIndex].keyValue.value) ? Helper.formatValue(DOCUMENT_MAPPING_FRM.fields.mapping[fieldIndex].keyFormat.value, Helper.enumToText(DOCUMENT_MAPPING_FRM.fields.mapping[fieldIndex].keyValue.value, get(offer, DOCUMENT_MAPPING_FRM.fields.mapping[fieldIndex].keyValue.value), true)) : 'N/A'}</div>}
               </Table.Cell>
             )} */}
-            {!isReadOnly && currentForm.fields.mapping.length > 1 && (
+            {!isReadOnly && (
               <Table.Cell collapsing>
                 <Button icon circular floated="right" className="link-button">
                   <Icon className="ns-trash" onClick={e => removeOne(metaInfo.form, mapIndex, 'mapping', fieldIndex, e)} />
@@ -134,6 +134,17 @@ class DocumentMapping extends Component {
       this.props.offeringCreationStore.setUploadDocsOrder(arrayMove(docs, oldIndex, newIndex), metaInfo.form);
     }
   };
+
+  removeOneForArray = (FormName, mapIndex, subForm, fieldIndex, e) => {
+    const { manageOfferingStore } = this.props;
+    const { removeOneForNlevelForm, prepareDocumentMappingForm, DOCUMENT_UPLOAD_MAPPING_FRM } = manageOfferingStore;
+    const currentForm = DOCUMENT_UPLOAD_MAPPING_FRM[mapIndex];
+    removeOneForNlevelForm(FormName, mapIndex, subForm, fieldIndex, e);
+    if (currentForm.fields.mapping.length === 0) {
+      prepareDocumentMappingForm(FormName, mapIndex);
+    }
+  };
+
   render() {
     const {
       hideHighlight,
@@ -143,7 +154,7 @@ class DocumentMapping extends Component {
       title,
       mapIndex
     } = this.props;
-    const { removeOneForNlevelForm, addMoreForNlevelForm, DOCUMENT_UPLOAD_MAPPING_FRM, formChangeForMultilevelArray, setDefulatKeyForTypeSelect } = manageOfferingStore;
+    const { addMoreForNlevelForm, DOCUMENT_UPLOAD_MAPPING_FRM, formChangeForMultilevelArray, setDefulatKeyForTypeSelect } = manageOfferingStore;
     const { UPLOAD_DATA_FRM } = offeringCreationStore;
     // const isReadonly = false;
     // const formName = metaInfo.form;  
@@ -165,7 +176,7 @@ class DocumentMapping extends Component {
             isReadOnly={false}
             offer={docs}
             hideHighlight={hideHighlight}
-            removeOne={removeOneForNlevelForm}
+            removeOne={this.removeOneForArray}
             currentForm={currentForm}
             onSortEnd={this.onSortEnd}
             mapIndex={mapIndex}

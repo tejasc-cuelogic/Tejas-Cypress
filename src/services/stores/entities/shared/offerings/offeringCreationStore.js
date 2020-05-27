@@ -500,7 +500,7 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
-  removeData = (formName, subForm = 'data', isApiDelete = false, isForBusinessApplication = false) => {
+  removeData = (formName, subForm = 'data', isApiDelete = false, isForBusinessApplication = false, documentLength = undefined) => {
     const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
       if (['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'CLOSING_BINDER_FRM', 'DATA_ROOM_FRM', 'UPLOAD_DATA_FRM'].includes(formName)) {
@@ -524,6 +524,10 @@ export class OfferingCreationStore extends DataModelStore {
     this.confirmModalName = null;
     if (subForm === 'leadership') {
       this.leadershipExperience[this.removeIndex] = LEADERSHIP_EXP.employer;
+    }
+    if (formName === 'UPLOAD_DATA_FRM' && documentLength && documentLength === 1) {
+      this.resetForm(formName);
+      this[formName] = Validator.prepareFormObject(UPLOAD_DATA);
     }
     this.removeIndex = null;
   }

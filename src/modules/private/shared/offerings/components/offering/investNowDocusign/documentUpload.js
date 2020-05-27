@@ -67,7 +67,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
                 <Icon className={!offeringClose ? document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock' : document.accreditedOnly.value ? 'ns-view' : 'ns-no-view'} onClick={() => handleLockUnlock(docIndx)} />
               </Button>)
             }
-            <Button disabled={isReadonly || length === 1 || (isBusinessApplication && document.accreditedOnly.value)} icon circular className="link-button">
+            <Button disabled={isReadonly || (isBusinessApplication && document.accreditedOnly.value)} icon circular className="link-button">
               <Icon className="ns-trash" onClick={e => toggleConfirmModal(e, docIndx, formName)} />
             </Button>
           </div>
@@ -166,7 +166,9 @@ export default class DocumentUpload extends Component {
       fieldName: 'upload',
       uploadEnum: uploadEnum,
     };
-    remove(uploadFileArr, n => removedArr.includes(n.currentIndex));
+    if (docs.length > 1) {
+      remove(uploadFileArr, n => removedArr.includes(n.currentIndex));
+    }
     updateUploadDocs(uploadMeta, uploadFileArr);
     uploadFileArr = [];
     removedArr = [];
@@ -273,7 +275,7 @@ export default class DocumentUpload extends Component {
             &&
             (
               <div className="right-align mt-20">
-                <Button disabled={!this.props[metaInfo.store][metaInfo.form].meta.isValid || !isMappingValid  || inProgress === 'save'} loading={inProgress === 'save'} primary className="relaxed" onClick={this.handleFormSubmitForBusinessApplication} >Save</Button>
+                <Button disabled={!this.props[metaInfo.store][metaInfo.form].meta.isValid || !isMappingValid || inProgress === 'save'} loading={inProgress === 'save'} primary className="relaxed" onClick={this.handleFormSubmitForBusinessApplication} >Save</Button>
               </div>
             )
           }
@@ -283,7 +285,7 @@ export default class DocumentUpload extends Component {
           content="Are you sure you want to remove this document?"
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName, 'documents', false, true)}
+          onConfirm={() => removeData(confirmModalName, 'documents', false, true, docs.length)}
           size="mini"
           className="deletion"
         />
