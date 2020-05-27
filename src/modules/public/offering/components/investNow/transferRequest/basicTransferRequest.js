@@ -17,7 +17,7 @@ function BasicTransferRequest(props) {
 
   return (
     <>
-      <Table basic="very" className="confirm-transfer-table unstackable mt-30" compact>
+      <Table basic="very" className="confirm-transfer-table unstackable mt-30 fundinvestmentTable" compact>
         <Table.Body>
           <Table.Row>
             <Table.Cell>Investment Amount:</Table.Cell>
