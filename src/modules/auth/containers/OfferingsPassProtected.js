@@ -37,7 +37,7 @@ class OfferingsPassProtected extends Component {
     this.props.authStore.validateOfferingPreviewPassword(this.props.offeringSlug, this.state.password).then((status) => {
       if (status) {
         this.props.authPreviewOffer(true, this.state.password);
-        this.props.authStore.setUserPrivateAccess(true);
+        this.props.authStore.setUserPrivateAccess(true, this.props.offeringSlug);
       } else {
         this.setState({ error: 'Access code is invalid. Please try again, or request the access code from the issuer.' });
       }

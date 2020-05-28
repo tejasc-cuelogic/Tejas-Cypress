@@ -175,10 +175,10 @@ export class AuthStore extends DataModelStore {
     navStore.setEverLogsIn();
   }
 
-  setUserPrivateAccess = (status) => {
+  setUserPrivateAccess = (status, slug) => {
     this.privateOfferingAccess = status;
     if (status) {
-      cookie.save('HAS_PRIVATE_ACCESS', status, { maxAge: 31536000 });
+      cookie.save('HAS_PRIVATE_ACCESS', status, { path: `/offerings/${slug}` }, { maxAge: 31536000 });
     }
     this.setOfferingPrivateAccess();
   }
