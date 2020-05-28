@@ -14,10 +14,14 @@ function BasicTransferRequest(props) {
     getTransferRequestAmount,
     isMobile,
     transferRequest } = props;
+    const currentCashFormat = isPreferredEquity ? Helper.CurrencyFormat(getCurrCashAvailable) : Helper.CurrencyFormat(getCurrCashAvailable, 0);
+    const currentCashAvailable = !money.isZero(getCurrCashAvailable) ? `(${currentCashFormat})` : currentCashFormat;
+    const currentCreditFormat = isPreferredEquity ? Helper.CurrencyFormat(getCurrCreditAvailable) : Helper.CurrencyFormat(getCurrCreditAvailable, 0);
+    const currentCreditAvailable = !money.isZero(getCurrCreditAvailable) ? `(${currentCreditFormat})` : currentCreditFormat;
 
   return (
     <>
-      <Table basic="very" className="confirm-transfer-table unstackable mt-30" compact>
+      <Table basic="very" className="confirm-transfer-table unstackable mt-30 fundinvestmentTable" compact>
         <Table.Body>
           <Table.Row>
             <Table.Cell>Investment Amount:</Table.Cell>
@@ -46,7 +50,7 @@ function BasicTransferRequest(props) {
               />
             </Table.Cell>
             <Table.Cell collapsing className="right-align">
-              {isPreferredEquity ? Helper.CurrencyFormat(getCurrCashAvailable) : Helper.CurrencyFormat(getCurrCashAvailable, 0)}
+              {currentCashAvailable}
             </Table.Cell>
           </Table.Row>
           {!money.isZero(getCurrCreditAvailable)
@@ -54,7 +58,7 @@ function BasicTransferRequest(props) {
               <Table.Row>
                 <Table.Cell>Available Credit: </Table.Cell>
                 <Table.Cell collapsing className="right-align">
-                  {isPreferredEquity ? Helper.CurrencyFormat(getCurrCreditAvailable) : Helper.CurrencyFormat(getCurrCreditAvailable, 0)}
+                  {currentCreditAvailable}
                 </Table.Cell>
               </Table.Row>
             )
