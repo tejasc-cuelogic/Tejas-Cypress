@@ -2,7 +2,7 @@ import React from 'react';
 import { toJS } from 'mobx';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { authActions } from '../../services/actions';
 import { privateRoutes } from '../routes';
 import { InlineLoader, SuspenseBoundary, lazyRetry, Spinner } from '../../theme/shared';
@@ -31,7 +31,8 @@ export default class Private extends React.Component {
     const { userStore, referralsStore, userDetailsStore } = this.props;
     if (!this.props.authStore.isUserLoggedIn) {
       this.props.uiStore.setRedirectURL(this.props.location.pathname);
-      this.props.uiStore.setAuthRef(this.props.location.pathname);
+      this.props.uiStore.setAuthRef('/');
+      // this.props.uiStore.setAuthRef(this.props.location.pathname);
       this.props.history.push('/login');
     } else if (userStore.isInvestor && get(userDetailsStore, 'signupStatus.activeAccounts') && get(userDetailsStore, 'signupStatus.activeAccounts').length) {
       referralsStore.getUserReferralDetails(false, false);
@@ -69,6 +70,7 @@ export default class Private extends React.Component {
     const { myRoutes } = this.props.navStore;
     const { info } = userDetails;
     const { match } = this.props;
+    const { topBanner } = this.props.uiStore;
     const UserInfo = {
       firstName: get(userDetails, 'info.firstName'),
       lastName: get(userDetails, 'info.lastName'),
@@ -92,6 +94,7 @@ export default class Private extends React.Component {
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
             handleLogOut={this.handleLogOut}
+            headerclass={topBanner ? 'large-header' : ''}
             // canSubmitApp={isValid}
             // isPrequalQulify={isPrequalQulify}
             // preQualSubmit={this.preQualSubmit}
@@ -117,6 +120,7 @@ export default class Private extends React.Component {
                   key={route.path}
                 />
               ))}
+              {['*', ''].map(u => <Redirect from={`/dashboard/summary/${u}`} to={`/dashboard/setup/${u}`} />)}
               <Route exact path="/dashboard/legal-docs/:agreementKey" render={props => <AgreementsPdfLoader isNewTab {...props} />} />
               {Object.keys(routes).map(route => routes[route])}
               {myRoutes.length > 0 ? <Route component={NotFound} />

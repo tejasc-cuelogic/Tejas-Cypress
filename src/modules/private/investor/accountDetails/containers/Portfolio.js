@@ -14,7 +14,7 @@ import InvestmentDetails from './InvestmentDetails';
 import CancelInvestment from '../components/portfolio/CancelInvestment';
 import { InlineLoader, IframeModal } from '../../../../../theme/shared';
 import InvestNow from '../../../../public/offering/components/investNow/InvestNow';
-import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
+// import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
 import AgreementTemplate from '../../../../shared/campaign/AgreementTemplate';
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
@@ -106,8 +106,8 @@ export default class Portfolio extends PureComponent {
   }
 
   routesList = () => {
-    const { match, campaignStore } = this.props;
-    const AgreementComponent = campaignStore.campaignStatus.isAgreementTemplate ? AgreementTemplate : Agreement;
+    const { match } = this.props;
+    // const AgreementComponent = campaignStore.campaignStatus.isAgreementTemplate ? AgreementTemplate : Agreement;
     return (
       <Switch>
         <Route
@@ -119,7 +119,7 @@ export default class Portfolio extends PureComponent {
           path={`${match.url}/:offeringId/invest-now`}
           render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
         />
-        <Route exact path={`${match.url}/:offeringId/agreement`} render={() => <AgreementComponent changeInvestment refLink={match.url} />} />
+        <Route exact path={`${match.url}/:offeringId/agreement`} render={() => <AgreementTemplate changeInvestment refLink={match.url} />} />
         <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}`} {...props} />} />
         <Route path={`${match.url}/:offeringId/congratulation`} render={() => <Congratulation changeInvestment />} />
         <Route
@@ -136,7 +136,7 @@ export default class Portfolio extends PureComponent {
       multipleUserAccounts,
     } = userDetailsStore;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
-    const { referralData } = this.props.referralsStore;
+    // const { referralData } = this.props.referralsStore;
     const { getActiveAccounts } = userDetailsStore;
 
     if (portfolioStore.loading) {
@@ -188,6 +188,9 @@ export default class Portfolio extends PureComponent {
         {
           title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.lifetimePaymentsReceived, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
         },
+        {
+          title: 'Available Credit', content: getInvestorAccounts && getInvestorAccounts.rewardsBalance, type: 1, info: `Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest. ${getActiveAccounts.length > 1 ? 'Referral credits are shared amongst all of your investment accounts.' : ''}`,
+        },
         // {
         //   title: 'TNAR', content: tnarValue && !money.isZero(tnarValue) ? tnarValue :
         // 'N/A', type: 1, info: <span>The Total Net Annualized Return (TNAR) approximates
@@ -197,12 +200,12 @@ export default class Portfolio extends PureComponent {
         // },
       ],
     };
-    if (get(referralData, 'availableCredit') !== '0.00') {
+    /* if (get(referralData, 'availableCredit') !== '0.00') {
       const availableCredit = {
         title: 'Available Credit', content: get(referralData, 'availableCredit'), type: 1, info: `Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest. ${getActiveAccounts.length > 1 ? 'Referral credits are shared amongst all of your investment accounts.' : ''}`,
       };
       summaryDetails.summary.push(availableCredit);
-    }
+    } */
     const pendingSorted = getInvestorAccounts && getInvestorAccounts.investments.pending.length ? orderBy(getInvestorAccounts.investments.pending, o => get(o, 'offering.closureSummary.processingDate') && DataFormatter.diffDays(get(o, 'offering.closureSummary.processingDate')), ['asc']) : [];
     const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     let completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
@@ -226,10 +229,10 @@ export default class Portfolio extends PureComponent {
           />
         )
         }
-        <SummaryHeader refLink={refLink} isAdmin={this.props.isAdmin} details={summaryDetails} />
         {this.props.isAdmin
-          && <SummaryTerms refLink={refLink} isAdmin={this.props.isAdmin} details={getInvestorAccounts} />
+          && <SummaryHeader refLink={refLink} isAdmin={this.props.isAdmin} details={summaryDetails} />
         }
+        <SummaryTerms refLink={refLink} isAdmin={this.props.isAdmin} details={getInvestorAccounts} />
         {(getPieChartData.investmentType.length || getPieChartData.industry.length)
           ? <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }

@@ -26,7 +26,7 @@ const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
   { type: 'ogTag', property: 'og:type', content: 'website' },
-  { type: 'ogTag', property: 'og:title', content: 'NextSeed | Build an Investment Portfolio With Local Businesses' },
+  { type: 'ogTag', property: 'og:title', content: 'NextSeed | Invest In Small Businesses' },
   { type: 'ogTag', property: 'og:description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:url', content: window.location.href },
   { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },
@@ -44,7 +44,7 @@ const metaTagsData = [
 ];
 const isMobile = document.documentElement.clientWidth < 768;
 const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/insights/category/', '/dashboard/resources/knowledge-base/', '/space/'];
-@inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore', 'referralsStore')
+@inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore', 'referralsStore', 'collectionStore')
 @withRouter
 @observer
 class App extends Component {
@@ -54,6 +54,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
+    // props.collectionStore.getCollections();
     window.addEventListener('resize', this.handleResize);
     this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
     const urlParameter = queryString.parse(this.props.location.search);
@@ -96,9 +97,10 @@ class App extends Component {
         }
       })
       .catch((err) => {
-        console.log('Catch error in app.js verifySession. ', err);
+        window.logger('Catch error in app.js verifySession. ', err);
       }).finally(() => {
         this.setState({ authChecked: true });
+        this.props.collectionStore.getCollections();
       });
     if (this.props.uiStore.devBanner) {
       activityActions.log({ action: 'APP_LOAD', status: 'SUCCESS' });
@@ -124,7 +126,7 @@ class App extends Component {
       }
       this.props.authStore.setUserLoggedIn(false);
       localStorage.removeItem('lastActiveTime');
-      console.log('error in app.js - getUserSession', err);
+      window.logger('error in app.js - getUserSession', err);
     });
     if (this.props.location !== prevProps.location) {
       this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
@@ -258,10 +260,13 @@ class App extends Component {
 
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
 
+  playTopBanner = () => this.props.uiStore.toggleTopBanner();
+
   render() {
     const { location, uiStore, userStore, authStore } = this.props;
     const { authChecked } = this.state;
     const { isTablet } = uiStore.responsiveVars;
+    const { isInvestor } = userStore;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
       return (
         <Route path="/secure-gateway" component={SecureGateway} />
@@ -272,7 +277,7 @@ class App extends Component {
         <Spinner loaderMessage={uiStore.loaderMessage} />
       );
     }
-    const { isInvestor } = userStore;
+
     return (
       <div className={(isInvestor || !matchPath(location.pathname, { path: '/dashboard' })) ? 'public-pages' : ''}>
         {authStore.isUserLoggedIn

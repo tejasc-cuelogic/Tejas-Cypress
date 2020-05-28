@@ -4,7 +4,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import { Popup, Icon } from 'semantic-ui-react';
 import { forEach, filter, get, groupBy, map, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
-import { uiStore, campaignStore, userDetailsStore, offeringsStore } from '../../../index';
+import { uiStore, campaignStore, userDetailsStore, offeringsStore, manageOfferingStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
 import { getBoxEmbedLink, getLegalDocsFileIds, getS3DownloadLinkByFileId } from '../../../queries/agreements';
 import { AGREEMENT_TEMPLATE_DETAILS_INFO } from '../../../../constants/investment';
@@ -75,6 +75,8 @@ export class AgreementsStore {
   @observable alreadySet = false;
 
   @observable tocRequiredArray = [];
+
+  @observable tocOptional = { array: [], labels: [] };
 
   @observable agreementPage = 0;
 
@@ -273,18 +275,22 @@ export class AgreementsStore {
     const { campaignStatus } = campaignStore;
     const { currentActiveAccount } = userDetailsStore;
     const currentSelectedAccount = ['individual', 'ira'].includes(currentActiveAccount) ? 'INDIVIDUAL' : 'ENTITY';
-    let investNowTocs = campaignStatus.investNowToc;
+    let investNowTocs = campaignStatus.isAgreementTemplate ? campaignStatus.investNowToc : manageOfferingStore.getInvestNowTocDefaults(true);
     const checkAccountValidation = acc => (!acc || acc === 'ALL' || acc === currentSelectedAccount);
     const checkRegulationValidation = reg => (!reg || reg === currentRegulation);
     investNowTocs = filter(investNowTocs, i => (checkRegulationValidation(i.regulation)));
     investNowTocs = groupBy(investNowTocs, 'page');
     investNowTocs = map(investNowTocs, page => page.map(t => ({ ...t, toc: t.toc && t.toc.length ? orderBy(t.toc.filter(toc => checkAccountValidation(toc.account)), ['order'], ['asc']) : [] })));
     const requiredArray = [];
+    const optionalArray = [];
+    const optionalLabels = [];
     if (investNowTocs.length > 1) {
       this.AGREEMENT_DETAILS_FORM = Validator.addMoreRecordToSubSection(this.AGREEMENT_DETAILS_FORM, 'page', investNowTocs.length - 1, true);
     }
     forEach(investNowTocs, (tocs, index) => {
       const pageRequiredArray = [];
+      const pageOptionalArray = [];
+      const pageOptionalLabels = [];
       const valuesArray = [];
       forEach(get(tocs, '[0].toc'), (data) => {
         const valueObj = {};
@@ -294,19 +300,30 @@ export class AgreementsStore {
         valuesArray.push(valueObj);
         if (data.required) {
           pageRequiredArray.push(data.order);
+        } else {
+          pageOptionalArray.push(data.order);
+          pageOptionalLabels.push(data.label);
         }
       });
       requiredArray.push(pageRequiredArray);
+      optionalArray.push(pageOptionalArray);
+      optionalLabels.push(pageOptionalLabels);
       this.AGREEMENT_DETAILS_FORM.fields.page[index].title.value = get(tocs, '[0].title');
       this.AGREEMENT_DETAILS_FORM.fields.page[index].toc.values = valuesArray;
+      this.AGREEMENT_DETAILS_FORM.fields.page[index].toc.value = [];
+      this.AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader.value = get(tocs, '[0].hideHeader');
     });
     this.tocRequiredArray = requiredArray;
+    this.tocOptional.array = optionalArray;
+    this.tocOptional.labels = optionalLabels;
   }
 
   @action
   previewAgreementTocs = (regulation, page, params) => {
     const { offer } = offeringsStore;
-    let investNowTocs = get(offer, 'investNow.page') || [];
+    const { getInvestNowTocDefaults } = manageOfferingStore;
+    const isTemplate2 = get(offer, 'investNow.template') === 2;
+    let investNowTocs = (!isTemplate2 || !get(offer, 'investNow.page[0]')) ? getInvestNowTocDefaults() : get(offer, 'investNow.page') || [];
     investNowTocs = investNowTocs.find(i => i.page === page && i.regulation === regulation);
     const requiredArray = [];
     const pageRequiredArray = [];
@@ -324,12 +341,38 @@ export class AgreementsStore {
     requiredArray.push(pageRequiredArray);
     this.AGREEMENT_DETAILS_FORM.fields.page[0].title.value = get(investNowTocs, 'title');
     this.AGREEMENT_DETAILS_FORM.fields.page[0].toc.values = valuesArray;
+    this.AGREEMENT_DETAILS_FORM.fields.page[0].hideHeader.value = get(investNowTocs, 'hideHeader');
     this.tocRequiredArray = requiredArray;
+  }
+
+  @computed get getUncheckedOptionalToc() {
+    const uncheckedTocs = [];
+    // const page = toJS(this.AGREEMENT_DETAILS_FORM.fields.page);
+    const page = toJS(this.AGREEMENT_DETAILS_FORM.fields.page);
+    const optionalArray = toJS(this.tocOptional.array) || [];
+    const optionalLabels = toJS(this.tocOptional.labels) || [];
+    // page.forEach((p, index) => {
+    // optionalArray[this.agreementPage].forEach((optional, oi) => {
+    //   if (!(page.toc.value || []).includes(optional)) {
+    //     uncheckedTocs.push(optionalLabels[this.agreementPage][oi]);
+    //   }
+    // });
+    // });
+// multipage support
+    page.forEach((p, index) => {
+      optionalArray[index].forEach((optional, oi) => {
+        if (!(p.toc.value || []).includes(optional)) {
+          uncheckedTocs.push(optionalLabels[index][oi]);
+        }
+      });
+    });
+    return uncheckedTocs;
   }
 
   @computed get isAgreementFormValid() {
     const requiredArray = toJS(get(this.tocRequiredArray, `[${this.agreementPage}]`)) || [];
-    return requiredArray.every(e => toJS(this.AGREEMENT_DETAILS_FORM.fields.page[this.agreementPage].toc.value).includes(e));
+    const formArr = get(this.AGREEMENT_DETAILS_FORM.fields, `page[${this.agreementPage}].toc.value`) || [];
+    return requiredArray.every(e => toJS(formArr).includes(e));
   }
 
   @action

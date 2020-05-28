@@ -2,9 +2,14 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { get, pick } from 'lodash';
 import ReactCodeInput from 'react-code-input';
-import { Header } from 'semantic-ui-react';
-import { FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown, FormTextarea } from '.';
+import { Button, Form, Confirm, Header, Responsive, Icon } from 'semantic-ui-react';
+import {
+  ImageCropper, FormTextarea, FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown, FormColorPikcer,
+} from '.';
 import Address from './src/Address';
+import HtmlEditor from '../../modules/shared/HtmlEditor';
+import { Image64 } from '../shared';
+import Helper from '../../helper/utility';
 
 function formHoc(WrappedComponent, metaInfo) {
   // eslint-disable-next-line no-unused-expressions
@@ -15,7 +20,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     Input = (name, props) => {
-      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.props[metaInfo.store][props.multiForm[0]].fields[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormInput
           name={name}
@@ -24,7 +29,7 @@ function formHoc(WrappedComponent, metaInfo) {
           format={get(fieldData, 'format')}
           fielddata={fieldData}
           onblur={get(props, 'handleBlur') || false}
-          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form))}
           label={get(props, 'label') || false}
           {...props}
         />
@@ -81,7 +86,7 @@ function formHoc(WrappedComponent, metaInfo) {
         multiple={this.props[metaInfo.store][metaInfo.form].fields[name].multiple || get(props, 'multiple')}
         label={this.props[metaInfo.store][metaInfo.form].fields[name].label}
         fielddata={this.props[metaInfo.store][metaInfo.form].fields[name]}
-        ondrop={files => this.props[metaInfo.store].setFileUploadData(metaInfo.form, name, this.props[metaInfo.store][metaInfo.form].fields[name].multiple || get(props, 'multiple'), get(props, 'index'), get(props, 'arrayName'), get(props, 'stepName') || this.props[metaInfo.store][metaInfo.form].fields[name].stepName, files, { userRole: metaInfo.userRole || get(props, 'userRole'), investorId: get(props, 'investorId') || '', offeringId: get(props, 'offeringId') || '', applicationId: get(props, 'applicationId') || '', applicationIssuerId: get(props, 'applicationIssuerId') || '', tags: get(props, 'tags') || '' })}
+        ondrop={(files, field) => (props.S3Upload ? this.props[metaInfo.store].uploadMedia(field, metaInfo.form, props.uploadPath, files) : this.props[metaInfo.store].setFileUploadData(metaInfo.form, name, this.props[metaInfo.store][metaInfo.form].fields[name].multiple || get(props, 'multiple'), get(props, 'index'), get(props, 'arrayName'), get(props, 'stepName') || this.props[metaInfo.store][metaInfo.form].fields[name].stepName, files, { userRole: metaInfo.userRole || get(props, 'userRole'), investorId: get(props, 'investorId') || '', offeringId: get(props, 'offeringId') || '', applicationId: get(props, 'applicationId') || '', applicationIssuerId: get(props, 'applicationIssuerId') || '', tags: get(props, 'tags') || '' }))}
         onremove={(field, index) => this.props[metaInfo.store].removeUploadedData(metaInfo.form, field, index)}
         containerclassname="fluid"
         {...props}
@@ -122,28 +127,27 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     FormCheckBox = (name, props) => {
-      const fieldData = this.fieldsData[name];
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormCheckbox
           name={name}
           fielddata={fieldData}
-          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
-          containerclassname="ui relaxed list"
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form), '', get(props, 'toggle') ? { value: result.checked } : false)}
+          containerclassname={`ui relaxed list mr-10 ${get(props, 'customClass')}`}
           {...props}
         />
       );
     }
 
     FormSelect = (name, props) => {
-      const fieldData = get(props, 'fielddata') || this.props[metaInfo.store][metaInfo.form].fields[name];
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormSelect
-          containerwidth={8}
           name={name}
           placeholder="Select"
           fielddata={fieldData}
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form))}
           options={get(props, 'options') || fieldData.options}
-          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
           {...props}
         />
       );
@@ -226,11 +230,159 @@ function formHoc(WrappedComponent, metaInfo) {
       const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormDropDown
+          containerwidth={8}
           name={name}
           selection
           fielddata={fieldData}
           options={get(props, 'options') || fieldData.options}
           onChange={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form), props.multiple ? 'dropdown' : false)}
+          {...props}
+        />
+      );
+    }
+
+    FormTextarea = (name, props) => {
+      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      return (
+        <FormTextarea
+          name={name}
+          fielddata={fieldData}
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+          containerclassname="secondary"
+          {...props}
+        />
+      );
+    }
+
+    HtmlEditor = (name, props) => {
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
+      return (
+        <HtmlEditor
+          name={name}
+          content={fieldData.value}
+          form={metaInfo.form}
+          changed={(field, value, form, index) => this.props[metaInfo.store].editorChange(field, value, form, get(props, 'multiForm') ? props.multiForm[1] : undefined, get(props, 'multiForm') ? props.multiForm[2] : index)}
+          {...props}
+        />
+      );
+    }
+
+    ImageCropper = (name, props) => {
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.props[metaInfo.store][props.multiForm[0]].fields[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
+      const arrayName = Array.isArray(get(props, 'multiForm')) ? get(props, 'multiForm')[1] : false;
+      const index = Array.isArray(get(props, 'multiForm')) ? get(props, 'multiForm')[2] : -1;
+      const handleVerifyFileExtension = (fileExt, field) => {
+        const validate = Helper.validateImageExtension(fileExt);
+        if (validate.isInvalid) {
+          const attr = 'error';
+          const { errorMsg } = validate;
+          this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, attr, errorMsg, field, index, arrayName);
+          this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, 'value', '', field, index, arrayName);
+        }
+      };
+      const handelImageDimension = (width, height, field) => {
+        if (width < 200 || height < 200) {
+          const attr = 'error';
+          const errorMsg = 'Image size should not be less than 200 x 200.';
+          this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, attr, errorMsg, field, index, arrayName);
+          this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, 'value', '', field, index, arrayName);
+        }
+      };
+      const setData = (attr, value) => {
+        this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, attr, value, name, index, arrayName);
+      };
+      const handleResetImageCropper = () => {
+        this.props[metaInfo.store].resetImageCropper(get(props, 'multiForm') || metaInfo.form, name, index, arrayName);
+      };
+      const setConfirmModal = (val) => {
+        this.props[metaInfo.store].setMediaAttribute(get(props, 'multiForm') || metaInfo.form, 'confirmModal', val, name, index, arrayName);
+      };
+      const handleRemoveConfirm = () => {
+        if (props.removeMedia) {
+          props.removeMedia(get(props, 'multiForm') || metaInfo.form, name);
+        }
+        this.props[metaInfo.store].resetImageCropper(get(props, 'multiForm') || metaInfo.form, name, index, arrayName);
+      };
+      const handleFileUploadLoader = fileId => this.props[metaInfo.store].handleUploadLoader(fileId);
+      return (
+        <Form className={`${!props.isImagePreviewDisabled ? 'cropper-wrap' : ''} tombstone-img`}>
+          {fieldData.preSignedUrl && !props.isImagePreviewDisabled ? (
+            <div className="file-uploader attached" style={get(props, 'style')}>
+              {!props.isReadonly
+                && <Button onClick={() => setConfirmModal(true)} circular icon={{ className: 'ns-close-light' }} />
+              }
+              <Image64 srcUrl={fieldData.preSignedUrl} />
+              <Confirm
+                content="Are you sure you want to remove this media file?"
+                open={fieldData.confirmModal}
+                onCancel={() => setConfirmModal(false)}
+                onConfirm={handleRemoveConfirm}
+                size="mini"
+                className="deletion"
+              />
+            </div>
+          ) : fieldData.value && props.isImagePreviewDisabled ? (
+            <div className="file-uploader attached">
+              <Responsive
+                as={Button}
+                minWidth={768}
+                size="tiny"
+                compact
+                className="ghost-button remove pull-right"
+                onClick={() => setConfirmModal(true)}
+              >
+                Remove
+                    </Responsive>
+              <Responsive
+                as={Icon}
+                maxWidth={767}
+                name="remove"
+                className="pull-right"
+                onClick={() => setConfirmModal(true)}
+              />
+              {handleFileUploadLoader(fieldData.fileId) ? 'Loading...'
+                : <span title={fieldData.value}>{fieldData.value}</span>
+              }
+              <Confirm
+                content="Are you sure you want to remove this media file?"
+                open={fieldData.confirmModal}
+                onCancel={() => setConfirmModal(false)}
+                onConfirm={handleRemoveConfirm}
+                size="mini"
+                className="deletion"
+              />
+            </div>
+          ) : (
+                <ImageCropper
+                  disabled={props.isReadonly}
+                  fieldData={fieldData}
+                  setData={(attr, value) => setData(attr, value)}
+                  verifyExtension={handleVerifyFileExtension}
+                  handelReset={handleResetImageCropper}
+                  verifyImageDimension={handelImageDimension}
+                  field={fieldData}
+                  modalUploadAction={fieldName => this.props[metaInfo.store].uploadMedia(fieldName, (get(props, 'multiForm') || metaInfo.form), props.uploadPath)}
+                  name={name}
+                  cropInModal
+                  aspect={3 / 2}
+                  size="small"
+                />
+              )
+          }
+        </Form>
+      );
+    }
+
+    ColorPikcer = (name, props) => {
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
+      return (
+        <FormColorPikcer
+          fieldData={fieldData}
+          name={name}
+          // props={props}
+          onblur={get(props, 'handleBlur') || false}
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form))}
+          metaInfo={metaInfo}
           {...props}
         />
       );
@@ -250,7 +402,11 @@ function formHoc(WrappedComponent, metaInfo) {
         RadioGroup: this.RadioGroup,
         FormCheckBox: this.FormCheckBox,
         FormDropDown: this.FormDropDown,
+        FormTextarea: this.FormTextarea,
+        ImageCropper: this.ImageCropper,
+        HtmlEditor: this.HtmlEditor,
         TextArea: this.TextArea,
+        ColorPikcer: this.ColorPikcer,
       };
       return (
         <WrappedComponent

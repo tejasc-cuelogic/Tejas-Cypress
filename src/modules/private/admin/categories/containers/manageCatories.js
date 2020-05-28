@@ -5,7 +5,7 @@ import AllCategories from '../components/allCategories';
 
 export default class ManageCategories extends Component {
   search = (e) => {
-    if (e.charCode === 13 && false) {
+    if (e.charCode === 13) {
       // search goes here..
     }
   }

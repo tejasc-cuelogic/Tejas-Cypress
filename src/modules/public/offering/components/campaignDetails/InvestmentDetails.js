@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get } from 'lodash';
+import { get, camelCase } from 'lodash';
 import { toJS } from 'mobx';
 import { inject } from 'mobx-react';
 import { Header, Divider } from 'semantic-ui-react';
@@ -73,8 +73,8 @@ class InvestmentDetails extends Component {
         && (
         <>
         <Header as="h3" className={`${this.props.newLayout ? 'mt-40 mb-30' : ''} ${!isMobile ? 'mb-40' : 'mb-20'} anchor-wrap`}>
-          {campaignStatus.isFund ? 'Summary of Terms' : 'Investment Terms'}
-          <span className="anchor" id="key-terms" />
+          {this.props.title || (campaignStatus.isFund ? 'Summary of Terms' : 'Investment Terms')}
+          <span className="anchor" id={this.props.title ? camelCase(this.props.title) : 'key-terms'} />
         </Header>
         <KeytermsDetails
           refLink={this.props.refLink}

@@ -12,6 +12,7 @@ import { InlineLoader, Image64, UserAvatar } from '../../../../../../theme/share
 import Actions from './Actions';
 import Status from './Status';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
 @withRouter
@@ -142,6 +143,35 @@ export default class NewUpdate extends Component {
     );
   }
 
+  showInvestorList = () => {
+    const { PBUILDER_FRM } = this.props.updateStore;
+    return (
+      <>
+        <Modal
+          closeOnDimmerClick={false}
+          closeIcon
+          trigger={(
+            <Button color="green" className="link-button">
+              <Icon className="ns-view" />
+              Investor Notification List
+            </Button>
+          )}
+        >
+          <Modal.Content className="new-update-modal">
+            <Header as="h4">Investor Notification List</Header>
+            <List ordered relaxed>
+              {
+                PBUILDER_FRM.fields.notificationTo.value && PBUILDER_FRM.fields.notificationTo.value.map(investor => (
+                  <List.Item>{ investor }</List.Item>
+                ))
+              }
+            </List>
+          </Modal.Content>
+        </Modal>
+      </>
+    );
+  }
+
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, maskChange, newUpdateId,
@@ -264,7 +294,17 @@ export default class NewUpdate extends Component {
                               changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                               dateOfBirth
                             />
-                            {this.sendInvestorNotificationTemplate(isReadonly, isManager)}
+                            {PBUILDER_FRM.fields.notificationDate.value && this.showInvestorList()}
+                            {
+                              <div className="mb-10">
+                                {PBUILDER_FRM.fields.notificationDate.value
+                                ? <p>{`Notification sent on ${DataFormatter.formatedDate(PBUILDER_FRM.fields.notificationDate.value)} by ${PBUILDER_FRM.fields.notificationBy.value}.`}</p>
+                                : isPublished
+                                  ? <p>No notifications were sent.</p>
+                                  : this.sendInvestorNotificationTemplate(isReadonly, isManager)
+                                }
+                              </div>
+                            }
                             {this.postUpdateAsTemplate()}
                           </Form>
                         )

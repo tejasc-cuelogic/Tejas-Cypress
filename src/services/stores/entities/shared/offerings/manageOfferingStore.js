@@ -1,17 +1,42 @@
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { startCase, get, filter, orderBy } from 'lodash';
+import { startCase, get, includes, filter, orderBy } from 'lodash';
+import money from 'money-math';
+import moment from 'moment';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
+import {
+  TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC, SUB_HEADER_BASIC, GALLERY,
+} from '../../../../constants/offering/formMeta/offering';
 import { INVEST_NOW_TOC, INVEST_NOW_PAGE } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { offeringCreationStore, offeringsStore, uiStore } from '../../../index';
-import { offeringUpsert } from '../../../queries/offerings/manageOffering';
+import { offeringCreationStore, offeringsStore, uiStore, userDetailsStore, campaignStore } from '../../../index';
+import * as investNowTocDefaults from '../../../../constants/offering/InvestNowToc';
+import { offeringUpsert, adminLockOrUnlockOffering } from '../../../queries/offerings/manageOffering';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM } from '../../../../../constants/offering';
 
 
 export class ManageOfferingStore extends DataModelStore {
+  constructor() {
+    super({ adminLockOrUnlockOffering });
+  }
+
+  TOMBSTONE_BASIC_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
+
+  TOMBSTONE_HEADER_META_FRM = Validator.prepareFormObject(TOMBSTONE_HEADER_META);
+
+  GALLERY_FRM = Validator.prepareFormObject(GALLERY);
+
+  HEADER_BASIC_FRM = Validator.prepareFormObject(HEADER_BASIC);
+
+  SUB_HEADER_BASIC_FRM = Validator.prepareFormObject(SUB_HEADER_BASIC);
+
+  OFFERING_CONTENT_FRM = Validator.prepareFormObject(OFFERING_CONTENT);
+
+  OFFERING_MISC_FRM = Validator.prepareFormObject(OFFERING_MISC);
+
   INVEST_NOW_TOC_FRM = Validator.prepareFormObject(INVEST_NOW_TOC);
 
   INVEST_NOW_PAGE_FRM = Validator.prepareFormObject(INVEST_NOW_PAGE);
@@ -20,11 +45,46 @@ export class ManageOfferingStore extends DataModelStore {
 
   initLoad = [];
 
+  getInvestNowTocDefaults = (isPublic = false) => {
+    const { offer } = offeringsStore;
+    const { campaign } = campaignStore;
+    const offerDetails = isPublic ? campaign : offer;
+    const regulation = isPublic ? get(offerDetails, 'keyTerms.regulation') : get(offerDetails, 'regulation');
+    const securities = get(offerDetails, 'keyTerms.securities');
+    const equityClass = get(offerDetails, 'keyTerms.equityClass');
+    let nsDefaultData = [];
+    if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY) {
+      if (equityClass === CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM.LLC_MEMBERSHIP_UNITS) {
+        nsDefaultData = get(investNowTocDefaults.REAL_ESTATE_EQUITY, 'investNow.page');
+      } else if (equityClass === CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM.PREFERRED) {
+        nsDefaultData = get(investNowTocDefaults.PREFERRED_EQUITY, 'investNow.page');
+      } else {
+        nsDefaultData = get(investNowTocDefaults.CLASS_EQUITY, 'investNow.page');
+      }
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
+      nsDefaultData = get(investNowTocDefaults.TERM_NOTE, 'investNow.page');
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
+      nsDefaultData = get(investNowTocDefaults.REVENUE_SHARING_NOTE, 'investNow.page');
+    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE) {
+      nsDefaultData = get(investNowTocDefaults.SAFE, 'investNow.page');
+    }
+    const regCheck = regulation === 'BD_CF_506C' ? ['BD_506C', 'BD_CF'] : [regulation];
+    nsDefaultData = nsDefaultData.filter(t => regCheck.includes(t.regulation));
+    return nsDefaultData || [];
+  }
+
   // eslint-disable-next-line class-methods-use-this
   get getAgreementTocList() {
     const { offer } = offeringsStore;
     const regulation = get(offer, 'regulation');
-    const investNow = get(offer, 'investNow.page') || [];
+    const selectedTemplate = get(offer, 'investNow.template');
+    const nsDefaultData = this.getInvestNowTocDefaults();
+    let investNow = [];
+    if (selectedTemplate === 2 && get(offer, 'investNow.page[0]')) {
+      investNow = get(offer, 'investNow.page');
+    } else {
+      investNow = nsDefaultData;
+    }
     const investNowTocs = {};
     if (regulation === 'BD_CF_506C') {
       investNowTocs.BD_506C = orderBy(filter(investNow, i => i.regulation === 'BD_506C'), ['page'], ['asc']);
@@ -54,7 +114,7 @@ export class ManageOfferingStore extends DataModelStore {
         } : { required: !investNow[index].toc[tocIndex].required };
         investNow[index].toc[tocIndex] = { ...investNow[index].toc[tocIndex], ...editTOC };
       } else {
-        investNow[index] = { ...investNow[index], title: formData.title };
+        investNow[index] = { ...investNow[index], title: formData.title, note: formData.note, hideHeader: formData.hideHeader.includes(true) || false };
       }
     } else if (form === 'INVEST_NOW_PAGE_FRM') {
       const formData = Validator.evaluateFormData(this[form].fields);
@@ -62,6 +122,8 @@ export class ManageOfferingStore extends DataModelStore {
         page: ((agreementLists[regulation] && agreementLists[regulation].length) || 0) + 1,
         regulation,
         title: formData.title,
+        note: formData.note,
+        hideHeader: formData.hideHeader.includes(true) || false,
       };
       investNow.push(addPage);
     } else if (form === 'INVEST_NOW_TOC_FRM') {
@@ -96,15 +158,181 @@ export class ManageOfferingStore extends DataModelStore {
     return { page: investNow };
   }
 
+  get campaignStatus() {
+    const { currentUserId } = userDetailsStore;
+    window.logger(this.TOMBSTONE_BASIC_FRM);
+    const { offer } = offeringsStore;
+    const campaignStatus = {};
+    const closingDate = get(offer, 'closureSummary.processingDate') && get(offer, 'closureSummary.processingDate') !== 'Invalid date' ? get(offer, 'closureSummary.processingDate') : null;
+    campaignStatus.lock = get(offer, 'lock.userId') && currentUserId !== get(offer, 'lock.userId');
+    campaignStatus.diff = DataFormatter.diffDays(closingDate || null, false, true);
+    campaignStatus.diffForProcessing = DataFormatter.getDateDifferenceInHoursOrMinutes(closingDate, true, true);
+    campaignStatus.countDown = (includes(['Minute Left', 'Minutes Left'], campaignStatus.diffForProcessing.label) && campaignStatus.diffForProcessing.value > 0) || campaignStatus.diffForProcessing.value <= 48 ? { valueToShow: campaignStatus.diffForProcessing.value, labelToShow: campaignStatus.diffForProcessing.label } : { valueToShow: campaignStatus.diff, labelToShow: campaignStatus.diff === 1 ? 'Day Left' : 'Days Left' };
+    campaignStatus.isInProcessing = campaignStatus.diffForProcessing.value <= 0 && (!get(offer, 'closureSummary.hardCloseDate') || get(offer, 'closureSummary.hardCloseDate') === 'Invalid date');
+    campaignStatus.collected = this.HEADER_BASIC_FRM.fields.raisedAmount.value || this.SUB_HEADER_BASIC_FRM.fields.raisedAmount.value || 0;
+    const offeringRegulation = get(offer, 'keyTerms.regulation');
+    const minOffering = get(offer, 'keyTerms.minOfferingAmountCF') || 0;
+    const minOfferingD = get(offer, 'keyTerms.minOfferingAmount506') && get(offer, 'keyTerms.minOfferingAmount506') !== '0.00' ? get(offer, 'keyTerms.minOfferingAmount506') : get(offer, 'keyTerms.minOfferingAmount506C') ? get(offer, 'keyTerms.minOfferingAmount506C') : '0.00';
+    campaignStatus.minOffering = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
+    const maxOffering = get(offer, 'keyTerms.maxOfferingAmountCF') || 0;
+    const maxOfferingD = get(offer, 'keyTerms.maxOfferingAmount506') && get(offer, 'keyTerms.maxOfferingAmount506') !== '0.00' ? get(offer, 'keyTerms.maxOfferingAmount506') : get(offer, 'keyTerms.maxOfferingAmount506C') ? get(offer, 'keyTerms.maxOfferingAmount506C') : '0.00';
+    campaignStatus.maxOffering = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
+    campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering;
+    campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
+    const formattedRaisedAmount = money.floatToAmount(campaignStatus.collected);
+    const formattedMaxOfferingAmount = money.floatToAmount(campaignStatus.maxOffering);
+    const maxReachedComparedAmount = money.cmp(formattedRaisedAmount, formattedMaxOfferingAmount);
+    const formattedReachedMaxCompareAmountValue = money.floatToAmount(maxReachedComparedAmount);
+    const minMaxOffering = campaignStatus.minFlagStatus
+      ? campaignStatus.maxOffering : campaignStatus.minOffering;
+    campaignStatus.maxFlagStatus = !!(money.isZero(formattedReachedMaxCompareAmountValue)
+      || money.isPositive(formattedReachedMaxCompareAmountValue));
+    campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
+    campaignStatus.address = get(offer, 'keyTerms.city') || get(offer, 'keyTerms.state') ? `${get(offer, 'keyTerms.city') || 'Houston'}, ${get(offer, 'keyTerms.state') || 'Texas'}` : 'Houston, Texas';
+    campaignStatus.earlyBird = get(offer, 'earlyBird') || null;
+    campaignStatus.bonusRewards = get(offer, 'bonusRewards') || [];
+    campaignStatus.isEarlyBirdRewards = campaignStatus.bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
+    campaignStatus.isBonusReward = campaignStatus.bonusRewards && campaignStatus.bonusRewards.length;
+    const elevatorPitch = (offer && offer.offering && offer.offering.overview
+      && offer.offering.overview.elevatorPitch)
+      || (offer && offer.offering && offer.offering.overview
+        && offer.offering.overview.highlight);
+    campaignStatus.hasTopThingToKnow = elevatorPitch;
+    campaignStatus.dataRooms = [];
+    campaignStatus.gallery = get(offer, 'media.gallery') ? get(offer, 'media.gallery').length : 0;
+    campaignStatus.keyTerms = get(offer, 'keyTerms');
+    campaignStatus.issuerStatement = get(offer, 'keyTerms.offeringDisclaimer');
+    campaignStatus.companyDescription = get(offer, 'offering.about.theCompany');
+    campaignStatus.businessModel = get(offer, 'offering.about.businessModel');
+    campaignStatus.localAnalysis = get(offer, 'offering.about.locationAnalysis');
+    campaignStatus.history = get(offer, 'offering.about.history');
+    campaignStatus.team = get(offer, 'leadership');
+    campaignStatus.useOfProcceds = get(offer, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
+    campaignStatus.revenueSharingSummary = get(offer, 'keyTerms.revShareSummary');
+    campaignStatus.updates = get(offer, 'updates') && get(offer, 'updates').length;
+    campaignStatus.investmentHighlights = true;
+    campaignStatus.investmentSummary = get(offer, 'investmentSummary');
+    campaignStatus.isRevenueShare = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
+    campaignStatus.isTermNote = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
+    campaignStatus.isFund = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS;
+    campaignStatus.isRealEstate = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE;
+    campaignStatus.isPreferredEquity = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C;
+    return campaignStatus;
+  }
+
+  generateBanner = () => {
+    const { offer } = offeringsStore;
+    const resultObject = {};
+    const offeringKeyTermDetails = get(offer, 'keyTerms');
+    const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
+    const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506') && get(offeringKeyTermDetails, 'minOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'minOfferingAmount506') : get(offeringKeyTermDetails, 'minOfferingAmount506C') ? get(offeringKeyTermDetails, 'minOfferingAmount506C') : '0.00';
+    const maxOfferingAmountCF = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
+    const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506') && get(offeringKeyTermDetails, 'maxOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'maxOfferingAmount506') : get(offeringKeyTermDetails, 'maxOfferingAmount506C') ? get(offeringKeyTermDetails, 'maxOfferingAmount506C') : '0.00';
+    const regulation = get(offeringKeyTermDetails, 'regulation');
+    const securities = get(offeringKeyTermDetails, 'securities');
+    const isRealEstate = (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(offeringKeyTermDetails, 'equityClass') === 'LLC_MEMBERSHIP_UNITS');
+    const minimumOfferingAmount = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
+    const launchDate = this.TOMBSTONE_BASIC_FRM.fields.launchDate.value || null;
+    const closingDate = this.TOMBSTONE_BASIC_FRM.fields.closeDate.value || null;
+    const maxOfferingAmount = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], regulation) ? maxOfferingAmountRegD : maxOfferingAmountCF;
+    const raisedAmount = money.floatToAmount(this.TOMBSTONE_BASIC_FRM.fields.raisedAmount.value || 0);
+    const divResult = money.div(raisedAmount, minimumOfferingAmount);
+    const percent = money.mul(divResult, '100.00');
+    const customAddinggDaysDateObj = {
+      number: 7,
+      format: 'days',
+    };
+    const launchDaysToRemainsForNewLable = DataFormatter.diffDaysForLauch(
+      launchDate || null,
+      false, true, true, customAddinggDaysDateObj,
+    );
+    const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
+    const closeDaysToRemainsInHours = DataFormatter.getDateDifferenceInHoursOrMinutes(closingDate, true, true);
+    const isInProcessing = closeDaysToRemainsInHours.value <= 0 && (!this.TOMBSTONE_BASIC_FRM.fields.hardCloseDate.value || this.TOMBSTONE_BASIC_FRM.fields.hardCloseDate.value === 'Invalid date');
+    const percentageCompairResult = money.cmp(percent, '50.00').toString();
+    const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
+    let isReachedMax = false;
+    if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
+      isReachedMax = true;
+    }
+    if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
+      || closeDaysToRemains === null)
+      && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
+      resultObject.isBannerShow = true;
+      resultObject.datesBanner = 'NEW';
+      resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, isRealEstate);
+      if (isRealEstate) {
+        resultObject.realEstateBanner = 'Real Estate';
+      }
+      resultObject.launchDate = moment(launchDate).unix() || null;
+      resultObject.processingDate = moment(closingDate).unix() || null;
+      resultObject.category = 'newOffering';
+      return resultObject;
+    } if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7 && !isInProcessing) {
+      const labelBannerFirst = ((includes(['Minute Left', 'Minutes Left'], closeDaysToRemainsInHours.label) && closeDaysToRemainsInHours.value > 0) || closeDaysToRemainsInHours.value <= 48) ? `${closeDaysToRemainsInHours.value} ${closeDaysToRemainsInHours.label}` : closeDaysToRemains === 1 ? `${closeDaysToRemains} Day Left` : `${closeDaysToRemains} Days Left`;
+      resultObject.isBannerShow = !!labelBannerFirst;
+      resultObject.datesBanner = labelBannerFirst;
+      resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, isRealEstate);
+      if (isRealEstate) {
+        resultObject.realEstateBanner = 'Real Estate';
+      }
+      resultObject.launchDate = moment(launchDate).unix() || null;
+      resultObject.processingDate = moment(closingDate).unix() || null;
+      resultObject.category = 'closingSoon';
+      if (!isReachedMax) {
+        return resultObject;
+      }
+    } if (isInProcessing) {
+      resultObject.isBannerShow = true;
+      resultObject.datesBanner = 'Processing';
+      if (isRealEstate) {
+        resultObject.realEstateBanner = 'Real Estate';
+      }
+      resultObject.launchDate = moment(launchDate).unix() || null;
+      resultObject.processingDate = moment(closingDate).unix() || null;
+      resultObject.category = 'processing';
+      return resultObject;
+    }
+    resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, isRealEstate);
+    if (isRealEstate) {
+      resultObject.realEstateBanner = 'Real Estate';
+    }
+    resultObject.isBannerShow = !!(resultObject.datesBanner || resultObject.amountsBanner);
+    resultObject.launchDate = moment(launchDate).unix() || null;
+    resultObject.processingDate = moment(closingDate).unix() || null;
+    if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
+      resultObject.category = 'reachedMax';
+      return resultObject;
+    }
+    return resultObject;
+  }
+
+  generateLabelBannerSecond = (amountCompairResult, percentageCompairResult, percent, isRealEstate) => {
+    let labelBannerSecond = null;
+    if (money.isNegative(amountCompairResult)
+      && !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult) && !isRealEstate) {
+      labelBannerSecond = `${Math.round(percent)}% Funded`;
+    } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
+      labelBannerSecond = 'Reached Max';
+    }
+    return labelBannerSecond;
+  }
+
   updateOffering = params => new Promise((res) => {
-    const { keyName, forms, cleanData, offeringData } = params;
+    const { keyName, forms, cleanData, offeringData, tocAction } = params;
     let offeringDetails = {};
     let data;
+    let miscData;
     if (offeringData) {
       data = offeringData;
     } else if (Array.isArray(forms)) {
       forms.forEach((f) => {
-        data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
+        if (f === 'OFFERING_MISC_FRM') {
+          miscData = offeringCreationStore.evaluateFormFieldToArray(this[f].fields, false);
+          miscData = { ...miscData, ...Validator.evaluateFormData(this[f].fields) };
+        } else {
+          data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
+        }
       });
     } else if (keyName === 'misc') {
       data = offeringCreationStore.evaluateFormFieldToArray(this[forms].fields, false);
@@ -117,7 +345,17 @@ export class ManageOfferingStore extends DataModelStore {
       data = omitDeep(data, ['__typename', 'fileHandle']);
     }
     if (keyName) {
-      offeringDetails[keyName] = data;
+      if (keyName === 'investNow' && tocAction) {
+        const { offer } = offeringsStore;
+        if (data.template === 2 && (!get(offer, 'investNow.page') || tocAction === 'RESET')) {
+          offeringDetails[keyName] = { ...data, page: this.getInvestNowTocDefaults() };
+        }
+      } else {
+        offeringDetails[keyName] = data;
+        if (keyName !== 'misc' && forms && forms.includes('OFFERING_MISC_FRM')) {
+          offeringDetails.misc = miscData;
+        }
+      }
     } else {
       offeringDetails = { ...data };
     }
@@ -158,21 +396,66 @@ export class ManageOfferingStore extends DataModelStore {
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
+        if (get(err, 'message') && get(err, 'message').includes('has locked the offering')) {
+          Helper.toast(get(err, 'message'), 'error');
+        } else {
+          Helper.toast('Something went wrong.', 'error');
+        }
         uiStore.setProgress(false);
       });
   };
 
+  adminLockOrUnlockOffering = offeringAction => new Promise(async (res, rej) => {
+    const variables = {
+      offeringId: offeringCreationStore.currentOfferingId,
+      action: offeringAction,
+    };
+    try {
+      const data = await this.executeMutation({
+        mutation: 'adminLockOrUnlockOffering',
+        clientType: 'PRIVATE',
+        variables,
+      });
+      window.logger(data);
+      const lockObj = get(data, 'data.adminLockOrUnlockOffering') ? {
+        date: get(data, 'data.adminLockOrUnlockOffering.date'),
+        user: get(data, 'data.adminLockOrUnlockOffering.user'),
+        userId: get(data, 'data.adminLockOrUnlockOffering.userId'),
+      } : null;
+      offeringsStore.updateLockOffering(lockObj);
+      res();
+    } catch (error) {
+      rej(error);
+    }
+  });
+
   getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {
+      TOMBSTONE_HEADER_META_FRM: { isMultiForm: true },
+      TOMBSTONE_BASIC_FRM: { isMultiForm: false },
+      SUB_HEADER_BASIC_FRM: { isMultiForm: false },
+      HEADER_BASIC_FRM: { isMultiForm: false },
+      OFFERING_CONTENT_FRM: { isMultiForm: true },
+      OFFERING_MISC_FRM: { isMultiForm: false },
       INVEST_NOW_TOC_FRM: { isMultiForm: true },
+      GALLERY_FRM: { isMultiForm: true },
     };
     return metaDataMapping[formName][getField];
   }
 
-  reOrderHandle = (orderedForm = 'OFFERING_CONTENT_FRM', form, arrayName = 'content') => {
+  reOrderHandle = (orderedForm, form, arrayName) => {
     const content = toJS(orderedForm).map((d, index) => ({ ...d, order: { ...d.order, value: index + 1 } }));
     this.setFieldValue(form, content, `fields.${arrayName}`);
+  }
+
+  toggleVisible = (index) => {
+    this.GALLERY_FRM = Validator.onArrayFieldChange(
+      this.GALLERY_FRM,
+      { name: 'isVisible', value: !this.GALLERY_FRM.fields.gallery[index].isVisible.value },
+      'gallery',
+      index,
+    );
+    this.currTime = +new Date();
   }
 
   setFormData = (form, ref, keepAtLeastOne) => {
@@ -203,6 +486,7 @@ export class ManageOfferingStore extends DataModelStore {
       const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
       if (index > -1) {
         const pageData = investNow[index];
+        pageData.hideHeader = [pageData.hideHeader];
         this.INVEST_NOW_PAGE_FRM = Validator.setFormData(this.INVEST_NOW_PAGE_FRM, pageData);
         this.INVEST_NOW_PAGE_FRM = Validator.validateForm(this.INVEST_NOW_PAGE_FRM);
       }
@@ -210,19 +494,29 @@ export class ManageOfferingStore extends DataModelStore {
   }
 }
 
-  decorate(ManageOfferingStore, {
-    ...dataModelStore.decorateDefault,
-    INVEST_NOW_TOC_FRM: observable,
-    INVEST_NOW_PAGE_FRM: observable,
-    initLoad: observable,
-    onDragSaveEnable: observable,
-    getAgreementTocList: computed,
-    reOrderHandle: action,
-    resetInitLoad: action,
-    updateOffering: action,
-    updateOfferingMutation: action,
-    setFormData: action,
-    setFormDataV2: action,
-  });
+decorate(ManageOfferingStore, {
+  ...dataModelStore.decorateDefault,
+  TOMBSTONE_BASIC_FRM: observable,
+  onDragSaveEnable: observable,
+  OFFERING_CONTENT_FRM: observable,
+  TOMBSTONE_HEADER_META_FRM: observable,
+  GALLERY_FRM: observable,
+  HEADER_BASIC_FRM: observable,
+  OFFERING_MISC_FRM: observable,
+  SUB_HEADER_BASIC_FRM: observable,
+  uploadFileToS3: action,
+  campaignStatus: computed,
+  INVEST_NOW_TOC_FRM: observable,
+  INVEST_NOW_PAGE_FRM: observable,
+  initLoad: observable,
+  getAgreementTocList: computed,
+  reOrderHandle: action,
+  resetInitLoad: action,
+  updateOffering: action,
+  toggleVisible: action,
+  updateOfferingMutation: action,
+  setFormData: action,
+  setFormDataV2: action,
+});
 
 export default new ManageOfferingStore();

@@ -21,7 +21,7 @@ export default class Overview extends Component {
         <Header as="h4">
           {signupStatus.isMigratedFullAccount
             ? <>Please establish your<Responsive minWidth={992}><br /></Responsive>investor profile</>
-            : <>Let{"'"}s get started</>
+            : <>Let{'\''}s get started</>
           }
         </Header>
         {!isMobile && <Divider hidden />}
@@ -48,7 +48,7 @@ export default class Overview extends Component {
       <>
         {overviewInfo}
         <div className={!isMobile ? '' : 'center-align'}>
-          <Button fluid={isMobile} primary className="relaxed" content="Continue" onClick={this.handleChangeStep} />
+          <Button fluid={isMobile} primary className="relaxed" data-cy="inv-profile-overview" content="Continue" onClick={this.handleChangeStep} />
           <p className="mt-20"><Link to={`${this.props.match.url}/confirm`}>I’ll do it later</Link></p>
         </div>
         {!signupStatus.isMigratedFullAccount

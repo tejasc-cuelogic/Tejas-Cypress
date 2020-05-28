@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Card, Button, Form, Grid, Divider, Header } from 'semantic-ui-react';
+import { Card, Button, Form, Grid, Divider } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import formHOC from '../../../../../../theme/form/formHOC';
@@ -23,7 +23,7 @@ function FileFactory(props) {
 
   const { factoryStore, smartElement } = props;
   const {
-    FILEFACTORY_FRM, formChangeForPlugin, inProgress, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
+    FILEFACTORY_FRM, formChangeForPlugin, inProgress, pluginObj, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
   } = factoryStore;
 
   return (
@@ -40,6 +40,7 @@ function FileFactory(props) {
                       onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
                       containerclassname: 'dropdown-field mlr-0',
                       placeholder: 'Choose here',
+                      containerwidth: 16,
                       options: FILEFACTORY_FRM.fields.method.values,
                       className: 'mb-80',
                     })}
@@ -47,8 +48,7 @@ function FileFactory(props) {
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} />
                   </Grid.Column>
                   <Grid.Column width={8}>
-                    <Header as="h5">Payload</Header>
-                    <DynamicFormInput {...props} formPayload={DYNAMCI_PAYLOAD_FRM.FILEFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'FILEFACTORY' }} selectedPlugin={currentPluginSelected} />
+                    <DynamicFormInput {...props} listType="adminListFilePlugins" pluginObj={pluginObj} formPayload={DYNAMCI_PAYLOAD_FRM.FILEFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'FILEFACTORY' }} selectedPlugin={currentPluginSelected} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>

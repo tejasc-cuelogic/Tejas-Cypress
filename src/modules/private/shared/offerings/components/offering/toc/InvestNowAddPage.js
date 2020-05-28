@@ -40,6 +40,8 @@ function InvestNowAddPage(props) {
     <div className="inner-content-spacer">
       <Form>
         {smartElement.Input('title', { fielddata: INVEST_NOW_PAGE_FRM.fields.title })}
+        {smartElement.Input('note', { fielddata: INVEST_NOW_PAGE_FRM.fields.note })}
+        {smartElement.FormCheckBox('hideHeader', { defaults: true, fielddata: INVEST_NOW_PAGE_FRM.fields.hideHeader })}
         <Divider hidden />
           <OfferingButtonGroup
             buttonTitle={['PAGE_EDIT'].includes(type) ? 'Update' : 'Create'}

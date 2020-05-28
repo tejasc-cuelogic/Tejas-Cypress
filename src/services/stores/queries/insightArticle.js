@@ -33,6 +33,7 @@ query adminInsightsArticle($id: ID!) {
     title
     banner
     featuredImage
+    isFeatured
     content
     category
     categoryId
@@ -43,9 +44,7 @@ query adminInsightsArticle($id: ID!) {
     updated {
       by
       date
-      __typename
     }
-    __typename
   }
 }
 `;
@@ -116,6 +115,7 @@ query adminInsightArticlesListByFilter($categoryId: String, $articleStatus: Arti
     featuredImage
     tags
     articleStatus
+    visible
     minuteRead
     title
     author

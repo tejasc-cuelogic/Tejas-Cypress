@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get, orderBy } from 'lodash';
+import { get, orderBy, camelCase } from 'lodash';
 import { Header, Grid, Segment, Label } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared';
 import BonusRewardsList from './BonusRewardsList';
@@ -36,8 +36,8 @@ class BonusRewards extends Component {
     return (
       <div className={this.props.newLayout ? '' : 'campaign-content-wrapper'}>
         <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
-          <span className="anchor" id={this.props.newLayout ? 'bonus-rewards' : ''} />
-          Bonus Rewards
+          <span className="anchor" id={this.props.newLayout ? this.props.title ? camelCase(this.props.title) : 'bonus-rewards' : ''} />
+          {this.props.title || 'Bonus Rewards'}
         </Header>
         {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
           ? (

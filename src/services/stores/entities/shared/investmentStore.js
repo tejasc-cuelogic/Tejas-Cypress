@@ -55,6 +55,8 @@ export class InvestmentStore {
 
   @observable isUpdateLimitReflect = false;
 
+  @observable transferRequestDraft = 'ACH';
+
   @action
   setShowTransferRequestErr = (status) => {
     this.showTransferRequestErr = status;
@@ -278,7 +280,7 @@ export class InvestmentStore {
   @action
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
     uiStore.setProgress();
-    if (this.investmentAmount) {
+    if (this.investmentAmount && !money.isZero(this.investmentAmount)) {
       const { campaignStatus } = campaignStore;
       if (campaignStatus.isRealEstate && this.realEstateValidation()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
@@ -311,6 +313,7 @@ export class InvestmentStore {
               offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
               accountId: this.getSelectedAccountTypeId,
               transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
+              draftMethod: this.transferRequestDraft,
               // creditToSpend: this.getSpendCreditValue,
               callbackUrl: `${window.location.origin}/secure-gateway`,
             },
@@ -373,6 +376,7 @@ export class InvestmentStore {
       }
     } else {
       resolve();
+      uiStore.setProgress(false);
     }
   });
 
@@ -419,7 +423,7 @@ export class InvestmentStore {
   }
 
   @action
-  investNowSubmit = () => {
+  investNowSubmit = (addUncheckedToc = false) => {
     const offeringIdToUpdate = campaignStore.getOfferingId
       ? campaignStore.getOfferingId : portfolioStore.currentOfferingId;
     if (this.agreementDetails && offeringIdToUpdate) {
@@ -429,7 +433,11 @@ export class InvestmentStore {
         investmentAmount: this.investmentAmount.toString(),
         agreementId: this.agreementDetails.agreementId,
         transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
+        draftMethod: this.transferRequestDraft,
       };
+      if (addUncheckedToc) {
+        variables.uncheckedToc = agreementsStore.getUncheckedOptionalToc || [];
+      }
       uiStore.setProgress();
       return new Promise((resolve) => {
         client

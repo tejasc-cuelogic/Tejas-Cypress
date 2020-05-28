@@ -155,7 +155,7 @@ class AccountType extends Component {
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if ((accountToConsider && accountToConsider.length === 1 && isDocumentUpload === true) || (this.props.changeInvest && regulationType)) {
+    } else if ((accountToConsider && accountToConsider.length === 1 && isDocumentUpload === true) || (this.props.changeInvest && regulationType) || (accountToConsider && accountToConsider.length > 1 && isDocumentUpload === true)) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         if (this.props.changeInvest) {
           // const accreditationStatus = get(userDetails, 'accreditation.status');
@@ -201,11 +201,11 @@ class AccountType extends Component {
       setStepToBeRendered(2);
     } else if (investAccTypes && investAccTypes.values.length === 1 && isDocumentUpload === true) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
+        const { getInvestorAccountById } = this.props.portfolioStore;
+        const offeringRegulation = campaign && campaign.keyTerms ? get(campaign, 'keyTerms.regulation') : get(getInvestorAccountById, 'offering.keyTerms.regulation');
+        const accreditationStatus = get(userDetails, 'accreditation.status');
+        const isParallelOfferingModelToShow = !!((userAccredetiationState === 'EXPIRED') || (offeringRegulation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus)));
         if (this.props.changeInvest) {
-          const { getInvestorAccountById } = this.props.portfolioStore;
-          const offeringRegulation = campaign && campaign.keyTerms ? get(campaign, 'keyTerms.regulation') : get(getInvestorAccountById, 'offering.keyTerms.regulation');
-          const accreditationStatus = get(userDetails, 'accreditation.status');
-          const isParallelOfferingModelToShow = !!((userAccredetiationState === 'EXPIRED') || (offeringRegulation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus)));
           if (isUpdateLimitReflect || locationURL.includes('change-investment-limit')) {
             this.props.investmentStore.setFieldValue('isUpdateLimitReflect', true);
             setFieldValue('disableNextbtn', false);
@@ -214,7 +214,7 @@ class AccountType extends Component {
             setFieldValue('disableNextbtn', false);
             setStepToBeRendered(1);
           }
-        } else if (userStatus === 'FULL') {
+        } else if (userStatus === 'FULL' && !isParallelOfferingModelToShow) {
           setFieldValue('disableNextbtn', false);
           setStepToBeRendered(1);
         }

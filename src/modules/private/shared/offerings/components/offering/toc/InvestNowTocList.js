@@ -19,32 +19,30 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({ toc, handleAction, preview, isReadOnly, tocIndex, pageIndex }) => (
   <div className="row-wrap striped-table">
     <div className="balance first-column break-text">
-      <DragHandle />
+      {!isReadOnly && <DragHandle />}
       <div>
-      {preview(get(toc, 'label'))}
+        {preview(get(toc, 'label'))}
       </div>
     </div>
     <div className="balance width-100">
       {get(toc, 'account') ? accountTitle[get(toc, 'account')] : 'N/A'}
     </div>
-    <div className="action right-align width-100">
-      <Button.Group>
-        {!isReadOnly
-          && (
-            <>
-              <Button color="green" className="link-button" onClick={e => handleAction(e, { action: 'REQUIRED', tocIndex, pageIndex })}>
-                <Icon name="asterisk" color={get(toc, 'required') ? 'green' : ''} />
-              </Button>
-              <Button icon className="link-button" onClick={e => handleAction(e, { action: 'EDIT', tocIndex, pageIndex })}>
-                <Icon className="ns-pencil" />
-              </Button>
-              <Button color="red" icon className="link-button" onClick={e => handleAction(e, { action: 'DELETE', tocIndex, pageIndex })}>
-                <Icon className="ns-trash" color="red" />
-              </Button>
-            </>
-          )
-        }
-      </Button.Group>
+    <div className={`action ${isReadOnly ? '' : 'right-align'} width-100`}>
+      {!isReadOnly
+        ? (
+          <Button.Group>
+            <Button color="green" className="link-button" onClick={e => handleAction(e, { action: 'REQUIRED', tocIndex, pageIndex })}>
+              <Icon name="asterisk" color={get(toc, 'required') ? 'green' : ''} />
+            </Button>
+            <Button icon className="link-button" onClick={e => handleAction(e, { action: 'EDIT', tocIndex, pageIndex })}>
+              <Icon className="ns-pencil" />
+            </Button>
+            <Button color="red" icon className="link-button" onClick={e => handleAction(e, { action: 'DELETE', tocIndex, pageIndex })}>
+              <Icon className="ns-trash" color="red" />
+            </Button>
+          </Button.Group>
+        ) : get(toc, 'required') ? 'Yes' : 'No'
+      }
     </div>
   </div>
 ));
@@ -65,30 +63,32 @@ const SortableList = SortableContainer(({ data, handleAction, preview, isReadOnl
   </div>
 ));
 
-const ToCList = ({ toc, title, regulation, isReadOnly, onSortEnd, handleAction, preview, addMore }) => (
+const ToCList = ({ toc, title, note, hideHeader, regulation, isReadOnly, onSortEnd, handleAction, preview, addMore }) => (
   <>
-  {title && <Header as="h6" content={title} />}
-  <div className="ui card fluid">
-    <div className="ui basic table">
-      <div className="row-wrap striped-table thead">
-        <div className="balance first-column">Label</div>
-        <div className="balance width-100">Account</div>
-        <div className="action right-align width-100" />
+    {hideHeader && <Header as="h6" content="Header: Hidden" />}
+    {title && <Header as="h6" content={`Title: ${title}`} />}
+    {note && <Header as="h6" content={`Note: ${note}`} />}
+    <div className="ui card fluid">
+      <div className="ui basic table">
+        <div className="row-wrap striped-table thead">
+          <div className="balance first-column">Label</div>
+          <div className="balance width-100">Account</div>
+          {isReadOnly ? <div className="balance width-100">Required</div> : <div className="action right-align width-100" />}
+        </div>
+        <SortableList
+          pageIndex={toc.page}
+          data={toc.toc}
+          pressDelay={100}
+          handleAction={handleAction}
+          onSortEnd={e => onSortEnd(e, toc.page, regulation)}
+          lockAxis="y"
+          useDragHandle
+          preview={preview}
+          isReadOnly={isReadOnly}
+        />
       </div>
-      <SortableList
-        pageIndex={toc.page}
-        data={toc.toc}
-        pressDelay={100}
-        handleAction={handleAction}
-        onSortEnd={e => onSortEnd(e, toc.page, regulation)}
-        lockAxis="y"
-        useDragHandle
-        preview={preview}
-        isReadOnly={isReadOnly}
-      />
     </div>
-  </div>
-  {!isReadOnly && <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, 'TOC', toc.page)}>+ Add ToC</Button>}
+    {!isReadOnly && <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, 'TOC', toc.page)}>+ Add ToC</Button>}
   </>
 );
 
@@ -195,30 +195,37 @@ export default class InvestNowTocList extends Component {
   preview = label => this.props.agreementsStore.preview(label, { docuSignHandeler: this.callbackFun, refLink: '', agreementPDFLoader: this.callbackFun });
 
   render() {
-    const { data, regulation, offeringsStore } = this.props;
+    const { data, regulation, offeringsStore, manageOfferingStore } = this.props;
     const { offer } = offeringsStore;
+    const { campaignStatus } = manageOfferingStore;
     const { showConfirm, activeIndex, showModal, page, tocIndex, previewMode } = this.state;
-    const isReadOnly = get(offer, 'stage') !== 'CREATION';
+    const tocTemplate = get(offer, 'investNow.template');
+    const isReadOnly = campaignStatus.lock || get(offer, 'stage') !== 'CREATION' || tocTemplate !== 2 || (!get(offer, 'investNow.page[0]') && tocTemplate === 2);
     return (
       <>
         {!isReadOnly && <Button size="small" color="blue" floated="right" className="link-button mt-20 mb-20" onClick={e => this.addMore(e, 'PAGE')}>+ Add Page</Button>}
         {data && data.length ? data.map((toc, index) => (data.length === 1 ? (
           <>
             <div className="toc-header">
-              <Header as="h6" content={toc.title} />
+              <Header as="h6">
+                {/* content={`Header: ${get(toc, 'hideHeader')}`} */}
+                {get(toc, 'hideHeader') && <Header as="h6" className="mt-14" content="Header: Hidden" />}
+                {get(toc, 'title') && <Header as="h6" className="mt-14" content={`Title: ${get(toc, 'title')}`} />}
+                {get(toc, 'note') && <Header as="h6" className="mt-14" content={`Note: ${get(toc, 'note')}`} />}
+              </Header>
               <Button.Group>
                 {data.length
                   && (
-                  <Button color="green" className="link-button mb-10" onClick={() => this.handlePreview(toc.page)}>
-                    <Icon className="ns-view" />
-                  </Button>
-                )}
+                    <Button color="green" className="link-button mb-10" onClick={() => this.handlePreview(toc.page)}>
+                      <Icon className="ns-view" />
+                    </Button>
+                  )}
                 {!isReadOnly && data.length
                   && (
-                  <Button className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}>
-                    <Icon className="ns-pencil" />
-                  </Button>
-                )}
+                    <Button className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}>
+                      <Icon className="ns-pencil" />
+                    </Button>
+                  )}
               </Button.Group>
             </div>
             <ToCList
@@ -232,33 +239,35 @@ export default class InvestNowTocList extends Component {
             />
           </>
         ) : (
-          <Accordion exclusive={false} fluid styled className={`card-style ${index === 0 ? 'mt-20' : ''}`}>
-            <Accordion.Title onClick={() => this.toggleAccordianContent(index)}>
-              <Icon className={activeIndex.includes(index) ? 'ns-chevron-up' : 'ns-chevron-down'} />
-              {`${CAMPAIGN_KEYTERMS_REGULATION[toc.regulation]} ToC Page - ${toc.page}`}
-              {!isReadOnly
-              && (
-                <>
-                  {data.length > 1 && <Button floated="right" color="red" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-trash" /></Button>}
-                  {data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
-                </>
-              )}
-              {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => this.handlePreview(toc.page)}><Icon className="ns-view" /></Button>}
-            </Accordion.Title>
-            <Accordion.Content active={activeIndex.includes(index)} className="categories-acc">
-            <ToCList
-              toc={toc}
-              title={toc.title}
-              handleAction={this.handleAction}
-              onSortEnd={this.onSortEnd}
-              preview={this.preview}
-              isReadOnly={isReadOnly}
-              regulation={regulation}
-              addMore={this.addMore}
-            />
-            </Accordion.Content>
-          </Accordion>
-        ))) : ''}
+            <Accordion exclusive={false} fluid styled className={`card-style ${index === 0 ? 'mt-20' : ''}`}>
+              <Accordion.Title onClick={() => this.toggleAccordianContent(index)}>
+                <Icon className={activeIndex.includes(index) ? 'ns-chevron-up' : 'ns-chevron-down'} />
+                {`${CAMPAIGN_KEYTERMS_REGULATION[toc.regulation]} ToC Page - ${toc.page}`}
+                {!isReadOnly
+                  && (
+                    <>
+                      {data.length > 1 && <Button floated="right" color="red" className="link-button mb-10" onClick={() => { this.updateState('showConfirm', 'PAGE'); this.updateState('page', toc.page); }}><Icon className="ns-trash" /></Button>}
+                      {data.length && <Button floated="right" className="link-button mb-10" onClick={() => { this.updateState('showModal', 'PAGE_EDIT'); this.updateState('page', toc.page); }}><Icon className="ns-pencil" /></Button>}
+                    </>
+                  )}
+                {data.length && <Button color="green" floated="right" className="link-button mb-10" onClick={() => this.handlePreview(toc.page)}><Icon className="ns-view" /></Button>}
+              </Accordion.Title>
+              <Accordion.Content active={activeIndex.includes(index)} className="categories-acc">
+                <ToCList
+                  toc={toc}
+                  title={toc.title}
+                  note={toc.note}
+                  hideHeader={toc.hideHeader}
+                  handleAction={this.handleAction}
+                  onSortEnd={this.onSortEnd}
+                  preview={this.preview}
+                  isReadOnly={isReadOnly}
+                  regulation={regulation}
+                  addMore={this.addMore}
+                />
+              </Accordion.Content>
+            </Accordion>
+          ))) : ''}
         {previewMode && <InvestNowTocPreview handleClosePreview={this.handleClosePreview} page={page} regulation={regulation} previewMode callbackFun={this.callbackFun} />}
         <Modal open={!!showModal} closeIcon onClose={() => this.updateState('showModal', null)} size="small" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">

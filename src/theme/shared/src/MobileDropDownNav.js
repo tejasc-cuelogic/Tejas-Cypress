@@ -5,7 +5,7 @@ import { matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { NavItems } from '../../layout/NavigationItems';
 
-@inject('campaignStore', 'navStore')
+@inject('campaignStore', 'navStore', 'uiStore')
 @observer
 export default class MobileDropDownNav extends React.Component {
   state = {
@@ -44,13 +44,15 @@ export default class MobileDropDownNav extends React.Component {
 
   render() {
     const {
-      navItems, location, className, navStore, slideUpNot, useIsActive, id, newLayout, refMatch, isPortfolio,
+      navItems, location, className, navStore, slideUpNot, useIsActive, id, newLayout, refMatch, isPortfolio, uiStore,
     } = this.props;
     const { navStatus, campaignHeaderStatus } = navStore;
-    const navItemsComponent = <NavItems needNavLink newLayout={newLayout} onToggle={hash => this.setActiveHash(hash)} refMatch={refMatch} sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />;
+    const { topBanner } = uiStore;
+    const { postNavCount } = this.props.campaignStore;
+    const navItemsComponent = <NavItems needNavLink newLayout={newLayout} onToggle={hash => this.setActiveHash(hash)} refMatch={refMatch} sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={postNavCount} navItems={navItems} />;
     return (
       <Responsive maxWidth={991} as={React.Fragment}>
-        <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className={location.pathname.startsWith('/dashboard/') ? `private-dropdown ${isPortfolio ? 'sticky' : ''}` : ''}>
+        <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className={location.pathname.startsWith('/dashboard/') ? `private-dropdown ${isPortfolio ? 'sticky' : ''} ${topBanner ? 'large-header' : ''}` : ''}>
           {newLayout ? (
             <Menu text className={`campaign-mobile-menu-v2 ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
               {navItemsComponent}

@@ -53,7 +53,7 @@ export default class HtmlEditor extends React.Component {
   getConfig = (keyStart, overrides) => {
     const config = {
       placeholderText: 'Enter here..',
-      toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen', '|', 'popup-btn'],
+      toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'fontSize', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', '|', 'popup-btn'],
       charCounterCount: false,
       editorClass: 'html-editor',
       key: FROALA_EDITOR_LICENSE,
@@ -101,7 +101,7 @@ export default class HtmlEditor extends React.Component {
                 return false;
               }).catch((error) => {
                 editor.edit.on();
-                console.log(error);
+                window.logger(error);
                 this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
                 return false;
               });
@@ -114,7 +114,7 @@ export default class HtmlEditor extends React.Component {
           editor.edit.off();
         },
         'froalaEditor.image.error': (e, editor, error) => {
-          console.log(error);
+          window.logger(error);
         },
       },
     };
@@ -129,7 +129,7 @@ export default class HtmlEditor extends React.Component {
     const { keyStart, readOnly, tag, noDivWrap } = this.props;
     if (readOnly) {
     const FroalaView = <FroalaEditorView tag={tag} model={this.props.content} />;
-    return noDivWrap ? FroalaView : <div className="parsed-data">{FroalaView}</div>;
+    return noDivWrap ? FroalaView : <div className="parsed-data overflow-wrap">{FroalaView}</div>;
     }
     return (
       <div>

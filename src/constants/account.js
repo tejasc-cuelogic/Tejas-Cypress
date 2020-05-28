@@ -655,7 +655,7 @@ export const FINANCES = {
     fieldType: 'integer',
     customErrors: {
       required: 'required',
-      min: 'Please enter a valid amount to deposit',
+      min: 'Please enter a valid amount',
     },
   },
   annualIncomeCurrentYear: {

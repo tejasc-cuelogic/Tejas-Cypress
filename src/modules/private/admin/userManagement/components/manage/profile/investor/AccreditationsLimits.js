@@ -64,12 +64,26 @@ export default class AccreditationsLimits extends Component {
                         <dt>Status :</dt>
                         <b><dd className={`${(get(accreditationData[account.name], 'status') === 'CONFIRMED' && get(accreditationData[account.name], 'expiration') && (DataFormatter.diffDays(DataFormatter.formatedDate(get(accreditationData[account.name], 'expiration')), false, true) < 0)) ? 'negative' : get(accreditationData[account.name], 'status') === 'REQUESTED' ? 'warning' : get(accreditationData[account.name], 'status') === 'CONFIRMED' ? 'positive' : ['INVALID', 'EXPIRED'].includes(get(accreditationData[account.name], 'status')) ? 'negative' : ''}-text`}>{get(accreditationData[account.name], 'status') === 'CONFIRMED' && get(accreditationData[account.name], 'expiration') && (DataFormatter.diffDays(DataFormatter.formatedDate(get(accreditationData[account.name], 'expiration')), false, true) < 0) ? 'Expired' : get(accreditationData[account.name], 'status') ? ACCREDITATION_STATUS_LABEL[get(accreditationData[account.name], 'status')] : 'N/A'}</dd></b>
                       </dl>
-                      {accreditationData[account.name].status === 'INVALID'
+                      {['CONFIRMED', 'INVALID', 'EXPIRED'].includes(accreditationData[account.name].status)
                         ? (
-                          <dl className="dl-horizontal">
-                            <dt>Message :</dt>
-                            <dd>{get(accreditationData[account.name], 'reviewed.message') || 'N/A'}</dd>
-                          </dl>
+                          <>
+                            <dl className="dl-horizontal">
+                              <dt>Expiration :</dt>
+                              <dd>{DataFormatter.getDateAsPerTimeZone(get(accreditationData[account.name], 'expiration'), true, false, false)}</dd>
+                            </dl>
+                            <dl className="dl-horizontal">
+                              <dt>Details :</dt>
+                              <dd>{`Request ${accreditationData[account.name].status === 'CONFIRMED' ? 'approved' : 'declined'} by ${get(accreditationData[account.name], 'reviewed.by')} on ${DataFormatter.getDateAsPerTimeZone(get(accreditationData[account.name], 'reviewed.date'), true, false, false)}`}</dd>
+                            </dl>
+                            <dl className="dl-horizontal">
+                              <dt>Message :</dt>
+                              <dd>{get(accreditationData[account.name], 'reviewed.message') || 'N/A'}</dd>
+                            </dl>
+                            <dl className="dl-horizontal">
+                              <dt>Justification :</dt>
+                              <dd>{get(accreditationData[account.name], 'reviewed.justification') || 'N/A'}</dd>
+                            </dl>
+                          </>
                         ) : ''
                       }
                       <Form.Group widths={4}>

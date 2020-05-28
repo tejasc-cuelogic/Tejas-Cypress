@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Some generally used function definations being used at multiple places
  */
@@ -13,6 +14,7 @@ import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLO
 import authStore from '../services/stores/entities/shared/authStore';
 import userStore from '../services/stores/entities/userStore';
 import DataFormatter from './utilities/DataFormatter';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL, CAMPAIGN_KEYTERMS_REGULATION } from '../constants/offering';
 
 export class Utility {
   // Default options for the toast
@@ -99,7 +101,7 @@ export class Utility {
   }).format(amount)
 
   formattedSSNNumber = (ssnNumber) => {
-    if (!ssnNumber) return null;
+    if (!ssnNumber) { return null; }
     // const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, 'X');
     const cyrptedSSNNumber = ssnNumber;
     const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
@@ -107,17 +109,17 @@ export class Utility {
   }
 
   isUuid = value => value
-  .match(new RegExp(/([a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}){1}/)) !== null
+  .match(new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/)) !== null
 
   encryptNumber = (number) => {
-    if (!number) return null;
+    if (!number) { return null; }
     let encryptedNumber = number.replace(/.(?=.{4,}$)/g, '...');
     encryptedNumber = encryptedNumber.slice(-7);
     return encryptedNumber;
   }
 
   encryptNumberWithX = (number) => {
-    if (!number) return null;
+    if (!number) { return null; }
     const encryptedNumber = number.replace(/.(?=.{4,}$)/g, 'X');
     return encryptedNumber;
   }
@@ -201,7 +203,7 @@ export class Utility {
         });
       }
     } catch (e) {
-      console.log(e);
+      window.logger(e);
     }
   }
 
@@ -259,7 +261,7 @@ export class Utility {
     try {
       document.getElementsByName('ssn')[0].value = '';
     } catch (e) {
-      console.log(e);
+      window.logger(e);
     }
   }
 
@@ -340,7 +342,7 @@ export class Utility {
     try {
       return sanitizeHtml(c);
     } catch (e) {
-      console.log(e);
+      window.logger(e);
       return '';
     }
   };
@@ -385,6 +387,14 @@ export class Utility {
     }
   };
 
+  formatValue = (format, value) => {
+    if (format && format.search('{{var}}') > -1) {
+      const d = format.replace('{{var}}', value);
+      return d;
+    }
+    return value;
+  };
+
   checkAccreditationExpiryStatus = (expirationDate, isUnix = false) => {
     let dateDiff = '';
     if (expirationDate) {
@@ -400,6 +410,22 @@ export class Utility {
     const regulationType = _.get(offeringRegulationArr, '[0]');
     return regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
   }
+
+  enumToText = (valKey = '', value, fullText = false) => {
+    let val = value;
+    if (valKey) {
+      let key = valKey.split('.');
+      if (valKey && key.length) {
+        key = key[key.length - 1];
+        if (key === 'securities') {
+          val = CAMPAIGN_KEYTERMS_SECURITIES[value];
+        } else if (key === 'regulation') {
+          val = fullText ? CAMPAIGN_KEYTERMS_REGULATION[value] : CAMPAIGN_KEYTERMS_REGULATION_PARALLEL[value];
+        }
+      }
+    }
+    return val;
+  };
 
   cleanMsg = msg => (msg ? msg.replace('GraphQL error: ', '').replace('Error: ', '') : '');
 }

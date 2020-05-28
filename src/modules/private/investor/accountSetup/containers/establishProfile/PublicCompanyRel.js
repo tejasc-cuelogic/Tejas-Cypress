@@ -59,8 +59,8 @@ class PublicCompanyRel extends Component {
         {!inProgressArray.includes('PUBLIC_COMPANY_REL')
           && (
             <>
-              <Button basic onClick={() => { resetForm('PUBLIC_COMPANY_REL_FRM'); upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered]); }} fluid={isMobile} className={`${isMobile ? 'mb-30 relaxed' : ''} primary-hover`} content="No" />
-              <Button basic className={`${!isMobile && 'ml-10'} primary-hover`} onClick={this.handleShowFields} content="Yes" />
+              <Button basic data-cy="no-pr" onClick={() => { resetForm('PUBLIC_COMPANY_REL_FRM'); upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered]); }} fluid={isMobile} className={`${isMobile ? 'mb-20 relaxed' : ''} primary-hover`} content="No" />
+              <Button basic className={`${!isMobile ? 'ml-10' : 'mlr-0'} primary-hover`} onClick={this.handleShowFields} content="Yes" fluid={isMobile} />
             </>
           )
         }

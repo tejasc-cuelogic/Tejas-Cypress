@@ -82,12 +82,19 @@ export const AGREEMENT_TEMPLATE_DETAILS_INFO = {
     values: [],
     error: undefined,
     rule: 'required',
+    defaultValue: [],
   },
   title: {
     value: '',
     label: '',
     error: undefined,
     rule: 'required',
+  },
+  hideHeader: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'optional',
   },
   }],
 };

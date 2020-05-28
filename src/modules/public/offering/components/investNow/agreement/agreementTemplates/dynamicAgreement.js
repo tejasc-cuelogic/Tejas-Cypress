@@ -7,6 +7,7 @@ import { FormCheckbox } from '../../../../../../../theme/form';
 function DynamicAgreement(props) {
   const { inProgress, showError, submit, setCheckbox, isAgreementFormValid, investmentFlowErrorMessage, index } = props;
   const { AGREEMENT_DETAILS_FORM } = props.agreementsStore;
+  const isNextBtnVisible = !!(AGREEMENT_DETAILS_FORM.fields.page.length > 1 && (index !== (AGREEMENT_DETAILS_FORM.fields.page.length - 1)));
   return (
     <Form
       error={(showError
@@ -28,7 +29,10 @@ function DynamicAgreement(props) {
         </Grid.Row>
       </Grid>
       <div className="mt-30">
-        <Button primary content="Invest" disabled={inProgress || !isAgreementFormValid} loading={inProgress} onClick={submit} />
+        {isNextBtnVisible
+          ? (<Button primary disabled={!isAgreementFormValid} content="Next" onClick={() => submit('NEXT')} />)
+          : (<Button primary content="Invest" disabled={inProgress || !isAgreementFormValid} loading={inProgress} onClick={() => submit('DYNAMIC')} />)
+        }
       </div>
       {!showError && investmentFlowErrorMessage
         && (

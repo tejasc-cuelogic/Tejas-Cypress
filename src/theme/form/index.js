@@ -15,3 +15,4 @@ export { default as ImageCropper } from './src/ImageCropper';
 export { default as HeaderCheckbox } from './src/HeaderCheckbox';
 export { default as FormPasswordStrength } from './src/FormPasswordStrength';
 export { default as FormArrowButton } from './src/FormArrowButton';
+export { default as FormColorPikcer } from './src/FormColorPikcer';

@@ -140,7 +140,7 @@ class Experience extends Component {
           {isExperiencedTypeSelected ? (
             <div className="mt-40">
               <div className={isMobile ? 'center-align' : ''}>
-                <Button primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FRM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
+                <Button primary className="relaxed" data-cy="inv-profile-exp" content="Continue to Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FRM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
               </div>
               {!isInvExperienceValid && noExperience
                 && (

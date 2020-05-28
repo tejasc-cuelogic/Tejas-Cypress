@@ -5,13 +5,83 @@ import { Button, Comment, Form, Segment, Header, Label, Divider, Message } from 
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
-import { FormTextarea } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import { FormTextarea } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { DataFormatter } from '../../../../../helper';
 
-const isMobile = document.documentElement.clientWidth < 768;
+const readMoreLength = 250;
 
+const CommentHeader = ({ newLayout, refLink, isMobile }) => (
+  <>
+    <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
+      Comments
+      <span className="anchor" id="comments" />
+    </Header>
+    <p>
+      Note that both NextSeed and issuers are notified of all comments immediately,
+      but there may be a slight delay in response to questions submitted outside of
+      standard business hours (9am to 5pm CST, Monday through Friday).
+      </p>
+    <p>
+      Most questions will be answered by issuers in approximately two business days,
+      although some questions require more thorough analyses and will take additional
+      time.
+      </p>
+    <p>See our <Link to={`${refLink}/community-guidelines`}>community guidelines</Link> on posting.</p>
+    {/* <p>
+      If you have any technical questions or questions about NextSeed, please
+        email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
+        </p> */}
+  </>
+);
+
+const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHandler, showButton, showCopy, match, errors, isMobile, showCancelButton, closeBtnHandler, visiblePost }) => (
+  <>
+    <Form className="public-form mt-30 clearfix" reply>
+      <FormTextarea
+        clear
+        fielddata={visiblePost && MESSAGE_FRM.fields.comment}
+        name="comment"
+        changed={msgEleChange}
+        containerclassname="secondary"
+        disabled={!(visiblePost)}
+      />
+      {showButton
+        && <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC' && visiblePost} onClick={btnHandler} disabled={!isFormValid || buttonLoader === 'PUBLIC' || !(visiblePost)} primary content="Post Comment" />}
+      {showCancelButton
+        && <Button fluid={isMobile} className={isMobile && 'mlr-0 mt-20 mb-30'} onClick={closeBtnHandler} disabled={buttonLoader === 'PUBLIC'} basic>Cancel</Button>}
+    </Form>
+    {errors
+      && (
+        <Message error className="mt-30">
+          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+        </Message>
+      )
+    }
+    {showCopy
+      && (
+        <>
+          <Divider hidden />
+          <p>
+            Note that both NextSeed and issuers are notified of all comments
+            immediately, but there may be a slight delay in response to
+            questions submitted outside of standard business hours (9am to
+            5pm CST, Monday through Friday).Most questions will be answered
+            by issuers in approximately two business days, although some
+            questions require more thorough analyses and will take additional
+            time.
+          </p>
+          <p>See our <Link to={`${match.url}/community-guidelines`}>community guidelines</Link> on posting. If you have any technical questions or questions about NextSeed,{' '}
+            please email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
+          </p>
+        </>
+      )
+    }
+  </>
+);
+
+// TODO: create a HOC for NsOvserverComponent
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'messageStore')
 @withRouter
 @observer
@@ -25,39 +95,28 @@ class Comments extends Component {
     this.props.messageStore.resetMessageForm();
   }
 
-  componentDidMount() {
-    if (!this.props.newLayout && !isMobile) {
-      const sel = 'anchor';
-      document.querySelector(`.${sel}`).scrollIntoView(true);
-    }
-  }
-
-  postNewComment = () => {
-    const { isUserLoggedIn } = this.props.authStore;
-    if (!isUserLoggedIn) {
-      this.props.uiStore.setRedirectURL(this.props.history.location);
-      this.props.uiStore.setAuthRef(this.props.refLink);
-      this.props.history.push('/login');
-    } else {
-      this.props.history.push(`${this.props.match.url}/postComment/NEW`);
-    }
-  }
-
   handleLogin = (e) => {
     e.preventDefault();
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
     if (!isUserLoggedIn) {
-      this.props.uiStore.setAuthRef(`${this.props.refLink}${this.props.newLayout ? '' : '/comments'}`);
-      this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}${this.props.newLayout ? '' : '/comments'}` });
+      this.props.uiStore.setAuthRef(`${this.props.refLink}${this.props.newLayout ? '#comments' : '/comments'}`);
+      this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}${this.props.newLayout ? '#comments' : '/comments'}` });
       this.props.history.push('/login');
     } else if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
       this.props.history.push(`${this.props.refLink}/confirm-comment-login`);
     }
   }
 
-  send = (scope, campaignSlug, currentMessage, campaignId) => {
-    this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage, campaignId);
+  send = async (scope, campaignSlug, currentMessage, campaignId) => {
+    const response = await this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage, campaignId);
+    if (response) {
+      if (currentMessage) {
+        this.closeTextBox(currentMessage);
+      } else {
+        this.props.messageStore.resetMessageForm();
+      }
+    }
   }
 
   toggleVisibility = (comment = null) => {
@@ -86,129 +145,50 @@ class Comments extends Component {
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
 
   render() {
-    //  props destructuring
     const { visible, visiblePost } = this.state;
-    const { isInvestorAccreditated } = this.props.userDetailsStore;
-    const { isUserLoggedIn } = this.props.authStore;
-    const { currentUser } = this.props.userStore;
-    const { errors } = this.props.uiStore;
-    const { activeAccounts, frozenAccounts } = this.props.userDetailsStore.signupStatus;
-    const { MESSAGE_FRM, msgEleChange, buttonLoader } = this.props.messageStore;
-    const { showOnlyOne, newLayout } = this.props;
-    const { campaign, commentsMainThreadCount } = this.props.campaignStore;
-    const { stepInRoute } = this.props.navStore;
-    //  user & campaign status
-    const loginOrSignup = stepInRoute;
-    const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
-    const accountStatusFull = activeAccounts.length;
-    const canPostComment = loggedInAsInvestor && accountStatusFull;
-    const campaignStage = get(campaign, 'stage');
-    // const accreditationStatus = this.props.userDetailsStore.currentUser.data.user.accreditation.status;
-    const passedProcessingDate = DataFormatter.getDateDifferenceInHoursOrMinutes(get(campaign, 'closureSummary.processingDate'), true, true).value <= 0;
-    const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull || frozenAccounts.length;
-    //  comments & campaign data
-    const campaignId = campaign && campaign.id;
-    const campaignSlug = campaign && campaign.offeringSlug;
-    const issuerId = campaign && campaign.issuerId;
-    let comments = campaign && campaign.comments;
-    comments = showOnlyOne ? [get(commentsMainThreadCount, '[0]')] : comments;
-    this.props.messageStore.setDataValue('currentOfferingId', campaignId);
-    const offeringRegulation = get(campaign, 'keyTerms.regulation');
-    const readMoreLength = 250;
-    const isValidForAccreditedStatus = !(['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status);
+    const { showOnlyOne, newLayout, messageStore, campaignStore, uiStore, match } = this.props;
+    const { errors, responsiveVars } = uiStore;
+    const { isMobile } = responsiveVars;
+    const { MESSAGE_FRM, msgEleChange, buttonLoader } = messageStore;
+    const { campaign, commentsMainThreadCount, campaignCommentsMeta, isPostedNewComment } = campaignStore;
+
+    const campaignId = get(campaign, 'id');
+    const campaignSlug = get(campaign, 'offeringSlug');
+    const issuerId = get(campaign, 'issuerId');
+    let comments = get(campaign, 'comments');
+    comments = showOnlyOne ? isPostedNewComment ? [get(comments, '[0]')] : [get(commentsMainThreadCount, '[0]')] : comments;
+    messageStore.setDataValue('currentOfferingId', campaignId);
+    const isNsAdmin = comment => get(comment, 'createdUserInfo.roles[0].name') === 'admin';
+    const isIssuerComment = comment => get(comment, 'createdUserInfo.id') === issuerId;
+
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
-        <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
-          Comments
-          <span className="anchor" id="comments" />
-        </Header>
-        {
-          // !showOnlyOne
-          // && (
-          <>
-            <p>
-              Note that both NextSeed and issuers are notified of all comments immediately,
-              but there may be a slight delay in response to questions submitted outside of
-              standard business hours (9am to 5pm CST, Monday through Friday).
-        </p>
-            <p>
-              Most questions will be answered by issuers in approximately two business days,
-              although some questions require more thorough analyses and will take additional
-              time.
-        </p>
-            <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
-            {/* <p>
-              If you have any technical questions or questions about NextSeed, please
-          email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
-        </p> */}
-          </>
-          // )
-        }
-        {!canPostComment && !frozenAccounts.length
-          ? (
-            <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
-              {loggedInAsInvestor && !accountStatusFull
-                ? (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
-                  ? <p>In order to leave a comment, please complete your account setup and verify your status as an accredited investor.</p>
-                  : <p>In order to leave a comment, please complete your account setup.</p>
-                : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
-                  ? <p>In order to leave a comment, please {get(loginOrSignup, 'word')} and verify your status as an <br />accredited investor.</p>
-                  : <p>In order to leave comments, please {get(loginOrSignup, 'word')} and verify your identity.</p>
-              }
-              <Form reply className="public-form clearfix">
-                {loggedInAsInvestor && !accountStatusFull
-                  ? <Link to="/dashboard/setup" className="ui button primary">Complete Account Setup</Link>
-                  : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button primary">{get(loginOrSignup, 'title')}</Link>
-                }
-              </Form>
-            </section>
-          )
-          : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
-            ? (
-              <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
-                {isInvestorAccreditated.requestedStatus
-                  ? (
-                    <p>In order to leave a comment, we must confirm your status as an accredited investor. If you have any questions about your
-                    approval status, please contact <a href="mailto: support@nextseed.com">support@nextseed.com</a>.</p>
-                  )
-                  : (
-                    <>
-                      <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
-                      <Form reply className="public-form clearfix">
-                        <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
-                      </Form>
-                    </>
-                  )
-                }
-              </section>
-            )
-            : (!disablePostComment)
-            && (
-              <>
-                {visiblePost
-                  ? (
-                    <Form className="public-form mt-30 clearfix" reply>
-                      <FormTextarea
-                        fielddata={MESSAGE_FRM.fields.comment}
-                        name="comment"
-                        changed={msgEleChange}
-                        containerclassname="secondary"
-                      />
-                      <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />
-                    </Form>
-                  ) : ''
-                }
-              </>
-            )
-        }
-        {errors
+        <CommentHeader refLink={match.url} newLayout={newLayout} isMobile={isMobile} />
+        {/* action will trigger requirements users need to filfill prior to posting a comment:
+            Log In, Verify Accreidted Status, Complete Account Setup (pass CIP), or if CIP Failed, FULL status on User */}
+        {campaignCommentsMeta.action
           && (
-            <Message error className="mt-30">
-              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-            </Message>
+            <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+              {campaignCommentsMeta.content}
+              {campaignCommentsMeta.action(this.handleLogin)}
+            </section>
+          )}
+        {(campaignCommentsMeta.isValid)
+          && (
+            <ReplyBox
+              MESSAGE_FRM={MESSAGE_FRM}
+              msgEleChange={msgEleChange}
+              buttonLoader={buttonLoader}
+              isFormValid={MESSAGE_FRM.meta.isValid}
+              showButton
+              btnHandler={() => this.send('PUBLIC', campaignSlug, null, campaignId)}
+              errors={errors}
+              isMobile={isMobile}
+              visiblePost={visiblePost}
+            />
           )
         }
-        {(comments && commentsMainThreadCount.length)
+        {(comments && commentsMainThreadCount.length) || (isPostedNewComment && comments.length)
           ? (
             <>
               <div color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>
@@ -216,12 +196,12 @@ class Comments extends Component {
                   && comments.map(c => (((c.createdUserInfo && c.createdUserInfo.id === issuerId
                     && c.approved)
                     || (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC' && (
-                      <Comment.Group minimal>
-                        <Comment key={c.id} className={`${((get(c, 'createdUserInfo.id') === issuerId) || get(c, 'createdUserInfo.roles[0].name') === 'admin') ? 'issuer-co mment' : ''}`}>
+                      <Comment.Group minimal key={`cG-${c.id}`}>
+                        <Comment key={c.id} className={`${((isIssuerComment(c)) || isNsAdmin(c)) ? 'issuer-co mment' : ''}`}>
                           <Comment.Content>
                             <Comment.Author>
-                              {(get(c, 'createdUserInfo.id') === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(c, 'createdUserInfo.roles[0].name') === 'admin' ? 'NextSeed' : get(c, 'createdUserInfo.info.firstName')}
-                              {((get(c, 'createdUserInfo.id') === issuerId) || get(c, 'createdUserInfo.roles[0].name') === 'admin') && <Label color={(get(c, 'createdUserInfo.id') === issuerId) ? 'green' : 'blue'} size="mini">{(get(c, 'createdUserInfo.id') === issuerId) ? 'ISSUER' : 'ADMIN'}</Label>}
+                              {(isIssuerComment(c)) ? get(campaign, 'keyTerms.shorthandBusinessName') : isNsAdmin(c) ? 'NextSeed' : get(c, 'createdUserInfo.info.firstName')}
+                              {((isIssuerComment(c)) || isNsAdmin(c)) && <Label color={(isIssuerComment(c)) ? 'green' : 'blue'} size="mini">{(isIssuerComment(c)) ? 'ISSUER' : 'ADMIN'}</Label>}
                             </Comment.Author>
                             <Comment.Metadata><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date'), true, true)}</span></Comment.Metadata>
                             <Comment.Text className="mt-20">
@@ -247,25 +227,13 @@ class Comments extends Component {
                                   && c.threadComments.map(tc => ((tc.createdUserInfo && tc.createdUserInfo.id === issuerId
                                     && tc.approved)
                                     || (tc.createdUserInfo && tc.createdUserInfo.id !== issuerId)) && tc.scope === 'PUBLIC' && (
-                                      <Comment key={tc.id} className={`${((get(tc, 'createdUserInfo.id') === issuerId) || get(tc, 'createdUserInfo.roles[0].name') === 'admin') ? 'issuer-comment' : ''}`}>
+                                      <Comment key={tc.id} className={`${((isIssuerComment(tc)) || isNsAdmin(tc)) ? 'issuer-comment' : ''}`}>
                                         <Comment.Content>
                                           <Comment.Author>
-                                            {(get(tc, 'createdUserInfo.id') === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(tc, 'createdUserInfo.roles[0].name') === 'admin' ? 'NextSeed' : get(tc, 'createdUserInfo.info.firstName')}
-                                            {((get(tc, 'createdUserInfo.id') === issuerId) || get(tc, 'createdUserInfo.roles[0].name') === 'admin') && <Label color={(get(tc, 'createdUserInfo.id') === issuerId) ? 'green' : 'black'} size="mini">{(get(tc, 'createdUserInfo.id') === issuerId) ? 'ISSUER' : 'NEXTSEED'}</Label>}
+                                            {(isIssuerComment(tc)) ? get(campaign, 'keyTerms.shorthandBusinessName') : isNsAdmin(tc) ? 'NextSeed' : get(tc, 'createdUserInfo.info.firstName')}
+                                            {((isIssuerComment(tc)) || isNsAdmin(tc)) && <Label color={(isIssuerComment(tc)) ? 'green' : 'black'} size="mini">{(isIssuerComment(tc)) ? 'ISSUER' : 'NEXTSEED'}</Label>}
                                           </Comment.Author>
                                           <Comment.Metadata><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date'), true, true)}</span></Comment.Metadata>
-                                          {/* {isUserLoggedIn && !disablePostComment && !showOnlyOne
-                                            && (
-                                              <Comment.Actions>
-                                                <Comment.Action
-                                                  onClick={() => this.toggleVisibility(tc.id)}
-                                                  className="grey-header"
-                                                >
-                                                  Reply
-                                                </Comment.Action>
-                                              </Comment.Actions>
-                                            )
-                                          } */}
                                           <Comment.Text className="mt-20">
                                             <HtmlEditor
                                               readOnly
@@ -282,29 +250,14 @@ class Comments extends Component {
                                               )}
                                           </Comment.Text>
                                           {visible && tc.id === this.state.commentId ? (
-                                            <>
-                                              <Form className="public-form mt-30" reply>
-                                                <FormTextarea
-                                                  fielddata={MESSAGE_FRM.fields.comment}
-                                                  name="comment"
-                                                  changed={msgEleChange}
-                                                  containerclassname="secondary"
-                                                />
-                                              </Form>
-                                              <Divider hidden />
-                                              <p>
-                                                Note that both NextSeed and issuers are notified of all
-                                                comments immediately, but there may be a slight delay in
-                                                response to questions submitted outside of standard
-                                                business hours (9am to 5pm CST, Monday through Friday).Most
-                                                questions will be answered by issuers in approximately two
-                                                business days, although some questions require more thorough
-                                                analyses and will take additional time.
-                                    </p>
-                                              <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting. If you have any technical questions or questions about NextSeed,{' '}
-                                                please email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
-                                    </p>
-                                            </>
+                                            <ReplyBox
+                                              MESSAGE_FRM={MESSAGE_FRM}
+                                              msgEleChange={msgEleChange}
+                                              showCopy
+                                              match={match}
+                                              errors={errors}
+                                              isMobile={isMobile}
+                                            />
                                           ) : ''}
                                         </Comment.Content>
                                       </Comment>
@@ -313,38 +266,27 @@ class Comments extends Component {
                             )
                           }
                           <Comment.Content>
-                            {isUserLoggedIn && !disablePostComment && c.id !== this.state.commentId && isValidForAccreditedStatus
+                            {campaignCommentsMeta.isValid && c.id !== this.state.commentId
                               && (
                                 <Button className="mt-30" disabled={visible} fluid={isMobile} inverted color="green" onClick={() => this.toggleVisibility(c.id)} content="Reply" />
                               )
                             }
                             {visible && c.id === this.state.commentId ? (
-                              <>
-                                <Form className="public-form mt-30" reply>
-                                  <FormTextarea
-                                    fielddata={MESSAGE_FRM.fields.comment}
-                                    name="comment"
-                                    changed={msgEleChange}
-                                    containerclassname="secondary"
-                                    placeholder="Write a reply..."
-                                  />
-                                  <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />
-                                  <Button fluid={isMobile} className={isMobile && 'mlr-0 mt-20 mb-30'} onClick={() => this.closeTextBox(c.id)} disabled={buttonLoader === 'PUBLIC'} basic>Cancel</Button>
-                                </Form>
-                                <Divider hidden />
-                                <p>
-                                  Note that both NextSeed and issuers are notified of all comments
-                                  immediately, but there may be a slight delay in response to
-                                  questions submitted outside of standard business hours (9am to
-                                  5pm CST, Monday through Friday).Most questions will be answered
-                                  by issuers in approximately two business days, although some
-                                  questions require more thorough analyses and will take additional
-                                  time.
-                              </p>
-                                <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting. If you have any technical questions or questions about NextSeed,{' '}
-                                  please email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
-                              </p>
-                              </>
+                              <ReplyBox
+                                MESSAGE_FRM={MESSAGE_FRM}
+                                msgEleChange={msgEleChange}
+                                buttonLoader={buttonLoader}
+                                isFormValid={MESSAGE_FRM.meta.isValid}
+                                showButton
+                                match={match}
+                                showCopy
+                                btnHandler={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)}
+                                showCancelButton
+                                closeBtnHandler={() => this.closeTextBox(c.id)}
+                                errors={errors}
+                                isMobile={isMobile}
+                                visiblePost={visible && c.id === this.state.commentId}
+                              />
                             ) : ''}
                           </Comment.Content>
                         </Comment>
@@ -363,8 +305,8 @@ class Comments extends Component {
           )
         }
         <Switch>
-          <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
-          <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignSlug={campaignSlug} campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
+          <Route exact path={`${match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={match.url} {...props} />} />
+          <Route path={`${match.url}/:id/:messageType?`} render={props => <CommentsReplyModal c={campaignSlug} campaignId={campaignId} issuerId={issuerId} refLink={match.url} {...props} />} />
         </Switch>
       </div>
     );

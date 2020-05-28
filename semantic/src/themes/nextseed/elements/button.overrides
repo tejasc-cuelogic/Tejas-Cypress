@@ -40,6 +40,17 @@
     &.inverted.green{
         box-shadow: 0 0 0 1px @primary-one inset !important;
     }
+    &.user-type{
+        font-size: @15px;
+        line-height: 20px;
+        min-width: 70px;
+    }
+    &.grey-colored{
+        background-color: #567991;
+        border: 1px solid #567991;
+        color: @white;
+        font-weight: @normal
+    }
 }
 //  Public Page Ends
 
@@ -246,13 +257,17 @@
         }
         .details{
             color: @neutral-middark;
-            line-height: 20px;
-            font-size: @13px;
+            line-height: 20px !important;
+            font-size: @13px !important;
             padding-right: @20px;
-            .ui.header,span{
+            .ui.header{
                 font-size: @15px;
                 line-height: 24px;
                 color: @neutral;
+            }
+            p, span{
+                line-height: 20px !important;
+                font-size: @13px !important;
             }
         }
         &.icon-arrow-button{
@@ -340,5 +355,12 @@
             background:@primary-one;
             color:@white;
         }
+    }
+}
+
+.banner-section .ui.button{
+    &.arrow-button.labeled:not(.icon){
+        background-color: @white !important;
+        border: none !important;
     }
 }

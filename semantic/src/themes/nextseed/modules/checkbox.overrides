@@ -71,6 +71,9 @@
 			}
 		}
 	}
+	.neutral-text .ui.checkbox.disabled label{
+		opacity: 1;
+	}
 }
 .button-radio, .button-checkbox{
 	.ui.radio.checkbox, .ui.checkbox{
@@ -282,6 +285,16 @@
 			color: @neutral-offdark;
 			background: @neutral-offdark;
 			border-color: @neutral-offdark;
+		}
+	}
+}
+.ui.checkbox.toggle{
+	&.negative-toggle{
+		&.checked label:before{
+			background-color: @highlight-primary !important;
+		}
+		input:focus:checked~label:before{
+			background-color: @highlight-primary !important;
 		}
 	}
 }

@@ -10,7 +10,7 @@ import {
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { DRAFT_NEW } from '../../../constants/messages';
-import { offeringCreationStore, campaignStore, userDetailsStore } from '../../index';
+import { offeringCreationStore, campaignStore, userDetailsStore, userStore } from '../../index';
 import uiStore from '../shared/uiStore';
 
 export class NewMessage {
@@ -88,43 +88,53 @@ export class NewMessage {
   }
 
   @action
-  createNewComment = (scope, campaignSlug, currentMessageId, campaignId = null) => {
+  createNewComment = (scope, campaignSlug, currentMessageId, campaignId = null) => new Promise((resolve) => {
     this.setDataValue('buttonLoader', scope);
     this.currentMessageId = currentMessageId;
     const data = Validator.ExtractValues(this.MESSAGE_FRM.fields);
-    const payload = {
-      commentInput: {
-        offeringId: campaignId || (offeringCreationStore.currentOfferingId || this.currentOfferingId),
-        scope,
-        comment: Helper.sanitizeContent(data.comment),
-      },
-    };
-    if (this.editMessageId) {
-      payload.id = this.editMessageId;
+    if (data.comment && data.comment !== '') {
+      const payload = {
+        commentInput: {
+          offeringId: campaignId || (offeringCreationStore.currentOfferingId || this.currentOfferingId),
+          scope,
+          comment: Helper.sanitizeContent(data.comment),
+        },
+      };
+      if (this.editMessageId) {
+        payload.id = this.editMessageId;
+      }
+      if (this.currentMessageId && this.currentMessageId !== this.editMessageId) {
+        payload.commentInput.thread = this.currentMessageId;
+      }
+      client
+        .mutate({
+          mutation: this.editMessageId ? updateOfferingCommentsInfo : createOfferingComments,
+          variables: payload,
+        })
+        .then((result) => {
+          if (!offeringCreationStore.currentOfferingId) {
+            campaignStore.getCampaignDetails(campaignSlug, false);
+          } else if (get(result, 'data.createOfferingComments') && userStore.isInvestor) {
+            campaignStore.updateCommentThread(get(result, 'data.createOfferingComments'), currentMessageId);
+          } else if (get(result, 'data.createOfferingComments') || get(result, 'data.updateOfferingCommentsInfo')) {
+            this.initRequest();
+          }
+          this.resetMessageForm();
+          Helper.toast('Message sent.', 'success');
+          resolve(true);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong please try again after sometime.', 'error');
+          uiStore.setErrors(error.message);
+          resolve(false);
+        })
+        .finally(() => this.setDataValue('buttonLoader', false));
+    } else {
+      this.MESSAGE_FRM.fields.comment.error = 'This field is required';
+      this.MESSAGE_FRM.meta.isValid = false;
+      this.setDataValue('buttonLoader', false);
     }
-    if (this.currentMessageId && this.currentMessageId !== this.editMessageId) {
-      payload.commentInput.thread = this.currentMessageId;
-    }
-    client
-      .mutate({
-        mutation: this.editMessageId ? updateOfferingCommentsInfo : createOfferingComments,
-        variables: payload,
-      })
-      .then(() => {
-        if (!offeringCreationStore.currentOfferingId) {
-          campaignStore.getCampaignDetails(campaignSlug, false);
-        } else {
-          this.initRequest();
-        }
-        this.resetMessageForm();
-        Helper.toast('Message sent.', 'success');
-      })
-      .catch((error) => {
-        Helper.toast('Something went wrong please try again after sometime.', 'error');
-        uiStore.setErrors(error.message);
-      })
-      .finally(() => this.setDataValue('buttonLoader', false));
-  }
+  });
 
   @action
   approveComment = (e, id) => {
@@ -150,7 +160,7 @@ export class NewMessage {
   }
 
   @action
-  deleteMessage = id => client
+  deleteMessage = (id, isInitRequest = false) => client
     .mutate({
       mutation: deleteMessage,
       variables: { id: [id] },
@@ -159,7 +169,12 @@ export class NewMessage {
         variables: { offerId: offeringCreationStore.currentOfferingId },
       }],
     })
-    .then(() => Helper.toast('Message deleted successfully.', 'success'))
+    .then(() => {
+      if (isInitRequest) {
+        this.initRequest();
+      }
+      Helper.toast('Message deleted successfully.', 'success');
+    })
     .catch(() => Helper.toast('Error while deleting message', 'error'));
 
   @computed get allData() {

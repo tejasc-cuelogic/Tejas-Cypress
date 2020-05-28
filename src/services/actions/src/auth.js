@@ -25,6 +25,8 @@ import {
   accreditationStore,
   transactionStore,
   offeringsStore,
+  multiFactorAuthStore,
+  collectionStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -65,7 +67,7 @@ export class Auth {
       this.cognitoUser = await AmplifyAuth.currentSession();
       return this.cognitoUser;
     } catch (err) {
-      console.log('error in getUserSession', err);
+      window.logger('error in getUserSession', err);
       return null;
     } finally {
       uiStore.setProgress(false);
@@ -87,7 +89,7 @@ export class Auth {
       new Promise((res, rej) => {
         AmplifyAuth.currentSession().then((currentUser) => {
           if (currentUser) {
-            AmplifyAuth.currentAuthenticatedUser().then((user) => {
+            AmplifyAuth.currentAuthenticatedUser({ bypassCache: true }).then((user) => {
               const { signInUserSession, attributes } = user;
               const mapData = this.parseRoles(this.mapCognitoToken(attributes));
               userStore.setCurrentUser(mapData);
@@ -99,7 +101,7 @@ export class Auth {
               }
               return res({ attributes, session: signInUserSession });
             }).catch((err) => {
-              console.log('error in verifysession', err);
+              window.logger('error in verifysession', err);
               rej(err);
             })
               .finally(() => {
@@ -109,7 +111,7 @@ export class Auth {
               });
           }
         }).catch((err) => {
-          console.log('error in verifysession', err);
+          window.logger('error in verifysession', err);
           rej(err);
         }).finally(() => {
           commonStore.setAppLoaded();
@@ -173,6 +175,27 @@ export class Auth {
     }
   }
 
+  async refreshCurrentSession() {
+    try {
+      const session = await AmplifyAuth.currentSession();
+      await this.refreshSessionPromise(session.getRefreshToken());
+      // eslint-disable-next-line no-empty
+    } catch {
+    }
+  }
+
+  refreshSessionPromise = refreshToken => new Promise(async (resolve, reject) => {
+    const user = await AmplifyAuth.currentAuthenticatedUser();
+    user.refreshSession(refreshToken, async (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+        resolve(data);
+      }
+    });
+  })
+
   resetPasswordExpiration = async (lowerCasedEmail, password) => {
     const res = await userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail);
     if (res.data.resetPasswordExpirationDurationForCognitoUser) {
@@ -211,7 +234,7 @@ export class Auth {
         if (window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') && window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') !== undefined) {
           window.localStorage.removeItem('SAASQUATCH_REFERRAL_CODE');
         }
-        if (window.analytics) { // && false
+        if (window.analytics) {
           window.analytics.identify(userStore.currentUser.sub, {
             name: `${get(data, 'user.info.firstName')} ${get(data, 'user.info.lastName')}`,
             email: get(data, 'user.email.address'),
@@ -245,11 +268,13 @@ export class Auth {
 
     const { fields } = authStore.SIGNUP_FRM;
     const signupFields = authStore.CONFIRM_FRM.fields;
+    const signUpRole = authStore.SIGNUP_FRM.fields.role.value;
     const attributeList = {
       'custom:roles': JSON.stringify([fields.role.value]),
-      given_name: fields.givenName.value || 'New Signup',
-      family_name: fields.email.value,
+      given_name: signUpRole === 'investor' ? 'New Signup' : fields.givenName.value,
+      family_name: signUpRole === 'investor' ? fields.email.value : fields.familyName.value,
     };
+
     try {
       const user = await AmplifyAuth.signUp({
         username: (fields.email.value || signupFields.email.value).toLowerCase(),
@@ -259,7 +284,6 @@ export class Auth {
 
       if (user && user.userConfirmed) {
         authStore.setUserId(user.userSub);
-        const signUpRole = authStore.SIGNUP_FRM.fields.role.value;
         if (!isMobile) {
           if (signUpRole === 'investor') {
             // Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
@@ -404,9 +428,9 @@ export class Auth {
       if (window.Intercom) {
         window.Intercom('shutdown');
       }
-      console.log('Intercom Shutdown time:', new Date());
+      window.logger('Intercom Shutdown time:', new Date());
     } catch (e) {
-      console.log(e);
+      window.logger(e);
     }
   }
 
@@ -431,6 +455,8 @@ export class Auth {
     window.sessionStorage.removeItem(`${uKey}_pInfo`);
     authStore.setUserLoggedIn(false);
     userStore.forgetUser();
+    collectionStore.setFieldValue('collectionApiHit', false);
+    collectionStore.getCollections();
     this.segmentTrackLogout(logoutType);
     this.clearMobxStore();
   }
@@ -447,7 +473,7 @@ export class Auth {
         AWS.config.clear();
         res();
       } catch (err) {
-        console.log('Error occured while logout', err);
+        window.logger('Error occured while logout', err);
         rej();
       }
     })
@@ -458,8 +484,10 @@ export class Auth {
     accountStore.resetStoreData();
     identityStore.resetStoreData();
     investorProfileStore.resetAll();
+    investorProfileStore.resetStoreData();
     userDetailsStore.resetStoreData();
     iraAccountStore.resetStoreData();
+    multiFactorAuthStore.resetStoreData();
     entityAccountStore.resetStoreData();
     bankAccountStore.resetStoreData();
     individualAccountStore.resetStoreData();

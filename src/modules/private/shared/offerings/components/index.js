@@ -1,4 +1,5 @@
 import Overview from './Overview';
+import OverviewV2 from './Overview-v2';
 import KeyTerms from './KeyTerms';
 import Legal from './Legal';
 import OfferingSection from './Offering';
@@ -14,15 +15,17 @@ import OfferingCreation from './OfferingCreation';
 import ActivityHistory from '../../ActivityHistory';
 import WatchList from './WatchList';
 import Documents from './Documents';
+import Marketing from './Marketing';
+import OfferingV2 from './OfferingV2';
 import ApplicationDetails from './ApplicationDetails';
 
-const OfferingModule = (to) => {
+const OfferingModule = (to, template = 1) => {
   let module = null;
   switch (to) {
-    case 'overview': module = Overview; break;
+    case 'overview': module = template === 2 ? OverviewV2 : Overview; break;
     case 'key-terms': module = KeyTerms; break;
     case 'legal': module = Legal; break;
-    case 'offering': module = OfferingSection; break;
+    case 'offering': module = template === 2 ? OfferingV2 : OfferingSection; break;
     case 'leadership': module = Leadership; break;
     case 'bonus-rewards': module = BonusRewards; break;
     case 'media': module = Media; break;
@@ -35,6 +38,7 @@ const OfferingModule = (to) => {
     case 'activity-history': module = ActivityHistory; break;
     case 'watch-list': module = WatchList; break;
     case 'documents': module = Documents; break;
+    case 'marketing': module = Marketing; break;
     case 'applications': module = ApplicationDetails; break;
     default: module = Overview; break;
   }

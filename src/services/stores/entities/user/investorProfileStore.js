@@ -32,6 +32,8 @@ export class InvestorProfileStore extends DataModelStore {
 
   INVESTMENT_EXP_FRM = Validator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
 
+  formArr = [...this.invProfileForms, ...['INVESTMENT_EXP_FRM']];
+
   isFormSubmitted = false;
 
   @action
@@ -112,7 +114,7 @@ export class InvestorProfileStore extends DataModelStore {
   setInvestorDetailInfo = (data) => {
     if (data) {
       this.INVESTOR_PROFILE_FULL = Validator.prepareFormObject(INVESTOR_PROFILE_FULL_META, true);
-      [...this.invProfileForms, ...['INVESTMENT_EXP_FRM']].forEach((form) => {
+      this.formArr.forEach((form) => {
         this.setFormData(form, data);
         this.INVESTOR_PROFILE_FULL.fields = { ...this.INVESTOR_PROFILE_FULL.fields, ...this[form].fields };
       });

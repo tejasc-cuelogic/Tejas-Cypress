@@ -15,7 +15,7 @@ import FinancialInfo from './FinancialInfo';
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'accountStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
 @observer
 export default class InvestNow extends React.Component {
-  state = { submitLoading: false, isInvestmentUpdate: false };
+  state = { submitLoading: false, isInvestmentUpdate: false, disableBackButton: false };
 
   constructor(props) {
     super(props);
@@ -78,7 +78,7 @@ export default class InvestNow extends React.Component {
   }
 
   handleIframeTask = (e) => {
-    console.log(e.data);
+    window.logger(e.data);
   };
 
   handleMultiStepModalclose = () => {
@@ -214,6 +214,10 @@ export default class InvestNow extends React.Component {
     this.multiClickHandler(multiSteps[stepToBeRendered]);
   }
 
+  handleBackButton = (currentState) => {
+    this.setState({ disableBackButton: currentState });
+  }
+
   render() {
     const { changeInvest, uiStore } = this.props;
     const { showAccountList, disableElement } = this.props.accreditationStore;
@@ -275,16 +279,18 @@ export default class InvestNow extends React.Component {
         disablePrevButton: changeInvest || !(accountToConsider.length > 1),
       },
       {
-        name: 'TransferRequest',
+        name: 'Transfer Request',
         component: <TransferRequest
           changeInvest={changeInvest || this.state.isInvestmentUpdate}
           isPreferredEquity={campaignStatus.isPreferredEquity}
           confirm={this.handleConfirm}
           cancel={this.handleCancel}
           refLink={this.props.refLink}
+          handleBack={this.handleBackButton}
         />,
         isValid: '',
         onlyDisableNextButton: true,
+        disablePrevButton: this.state.disableBackButton,
       },
     ];
     const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;

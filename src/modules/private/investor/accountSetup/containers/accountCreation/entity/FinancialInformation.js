@@ -31,13 +31,14 @@ export default class FinancialInformation extends Component {
       <>
         <Header as="h4">Calculating your investment limit</Header>
         <p>
-          Your entity{"'"}s net assets and annual revenue are used to determine your 12-month investment limit under Regulation Crowdfunding.
+          Your entity{'\''}s net assets and annual revenue are used to determine your 12-month investment limit under Regulation Crowdfunding.
         </p>
         <Form error>
           {['netAssets', 'annualIncome'].map(field => (
             <MaskedInput
               key={field}
               name={field}
+              data-cy={field}
               placeHolder={field === 'annualIncome' ? '$ 1,000,000' : '$ 5,000'}
               fielddata={FIN_INFO_FRM.fields[field]}
               maxLength={FIN_INFO_FRM.fields[field].maxLength}
@@ -54,7 +55,7 @@ export default class FinancialInformation extends Component {
           </p>
           <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
           <div>
-            <Button fluid={isMobile} primary className="relaxed mt-30" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
+            <Button fluid={isMobile} data-cy="fin-info-entity-submit" primary className="relaxed mt-30" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
           </div>
         </Form>
       </>

@@ -1,15 +1,28 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { intersection } from 'lodash';
 import { observer, inject } from 'mobx-react';
 import { Form, Header, Button } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 import { FormInput } from '../../../../../theme/form';
+import { InlineLoader } from '../../../../../theme/shared';
+import AddToCollection from '../../marketing/AddToCollection';
 
 @withRouter
-@inject('offeringCreationStore', 'userStore', 'uiStore')
+@inject('offeringCreationStore', 'userStore', 'uiStore', 'nsUiStore', 'collectionStore', 'offeringsStore')
 @observer
 export default class Overview extends Component {
+  constructor(props) {
+    super(props);
+    if (this.props.match.isExact) {
+      const {
+        currentOfferingId,
+      } = this.props.offeringCreationStore;
+      this.props.collectionStore.initRequest('ACTIVE_INVESTMENTS', currentOfferingId);
+    }
+  }
+
   handleSubmitOfferingDetails = () => {
     const {
       OFFERING_DETAILS_FRM,
@@ -28,7 +41,9 @@ export default class Overview extends Component {
       OFFERING_DETAILS_FRM,
       formChange,
       formArrayChange,
+      currentOfferingId,
     } = this.props.offeringCreationStore;
+    const { offer } = this.props.offeringsStore;
     const { isIssuer } = this.props.userStore;
     const { inProgress } = this.props.uiStore;
     const isLaunchContingency = !isIssuer ? true
@@ -36,6 +51,10 @@ export default class Overview extends Component {
     const isCloseContingency = !isIssuer ? true : CLOSING_CONTITNGENCIES_FRM.fields.close
       && CLOSING_CONTITNGENCIES_FRM.fields.close.length > 0;
     const offeringMetaFields = isIssuer ? ['previewPassword', 'referralCode'] : ['offeringSlug', 'previewPassword', 'referralCode'];
+    const { loadingArray } = this.props.nsUiStore;
+    if (intersection(loadingArray, ['getCollections', 'getCollectionMapping']).length > 0) {
+      return <InlineLoader />;
+    }
     return (
       <div className={isIssuer ? 'ui card fluid form-card' : 'inner-content-spacer'}>
         <Form>
@@ -47,17 +66,24 @@ export default class Overview extends Component {
                   lowercase={field === 'referralCode'}
                   name={field}
                   disabled={isIssuer}
+                  value={field === 'offeringSlug' ? `https://www/nextseed.com/offering/${OFFERING_DETAILS_FRM.value}` : ''}
                   fielddata={OFFERING_DETAILS_FRM.fields[field]}
                   changed={(e, result) => formChange(e, result, 'OFFERING_DETAILS_FRM')}
                 />
               ))
             }
           </Form.Group>
-          { isIssuer ? ''
+          {isIssuer ? ''
             : (
-          <div className="clearfix">
-            <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} loading={inProgress} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
-          </div>
+              <div className="clearfix">
+                <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} loading={inProgress} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
+              </div>
+            )
+          }
+          {
+            ['LIVE', 'COMPLETE'].includes(offer.stage)
+            && (
+              <AddToCollection isOffering referenceId={currentOfferingId} />
             )
           }
           {isLaunchContingency

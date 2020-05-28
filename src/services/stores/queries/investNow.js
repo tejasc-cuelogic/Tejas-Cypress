@@ -19,13 +19,15 @@ export const getInvestorAvailableCash = gql`
 `;
 
 export const investNowSubmit = gql`
-  mutation investNowSubmit($accountId: String!, $offeringId: String!, $investmentAmount: String!, $agreementId: Int!, $transferAmount: String){
+  mutation investNowSubmit($accountId: String!, $offeringId: String!, $investmentAmount: String!, $agreementId: Int!, $transferAmount: String, $uncheckedToc: [String], $draftMethod: DraftMethodEnum){
     investNowSubmit(
       accountId: $accountId
       offeringId: $offeringId
       investmentAmount: $investmentAmount
       agreementId: $agreementId
       transferAmount: $transferAmount
+      uncheckedToc: $uncheckedToc
+      draftMethod: $draftMethod
     )
     {
       status
@@ -40,14 +42,16 @@ mutation investNowGeneratePurchaseAgreement(
   $offeringId: String!,
   $investmentAmount: String!,
   $transferAmount: String,
-  $callbackUrl: String
+  $callbackUrl: String,
+  $draftMethod: DraftMethodEnum
 ) {
   investNowGeneratePurchaseAgreement(
     accountId: $accountId,
     offeringId: $offeringId,
     investmentAmount: $investmentAmount,
     transferAmount: $transferAmount,
-    callbackUrl: $callbackUrl
+    callbackUrl: $callbackUrl,
+    draftMethod: $draftMethod
   ) {
       agreementId
       envelopeId

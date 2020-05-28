@@ -77,7 +77,7 @@ const NEW_OFFERING_LAYOUT = [
     title: 'Bonus Rewards', to: '#bonus-rewards', useRefLink: true, key: 'isBonusReward',
   },
   {
-    title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallary',
+    title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallery',
   },
   {
     title: 'Documents', to: '#data-room', useRefLink: true, key: 'dataRooms',
@@ -262,27 +262,30 @@ export const PRIVATE_NAV = [
     accessibleTo: ['issuer', 'admin'],
     subPanel: 1,
     subNavigations: [
-      { title: 'Overview', to: 'overview', accessFor: [1, 2, 3, 4] },
+      { title: 'Overview', to: 'overview', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'] },
+      { title: 'Marketing', to: 'marketing', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 2 },
       {
-        title: 'Key Terms', to: 'key-terms', accessFor: [1], accessibleTo: ['admin', 'manager', 'support'],
+        title: 'Key Terms', to: 'key-terms', accessFor: [1], accessibleTo: ['admin', 'manager', 'support'], template: 1,
       },
-      { title: 'Legal', to: 'legal', accessFor: [1] },
-      { title: 'Offering', to: 'offering', accessFor: [1] },
-      { title: 'Media', to: 'media', accessFor: [1] },
-      { title: 'Leadership', to: 'leadership', accessFor: [1] },
+      { title: 'Legal', to: 'legal', accessFor: [1], accessibleTo: ['admin', 'manager', 'support'], template: 1 },
+      { title: 'Legal', to: 'legal', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 2 },
+      { title: 'Offering', to: 'offering', accessFor: [1], accessibleTo: ['admin', 'manager', 'support'], template: 1 },
+      { title: 'Offering', to: 'offering', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 2 },
+      { title: 'Media', to: 'media', accessFor: [1], template: 1 },
+      { title: 'Leadership', to: 'leadership', accessFor: [1], template: 1 },
       { title: 'Investors', to: 'investors', accessFor: [2, 3, 4] },
       {
-        title: 'Transactions', to: 'transactions', accessFor: [3, 4], accessibleTo: ['admin', 'manager', 'support'], env: ['localhost', 'predev', 'dev'],
+        title: 'Transactions', to: 'transactions', accessFor: [3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 1, env: ['localhost', 'predev', 'dev'],
       },
       { title: 'Comments', to: 'comments', accessFor: [2, 3] },
       { title: 'Updates', to: 'updates', accessFor: [2, 3, 4] },
       {
-        title: 'Close', to: 'close', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
+        title: 'Close', to: 'close', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 1,
       },
-      { title: 'Bonus Rewards', to: 'bonus-rewards', accessFor: [1, 2, 3, 4] },
-      { title: 'Documents', to: 'documents', accessFor: [2, 3, 4], accessibleTo: ['issuer'], filterKey: 'closingBinder' },
+      { title: 'Bonus Rewards', to: 'bonus-rewards', accessFor: [1, 2, 3, 4], template: 1 },
+      { title: 'Documents', to: 'documents', accessFor: [2, 3, 4], accessibleTo: ['issuer'], filterKey: 'closingBinder', template: 1 },
       {
-        title: 'Offering Creation', to: 'offering-creation', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
+        title: 'Offering Creation', to: 'offering-creation', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 1,
       },
       {
         title: 'Watch List', to: 'watch-list', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
@@ -342,6 +345,15 @@ export const PRIVATE_NAV = [
       // { title: 'Completed', to: 'completed' },
       { title: '¯\\_(ツ)_/¯', to: 'failed' },
     ],
+  },
+  {
+    icon: 'wpforms',
+    title: 'Communities',
+    capability: 'COLLECTIONS_ANY',
+    to: 'communities',
+    path: 'admin/collections',
+    accessibleTo: ['admin', 'manager', 'support'],
+    subPanel: 0,
   },
   {
     icon: 'list layout',
@@ -602,7 +614,23 @@ export const PUBLIC_NAV = [
   {
     title: 'Investment opportunities',
     to: 'offerings/',
+    // header: false,
+    // headerMobile: false,
     subNavigations: NEW_OFFERING_LAYOUT,
+    validateNav: 'OFFERING',
+  },
+  {
+    title: 'Investment opportunities',
+    to: '',
+    subPanel: 1,
+    exact: true,
+    header: false,
+    headerMobile: false,
+    validateNav: 'COLLECTION',
+    subNavigations: [
+      { title: 'NextSeed Offerings', to: 'offerings' },
+      { title: 'Communities & Partners', to: 'communities' },
+    ],
   },
   {
     title: 'Investment opportunities',
@@ -628,7 +656,7 @@ export const PUBLIC_NAV = [
             title: 'Updates', to: '#updates', useRefLink: true, key: 'updates',
           },
           {
-            title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallary',
+            title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallery',
           },
           {
             title: 'Issuer Statement', to: '#issuer-statement', useRefLink: true, key: 'issuerStatement',
@@ -703,6 +731,7 @@ export const PUBLIC_NAV = [
       { title: 'For Investors', to: 'investors' },
       { title: 'For Businesses', to: 'business' },
       { title: 'Education Center', to: 'education-center' },
+      { title: 'Insights', to: 'insights' },
     ],
   },
   {
@@ -711,10 +740,10 @@ export const PUBLIC_NAV = [
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'Who We Are', to: 'about' },
-      // { title: 'Team & Culture', to: 'about/team' },
-      // { title: 'Careers', to: 'about/careers' },
-      { title: 'Insights', to: 'insights' },
+      { title: 'Our Mission', to: 'mission' },
+      { title: 'Our Team', to: 'team' },
+      { title: 'The NextSeed Group', to: 'group' },
+      { title: 'NextSeed Capital', to: 'capital' },
       { title: 'NextSeed Space', to: 'space' },
     ],
   },
@@ -766,6 +795,7 @@ export const MOBILE_NAV = [
     isLoggedIn: true,
   },
   { title: 'Investment Opportunities', to: 'offerings', isLoggedIn: true },
+  { title: 'Communities & Partners', to: 'communities', validateNav: 'COLLECTION', isLoggedIn: true },
   {
     title: 'Refer a Friend',
     to: 'app/referrals',
@@ -777,8 +807,11 @@ export const MOBILE_NAV = [
   { title: 'For Investors', to: 'investors' },
   { title: 'For Businesses', to: 'business' },
   { title: 'Education Center', to: 'education-center' },
-  { title: 'Who We Are', to: 'about' },
   { title: 'Insights', to: 'insights' },
+  { title: 'Our Mission', to: 'mission' },
+  { title: 'Our Team', to: 'team' },
+  { title: 'The NextSeed Group', to: 'group' },
+  { title: 'NextSeed Capital', to: 'capital' },
   { title: 'NextSeed Space', to: 'space' },
 ];
 

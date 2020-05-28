@@ -373,6 +373,13 @@ class FormValidator {
             value: '', fileId: '', preSignedUrl: '', fileData: '',
           },
         };
+      } else if (fields[key].objType === 's3File') {
+        fields[key] = {
+          ...fields[key],
+          ...{
+            value: '', fileId: '', preSignedUrl: '', fileData: '', fileName: '', base64String: '', src: '',
+          },
+        };
       } else {
         fields[key].value = fields[key].hasOwnProperty('defaultValue') ? fields[key].defaultValue : '';
         // fields[key].value = typeof fields[key].value === 'number' ? '' :
@@ -493,7 +500,7 @@ class FormValidator {
         } else if (fields[key].objType === 'DATE') {
           fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : data[key] ? moment(data[key]).format('MM/DD/YYYY') : '';
         } else {
-          fields[key].value = data && typeof data === 'object' ? (data[key] !== null && data[key] !== '' && data[key] !== undefined) ? data[key] : fields[key].value : data;
+          fields[key].value = data && typeof data === 'object' ? (data[key] !== null && data[key] !== '' && data[key] !== undefined) ? data[key] : fields[key].value : data || fields[key].value;
         }
         if (fields[key].refSelector) {
           fields[key].refSelectorValue = fields[key].value !== '';
@@ -660,7 +667,7 @@ class FormValidator {
           }
         }
       } catch (e) {
-        console.log(e);
+        window.logger(e);
       }
     });
     return inputData;

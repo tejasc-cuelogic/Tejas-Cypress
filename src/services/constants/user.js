@@ -1,6 +1,8 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
 import React from 'react';
+import { COMMON } from './auth';
+
 // import { Popup } from 'semantic-ui-react';
 
 /* eslint-disable no-unused-vars */
@@ -10,7 +12,7 @@ Validator.register(
   'dob', (value, attribute) => {
     return moment(value, 'MM/DD/YYYY').isBefore(moment());
   },
-  "The :attribute should be less than today's date.",
+  'The :attribute should be less than today\'s date.',
 );
 Validator.register(
   'afterDate', (value, attribute) => {
@@ -440,3 +442,7 @@ export const DATE_RANGES = [
   { text: 'Last 60 days', value: '60' },
   { text: 'Last 90 days', value: '90' },
 ];
+
+export const VERIFY_OTP = {
+  code: { ...COMMON.code },
+};

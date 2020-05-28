@@ -34,9 +34,9 @@ export default class General extends Component {
       <>
         <Header as="h4">General information</Header>
         <p className="mb-20">
-          Let{"'"}s create your Entity Investment Account. Get started by providing your entity information.
+          Let{'\''}s create your Entity Investment Account. Get started by providing your entity information.
         </p>
-        <Form error>
+        <Form data-cy="entity-general" error>
           <FormInput
             name="name"
             fielddata={GEN_INFO_FRM.fields.name}
@@ -106,7 +106,7 @@ export default class General extends Component {
               </Message>
             )
           }
-          <Button fluid={isMobile} primary className={`${isMobile ? '' : 'mt-30'} relaxed`} content="Continue" disabled={!GEN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
+          <Button fluid={isMobile} primary data-cy="general-entity-confirm" className={`${isMobile ? '' : 'mt-30'} relaxed`} content="Continue" disabled={!GEN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
         </Form>
       </>
     );

@@ -1,10 +1,12 @@
 import React from 'react';
 
 export const BUSINESS_GOAL = {
-  UPGRADE: 'UPGRADE',
-  RESTRUCTURE: 'RESTRUCTURE',
   BRAND_NEW: 'BRAND_NEW',
-  FRANCHISE: 'FRANCHISE',
+  UPGRADE: 'UPGRADE',
+  PRE_LAUNCH: 'PRE_LAUNCH',
+  NEW_BUSINESS: 'NEW_BUSINESS',
+  FIRST_YEAR: 'FIRST_YEAR',
+  ESTABLISHED: 'ESTABLISHED',
 };
 
 export const BUSINESS_APPLICATION_STEP_STATUS = {
@@ -196,17 +198,16 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700', customErrors: { required: 'required' },
   },
   totalProjectCost: {
-    value: '', maxLength: 16, label: 'What’s the total project cost?', error: undefined, rule: 'required', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'How much total capital are you raising for your business right now (including other investors, bank loans, and etc.)?', error: undefined, rule: 'required', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
   },
   amountNeeded: {
     value: '',
     maxLength: 16,
-    label: 'How much do you need to raise on NextSeed?',
+    label: 'How much are you looking to raise on the NextSeed platform?',
     error: undefined,
     rule: 'required',
     customErrors: { required: 'required' },
     placeHolder: 'e.g. $100,000',
-    tooltip: (<span>Minimum amount of funding is $100,000. For requirements on different levels of funding, <a href="/business" target="_blank">click here.</a></span>),
   },
   businessEntityStructure: {
     value: '',
@@ -245,10 +246,10 @@ export const BUSINESS_PRE_QUALIFICATION = {
   },
   ...BUSINESS_PREQUAL_COMMON,
   businessAgeYears: {
-    value: '', label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1', customErrors: { required_if: 'required' },
+    value: '', label: 'Years', error: undefined, rule: 'required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: '1', customErrors: { required_if: 'required' },
   },
   businessAgeMonths: {
-    value: '', label: 'Months', error: undefined, rule: 'maxVal:11|required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3', customErrors: { required_if: 'required', maxVal: 'Please enter valid value.' },
+    value: '', label: 'Months', error: undefined, rule: 'maxVal:11|required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: '3', customErrors: { required_if: 'required', maxVal: 'Please enter valid value.' },
   },
   franchiseHolder: {
     value: '',
@@ -261,16 +262,16 @@ export const BUSINESS_PRE_QUALIFICATION = {
     customErrors: { required_if: 'required' },
   },
   previousYearGrossSales: {
-    value: '', label: 'Gross Sales', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $750,000', customErrors: { required_if: 'required' },
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: 'e.g. $750,000', customErrors: { required_if: 'required' },
   },
   previousYearCogSold: {
-    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $75,000', customErrors: { required_if: 'required' },
+    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: 'e.g. $75,000', customErrors: { required_if: 'required' },
   },
   previousYearOperatingExpenses: {
-    value: '', label: 'Operating Expenses', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $150,000', customErrors: { required_if: 'required' },
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: 'e.g. $150,000', customErrors: { required_if: 'required' },
   },
   previousYearNetIncome: {
-    value: '', label: 'Net Income', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $525,000', customErrors: { required_if: 'required' },
+    value: '', label: 'Net Income', error: undefined, rule: 'required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: 'e.g. $525,000', customErrors: { required_if: 'required' },
   },
   nextYearGrossSales: {
     value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. $750,000', customErrors: { required: 'required' },
@@ -306,6 +307,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Equity', icon: 'ns-calculator-icon', value: 'EQUITY' },
       { label: 'Debt', icon: 'ns-debt-icon', value: 'DEBT' },
       { label: 'Convertible Notes / SAFE', icon: 'ns-convertible-icon', value: 'CONVERTIBLE_NOTE' },
+      { label: 'Community Bridge Note', icon: 'ns-covid-icon', value: 'BRIDGE_NOTE', tooltip: (<span>Tip: The Community Bridge Note (CBN) is a special, low-interest note designed for businesses navigating the COVID-19 crisis. <a href="/insights/community-bridge-notes" target="_blank">Learn more</a> to see whether you qualify.</span>) },
     ],
     error: undefined,
     rule: 'required',
@@ -315,9 +317,11 @@ export const BUSINESS_PRE_QUALIFICATION = {
     value: '',
     values: [
       { label: <span>Fund New Business <br /> (&lt;12 months of operations) </span>, icon: 'ns-new-business', value: BUSINESS_GOAL.BRAND_NEW },
-      // { label: 'Open Franchise', icon: 'ns-franchise', value: BUSINESS_GOAL.FRANCHISE },
       { label: <span>Expand/Upgrade Existing Business <br /> (over 12 months of operations) </span>, icon: 'ns-expand-business', value: BUSINESS_GOAL.UPGRADE },
-      // { label: 'Create Off-shoot of Existing Business', icon: 'ns-off-shoot-business', value: BUSINESS_GOAL.RESTRUCTURE },
+      { label: <span>Pre-launch or Pre-opening</span>, icon: 'ns-seed-icon', value: BUSINESS_GOAL.PRE_LAUNCH },
+      { label: <span>Brand new business <br /> (&lt;90 days)</span>, icon: 'ns-sprout-icon', value: BUSINESS_GOAL.NEW_BUSINESS },
+      { label: <span>First year of operations </span>, icon: 'ns-shrub-icon', value: BUSINESS_GOAL.FIRST_YEAR },
+      { label: <span>Over one year in business</span>, icon: 'ns-tree-icon', value: BUSINESS_GOAL.ESTABLISHED },
     ],
     error: undefined,
     rule: 'required',
@@ -326,9 +330,9 @@ export const BUSINESS_PRE_QUALIFICATION = {
   fundUsage: {
     value: [],
     values: [
+      { label: 'Working Capital', icon: 'ns-working-capital', value: 'WORKING_CAPITAL' },
       { label: 'Renovations', icon: 'ns-renovations', value: 'RENOVATIONS' },
       { label: 'Equipment Purchase', icon: 'ns-equipment-purchase', value: 'EQUIPMENT_PURCHASE' },
-      { label: 'Working Capital', icon: 'ns-working-capital', value: 'WORKING_CAPITAL' },
       { label: 'Inventory', icon: 'ns-inventory', value: 'INVENTORY' },
       { label: 'New Product Line', icon: 'ns-new-product', value: 'NEW_PRODUCT_LINE' },
       { label: 'New Location', icon: 'ns-new-location', value: 'NEW_LOCATION' },
@@ -587,10 +591,10 @@ export const BUSINESS_DETAILS = {
 
 export const BUSINESS_PERF_COMMON = {
   priorToThreeYear: {
-    value: [], uploadtitle: 'Upload a file or drag it here', label: 'Prior 3 Year Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Prior 3 Year Statements', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   ytd: {
-    value: [], uploadtitle: 'Upload a file or drag it here', label: 'YTD Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'YTD Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   fiveYearProjection: {
     value: [], uploadtitle: <span>Upload a file or drag it here <br /> (Excel or CSV format preferred)</span>, label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },

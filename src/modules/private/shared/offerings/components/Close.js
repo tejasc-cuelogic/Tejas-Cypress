@@ -199,7 +199,7 @@ export default class Close extends Component {
           this.handleCloseModal();
         }
       }).catch((e) => {
-        console.log(e);
+        window.logger(e);
         this.setState({ inProgress: false });
       });
   };
@@ -255,6 +255,7 @@ export default class Close extends Component {
     const dynamicFields = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? ['interestRate'] : ['revSharePercentage', 'multiple'];
     const modalHeader = find(closingActions, a => a.enum === this.state.action) ? find(closingActions, a => a.enum === this.state.action).label : '';
     const showDefaultOfferingCTA = !['CREATION', 'COMPLETE', 'LIVE'].includes(get(offer, 'stage'));
+    const trueVal = true;
     const ServiceDropDown = props => (
       <>
         {/* <FormDropDown
@@ -305,7 +306,7 @@ export default class Close extends Component {
             </>
           </p>
           <Divider section />
-          {((hoursToClose <= 0 && !offerStatus.isFailed) || true)
+          {((hoursToClose <= 0 && !offerStatus.isFailed) || trueVal)
             ? (
               <>
                 <Step.Group className="campaign-close">

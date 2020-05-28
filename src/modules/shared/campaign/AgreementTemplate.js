@@ -5,7 +5,7 @@ import { get } from 'lodash';
 import { Header, Button, Grid } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 import { InlineLoader, NsModal } from '../../../theme/shared';
-import CustomAgreement from '../../public/offering/components/investNow/agreement/agreementTemplates/customAgreement';
+// import CustomAgreement from '../../public/offering/components/investNow/agreement/agreementTemplates/customAgreement';
 import DynamicAgreement from '../../public/offering/components/investNow/agreement/agreementTemplates/dynamicAgreement';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -45,11 +45,11 @@ function AgreementTemplate(props) {
       stepToBeRendered, setStepToBeRendered, investAccTypes, resetAggrementForm, setFieldValue,
     } = investmentStore;
     const {
-      getLegalDocsFileIds, alreadySet, createAgreementTocs,
+      getLegalDocsFileIds, alreadySet, createAgreementTocs, setField,
     } = agreementsStore;
     if (!alreadySet) {
       getLegalDocsFileIds().then(() => {
-        // console.log('successfully doc get.');
+        // window.logger('successfully doc get.');
       });
     }
     resetAggrementForm();
@@ -67,6 +67,7 @@ function AgreementTemplate(props) {
       const redirectURL = props.history.location.pathname;
       if (!redirectURL.includes('change-investment-limit') && !redirectURL.includes('agreement')) {
         investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+        setField('agreementPage', 0);
       }
     };
   }, []);
@@ -75,16 +76,22 @@ function AgreementTemplate(props) {
     const isFormValid = currentAction && currentAction === 'CUSTOM' ? props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid : props.agreementsStore.isAgreementFormValid;
     if (isFormValid) {
       setShowError(false);
-      props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
-      props.investmentStore.investNowSubmit().then((investmentStatus) => {
-        if (investmentStatus) {
-          props.history.push('congratulation');
-        }
-      });
+      if (currentAction !== 'NEXT') {
+        props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
+        props.investmentStore.investNowSubmit(currentAction === 'DYNAMIC').then((investmentStatus) => {
+          if (investmentStatus) {
+            props.history.push('congratulation');
+          }
+        });
+      } else {
+        const { setField, agreementPage } = props.agreementsStore;
+        setField('agreementPage', agreementPage + 1);
+      }
     } else {
       setShowError(true);
     }
   };
+
 
   const handleCancelAgreement = () => {
     // e.preventDefault();
@@ -110,6 +117,11 @@ function AgreementTemplate(props) {
     setShowAgreementPdf(false);
   };
 
+  const moveBack = () => {
+    const { setField, agreementPage } = props.agreementsStore;
+    setField('agreementPage', agreementPage - 1);
+  };
+
   const {
     investmentAmount,
     agreementDetails,
@@ -124,9 +136,10 @@ function AgreementTemplate(props) {
   const { campaign, campaignStatus } = props.campaignStore;
   const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
   const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
-  const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
-  const offeringRegulationType = get(campaign, 'keyTerms.regulation');
+  // const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
+  // const offeringRegulationType = get(campaign, 'keyTerms.regulation');
   const index = agreementPage;
+  const isBackButtonVisible = !!(AGREEMENT_DETAILS_FORM.fields.page.length > 1 && index > 0);
   return (
     <>
       <NsModal
@@ -160,7 +173,8 @@ function AgreementTemplate(props) {
         isProgressHeaderDisable
         isHeaderDisabled={showAgreementPdf}
         modalContentClass={showAgreementPdf ? 'pt-0 pb-0' : ''}
-        disableCloseIcon={showDocuSign || showAgreementPdf}
+        disableCloseIcon={showDocuSign || showAgreementPdf || inProgress}
+        back={isBackButtonVisible && moveBack}
       >
         {(showDocuSign || showAgreementPdf)
           && (
@@ -195,17 +209,32 @@ function AgreementTemplate(props) {
               </div>
             </div>
             <div style={{ display: showDocuSign || showAgreementPdf ? 'none' : 'block' }}>
-              <Header as="h3" className="mb-40">
-                Let&#39;s confirm your investment.<br />You are investing
-                  <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
-                {AGREEMENT_DETAILS_FORM.fields.page[index].title.value
-                  && (
-                    <Header.Subheader>
-                      {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
-                    </Header.Subheader>
-                  )}
-              </Header>
-              {
+              {(!AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader || (AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader && !AGREEMENT_DETAILS_FORM.fields.page[index].hideHeader.value))
+                && (
+                  <Header as="h3" className={`${AGREEMENT_DETAILS_FORM.fields.page[index].title.value ? '' : 'mb-40'}`}>
+                    Let&#39;s confirm your investment.<br />You are investing
+                    <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
+                  </Header>
+                )}
+              {AGREEMENT_DETAILS_FORM.fields.page[index].title.value
+                && (
+                  <Header as="h4" className="mb-40">
+                    {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
+                  </Header>
+                )}
+              <DynamicAgreement
+                inProgress={inProgress}
+                showError={showError}
+                docuSignHandeler={docuSignHandeler}
+                agreementPDFLoader={agreementPDFLoader}
+                submit={submit}
+                setCheckbox={setCheckbox}
+                isAgreementFormValid={isAgreementFormValid}
+                investmentFlowErrorMessage={investmentFlowErrorMessage}
+                index={index}
+                {...props}
+              />
+              {/*
                 campaignStatus.isAgreementTemplate
                   ? (
                     <DynamicAgreement
@@ -233,7 +262,7 @@ function AgreementTemplate(props) {
                       {...props}
                     />
                   )
-              }
+              */}
             </div>
           </Grid.Column>
         </Grid>

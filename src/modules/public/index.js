@@ -133,6 +133,7 @@ export default class Public extends React.Component {
               isPrequalQulify={isPrequalQulify}
               preQualSubmit={this.preQualSubmit}
               loading={inProgress || appSubmitLoading}
+              // headerclass={topBanner ? 'large-header' : ''}
             />
           )}
           {this.getRoutes(isAuthLocation, location)}

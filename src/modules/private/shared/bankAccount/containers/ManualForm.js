@@ -10,7 +10,7 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
+@inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'identityStore')
 @withRouter
 @observer
 export default class ManualForm extends Component {
@@ -25,7 +25,7 @@ export default class ManualForm extends Component {
     }
   }
 
-  handleSubmitForm = (e) => {
+  handleSubmitForm = async (e) => {
     e.preventDefault();
     this.props.bankAccountStore.resetAddFundsForm();
     this.props.bankAccountStore.setIsManualLinkBankSubmitted();
@@ -34,12 +34,13 @@ export default class ManualForm extends Component {
     const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 6, linkBankStepValue: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5, linkBankStepValue: 4 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1, linkBankStepValue: 0 };
     if (this.props.action === 'change') {
       this.props.uiStore.setProgress();
-      this.props.bankAccountStore.validateManualAccount(investmentAccType).then(() => {
-        this.props.transactionStore.requestOtpForManageTransactions(true).then(() => {
-          const confirmUrl = `${this.props.refLink}/confirm`;
-          this.props.history.push(confirmUrl);
-        });
-      });
+      this.props.bankAccountStore.validateManualAccount(investmentAccType).then(async () => {
+      const res = await this.props.identityStore.sendOtp('BANK_CHANGE', isMobile);
+      if (res) {
+        const confirmUrl = `${this.props.refLink}/confirm`;
+        this.props.history.push(confirmUrl);
+      }
+    });
     } else {
       store.createAccount(currentStep).then(() => {
         if (this.props.bankAccountStore.isAccountPresent) {
@@ -90,7 +91,7 @@ export default class ManualForm extends Component {
         <Header as="h4">
           Enter your bank account and routing number
         </Header>
-        <Form error={!!errors} onSubmit={this.handleSubmitForm}>
+        <Form error={!!errors} data-cy="manual-form" onSubmit={this.handleSubmitForm}>
           <Form.Field className={isMobile ? 'mb-40' : 'mb-50'}>
             <>
               {
@@ -125,7 +126,7 @@ export default class ManualForm extends Component {
             />
             <FormInput
               name="bankName"
-              type="tel"
+              type="text"
               fielddata={formLinkBankManually.fields.bankName}
               changed={linkBankManualFormChange}
               value={formLinkBankManually.fields.bankName.value}
@@ -142,7 +143,7 @@ export default class ManualForm extends Component {
               </p>
             )
           }
-          <Button primary size="large" fluid={isMobile} className="mt-30 relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
+          <Button primary size="large" fluid={isMobile} data-cy="manual-confirm" className="mt-30 relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
         </Form>
         <div className={isMobile && 'center-align'}>
           <Button color="green" className="link-button mt-30" content="Link bank account automatically" onClick={this.linkAccountDirectly} />

@@ -1,93 +1,75 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import { mapValues, get } from 'lodash';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
-import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
+import formHOC from '../../../theme/form/formHOC';
 
-@inject('authStore', 'uiStore')
-@observer
-export default class ChangePassword extends Component {
-  constructor(props) {
-    super(props);
-    const loginData = mapValues(this.props.authStore.LOGIN_FRM.fields, f => f.value);
-    if (this.props.refModule !== 'security' && loginData.email === '') {
-      this.props.history.push('/login');
+const metaInfo = {
+  store: 'authStore',
+  form: 'CHANGE_PASS_FRM',
+};
+function ChangePassword(props) {
+  useEffect(() => {
+    const { setDefaultPwdType, resetForm } = props.authStore;
+    const loginData = mapValues(props.authStore.LOGIN_FRM.fields, f => f.value);
+    if (props.refModule !== 'security' && loginData.email === '') {
+      props.history.push('/login');
     }
-    this.props.authStore.setDefaultPwdType();
-    this.props.authStore.resetForm('CHANGE_PASS_FRM');
-  }
+    setDefaultPwdType();
+    resetForm('CHANGE_PASS_FRM');
+  }, []);
 
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    const method = this.props.refModule && this.props.refModule === 'security'
+    const method = props.refModule && props.refModule === 'security'
       ? 'changeMyPassword' : 'updatePassword';
-    authActions[method](this.props.refModule)
+    authActions[method](props.refModule)
       .then(() => {
         authActions.logout('updatedPassword').then(() => {
-          this.props.history.push('/login');
+          props.history.push('/login');
         });
       })
       .catch((err) => {
-        console.log(err);
+        window.logger(err);
       });
-  }
+  };
 
-  handleCloseModal = (e) => {
+  const handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.uiStore.clearErrors();
-    this.props.history.goBack();
-  }
+    props.uiStore.clearErrors();
+    props.history.goBack();
+  };
 
-  render() {
-    // togglePasswordType
     const {
       CHANGE_PASS_FRM, changePassChange, pwdInputType, currentScore,
-    } = this.props.authStore;
-    const { errors, inProgress } = this.props.uiStore;
+    } = props.authStore;
+    const { errors, inProgress } = props.uiStore;
+    const { smartElement } = props;
     return (
-      <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
+      <Modal open closeIcon onClose={handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Change your Password</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form error onSubmit={this.onSubmit}>
+          <Form error onSubmit={onSubmit}>
             {
               ['oldPasswd', 'newPasswd', 'retypePasswd'].map(field => (
                 (field === 'newPasswd')
                   ? (
-<FormPasswordStrength
-  key="newPasswd"
-  name="newPasswd"
-  type="password"
-  iconDisplay
-  minLength={8}
-  minScore={4}
-  tooShortWord="Weak"
-  scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-  inputProps={{
-    name: 'newPasswd', autoComplete: 'off', placeholder: 'New Password', key: 'newPasswd',
-  }}
-  changed={changePassChange}
-  fielddata={CHANGE_PASS_FRM.fields[field]}
-/>
+                    smartElement.FormPasswordStrength(field, { scoreWords: ['Weak', 'Okay', 'Good', 'Strong', 'Stronger'],
+                      inputProps: { name: 'newPasswd', autoComplete: 'off', placeholder: 'New Password', key: 'newPasswd' },
+                      changed: changePassChange })
                   )
                   : (
-<FormInput
-  key={field}
-  type={pwdInputType}
-                    // icon={(field === 'oldPasswd') ? togglePasswordType() : null}
-  name={field}
-  fielddata={CHANGE_PASS_FRM.fields[field]}
-  changed={changePassChange}
-/>
+                    smartElement.Input(field, { type: pwdInputType })
                   )
               ))
             }
             {errors
               && (
-<Message error textAlign="left" className="mt-30">
+              <Message error textAlign="left" className="mt-30">
                 <ListErrors errors={get(errors, 'code') === 'NotAuthorizedException' ? ['Incorrect old password'] : [get(errors, 'message')]} />
               </Message>
               )
@@ -99,5 +81,5 @@ export default class ChangePassword extends Component {
         </Modal.Content>
       </Modal>
     );
-  }
 }
+export default inject('authStore', 'uiStore')(formHOC(observer(ChangePassword), metaInfo));

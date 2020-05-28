@@ -24,7 +24,7 @@ class Finances extends Component {
     const { errors, multiSteps } = uiStore;
     return (
       <>
-        <Header as="h4">What is your household{"'"}s annual income and net worth?</Header>
+        <Header as="h4">What is your household{'\''}s annual income and net worth?</Header>
         <p className={`${isMobile ? 'mb-30' : ''} tertiary-text`}>
           SEC rules and regulations require broker-dealers to collect this information
           to determine investor suitability for private offerings.
@@ -37,13 +37,14 @@ class Finances extends Component {
                 formChange(e, result, 'FINANCIAL_INFO_FRM');
                 this.props.uiStore.scrollIntoActiveInputFields();
               },
+              'data-cy': 'taxFilingAs',
               containerclassname: 'three wide button-radio center-align',
             })
           }
           <Divider hidden />
           <Form.Group widths={2} className="mt-40">
             {['netWorth', 'annualIncomeCurrentYear'].map(field => (
-              smartElement.Masked(field, { currency: true })
+              smartElement.Masked(field, { currency: true, 'data-cy': field })
             ))}
           </Form.Group>
           {errors
@@ -57,7 +58,7 @@ class Finances extends Component {
         <p className="tertiary-text note mt-30 mb-40">
           We will never share your personal information with third parties without your consent
         </p>
-       <Button primary onClick={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className="relaxed" disabled={!FINANCIAL_INFO_FRM.meta.isValid} content="Continue" />
+       <Button primary data-cy="inv-profile-finance" onClick={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className="relaxed" disabled={!FINANCIAL_INFO_FRM.meta.isValid} content="Continue" />
       </>
     );
   }

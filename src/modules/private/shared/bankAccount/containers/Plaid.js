@@ -11,7 +11,7 @@ import NSImage from '../../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('bankAccountStore', 'uiStore', 'transactionStore', 'accountStore')
+@inject('bankAccountStore', 'uiStore', 'identityStore', 'accountStore')
 @withRouter
 @observer
 export default class Plaid extends Component {
@@ -50,11 +50,12 @@ export default class Plaid extends Component {
     }
   }
 
-  handleBankSelect = (referenceLink) => {
-    this.props.transactionStore.requestOtpForManageTransactions(true).then(() => {
+  handleBankSelect = async (referenceLink) => {
+    const res = await this.props.identityStore.sendOtp('BANK_CHANGE', isMobile);
+    if (res) {
       const confirmUrl = `${referenceLink}/confirm`;
       this.props.history.push(confirmUrl);
-    });
+    }
   }
 
   handleInstitutionClick = (insId, action) => {
@@ -169,7 +170,7 @@ export default class Plaid extends Component {
             )
           }
           <div className={`${isMobile && 'center-align'} mt-30`}>
-            <Button color="green" className="link-button" content="Link bank account manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
+            <Button color="green" className="link-button" data-cy="link-bank-manually" content="Link bank account manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
           </div>
         </>
         {(isAccountPresent && action !== 'change') && (

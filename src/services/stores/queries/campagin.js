@@ -1,13 +1,100 @@
 import gql from 'graphql-tag';
 
-export const allOfferings = gql`
-query getOfferingList($filters: OfferingListFilterInputType){
-    getOfferingList(filters: $filters) {
-      id
+const offeringTemplate2 = {
+  content: `content {
+    title
+    order
+    contentType
+    scope
+    customValue
+  }`,
+  gallery: `gallery {
+    caption
+    order
+    image {
+      url
+      fileName
+    }
+    isVisible
+  }`,
+  misc: `misc {
+    issuerStatement
+    logo {
+      url
+      fileName
+    }
+    avatar {
+      url
+      fileName
+    }
+    social {
+      type
+      url
+      shareLink
+      blurb
+      featuredImageUpload {
+        url
+        fileName
+      }
+    }
+  }`,
+  tombstone: `tombstone {
+    image {
+      url
+      fileName
+    }
+    description
+    meta {
+      keyLabel
+      order
+      keyType
+      keyValue
+      keyFormat
+      isHighlight
+    }
+    customTag
+    toggleMeta
+  }`,
+  header: `header {
+    heroImage {
+      url
+      fileName
+    }
+    heroBackgroundImage {
+      url
+      fileName
+    }
+    heroVideoURL
+    meta {
+      keyLabel
+      order
+      keyType
+      keyValue
+      keyFormat
+      isHighlight
+    }
+    toggleMeta
+  }`,
+  subHeader: `subHeader {
+    meta {
+      keyLabel
+      order
+      keyType
+      keyValue
+      keyFormat
+      isHighlight
+    }
+    toggleMeta
+  }`,
+};
+
+export const offeringFields = `id
+      template
       isAvailablePublicly
       watchListStatus
       offeringSlug
       stage
+      ${offeringTemplate2.tombstone}
       updated {
         date
       }
@@ -77,7 +164,12 @@ query getOfferingList($filters: OfferingListFilterInputType){
         state
         city
       }
-      regulation
+      regulation`;
+
+export const allOfferings = gql`
+query getOfferingList($filters: OfferingListFilterInputType){
+    getOfferingList(filters: $filters) {
+      ${offeringFields}
     }
   }
 `;
@@ -104,17 +196,29 @@ query offeringWatchList($offeringId: String){
   offeringWatchList(offeringId: $offeringId) {
     userId
     status
-    offeringId
     lastUpdated
+    activity
+    investmentCount
     userInfo {
       email {
         address
       }
-    info {
-      firstName
-      lastName
+      info {
+        firstName
+        lastName
+        mailingAddress {
+          city
+          state
+        }
+      }
+      legalDetails {
+        legalAddress {
+          city
+          state
+        }
+      }
     }
-    }
+
   }
 }
 `;
@@ -146,6 +250,12 @@ export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    template
+    ${offeringTemplate2.header}
+    ${offeringTemplate2.subHeader}
+    ${offeringTemplate2.content}
+    ${offeringTemplate2.misc}
+    ${offeringTemplate2.gallery}
     investmentSummary {
       isInvestedInOffering
       tranche
@@ -330,6 +440,7 @@ export const campaignDetailsQuery = gql`
         title
         page
         regulation
+        hideHeader
         toc {
           label
           order
@@ -452,6 +563,7 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
         title
         page
         regulation
+        hideHeader
         toc {
           label
           order

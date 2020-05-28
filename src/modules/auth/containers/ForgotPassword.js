@@ -1,41 +1,39 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
-import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
+import formHOC from '../../../theme/form/formHOC';
 
-@inject('authStore', 'uiStore')
-@observer
-export default class ForgotPassword extends Component {
-  constructor(props) {
-    super(props);
-    this.props.authStore.resetForm('FORGOT_PASS_FRM');
-  }
-
-  componentWillUnmount() {
-    // Do not reset authStore here; required
-    this.props.uiStore.reset();
-  }
-
-  onSubmit = (event) => {
+const metaInfo = {
+    store: 'authStore',
+    form: 'FORGOT_PASS_FRM',
+};
+function ForgotPassword(props) {
+  useEffect(() => {
+    props.authStore.resetForm('FORGOT_PASS_FRM');
+    return () => {
+      props.uiStore.reset();
+    };
+  }, []);
+   const onSubmit = (event) => {
     event.preventDefault();
     authActions.resetPassword()
-      .then(() => this.props.history.push('/reset-password'))
+      .then(() => props.history.push('/reset-password'))
       .catch(err => window.logger(err));
-  }
+  };
 
-  handleCloseModal = (e) => {
+  const handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.history.push(this.props.uiStore.authRef || '/');
-  }
+    props.history.push(props.uiStore.authRef || '/');
+  };
 
-  render() {
-    const { FORGOT_PASS_FRM, forgotPassChange } = this.props.authStore;
-    const { inProgress, errors } = this.props.uiStore;
+    const { FORGOT_PASS_FRM } = props.authStore;
+    const { inProgress, errors } = props.uiStore;
+    const { smartElement } = props;
     return (
-      <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
+      <Modal open closeIcon onClose={handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Reset your password</Header>
           <p>
@@ -44,16 +42,10 @@ export default class ForgotPassword extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form error onSubmit={this.onSubmit}>
+          <Form error onSubmit={onSubmit}>
             {
               Object.keys(FORGOT_PASS_FRM.fields).map(field => (
-                <FormInput
-                  key={field}
-                  type="text"
-                  name={field}
-                  fielddata={FORGOT_PASS_FRM.fields[field]}
-                  changed={forgotPassChange}
-                />
+                smartElement.Input(field)
               ))
             }
             {errors
@@ -73,5 +65,5 @@ export default class ForgotPassword extends Component {
         </Modal.Actions>
       </Modal>
     );
-  }
 }
+export default inject('authStore', 'uiStore')(formHOC(observer(ForgotPassword), metaInfo));

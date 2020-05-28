@@ -49,16 +49,20 @@ export class MultiFactorAuthStore {
         .then(action(() => {
           userDetailsStore.setUserMfaMode(mfaModeType);
           Helper.toast('Multi-factor autentitaction updated successfully.', 'success');
+          uiStore.setProgress(false);
           resolve();
         }))
         .catch(() => {
           Helper.toast('Someting went wrong. Please try again in sometime', 'error');
-          reject();
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          reject();
         });
     });
+  }
+
+  @action
+  resetStoreData = () => {
+    this.MFA_MODE_TYPE_META = Validator.resetFormData(this.MFA_MODE_TYPE_META);
   }
 }
 

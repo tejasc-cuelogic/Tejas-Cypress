@@ -15,10 +15,12 @@ import {
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore from '../dataModelStore';
-import { deleteBonusReward, updateOffering,
+import {
+  deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
-  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted, getOfferingClosureProcess } from '../../../queries/offerings/manage';
+  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted, getOfferingClosureProcess,
+} from '../../../queries/offerings/manage';
 import { adminInvokeProcessorDriver } from '../../../queries/data';
 import { updateBusinessApplicationInformation, adminBusinessApplicationsDetails } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -372,7 +374,7 @@ export class OfferingCreationStore extends DataModelStore {
       .catch((err) => {
         this.resetFormField('MEDIA_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
-        console.log(err);
+        window.logger(err);
       });
   }
 
@@ -393,7 +395,7 @@ export class OfferingCreationStore extends DataModelStore {
       .catch((err) => {
         this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
-        console.log(err);
+        window.logger(err);
       });
   }
 
@@ -431,7 +433,7 @@ export class OfferingCreationStore extends DataModelStore {
       })
       .catch((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
+        window.logger(err);
       });
   }
 
@@ -527,7 +529,7 @@ export class OfferingCreationStore extends DataModelStore {
       if (field === 'legalBusinessName') {
         this[formName].fields.shorthandBusinessName.value = value;
       }
-      this[formName].fields.offeringSlug.value = kebabCase(value);
+      this[formName].fields.offeringSlug.value = `https://www/nextseed.com/offering/${kebabCase(value)}`;
     }
   }
 
@@ -613,8 +615,9 @@ export class OfferingCreationStore extends DataModelStore {
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
     const isDateField = includes(['maturityDate', 'dob', 'dateOfService', 'dlExpirationDate', 'dlIssuedDate'], field);
+    const isString = includes(['ssn'], field);
     const isAbsField = includes(['startupPeriod'], field);
-    const fieldValue = isDateField ? values.formattedValue : isAbsField ? Math.abs(values.floatValue) || '' : values.floatValue;
+    const fieldValue = isDateField ? values.formattedValue : isAbsField ? Math.abs(values.floatValue) || '' : isString ? values.value : values.floatValue;
     if (form === 'KEY_TERMS_FRM' && includes(['minOfferingAmount506', 'maxOfferingAmount506'], field)) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
@@ -1057,7 +1060,7 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
-  evaluateFormFieldToArray = (fields) => {
+  evaluateFormFieldToArray = (fields, includeHighlight = true) => {
     const social = [];
     const highlight = [];
     map(fields, (ele, key) => {
@@ -1106,16 +1109,17 @@ export class OfferingCreationStore extends DataModelStore {
             social.push(object);
           }
         }
-        if (Array.isArray(toJS(fields[key]))) {
+        if (includeHighlight && Array.isArray(toJS(fields[key]))) {
           records.forEach((field) => {
             highlight.push(field.highlight.value);
           });
         }
       } catch (e) {
-        console.log(e);
+        window.logger(e);
       }
     });
-    return { social, highlight };
+    const socialData = includeHighlight ? { social, highlight } : { social };
+    return socialData;
   }
 
   generateActivityHistory = (resourceId, activityType, activityTitle, subType) => {
@@ -1199,12 +1203,16 @@ export class OfferingCreationStore extends DataModelStore {
         } else if (keyName === false && payload.stage === 'LIVE') {
           this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.LIVE, 'Application launched!', 'LAUNCHED');
         }
-        res();
+        res((get(result, 'data.updateOffering.template')));
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        console.log('Error', err);
-        Helper.toast('Something went wrong.', 'error');
+        window.logger('Error', err);
+        if (get(err, 'message') && get(err, 'message').includes('has locked the offering')) {
+          Helper.toast(get(err, 'message'), 'error');
+        } else {
+          Helper.toast('Something went wrong.', 'error');
+        }
         rej();
       })
       .finally(() => {
@@ -1507,7 +1515,7 @@ export class OfferingCreationStore extends DataModelStore {
       }
       payloadData.agreements = [...finalDataRoomDocs, ...removedDataFooms];
       payloadData.agreements = cleanDeep(payloadData.agreements);
-      console.log('agreement payload==>', payloadData);
+      window.logger('agreement payload==>', payloadData);
       this.updateDcoumentForApplication(payloadData)
         .then(() => {
           this.removeUploadedFiles(fromS3);
@@ -1515,7 +1523,7 @@ export class OfferingCreationStore extends DataModelStore {
           uiStore.setProgress(false);
         });
     }).catch(action((error) => {
-      console.log(error);
+      window.logger(error);
       uiStore.setProgress(false);
     }));
   }
@@ -1826,14 +1834,14 @@ export class OfferingCreationStore extends DataModelStore {
     const result = await this.executeMutation({
       mutation: 'adminInvokeProcessorDriver',
       variables: {
-                    method: 'OFFERING_CLOSE',
-                    payload: requestVariable,
-                 },
+        method: 'OFFERING_CLOSE',
+        payload: requestVariable,
+      },
       setLoader: adminInvokeProcessorDriver,
       message: {
-                success: 'Your request is processed.',
-                error: 'Error while performing operation.',
-              },
+        success: 'Your request is processed.',
+        error: 'Error while performing operation.',
+      },
     });
     uiStore.setProgress(false);
   });
@@ -2145,7 +2153,7 @@ export class OfferingCreationStore extends DataModelStore {
     );
     if (type === 'CLOSING_BINDER' && (!obj.closingBinder || !obj.closingBinder.length)) {
       // obj.closingBinder = mergeWith(
-      //   toJS(getOfferingById.closingBinder),
+      //   toJS(getOffering.closingBinder),
       //   obj.closingBinder,
       //   this.mergeCustomize,
       // );
@@ -2200,7 +2208,7 @@ export class OfferingCreationStore extends DataModelStore {
         funcArray.push(this.uploadFiles(form, arrayName, field, file, stepName, fileData, file.currentIndex));
       });
       Promise.all(funcArray).then((responseArr) => {
-        console.log(responseArr);
+        window.logger(responseArr);
         this.isUploadingFile = false;
         resolve();
       }).catch((err) => {
@@ -2263,19 +2271,19 @@ export class OfferingCreationStore extends DataModelStore {
 
   getOfferingClosureProcessMeta = id => new Promise((resolve) => {
     graphql({
-        client,
-        query: getOfferingClosureProcess,
-        fetchPolicy: 'no-cache',
-        variables: { id },
-        onFetch: (res) => {
-          if (res !== undefined) {
-            resolve(res.getOfferingDetailsBySlug.closureProcess);
-          }
-        },
-        onError: () => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        },
-      });
+      client,
+      query: getOfferingClosureProcess,
+      fetchPolicy: 'no-cache',
+      variables: { id },
+      onFetch: (res) => {
+        if (res !== undefined) {
+          resolve(res.getOfferingDetailsBySlug.closureProcess);
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
   });
 }
 

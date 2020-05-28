@@ -23,11 +23,10 @@ export default class MigratedUserPhoneNumber extends Component {
   }
 
   handlePhoneNumberConfirmation = async () => {
-    const { ID_VERIFICATION_FRM } = this.props.identityStore;
-    // this.props.identityStore.setConfirmMigratedUserPhoneNumber(true);
-    const { phoneNumber } = ID_VERIFICATION_FRM.fields;
-    const phoneNumberValue = phoneNumber.value;
-    await this.props.identityStore.startPhoneVerification('NEW', phoneNumberValue, isMobile);
+   const res = await this.props.identityStore.sendOtp('PHONE_CONFIGURATION', isMobile);
+    if (res) {
+      this.props.identityStore.setConfirmMigratedUserPhoneNumber(true);
+    }
   }
 
   handleCloseModal = () => {
@@ -80,7 +79,7 @@ export default class MigratedUserPhoneNumber extends Component {
                 phone number. Your mobile carrier’s messaging and data fees may apply.
               </p>
               <Divider hidden />
-              <Button disabled={!(ID_VERIFICATION_FRM.fields.phoneNumber.value !== '' && ID_VERIFICATION_FRM.fields.phoneNumber.error === undefined)} primary fluid={isMobile} content="Confirm" loading={this.props.uiStore.inProgress} />
+              <Button disabled={!(ID_VERIFICATION_FRM.fields.phoneNumber.value !== '' && ID_VERIFICATION_FRM.fields.phoneNumber.error === undefined) || this.props.uiStore.inProgress} primary fluid={isMobile} content="Confirm" loading={this.props.uiStore.inProgress} />
             </Form>
             {errors
               && (
