@@ -70,7 +70,7 @@ class offerDetails extends Component {
           this.props.history.push('/offerings');
         } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
           this.props.history.push('/offerings');
-        } else if (['BD_506B'].includes(get(exception, 'regulation')) && get(exception, 'promptPassword')) {
+        } else if ((['CREATION'].includes(get(exception, 'stage')) || ['BD_506B'].includes(get(exception, 'regulation'))) && get(exception, 'promptPassword')) {
           this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false, offeringRegulation: get(exception, 'regulation'), shorthandBusinessName: get(exception, 'shorthandBusinessName') });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
           this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
