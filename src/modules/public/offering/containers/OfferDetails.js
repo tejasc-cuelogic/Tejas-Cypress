@@ -18,6 +18,7 @@ import SecondaryMenu from '../components/CampaignSecondaryMenu';
 import AgreementTemplate from '../../../shared/campaign/AgreementTemplate';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
+import OfferingsPassProtected from '../../../auth/containers/OfferingsPassProtected';
 import NotFound from '../../../shared/NotFound';
 import DocumentModal from '../components/campaignDetails/DataRoom/DocumentModal';
 import OfferingMetaTags from '../components/OfferingMetaTags';
@@ -45,13 +46,14 @@ class offerDetails extends Component {
     preLoading: false,
     found: 0,
     offeringSlug: null,
+    offeringRegulation: null,
+    shorthandBusinessName: null,
   }
 
   componentDidMount() {
     const { location, match, newLayout } = this.props;
     const { isUserLoggedIn } = this.props.authStore;
     const { isAdmin } = this.props.userStore;
-    const { campaign } = this.props.campaignStore;
     this.props.campaignStore.getCampaignDetails(this.props.match.params.id).then((data) => {
       if (!data) {
         this.props.history.push('/offerings');
@@ -68,8 +70,8 @@ class offerDetails extends Component {
           this.props.history.push('/offerings');
         } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
           this.props.history.push('/offerings');
-        } else if ((['CREATION'].includes(get(exception, 'stage')) || ['BD_506B'].includes(get(campaign, 'regulation'))) && get(exception, 'promptPassword')) {
-          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
+        } else if (['BD_506B'].includes(get(exception, 'regulation')) && get(exception, 'promptPassword')) {
+          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false, offeringRegulation: get(exception, 'regulation'), shorthandBusinessName: get(exception, 'shorthandBusinessName') });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
           this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && !get(exception, 'isAvailablePublicly') && !isUserLoggedIn) {
@@ -190,20 +192,37 @@ class offerDetails extends Component {
     const {
       match, campaignStore, location, newLayout,
     } = this.props;
+    const { hasPrivateAccess } = this.props.authStore;
     if (this.state.showPassDialog) {
       return (
-        <DevPassProtected
-          offerPreview
-          authPreviewOffer={this.authPreviewOffer}
-          offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
-        />
+        <>
+          { ['BD_506B'].includes(this.state.offeringRegulation) && hasPrivateAccess
+            ? (this.authPreviewOffer(true))
+            : ['BD_506B'].includes(this.state.offeringRegulation) && !hasPrivateAccess
+            ? (
+              <OfferingsPassProtected
+                offerPreview
+                authPreviewOffer={this.authPreviewOffer}
+                offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
+                shorthandBusinessName={this.state.shorthandBusinessName}
+              />
+            )
+            : (
+              <DevPassProtected
+                offerPreview
+                authPreviewOffer={this.authPreviewOffer}
+                offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
+              />
+            )
+          }
+        </>
       );
     }
     if (campaignStore.loading || (this.state.found !== 2 && !campaignStore.campaignStatus.doneComputing) || this.state.preLoading) {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, campaign, modifySubNavs, campaignStatus,
+      details, modifySubNavs, campaignStatus, campaign,
     } = campaignStore;
     const { isWatching } = this.props.watchListStore;
     let navItems = [];
