@@ -19,7 +19,7 @@ export default class DashboardCta extends React.Component {
           this.props.uiStore.setNavExpanded(hasExpanded.to);
         }
       }
-      this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor')
+      this.props.history.push(redirectURL && redirectURL.pathname ? redirectURL.pathname : (roles && roles.includes('investor')
         ? `${this.props.userDetailsStore.pendingStep}` : '/dashboard'));
     } else {
       this.props.history.push('/login');
