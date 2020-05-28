@@ -45,7 +45,7 @@ function QueryBuilderContainer(props) {
                       containerclassname: 'dropdown-field mlr-0',
                       placeholder: 'Choose here',
                       containerwidth: 16,
-                      options: QUERY_BUILDER_FRM.fields.table.values.map(t => ({ ...pick(t, ['key', 'value']), text: t.value })),
+                      options: QUERY_BUILDER_FRM.fields.table.values.map(t => ({ ...pick(t, ['key', 'value', 'text']) })),
                       className: 'mb-80',
                     })}
                     <Divider section hidden />

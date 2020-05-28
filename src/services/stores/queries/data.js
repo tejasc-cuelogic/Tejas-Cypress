@@ -30,7 +30,7 @@ export const adminListRdsPlugins = gql`
 query adminListRdsPlugins {
   adminListRdsPlugins {
     tables {
-      key value
+      key value text
       columns { key value type }
     }
     operators

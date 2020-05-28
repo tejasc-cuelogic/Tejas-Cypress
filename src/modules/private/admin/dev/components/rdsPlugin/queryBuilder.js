@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Grid, Header, Button, Divider } from 'semantic-ui-react';
+import { Grid, Header, Button, Divider, Icon } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import formHOC from '../../../../../../theme/form/formHOC';
 
@@ -15,9 +15,14 @@ function QueryBuilder(props) {
     props.rdsPluginStore.addMore(metaInfo.form, 'where');
   };
 
+  const deleteFilter = (e, type, index) => {
+    e.preventDefault();
+    props.rdsPluginStore.removeOne(metaInfo.form, type, index);
+  };
+
   const { smartElement } = props;
   const { QUERY_BUILDER_FRM } = props.rdsPluginStore;
-  const { where } = QUERY_BUILDER_FRM.fields;
+  const { where, orderBy } = QUERY_BUILDER_FRM.fields;
 
   return (
     <div className="featured-section full-width">
@@ -44,13 +49,14 @@ function QueryBuilder(props) {
         {where.map((_fiter, index) => (
           <Grid columns="3">
             <Grid.Column>
-              {smartElement.FormDropDown('name', { multiForm: [metaInfo.form, 'where', index], options: where[index].name.values })}
+              {smartElement.FormDropDown('name', { multiForm: [metaInfo.form, 'where', index], options: where[index].name.values, containerwidth: 16 })}
             </Grid.Column>
             <Grid.Column>
-              {smartElement.FormDropDown('operator', { multiForm: [metaInfo.form, 'where', index], containerwidth: 16 })}
+              {smartElement.FormDropDown('operator', { multiForm: [metaInfo.form, 'where', index] })}
             </Grid.Column>
             <Grid.Column>
               {smartElement.Input('value', { multiForm: [metaInfo.form, 'where', index] })}
+              <Button className="link-button mt-5" onClick={e => deleteFilter(e, 'where', index)}><Icon className="ns-trash" /></Button>
             </Grid.Column>
           </Grid>
         ))
@@ -69,21 +75,29 @@ function QueryBuilder(props) {
               Order By
             </Header>
           </Grid.Column>
-        </Grid>
-        <Grid columns="2">
-          <Grid.Column>
-            {smartElement.FormDropDown('column', {
-              multiForm: ['QUERY_BUILDER_FRM', 'orderBy', 0],
-              options: QUERY_BUILDER_FRM.fields.orderBy[0].column.values,
-            })}
-          </Grid.Column>
-          <Grid.Column>
-            {smartElement.FormDropDown('order', {
-              multiForm: ['QUERY_BUILDER_FRM', 'orderBy', 0],
-              options: QUERY_BUILDER_FRM.fields.orderBy[0].order.values,
-            })}
+          <Grid.Column width={8}>
+            <Button size="small" color="blue" className="link-button mt-5" onClick={e => addMore(e, 'orderBy')} floated="right">
+              + Add more
+          </Button>
           </Grid.Column>
         </Grid>
+        {orderBy.map((_order, index) => (
+          <Grid columns="2">
+            <Grid.Column>
+              {smartElement.FormDropDown('column', {
+                multiForm: ['QUERY_BUILDER_FRM', 'orderBy', index],
+                options: QUERY_BUILDER_FRM.fields.orderBy[index].column.values,
+              })}
+            </Grid.Column>
+            <Grid.Column>
+              {smartElement.FormDropDown('order', {
+                multiForm: ['QUERY_BUILDER_FRM', 'orderBy', index],
+                options: QUERY_BUILDER_FRM.fields.orderBy[index].order.values,
+              })}
+              <Button className="link-button mt-5" onClick={e => deleteFilter(e, 'orderBy', index)}><Icon className="ns-trash" /></Button>
+            </Grid.Column>
+          </Grid>
+        ))}
       </>
       }
     </div>
