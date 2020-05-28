@@ -36,7 +36,7 @@ function QueryBuilderContainer(props) {
             <Form onSubmit={QUERY_BUILDER_FRM.meta.isValid && onSubmit}>
               <Form.Group>
                 <Grid className="full-width mlr-0" stackable>
-                  <Grid.Column width={8}>
+                  <Grid.Column width={6}>
                     {smartElement.FormDropDown('table', {
                       onChange: (e, result) => formChangeForTable(e, result, {
                         multiForm: ['QUERY_BUILDER_FRM', '', -1],
@@ -51,7 +51,7 @@ function QueryBuilderContainer(props) {
                     <Divider section hidden />
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={!QUERY_BUILDER_FRM.meta.isValid || loadingArray.includes('adminRunRdsQuery')} />
                   </Grid.Column>
-                  <Grid.Column width={8}>
+                  <Grid.Column width={10}>
                     {QUERY_BUILDER_FRM.fields.table.value !== ''
                       && <QueryBuilder />
                     }
