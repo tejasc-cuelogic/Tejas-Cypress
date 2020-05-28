@@ -52,7 +52,7 @@ class OfferingsPassProtected extends Component {
 
   render() {
     const { SELF_ACCREDITATION_PRIVATE_FRM, formChange } = this.props.accreditationStore;
-    const headerMsg = `This is a private offering for ${this.props.offeringSlug} that is only available to accredited investors.`;
+    const headerMsg = `This is a private offering for ${this.props.shorthandBusinessName} that is only available to accredited investors.`;
     const paraMsg = <span>Please confirm that you are an accredited<br /> investor and enter in the access code<br /> provided by the issuer.</span>;
     const isDisabled = !SELF_ACCREDITATION_PRIVATE_FRM.fields.status.value.length || !this.state.password;
     return (

@@ -47,6 +47,7 @@ class offerDetails extends Component {
     found: 0,
     offeringSlug: null,
     offeringRegulation: null,
+    shorthandBusinessName: null,
   }
 
   componentDidMount() {
@@ -70,7 +71,7 @@ class offerDetails extends Component {
         } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
           this.props.history.push('/offerings');
         } else if (['BD_506B'].includes(get(exception, 'regulation')) && get(exception, 'promptPassword')) {
-          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false, offeringRegulation: get(exception, 'regulation') });
+          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false, offeringRegulation: get(exception, 'regulation'), shorthandBusinessName: get(exception, 'shorthandBusinessName') });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
           this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && !get(exception, 'isAvailablePublicly') && !isUserLoggedIn) {
@@ -203,6 +204,7 @@ class offerDetails extends Component {
                 offerPreview
                 authPreviewOffer={this.authPreviewOffer}
                 offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
+                shorthandBusinessName={this.state.shorthandBusinessName}
               />
             )
             : (
