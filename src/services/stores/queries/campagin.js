@@ -258,6 +258,10 @@ export const campaignDetailsQuery = gql`
     ${offeringTemplate2.content}
     ${offeringTemplate2.misc}
     ${offeringTemplate2.gallery}
+    tombstone {
+      offeredBy
+      showOfferedBy
+    }
     investmentSummary {
       isInvestedInOffering
       tranche

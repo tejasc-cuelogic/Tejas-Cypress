@@ -211,7 +211,7 @@ export default class CampaignList extends Component {
                               )
                             }
                             {
-                              get(offering, 'tombstone.showOfferedBy')
+                              get(offering, 'tombstone.showOfferedBy') !== false
                               && (
                                 <p className="more-info">
                                   Offered by {get(offering, 'tombstone.offeredBy') ? offering.tombstone.offeredBy : 'NextSeed Securities, LLC'}
