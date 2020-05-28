@@ -39,6 +39,8 @@ const offeringTemplate2 = {
     }
   }`,
   tombstone: `tombstone {
+    offeredBy
+    showOfferedBy
     image {
       url
       fileName
