@@ -472,21 +472,15 @@
         //     }
         // }
     }
-    &.doc-mapfile-table{
-        // tr td{
-        //     width: 50%;
-        // }
-        // .field>.selection.dropdown{
-        //     width: auto !important;
-        // }
-        // .ui.selection.dropdown>.text{
-        //     width: auto !important;
-        // }
-        // .ui.selection.dropdown .menu{
-        //     width: auto !important;
-        //     min-width: auto !important;
-        // }
+    &.fundinvestmentTable,&.confirm-transfer-table{
+        max-width: 450px !important;
+        margin: 0 auto;
+        +.note.mt-30{
+            max-width: 450px !important;
+            margin: 0 auto;
+        }
     }
+    
 }
 
 .compare-table {
