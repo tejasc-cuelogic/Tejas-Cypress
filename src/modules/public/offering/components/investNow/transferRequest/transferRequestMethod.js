@@ -60,8 +60,9 @@ function TransferRequestMethod(props) {
                   <p className={`mb-0 ${isMobile ? 'mt-10' : ''}`}>
                     Routing Number: 111310870 <br />
                       Account Number: 6002000773 <br />
-                      Memo - For further credit to: Goldstar Trust Operating <br />
-                    {`FBO: ${accountDetailsMeta.userFullName} ${accountDetailsMeta.goldstarAccountNumber}`}
+                      Memo <br />
+                      For further credit to: Goldstar Trust Operating <br />
+                    {`FBO: ${accountDetailsMeta.userFullName} (${accountDetailsMeta.goldstarAccountNumber})`}
                   </p>
                   {/* <p className="mb-0">Routing Number: 111310870</p>
                     <p className="mb-0">Account Number: 6002000773</p>
