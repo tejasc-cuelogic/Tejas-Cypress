@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { Card, Button, Form, Grid, Divider } from 'semantic-ui-react';
+import { Card, Button, Form, Grid, Divider, Header } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import { isEmpty, get } from 'lodash';
 import formHOC from '../../../../../../theme/form/formHOC';
 import DynamicFormInput from './dynamicFormInput';
 
@@ -25,7 +26,7 @@ function FileFactory(props) {
   const {
     FILEFACTORY_FRM, formChangeForPlugin, inProgress, pluginObj, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
   } = factoryStore;
-
+  const isExtraInfoVisible = !!(DYNAMCI_PAYLOAD_FRM.FILEFACTORY && DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields && !isEmpty(DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields));
   return (
     <>
       <Card fluid className="elastic-search">
@@ -36,6 +37,18 @@ function FileFactory(props) {
               <Form.Group>
                 <Grid className="full-width mlr-0" stackable>
                   <Grid.Column width={8}>
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Note: <span className="regular-text">{pluginObj.note}</span>
+                        </Header>
+                      )}
+
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Description: <span className="regular-text">{pluginObj.description}</span>
+                        </Header>
+                      )}
+                    <Divider hidden />
                     {smartElement.FormDropDown('method', {
                       onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
                       containerclassname: 'dropdown-field mlr-0',

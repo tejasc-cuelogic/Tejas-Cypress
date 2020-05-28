@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import beautify from 'json-beautify';
-import { isEmpty } from 'lodash';
-import { Card, Button, Form, Grid, Divider, Modal, Header } from 'semantic-ui-react';
-import { inject, observer } from 'mobx-react';
-import { withRouter, Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+// import beautify from 'json-beautify';
+import { isEmpty, get } from 'lodash';
+import { Card, Button, Form, Grid, Divider, Header } from 'semantic-ui-react';
+import { observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import formHOC from '../../../../../../theme/form/formHOC';
 import DynamicFormInput from '../factory/dynamicFormInput';
 
@@ -13,8 +13,8 @@ const metaInfo = {
 };
 
 function TriggerEmail(props) {
-  const [prev, setPrev] = useState(false);
-  const [visibleProp, setVisibleProp] = useState(false);
+  // const [prev, setPrev] = useState(false);
+  // const [visibleProp, setVisibleProp] = useState(false);
 
   useEffect(() => {
     props.factoryStore.resetForm('EMAILFACTORY_FRM');
@@ -23,36 +23,40 @@ function TriggerEmail(props) {
     props.factoryStore.setFieldValue('processFactoryResponse', {});
   }, []);
 
-  function onSubmit() {
-    props.factoryStore.processFactoryPluginTrigger()
-      .then(() => {
-        setVisibleProp(true);
-      });
-  }
+  const onSubmit = async () => {
+    props.factoryStore.emailFactoryPluginTrigger();
+    // const res = await props.factoryStore.emailFactoryPluginTrigger();
+    // if (res) {
+    //   setVisibleProp(true);
+    // }
+  };
 
-  function handleCloseModel(e, val) {
-    e.preventDefault();
-    setPrev(val);
-    setVisibleProp(false);
-    props.factoryStore.setFieldValue('processFactoryResponse', {});
-  }
+  // function handleCloseModel(e, val) {
+  //   e.preventDefault();
+  //   setPrev(val);
+  //   setVisibleProp(false);
+  //   props.factoryStore.setFieldValue('processFactoryResponse', {});
+  // }
 
-  function showModel(e, val) {
-    e.preventDefault();
-    setPrev(val);
-  }
+  // function showModel(e, val) {
+  //   e.preventDefault();
+  //   setPrev(val);
+  // }
 
-  const { factoryStore, smartElement, emailStore } = props;
+  const { factoryStore, smartElement } = props;
   const {
-    EMAILFACTORY_FRM, formChangeForPlugin, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
+    EMAILFACTORY_FRM,
+    formChangeForPlugin,
+    inProgress,
+    // processFactoryResponse,
+    DYNAMCI_PAYLOAD_FRM,
+    currentPluginSelected,
+    pluginObj,
   } = factoryStore;
-  const {
-    emailPlugin,
-  } = emailStore;
-
+  const isExtraInfoVisible = !!(DYNAMCI_PAYLOAD_FRM.EMAIL_LIST && DYNAMCI_PAYLOAD_FRM.EMAIL_LIST.fields && !isEmpty(DYNAMCI_PAYLOAD_FRM.EMAIL_LIST.fields));
   return (
     <>
-      <Modal open={prev} size="small" closeOnDimmerClick={false} closeIcon onClose={e => handleCloseModel(e, false)}>
+      {/* <Modal open={prev} size="small" closeOnDimmerClick={false} closeIcon onClose={e => handleCloseModel(e, false)}>
         <Modal.Content>
           <Header as="h3">Response Payload</Header>
           {processFactoryResponse && !isEmpty(processFactoryResponse)
@@ -68,7 +72,7 @@ function TriggerEmail(props) {
             )
           }
         </Modal.Content>
-      </Modal>
+      </Modal> */}
       <Card fluid className="elastic-search">
         <Card.Content header="Trigger Email" />
         <Card.Content>
@@ -77,6 +81,18 @@ function TriggerEmail(props) {
               <Form.Group>
                 <Grid className="full-width mlr-0" stackable>
                   <Grid.Column width={8}>
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Note: <span className="regular-text">{pluginObj.note}</span>
+                        </Header>
+                      )}
+
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Description: <span className="regular-text">{pluginObj.description}</span>
+                        </Header>
+                      )}
+                    <Divider hidden />
                     {smartElement.FormDropDown('method', {
                       onChange: (e, result) => formChangeForPlugin(e, result, 'EMAILFACTORY_FRM'),
                       containerclassname: 'dropdown-field mlr-0',
@@ -87,10 +103,10 @@ function TriggerEmail(props) {
                     })}
                     <Divider section hidden />
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.emailFactory || !EMAILFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.EMAIL_LIST.meta.isValid} loading={inProgress.emailFactory} />
-                    {visibleProp && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
+                    {/* {visibleProp && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>} */}
                   </Grid.Column>
                   <Grid.Column width={8}>
-                    <DynamicFormInput {...props} pluginObj={emailPlugin} formPayload={DYNAMCI_PAYLOAD_FRM.EMAIL_LIST} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'EMAIL_LIST' }} selectedPlugin={currentPluginSelected} />
+                    <DynamicFormInput {...props} pluginObj={pluginObj} listType="adminListEmailPlugins" formPayload={DYNAMCI_PAYLOAD_FRM.EMAIL_LIST} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'EMAIL_LIST' }} selectedPlugin={currentPluginSelected} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>
@@ -102,4 +118,4 @@ function TriggerEmail(props) {
   );
 }
 
-export default inject('emailStore')(withRouter(formHOC(observer(TriggerEmail), metaInfo)));
+export default (withRouter(formHOC(observer(TriggerEmail), metaInfo)));

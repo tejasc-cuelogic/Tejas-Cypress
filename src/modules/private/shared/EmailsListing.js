@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Table, Popup, Item, Icon, Button } from 'semantic-ui-react';
+import { Table, Popup, Item, Icon } from 'semantic-ui-react';
 import { DataFormatter } from '../../../helper';
 
-const EmailsListing = ({ emailList, displyNoEmails, handleModel, loading, handleActionModel }) => (
+const EmailsListing = ({ emailList, displyNoEmails, handleModel, loading }) => (
   <div className="table-wrapper">
     <Table unstackable striped className="application-list">
       <Table.Header>
@@ -12,7 +12,6 @@ const EmailsListing = ({ emailList, displyNoEmails, handleModel, loading, handle
           <Table.HeaderCell>From Details</Table.HeaderCell>
           <Table.HeaderCell>To Details</Table.HeaderCell>
           <Table.HeaderCell>Subject</Table.HeaderCell>
-          <Table.HeaderCell>Action</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -72,9 +71,6 @@ const EmailsListing = ({ emailList, displyNoEmails, handleModel, loading, handle
                       position="top center"
                     />
                   )}
-                </Table.Cell>
-                <Table.Cell collapsing>
-                  <Button className="ml-10" primary content="Send Email" onClick={e => handleActionModel(e, { emailIdentifier: resp.emailIdentifier, pluginInputs: resp.pluginInputs })} />
                 </Table.Cell>
               </Table.Row>
             ))

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import beautify from 'json-beautify';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { Card, Button, Form, Grid, Divider, Modal, Header } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
@@ -46,7 +46,7 @@ function ProcessFactory(props) {
   const {
     PROCESSFACTORY_FRM, pluginObj, formChangeForPlugin, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
   } = factoryStore;
-
+  const isExtraInfoVisible = !!(DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY && DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.fields && !isEmpty(DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.fields));
   return (
     <>
       <Modal open={prev} size="small" closeOnDimmerClick={false} closeIcon onClose={e => handleCloseModel(e, false)}>
@@ -74,6 +74,18 @@ function ProcessFactory(props) {
               <Form.Group>
                 <Grid className="full-width mlr-0" stackable>
                   <Grid.Column width={8}>
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Note: <span className="regular-text">{pluginObj.note}</span>
+                        </Header>
+                      )}
+
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Description: <span className="regular-text">{pluginObj.description}</span>
+                        </Header>
+                      )}
+                    <Divider hidden />
                     {smartElement.FormDropDown('method', {
                       onChange: (e, result) => formChangeForPlugin(e, result, 'PROCESSFACTORY_FRM'),
                       containerclassname: 'dropdown-field mlr-0',
