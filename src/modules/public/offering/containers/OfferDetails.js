@@ -191,17 +191,21 @@ class offerDetails extends Component {
     const {
       match, campaignStore, location, newLayout,
     } = this.props;
+    const { hasPrivateAccess } = this.props.authStore;
     if (this.state.showPassDialog) {
       return (
         <>
-          { ['BD_506B'].includes(this.state.offeringRegulation)
+          { ['BD_506B'].includes(this.state.offeringRegulation) && hasPrivateAccess
+            ? (this.authPreviewOffer(true))
+            : ['BD_506B'].includes(this.state.offeringRegulation) && !hasPrivateAccess
             ? (
               <OfferingsPassProtected
                 offerPreview
                 authPreviewOffer={this.authPreviewOffer}
                 offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
               />
-            ) : (
+            )
+            : (
               <DevPassProtected
                 offerPreview
                 authPreviewOffer={this.authPreviewOffer}

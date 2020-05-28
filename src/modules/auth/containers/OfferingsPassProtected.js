@@ -28,7 +28,7 @@ class OfferingsPassProtected extends Component {
       })
       .catch(() => {
         activityActions.log({ action: 'LOGIN', status: 'FAIL' });
-        this.setState({ error: 'Access code is invalid. Please try again, or request the access code from the issuer.' });
+        this.setState({ error: 'Entered password is invalid, please try again.' });
       });
   }
 
@@ -37,6 +37,7 @@ class OfferingsPassProtected extends Component {
     this.props.authStore.validateOfferingPreviewPassword(this.props.offeringSlug, this.state.password).then((status) => {
       if (status) {
         this.props.authPreviewOffer(true, this.state.password);
+        this.props.authStore.setUserPrivateAccess(true);
       } else {
         this.setState({ error: 'Access code is invalid. Please try again, or request the access code from the issuer.' });
       }
@@ -53,38 +54,15 @@ class OfferingsPassProtected extends Component {
     const { SELF_ACCREDITATION_PRIVATE_FRM, formChange } = this.props.accreditationStore;
     const headerMsg = `This is a private offering for ${this.props.offeringSlug} that is only available to accredited investors.`;
     const paraMsg = <span>Please confirm that you are an accredited<br /> investor and enter in the access code<br /> provided by the issuer.</span>;
+    const isDisabled = !SELF_ACCREDITATION_PRIVATE_FRM.fields.status.value.length || !this.state.password;
     return (
       <>
-        {/* <Modal size="mini" basic open className="multistep-modal">
-          <Logo size="medium" centered dataSrc="LogoWhiteGreen" />
-          <Divider hidden />
-          <Modal.Content className="signup-modal multistep">
-            <Form onSubmit={this.props.offerPreview ? this.authPreviewOffer : this.submit}>
-              <Form.Input
-                onChange={e => this.setState({ password: e.target.value, error: '' })}
-                fluid
-                placeholder="Please enter password here"
-                label="Site Password"
-                value={this.state.password}
-                type="password"
-                autoFocus
-                name="password"
-                error={this.state.error}
-              />
-              <FieldError error={this.state.error} />
-              <div className="center-align">
-                <Button disabled={!this.state.password} primary size="large" className="very relaxed" loading={this.state.previewPassLoader}>{this.props.offerPreview ? 'Continue' : 'Log in'}</Button>
-              </div>
-            </Form>
-          </Modal.Content>
-        </Modal> */}
-
-        <Modal size="small" className="acc-investor-modal" open={this.state.openModal} closeIcon onClose={this.closeModal}>
+        <Modal size="large" className="acc-investor-modal" open={this.state.openModal} closeIcon onClose={this.closeModal}>
           <Modal.Content>
             <section className="no-updates padded plr-0">
               <Grid columns="2" stackable doubling>
                 <Grid.Column>
-                  <Header as="h3" className="mb-20">
+                  <Header as="h4" className="mb-20">
                     {headerMsg}
                   </Header>
                   <p className="line-height-24">{paraMsg}</p>
@@ -111,7 +89,7 @@ class OfferingsPassProtected extends Component {
                       error={this.state.error}
                     />
                     <FieldError error={this.state.error} />
-                    <Button loading={this.state.previewPassLoader} primary content="Confirm" className="mt-20" disabled={SELF_ACCREDITATION_PRIVATE_FRM.fields.status.value.length !== 1 && !this.state.password} onClick={e => this.investorSelfVerifyAccreditedStatus(e)} />
+                    <Button loading={this.state.previewPassLoader} primary content="Confirm" className="mt-20" disabled={isDisabled || this.state.previewPassLoader} />
                   </Form>
                 </Grid.Column>
               </Grid>
