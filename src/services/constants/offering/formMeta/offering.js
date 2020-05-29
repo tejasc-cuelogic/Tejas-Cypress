@@ -244,8 +244,8 @@ export const GALLERY = {
       defaultValue: 1,
     },
     isVisible: {
-      value: false,
-      defaultValue: false,
+      value: true,
+      defaultValue: true,
       values: [
         {
           label: 'Is Visible',
