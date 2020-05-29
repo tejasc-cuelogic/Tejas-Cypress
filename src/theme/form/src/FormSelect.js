@@ -1,8 +1,10 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon, Select } from 'semantic-ui-react';
-import { FieldError } from '../../shared';
+import { Form, Select } from 'semantic-ui-react';
+import { FieldError, PopUpModal } from '../../shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 const FormSelect = observer((props) => {
   const {
@@ -11,27 +13,32 @@ const FormSelect = observer((props) => {
     error,
     placeHolder,
   } = props.fielddata;
-  let width = '';
+  let width = false;
   if (props.containerwidth) {
     width = props.containerwidth;
   }
   const { displayMode, readOnly } = props;
+  const fieldClass = `${props.containerclassname || ''} ${displayMode ? ' display-only' : ''}`;
   return (
-    <Form.Field error={error} width={width}>
-      <label>
-        {label}
-        {props.tooltip
-          && (
-<Popup
-  trigger={<Icon className="ns-help-circle" />}
-  content={props.tooltip}
-  position="top center"
-  className="center-align"
-  wide
-/>
-          )
-        }
-      </label>
+    <Form.Field error={error} width={width} className={fieldClass}>
+      {!props.ishidelabel && (label !== '' || props.label !== '')
+        && (
+          <label>
+            {props.tooltip
+              ? (
+                <PopUpModal
+                  customTrigger={<span className="popup-label">{label}</span>}
+                  content={props.tooltip}
+                  position="top center"
+                  className="center-align"
+                  wide
+                  showOnlyPopup={!isMobile}
+                />
+              ) : <span>{label}</span>
+            }
+          </label>
+        )
+      }
       <Select
         fluid
         {...props}
@@ -39,6 +46,7 @@ const FormSelect = observer((props) => {
         error={!!error}
         onChange={props.changed}
         placeholder={(displayMode || readOnly) ? '' : placeHolder}
+        disabled={displayMode}
       />
       <div className="dropdown-effect">{props.fielddata.label}</div>
       {error

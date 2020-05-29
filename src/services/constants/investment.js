@@ -75,6 +75,31 @@ export const INVEST_ACCOUNT_TYPES = {
   rule: 'required',
 };
 
+export const AGREEMENT_TEMPLATE_DETAILS_INFO = {
+  page: [{
+    toc: {
+    value: [],
+    values: [],
+    error: undefined,
+    rule: 'required',
+    defaultValue: [],
+  },
+  title: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'required',
+  },
+  hideHeader: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'optional',
+  },
+  }],
+};
+
+
 export const AGREEMENT_DETAILS_INFO = {
   checkboxesLeft: {
     value: [],
@@ -200,3 +225,26 @@ export const VOID_TYPE = [
   { key: 'ADMINCANCEL', value: 'ADMINCANCEL', text: 'ADMIN CANCEL' },
   { key: 'OFFERING_TERMINATED', value: 'OFFERING_TERMINATED', text: 'OFFERING TERMINATED' },
 ];
+
+export const PARALLEL_INVESTMENT_OPTIONS = {
+  option: {
+    value: '',
+    values: [
+      {
+        label: 'Yes',
+        labelDescription: <>
+          Verify my status as an accredited investor</>,
+        value: 'yes',
+      },
+      {
+        label: 'No',
+        labelDescription: <>
+          Proceed to invest under Regulation Crowdfunding</>,
+        value: 'no',
+      },
+    ],
+    // error: undefined,
+    // rule: 'required',
+    // key: 'role',
+  },
+};

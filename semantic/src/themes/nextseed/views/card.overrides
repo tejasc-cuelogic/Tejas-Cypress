@@ -150,6 +150,8 @@
                 }
                 > .meta{
                     text-transform:none;
+                    font-size: @15px;
+                    line-height: 24px;
                 }
                 .description{
                     min-height:120px;
@@ -165,6 +167,10 @@
                     min-height: 115px;
                     @media only screen and (max-width : @monitorBreakpoint){
                         min-height: auto;
+                    }
+                    .ui.table tbody tr td{
+                        line-height: 26px;
+                        font-size: @14px;
                     }
                 }
                 p{
@@ -188,6 +194,7 @@
             top: auto;
             width: 100%;
             background: @white;
+            min-height: 73px !important;
             @media only screen and (max-width : @largestMobileScreen){
                 padding:0 @22px @20px;
             }
@@ -199,6 +206,9 @@
             &.disabled{
                 background: @neutral-darkwhite;
             }
+        }
+        >.content.extra.ed-center {
+            min-height: 0px !important;
         }
         .message {
             padding: @6px @30px;
@@ -250,12 +260,13 @@
             border-color: transparent;
             padding: @14px;
             width: auto;
+            height: 100%;
             &:hover {
                 border-color: @neutral-darkwhite;
             }
             .content {
                 border: 0;
-                padding: 0 @28px;
+                padding: 0 @28px @14px;
                 .description {
                     font-size: @15px;
                     margin: 0 0 @30px;
@@ -276,6 +287,7 @@
     }
     &.insights{
         height: 100%;
+        padding-bottom: 0px !important;
         &:hover{
             text-decoration: none;
         }
@@ -292,6 +304,18 @@
             .description{
                 height:auto;
                 margin-bottom: 0;
+            }
+        }
+        &.campaign{
+            >.content{
+                position: relative;
+                .description{
+                    margin-bottom: 42px !important;
+                }
+                a{
+                    position: absolute;
+                    bottom: 14px;
+                }
             }
         }
     }

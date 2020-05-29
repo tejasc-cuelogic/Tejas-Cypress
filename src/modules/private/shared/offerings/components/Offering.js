@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { get } from 'lodash';
 import { Grid } from 'semantic-ui-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
@@ -7,7 +8,7 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const getModule = component => lazyRetry(() => import(`./offering/${component}`));
 
-@inject('userStore', 'uiStore', 'offeringCreationStore')
+@inject('userStore', 'offeringCreationStore', 'offeringsStore', 'manageOfferingStore')
 @withRouter
 @observer
 export default class Offering extends Component {
@@ -23,7 +24,10 @@ export default class Offering extends Component {
   }
 
   render() {
-    const { isIssuer } = this.props.userStore;
+    const { offeringsStore, match, userStore } = this.props;
+    const { isIssuer } = userStore;
+    const { offer } = offeringsStore;
+    const showInvestNowToc = !!get(offer, 'investNow.page[0]') || get(offer, 'stage') === 'CREATION';
     let navItems = [
       { title: 'Overview', to: 'overview', component: 'OfferingOverview' },
       { title: 'About the Company', to: 'about-company', component: 'OfferingCompany' },
@@ -37,7 +41,9 @@ export default class Offering extends Component {
         ],
       ];
     }
-    const { match } = this.props;
+    if (showInvestNowToc) {
+      navItems.push({ title: 'InvestNow ToC', to: 'invest-now-toc', component: 'InvestNowToc' });
+    }
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
         <Grid>

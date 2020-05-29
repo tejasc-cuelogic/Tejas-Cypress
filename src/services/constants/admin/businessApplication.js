@@ -490,7 +490,7 @@ export const OFFERS = {
       label: 'Security Type',
       error: undefined,
       rule: 'optional',
-      default: 'TERM_NOTE',
+      defaultValue: 'TERM_NOTE',
     },
     amount: {
       value: '',
@@ -631,7 +631,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
-      default: null,
+      defaultValue: null,
     },
   }],
 };
@@ -1837,15 +1837,22 @@ export const APPLICATION_MAPPED_OFFERING = {
   },
   shorthandBusinessName: {
     value: '',
-    label: 'Short hand Name of Business',
+    label: 'DBA',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',
     objRefOutput: 'keyTerms',
   },
+  template: {
+    value: '',
+    label: 'Offering Template',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Select',
+  },
   offeringSlug: {
     value: '',
-    label: 'Offering Slug',
+    label: 'Offering URL',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',

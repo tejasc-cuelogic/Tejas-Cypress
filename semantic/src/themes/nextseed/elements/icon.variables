@@ -124,6 +124,8 @@
 @ns-bell: "\e909";
 @ns-box: "\e90a";
 @ns-business: "\e90b";
+@ns-business-circle: "\e9ab";
+@ns-building-circle: "\e9ac";
 @ns-calculator-icon: "\e9a1";
 @ns-calendar: "\e90c";
 @ns-campaign-dashboard: "\e994";
@@ -163,6 +165,7 @@
 @ns-contact-card: "\e971";
 @ns-convertible-icon: "\e9a2";
 @ns-corporation: "\e955";
+@ns-covid-icon: "\e9ad";
 @ns-credit-card: "\e91f";
 @ns-dashboard: "\e920";
 @ns-dashboard-circle: "\e921";
@@ -217,6 +220,7 @@
 @ns-minus: "\e99e";
 @ns-minus-circle: "\e9a0";
 @ns-minus-square: "\e986";
+@ns-money-circle: "\e9aa";
 @ns-new-business: "\e95d";
 @ns-new-location: "\e95e";
 @ns-new-product: "\e95f";
@@ -250,9 +254,12 @@
 @ns-rewards: "\e980";
 @ns-rss-feed: "\e94a";
 @ns-search: "\e931";
+@ns-seed-icon: "\e9ae";
 @ns-send-right: "\e989";
 @ns-setting: "\e932";
 @ns-shield-check: "\e96c";
+@ns-shrub-icon: "\e9af";
+@ns-sprout-icon: "\e9b0";
 @ns-star: "\e981";
 @ns-statement: "\e933";
 @ns-store: "\e967";
@@ -264,6 +271,7 @@
 @ns-times-box: "\e935";
 @ns-times-circle: "\e936";
 @ns-trash: "\e937";
+@ns-tree-icon: "\e9b1";
 @ns-trending: "\e982";
 @ns-twitter: "\e947";
 @ns-unlock: "\e948";

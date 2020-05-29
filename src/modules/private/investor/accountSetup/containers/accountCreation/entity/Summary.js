@@ -63,85 +63,83 @@ export default class Summary extends Component {
     const { taxId, name, street, state, city, zipCode } = GEN_INFO_FRM.fields;
     return (
       <>
-        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Verify information and submit for review</Header>
-        <div className={isMobile ? '' : 'field-wrap'}>
-          <div className="table-wrapper">
-            <Table unstackable basic="very" fixed>
-              <Table.Body>
+        <Header as="h4">Verify information and submit for review</Header>
+        <div className={`${isMobile ? '' : 'mt-30 mb-30'} table-wrapper`}>
+          <Table unstackable basic="very" fixed>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell className="grey-header">Entity Net Assets</Table.Cell>
+                <Table.Cell textAlign="right">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netAssets.value
+                  ? FIN_INFO_FRM.fields.netAssets.value : 0)}
+                </Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell className="grey-header">Other CF Investments</Table.Cell>
+                <Table.Cell textAlign="right">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.annualIncome.value
+                  ? FIN_INFO_FRM.fields.annualIncome.value : 0)}
+                </Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell className="grey-header">Entity Name</Table.Cell>
+                <Table.Cell textAlign="right">{name.value}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell className="grey-header">Tax ID</Table.Cell>
+                <Table.Cell textAlign="right">{taxId.value}</Table.Cell>
+              </Table.Row>
+              <Table.Row verticalAlign="top">
+                <Table.Cell className="grey-header">Entity Address</Table.Cell>
+                <Table.Cell textAlign="right">{`${street.value}, ${city.value}, ${state.value}, ${zipCode.value}`}
+                </Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell className="grey-header">Is Entity a Trust?</Table.Cell>
+                <Table.Cell textAlign="right">
+                  {TRUST_INFO_FRM.fields.isTrust.value
+                    && 'Yes, since '
+                  }
+                  {TRUST_INFO_FRM.fields.isTrust.value
+                    && <DateTimeFormat datetime={TRUST_INFO_FRM.fields.trustDate.value} />
+                  }
+                  {!TRUST_INFO_FRM.fields.isTrust.value
+                    && 'No'
+                  }
+                </Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell className="grey-header">Title With the Entity</Table.Cell>
+                <Table.Cell textAlign="right">{PERSONAL_INFO_FRM.fields.title.value}</Table.Cell>
+              </Table.Row>
+              {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
+                && (
                 <Table.Row>
-                  <Table.Cell className="grey-header">Entity Net Assets</Table.Cell>
-                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netAssets.value
-                    ? FIN_INFO_FRM.fields.netAssets.value : 0)}
+                  <Table.Cell className="grey-header">Bank: </Table.Cell>
+                  <Table.Cell textAlign="right">{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                </Table.Row>
+                )
+              }
+              <Table.Row>
+                <Table.Cell className="grey-header">Bank Account</Table.Cell>
+                <Table.Cell textAlign="right">{bankAccountNumber || ''}</Table.Cell>
+              </Table.Row>
+              {!isEmpty(routingNum)
+                && (
+                <Table.Row>
+                  <Table.Cell className="grey-header">Routing Number</Table.Cell>
+                  <Table.Cell textAlign="right">
+                    { routingNum || '' }
                   </Table.Cell>
                 </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="grey-header">Other CF Investments</Table.Cell>
-                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.annualIncome.value
-                    ? FIN_INFO_FRM.fields.annualIncome.value : 0)}
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="grey-header">Entity Name</Table.Cell>
-                  <Table.Cell>{name.value}</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="grey-header">Tax ID</Table.Cell>
-                  <Table.Cell>{taxId.value}</Table.Cell>
-                </Table.Row>
-                <Table.Row verticalAlign="top">
-                  <Table.Cell className="grey-header">Entity Address</Table.Cell>
-                  <Table.Cell>{`${street.value}, ${city.value}, ${state.value}, ${zipCode.value}`}
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="grey-header">Is Entity a Trust?</Table.Cell>
-                  <Table.Cell>
-                    {TRUST_INFO_FRM.fields.isTrust.value
-                      && 'Yes, since '
-                    }
-                    {TRUST_INFO_FRM.fields.isTrust.value
-                      && <DateTimeFormat datetime={TRUST_INFO_FRM.fields.trustDate.value} />
-                    }
-                    {!TRUST_INFO_FRM.fields.isTrust.value
-                      && 'No'
-                    }
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="grey-header">Title With the Entity</Table.Cell>
-                  <Table.Cell>{PERSONAL_INFO_FRM.fields.title.value}</Table.Cell>
-                </Table.Row>
-                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
-                  && (
-                  <Table.Row>
-                    <Table.Cell className="grey-header">Bank: </Table.Cell>
-                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
-                  </Table.Row>
-                  )
-                }
-                <Table.Row>
-                  <Table.Cell className="grey-header">Bank Account</Table.Cell>
-                  <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
-                </Table.Row>
-                {!isEmpty(routingNum)
-                  && (
-                  <Table.Row>
-                    <Table.Cell className="grey-header">Routing Number</Table.Cell>
-                    <Table.Cell>
-                      { routingNum || '' }
-                    </Table.Cell>
-                  </Table.Row>
-                  )
-                }
-                <Table.Row>
-                  <Table.Cell className="grey-header">Your Initial Deposit</Table.Cell>
-                  <Table.Cell>
-                    {depositAmount}
-                  </Table.Cell>
-                </Table.Row>
-              </Table.Body>
-            </Table>
-          </div>
+                )
+              }
+              <Table.Row>
+                <Table.Cell className="grey-header">Your Initial Deposit</Table.Cell>
+                <Table.Cell textAlign="right">
+                  {depositAmount}
+                </Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
         </div>
         {errors
           && (
@@ -150,10 +148,7 @@ export default class Summary extends Component {
             </Message>
           )
         }
-        <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent || inProgressArray.includes('submitAccountLoader')} />
-        </div>
-        <p className={`${isMobile ? '' : 'center-align'} grey-header mt-30 mb-0`}>
+        <p className="grey-header mt-30 mb-0">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
             CrowdPay Custodial Account Agreement
@@ -173,6 +168,12 @@ export default class Summary extends Component {
             Substitute IRS Form W-9 Certification
           </span>
 .
+          {isMobile
+          && (
+            <div className="mt-30">
+              <Button fluid primary size="large" className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent || inProgressArray.includes('submitAccountLoader')} />
+            </div>
+          )}
           <IframeModal
             open={this.state.open}
             close={this.closeModal}
@@ -180,6 +181,12 @@ export default class Summary extends Component {
             loading={docLoading}
           />
         </p>
+        {!isMobile
+        && (
+          <div className="mt-30">
+            <Button primary size="large" className="relaxed" data-cy="entity-summary" content="Submit for review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent || inProgressArray.includes('submitAccountLoader')} />
+          </div>
+        )}
       </>
     );
   }

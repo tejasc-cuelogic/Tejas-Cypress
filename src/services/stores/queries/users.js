@@ -52,6 +52,45 @@ export const userDetailsQueryForBoxFolder = gql`
   }
 `;
 
+export const bankChangeRequestQuery = gql`
+  query getUserDetails($userId: String) {
+    user(userId: $userId) {
+      id
+      roles {
+        name
+        scope
+        status
+        details {
+          ... on Investor {
+           linkedBank {
+            bankName
+            plaidAccountId
+            plaidItemId
+            plaidInstitutionId
+            accountNumber
+            routingNumber
+            plaidAccessToken
+            dateLinked
+            pendingUpdate
+            accountType
+            changeRequest {
+              accountNumber
+              bankName
+              plaidAccessToken
+              plaidAccountId
+              plaidItemId
+              plaidInstitutionId
+              dateRequested
+              status
+            }
+           }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const userDetailsQuery = gql`
   query getUserDetails($userId: String) {
     user(userId: $userId) {
@@ -117,6 +156,9 @@ export const userDetailsQuery = gql`
             accreditation {
               status
               expiration
+            }
+            goldstar {
+              accountNumber              
             }
             limits {
               income

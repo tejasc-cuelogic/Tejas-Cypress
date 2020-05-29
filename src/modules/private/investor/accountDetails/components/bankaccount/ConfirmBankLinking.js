@@ -7,65 +7,76 @@ import Helper from '../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../theme/shared';
 import ConfirmOTPModal from '../../../../shared/ConfirmOTPModal';
 
-@inject('transactionStore', 'bankAccountStore', 'uiStore', 'userDetailsStore')
+@inject('bankAccountStore', 'uiStore', 'userDetailsStore', 'identityStore')
 @withRouter
 @observer
 export default class ConfirmBankLinking extends Component {
   constructor(props) {
     super(props);
     this.props.uiStore.clearErrors();
-    const { transactionOtpRequestId } = this.props.transactionStore;
-    this.props.transactionStore.resetFormData('OTP_VERIFY_META');
-    if (!transactionOtpRequestId) {
-      const redirectingUrl = this.props.refLink;
-      this.props.history.push(redirectingUrl);
+    const { requestOtpResponse, sendOtp } = this.props.identityStore;
+    this.props.identityStore.resetFormData('OTP_VERIFY_META');
+    if (Object.keys(requestOtpResponse).length === 0) {
+      sendOtp('BANK_CHANGE');
     }
   }
 
-  submit = (e) => {
+  componentDidMount() {
+    const { requestOtpResponse } = this.props.identityStore;
+    const { isChangeLinkBankParamsPresent } = this.props.bankAccountStore;
+    if (!requestOtpResponse || !isChangeLinkBankParamsPresent) {
+      const redirectingUrl = this.props.refLink;
+      this.props.history.push(redirectingUrl);
+    }
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
+  }
+
+  handleBeforeUnload = (e) => {
     e.preventDefault();
-    this.props.transactionStore.confirmAccountLinking(false).then(() => {
-      const bankInterFace = this.props.bankAccountStore.bankLinkInterface;
+    e.returnValue = '';
+  }
+
+  submit = async (e) => {
+    e.preventDefault();
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    const res = await this.props.identityStore.changeLinkedBankRequest(accountType);
+    if (res) {
       const {
-        newPlaidAccDetails,
         declineBankChangeRequest,
         isLinkedBankCancelRequest,
       } = this.props.bankAccountStore;
-      const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
       const redirectUrl = `/dashboard/account-details/${accountType}/bank-accounts/link-bank-account/verify-update`;
-
       if (isLinkedBankCancelRequest) {
         declineBankChangeRequest().then(() => {
           const redirectCancelUrl = `/dashboard/account-details/${accountType}/bank-accounts`;
           Helper.toast('Cancel linked bank successfully.', 'success');
           this.props.history.push(redirectCancelUrl);
         });
-      } else if (bankInterFace === 'form') {
-        this.props.bankAccountStore.linkBankRequestManual().then(() => {
-          this.props.history.push(redirectUrl);
-        });
-      } else {
-        this.props.bankAccountStore.changeBankPlaid(newPlaidAccDetails).then(() => {
-          this.props.history.push(redirectUrl);
-        });
       }
-    });
+      this.props.history.push(redirectUrl);
+    }
   }
 
-  resendVerification = (e) => {
+  resendVerification = async (e) => {
     e.preventDefault();
-    this.props.transactionStore.setReSendVerificationCode(true);
-    this.props.transactionStore.requestOtpForManageTransactions().then(() => {
+    this.props.identityStore.setReSendVerificationCode(true);
+    const res = await this.props.identityStore.sendOtp('BANK_CHANGE');
+    if (res) {
       this.props.uiStore.clearErrors();
-      this.props.transactionStore.setReSendVerificationCode(false);
-    });
+      this.props.identityStore.setReSendVerificationCode(false);
+    }
   }
 
   render() {
     const {
       OTP_VERIFY_META,
       verifyVerificationCodeChange,
-    } = this.props.transactionStore;
+      reSendVerificationCode,
+    } = this.props.identityStore;
     const { userDetails, currentUser } = this.props.userDetailsStore;
 
     if (currentUser.loading) {
@@ -81,10 +92,11 @@ export default class ConfirmBankLinking extends Component {
         }
         refLinkListVal={this.props.refLink}
         maskedPhoneNumber={userDetails.phone.number}
+        reSendVerificationCode={reSendVerificationCode}
         otpConfirmemailAddress={userDetails.email.address}
-        reSendVerificationCode={this.props.transactionStore.reSendVerificationCode}
         resendVerification={this.resendVerification}
         formSubmit={this.submit}
+        mfaType="BANK_CHANGE"
         actionToPerform="updating you're linked bank"
         mfaMode={userDetails.mfaMode}
       />

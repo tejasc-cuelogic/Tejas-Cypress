@@ -41,58 +41,44 @@ export default class LinkbankSummary extends React.Component {
       ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     return (
       <>
-        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Please confirm your linked bank account information</Header>
-        <div className={isMobile ? '' : 'field-wrap'}>
-          <div className="table-wrapper">
-            <Table unstackable basic="very" fixed>
-              <Table.Body>
-                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
-                  && (
-                    <Table.Row>
-                      <Table.Cell className="grey-header">Bank: </Table.Cell>
-                      <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
-                    </Table.Row>
-                  )
-                }
-                <Table.Row>
-                  <Table.Cell className="grey-header">Account Type: </Table.Cell>
-                  <Table.Cell>{Helper.caseify(plaidAccDetails.accountType || '')}</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell className="grey-header">Bank Account Number: </Table.Cell>
-                  <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
-                </Table.Row>
-                {!isEmpty(routingNum)
-                  && (
-                    <Table.Row>
-                      <Table.Cell className="grey-header">Bank Routing Number: </Table.Cell>
-                      <Table.Cell>
-                        {routingNum || ''}
-                      </Table.Cell>
-                    </Table.Row>
-                  )
-                }
-              </Table.Body>
-            </Table>
-          </div>
+        <Header as="h4">Please confirm your linked bank account information</Header>
+        <div className="table-wrapper mt-60">
+          <Table unstackable basic="very" fixed>
+            <Table.Body>
+              {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
+                && (
+                  <Table.Row>
+                    <Table.Cell className="grey-header">Bank: </Table.Cell>
+                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                  </Table.Row>
+                )
+              }
+              <Table.Row>
+                <Table.Cell className="grey-header">Account Type: </Table.Cell>
+                <Table.Cell>{Helper.caseify(plaidAccDetails.accountType || '')}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell className="grey-header">Bank Account Number: </Table.Cell>
+                <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
+              </Table.Row>
+              {!isEmpty(routingNum)
+                && (
+                  <Table.Row>
+                    <Table.Cell className="grey-header">Bank Routing Number: </Table.Cell>
+                    <Table.Cell>
+                      {routingNum || ''}
+                    </Table.Cell>
+                  </Table.Row>
+                )
+              }
+            </Table.Body>
+          </Table>
         </div>
-        {/* {errors &&
-          <Message error className="center-align">
-            <ListErrors errors={[errors.message]} />
-          </Message>
-        } */}
-        {/* <div className="center-align mt-30">
-        <Button primary
-          size="large"
-          className="relaxed"
-          content="Continue" onClick={() => this.handleSubmit()}
-          disabled={errors || !bankAccountNumber} />
-        </div> */}
-        <div className="center-align">
+        <div className={isMobile && 'center-align'}>
           <Button onClick={this.handleContinueCta} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Confirm" />
         </div>
-        <div className={`${isMobile ? 'mb-30' : ''} center-align mt-30`}>
-          <Button color="green" className="link-button" content="Change link bank account" onClick={() => changeLinkbank()} />
+        <div className={`${isMobile ? 'mb-30 center-align' : ''} mt-30`}>
+          <Button color="green" className="link-button" data-cy="change-link-bank" content="Change link bank account" onClick={() => changeLinkbank()} />
         </div>
       </>
     );

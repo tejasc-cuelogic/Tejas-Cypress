@@ -1,6 +1,8 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
 import React from 'react';
+import { COMMON } from './auth';
+
 // import { Popup } from 'semantic-ui-react';
 
 /* eslint-disable no-unused-vars */
@@ -10,7 +12,7 @@ Validator.register(
   'dob', (value, attribute) => {
     return moment(value, 'MM/DD/YYYY').isBefore(moment());
   },
-  "The :attribute should be less than today's date.",
+  'The :attribute should be less than today\'s date.',
 );
 Validator.register(
   'afterDate', (value, attribute) => {
@@ -64,43 +66,27 @@ export const securitySections = [
   },
 ];
 
-export const USER_IDENTITY = {
-  salutation: {
-    key: 'salutation',
+export const PHONE_NUMBER = {
+  phoneNumber: {
+    key: 'phoneNumber',
     value: '',
-    label: 'Title',
-    placeHolder: 'Select',
+    label: 'Phone Number',
+    showError: true,
+    format: '(###) ###-####',
+    type: 'tel',
+    placeHolder: '(123) 456-7890',
     error: undefined,
-    rule: 'optional',
-    objRefOutput: 'legalName',
-    objRef: 'legalDetails.legalName',
-  },
-  firstLegalName: {
-    key: 'firstLegalName',
-    value: '',
-    label: 'First Name (Legal)',
-    placeHolder: 'John',
-    error: undefined,
-    rule: 'required',
+    rule: 'required|maskedPhoneNumber',
+    skipField: true,
+    objRef: 'phone',
     customErrors: {
       required: '* required.',
+      maskedPhoneNumber: 'The phone number is not in the format XXX-XXX-XXXX.',
     },
-    objRefOutput: 'legalName',
-    objRef: 'legalDetails.legalName',
   },
-  lastLegalName: {
-    key: 'lastLegalName',
-    value: '',
-    label: 'Last Name (Legal)',
-    placeHolder: 'Smith',
-    error: undefined,
-    rule: 'required',
-    customErrors: {
-      required: '* required.',
-    },
-    objRefOutput: 'legalName',
-    objRef: 'legalDetails.legalName',
-  },
+};
+
+export const USER_ADDRESS = {
   street: {
     key: 'street',
     value: '',
@@ -168,22 +154,44 @@ export const USER_IDENTITY = {
     objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
-  phoneNumber: {
-    key: 'phoneNumber',
+};
+
+export const USER_IDENTITY = {
+  salutation: {
+    key: 'salutation',
     value: '',
-    label: 'Phone Number',
-    showError: true,
-    format: '(###) ###-####',
-    type: 'tel',
-    placeHolder: '(123) 456-7890',
+    label: 'Title',
+    placeHolder: 'Select',
     error: undefined,
-    rule: 'required|maskedPhoneNumber',
-    skipField: true,
-    objRef: 'phone',
+    rule: 'optional',
+    objRefOutput: 'legalName',
+    objRef: 'legalDetails.legalName',
+  },
+  firstLegalName: {
+    key: 'firstLegalName',
+    value: '',
+    label: 'First Name (Legal)',
+    placeHolder: 'John',
+    error: undefined,
+    rule: 'required',
     customErrors: {
       required: '* required.',
-      maskedPhoneNumber: 'The phone number is not in the format XXX-XXX-XXXX.',
     },
+    objRefOutput: 'legalName',
+    objRef: 'legalDetails.legalName',
+  },
+  lastLegalName: {
+    key: 'lastLegalName',
+    value: '',
+    label: 'Last Name (Legal)',
+    placeHolder: 'Smith',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+    objRefOutput: 'legalName',
+    objRef: 'legalDetails.legalName',
   },
   dateOfBirth: {
     key: 'dateOfBirth',
@@ -223,6 +231,8 @@ export const USER_IDENTITY = {
     skipField: true,
     rule: 'optional',
   },
+  ...USER_ADDRESS,
+  ...PHONE_NUMBER,
 };
 
 export const USER_TITLE = [
@@ -369,11 +379,11 @@ export const USER_PROFILE_PREFERRED_INFO = {
     placeHolder: 'Preferred Name',
     objRef: 'info.preferred',
   },
-  street: { ...USER_IDENTITY.street, objRef: 'info.preferred', objRefOutput: '' },
-  streetTwo: { ...USER_IDENTITY.streetTwo, objRef: 'info.preferred', objRefOutput: '', skipField: false },
-  city: { ...USER_IDENTITY.city, objRef: 'info.preferred', objRefOutput: '' },
-  state: { ...USER_IDENTITY.state, objRef: 'info.preferred', objRefOutput: '' },
-  zipCode: { ...USER_IDENTITY.zipCode, objRef: 'info.preferred', objRefOutput: '' },
+  street: { ...USER_IDENTITY.street, rule: 'optional', objRef: 'info.preferred', objRefOutput: '' },
+  streetTwo: { ...USER_IDENTITY.streetTwo, rule: 'optional', objRef: 'info.preferred', objRefOutput: '', skipField: false },
+  city: { ...USER_IDENTITY.city, rule: 'optional', objRef: 'info.preferred', objRefOutput: '' },
+  state: { ...USER_IDENTITY.state, rule: 'optional', objRef: 'info.preferred', objRefOutput: '' },
+  zipCode: { ...USER_IDENTITY.zipCode, rule: 'optional', objRef: 'info.preferred', objRefOutput: '' },
 };
 
 export const USER_PROFILE_FOR_ADMIN = {
@@ -432,3 +442,7 @@ export const DATE_RANGES = [
   { text: 'Last 60 days', value: '60' },
   { text: 'Last 90 days', value: '90' },
 ];
+
+export const VERIFY_OTP = {
+  code: { ...COMMON.code },
+};

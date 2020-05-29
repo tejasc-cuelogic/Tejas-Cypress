@@ -20,7 +20,7 @@ function Image64(props) {
     if (props.srcUrl) {
       const imgUrl = (props.srcUrl.includes('https://') || props.srcUrl.includes('http://')) ? props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(props.srcUrl)}`;
       try {
-        const imgName = props.avatar ? imgUrl : Helper.processImageFileName(imgUrl, props.uiStore.responsiveVars);
+        const imgName = (props.avatar || props.originalImg) ? imgUrl : Helper.processImageFileName(imgUrl, props.uiStore.responsiveVars);
         setOData(imgUrl || emptyImage);
         // Deprecated the API call for getting base64 of an image
         // const result = await apiService.getRemoteFile(imgName);
@@ -56,8 +56,10 @@ function Image64(props) {
   }
 
   useEffect(() => {
-    getImage();
-  }, []);
+    setTimeout(() => {
+      getImage();
+    }, props.setTimeout || 0);
+  }, props.reRender ? null : []);
 
   return props.bg ? (
     <div {...props} style={{ backgroundImage: `url(${data})` }} />

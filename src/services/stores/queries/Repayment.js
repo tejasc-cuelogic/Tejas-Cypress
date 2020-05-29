@@ -98,19 +98,31 @@ export const updatePaymentIssuer = gql`
 `;
 
 export const adminPaymentSendIssuerDraftNotice = gql`
-  mutation adminPaymentSendIssuerDraftNotice{
-    adminPaymentSendIssuerDraftNotice
+  mutation adminPaymentSendIssuerDraftNotice($scope: String, $sendEmail: Boolean){
+    adminPaymentSendIssuerDraftNotice(scope: $scope, sendEmail: $sendEmail)
   }
 `;
 
 export const adminPaymentSendGoldStarDraftInstructions = gql`
-  mutation adminPaymentSendGoldStarDraftInstructions{
-    adminPaymentSendGoldStarDraftInstructions
+  mutation adminPaymentSendGoldStarDraftInstructions($date: String!, $scope: String, $sendEmail: Boolean){
+    adminPaymentSendGoldStarDraftInstructions(date: $date, scope: $scope, sendEmail: $sendEmail)
   }
 `;
 
-export const adminPaymentGenerateAdminSummary = gql`
-  mutation adminPaymentGenerateAdminSummary($date: String!){
-    adminPaymentGenerateAdminSummary(date: $date)
+// export const adminPaymentGenerateAdminSummary = gql`
+//   mutation adminPaymentGenerateAdminSummary($date: String!, $scope: String, $sendEmail: Boolean){
+//     adminPaymentGenerateAdminSummary(date: $date, scope: $scope, sendEmail: $sendEmail)
+//   }
+// `;
+
+export const adminPaymentSendIssuerFirstNotice = gql`
+  mutation adminPaymentSendIssuerFirstNotice($scope: String, $sendEmail: Boolean){
+    adminPaymentSendIssuerFirstNotice(scope: $scope, sendEmail: $sendEmail)
+  }
+`;
+
+export const adminPaymentSendIssuerSecondNotice = gql`
+  mutation adminPaymentSendIssuerSecondNotice($scope: String, $sendEmail: Boolean){
+    adminPaymentSendIssuerSecondNotice(scope: $scope, sendEmail: $sendEmail)
   }
 `;

@@ -11,7 +11,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { applicationDeclinedByIssuer, getBusinessApplications, adminGeneratePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, adminUpdateApplicationStatusAndReview, adminBusinessApplicationsDetails, getBusinessApplicationOffers, adminCreateOffering } from '../../../queries/businessApplication';
+import { applicationDeclinedByIssuer, getBusinessApplications, adminGeneratePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, adminUpdateApplicationStatusAndReview, adminBusinessApplicationsDetails, adminCreateOffering } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore, userStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { allOfferingsCompact } from '../../../queries/offerings/manage';
@@ -219,7 +219,7 @@ export class BusinessAppReviewStore {
             this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
-            this.checkFormValid(form, (index != null) || (form === 'OFFERS_FRM'), false);
+            this.checkFormValid(form, (index !== null) || (form === 'OFFERS_FRM'), false);
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           }).catch((error) => {
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
@@ -248,7 +248,7 @@ export class BusinessAppReviewStore {
 
   @action
   setFormFileArray = (formName, arrayName, field, getField, value, index) => {
-    if (index != null) {
+    if (index !== null) {
       this[formName].fields[arrayName][index][field][getField] = value;
     } else {
       this[formName].fields[field][getField] = value;
@@ -258,7 +258,7 @@ export class BusinessAppReviewStore {
   @action
   removeUploadedData = (form, field, index = null, arrayName) => {
     let removeFileIds = '';
-    if (index != null) {
+    if (index !== null) {
       const { fileId } = this[form].fields[arrayName][index][field];
       removeFileIds = fileId;
     } else {
@@ -272,7 +272,7 @@ export class BusinessAppReviewStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    this.checkFormValid(form, (index != null) || (form === 'OFFERS_FRM'), false);
+    this.checkFormValid(form, (index !== null) || (form === 'OFFERS_FRM'), false);
   }
 
   @action
@@ -573,30 +573,6 @@ export class BusinessAppReviewStore {
   @computed get offerLoading() {
     return this.businessApplicationOffers.loading;
   }
-
-  @action
-  fetchApplicationOffers = applicationId => new Promise((resolve) => {
-    uiStore.setAppLoader(true);
-    uiStore.setLoaderMessage('Getting application data');
-    this.businessApplicationOffers = graphql({
-      client,
-      query: getBusinessApplicationOffers,
-      variables: {
-        id: applicationId,
-      },
-      fetchPolicy: 'network-only',
-      onFetch: () => {
-        if (!this.businessApplicationOffers.loading) {
-          uiStore.setAppLoader(false);
-          resolve();
-        }
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        uiStore.setAppLoader(false);
-      },
-    });
-  });
 
   @computed get offerStructure() {
     const offerData = this.fetchBusinessApplicationOffers;

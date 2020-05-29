@@ -40,7 +40,7 @@ export const KEY_TERMS = {
   },
   shorthandBusinessName: {
     value: '',
-    label: 'Short hand Name of Business',
+    label: 'DBA',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',
@@ -525,10 +525,8 @@ export const SCOPE_VALUES = [
 export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
-  { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
   { key: 'Convertible Notes', value: 'CONVERTIBLE_NOTES', text: 'Convertible Notes' },
   { key: 'SAFE', value: 'SAFE', text: 'SAFE' },
-  { key: 'Real Estate', value: 'REAL_ESTATE', text: 'Real Estate' },
   { key: 'Funds - Limited Partner Interest', value: 'FUNDS', text: 'Funds - Limited Partner Interest' },
   { key: 'Equity', value: 'EQUITY', text: 'Equity' },
 ];
@@ -547,25 +545,20 @@ export const BUSINESS_TYPE_VALUES = [
   { key: 'Other', value: 'OTHER', text: 'Other' },
 ];
 
+export const OFFERING_TEMPLATE_VALUES = [
+  { key: 1, value: 1, text: 'Legacy' },
+  { key: 2, value: 2, text: 'Version 2.0' },
+];
+
 export const REGULATION_VALUES = [
-  { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
-  { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
-  { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
-  { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
-  { key: 'Reg D 506(b) - Securities', value: 'BD_506B', text: 'Reg D 506(b) - Securities' },
-  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
+  { key: 'Reg CF', value: 'BD_CF', text: 'Regulation Crowdfunding' },
+  { key: 'Reg D 506(c)', value: 'BD_506C', text: 'Regulation D, 506(c)' },
+  { key: 'Reg D 506(b)', value: 'BD_506B', text: 'Regulation D, 506(b)' },
+  { key: 'Reg CF + Reg D 506(c)', value: 'BD_CF_506C', text: 'Parallel (Regulation Crowdfunding + Regulation D, 506(c))' },
 ];
-export const BD_REGULATION_VALUES = [
-  { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
-  { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
-  { key: 'Reg D 506(b) - Securities', value: 'BD_506B', text: 'Reg D 506(b) - Securities' },
-  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
-];
-export const FP_REGULATION_VALUES = [
-  { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
-  { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
-];
+
 export const NS_FEE_PERCENTAGE = [
+  { key: '0', value: '0.00', text: '0%' },
   { key: '1', value: '1.00', text: '1%' },
   { key: '2', value: '2.00', text: '2%' },
 ];
@@ -1047,7 +1040,7 @@ export const CONTINGENCIES = {
 export const OFFERING_DETAILS = {
   offeringSlug: {
     value: '',
-    label: 'Offering Slug',
+    label: 'Offering URL',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',
@@ -1061,7 +1054,7 @@ export const OFFERING_DETAILS = {
   },
   referralCode: {
     value: '',
-    label: 'Offering Referral Code',
+    label: 'Issuer Referral Code',
     error: undefined,
     rule: 'optional|alpha_num',
     placeHolder: 'Enter here',
@@ -1240,7 +1233,8 @@ export const LEADERSHIP = {
       label: 'Percentage Owned',
       placeHolder: '10.0%',
       error: undefined,
-      rule: 'numeric',
+      rule: 'numeric|max:100',
+      customErrors: { max: 'The Percent Owned should be less than or equal to 100%' },
       tooltip: 'List any person who owns, directly or indirectly, 20% or more of the Issuer’s equity, based on voting power',
     },
     companyPosition: {
@@ -1801,6 +1795,13 @@ export const NEW_OFFER = {
     label: 'Regulation',
     error: undefined,
     rule: 'required',
+    placeHolder: 'Choose here',
+  },
+  template: {
+    value: '',
+    label: 'Offering Template',
+    error: undefined,
+    rule: 'optional',
     placeHolder: 'Choose here',
   },
 };
@@ -2878,7 +2879,7 @@ const DATA_ROOM_COMMON = {
     label: '',
     value: false,
     error: undefined,
-    default: false,
+    defaultValue: false,
     rule: 'required',
   },
 };

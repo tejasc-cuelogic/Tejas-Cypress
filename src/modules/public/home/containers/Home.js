@@ -78,7 +78,7 @@ class Home extends Component {
               </Grid.Column>
             </Grid>
             <Divider section />
-            <Grid columns={2} stackable>
+            <Grid id="news-letter" columns={2} stackable doubling>
               <Grid.Column>
                 <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-10' : 'mt-80 mb-20'}>Join our newsletter</Header>
                 <p className={`${responsiveVars.isMobile ? 'mb-10' : ''} neutral-text`}>

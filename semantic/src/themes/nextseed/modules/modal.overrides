@@ -5,17 +5,12 @@
 .ui.active.dimmer.modals.transition {
     display: flex !important;
     display: -ms-flexbox !important;
-    // @media only screen and (max-width:@largestTabletScreen){
-    //     justify-content: center;
-    // }
     .ui.modal{
-        // margin:0 !important;
         @media only screen and (max-width:@largestSmallMonitor){
             position: relative;
         }
         &.dimmer-visible {
             max-height: 100%;
-            // height: 100%;
             overflow-y: hidden;
             @media only screen and (min-width:@largestSmallMonitor){
                 position: relative;
@@ -24,15 +19,13 @@
                 flex-direction: column;
                 justify-content: center;
                 padding: @15px @21px;
-                width: 706px;
+                max-width: 100%;
             }
 
         }
-        // &.finish-later{
         @media only screen and (max-width:@largestMobileScreen){
             margin: @28px;
         }        
-        // }
         &.mobile-tooltip{
             padding: @15px;
             width: 85%;
@@ -120,11 +113,16 @@
         }
     }
     @media only screen and (max-width:@largestMobileScreen){
-        // background: @white;
         padding: 0;
     }
     .ui.modal.link-bank-modal>.icon:first-child+.dimmer{
         border-radius: 0;
+    }
+    &[class*="top aligned"] .ui.modal.scrolling.multistep-modal{
+        margin: 5vh auto !important;
+        @media only screen and (max-width:@largestMobileScreen){
+            margin: 0 !important;
+        }
     }
 }
 //  Public pages Starts
@@ -230,6 +228,7 @@
         }
     }
     .content{
+        font-size: 15px;
         &.scrolling {
             .ui.image.large {
                 min-width: 400px;
@@ -295,6 +294,9 @@
                     .about-carousel {
                         position: relative;
                         display:block !important;
+                        &.about-carousel-2{
+                            position: static;
+                        }
                     }
                     .ui.image{
                         max-height:~"calc(100vh - 30px)";
@@ -333,6 +335,9 @@
             @media only screen and (max-width : @largestMobileScreen){
                 right: 0px;
             }
+        }
+        &.about-modal-2 .slick-slider .slick-arrow.slick-disabled{
+            display: none !important;
         }
     }
     &.video-modal{
@@ -528,9 +533,7 @@
             padding:@50px @70px;
         }
         .option-details{
-            padding:@14px 0;
             line-height:@22px;
-            text-align:center;
             @media only screen and (max-width : @largestMobileScreen){
 				padding:@14px;
 			}
@@ -683,11 +686,60 @@
 .ui.modal.basic.multistep-modal{
     color:@neutral;
     will-change:auto;
+    >.header{
+        padding: 0;
+        line-height: 18px;
+        font-size: @12px;
+        border-bottom: 0;
+        color:@neutral-middark !important;
+        .multistep-header{
+            display: flex;
+            margin-bottom: 28px;
+            align-items: center;
+            position: relative;
+            .ui.image.logo{
+                margin-right: @17px;
+            }
+            .vertical-divider:before{
+                content: '';
+                height: @20px;
+                width: auto;
+                position: absolute;
+                top: 50%;
+                transform: translate(0, -50%);
+                border: 1px solid @neutral-offdark;
+            }
+        }
+        .ui.progress.attached {
+            // bottom: -18px;
+            height: @6px;
+            border-radius: 50px;
+            background-color: @neutral-darkwhite;
+            @media only screen and (max-width:@largestMobileScreen){
+                &.no-header{
+                    bottom: -35px;
+                }
+            }
+            .bar{
+                height: @6px;
+                border-radius: 50px;
+            }
+        }
+        /* For CIP new design */
+        &.bordered{
+            border-bottom: 1px solid @neutral-darkwhite;
+        }
+        &.padded{
+            @media only screen and (max-width:@largestMobileScreen){
+                padding: @14px !important;
+            }
+        }
+    }
     @media only screen and (max-width:@largestMobileScreen){
         width: 100%;
         height: 100%;
         overflow: auto;
-        padding-bottom: @80px;
+        // padding-bottom: @60px;
         margin: 0 !important;
         >.header{
             position: sticky;
@@ -702,11 +754,12 @@
             // border-bottom: 0;
             border-radius: 0;
             .ui.progress.attached {
+                height: @2px;
                 bottom: -18px;
                 border-radius: 0;
-                background-color: @neutral-darkwhite;
-                &.no-header{
-                    bottom: -35px;
+                .bar{
+                    height: @2px;
+                    border-radius: 50px;
                 }
             }
             .ui.button.link-button {
@@ -714,6 +767,7 @@
                 right: 0;
                 margin: 0;
                 color: @neutral-offdark;
+                top: 50%;
                 transform: translate(0,-50%);
                 padding: @14px @14px @14px;
             }
@@ -723,28 +777,17 @@
         }
     }
     >.close{
-        height:30px;
-        width:30px;
         font-size:.85em;
         line-height:30px;
         padding:0;
         margin:0;
-        background:@white;
-        border-radius:@15px;
-        position:fixed;
-        top:1rem;
+        background:transparent !important;
+        border-radius:0 !important;
+        position: absolute !important;
+        top:-10px !important;
         right:1rem;
         opacity:1;
-        @media only screen and (max-width:@largestTabletScreen){
-            color:@neutral-middark;
-        }
-        // @media only screen and (max-width:@largestMobileScreen){
-        //     top: 22px!important;
-        //     right: 15px !important;
-        //     height: auto;
-        //     width: auto;
-        //     line-height: 12px;
-        // }
+        color:@neutral-middark !important;
     }
     .ui.header{
         border:none;
@@ -753,7 +796,7 @@
         background:@white;
         border-radius:@10px;
         position:relative;
-        padding:@50px @64px;
+        padding:@50px 0 !important;
         @media only screen and (max-width : @largestMobileScreen){
             padding: @30px !important;
             position:unset;
@@ -842,6 +885,19 @@
             color: #676a73;
         }
     }
+    .signup-modal.multistep.content{
+        padding:@50px @64px !important;
+    }
+    .content {
+        p{
+            line-height: 24px;
+        }
+    }
+    .file-uploader-wrap label{
+        font-size: @15px;
+        line-height: 24px;
+        font-weight: @normal;
+    }
 }
 .field-wrap{
     margin:@30px auto;
@@ -861,9 +917,12 @@
     }
 }
 .bank-list{
-    padding:@28px 0;
+    padding:@28px 0 @14px;
     position:relative;
     min-height:362px;
+    @media only screen and (min-width:@tabletBreakpoint) and (max-width:@largestTabletScreen){
+        min-height: 262px;
+    }
     a.bank-link{
         height:100%;
         width:100%;
@@ -966,4 +1025,9 @@
         }
     }
 
+}
+
+// Custom Multistep Modal //
+.custom-modal-wrapper .ui.dimmer.inverted{
+    background: @white;
 }

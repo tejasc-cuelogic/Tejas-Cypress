@@ -87,7 +87,7 @@ export default class PreQualification extends Component {
           }
         })
         .catch((error) => {
-          console.log(error);
+          window.logger(error);
         });
     }
   }
@@ -103,7 +103,7 @@ export default class PreQualification extends Component {
       })
       .catch((error) => {
         this.props.uiStore.setProgress(false);
-        console.log(error);
+        window.logger(error);
         Helper.toast(error.message, 'error');
       })
       .finally(() => {

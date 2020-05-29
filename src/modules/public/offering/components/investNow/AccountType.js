@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { includes, uniq, get } from 'lodash';
-import { Header, Form, Button, Icon, Card } from 'semantic-ui-react';
+import { Header, Form, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
-import { FormRadioGroup, FormArrowButton } from '../../../../../theme/form';
+import { FormArrowButton } from '../../../../../theme/form';
 import { Spinner } from '../../../../../theme/shared';
+import { PARALLEL_INVESTMENT_OPTIONS } from '../../../../../services/constants/investment';
 
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 @inject('investmentStore', 'userDetailsStore', 'accountStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore', 'portfolioStore')
 @withRouter
 @observer
@@ -154,7 +155,7 @@ class AccountType extends Component {
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if ((accountToConsider && accountToConsider.length === 1 && isDocumentUpload === true) || (this.props.changeInvest && regulationType)) {
+    } else if ((accountToConsider && accountToConsider.length === 1 && isDocumentUpload === true) || (this.props.changeInvest && regulationType) || (accountToConsider && accountToConsider.length > 1 && isDocumentUpload === true)) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         if (this.props.changeInvest) {
           // const accreditationStatus = get(userDetails, 'accreditation.status');
@@ -200,11 +201,11 @@ class AccountType extends Component {
       setStepToBeRendered(2);
     } else if (investAccTypes && investAccTypes.values.length === 1 && isDocumentUpload === true) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
+        const { getInvestorAccountById } = this.props.portfolioStore;
+        const offeringRegulation = campaign && campaign.keyTerms ? get(campaign, 'keyTerms.regulation') : get(getInvestorAccountById, 'offering.keyTerms.regulation');
+        const accreditationStatus = get(userDetails, 'accreditation.status');
+        const isParallelOfferingModelToShow = !!((userAccredetiationState === 'EXPIRED') || (offeringRegulation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus)));
         if (this.props.changeInvest) {
-          const { getInvestorAccountById } = this.props.portfolioStore;
-          const offeringRegulation = campaign && campaign.keyTerms ? get(campaign, 'keyTerms.regulation') : get(getInvestorAccountById, 'offering.keyTerms.regulation');
-          const accreditationStatus = get(userDetails, 'accreditation.status');
-          const isParallelOfferingModelToShow = !!((userAccredetiationState === 'EXPIRED') || (offeringRegulation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus)));
           if (isUpdateLimitReflect || locationURL.includes('change-investment-limit')) {
             this.props.investmentStore.setFieldValue('isUpdateLimitReflect', true);
             setFieldValue('disableNextbtn', false);
@@ -213,7 +214,7 @@ class AccountType extends Component {
             setFieldValue('disableNextbtn', false);
             setStepToBeRendered(1);
           }
-        } else if (userStatus === 'FULL') {
+        } else if (userStatus === 'FULL' && !isParallelOfferingModelToShow) {
           setFieldValue('disableNextbtn', false);
           setStepToBeRendered(1);
         }
@@ -246,6 +247,14 @@ class AccountType extends Component {
     } = this.props.investmentStore;
     setFieldValue('disableNextbtn', false);
     setStepToBeRendered(1);
+  }
+
+  accTypeChangedForParallel = (e, res, redirectUrl) => {
+    if (res.value === 'yes') {
+      this.props.history.push(redirectUrl);
+    } else {
+      this.handleInvestmentWihoutAccreditation(e);
+    }
   }
 
   render() {
@@ -318,7 +327,7 @@ class AccountType extends Component {
       || (!showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length > 0)
       || (showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length === 1)
       || this.props.inProgress) {
-      return <Spinner loaderMessage="Loading.." />;
+      return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     const { currentUser } = this.props.userStore;
@@ -328,7 +337,7 @@ class AccountType extends Component {
         ? `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/dashboard/setup' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
     if ((isRegulationCheck && selectedAccountStatus === 'FULL' && !userAccredetiationState) || this.props.inProgress) {
-      return <Spinner loaderMessage="Loading.." />;
+      return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
     const currentStatus = userProfileFullStatus && userProfileFullStatus !== 'FULL' && userProfileFullStatus !== 'BASIC' ? 'USER-PARTIAL' : selectedAccountStatus;
@@ -345,11 +354,11 @@ class AccountType extends Component {
       }
     }
     if (headerSubheaderObj.header === '' || this.props.inProgress) {
-      return <Spinner loaderMessage="Loading.." />;
+      return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
     return (
       <>
-        <Header as="h3" textAlign="center"> {headerSubheaderObj.header}</Header>
+        <Header as="h4">{headerSubheaderObj.header}</Header>
         <Form error className="account-type-tab mb-0">
           {investAccTypes.values.length && selectedAccountStatus && (userProfileFullStatus === 'FULL' || userProfileFullStatus === 'BASIC')
             ? (
@@ -357,31 +366,20 @@ class AccountType extends Component {
                 {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest
                   ? (
                     <>
-                      <p className="center-align">{headerSubheaderObj.subHeader}</p>
-                      {isMobile
-                        ? (
-                        <FormArrowButton
-                          fielddata={investAccTypes}
-                          name="investAccountType"
-                          changed={accTypeChanged}
-                          action={submitStep}
-                        />
-                        )
-                        : (
-                        <FormRadioGroup
-                          name="investAccountType"
-                          containerclassname="button-radio center-align"
-                          fielddata={investAccTypes}
-                          changed={accTypeChanged}
-                        />
-                        )}
+                      <p>{headerSubheaderObj.subHeader}</p>
+                      <FormArrowButton
+                        fielddata={investAccTypes}
+                        name="investAccountType"
+                        changed={accTypeChanged}
+                        action={submitStep}
+                      />
                     </>
                   )
                   : (
                     <>
                       {isDocumentUpload === false
                         ? (
-                          <div className="center-align">
+                          <div>
                             <p>
                               There is a technical issue with this offering.
                               The NextSeed team has been notified and will
@@ -393,14 +391,26 @@ class AccountType extends Component {
                         )
                         : selectedAccountStatus === 'FULL'
                           ? (
-                            <div className="center-align">
+                            <div>
                               {headerSubheaderObj.subHeader
-                                ? <p className="center-align">{headerSubheaderObj.subHeader}</p> : null
+                                ? <p>{headerSubheaderObj.subHeader}</p> : null
                               }
                               {(userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING' || (userAccredetiationState === 'EXPIRED' && offeringReuglation === 'BD_CF_506C'))
                                 ? offeringReuglation && offeringReuglation === 'BD_CF_506C'
                                   ? (
-                                    <Card.Group itemsPerRow={isMobile ? '1' : '2'}>
+                                    <>
+                                      <FormArrowButton
+                                        fielddata={PARALLEL_INVESTMENT_OPTIONS.option}
+                                        name="parallelOption"
+                                        changed={(e, res) => this.accTypeChangedForParallel(e, res, redirectURL)}
+                                        action={submitStep}
+                                      />
+                                      <p className="note mt-20">
+                                        For a limited time, accredited investors can earn a $100 bonus
+                            by verifying your status on NextSeed. <a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See rules for details.</a>
+                                      </p>
+                                    </>
+                                    /* <Card.Group itemsPerRow={isMobile ? '1' : '2'}>
                                       <Card>
                                         <Card.Content>
                                           <Header as="h5" color="green">Yes, let’s get you verified.</Header>
@@ -426,14 +436,10 @@ class AccountType extends Component {
                                           <Button basic className="relaxed" content="Continue" onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
                                         </Card.Content>
                                       </Card>
-                                    </Card.Group>
+                                    </Card.Group> */
                                   )
                                   : (
                                     <>
-                                      {/* <Link to={redirectURL} className="text-link">
-                                <Icon className="ns-arrow-right" color="green" />
-                                Apply for accreditation
-                              </Link> */}
                                       <div className="mt-30">
                                         <Button
                                           as={Link}
@@ -464,7 +470,7 @@ class AccountType extends Component {
                             </div>
                           )
                           : (
-                            <div className="center-align">
+                            <div>
                               {selectedAccountStatus && isAccFrozen(selectedAccountStatus)
                                 ? (
                                   <>
@@ -501,7 +507,7 @@ class AccountType extends Component {
               </>
             )
             : (
-              <div className="center-align">
+              <div>
                 {selectedAccountStatus && isAccFrozen(selectedAccountStatus)
                   ? (
                     <>
@@ -514,20 +520,6 @@ class AccountType extends Component {
                   ? (
                     <>
                       Please answer a few basic questions to complete your Investor Profile.
-                    {/* <Link to={redirectURL} className="text-link">
-                        <Icon className="ns-arrow-right" color="green" />
-                        Please finish your account setup.
-                      </Link> */}
-                      {/* <div className="mt-30">
-                    <Button
-                    as={Link}
-                      to="/"
-                      onClick={e => this.handlBackToOffering(e)}
-                        primary
-                        className="relaxed"
-                          content="Confirm Status"
-                          />
-                    </div> */}
                       <div className="mt-30"><Button as={Link} to={redirectURL} primary className="relaxed" content="Continue" /></div>
                     </>
                   )

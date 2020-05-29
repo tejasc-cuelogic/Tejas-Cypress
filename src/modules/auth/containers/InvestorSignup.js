@@ -1,23 +1,25 @@
-/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
-import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
-import { FormInput, FormPasswordStrength } from '../../../theme/form';
-import { ListErrors } from '../../../theme/shared';
+import { Button, Header, Grid, Form, Message } from 'semantic-ui-react';
+import { ListErrors, NsModal } from '../../../theme/shared';
+import formHOC from '../../../theme/form/formHOC';
+import { FormValidator as Validator } from '../../../helper';
+
 
 const isMobile = document.documentElement.clientWidth < 768;
-
-@inject('authStore', 'uiStore', 'identityStore')
-@withRouter
-@observer
+const metaInfo = {
+  store: 'authStore',
+  form: 'SIGNUP_FRM',
+};
 class InvestorSignup extends Component {
   constructor(props) {
     super(props);
-    this.props.authStore.setDefaultPwdType();
+    const { setDefaultPwdType, setUserRole } = this.props.authStore;
+    setDefaultPwdType();
     const userRoleData = cookie.load('ROLE_VALUE');
-    this.props.authStore.setUserRole(userRoleData || 'investor');
+    setUserRole(userRoleData || 'investor');
   }
 
   componentWillUnmount() {
@@ -28,42 +30,48 @@ class InvestorSignup extends Component {
     this.props.authStore.checkEmailExistsPresignup(email);
   }
 
-  handleSubmitForm = (e) => {
+  handlePassword = (e, result) => {
+    this.props.authStore.signupChange(e, result);
+    this.props.authStore.setVerifyPassword(e);
+  }
+
+  handleSubmitForm = async (e) => {
     e.preventDefault();
-    if (this.props.authStore.newPasswordRequired) {
-      this.props.history.push('/change-password');
+    const { authStore, uiStore, history, identityStore } = this.props;
+    if (authStore.newPasswordRequired) {
+      history.push('/change-password');
     } else {
-      const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
-      this.props.uiStore.setProgress();
-      this.props.authStore.checkEmailExistsPresignup(email.value).then((res) => {
-        if (res) {
-          this.props.uiStore.setProgress(false);
-          this.props.authStore.setCredentials({
-            email: email.value,
-            password: password.value,
-            givenName: givenName.value,
-          });
-          if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
-            this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
-              this.props.history.push('/confirm-email');
-            });
+      const { email, password, givenName } = Validator.ExtractValues(authStore.SIGNUP_FRM.fields);
+      uiStore.setProgress();
+      const res = await authStore.checkEmailExistsPresignup(email);
+      if (res) {
+        uiStore.setProgress(false);
+        authStore.setCredentials({
+          email,
+          password,
+          givenName,
+        });
+        if (authStore.SIGNUP_FRM.meta.isValid) {
+          const result = await identityStore.sendOtpEmail(isMobile);
+          if (result) {
+            history.push('/confirm-email');
           }
         }
-      });
+      }
     }
   };
 
   render() {
+    const { smartElement } = this.props;
     const {
-      SIGNUP_FRM, signupChange, pwdInputType, currentScore,
+      SIGNUP_FRM,
     } = this.props.authStore;
-    const { errors, inProgress, responsiveVars } = this.props.uiStore;
-    const isDisabled = !([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !SIGNUP_FRM.meta.isValid || !currentScore;
+    const { errors, inProgress } = this.props.uiStore;
+    const isDisabled = !([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !SIGNUP_FRM.meta.isValid;
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
-      <Modal
-        size="mini"
+      <NsModal
         open
         closeOnDimmerClick={false}
         onClose={
@@ -72,68 +80,26 @@ class InvestorSignup extends Component {
             this.props.history.push(this.props.uiStore.authRef || '/');
           }
         }
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+        back="/register"
       >
-        <Modal.Header className="center-align signup-header">
-          <Header as="h3" className="mb-0">
-            Sign up as an Investor
-          </Header>
-          <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link>
-        </Modal.Header>
-        <Modal.Content className="signup-content">
-          {/* <Form>
-            <Button fluid color="facebook" size="large" content="Sign up with Facebook" />
-          </Form>
-          <Divider horizontal section>or</Divider> */}
-          <Form error onSubmit={this.handleSubmitForm}>
+        <Grid centered stackable className={isMobile ? 'full-width' : ''}>
+          <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
+            <Header as="h3" className="mb-40">
+              Sign up as an investor
+              {/* <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link> */}
+            </Header>
+            <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
-              {
-                ['givenName', 'familyName'].map(field => (
-                  <FormInput
-                    key={field}
-                    type="text"
-                    autoFocus={!responsiveVars.isMobile && field === 'givenName'}
-                    name={field}
-                    fielddata={SIGNUP_FRM.fields[field]}
-                    changed={signupChange}
-                  />
-                ))
-              }
-
             </Form.Group>
-            <FormInput
-              type="email"
-              name="email"
-              fielddata={SIGNUP_FRM.fields.email}
-              changed={signupChange}
-            />
-            <FormPasswordStrength
-              key="password"
-              name="password"
-              type="password"
-              minLength={8}
-              minScore={4}
-              iconDisplay
-              tooShortWord="Weak"
-              // scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-              scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
-              inputProps={{
-                name: 'password', autoComplete: 'off', placeholder: 'Password',
-              }}
-              userInputs={
-                [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
-                  SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value]
-              }
-              changed={signupChange}
-              fielddata={SIGNUP_FRM.fields.password}
-              showRequiredError
-            />
-            <FormInput
-              key="verify"
-              name="verify"
-              type={pwdInputType}
-              fielddata={SIGNUP_FRM.fields.verify}
-              changed={signupChange}
-            />
+            {smartElement.Input('email')}
+            {smartElement.FormPasswordStrength('password',
+              {
+                changed: (e, result) => this.handlePassword(e, result),
+                userInputs: [SIGNUP_FRM.fields.givenName.value],
+              })}
             {errors
               && (
                 <Message error textAlign="left" className="mt-30">
@@ -142,16 +108,15 @@ class InvestorSignup extends Component {
               )
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
+              <Button fluid primary size="large" className="very relaxed" data-cy="investor-signup" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
             </div>
+            <p className="mt-40">Already have an account? <Link to="/login">Log in</Link></p>
+
           </Form>
-        </Modal.Content>
-        <Modal.Actions className="signup-actions">
-          <p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>
-        </Modal.Actions>
-      </Modal>
+          </Grid.Column>
+        </Grid>
+      </NsModal>
     );
   }
 }
-
-export default InvestorSignup;
+export default inject('authStore', 'uiStore', 'identityStore')(withRouter(formHOC(observer(InvestorSignup), metaInfo)));

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Route, withRouter, Link } from 'react-router-dom';
-import { Header, Form, Popup, Icon, Divider, Table, Message, Button } from 'semantic-ui-react';
+import { Header, Form, Divider, Table, Message, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get, includes, capitalize } from 'lodash';
 import { MaskedInput } from '../../../../../theme/form';
 import InvestmentLimit from './financialInfo/InvestmentLimit';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 import Helper from '../../../../../helper/utility';
-import { Spinner, ListErrors } from '../../../../../theme/shared';
+import { Spinner, ListErrors, PopUpModal } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
@@ -35,6 +35,7 @@ class FinancialInfo extends Component {
       const investorTotalAmountInvested = get(this.props.investmentLimitStore.getCurrentInvestNowHealthCheck, 'investorTotalAmountInvested') || '0';
       this.props.investmentLimitStore.setFieldValue('investorTotalAmountInvested', investorTotalAmountInvested);
     }
+    this.props.investmentStore.validateMaskedInputForAmount();
   }
 
   render() {
@@ -78,44 +79,46 @@ class FinancialInfo extends Component {
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
     if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading
       || this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
-      return <Spinner loaderMessage="Loading.." />;
+      return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
     const isCenterAlignedCls = campaignStatus.isPreferredEquity ? 'center-align' : '';
     const isOfferingPreferredEquity = !!campaignStatus.isPreferredEquity;
     return (
       <>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
-        <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
+        <Header as="h4">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
         {this.props.changeInvest
           && (
             <>
-              <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{isOfferingPreferredEquity ? Helper.CurrencyFormat(currentInvestedAmount) : Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
-              <Divider section className="small" />
+              <Header as="h4" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{isOfferingPreferredEquity ? Helper.CurrencyFormat(currentInvestedAmount) : Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
+              <Divider hidden />
               {!campaignStatus.isPreferredEquity
                 && (<Header as="h4" className={`mb-half ${isCenterAlignedCls}`}>Enter new investment amount. </Header>)
               }
               {!includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) && showLimitComponent
                 && (
-                  <p className={isCenterAlignedCls}>
-                    Your investment limit: {' '}
-                    {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
-                    <Popup
+                  <p>
+                    Your
+                    <PopUpModal
                       wide
-                      trigger={<Icon className="ns-help-circle ml-10" color="green" />}
+                      customTrigger={<span className="popup-label">{' '}investment limit</span>}
                       content={(
                         <span>
                           Under Regulation Crowdfunding, you have a limit as to how much you may invest
                           in Reg CF offerings over a 12-month period.
                            This limit is calculated based on your
-            annual income and net worth. <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link> for how this is calculated. If you believe
-            your limit is innacurate, please update your <Link to="/dashboard/account-settings/profile-data">Investor Profile</Link>
+                          annual income and net worth. <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link> for how this is calculated. If you believe
+                          your limit is innacurate, please update your <Link to="/dashboard/account-settings/profile-data">Investor Profile</Link>
                         </span>
                       )}
                       position="top center"
+                      showOnlyPopup={!isMobile}
                       hoverable
                     />
+                    :{' '}
+                    {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
                     {/* <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link> */}
-                    <Link to={`${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
+                    <Link to={`${match.url}/change-investment-limit`} className="link"> <small>Update</small></Link>
                   </p>
                 )
               }
@@ -135,7 +138,7 @@ class FinancialInfo extends Component {
             />
           )
         }
-        <Form error size="huge">
+        <Form error>
           {campaignStatus.isPreferredEquity
             ? (
               <>
@@ -158,11 +161,6 @@ class FinancialInfo extends Component {
                           className="right-align-placeholder"
                           containerclassname="right-align"
                         />
-                        {isMobile
-                          && (
-                            <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
-                          )
-                        }
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row>
@@ -175,11 +173,14 @@ class FinancialInfo extends Component {
                         <b>{equityInvestmentAmount}</b>
                       </Table.Cell>
                     </Table.Row>
+                    <Table.Row>
+                    <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
+                    </Table.Row>
                   </Table.Body>
                 </Table>
                 {this.props.changeInvest && getDiffInvestmentLimitAmount
                   && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
-                  ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{isOfferingPreferredEquity ? Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0) : Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
+                  ? <p className="mt-20">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{isOfferingPreferredEquity ? Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0) : Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
                 }
 
                 {investmentFlowEquityErrorMessage
@@ -200,7 +201,7 @@ class FinancialInfo extends Component {
                     </Message>
                   )
                 }
-                <p className="note mt-40 center-align">{equityCalculateShareAmount()}</p>
+                <p className="note mt-40">{equityCalculateShareAmount()}</p>
               </>
             )
             : (
@@ -218,11 +219,7 @@ class FinancialInfo extends Component {
                 autoFocus
                 allowNegative={false}
               />
-              {isMobile
-                && (
-                  <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
-                )
-              }
+              <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
               </>
             )}
         </Form>
@@ -235,13 +232,15 @@ class FinancialInfo extends Component {
           !campaignStatus.isSafe && estReturnVal && estReturnVal !== '-'
             && investmentAmount
             ? (
-              <Header as="h4">Total Investment Return: Up to {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
-                <Popup
+              <Header as="h4">
+                <PopUpModal
                   wide
-                  trigger={<Icon className="ns-help-circle" color="green" />}
-                  content="This calculates the total amount that the issuer agrees to pay you under the note purchase agrrement, based on what you enter above. Payment is not guaranteed or ensured and investors may lose some or all of the principal invested. "
+                  customTrigger={<span className="popup-label">Total Investment Return</span>}
+                  content="This calculates the total amount that the issuer agrees to pay you under the note purchase agreement, based on what you enter above. Payment is not guaranteed or ensured and investors may lose some or all of the principal invested. "
                   position="top center"
+                  showOnlyPopup={!isMobile}
                 />
+                : Up to {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
               </Header>
             )
             : null

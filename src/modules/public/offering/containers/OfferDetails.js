@@ -1,20 +1,24 @@
 /* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
-import { get, find, has, cloneDeep } from 'lodash';
+import { get, find, has, cloneDeep, includes } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Responsive, Container, Grid, Visibility, Button, Icon } from 'semantic-ui-react';
+// import queryString from 'query-string';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, MobileDropDownNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
+import CampaignHeaderV2 from '../components/campaignDetails/CampaignHeaderV2';
 import InvestNow from '../components/investNow/InvestNow';
 import CommunityGuideline from '../components/campaignDetails/CommunityGuideline';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import SecondaryMenu from '../components/CampaignSecondaryMenu';
-import Agreement from '../components/investNow/agreement/components/Agreement';
+// import Agreement from '../components/investNow/agreement/components/Agreement';
+import AgreementTemplate from '../../../shared/campaign/AgreementTemplate';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
+import OfferingsPassProtected from '../../../auth/containers/OfferingsPassProtected';
 import NotFound from '../../../shared/NotFound';
 import DocumentModal from '../components/campaignDetails/DataRoom/DocumentModal';
 import OfferingMetaTags from '../components/OfferingMetaTags';
@@ -42,6 +46,8 @@ class offerDetails extends Component {
     preLoading: false,
     found: 0,
     offeringSlug: null,
+    offeringRegulation: null,
+    shorthandBusinessName: null,
   }
 
   componentDidMount() {
@@ -62,16 +68,16 @@ class offerDetails extends Component {
       if (get(exception, 'code') === 'OFFERING_EXCEPTION') {
         if (['TERMINATED', 'FAILED'].includes(get(exception, 'stage')) && !isAdmin) {
           this.props.history.push('/offerings');
-        } else if (['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
-          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
+        } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
+          this.props.history.push('/offerings');
+        } else if ((['CREATION'].includes(get(exception, 'stage')) || ['BD_506B'].includes(get(exception, 'regulation'))) && get(exception, 'promptPassword')) {
+          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false, offeringRegulation: get(exception, 'regulation'), shorthandBusinessName: get(exception, 'shorthandBusinessName') });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
           this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && !get(exception, 'isAvailablePublicly') && !isUserLoggedIn) {
           this.setState({ showPassDialog: false, preLoading: false });
           this.props.uiStore.setAuthRef(this.props.location.pathname, this.props.location.hash);
           this.props.history.push('/login');
-        } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
-          this.props.history.push('/offerings');
         } else {
           this.props.campaignStore.getCampaignDetails(this.props.match.params.id, false, true);
         }
@@ -186,40 +192,61 @@ class offerDetails extends Component {
     const {
       match, campaignStore, location, newLayout,
     } = this.props;
+    const { hasPrivateAccess } = this.props.authStore;
     if (this.state.showPassDialog) {
       return (
-        <DevPassProtected
-          offerPreview
-          authPreviewOffer={this.authPreviewOffer}
-          offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
-        />
+        <>
+          { ['BD_506B'].includes(this.state.offeringRegulation) && hasPrivateAccess
+            ? (this.authPreviewOffer(true))
+            : ['BD_506B'].includes(this.state.offeringRegulation) && !hasPrivateAccess
+            ? (
+              <OfferingsPassProtected
+                offerPreview
+                authPreviewOffer={this.authPreviewOffer}
+                offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
+                shorthandBusinessName={this.state.shorthandBusinessName}
+              />
+            )
+            : (
+              <DevPassProtected
+                offerPreview
+                authPreviewOffer={this.authPreviewOffer}
+                offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
+              />
+            )
+          }
+        </>
       );
     }
     if (campaignStore.loading || (this.state.found !== 2 && !campaignStore.campaignStatus.doneComputing) || this.state.preLoading) {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, campaign, navCountData, modifySubNavs, campaignStatus,
+      details, modifySubNavs, campaignStatus, campaign,
     } = campaignStore;
     const { isWatching } = this.props.watchListStore;
     let navItems = [];
-    const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
-    if (isMobile) {
-      navItems = modifySubNavs(cloneDeep(tempNavItems), newLayout);
-      navItems = this.addDataRoomSubnavs(navItems, get(campaign, 'legal.dataroom.documents'));
-      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
-      navItems = this.removeSubNavs(navItems);
+    if (newLayout && campaignStatus.campaignTemplate === 2) {
+      navItems = campaignStatus.templateNavs;
     } else {
-      navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
-      navItems = modifySubNavs(navItems, newLayout);
-      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
-    }
-    if (!['LIVE', 'CREATION'].includes(get(campaign, 'stage'))) {
-      navItems = navItems.filter(n => n.to !== '#data-room');
-    }
-    if (campaignStatus.isFund) {
-      navItems = navItems.filter(n => !['#gallery', '#comments'].includes(n.to));
-      navItems = navItems.map(n => (navTitleMeta[n.to] ? { ...n, title: navTitleMeta[n.to] } : { ...n }));
+      const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
+      if (isMobile) {
+        navItems = modifySubNavs(cloneDeep(tempNavItems), newLayout);
+        navItems = this.addDataRoomSubnavs(navItems, get(campaign, 'legal.dataroom.documents'));
+        navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
+        navItems = this.removeSubNavs(navItems);
+      } else {
+        navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
+        navItems = modifySubNavs(navItems, newLayout);
+        navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
+      }
+      if (!['LIVE', 'CREATION'].includes(get(campaign, 'stage'))) {
+        navItems = navItems.filter(n => n.to !== '#data-room');
+      }
+      if (campaignStatus.isFund) {
+        navItems = navItems.filter(n => !['#gallery', '#comments'].includes(n.to));
+        navItems = navItems.map(n => (navTitleMeta[n.to] ? { ...n, title: navTitleMeta[n.to] } : { ...n }));
+      }
     }
     if ((details && details.data && !details.data.getOfferingDetailsBySlug)
       || this.state.found === 2) {
@@ -231,6 +258,7 @@ class offerDetails extends Component {
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
     const showWatchingBtn = isWatching !== 'loading';
+    // const AgreementComponent = campaignStatus.isAgreementTemplate ? AgreementTemplate : Agreement;
     const followBtn = (
       <Button disabled={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} inverted loading={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} fluid color="white" onClick={this.handleFollowBtn}>
         {showWatchingBtn && <Icon name={` ${!this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') && 'heart'} ${isWatching ? '' : 'outline'}`} color={isWatching ? 'green' : ''} />} {isWatching ? 'Following' : 'Follow'}
@@ -243,17 +271,17 @@ class offerDetails extends Component {
           && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
         {!isMobile
-          && <CampaignHeader followBtn={followBtn} {...this.props} />
+          && (campaignStatus.campaignTemplate === 2 ? <CampaignHeaderV2 followBtn={followBtn} {...this.props} /> : <CampaignHeader followBtn={followBtn} {...this.props} />)
         }
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu newLayout={newLayout} {...this.props} />
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
-              {mobileHeaderAndSideBar}
+              {campaignStatus.campaignTemplate === 2 ? <CampaignHeaderV2 followBtn={followBtn} {...this.props} /> : mobileHeaderAndSideBar}
               <MobileDropDownNav
                 inverted
                 refMatch={match}
-                navCountData={navCountData}
+                // navCountData={navCountData}
                 navItems={navItems}
                 location={location}
                 isBonusReward={isBonusReward}
@@ -286,10 +314,10 @@ class offerDetails extends Component {
                       <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
                       <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
                       <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}${newLayout ? '#comments' : '/comments'}`} {...props} />} />
-                      <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
+                      <Route exact path={`${match.url}/agreement`} render={() => <AgreementTemplate refLink={this.props.match.url} />} />
                       <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
                       <Route exact path={`${match.url}/congratulation`} render={() => <Congratulation refLink={this.props.match.url} />} />
-                      <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
+                      <Route exact path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
                       <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
                       <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
                       <Route component={NotFound} />
@@ -300,6 +328,7 @@ class offerDetails extends Component {
             </section>
           </Container>
         </div>
+        { includes(this.props.location.pathname, 'herovideo') && <VideoModal refLink={this.props.match} {...this.props} />}
       </>
     );
   }

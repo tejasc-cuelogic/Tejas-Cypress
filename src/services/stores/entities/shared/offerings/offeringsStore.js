@@ -2,7 +2,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
-import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes, orderBy } from 'lodash';
+import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes, orderBy, set } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
@@ -10,7 +10,7 @@ import {
   allOfferings, allOfferingsCompact, updateOffering,
   adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings, getofferingById,
 } from '../../../queries/offerings/manage';
-import { offeringCreationStore, userStore, uiStore, campaignStore } from '../../../index';
+import { offeringCreationStore, userStore, uiStore, campaignStore, collectionStore } from '../../../index';
 import { ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -53,7 +53,7 @@ export class OfferingsStore {
   @observable orderedActiveLiveList = [];
 
   @action
-  initRequest = (props, forceResetDb = false) => {
+  initRequest = (props, forceResetDb = false) => new Promise(async (resolve) => {
     const {
       stage,
     } = props;
@@ -73,14 +73,18 @@ export class OfferingsStore {
           if (stage === 'live') {
             this.orderedActiveListArr();
           }
+          const stageValue = stage === 'live' ? 'LIVE' : 'COMPLETE';
+          collectionStore.setFieldValue('collectionMappingList',
+            res.getOfferings.filter(d => d.stage === stageValue).map(c => ({ key: c.id, text: c.offeringSlug, value: c.id })));
+          resolve();
         }
       },
       onError: (err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
+        window.logger(err);
       },
     });
-  }
+  });
 
   @action
   setFieldValue = (field, value) => {
@@ -107,6 +111,12 @@ export class OfferingsStore {
         uiStore.removeOneFromProgressArray('publish');
         Helper.toast('Error while updating offering', 'error');
       });
+  }
+
+  @action
+  updateLockOffering = (lockObj) => {
+    const tempRef = this.offerData;
+    this.offerData = set(tempRef, 'data.getOfferingDetailsBySlug.lock', lockObj);
   }
 
   @action
@@ -284,17 +294,17 @@ export class OfferingsStore {
       fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: (res) => {
-          if (!this.offerDataLoading) {
-            this.currentId = id;
-            this.offerLoading = false;
-            this.oldOfferData = {};
-            const { setFormData, setCurrentOfferingId, setFieldValue } = offeringCreationStore;
-            setFieldValue('currentOfferingSlug', id);
-            setCurrentOfferingId(res.getOfferingDetailsBySlug.id);
-            setFormData('OFFERING_DETAILS_FRM', false);
-            setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
-            setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
-          }
+        if (!this.offerDataLoading) {
+          this.currentId = id;
+          this.offerLoading = false;
+          this.oldOfferData = {};
+          const { setFormData, setCurrentOfferingId, setFieldValue } = offeringCreationStore;
+          setFieldValue('currentOfferingSlug', id);
+          setCurrentOfferingId(res.getOfferingDetailsBySlug.id);
+          setFormData('OFFERING_DETAILS_FRM', false);
+          setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
+          setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -431,7 +441,7 @@ export class OfferingsStore {
   }
 
   @computed get loading() {
-    return this.data[this.requestState.stage].loading;
+    return this.data[this.requestState.stage] && this.data[this.requestState.stage].loading;
   }
 
   @action resetInitLoad() {

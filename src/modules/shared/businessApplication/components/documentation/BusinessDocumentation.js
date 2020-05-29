@@ -19,18 +19,18 @@ export default class BusinessDocumentation extends Component {
       businessDocChange,
       businessAppUploadFiles,
       businessAppRemoveFiles,
-      getBusinessTypeCondtion,
       getPersonalGuaranteeCondition,
       formReadOnlyMode,
       businessAppParitalSubmit,
       enableSave,
       businessApplicationDetailsAdmin,
+      getBusinessTypeCondtion,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_DOC_FRM;
     const { hideFields } = this.props;
     const userAccess = this.props.userStore.myAccessForModule('APPLICATIONS');
-    const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
-    const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];
+    const statementFileList = ['bankStatements', 'leaseAgreementsOrLOIs'];
+    const taxFileList = ['personalTaxReturn', 'businessTaxReturn'];
     const { inProgress } = this.props.uiStore;
     let disableFileUpload = true;
     if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
@@ -67,7 +67,7 @@ export default class BusinessDocumentation extends Component {
                     multiple
                     key={field}
                     name={field}
-                    asterisk={fields[field].rule.includes('required') ? 'true' : ''}
+                    asterisk={((fields[field].rule.includes('required') && getBusinessTypeCondtion) ? 'true' : '')}
                     fielddata={fields[field]}
                     ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                     onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
@@ -111,7 +111,7 @@ export default class BusinessDocumentation extends Component {
         <FormElementWrap
           hideFields={hideFields}
           header="Will you accept a blanket lien on the business if your campaign is successfully funded?*"
-          subHeader="This is a NextSeed requirement for Debt products only. (Note that if you have existing debt with liens attached, a second lien will be accepted.)"
+          subHeader="This is a requirement for NextSeed debt products only. (Note that if you have existing debt with a lien attached, a second lien will be accepted). The Community Bridge Note does not require a lien."
         >
           <FormRadioGroup
             disabled={formReadOnlyMode}

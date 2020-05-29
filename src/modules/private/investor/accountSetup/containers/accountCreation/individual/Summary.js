@@ -64,45 +64,52 @@ export default class Summary extends React.Component {
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <>
-        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Confirm your account to start investing! </Header>
-        <div className={isMobile ? '' : 'field-wrap'}>
-          <div className="table-wrapper">
-            <Table unstackable basic="very" fixed>
+        <Header as="h4">Confirm your account to start investing! </Header>
+        <>
+          <div className="table-wrapper mt-30">
+            <Table unstackable basic="very" fixed compact={isMobile}>
               <Table.Body>
                 <Table.Row>
                   <Table.Cell className="grey-header">Investor: </Table.Cell>
-                  <Table.Cell>{`${get(userDetails, 'info.firstName') || ''} ${get(userDetails, 'info.lastName') || ''} `}</Table.Cell>
+                  <Table.Cell textAlign="right">{`${get(userDetails, 'info.firstName') || ''} ${get(userDetails, 'info.lastName') || ''} `}</Table.Cell>
+                  <Table.Cell collapsing width={isMobile ? '3' : '2'} />
                 </Table.Row>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
                   && (
                 <Table.Row>
                     <Table.Cell className="grey-header">Bank: </Table.Cell>
-                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
-                  </Table.Row>
+                    <Table.Cell textAlign="right">{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                    <Table.Cell collapsing width={isMobile ? '3' : '2'} />
+                    </Table.Row>
                   )
                 }
                 <Table.Row>
                   <Table.Cell className="grey-header">Account Type: </Table.Cell>
-                  <Table.Cell>{Helper.caseify(plaidAccDetails.accountType || '')}</Table.Cell>
+                  <Table.Cell textAlign="right">{Helper.caseify(plaidAccDetails.accountType || '')}</Table.Cell>
+                  <Table.Cell collapsing width={isMobile ? '3' : '2'} />
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell className="grey-header">Bank Account Number: </Table.Cell>
-                  <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
+                  <Table.Cell textAlign="right">{bankAccountNumber || ''}</Table.Cell>
+                  <Table.Cell collapsing width={isMobile ? '3' : '2'} />
                 </Table.Row>
                 {!isEmpty(routingNum)
                   && (
                <Table.Row>
                     <Table.Cell className="grey-header">Routing Number</Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell textAlign="right">
                       {routingNum || ''}
                     </Table.Cell>
+                    <Table.Cell collapsing width={isMobile ? '3' : '2'} />
                   </Table.Row>
                   )
                 }
                 <Table.Row>
                   <Table.Cell className="grey-header">Your Initial Deposit</Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell textAlign="right">
                       {depositAmount}
+                  </Table.Cell>
+                  <Table.Cell collapsing>
                       <span className="pull-right">
                         <Button className="link-button highlight-text" onClick={() => setStepToBeRendered(1)}>Change</Button>
                       </span>
@@ -111,15 +118,15 @@ export default class Summary extends React.Component {
               </Table.Body>
             </Table>
           </div>
-        </div>
+        </>
         {errors
           && (
-            <Message error className="center-align">
+            <Message error className={isMobile && 'center-align'}>
               <ListErrors errors={[errors.message]} />
             </Message>
           )
         }
-        <p className={`${isMobile ? '' : 'center-align'} grey-header mt-30`}>
+        <p className="grey-header mt-30">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
           <a className="highlight-text" style={{ cursor: 'pointer' }} href="/dashboard/legal-docs/cCAgreement" onClick={e => this.openModal(e, 'cCAgreement')}>CrowdPay Custodial Account Agreement</a>,{' '}
           <a className="highlight-text" style={{ cursor: 'pointer' }} href="/dashboard/legal-docs/fPAgreemnt" onClick={e => this.openModal(e, 'fPAgreemnt')}>NextSeed US LLC Member Agreement</a>,{' '}
@@ -132,8 +139,8 @@ export default class Summary extends React.Component {
             loading={docLoading}
           />
         </p>
-        <div className="center-align mt-30">
-          <Button primary size="large" fluid={isMobile} className="relaxed" content="Create your account" onClick={() => this.props.handleCreateAccount('individual')} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum) || inProgressArray.includes('submitAccountLoader')} />
+        <div className="mt-30">
+          <Button primary size="large" fluid={isMobile} className="relaxed" data-cy="ind-summary" content="Create your account" onClick={() => this.props.handleCreateAccount('individual')} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum) || inProgressArray.includes('submitAccountLoader')} />
         </div>
       </>
     );

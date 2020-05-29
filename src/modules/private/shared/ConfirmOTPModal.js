@@ -4,8 +4,8 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { get } from 'lodash';
-import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { ListErrors } from '../../../theme/shared';
+import { Button, Header, Form, Divider, Message, Grid } from 'semantic-ui-react';
+import { ListErrors, NsModal } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import ManageMultiFactorAuth from './settings/components/profileSettings/ManageMultiFactorAuth';
 import { FormInput } from '../../../theme/form';
@@ -58,65 +58,65 @@ export default class ConfirmOTPModal extends Component {
     const headerMessageToShow = actionToPerform;
     const formattedPhoneNumber = get(this.props, 'maskedPhoneNumber') ? Helper.phoneNumberFormatter(this.props.maskedPhoneNumber) : '';
     if (this.state.changeMfa) {
-      return <ManageMultiFactorAuth refLink={this.props.match.url} />;
+      return <ManageMultiFactorAuth refLink={this.props.match.url} {...this.props} />;
     }
     return (
-      <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
-        <Modal.Header className="center-align signup-header">
-          <Header as="h3">Please confirm with the code</Header>
-          <Divider section className="small" />
-          <p>
-            To proceed with <b>{headerMessageToShow}</b> please
+      <NsModal open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
+        <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
+          <Grid.Column mobile={16} tablet={10} computer={8} className="pt-0">
+            <Header as="h3">Please confirm with the code</Header>
+            <Divider section className="small" />
+            <p>
+              To proceed with <b>{headerMessageToShow}</b> please
             check the verification code in the message we sent to:
           </p>
-        </Modal.Header>
-        <Modal.Content className="signup-content center-align">
-          {['TEXT', 'CALL', 'PHONE'].includes(mfaMode)
-            ? <p className="display-only">{formattedPhoneNumber}</p>
-            : (
-              <FormInput
-                ishidelabel
-                type="email"
-                size="huge"
-                name="email"
-                fielddata={{ value: this.getOTPEmailAddress() }}
-                readOnly
-                displayMode
-                className="display-only"
-              />
-            )
-          }
-          <p>
-          <Button color="green" className="link-button mt-30" content="See Multi-Factor Authentication Settings" onClick={this.handleChangeMfa} />
-          </p>
-          <Form error onSubmit={formSubmit}>
-            <Form.Field className="otp-wrap">
-              <label>Enter verification code here:</label>
-              <ReactCodeInput
-                filterChars
-                fields={6}
-                type="number"
-                className="otp-field"
-                pattern="[0-9]*"
-                inputmode="numeric"
-                autocomplete="one-time-code"
-                autoFocus={!isMobile}
-                fielddata={OTPVerifyMeta.fields.code}
-                onChange={VerificationChange}
-              />
-              <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend code" onClick={e => resendVerification(e)} />
-            </Form.Field>
-            {errors
-              && (
-                <Message error className="mb-40">
-                  <ListErrors errors={[errors]} />
-                </Message>
+            {['TEXT', 'CALL', 'PHONE'].includes(mfaMode)
+              ? <p className="display-only">{formattedPhoneNumber}</p>
+              : (
+                <FormInput
+                  ishidelabel
+                  type="email"
+                  size="huge"
+                  name="email"
+                  fielddata={{ value: this.getOTPEmailAddress() }}
+                  readOnly
+                  displayMode
+                  className="display-only"
+                />
               )
             }
-            <Button type="submit" primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTPVerifyMeta.meta.isValid} />
-          </Form>
-        </Modal.Content>
-      </Modal>
+            <p>
+              <Button color="green" className="link-button mt-30" content="See Multi-Factor Authentication Settings" onClick={this.handleChangeMfa} />
+            </p>
+            <Form error onSubmit={formSubmit}>
+              <Form.Field className="otp-wrap">
+                <label>Enter verification code here:</label>
+                <ReactCodeInput
+                  filterChars
+                  fields={6}
+                  type="number"
+                  autocomplete="one-time-code"
+                  className="otp-field"
+                  autoFocus={!isMobile}
+                  pattern="[0-9]*"
+                  inputmode="numeric"
+                  fielddata={OTPVerifyMeta.fields.code}
+                  onChange={VerificationChange}
+                />
+                <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend code" onClick={e => resendVerification(e)} />
+              </Form.Field>
+              {errors
+                && (
+                  <Message error className="mb-40">
+                    <ListErrors errors={[errors]} />
+                  </Message>
+                )
+              }
+              <Button type="submit" primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTPVerifyMeta.meta.isValid || this.props.uiStore.inProgress} />
+            </Form>
+          </Grid.Column>
+        </Grid>
+      </NsModal>
     );
   }
 }

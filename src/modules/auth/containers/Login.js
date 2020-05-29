@@ -4,75 +4,87 @@ import { Link, withRouter } from 'react-router-dom';
 import { isEmpty, get } from 'lodash';
 import queryString from 'query-string';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Header, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
-import { FormInput } from '../../../theme/form';
+import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
+import formHOC from '../../../theme/form/formHOC';
+import Spinner from '../../../theme/shared/src/Spinner';
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
-@withRouter
-@observer
+const metaInfo = {
+  store: 'authStore',
+  form: 'LOGIN_FRM',
+};
 class Login extends Component {
   constructor(props) {
     super(props);
-    const urlParameter = queryString.parse(this.props.location.search);
+    const { uiStore, authStore, location } = this.props;
+    const urlParameter = queryString.parse(location.search);
     if (urlParameter && urlParameter.ref) {
-      this.props.uiStore.setAuthRef(atob(urlParameter.ref));
+      uiStore.setAuthRef(atob(urlParameter.ref));
     }
-    this.props.uiStore.clearErrors();
-    this.props.uiStore.setProgress(false);
-    this.props.authStore.resetForm('LOGIN_FRM');
-    this.props.authStore.setDefaultPwdType();
+    uiStore.clearErrors();
+    uiStore.setProgress(false);
+    authStore.resetForm('LOGIN_FRM');
+    authStore.setDefaultPwdType();
     localStorage.removeItem('lastActiveTime');
   }
 
   componentDidUpdate() {
-    if (this.props.authStore.isUserLoggedIn
-      && !this.props.authStore.newPasswordRequired
-      && this.props.userDetailsStore.userFirstLoad) {
-      const { authRef } = this.props.uiStore;
-      const roles = get(this.props.userStore.currentUser, 'roles');
-      this.props.history.push(authRef || (roles && roles.includes('investor')
-        ? `${this.props.userDetailsStore.pendingStep}` : '/dashboard'));
+    const { authStore, userDetailsStore, userStore, uiStore, history } = this.props;
+    if (authStore.isUserLoggedIn
+      && !authStore.newPasswordRequired
+      && userDetailsStore.userFirstLoad) {
+      const { authRef } = uiStore;
+      const roles = get(userStore.currentUser, 'roles');
+      history.push(authRef || (roles && roles.includes('investor')
+        ? `${userDetailsStore.pendingStep}` : '/dashboard'));
     }
   }
 
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
+    this.props.uiStore.setProgress(false);
   }
 
   handleSubmitForm = (e) => {
     e.preventDefault();
+    const { removeOneFromProgressArray, authRef, appUpdated, setAppUpdated, authRefHash } = this.props.uiStore;
     this.props.uiStore.clearErrors();
     const { email, password } = this.props.authStore.LOGIN_FRM.fields;
     const lowerCasedEmail = email.value.toLowerCase();
     const userCredentials = { email: lowerCasedEmail, password: password.value };
     authActions.login()
       .then(() => {
-        if (this.props.authStore.newPasswordRequired) {
-          this.props.uiStore.removeOneFromProgressArray('login');
+        this.props.collectionStore.setFieldValue('collectionApiHit', false);
+        this.props.collectionStore.getCollections();
+        const { newPasswordRequired, setCredentials, resetForm } = this.props.authStore;
+        if (appUpdated) {
+          window.location.reload();
+        }
+        if (newPasswordRequired) {
+          removeOneFromProgressArray('login');
           this.props.history.push('/change-password');
         } else {
-          this.props.authStore.setCredentials(userCredentials);
-          this.props.authStore.resetForm('LOGIN_FRM');
+          setCredentials(userCredentials);
+          resetForm('LOGIN_FRM');
           const { pendingStep, userHasOneFullAccount } = this.props.userDetailsStore;
           const roles = get(this.props.userStore.currentUser, 'roles');
           const redirectUrl = (roles && roles.includes('investor'))
             && !userHasOneFullAccount
-            ? pendingStep : this.props.uiStore.authRef;
-          this.props.uiStore.removeOneFromProgressArray('login');
-          if (this.props.uiStore.appUpdated) {
-            this.props.uiStore.setAppUpdated(false);
+            ? pendingStep : authRef;
+          removeOneFromProgressArray('login');
+          if (appUpdated) {
+            setAppUpdated(false);
             window.location = redirectUrl || '/';
           } else {
             this.props.history.push(redirectUrl || '/');
           }
-          if (this.props.uiStore.authRefHash) {
-            window.location.hash = this.props.uiStore.authRefHash;
+          if (authRefHash) {
+            window.location.hash = authRefHash;
           }
         }
       }).catch((err) => {
-        console.log(err);
+        window.logger(err);
       });
   };
 
@@ -89,14 +101,15 @@ class Login extends Component {
         && !this.props.authStore.newPasswordRequired
     ) {
       return (
-        <Dimmer active className="fullscreen">
-          <Loader active />
-        </Dimmer>
+        <Spinner page />
       );
     }
     const {
-      LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType,
+      LOGIN_FRM, togglePasswordType, pwdInputType,
     } = this.props.authStore;
+    const { smartElement } = this.props;
+
+    const isProgress = inProgress || inProgressArray.includes('login');
 
     const customError = errors && errors.message === 'User does not exist.'
       ? 'Incorrect username or password.' : errors && errors.message;
@@ -113,25 +126,13 @@ class Login extends Component {
           <Header as="h3">Log in to NextSeed</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {/* <Form>
-            <Button color="facebook" size="large" fluid>
-              Log in with Facebook
-            </Button>
-          </Form>
-          <Divider horizontal section>or</Divider> */}
           <Form error onSubmit={this.handleSubmitForm} data-cy="loginForm">
             {
-              Object.keys(LOGIN_FRM.fields).map(field => (
-                <FormInput
-                  data-cy={field}
-                  key={field}
-                  type={field === 'password' ? pwdInputType : 'email'}
-                  icon={field === 'password' ? togglePasswordType() : null}
-                  name={field}
-                  autoFocus={!responsiveVars.isMobile && field === 'email'}
-                  fielddata={LOGIN_FRM.fields[field]}
-                  changed={LoginChange}
-                />
+              ['email', 'password'].map(field => (
+                smartElement.Input(field, { type: field === 'password' ? pwdInputType : 'email',
+                icon: field === 'password' ? togglePasswordType() : null,
+                autoFocus: !responsiveVars.isMobile && field === 'email',
+                disabled: isProgress })
               ))
             }
             <Form.Field>
@@ -145,7 +146,7 @@ class Login extends Component {
               )
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Log in" loading={inProgress || !isEmpty(inProgressArray)} disabled={!LOGIN_FRM.meta.isValid || inProgress || !isEmpty(inProgressArray)} />
+              <Button fluid primary size="large" className="very relaxed" content="Log in" loading={isProgress} disabled={!LOGIN_FRM.meta.isValid || inProgress || !isEmpty(inProgressArray)} />
             </div>
           </Form>
         </Modal.Content>
@@ -156,5 +157,4 @@ class Login extends Component {
     );
   }
 }
-
-export default Login;
+export default inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'collectionStore')(withRouter(formHOC(observer(Login), metaInfo)));

@@ -32,22 +32,31 @@ export default class UploadDocument extends Component {
 
   render() {
     const {
-      INCOME_UPLOAD_DOC_FORM, formChange, FILLING_STATUS_FORM, maskChange,
+      INCOME_UPLOAD_DOC_FORM, formChange, FILLING_STATUS_FORM, maskChange, isFilingAllowed,
     } = this.props.accreditationStore;
-    const isFilling = FILLING_STATUS_FORM.fields.method.value;
+
+    // const isFilling = FILLING_STATUS_FORM.fields.method.value;
+    let isFilling;
+    if (!isFilingAllowed) {
+      isFilling = true;
+    } else {
+      isFilling = FILLING_STATUS_FORM.fields.method.value;
+    }
+
     let docsToUpload = ['incomeDocSecondLastYear', 'incomeDocLastYear'];
     if (!isFilling) {
       docsToUpload = ['incomeDocThirdLastYear', 'incomeDocSecondLastYear'];
     }
+
     return (
       <div>
-        <Header as="h3" textAlign="center">Upload documents</Header>
-        <p className={isMobile ? 'left-align' : 'center-align'}>
-          Upload your tax returns, Form W-2s, or other IRS or foreign tax authority documents evidencing your income for the past 2 years, or a letter from your personal lawyer, CPA, investment advisor or investment broker verifying your income for such years.
+        <Header as="h4">Upload documents</Header>
+        <p>
+           Upload your tax returns, Form W-2s, or other IRS or foreign tax authority documents evidencing your income for the past 2 years.
         </p>
         <Divider hidden />
         <Form>
-          <Grid stackable columns={2} centered>
+          <Grid stackable columns={2}>
             {
               docsToUpload.map(field => (
                 <Grid.Column key={field}>
@@ -58,10 +67,13 @@ export default class UploadDocument extends Component {
                     ondrop={this.onFileDrop}
                     onremove={this.handleDelDoc}
                     containerclassname="fluid"
+                    uploadtitle="Choose a File"
                   />
                 </Grid.Column>
               ))
             }
+          </Grid>
+          <Grid stackable columns={isFilling ? 1 : 2}>
             {
               ['previousEstimateIncome', 'estimateIncome'].map(field => (
                 ((!isFilling && field === 'previousEstimateIncome')
@@ -72,8 +84,10 @@ export default class UploadDocument extends Component {
                       fielddata={INCOME_UPLOAD_DOC_FORM.fields[field]}
                       changed={(values, name) => maskChange(values, 'INCOME_UPLOAD_DOC_FORM', name)}
                       currency
+                      type="tel"
                       showerror
                       prefix="$"
+                      fluid
                     />
                   </Grid.Column>
                 )
@@ -83,29 +97,22 @@ export default class UploadDocument extends Component {
           <Divider hidden />
           {isFilling
             && (
-              <p className={isMobile ? 'left-align' : 'center-align'}>
-                <b>Note:</b> If you provide tax documents, W-2s, or other direct forms of income verification, your accredited investor status will be valid for the remainder of this calendar year. If you provide an upload of communication from a qualified advisor, your accredited investor status will be valid for 90 days from the date of your verifier`s confirmation.
+              <p className="note">
+                <b>Note:</b> if you provide tax documents, W-2s, or other direct froms of income verification, your accredited investor status will be valid for the remainder of this calender year.
           </p>
             )
           }
           <Divider hidden />
           <FormCheckbox
             fielddata={
-              FILLING_STATUS_FORM.fields.method.value
-                ? INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling
-                : INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling
+              INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling
             }
-            name={FILLING_STATUS_FORM.fields.method.value ? 'isAcceptedForfilling' : 'isAcceptedForUnfilling'}
+            name="isAcceptedForfilling"
             changed={(e, result) => formChange(e, result, 'INCOME_UPLOAD_DOC_FORM')}
             defaults
-            disabled={
-              (INCOME_UPLOAD_DOC_FORM.fields.incomeDocSecondLastYear.fileId === ''
-                || INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.fileId === '')}
-            containerclassname="ui relaxed list"
+            containerclassname="ui relaxed list small-font"
           />
-          <div className="center-align">
-            <Button fluid={isMobile} onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
-          </div>
+          <Button className="mt-30" fluid={isMobile} onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
         </Form>
       </div>
     );

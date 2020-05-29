@@ -9,6 +9,7 @@ import Summary from './Summary';
 import { validationActions } from '../../../../../../../services/actions';
 import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import AboutIra from './AboutIra';
+import { ThankYouStep } from '../../../components/confirmModal';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -21,13 +22,14 @@ export default class AccountCreation extends React.Component {
     if (!this.props.iraAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('ira');
-      this.props.accountStore.setAccTypeChange(1);
     }
+    this.props.accountStore.setAccTypeChange(1);
   }
 
   checkIfAccountIsAlreadyPresent = (accountType) => {
     const { checkIfAccountIsAlreadyPresent, getInvestorAccountsRoute } = this.props.userDetailsStore;
-    if (checkIfAccountIsAlreadyPresent(accountType)) {
+    const { isThankYouStep } = this.props.iraAccountStore;
+    if (checkIfAccountIsAlreadyPresent(accountType) && !isThankYouStep) {
       const route = getInvestorAccountsRoute(accountType);
       this.props.history.push(`/dashboard/account-details/${route}/portfolio`);
     }
@@ -86,7 +88,7 @@ export default class AccountCreation extends React.Component {
     if (FUNDING_FRM.fields.fundingType.value === 0) {
       steps = [
         {
-          name: 'About Ira',
+          name: 'Account Setup',
           component: <AboutIra />,
           isHideLabel: true,
           isValid: false,
@@ -167,16 +169,19 @@ export default class AccountCreation extends React.Component {
           disableNextButton: true,
           component: <Summary handleCreateAccount={this.props.handleCreateAccount} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
         },
+        {
+          ...ThankYouStep,
+          stepToBeRendered: 8,
+        },
       ];
     } else {
       steps = [
         {
-          name: 'About Ira',
+          name: 'Account Setup',
           component: <AboutIra />,
           isHideLabel: true,
           isValid: false,
           isDirty: false,
-          isHideName: true,
           form: '',
           stepToBeRendered: 1,
         },
@@ -231,11 +236,15 @@ export default class AccountCreation extends React.Component {
           isValid: isValidIraForm ? '' : stepToBeRendered > 5 ? 'error' : '',
           validForm: isValidIraForm,
         },
+        {
+          ...ThankYouStep,
+          stepToBeRendered: 6,
+        },
       ];
     }
     return (
       <div className="step-progress">
-        <MultiStep hideHeader={(stepToBeRendered === 0 && !isMobile)} isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep hideHeader={(stepToBeRendered === -1 && !isMobile)} isdynamicSteps isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

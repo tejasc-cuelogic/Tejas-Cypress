@@ -24,7 +24,7 @@ export default class Filters extends Component {
               <Grid.Column width={3}>
                 <DropdownFilter value={requestState.search.status} label="Status" name="status" change={setSearchParam} options={FILTER_FRM.fields.status.values} />
               </Grid.Column>
-              <Grid.Column width={4}>
+              <Grid.Column width={5}>
                 <DateRangeFilter filters={requestState.search} label="Date" name="createdAt" change={change} />
               </Grid.Column>
               <Grid.Column width={3}>

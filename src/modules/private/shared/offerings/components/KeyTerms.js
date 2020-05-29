@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Header, Form, Divider, Icon, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { startsWith } from 'lodash';
-import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES, NS_FEE_PERCENTAGE } from '../../../../../services/constants/admin/offerings';
+import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES, NS_FEE_PERCENTAGE } from '../../../../../services/constants/admin/offerings';
 import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import { InlineLoader } from '../../../../../theme/shared';
 import ButtonGroupType2 from './ButtonGroupType2';
@@ -69,13 +68,6 @@ export default class KeyTerms extends Component {
     const approved = (offer && offer.keyTerms && offer.keyTerms.approved)
       ? offer.keyTerms.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
-    let MODIFIED_REGULATION_VALUES = null;
-    if (KEY_TERMS_FRM && KEY_TERMS_FRM.fields && KEY_TERMS_FRM.fields.regulation
-      && KEY_TERMS_FRM.fields.regulation.value) {
-      MODIFIED_REGULATION_VALUES = startsWith(KEY_TERMS_FRM.fields.regulation.value, 'BD_') ? BD_REGULATION_VALUES : FP_REGULATION_VALUES;
-    } else {
-      MODIFIED_REGULATION_VALUES = REGULATION_VALUES;
-    }
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -91,7 +83,7 @@ export default class KeyTerms extends Component {
               />
             ))}
             <FormDropDown
-              disabled={isReadonly}
+              displayMode={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.industry}
               selection
               value={KEY_TERMS_FRM.fields.industry.value}
@@ -113,6 +105,7 @@ export default class KeyTerms extends Component {
             ))}
             {['securities', 'equityClass', 'equityUnitType'].map(field => (
               <FormDropDown
+                displayMode={isReadonly}
                 containerclassname={isReadonly ? 'display-only' : ''}
                 className={isReadonly ? 'display-only' : ''}
                 disabled={isReadonly}
@@ -162,7 +155,7 @@ export default class KeyTerms extends Component {
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
+              displayMode={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.legalBusinessType}
               selection
               value={KEY_TERMS_FRM.fields.legalBusinessType.value}
@@ -186,13 +179,13 @@ export default class KeyTerms extends Component {
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
+              displayMode={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.regulation}
               selection
               value={KEY_TERMS_FRM.fields.regulation.value}
               name="regulation"
               placeholder={isReadonly ? 'N/A' : 'Choose here'}
-              options={MODIFIED_REGULATION_VALUES}
+              options={REGULATION_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             />
             <FormInput
@@ -251,7 +244,7 @@ export default class KeyTerms extends Component {
             {/* <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
+              displayMode={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.roundType}
               selection
               value={KEY_TERMS_FRM.fields.roundType.value}
@@ -409,7 +402,7 @@ export default class KeyTerms extends Component {
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
+              displayMode={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.nsFeePercentage}
               selection
               value={KEY_TERMS_FRM.fields.nsFeePercentage.value}

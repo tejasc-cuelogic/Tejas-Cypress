@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-// import { Button, Table, Popup, Icon, Modal, Form, Header } from 'semantic-ui-react';
 import { Modal, Header, Divider, Button, Message, Form, Statistic } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import { get } from 'lodash';
@@ -8,21 +7,33 @@ import Helper from '../../../../../helper/utility';
 import { MaskedInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 
-@inject('investmentStore', 'userDetailsStore', 'uiStore', 'investmentLimitStore')
+@inject('investmentStore', 'userDetailsStore', 'uiStore', 'investmentLimitStore', 'campaignStore')
 @withRouter
 @observer
 class ChangeInvestmentLimit extends Component {
   constructor(props) {
     super(props);
     this.props.investmentStore.setInvestmentLimitData();
+    this.props.investmentStore.resetFormErrors('INVESTMONEY_FORM');
+    this.props.investmentStore.setFieldValue('disableNextbtn', true);
+    const { getCurrentInvestNowHealthCheck, setFieldValue } = this.props.investmentLimitStore;
+    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit');
+    if (currentInvestmentLimit) {
+      setFieldValue('currentLimit', currentInvestmentLimit);
+    }
+  }
+
+  componentWillUnmount() {
+    const { setFieldValue } = this.props.investmentLimitStore;
+    setFieldValue('isUpdateLimitActionActive', false);
   }
 
   changeInvestmentLimit = () => {
     const { uiStore } = this.props;
+    const { offeringUUID } = this.props.campaignStore;
     uiStore.setProgress();
-    const offeringId = this.props.offeringId ? this.props.offeringId : this.props.match.params.offeringId;
+    const offeringId = this.props.offeringId ? this.props.offeringId : this.props.match.url.includes('portfolio') ? offeringUUID : this.props.match.params.offeringId;
     this.props.investmentStore.updateInvestmentLimits(offeringId).then(() => {
-      Helper.toast('Investment limit changed successfully.', 'success');
       this.handleCloseModal();
     });
   }
@@ -50,8 +61,8 @@ class ChangeInvestmentLimit extends Component {
       INVESTMENT_LIMITS_FORM,
       // changedInvestmentLimit,
     } = this.props.investmentStore;
-    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
-    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
+    const { calculateCfLimit, currentLimit, isUpdateLimitActionActive } = this.props.investmentLimitStore;
+    // const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
     const { fields } = INVESTMENT_LIMITS_FORM;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick={false}>
@@ -67,7 +78,7 @@ class ChangeInvestmentLimit extends Component {
         <Modal.Content>
           <Statistic size="tiny">
             <Statistic.Label>Estimated investment limit</Statistic.Label>
-            <Statistic.Value>{Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}</Statistic.Value>
+            <Statistic.Value>{Helper.MoneyMathDisplayCurrency(currentLimit || 0, false)}</Statistic.Value>
           </Statistic>
           <Divider clearing hidden />
           <Form error onSubmit={this.submit}>
@@ -82,7 +93,8 @@ class ChangeInvestmentLimit extends Component {
                   fielddata={fields[field]}
                   // changed={maskingFieldChange}
                   changed={(values, name) => this.change(values, name)}
-                // onblur={investmentCalculate}
+                  onblur={calculateCfLimit}
+                  toolTipOnLabel
                 />
               ))
             }
@@ -95,8 +107,8 @@ class ChangeInvestmentLimit extends Component {
             }
             <div className="center-align mt-30">
               <Button.Group>
-                <Button type="button" onClick={this.handleCloseModal}>Cancel</Button>
-                <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTMENT_LIMITS_FORM.meta.isValid} onClick={this.changeInvestmentLimit} />
+                <Button type="button" disabled={inProgress} onClick={this.handleCloseModal}>Cancel</Button>
+                <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTMENT_LIMITS_FORM.meta.isValid || inProgress || !isUpdateLimitActionActive} onClick={this.changeInvestmentLimit} />
               </Button.Group>
             </div>
           </Form>

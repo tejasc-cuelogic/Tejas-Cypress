@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { findKey } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { Header } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
+import ConfirmPhoneNumber from '../../../../auth/containers/ConfirmPhoneNumber';
 import StickyNotification from '../components/StickyNotification';
 import ProgressCard from '../components/ProgressCard';
-import IdentityVerification from './identityVerification';
 import EstablishProfile from './establishProfile';
 import AccountCreation from './accountCreation';
 import { InlineLoader } from '../../../../../theme/shared';
+import CipVerification from './cipVerification/index';
 import {
   INVESTMENT_ACCOUNT_TYPES,
 } from '../../../../../constants/account';
@@ -78,7 +79,9 @@ export default class AccountSetup extends Component {
 
         }
         <Switch>
-          <Route exact path={`${match.url}/identity-verification/:step`} component={IdentityVerification} />
+          <Redirect from="*/identity-verification/0" to="/dashboard/setup/cip" />
+          <Route path={`${match.url}/cip`} component={CipVerification} />
+          <Route exact path={`${match.url}/phone-verification`} component={ConfirmPhoneNumber} />
           <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
           <Route path={`${match.url}/account-creation`} component={AccountCreation} />
         </Switch>

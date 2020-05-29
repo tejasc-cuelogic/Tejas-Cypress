@@ -1775,6 +1775,12 @@ i.icon[class*="ns-"]{
 .ns-business:before{
     content:@ns-business;
 }
+.ns-business-circle:before {
+    content: @ns-business-circle; 
+}
+.ns-building-circle:before {
+    content: @ns-building-circle; 
+}
 .ns-calculator-icon:before{
     content:@ns-calculator-icon;
 }
@@ -1891,6 +1897,9 @@ i.icon[class*="ns-"]{
 }
 .ns-corporation:before{
     content:@ns-corporation;
+}
+.ns-covid-icon:before {
+    content: @ns-covid-icon; 
 }
 .ns-credit-card:before{
     content:@ns-credit-card;
@@ -2054,6 +2063,9 @@ i.icon[class*="ns-"]{
 .ns-minus-square:before{
     content:@ns-minus-square;
 }
+.ns-money-circle:before {
+    content: @ns-money-circle; 
+}
 .ns-new-business:before{
     content:@ns-new-business;
 }
@@ -2153,6 +2165,9 @@ i.icon[class*="ns-"]{
 .ns-search:before{
     content:@ns-search;
 }
+.ns-seed-icon:before {
+    content: @ns-seed-icon; 
+}
 .ns-send-right:before{
     content:@ns-send-right;
 }
@@ -2161,6 +2176,12 @@ i.icon[class*="ns-"]{
 }
 .ns-shield-check:before{
     content:@ns-shield-check;
+}
+.ns-shrub-icon:before {
+    content: @ns-shrub-icon; 
+}
+.ns-sprout-icon:before {
+    content: @ns-sprout-icon; 
 }
 .ns-star:before{
     content:@ns-star;
@@ -2194,6 +2215,9 @@ i.icon[class*="ns-"]{
 }
 .ns-trash:before{
     content:@ns-trash;
+}
+.ns-tree-icon:before {
+    content: @ns-tree-icon; 
 }
 .ns-trending:before{
     content:@ns-trending;

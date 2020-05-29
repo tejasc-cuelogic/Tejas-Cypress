@@ -28,7 +28,7 @@ class InsightArticlesList extends Component {
               <Card.Content>
                 <div className="tags">
                   {article.category}
-                  <span className="pull-right">{`${article.minuteRead} Min read`}</span>
+                  <span className="pull-right">{article.minuteRead ? `${article.minuteRead} Min read` : ''}</span>
                 </div>
                 <Card.Description>
                   {article.title}

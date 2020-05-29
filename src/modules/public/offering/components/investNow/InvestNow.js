@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, uniq } from 'lodash';
 import money from 'money-math';
 import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
@@ -9,13 +9,13 @@ import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
 // import Helper from '../../../../../helper/utility';
 
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 
 @withRouter
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'accountStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
 @observer
 export default class InvestNow extends React.Component {
-  state = { submitLoading: false, isInvestmentUpdate: false };
+  state = { submitLoading: false, isInvestmentUpdate: false, disableBackButton: false };
 
   constructor(props) {
     super(props);
@@ -78,7 +78,7 @@ export default class InvestNow extends React.Component {
   }
 
   handleIframeTask = (e) => {
-    console.log(e.data);
+    window.logger(e.data);
   };
 
   handleMultiStepModalclose = () => {
@@ -214,6 +214,10 @@ export default class InvestNow extends React.Component {
     this.multiClickHandler(multiSteps[stepToBeRendered]);
   }
 
+  handleBackButton = (currentState) => {
+    this.setState({ disableBackButton: currentState });
+  }
+
   render() {
     const { changeInvest, uiStore } = this.props;
     const { showAccountList, disableElement } = this.props.accreditationStore;
@@ -228,6 +232,13 @@ export default class InvestNow extends React.Component {
       && !money.isZero(getCurrentInvestNowHealthCheck.previousAmountInvested)) {
       this.setState({ isInvestmentUpdate: true });
     }
+    const {
+      activeAccounts,
+      inprogressAccounts,
+    } = this.props.userDetailsStore.signupStatus;
+    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0)
+      ? [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0)
+        ? activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
     const {
       inProgress, setFieldvalue,
       isEnterPressed,
@@ -265,23 +276,26 @@ export default class InvestNow extends React.Component {
         isValid: '',
         stepToBeRendered: 2,
         isDirty: true,
+        disablePrevButton: changeInvest || !(accountToConsider.length > 1),
       },
       {
-        name: 'TransferRequest',
+        name: 'Transfer Request',
         component: <TransferRequest
           changeInvest={changeInvest || this.state.isInvestmentUpdate}
           isPreferredEquity={campaignStatus.isPreferredEquity}
           confirm={this.handleConfirm}
           cancel={this.handleCancel}
           refLink={this.props.refLink}
+          handleBack={this.handleBackButton}
         />,
         isValid: '',
         onlyDisableNextButton: true,
+        disablePrevButton: this.state.disableBackButton,
       },
     ];
     const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;
     const closeOnDimmerClickAction = false;
-    this.props.investmentStore.setFieldValue('disablePrevButton', true);
+    // this.props.investmentStore.setFieldValue('disablePrevButton', true);
     return (
       <div className="step-progress">
         {
@@ -295,7 +309,7 @@ export default class InvestNow extends React.Component {
             disableNxtbtn={this.props.investmentStore.disableNextbtn}
             isEnterPressed={isEnterPressed}
             resetEnterPressed={resetIsEnterPressed}
-            hideHeader={!isMobile}
+            // hideHeader={!isMobile}
             setStepTobeRendered={this.handleStepChange}
             setStepTobeRenderedForAlert={this.handleStepChnageOnPreviousForAlert}
             stepToBeRendered={this.props.investmentStore.stepToBeRendered}

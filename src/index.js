@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import bugsnagReact from '@bugsnag/plugin-react';
 import { BrowserRouter } from 'react-router-dom';
+import ReactDependentScript from 'react-dependent-script';
 import promiseFinally from 'promise.prototype.finally';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
@@ -43,7 +44,7 @@ if (process.env.REACT_APP_BUG_SNAG_KEY) {
   ErrorBoundary = bugsnagClient.getPlugin('react');
 }
 
-// this is the logging function using instead of console.log()
+// this is the logging function using instead of window.logger()
 window.logger = Utils.logger;
 
 // For easier debugging
@@ -58,7 +59,13 @@ ReactDOM.render(
   <Provider {...stores}>
     <BrowserRouter>
       <ErrorBoundary>
+      <ReactDependentScript
+        scripts={[
+        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_PLACE_API_KEY}&libraries=places`,
+      ]}
+      >
         <App />
+        </ReactDependentScript>
       </ErrorBoundary>
     </BrowserRouter>
   </Provider>,

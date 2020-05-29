@@ -23,6 +23,7 @@ export const FILTER_META = {
       { text: 'Requested', value: 'REQUESTED' },
       { text: 'Approved', value: 'CONFIRMED' },
       { text: 'Declined', value: 'INVALID' },
+      { text: 'Expired', value: 'EXPIRED' },
     ],
     error: undefined,
     rule: 'empty',
@@ -60,6 +61,19 @@ export const SELF_ACCREDITATION = {
   },
 };
 
+export const SELF_ACCREDITATION_PRIVATE = {
+  status: {
+    value: [],
+    values: [
+      {
+        label: <>I meet the requirements to qualify as an <PopUpModal showOnlyPopup={!isMobile} customTrigger={<span className="popup-label">accredited investor</span>} content={<>You may qualify as an accredited investor if your annual income is $200k+ (or $300k+ together with your spouse) or if your net worth exceeds<br /> $1 million (excluding your primary residence). See our <a target="_blank" href="/education-center/investor/what-is-an-accredited-investor">Education Center</a> for additional details.</>} />.</>, value: '1',
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
 export const CONFIRM_ACCREDITATION = {
   justifyDescription: {
     value: '',
@@ -83,7 +97,7 @@ export const CONFIRM_ACCREDITATION = {
     rule: 'futureDate|required|date',
     customErrors: {
       date: 'Date format is invalid.',
-      futureDate: "You've entered a past Expiration Date",
+      futureDate: 'You\'ve entered a past Expiration Date',
     },
   },
   adminJustificationDocs: {

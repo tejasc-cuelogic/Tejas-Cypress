@@ -139,7 +139,7 @@ class HowItWorks extends Component {
                   <div>
                     <Header as="h2">Raise exactly the type<Responsive as="br" minWidth={1200} /> of capital you need</Header>
                     <p className={responsiveVars.isMobile ? 'mb-30 mt-10' : 'mb-60 mt-40'}>
-                      Whether you{"'"}re raising capital for an expansion, a new venture, or to improve your current capacity, our investment banking team will find the right capital solution to keep you in control of your business.
+                      {'\''}re raising capital for an expansion, a new venture, or to improve your current capacity, our investment banking team will find the right capital solution to keep you in control of your business.
                   </p>
                     {!userStore.isIssuer && !responsiveVars.isMobile
                       && (
@@ -148,13 +148,13 @@ class HowItWorks extends Component {
                     }
                   </div>
                 </Grid.Column>
-                <Grid.Column className="centered" widescreen={5} computer={5} tablet={16} mobile={16} verticalAlign="middle">
+                <Grid.Column className="centered" widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
                   <List className={responsiveVars.isMobile ? 'capital-list' : ''}>
                     <List.Item className={responsiveVars.isMobile ? 'mt-0' : 'mb-30'}>
                       <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
                         <Icon className="ns-tick" color="grey" />
                         Debt
-                       </Header>
+                      </Header>
                     </List.Item>
                     <List.Item className={responsiveVars.isMobile ? 'mt-14' : 'mb-30'}>
                       <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
@@ -173,6 +173,16 @@ class HowItWorks extends Component {
                         <Icon className="ns-tick" color="grey" />
                         SAFEs
                     </Header>
+                    </List.Item>
+                    <List.Item className={responsiveVars.isMobile ? 'mt-14' : 'mb-30'} style={{ columnSpan: 'all' }}>
+                      <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
+                        <Icon className="ns-tick" color="grey" />
+                        Community Bridge Note
+                    </Header>
+                    <p className={responsiveVars.isMobile ? 'ml-30' : 'ml-45'}>
+                      <span className="highlight-text"><b>New!</b></span>
+                      <Link to="/insights/community-bridge-notes" className="neutral-text green-hover no-decoration ml-18">Learn More <Icon size="small" className="ns-chevron-right" /></Link>
+                    </p>
                     </List.Item>
                   </List>
                   {!userStore.isIssuer && responsiveVars.isMobile
@@ -464,7 +474,7 @@ class HowItWorks extends Component {
               <Grid.Column width={11}>
                 <Header as="h2" className="mb-20">Let us know how we can help</Header>
                 <p className={`${responsiveVars.isMobile ? 'mb-10' : ''} neutral-text`}>
-                  Have questions about how we can help your business achieve your goals? We{"'"}re here to help.
+                  Have questions about how we can help your business achieve your goals? We{'\''}re here to help.
                 </p>
               </Grid.Column>
               <Grid.Column width={5} verticalAlign="middle" className="center-align">

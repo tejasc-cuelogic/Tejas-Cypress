@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, decorate } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
 import { isEmpty, get, map } from 'lodash';
@@ -8,86 +8,85 @@ import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
-import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup } from '../../queries/profile';
+import { portPrequalDataToApplication, checkEmailExistsPresignup } from '../../queries/profile';
 import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { adminValidateCreateAdminUser } from '../../queries/users';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { uiStore, navStore, identityStore, userDetailsStore, userStore, businessAppStore } from '../../index';
+import { uiStore, navStore, userDetailsStore, userStore, businessAppStore } from '../../index';
 import { validateOfferingPreviewPassword } from '../../queries/campagin';
+import DataModelStore, { decorateDefault } from './dataModelStore';
 
+export class AuthStore extends DataModelStore {
+  hasSession = false;
 
-export class AuthStore {
-  @observable hasSession = false;
+  isUserLoggedIn = false;
 
-  @observable isUserLoggedIn = false;
+  privateOfferingAccess = false;
 
-  @observable newPasswordRequired = false;
+  hasPrivateAccess = cookie.load('HAS_PRIVATE_ACCESS') || false;
 
-  @observable cognitoUserSession = null;
+  newPasswordRequired = false;
 
-  @observable isBoxApiChecked = false;
+  cognitoUserSession = null;
 
-  @observable isOfferPreviewUrl = false;
+  isBoxApiChecked = false;
 
-  @observable capabilities = [];
+  isOfferPreviewUrl = false;
 
-  @observable userId = null;
+  capabilities = [];
 
-  @observable emailList = [];
+  userId = null;
 
-  @observable devAuth = {
+  emailList = [];
+
+  devAuth = {
     required: !['production', 'localhost', 'prod', 'master', 'infosec'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
   };
 
-  @observable LOGIN_FRM = Validator.prepareFormObject(LOGIN);
+  LOGIN_FRM = Validator.prepareFormObject(LOGIN);
 
-  @observable SIGNUP_FRM = Validator.prepareFormObject(SIGNUP);
+  SIGNUP_FRM = Validator.prepareFormObject(SIGNUP);
 
-  @observable CONFIRM_FRM = Validator.prepareFormObject(CONFIRM);
+  CONFIRM_FRM = Validator.prepareFormObject(CONFIRM);
 
-  @observable CHANGE_PASS_FRM = Validator.prepareFormObject(CHANGE_PASS);
+  CHANGE_PASS_FRM = Validator.prepareFormObject(CHANGE_PASS);
 
-  @observable FORGOT_PASS_FRM = Validator.prepareFormObject(FORGOT_PASS);
+  FORGOT_PASS_FRM = Validator.prepareFormObject(FORGOT_PASS);
 
-  @observable RESET_PASS_FRM = Validator.prepareFormObject(RESET_PASS);
+  RESET_PASS_FRM = Validator.prepareFormObject(RESET_PASS);
 
-  @observable NEWSLETTER_FRM = Validator.prepareFormObject(NEWSLETTER);
+  NEWSLETTER_FRM = Validator.prepareFormObject(NEWSLETTER);
 
-  @observable confirmProgress = false;
+  confirmProgress = false;
 
-  @observable pwdInputType = 'password';
+  pwdInputType = 'password';
 
-  @observable currentScore = 0;
+  currentScore = 0;
 
-  @observable idleTimer = null;
+  idleTimer = null;
 
-  @observable checkEmail = false;
+  checkEmail = false;
 
-  @action
   setFieldvalue = (field, value) => {
     this[field] = value;
   }
 
-  @action
   resetIdelTimer = () => {
     if (this.idleTimer) {
       this.idleTimer.reset();
     }
   }
 
-  @action
   setDefaultPwdType = () => {
     this.pwdInputType = 'password';
   }
 
-  @action
   setPwdVisibilityStatus = () => {
     this.pwdInputType = this.pwdInputType === 'password' ? 'text' : 'password';
   }
 
-  @action
   togglePasswordType = () => {
     let iconData = {
       link: true,
@@ -103,45 +102,30 @@ export class AuthStore {
     return iconData;
   }
 
-  @action
-  LoginChange = (e, result) => {
-    this.LOGIN_FRM = Validator.onChange(this.LOGIN_FRM, Validator.pullValues(e, result));
-  };
-
-  @action
   signupChange = (e, result) => {
     if (result && result.name && result.name === 'role') {
       cookie.save('ROLE_VALUE', result.value, { maxAge: 1200 });
     }
-    if (e.password || e.password === '') {
-      this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
-      if (this.SIGNUP_FRM.fields.password.value === this.SIGNUP_FRM.fields.verify.value) {
-        this.SIGNUP_FRM.fields.verify.error = undefined;
-      }
-    } else {
-      this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValues(e, result));
-    }
+    const values = (e.password || e.password === '') ? Validator.pullValuesForPassword(e, result) : Validator.pullValues(e, result);
+    this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, values);
     if (e.score !== undefined) {
       this.currentScore = e.score;
     }
   };
 
-  @action
-  confirmFormChange = (e, result) => {
-    this.CONFIRM_FRM = Validator.onChange(this.CONFIRM_FRM, Validator.pullValues(e, result));
-  };
-
-  @action
-  newsLetterChange = (e, result) => {
-    this.NEWSLETTER_FRM = Validator.onChange(this.NEWSLETTER_FRM, Validator.pullValues(e, result));
-  };
-
-  @action
   ConfirmChange = (e) => {
     uiStore.setErrors('');
     this.CONFIRM_FRM = Validator.onChange(
       this.CONFIRM_FRM,
       { name: 'code', value: e },
+    );
+  };
+
+  @action
+  setVerifyPassword = (e) => {
+    this.SIGNUP_FRM = Validator.onChange(
+      this.SIGNUP_FRM,
+      { name: 'verify', value: e.password },
     );
   };
 
@@ -155,20 +139,15 @@ export class AuthStore {
       };
       const newObj = this.renameKeys(ojbNew, e);
       this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValuesForCangePassword(newObj, res));
-    } else {
-      this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValues(e, res));
     }
+    // else {
+    //   this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValues(e, res));
+    // }
     if (e.score !== undefined) {
       this.currentScore = e.score;
     }
   };
 
-  @action
-  forgotPassChange = (e, res) => {
-    this.FORGOT_PASS_FRM = Validator.onChange(this.FORGOT_PASS_FRM, Validator.pullValues(e, res));
-  };
-
-  @action
   resetPassChange = (e, res) => {
     if (e.password || e.password === '') {
       this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, Validator.pullValuesForPassword(e, res));
@@ -180,18 +159,15 @@ export class AuthStore {
     }
   };
 
-  @action
-  setNewPasswordRequired(value) {
+  setNewPasswordRequired = (value) => {
     this.newPasswordRequired = value;
   }
 
-  @action
-  setHasSession(status) {
+  setHasSession = (status) => {
     this.hasSession = status;
   }
 
-  @action
-  setUserLoggedIn(status) {
+  setUserLoggedIn = (status) => {
     this.isUserLoggedIn = status;
     if (status) {
       cookie.save('EVER_LOGS_IN', status, { maxAge: 31536000 });
@@ -199,18 +175,27 @@ export class AuthStore {
     navStore.setEverLogsIn();
   }
 
-  @action
+  setUserPrivateAccess = (status, slug) => {
+    this.privateOfferingAccess = status;
+    if (status) {
+      cookie.save('HAS_PRIVATE_ACCESS', status, { path: `/offerings/${slug}` }, { maxAge: 31536000 });
+    }
+    this.setOfferingPrivateAccess();
+  }
+
+  setOfferingPrivateAccess = () => {
+    this.hasPrivateAccess = cookie.load('HAS_PRIVATE_ACCESS');
+  }
+
   setCognitoUserSession(session) {
     this.cognitoUserSession = session;
   }
 
-  @action
   setProgress(entity) {
     this.confirmProgress = entity;
   }
 
-  @action
-  setCredentials(credentials) {
+  setCredentials = (credentials) => {
     this.CONFIRM_FRM = Validator.onChange(
       this.CONFIRM_FRM,
       { name: 'email', value: credentials.email },
@@ -241,32 +226,24 @@ export class AuthStore {
     }
   }
 
-  @computed get devPasswdProtection() {
+  get devPasswdProtection() {
     return this.devAuth.required && !this.devAuth.authStatus && !this.isOfferPreviewUrl;
   }
 
-  @action setUserId(userId) {
+  setUserId = (userId) => {
     this.userId = userId;
   }
 
-  @action
   setDevAppAuthStatus(status) {
     cookie.save('DEV_AUTH_TOKEN', status, { maxAge: 86400 });
     this.devAuth.authStatus = status;
   }
 
-  @action
-  resetForm = (form, targetedFields = undefined) => {
-    Validator.resetFormData(this[form], targetedFields);
-  }
-
-  @computed
   get canSubmitConfirmEmail() {
     return !isEmpty(this.CONFIRM_FRM.fields.email.value) && !this.CONFIRM_FRM.fields.email.error
       && !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
   }
 
-  @action
   setUserDetails = (fields) => {
     this.SIGNUP_FRM.fields.givenName.value = fields.firstName.value;
     this.SIGNUP_FRM.fields.familyName.value = fields.lastName.value;
@@ -277,58 +254,9 @@ export class AuthStore {
     this.SIGNUP_FRM.fields.verify.value = '';
   }
 
-  @action
   setUserLoginDetails = (email, password) => {
     this.LOGIN_FRM.fields.email.value = email;
     this.LOGIN_FRM.fields.password.value = password;
-  }
-
-  verifyAndUpdateEmail = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: verifyAndUpdateEmail,
-          variables: {
-            resourceId: identityStore.requestOtpResponse,
-            confirmationCode: this.CONFIRM_FRM.fields.code.value,
-          },
-        })
-        .then(() => {
-          userDetailsStore.getUser(userStore.currentUser.sub);
-          resolve();
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
-
-  requestEmailChange = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: requestEmailChnage,
-          variables: {
-            newEmail: this.CONFIRM_FRM.fields.email.value.toLowerCase(),
-          },
-        })
-        .then((result) => {
-          identityStore.setRequestOtpResponse(result.data.requestEmailChange);
-          uiStore.setProgress(false);
-          resolve();
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          uiStore.setProgress(false);
-          reject(err);
-        });
-    });
   }
 
   portPrequalDataToApplication = (applicationId) => {
@@ -364,7 +292,6 @@ export class AuthStore {
       ...{ [keysMap[key] || key]: obj[key] },
     }), {});
 
-  @action
   resetStoreData = () => {
     this.resetForm('SIGNUP_FRM', null);
     this.resetForm('LOGIN_FRM', null);
@@ -374,17 +301,16 @@ export class AuthStore {
     this.resetForm('RESET_PASS_FRM', null);
     this.resetForm('NEWSLETTER_FRM', null);
     this.newPasswordRequired = false;
-    this.isUserLoggedIn = false;
+    this.setUserLoggedIn(false);
+    this.setUserPrivateAccess(false);
   }
 
-  @action
   setCurrentUserCapabilites = (capabilities) => {
     this.capabilities = capabilities;
   }
 
   isEmailExist = email => (this.emailList.find(e => e === email))
 
-  @action
   checkEmailExistsPresignup = (email, isBusinessApplication = false) => new Promise((res) => {
     if (DataFormatter.validateEmail(email) && !this.isEmailExist(email)) {
       if (isBusinessApplication) {
@@ -420,6 +346,7 @@ export class AuthStore {
         onError: (err) => {
           uiStore.setErrors(err);
           uiStore.setProgress(false);
+          res(false);
         },
         fetchPolicy: 'network-only',
       });
@@ -431,7 +358,6 @@ export class AuthStore {
     }
   });
 
-  @action
   notifyApplicationError = params => new Promise((res, rej) => {
     clientPublic.mutate({
       mutation: notifyAdmins,
@@ -446,12 +372,10 @@ export class AuthStore {
       .finally(() => { });
   });
 
-  @action
   setUserRole = (userData) => {
     this.SIGNUP_FRM.fields.role.value = userData;
   }
 
-  @action
   subscribeToNewsletter = () => new Promise((res, rej) => {
     this.NEWSLETTER_FRM = Validator.validateForm(this.NEWSLETTER_FRM, false, true);
     if (!this.NEWSLETTER_FRM.meta.isValid) {
@@ -529,11 +453,10 @@ export class AuthStore {
       emailContent: JSON.stringify(errors),
     };
     this.notifyApplicationError(params).then(() => { }).catch((e) => {
-      console.log('Error while calling notifyApplicationError', e);
+      window.logger('Error while calling notifyApplicationError', e);
     });
   }
 
-  @action
   validateOfferingPreviewPassword = (offeringSlug, previewPassword) => new Promise((res, rej) => {
     graphql({
       client: clientPublic,
@@ -558,7 +481,6 @@ export class AuthStore {
     });
   });
 
-  @action
   adminValidateCreateAdminUser = (email, actionType = null) => new Promise((res, rej) => {
     const variables = actionType ? { email, action: actionType } : { email };
     client.mutate({
@@ -573,5 +495,70 @@ export class AuthStore {
       });
   });
 }
+
+decorate(AuthStore, {
+  ...decorateDefault,
+  hasSession: observable,
+  isUserLoggedIn: observable,
+  privateOfferingAccess: observable,
+  hasPrivateAccess: observable,
+  newPasswordRequired: observable,
+  cognitoUserSession: observable,
+  isBoxApiChecked: observable,
+  isOfferPreviewUrl: observable,
+  capabilities: observable,
+  userId: observable,
+  emailList: observable,
+  devAuth: observable,
+  LOGIN_FRM: observable,
+  SIGNUP_FRM: observable,
+  CONFIRM_FRM: observable,
+  CHANGE_PASS_FRM: observable,
+  FORGOT_PASS_FRM: observable,
+  RESET_PASS_FRM: observable,
+  NEWSLETTER_FRM: observable,
+  confirmProgress: observable,
+  pwdInputType: observable,
+  currentScore: observable,
+  idleTimer: observable,
+  checkEmail: observable,
+  resetIdelTimer: action,
+  setDefaultPwdType: action,
+  setPwdVisibilityStatus: action,
+  togglePasswordType: action,
+  // LoginChange: action,
+  signupChange: action,
+  confirmFormChange: action,
+  newsLetterChange: action,
+  ConfirmChange: action,
+  changePassChange: action,
+  forgotPassChange: action,
+  resetPassChange: action,
+  setNewPasswordRequired: action,
+  setHasSession: action,
+  setUserLoggedIn: action,
+  setUserPrivateAccess: action,
+  setOfferingPrivateAccess: action,
+  setCognitoUserSession: action,
+  setProgress: action,
+  setCredentials: action,
+  setUserCredentiansConfirmEmail: action,
+  setFieldvalue: action,
+  devPasswdProtection: computed,
+  setUserId: action,
+  setDevAppAuthStatus: action,
+  // resetForm: action,
+  canSubmitConfirmEmail: computed,
+  setUserDetails: action,
+  setUserLoginDetails: action,
+  resetStoreData: action,
+  setCurrentUserCapabilites: action,
+  checkEmailExistsPresignup: action,
+  notifyApplicationError: action,
+  setUserRole: action,
+  subscribeToNewsletter: action,
+  validateOfferingPreviewPassword: action,
+  adminValidateCreateAdminUser: action,
+});
 
 export default new AuthStore();

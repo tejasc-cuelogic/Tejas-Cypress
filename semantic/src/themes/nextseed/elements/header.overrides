@@ -3,7 +3,10 @@
 *******************************/
 
 .header-wrap{
-    height:72px;
+    height:72px; // this is original height of header
+    &.large-header{
+        height: 110px; // increased height for sticky banner of covid-19
+    }
     &.large{
         height:80px;
     }
@@ -78,6 +81,13 @@
         position: absolute;
         right: 0;
         top: -40px;
+    }
+    &.capital-header{
+        color: #695F54 !important;
+        &.mini{
+            font-size: @38px;
+            line-height: 42px;
+        }
     }
 }
 

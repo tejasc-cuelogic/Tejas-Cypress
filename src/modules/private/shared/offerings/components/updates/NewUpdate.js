@@ -12,6 +12,7 @@ import { InlineLoader, Image64, UserAvatar } from '../../../../../../theme/share
 import Actions from './Actions';
 import Status from './Status';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
 @withRouter
@@ -142,6 +143,35 @@ export default class NewUpdate extends Component {
     );
   }
 
+  showInvestorList = () => {
+    const { PBUILDER_FRM } = this.props.updateStore;
+    return (
+      <>
+        <Modal
+          closeOnDimmerClick={false}
+          closeIcon
+          trigger={(
+            <Button color="green" className="link-button">
+              <Icon className="ns-view" />
+              Investor Notification List
+            </Button>
+          )}
+        >
+          <Modal.Content className="new-update-modal">
+            <Header as="h4">Investor Notification List</Header>
+            <List ordered relaxed>
+              {
+                PBUILDER_FRM.fields.notificationTo.value && PBUILDER_FRM.fields.notificationTo.value.map(investor => (
+                  <List.Item>{ investor }</List.Item>
+                ))
+              }
+            </List>
+          </Modal.Content>
+        </Modal>
+      </>
+    );
+  }
+
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, maskChange, newUpdateId,
@@ -249,142 +279,101 @@ export default class NewUpdate extends Component {
                     </List>
                   </Card.Content>
                 </Card>
-                {['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE'].includes(offer.stage)
-                  ? (
-                    <>
-                      <Card fluid>
-                        <Card.Content>
-                          {
-                            isManager
-                            && (
-                              <Form>
-                                <MaskedInput
-                                  readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                                  ishidelabel
-                                  fluid
-                                  name="updatedDate"
-                                  fielddata={PBUILDER_FRM.fields.updatedDate}
-                                  changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
-                                  dateOfBirth
-                                />
-                                {this.sendInvestorNotificationTemplate(isReadonly, isManager)}
-                                {this.postUpdateAsTemplate()}
-                              </Form>
-                            )
-                          }
+                  <Card fluid>
+                    <Card.Content>
+                      {
+                        isManager
+                        && (
                           <Form>
-                            <div className="field">
-                              <Header as="label">Who’s this update for?</Header>
-                              <FormRadioGroup
-                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                                fielddata={PBUILDER_FRM.fields.scope}
-                                name="scope"
-                                changed={(e, result) => UpdateChange(e, result)}
-                                containerclassname="display-block"
-                                value={PBUILDER_FRM.fields.scope.value}
-                              />
-                              {PBUILDER_FRM.fields.scope.value !== 'PUBLIC'
-                                ? (
-                                  <Form.Field>
-                                    <Checkbox
-                                      name="allInvestor"
-                                      readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                                      onChange={(e, result) => UpdateChange(e, result)}
-                                      checked={PBUILDER_FRM.fields.allInvestor.value}
-                                      label="All Investors"
-                                    />
-                                  </Form.Field>
-                                ) : null
-                              }
-                              {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.earlyBird && offer.earlyBird.quantity > 0 ? (
-                                <Form.Field>
-                                  <Checkbox
-                                    name="tiers"
-                                    readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                                    value={-1}
-                                    onChange={(e, result) => UpdateChange(e, result)}
-                                    checked={PBUILDER_FRM.fields.tiers.values.includes(-1)}
-                                    label="Early Bird"
-                                  />
-                                </Form.Field>
-                              ) : ''}
-                              {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
-                                <Form.Field key={rewardTier}>
-                                  <Checkbox
-                                    name="tiers"
-                                    readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                                    value={rewardTier}
-                                    onChange={(e, result) => UpdateChange(e, result)}
-                                    checked={PBUILDER_FRM.fields.tiers.values.includes(rewardTier)}
-                                    label={`$${rewardTier}`}
-                                  />
-                                </Form.Field>
-                              )) : ''}
-                            </div>
-                          </Form>
-                        </Card.Content>
-                      </Card>
-                      <Card fluid>
-                        <Card.Content>
-                          <Header as="h4">Update Topic Ideas</Header>
-                          <List bulleted relaxed>
-                            <List.Item>How is construction / build-out on your project going?</List.Item>
-                            <List.Item>
-                              Any potential hurdles you want to share with your investors?
-                            </List.Item>
-                            <List.Item>When do you anticipate opening? (e.g. Fall 2019)</List.Item>
-                            <List.Item>What is the status on bonus rewards fulfillment?</List.Item>
-                          </List>
-                        </Card.Content>
-                      </Card>
-                    </>
-                  )
-                  : (
-                    <>
-                      <Card fluid>
-                        <Card.Content>
-                          <Form>
+                            <MaskedInput
+                              readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                              ishidelabel
+                              fluid
+                              name="updatedDate"
+                              fielddata={PBUILDER_FRM.fields.updatedDate}
+                              changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
+                              dateOfBirth
+                            />
+                            {PBUILDER_FRM.fields.notificationDate.value && this.showInvestorList()}
                             {
-                              isManager
-                              && (
-                                <>
-                                  <MaskedInput
-                                    readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                                    ishidelabel
-                                    fluid
-                                    name="updatedDate"
-                                    fielddata={PBUILDER_FRM.fields.updatedDate}
-                                    changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
-                                    dateOfBirth
-                                  />
-                                  {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
-                                    && (
-                                      this.sendInvestorNotificationTemplate(isReadonly, isManager)
-                                    )
-                                  }
-                                </>
-                              )
+                              <div className="mb-10">
+                                {PBUILDER_FRM.fields.notificationDate.value
+                                ? <p>{`Notification sent on ${DataFormatter.formatedDate(PBUILDER_FRM.fields.notificationDate.value)} by ${PBUILDER_FRM.fields.notificationBy.value}.`}</p>
+                                : isPublished
+                                  ? <p>No notifications were sent.</p>
+                                  : this.sendInvestorNotificationTemplate(isReadonly, isManager)
+                                }
+                              </div>
                             }
                             {this.postUpdateAsTemplate()}
                           </Form>
-                        </Card.Content>
-                      </Card>
-                      <Card fluid>
-                        <Card.Content>
-                          <Header as="h4">Update Topic Ideas</Header>
-                          <List bulleted relaxed>
-                            <List.Item>How is construction / build-out on your project going?</List.Item>
-                            <List.Item>
-                              Any potential hurdles you want to share with your investors?
-                            </List.Item>
-                            <List.Item>When do you anticipate opening? (e.g. Fall 2019)</List.Item>
-                            <List.Item>What is the status on bonus rewards fulfillment?</List.Item>
-                          </List>
-                        </Card.Content>
-                      </Card>
-                    </>
-                  )
-                }
+                        )
+                      }
+                      <Form>
+                        <div className="field">
+                          <Header as="label">Who’s this update for?</Header>
+                          <FormRadioGroup
+                            readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                            fielddata={PBUILDER_FRM.fields.scope}
+                            name="scope"
+                            changed={(e, result) => UpdateChange(e, result)}
+                            containerclassname="display-block"
+                            value={PBUILDER_FRM.fields.scope.value}
+                          />
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC'
+                            ? (
+                              <Form.Field>
+                                <Checkbox
+                                  name="allInvestor"
+                                  readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                  onChange={(e, result) => UpdateChange(e, result)}
+                                  checked={PBUILDER_FRM.fields.allInvestor.value}
+                                  label="All Investors"
+                                />
+                              </Form.Field>
+                            ) : null
+                          }
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.earlyBird && offer.earlyBird.quantity > 0 ? (
+                            <Form.Field>
+                              <Checkbox
+                                name="tiers"
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                value={-1}
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.tiers.values.includes(-1)}
+                                label="Early Bird"
+                              />
+                            </Form.Field>
+                          ) : ''}
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
+                            <Form.Field key={rewardTier}>
+                              <Checkbox
+                                name="tiers"
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                value={rewardTier}
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.tiers.values.includes(rewardTier)}
+                                label={`$${rewardTier}`}
+                              />
+                            </Form.Field>
+                          )) : ''}
+                        </div>
+                      </Form>
+                    </Card.Content>
+                  </Card>
+                  <Card fluid>
+                    <Card.Content>
+                      <Header as="h4">Update Topic Ideas</Header>
+                      <List bulleted relaxed>
+                        <List.Item>How is construction / build-out on your project going?</List.Item>
+                        <List.Item>
+                          Any potential hurdles you want to share with your investors?
+                        </List.Item>
+                        <List.Item>When do you anticipate opening? (e.g. Fall 2019)</List.Item>
+                        <List.Item>What is the status on bonus rewards fulfillment?</List.Item>
+                      </List>
+                    </Card.Content>
+                  </Card>
                 {(id || newUpdateId) && (isManager || (!isManager && isDraft)) && (
                   <Button
                     inverted

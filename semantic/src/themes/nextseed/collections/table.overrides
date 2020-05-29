@@ -66,15 +66,12 @@
                     border-top:none;
                 }
             }
-        }
-    }
-    tbody{
-        background:@neutral-offwhite;
-        tr.row-highlight{
-            background:fade(@neutral-middark, 30%) !important;
-            td{
-                border-top:none;
-            }
+            tr.row-highlight{
+                background:fade(@neutral-middark, 30%) !important;
+                td{
+                    border-top:none;
+                }
+            }            
         }
     }
     &.user-list{
@@ -462,7 +459,29 @@
             color: @border-color;
         }
     }
+    &.social-links-table{
+        .visible.menu{
+            min-width: 100% !important;
+            width: 100% !important;
+            margin-left: 0 !important;
+        }
+        // .ui.selection.dropdown{
+        //     padding-left: @15px;
+        //     .dropdown.icon{
+        //         right: @15px;
+        //     }
+        // }
+    }
+    &.fundinvestmentTable,&.confirm-transfer-table{
+        max-width: 450px !important;
+        margin: 0 auto;
+        +.note.mt-30{
+            max-width: 450px !important;
+            margin: 0 auto;
+        }
+    }
 
+    
 }
 
 .compare-table {
@@ -642,6 +661,17 @@
             &:hover{
                 text-decoration:none;
             }
+        }
+    }
+    &.drag-menu{
+        &:first-child{
+            border-top: 0;
+        }
+        i.icon{
+            cursor: grab;
+        }
+        a.item{
+            width: calc(100% - @33px);
         }
     }
 }
