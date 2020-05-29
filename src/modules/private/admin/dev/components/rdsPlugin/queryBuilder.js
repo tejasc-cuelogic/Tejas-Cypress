@@ -23,7 +23,7 @@ function QueryBuilder(props) {
   const { smartElement } = props;
   const { QUERY_BUILDER_FRM } = props.rdsPluginStore;
   const { where, orderBy } = QUERY_BUILDER_FRM.fields;
-
+  
   return (
     <div className="featured-section full-width">
       {smartElement.FormDropDown('selectColumns', {
@@ -49,16 +49,21 @@ function QueryBuilder(props) {
         </Grid>
         {where.map((_fiter, index) => (
           <Grid>
-            <Grid.Column width={7}>
-              {smartElement.FormDropDown('name', { multiForm: [metaInfo.form, 'where', index], options: where[index].name.values, containerwidth: 16 })}
-            </Grid.Column>
-            <Grid.Column width={4}>
-              {smartElement.FormDropDown('operator', { multiForm: [metaInfo.form, 'where', index], containerwidth: 16 })}
+            <Grid.Column width={8}>
+              {smartElement.FormDropDown('name', {
+                multiForm: [metaInfo.form, 'where', index],
+                search: true,
+                options: where[index].name.values,
+                containerwidth: 16,
+              })}
             </Grid.Column>
             <Grid.Column width={3}>
+              {smartElement.FormDropDown('operator', { multiForm: [metaInfo.form, 'where', index], containerwidth: 16 })}
+            </Grid.Column>
+            <Grid.Column width={4}>
               {smartElement.Input('value', { multiForm: [metaInfo.form, 'where', index], containerwidth: 16 })}
             </Grid.Column>
-            <Grid.Column width={2}>
+            <Grid.Column width={1}>
               <Button className="link-button mt-5" disabled={where.length === 1} onClick={e => deleteFilter(e, 'where', index)}><Icon className="ns-trash" /></Button>
             </Grid.Column>
           </Grid>
@@ -87,14 +92,15 @@ function QueryBuilder(props) {
         </Grid>
         {orderBy.map((_order, index) => (
           <Grid>
-            <Grid.Column width={7}>
+            <Grid.Column width={10}>
               {smartElement.FormDropDown('column', {
                 multiForm: ['QUERY_BUILDER_FRM', 'orderBy', index],
                 options: QUERY_BUILDER_FRM.fields.orderBy[index].column.values,
+                search: true,
                 containerwidth: 16,
               })}
             </Grid.Column>
-            <Grid.Column width={7}>
+            <Grid.Column width={4}>
               {smartElement.FormDropDown('order', {
                 multiForm: ['QUERY_BUILDER_FRM', 'orderBy', index],
                 options: QUERY_BUILDER_FRM.fields.orderBy[index].order.values,
@@ -102,7 +108,7 @@ function QueryBuilder(props) {
               })}
             </Grid.Column>
             <Grid.Column width={2}>
-            <Button className="link-button mt-5" disabled={orderBy.length === 1} onClick={e => deleteFilter(e, 'orderBy', index)}><Icon className="ns-trash" /></Button>
+              <Button className="link-button mt-5" disabled={orderBy.length === 1} onClick={e => deleteFilter(e, 'orderBy', index)}><Icon className="ns-trash" /></Button>
             </Grid.Column>
           </Grid>
         ))}
