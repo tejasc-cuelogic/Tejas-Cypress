@@ -65,7 +65,7 @@ export class RdsPluginStore extends DataModelStore {
       return true;
     } catch {
       Helper.toast('Something went wrong, please try again later.', 'error');
-      this.setFieldValue('rdsData', []);
+      this.setFieldValue('rdsData', {});
       return false;
     }
   }
