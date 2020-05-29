@@ -177,16 +177,6 @@ const operators = ['=', '!=', '>', '<', '>=', '<=', 'IS', 'IS NOT', 'IN', 'LIKE'
 
 export const QUERY_BUILDER = {
   ...FormHelper.generateMeta([
-    ['table', 'Table', '', 'optional', '',
-      {
-        asIn: true,
-        props: {
-          values: [],
-        },
-      },
-    ],
-  ]),
-  ...FormHelper.generateMeta([
     ['selectColumns', 'Columns To Retrieve', [], 'optional', '',
       {
         asIn: true,
@@ -195,8 +185,14 @@ export const QUERY_BUILDER = {
         },
       },
     ],
-  ]),
-  ...FormHelper.generateMeta([
+    ['table', 'Table', '', 'optional', '',
+      {
+        asIn: true,
+        props: {
+          values: [],
+        },
+      },
+    ],
     ['groupByColumns', 'Group By', [], 'optional', '',
       {
         asIn: true,
@@ -207,18 +203,18 @@ export const QUERY_BUILDER = {
     ],
   ]),
   where: [FormHelper.generateMeta([
-    ['name', 'Column', '', 'required', '', {
+    ['name', 'Column', '', 'optional', '', {
       asIn: true,
       props: {
         values: [],
       },
     }],
-    ['operator', 'Operator', '', 'required', '', { asIn: true, props: { values: operators, options: operators } }],
+    ['operator', 'Operator', '', 'optional', '', { asIn: true, props: { values: operators, options: operators } }],
     ['value', 'Value', null, 'optional', ''],
   ])],
   orderBy: [{
     ...FormHelper.generateMeta([
-      ['column', 'Column', '', 'required', '',
+      ['column', 'Column', '', 'optional', '',
         {
           asIn: true,
           props: {
@@ -228,7 +224,7 @@ export const QUERY_BUILDER = {
       ],
     ]),
     ...FormHelper.generateMeta([
-      ['order', 'Order', '', 'required', '',
+      ['order', 'Order', '', 'optional', '',
         {
           asIn: true,
           props: {

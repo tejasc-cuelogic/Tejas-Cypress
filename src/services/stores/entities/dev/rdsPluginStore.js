@@ -38,6 +38,20 @@ export class RdsPluginStore extends DataModelStore {
       const data = Validator.evaluateFormData(this.QUERY_BUILDER_FRM.fields);
       this.requestState.page = (reqParams && reqParams.page) || this.requestState.page;
       this.requestState.perPage = (reqParams && reqParams.first) || 100;
+      Object.keys(data).forEach((key) => {
+        const field = key === 'where' ? 'name' : 'column';
+        if (['where', 'orderBy'].includes(key)) {
+          if (data[key].length === 1 && data[key][0][field] === '') {
+            data[key] = [];
+          } else {
+            data[key].forEach((d) => {
+              // eslint-disable-next-line no-param-reassign
+              d.value = d.value === '' ? null : d.value;
+              return d;
+            });
+          }
+        }
+      });
       const res = await this.executeQuery({
         query: 'adminRunRdsQuery',
         variables: {
@@ -49,8 +63,9 @@ export class RdsPluginStore extends DataModelStore {
       });
       this.setFieldValue('rdsData', res);
       return true;
-    } catch (error) {
+    } catch {
       Helper.toast('Something went wrong, please try again later.', 'error');
+      this.setFieldValue('rdsData', []);
       return false;
     }
   }
@@ -60,7 +75,7 @@ export class RdsPluginStore extends DataModelStore {
   }
 
   get rdsListingColumns() {
-     let columns = get(this.rdsData, 'adminRunRdsQuery.results[0]') ? Object.keys(get(this.rdsData, 'adminRunRdsQuery.results[0]')) : [];
+    let columns = get(this.rdsData, 'adminRunRdsQuery.results[0]') ? Object.keys(get(this.rdsData, 'adminRunRdsQuery.results[0]')) : [];
     if (columns.length > 0) {
       columns = columns.map(c => ({ title: c.toUpperCase(), field: c }));
     }

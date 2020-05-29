@@ -10,9 +10,9 @@ const metaInfo = {
 };
 
 function QueryBuilder(props) {
-  const addMore = (e) => {
+  const addMore = (e, type) => {
     e.preventDefault();
-    props.rdsPluginStore.addMore(metaInfo.form, 'where');
+    props.rdsPluginStore.addMore(metaInfo.form, type);
   };
 
   const deleteFilter = (e, type, index) => {
@@ -30,6 +30,7 @@ function QueryBuilder(props) {
         multiForm: ['QUERY_BUILDER_FRM', '', -1],
         fielddata: QUERY_BUILDER_FRM.fields.selectColumns,
         options: QUERY_BUILDER_FRM.fields.selectColumns.values,
+        containerwidth: 16,
         multiple: true,
         search: true,
       })}
@@ -41,7 +42,7 @@ function QueryBuilder(props) {
             </Header>
           </Grid.Column>
           <Grid.Column width={8}>
-            <Button size="small" color="blue" className="link-button mt-5" onClick={e => addMore(e)} floated="right">
+            <Button size="small" color="blue" className="link-button mt-5" onClick={e => addMore(e, 'where')} floated="right">
               + Add more
           </Button>
           </Grid.Column>
@@ -58,7 +59,7 @@ function QueryBuilder(props) {
               {smartElement.Input('value', { multiForm: [metaInfo.form, 'where', index], containerwidth: 16 })}
             </Grid.Column>
             <Grid.Column width={2}>
-              <Button className="link-button mt-5" onClick={e => deleteFilter(e, 'where', index)}><Icon className="ns-trash" /></Button>
+              <Button className="link-button mt-5" disabled={where.length === 1} onClick={e => deleteFilter(e, 'where', index)}><Icon className="ns-trash" /></Button>
             </Grid.Column>
           </Grid>
         ))
@@ -68,6 +69,7 @@ function QueryBuilder(props) {
           multiForm: ['QUERY_BUILDER_FRM', '', -1],
           fielddata: QUERY_BUILDER_FRM.fields.groupByColumns,
           options: QUERY_BUILDER_FRM.fields.groupByColumns.values,
+          containerwidth: 16,
           multiple: true,
           search: true,
         })}
@@ -100,7 +102,7 @@ function QueryBuilder(props) {
               })}
             </Grid.Column>
             <Grid.Column width={2}>
-              <Button className="link-button mt-5" onClick={e => deleteFilter(e, 'orderBy', index)}><Icon className="ns-trash" /></Button>
+            <Button className="link-button mt-5" disabled={orderBy.length === 1} onClick={e => deleteFilter(e, 'orderBy', index)}><Icon className="ns-trash" /></Button>
             </Grid.Column>
           </Grid>
         ))}
