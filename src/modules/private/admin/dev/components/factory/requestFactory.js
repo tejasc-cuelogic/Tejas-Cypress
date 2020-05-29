@@ -40,6 +40,16 @@ class RequestFactory extends Component {
               <Form.Group>
                 <Grid className="full-width mlr-0" stackable>
                   <Grid.Column width={8}>
+                    {['plugin', 'invocationType'].map(field => (
+                      smartElement.FormDropDown(field, {
+                        onChange: (e, result) => formChangeForPlugin(e, result, 'REQUESTFACTORY_FRM'),
+                        containerclassname: 'dropdown-field mlr-0',
+                        containerwidth: 16,
+                        placeholder: 'Choose here',
+                        options: REQUESTFACTORY_FRM.fields[field].values,
+                      })
+                    ))}
+                    <Divider hidden />
                     {isExtraInfoVisible && get(pluginObj, 'note')
                       && (
                         <Header as="h6">Note: <span className="regular-text">{pluginObj.note}</span>
@@ -51,16 +61,6 @@ class RequestFactory extends Component {
                         <Header as="h6">Description: <span className="regular-text">{pluginObj.description}</span>
                         </Header>
                       )}
-                    <Divider hidden />
-                    {['plugin', 'invocationType'].map(field => (
-                      smartElement.FormDropDown(field, {
-                        onChange: (e, result) => formChangeForPlugin(e, result, 'REQUESTFACTORY_FRM'),
-                        containerclassname: 'dropdown-field mlr-0',
-                        containerwidth: 16,
-                        placeholder: 'Choose here',
-                        options: REQUESTFACTORY_FRM.fields[field].values,
-                      })
-                    ))}
                     <Divider section hidden />
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY.meta.isValid} loading={inProgress.requestFactory} />
                   </Grid.Column>

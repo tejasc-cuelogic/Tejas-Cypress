@@ -37,6 +37,15 @@ function FileFactory(props) {
               <Form.Group>
                 <Grid className="full-width mlr-0" stackable>
                   <Grid.Column width={8}>
+                    {smartElement.FormDropDown('method', {
+                      onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
+                      containerclassname: 'dropdown-field mlr-0',
+                      placeholder: 'Choose here',
+                      containerwidth: 16,
+                      options: FILEFACTORY_FRM.fields.method.values,
+                      className: 'mb-80',
+                    })}
+                    <Divider hidden />
                     {isExtraInfoVisible && get(pluginObj, 'note')
                       && (
                         <Header as="h6">Note: <span className="regular-text">{pluginObj.note}</span>
@@ -48,15 +57,6 @@ function FileFactory(props) {
                         <Header as="h6">Description: <span className="regular-text">{pluginObj.description}</span>
                         </Header>
                       )}
-                    <Divider hidden />
-                    {smartElement.FormDropDown('method', {
-                      onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
-                      containerclassname: 'dropdown-field mlr-0',
-                      placeholder: 'Choose here',
-                      containerwidth: 16,
-                      options: FILEFACTORY_FRM.fields.method.values,
-                      className: 'mb-80',
-                    })}
                     <Divider section hidden />
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} />
                   </Grid.Column>
