@@ -63,6 +63,7 @@ function formHoc(WrappedComponent, metaInfo) {
           className="otp-field"
           pattern="[0-9]*"
           inputmode="numeric"
+          autocomplete="one-time-code"
           fielddata={fieldData}
           onChange={e => this.props[metaInfo.store].eventFormChange({ name, value: e }, metaInfo.form)}
           {...props}
@@ -119,6 +120,7 @@ function formHoc(WrappedComponent, metaInfo) {
           className="otp-field"
           pattern="[0-9]*"
           inputmode="numeric"
+          autocomplete="one-time-code"
           fielddata={fieldData}
           onChange={e => this.props[metaInfo.store].eventFormChange({ name, value: e }, metaInfo.form)}
           {...props}

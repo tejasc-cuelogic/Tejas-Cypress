@@ -147,6 +147,7 @@ export default class ConfirmPhoneNumber extends Component {
                   fields={6}
                   type="number"
                   className="otp-field"
+                  autocomplete="one-time-code"
                   pattern="[0-9]*"
                   autoFocus={!isMobile}
                   inputmode="numeric"
