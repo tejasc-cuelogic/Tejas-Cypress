@@ -31,7 +31,7 @@ const SortableItem = SortableElement(({
     <Table.Row className={(record.scope === 'PUBLIC') ? '' : 'row-highlight'} collapsing>
       <Table.Cell collapsing>
         <DragHandle />
-        {isOffering ? offeringTitle(record) : record.title}
+        {isOffering ? offeringTitle(record).length > 60 ? (`${offeringTitle(record).substring(0, 55)}...`) : offeringTitle(record) : record.title.length > 60 ? (`${record.title.substring(0, 55)}...`) : record.title}
       </Table.Cell>
       <Table.Cell>
         {smartElement.ImageCropper('image', { style: { height: '125px' }, multiForm: [metaInfo.form, 'mappingContent', fieldIndex], uploadPath: `collections/${collectionId}`, removeMedia })}
