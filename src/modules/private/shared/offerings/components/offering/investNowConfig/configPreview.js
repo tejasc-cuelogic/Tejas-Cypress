@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { Header, Divider, Form, Table, Message, Button } from 'semantic-ui-react';
@@ -7,10 +7,17 @@ import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 import { PopUpModal } from '../../../../../../../theme/shared';
 
-
 const isMobile = document.documentElement.clientWidth < 768;
 
 function ConfigPreview(props) {
+  useEffect(() => () => {
+    props.investmentStore.resetData();
+  }, []);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+  };
+
   const { offeringsStore, investmentStore, manageOfferingStore } = props;
   const {
     offer,
@@ -18,6 +25,7 @@ function ConfigPreview(props) {
     adminInvestmentBonusRewards,
     adminInvestMoneyChangeForEquity,
     adminEquityCalculateShareAmount,
+    admininvestMoneyChange,
   } = offeringsStore;
   const {
     INVEST_NOW_CONFIG_FRM,
@@ -28,14 +36,14 @@ function ConfigPreview(props) {
     equityInvestmentAmount,
     getDiffInvestmentLimitAmount,
     investmentAmount,
-    investMoneyChange,
     validateMaskedInputForAmount,
     estReturnVal,
     calculateEstimatedReturn,
   } = investmentStore;
   const validBonusRewards = adminInvestmentBonusRewards(investmentAmount);
   const offerName = get(offer, 'keyTerms.shorthandBusinessName') || '-';
-  const isOfferingPreferredEquity = !!offeringStatus.isPreferredEquity;
+  // const isOfferingPreferredEquity = !!offeringStatus.isPreferredEquity;
+  const isOfferingPreferredEquity = !!(INVEST_NOW_CONFIG_FRM.fields.investmentType.value === 'UNITS');
   const isCenterAlignedCls = isOfferingPreferredEquity ? 'center-align' : '';
   const prefferedEquityAmount = get(offer, 'closureSummary.keyTerms.priceCalculation') || '0';
   const currentInvestedAmount = '500';
@@ -44,6 +52,7 @@ function ConfigPreview(props) {
   const prefferedEquityLabel = get(offer, 'keyTerms.equityUnitType');
   const showLimitComponent = true;
   const changeInvest = false;
+  const returnCalculationType = INVEST_NOW_CONFIG_FRM.fields.expectedReturnCalc.value;
 
   const InvestmentLimit = () => (
     <>
@@ -56,8 +65,8 @@ function ConfigPreview(props) {
             <span>
               Under Regulation Crowdfunding, you have a limit as to how much you may invest
               in Reg CF offerings over a 12-month period. This limit is calculated based on your
-              annual income and net worth. <Link to="#">Click here</Link> for how this is calculated. If you believe
-              your limit is inaccurate, please update your <Link to="#">Investor Profile</Link>
+              annual income and net worth. <Link to="#" onClick={e => handleClick(e)}>Click here</Link> for how this is calculated. If you believe
+              your limit is inaccurate, please update your <Link to="#" onClick={e => handleClick(e)}>Investor Profile</Link>
             </span>
           )}
           position="top center"
@@ -66,7 +75,7 @@ function ConfigPreview(props) {
         />
         :{' '}
         {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
-        <Link to="#" className="link"><small>Update</small></Link>
+        <Link to="#" onClick={e => handleClick(e)} className="link"><small>Update</small></Link>
       </Header>
       {changeInvest
         ? <p>Your investment will be {diffLimitAmount > 0 ? 'increased' : 'decreased'} by <span className="negative-text">{Helper.CurrencyFormat(diffLimitAmount || 0, 0)}</span></p>
@@ -84,7 +93,7 @@ function ConfigPreview(props) {
           <>
             <Header as="h4" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{isOfferingPreferredEquity ? Helper.CurrencyFormat(currentInvestedAmount) : Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
             <Divider hidden />
-            {!offeringStatus.isPreferredEquity
+            {!isOfferingPreferredEquity
               && (<Header as="h4" className={`mb-half ${isCenterAlignedCls}`}>Enter new investment amount. </Header>)
             }
             {showLimitComponent
@@ -99,8 +108,8 @@ function ConfigPreview(props) {
                         Under Regulation Crowdfunding, you have a limit as to how much you may invest
                         in Reg CF offerings over a 12-month period.
                         This limit is calculated based on your
-                          annual income and net worth. <Link to="#">Click here</Link> for how this is calculated. If you believe
-                          your limit is innacurate, please update your <Link to="#">Investor Profile</Link>
+                          annual income and net worth. <Link to="#" onClick={e => handleClick(e)}>Click here</Link> for how this is calculated. If you believe
+                          your limit is innacurate, please update your <Link to="#" onClick={e => handleClick(e)}>Investor Profile</Link>
                       </span>
                     )}
                     position="top center"
@@ -109,7 +118,7 @@ function ConfigPreview(props) {
                   />
                     :{' '}
                   {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
-                  <Link to="#" className="link"> <small>Update</small></Link>
+                  <Link to="#" onClick={e => handleClick(e)} className="link"> <small>Update</small></Link>
                 </p>
               )
             }
@@ -122,7 +131,7 @@ function ConfigPreview(props) {
         )
       }
       <Form error>
-        {offeringStatus.isPreferredEquity
+        {isOfferingPreferredEquity
           ? (
             <>
               <Table unstackable basic className="mt-30" padded="very">
@@ -190,7 +199,7 @@ function ConfigPreview(props) {
                 currency
                 prefix="$ "
                 fielddata={INVESTMONEY_FORM.fields.investmentAmount}
-                changed={values => investMoneyChange(values, 'investmentAmount')}
+                changed={values => admininvestMoneyChange(values, 'investmentAmount', false, returnCalculationType)}
                 onkeyup={validateMaskedInputForAmount}
                 autoFocus
                 allowNegative={false}

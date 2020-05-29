@@ -2,6 +2,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
+import { Calculator } from 'amortizejs';
 import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes, orderBy, set } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../../api/publicApi';
@@ -561,6 +562,56 @@ export class OfferingsStore {
     bonusRewards = offer && offer.bonusRewards && offer.bonusRewards
       .filter(reward => reward.tiers.includes(matchTier));
     return bonusRewards;
+  }
+
+  @action
+  admininvestMoneyChange = (inputValues, field, isPreferredEquiry = false, returnCalculationType) => {
+    investmentStore.INVESTMONEY_FORM = Validator.onChange(investmentStore.INVESTMONEY_FORM, {
+      name: field,
+      value: inputValues.floatValue,
+    });
+    if (!isPreferredEquiry) {
+      this.adminCalculateEstimatedReturn(returnCalculationType);
+    }
+  };
+
+  adminCalculateEstimatedReturn = (returnCalculationType) => {
+    const { offer } = this;
+    let offeringSecurityType = '';
+    let interestRate = '';
+    let investmentMultiple = '';
+    let loanTerm = '';
+    let calculationType = '';
+    offeringSecurityType = get(offer, 'keyTerms.securities');
+    calculationType = returnCalculationType && returnCalculationType === 'REV_SHAR_CALCULATION' ? 'REV_SHR' : 'TERM_NOTE';
+    interestRate = get(offer, 'keyTerms.interestRate') && get(offer, 'keyTerms.interestRate') !== null ? get(offer, 'keyTerms.interestRate') : '0';
+    investmentMultiple = get(offer, 'closureSummary.keyTerms.multiple') || '0';
+    loanTerm = parseFloat(get(offer, 'keyTerms.maturity'));
+
+    const investAmt = investmentStore.investmentAmount;
+    if (investAmt >= 100 && !['REAL_ESTATE'].includes(offeringSecurityType)) {
+      if (calculationType === 'TERM_NOTE') {
+        const data = {
+          method: 'mortgage',
+          apr: parseFloat(interestRate) || 0,
+          balance: parseFloat(investAmt) || 0,
+          loanTerm: loanTerm || 0,
+        };
+        const { totalPayment } = Calculator.calculate(data);
+        const finalAmtM = money.floatToAmount(Math.floor(totalPayment) || '');
+        const estReturnMIN = Helper.CurrencyFormat(finalAmtM, 0, 0);
+        investmentStore.estReturnVal = estReturnMIN;
+        return investmentStore.estReturnVal;
+      }
+      const formatedInvestmentMultiple = money.floatToAmount(investmentMultiple);
+      const estReturnMIN = Helper.CurrencyFormat(money.mul(formatedInvestmentMultiple, investAmt), 0);
+      investmentStore.estReturnVal = estReturnMIN;
+      return investmentStore.estReturnVal;
+    } if (investAmt <= 100) {
+      investmentStore.setFieldValue('estReturnVal', '-');
+      return investmentStore.estReturnVal;
+    }
+    return investmentStore.estReturnVal;
   }
 
   @action
