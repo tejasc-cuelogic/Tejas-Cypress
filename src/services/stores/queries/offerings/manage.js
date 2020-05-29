@@ -108,6 +108,8 @@ export const common = {
     }
   }
   tombstone {
+    offeredBy
+    showOfferedBy
     image {
       url
       fileName

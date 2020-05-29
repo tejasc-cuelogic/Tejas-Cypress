@@ -22,6 +22,10 @@ export class AuthStore extends DataModelStore {
 
   isUserLoggedIn = false;
 
+  privateOfferingAccess = false;
+
+  hasPrivateAccess = cookie.load('HAS_PRIVATE_ACCESS') || false;
+
   newPasswordRequired = false;
 
   cognitoUserSession = null;
@@ -171,6 +175,18 @@ export class AuthStore extends DataModelStore {
     navStore.setEverLogsIn();
   }
 
+  setUserPrivateAccess = (status, slug) => {
+    this.privateOfferingAccess = status;
+    if (status) {
+      cookie.save('HAS_PRIVATE_ACCESS', status, { path: `/offerings/${slug}` }, { maxAge: 31536000 });
+    }
+    this.setOfferingPrivateAccess();
+  }
+
+  setOfferingPrivateAccess = () => {
+    this.hasPrivateAccess = cookie.load('HAS_PRIVATE_ACCESS');
+  }
+
   setCognitoUserSession(session) {
     this.cognitoUserSession = session;
   }
@@ -286,6 +302,7 @@ export class AuthStore extends DataModelStore {
     this.resetForm('NEWSLETTER_FRM', null);
     this.newPasswordRequired = false;
     this.setUserLoggedIn(false);
+    this.setUserPrivateAccess(false);
   }
 
   setCurrentUserCapabilites = (capabilities) => {
@@ -483,6 +500,8 @@ decorate(AuthStore, {
   ...decorateDefault,
   hasSession: observable,
   isUserLoggedIn: observable,
+  privateOfferingAccess: observable,
+  hasPrivateAccess: observable,
   newPasswordRequired: observable,
   cognitoUserSession: observable,
   isBoxApiChecked: observable,
@@ -518,6 +537,8 @@ decorate(AuthStore, {
   setNewPasswordRequired: action,
   setHasSession: action,
   setUserLoggedIn: action,
+  setUserPrivateAccess: action,
+  setOfferingPrivateAccess: action,
   setCognitoUserSession: action,
   setProgress: action,
   setCredentials: action,

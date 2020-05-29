@@ -31,7 +31,7 @@ export default class CardHeaderPreview extends Component {
           && <Image64 bg className="collection-bg-image" srcUrl={get(collection, 'bgImage.preSignedUrl')} />
         }
         <section className="banner">
-          <Responsive minWidth={768} as={Container} className={`pt-70 pb-70 ${actionText ? 'mb-30' : 'mb-0'}`}>
+          <Responsive minWidth={768} as={Container} className="pt-100 pb-100">
             <Grid relaxed stackable centered>
               <Grid.Column width={7}>
                 <div className="video-wrapper campaign">
