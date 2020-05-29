@@ -218,6 +218,7 @@ class ConfirmEmailAddress extends Component {
                   autoFocus={!isMobile}
                   filterChars
                   className="otp-field"
+                  autocomplete="one-time-code"
                   pattern="[0-9]*"
                   inputmode="numeric"
                   disabled={isEmpty(CONFIRM_FRM.fields.email.value)}
