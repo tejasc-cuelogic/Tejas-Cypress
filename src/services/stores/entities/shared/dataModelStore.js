@@ -200,7 +200,7 @@ export default class DataModelStore {
         checked,
       );
     } else {
-      this[formName] = FormValidator.onChange(this[formName], FormValidator.pullValues(e, result), type, checked);
+      this[formName] = FormValidator.onChange(this[formName], FormValidator.pullValues(e, result), type, true, checked);
     }
     this.currTime = +new Date();
   };

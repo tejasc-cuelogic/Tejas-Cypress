@@ -55,9 +55,10 @@ class OfferingsPassProtected extends Component {
     const headerMsg = `This is a private offering for ${this.props.shorthandBusinessName} that is only available to accredited investors.`;
     const paraMsg = <span>Please confirm that you are an accredited<br /> investor and enter in the access code<br /> provided by the issuer.</span>;
     const isDisabled = !SELF_ACCREDITATION_PRIVATE_FRM.fields.status.value.length || !this.state.password;
+    const { responsiveVars } = this.props.uiStore;
     return (
       <>
-        <Modal size="large" className="acc-investor-modal" open={this.state.openModal} closeIcon onClose={this.closeModal}>
+        <Modal size="large" className={!responsiveVars.uptoTablet ? 'acc-investor-modal' : ''} open={this.state.openModal} closeIcon onClose={this.closeModal}>
           <Modal.Content>
             <section className="no-updates padded plr-0">
               <Grid columns="2" stackable doubling>
@@ -87,6 +88,7 @@ class OfferingsPassProtected extends Component {
                       autoFocus
                       name="password"
                       error={this.state.error}
+                      className="pt-10"
                     />
                     <FieldError error={this.state.error} />
                     <Button loading={this.state.previewPassLoader} primary content="Confirm" className="mt-20" disabled={isDisabled || this.state.previewPassLoader} />
