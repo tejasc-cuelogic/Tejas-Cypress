@@ -70,7 +70,12 @@ class ResetPassword extends Component {
           <Form error onSubmit={this.onSubmit}>
             <Form.Field className="otp-wrap center-align mt-10">
               <label>Enter verification code here:</label>
-              {smartElement.CodeInput('code', { autoFocus: !isMobile, className: 'otp-field mt-10', onChange: resetPassChange })}
+              {smartElement.CodeInput('code', {
+                autoFocus: !isMobile,
+                autocomplete: 'one-time-code',
+                className: 'otp-field mt-10',
+                onChange: resetPassChange,
+              })}
             </Form.Field>
             {smartElement.FormPasswordStrength('password', { changed: resetPassChange })}
             {smartElement.Input('verify', { changed: resetPassChange, type: pwdInputType })}

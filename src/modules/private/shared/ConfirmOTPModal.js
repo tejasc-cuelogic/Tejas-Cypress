@@ -95,6 +95,7 @@ export default class ConfirmOTPModal extends Component {
                   filterChars
                   fields={6}
                   type="number"
+                  autocomplete="one-time-code"
                   className="otp-field"
                   autoFocus={!isMobile}
                   pattern="[0-9]*"
