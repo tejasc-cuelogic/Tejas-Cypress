@@ -177,7 +177,7 @@ const operators = ['=', '!=', '>', '<', '>=', '<=', 'IS', 'IS NOT', 'IN', 'LIKE'
 
 export const QUERY_BUILDER = {
   ...FormHelper.generateMeta([
-    ['selectColumns', 'Columns To Retrieve', [], 'optional', '',
+    ['selectColumns', 'Columns To Retrieve', [], 'required', '',
       {
         asIn: true,
         props: {

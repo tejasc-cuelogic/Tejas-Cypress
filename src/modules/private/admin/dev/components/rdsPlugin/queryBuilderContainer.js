@@ -15,7 +15,6 @@ function QueryBuilderContainer(props) {
   useEffect(() => {
     props.rdsPluginStore.resetForm('QUERY_BUILDER_FRM');
     props.rdsPluginStore.setFieldValue('rdsData', {});
-
   }, []);
 
   function onSubmit() {
