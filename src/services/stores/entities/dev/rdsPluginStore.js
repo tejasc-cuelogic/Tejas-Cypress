@@ -1,5 +1,5 @@
 import { observable, action, decorate, computed } from 'mobx';
-import { get, pick } from 'lodash';
+import { get, pick, orderBy } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { FormValidator as Validator } from '../../../../helper';
 import { QUERY_BUILDER } from '../../../constants/admin/data';
@@ -12,6 +12,11 @@ export class RdsPluginStore extends DataModelStore {
   }
 
   rdsData = {};
+
+  sortOrder = {
+    column: null,
+    direction: 'asc',
+  };
 
   QUERY_BUILDER_FRM = Validator.prepareFormObject(QUERY_BUILDER);
 
@@ -70,8 +75,16 @@ export class RdsPluginStore extends DataModelStore {
     }
   }
 
+  setSortingOrder = (column = null, direction = null) => {
+    this.sortOrder = {
+      column,
+      direction,
+    };
+  }
+
   get rdsListingRows() {
-    return get(this.rdsData, 'adminRunRdsQuery.results') || [];
+    const list = get(this.rdsData, 'adminRunRdsQuery.results') || [];
+    return orderBy(list, [this.sortOrder.column], [this.sortOrder.direction]);
   }
 
   get rdsListingColumns() {
@@ -101,8 +114,10 @@ export class RdsPluginStore extends DataModelStore {
 decorate(RdsPluginStore, {
   ...decorateDefault,
   QUERY_BUILDER_FRM: observable,
+  sortOrder: observable,
   rdsData: observable,
   formChangeForTable: action,
+  setSortingOrder: action,
   initRequest: action,
   fetchPlugins: action,
   rdsListingRows: computed,

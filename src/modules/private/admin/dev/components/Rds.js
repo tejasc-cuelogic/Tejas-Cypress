@@ -9,7 +9,7 @@ import RdsList from './rdsPlugin/rdsList';
 @inject('rdsPluginStore', 'nsUiStore')
 @withRouter
 @observer
-export default class RdsPlugin extends Component {
+export default class Rds extends Component {
   constructor(props) {
     super(props);
     this.props.rdsPluginStore.fetchPlugins();
