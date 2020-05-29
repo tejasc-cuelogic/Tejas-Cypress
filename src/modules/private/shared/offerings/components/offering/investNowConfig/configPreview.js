@@ -231,7 +231,8 @@ function ConfigPreview(props) {
         : null
       }
       {
-        INVEST_NOW_CONFIG_FRM.fields.toggleMeta.value.includes('BONUS_REWARDS')
+        !isOfferingPreferredEquity
+        && INVEST_NOW_CONFIG_FRM.fields.toggleMeta.value.includes('BONUS_REWARDS')
         && validBonusRewards && validBonusRewards.length > 0
         && validBonusRewards.map(reward => (
           <p className="grey-header">+ {reward.title}</p>

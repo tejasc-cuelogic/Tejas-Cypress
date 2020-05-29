@@ -581,9 +581,8 @@ export class OfferingsStore {
     let interestRate = '';
     let investmentMultiple = '';
     let loanTerm = '';
-    let calculationType = '';
     offeringSecurityType = get(offer, 'keyTerms.securities');
-    calculationType = returnCalculationType && returnCalculationType === 'REV_SHAR_CALCULATION' ? 'REV_SHR' : 'TERM_NOTE';
+    const calculationType = returnCalculationType && returnCalculationType === 'TERM_NOTE_CALCULATION' ? 'TERM_NOTE' : 'REV_SHR';
     interestRate = get(offer, 'keyTerms.interestRate') && get(offer, 'keyTerms.interestRate') !== null ? get(offer, 'keyTerms.interestRate') : '0';
     investmentMultiple = get(offer, 'closureSummary.keyTerms.multiple') || '0';
     loanTerm = parseFloat(get(offer, 'keyTerms.maturity'));
