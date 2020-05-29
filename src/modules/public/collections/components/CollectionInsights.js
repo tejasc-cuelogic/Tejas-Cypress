@@ -14,9 +14,11 @@ class CollectionInsights extends Component {
         {this.props.heading}
         {this.props.subheading}
         {InsightArticles && InsightArticles.length
-          ? (
-            <Grid stackable doubling columns={2}>
+          && (
+          <Grid stackable doubling columns={2}>
               {InsightArticles.map(article => (
+                article.scope !== 'HIDDEN'
+                ? (
                 <Grid.Column>
                   <Card as={Link} to={`/insights/${article.slug}`} className="campaign insights" fluid>
                     <Image64
@@ -36,9 +38,11 @@ class CollectionInsights extends Component {
                     </Card.Content>
                   </Card>
                 </Grid.Column>
+                )
+                : <InlineLoader text="No record to display." />
               ))}
             </Grid>
-          ) : <InlineLoader text="No record to display." />}
+          )}
       </Container>
     );
   }

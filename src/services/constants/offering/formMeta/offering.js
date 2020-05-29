@@ -22,12 +22,14 @@ const SUB_HEADER_TOGGLE_META = [
   { label: 'Payments Made', value: 'REPAYMENT_COUNT' },
 ];
 
-const STAGE_COMMON = ['stage', 'Stage', 'CREATION', '', 'Stage', { props: {
-  values: [{ label: 'Creation', value: 'CREATION' }, { label: 'Live', value: 'LIVE' }, { label: 'Completed', value: 'COMPLETED' }],
-  defaultValue: 'CREATION',
-  skipField: true,
-},
-asIn: true }];
+const STAGE_COMMON = ['stage', 'Stage', 'CREATION', '', 'Stage', {
+  props: {
+    values: [{ label: 'Creation', value: 'CREATION' }, { label: 'Live', value: 'LIVE' }, { label: 'Completed', value: 'COMPLETED' }],
+    defaultValue: 'CREATION',
+    skipField: true,
+  },
+  asIn: true,
+}];
 
 export const TOMBSTONE_BASIC = FormHelper.generateMeta([
   STAGE_COMMON,
@@ -38,6 +40,13 @@ export const TOMBSTONE_BASIC = FormHelper.generateMeta([
   ['investorCount', 'Investor Count', '', 'optional', 'e.g 3', { asIn: true, props: { skipField: true } }],
   ['description', 'Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
   ['customTag', 'Custom Tag', '', 'optional', 'Enter here...'],
+  ['offeredBy', 'Offered By', '', 'optional', 'Enter here...'],
+  ['showOfferedBy', '', false, 'optional', '', {
+    asIn: true,
+    props: {
+      defaultValue: false, values: [{ label: 'Toggle Offered By', value: true }],
+    },
+  }],
   ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { defaultValue: [], values: TOMBSTONE_TOGGLE_META } }],
   ['image', 'Featured Image', '', 'optional', '', { s3Upload: true }],
 ]);
@@ -49,7 +58,7 @@ export const SUB_HEADER_BASIC = FormHelper.generateMeta([
   ['investorCount', 'Investor Count', '', 'optional', 'e.g 3', { asIn: true, props: { skipField: true } }],
   ['repaymentCount', 'Repayment Count', '', 'optional', 'e.g 2', { asIn: true, props: { skipField: true } }],
   ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { defaultValue: [], values: SUB_HEADER_TOGGLE_META } }],
-  ]);
+]);
 
 
 export const HEADER_BASIC = FormHelper.generateMeta([
