@@ -112,7 +112,7 @@ export default class BusinessDetails extends Component {
             header={currentApplicationType === 'business' ? 'Business Plan or Investment Prospectus' : 'Business Plan'}
             subHeader={(
               <>
-                {currentApplicationType === 'business' ? 'This document is intended to describe the who, what, when, where, how and why of your project.*' : 'Upload your Investment Summary or Business Plan.*'}
+                {currentApplicationType === 'business' ? <>This document is intended to describe the who, what, when, where, how and why of your project.*<br /> If you are applying for the Community Bridge Note, complete and submit <a href="https://nextseed.box.com/shared/static/5zmjfblvolcrtg9fvzkmnjufafyig8v4.docx"><b>this worksheet</b></a> in addition to or in lieu of your business plan.</> : 'Upload your Investment Summary or Business Plan.'}
                 {!hideFields && currentApplicationType !== 'business' && (
                   <Popup
                     trigger={<Icon className="ns-help-circle" />}
@@ -145,7 +145,7 @@ export default class BusinessDetails extends Component {
             <FormElementWrap
               hideFields={hideFields}
               header="Sources & Uses"
-              subHeader="Unless provided in your business plan or financial projections, please provide a table clearly outlining all sources of capital for your project (including the proposed NextSeed amount) and the proposed uses of capital."
+              subHeader="Unless provided in your business plan or financial projections, please provide a table clearly outlining all sources of capital that your business is currently raising (including the proposed NextSeed amount) and the proposed uses of capital."
             >
               <Grid>
                 <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>

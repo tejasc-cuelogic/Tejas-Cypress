@@ -1,4 +1,3 @@
-import About from './public/about/containers/About';
 import ReferralProgramTerms from './public/agreements/ReferralProgramTerms';
 import AccreditedIncentiveTerms from './public/agreements/AccreditedIncentiveTerms';
 import IraPromotionTerms from './public/agreements/IraPromotionTerms';
@@ -7,6 +6,7 @@ import Home from './public/home/containers/Home';
 import Invest from './public/invest/containers/Invest';
 import Offering from './public/offering/containers/Offering';
 import OfferDetails from './public/offering/containers/OfferDetails';
+import CollectionDetails from './public/collections/containers/CollectionDetails';
 // import VideoModal from './public/offering/components/campaignDetails/Overview/VideoModal';
 import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
@@ -19,13 +19,16 @@ import InsightsDetails from './public/resources/containers/InsightsDetails';
 import EducationCenter from './public/resources/containers/EducationCenter';
 import Space from './public/space/containers/Space';
 import Group from './public/about/components/Group';
-
+import Capital from './public/about/components/Capital';
+import Mission from './public/about/components/Mission';
+import Team from './public/about/components/Team';
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
 import XmlForm from './private/admin/edgar/containers/XmlForm';
 import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
 import UserManagement from './private/admin/userManagement';
 import DashboardCta from './shared/DashboardCta';
+import Collections from './public/collections/containers/Collections';
 
 import {
   AdminAuthorization,
@@ -62,7 +65,15 @@ export const publicRoutes = [
   },
   {
     path: '/about/:section?', // optional section to support old urls
-    component: About,
+    component: Mission,
+  },
+  {
+    path: '/mission',
+    component: Mission,
+  },
+  {
+    path: '/team',
+    component: Team,
   },
   {
     path: '/invest/get-started',
@@ -106,6 +117,10 @@ export const publicRoutes = [
     props: 'newLayout',
   },
   {
+    path: '/communities/:slug',
+    component: CollectionDetails,
+  },
+  {
     path: '/offerings-v1/preview/:id',
     component: OfferDetails,
   },
@@ -116,6 +131,10 @@ export const publicRoutes = [
   {
     path: '/offerings',
     component: Offering,
+  },
+  {
+    path: '/communities',
+    component: Collections,
   },
   {
     path: '/business',
@@ -153,6 +172,10 @@ export const publicRoutes = [
   {
     path: '/space',
     component: Space,
+  },
+  {
+    path: '/capital',
+    component: Capital,
   },
   {
     path: '/group',

@@ -47,7 +47,7 @@ export class SidebarNav extends Component {
           onToggle={this.toggleMobile}
           isMobile={isMobile}
         />
-        <Menu.Item key="logout" name="logout" onClick={this.props.handleLogOut}>
+        <Menu.Item key="logout" name="logout" data-cy="auth-logout" onClick={this.props.handleLogOut}>
           <Icon name="ns-logout" />
           <span>Logout</span>
         </Menu.Item>

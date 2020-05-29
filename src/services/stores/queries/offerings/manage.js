@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const common = {
+export const common = {
   offeringBasics: `
   isAvailablePublicly
   offeringSlug
@@ -108,6 +108,8 @@ const common = {
     }
   }
   tombstone {
+    offeredBy
+    showOfferedBy
     image {
       url
       fileName
@@ -333,6 +335,7 @@ export const getOfferingDetails = gql`
           title
           page
           regulation
+          hideHeader
           toc {
             label
             order

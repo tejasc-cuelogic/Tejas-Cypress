@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Header, Container, Button, Responsive } from 'semantic-ui-react';
+import { Header, Container, Button, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import NSImage from '../../../shared/NSImage';
 
 @inject('offeringsStore', 'authStore', 'userStore', 'uiStore')
 @withRouter
@@ -25,28 +26,31 @@ class Banner extends Component {
   }
 
   render() {
+    const { responsiveVars } = this.props.uiStore;
+    const { userStore } = this.props;
     return (
-      <section className="banner home-banner">
-        <Container>
-          <Responsive minWidth={768} as={React.Fragment}>
-            <div className="banner-caption">
-              <Header as="h2">
-                Accelerate your growth with<br />
-                the power of the crowd.
-              </Header>
-              {!this.props.userStore.isIssuer
-              && (
-                <Button onClick={this.props.handleApplyCta} primary>Apply Online</Button>
-              )
-              }
-            </div>
-          </Responsive>
-        </Container>
-        <div className="banner-meta">
-          <p className="mb-0">Brian Ching | Pitch 25</p>
-          <p><b>Raised $549,000 from 392 investors</b></p>
-        </div>
-      </section>
+        <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+          <Container>
+            <Grid reversed="mobile">
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left" verticalAlign="middle">
+                <Header as="h2">Tap into capital from <br /> your community</Header>
+                {!userStore.isIssuer && !responsiveVars.isMobile
+                  && (
+                    <Button className="mt-40" onClick={this.props.handleApplyCta} primary>Apply Online</Button>
+                  )
+                }
+              </Grid.Column>
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} floated="right">
+                <NSImage path={responsiveVars.isMobile ? 'banners/business-slider-mobile.png' : 'banners/business-slider.png'} fluid />
+                {!userStore.isIssuer && responsiveVars.isMobile
+                  && (
+                    <Button className="mt-40" onClick={this.props.handleApplyCta} primary fluid>Apply Online</Button>
+                  )
+                }
+              </Grid.Column>
+            </Grid>
+          </Container>
+        </section>
     );
   }
 }

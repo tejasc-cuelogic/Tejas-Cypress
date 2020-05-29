@@ -15,7 +15,7 @@ const highlights = {
 
 const bannerButtonsMeta = [
   {
-    label: <><a style={{ pointerEvents: 'none' }} color="green">New! {' '}</a>Raise additional working capital with a Community Bridge Note</>,
+    label: <><a style={{ pointerEvents: 'none' }}>New! {' '}</a>Raise additional working capital with a Community Bridge Note</>,
     description: 'The NextSeed Community Bridge Note (CBN) is a special financing product providing an alternative and efficient way to raise flexible, lower cost, lower fee financing.',
     link: '/insights/community-bridge-notes',
     // eslint-disable-next-line react/jsx-no-target-blank
@@ -32,7 +32,7 @@ const bannerButtonsMeta = [
   {
     label: 'Donate to the LIFE Fund',
     description: 'Make a tax-deductible donation to the Local Impact + Food Entrepreneurs (LIFE) Fund, supporting restaurants and delivering meals to front line healthcare workers.',
-    link: 'https://nextseed.link/life-fund',
+    link: 'https://www.betterunite.com/lifefund',
     showLifeFund: true,
   },
 ];

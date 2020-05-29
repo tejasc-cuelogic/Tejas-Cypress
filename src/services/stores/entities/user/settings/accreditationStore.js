@@ -12,13 +12,15 @@ import { updateAccreditation, investorSelfVerifyAccreditedStatus, adminListAccre
 import { userAccreditationQuery, userDetailsQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_SORT_ENUMS } from '../../../../constants/accreditation';
-import { FILTER_META, CONFIRM_ACCREDITATION, SELF_ACCREDITATION } from '../../../../constants/accreditationRequests';
+import { FILTER_META, CONFIRM_ACCREDITATION, SELF_ACCREDITATION, SELF_ACCREDITATION_PRIVATE } from '../../../../constants/accreditationRequests';
 import { CURR_YEAR } from '../../../../../constants/common';
 
 export class AccreditationStore {
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
 
   @observable SELF_ACCREDITATION_FRM = Validator.prepareFormObject(SELF_ACCREDITATION);
+
+  @observable SELF_ACCREDITATION_PRIVATE_FRM = Validator.prepareFormObject(SELF_ACCREDITATION_PRIVATE);
 
   @observable CONFIRM_ACCREDITATION_FRM = Validator.prepareFormObject(CONFIRM_ACCREDITATION);
 
@@ -1195,17 +1197,19 @@ export class AccreditationStore {
   }
 
   @action
-  changeRuleAsPerFilingStatus = (isFilingTrue) => {
-    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.rule = isFilingTrue ? 'optional' : 'required';
-    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.rule = isFilingTrue ? 'required' : 'optional';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.rule = isFilingTrue ? 'optional' : 'required';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.rule = isFilingTrue ? 'required' : 'optional';
-    this.INCOME_UPLOAD_DOC_FORM.fields.previousEstimateIncome.rule = !isFilingTrue ? 'required' : 'optional';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = isFilingTrue;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.skipField = !isFilingTrue;
+  // changeRuleAsPerFilingStatus = (isFilingTrue) => {
+  changeRuleAsPerFilingStatus = () => {
+    const override = true;
+    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.rule = override ? 'optional' : 'required';
+    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.rule = override ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.rule = override ? 'optional' : 'required';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.rule = override ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.previousEstimateIncome.rule = !override ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = override;
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.skipField = !override;
     ['fileData', 'fileId', 'value'].map((field) => {
-      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field] = isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field];
-      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field] = !isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field];
+      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field] = override ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field];
+      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field] = !override ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field];
       return null;
     });
 

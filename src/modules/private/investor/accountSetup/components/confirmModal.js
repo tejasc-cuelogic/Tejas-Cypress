@@ -29,7 +29,7 @@ const ConfirmModal = inject('iraAccountStore', 'entityAccountStore', 'individual
       <p className="mt-30 mb-30">
         {message}
       </p>
-      <Button fluid={isMobile} onClick={HandleModalCta} primary size="large">Explore Campaigns</Button>
+      <Button fluid={isMobile} data-cy="explore-campaigns" onClick={HandleModalCta} primary size="large">Explore Campaigns</Button>
     </>
   );
 }));

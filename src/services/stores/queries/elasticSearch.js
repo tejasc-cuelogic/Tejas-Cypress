@@ -1,54 +1,16 @@
 import gql from 'graphql-tag';
 
-export const adminDeleteUserIndices = gql`
-  mutation adminDeleteUserIndices($index: userESIndexEnum!) {
-    adminDeleteUserIndices(index: $index)
-  }`;
+export const adminDeleteIndex = gql`
+  mutation adminDeleteIndex($index: EsIndexEnum!, $indexAliasName: ESIndexAliasEnum!) {
+    adminDeleteIndex(index: $index, indexAliasName: $indexAliasName)
+  }
+`;
 
-export const adminPopulateUserIndex = gql`
-  mutation adminPopulateUserIndex($index: userESIndexEnum!) {
-    adminPopulateUserIndex(index: $index)
-  }`;
-
-export const adminDeleteCrowdPayIndices = gql`
-  mutation adminDeleteCrowdPayIndices($index: CrowdpayESIndexEnum!) {
-    adminDeleteCrowdPayIndices(index: $index)
-  }`;
-
-export const adminPopulateCrowdPayIndex = gql`
-  mutation adminPopulateCrowdPayIndex($index: CrowdpayESIndexEnum!) {
-    adminPopulateCrowdPayIndex(index: $index)
-  }`;
-
-export const adminDeleteLinkedBankIndices = gql`
-  mutation adminDeleteLinkedBankIndices($index: LinkedbankESIndexEnum!) {
-    adminDeleteLinkedBankIndices(index: $index)
-  }`;
-
-export const adminPopulateLinkedBankIndex = gql`
-  mutation adminPopulateLinkedBankIndex($index: LinkedbankESIndexEnum!) {
-    adminPopulateLinkedBankIndex(index: $index)
-  }`;
-
-export const adminDeleteAccreditationIndices = gql`
-  mutation adminDeleteAccreditationIndices($index: AccreditationESIndexEnum!) {
-    adminDeleteAccreditationIndices(index: $index)
-  }`;
-
-export const adminPopulateAccreditationIndex = gql`
-  mutation adminPopulateAccreditationIndex($index: AccreditationESIndexEnum!) {
-    adminPopulateAccreditationIndex(index: $index)
-  }`;
-
-export const adminDeleteOfferingIndices = gql`
-  mutation adminDeleteOfferingIndices($index: OfferingESIndexEnum!) {
-    adminDeleteOfferingIndices(index: $index)
-  }`;
-
-export const adminPopulateOfferingIndices = gql`
-  mutation adminPopulateOfferingIndices($index: OfferingESIndexEnum!) {
-    adminPopulateOfferingIndices(index: $index)
-  }`;
+export const adminPopulateIndex = gql`
+  mutation adminPopulateIndex($index: EsIndexEnum!, $indexAliasName: ESIndexAliasEnum!) {
+    adminPopulateIndex(index: $index, indexAliasName: $indexAliasName) 
+  }
+`;
 
 export const getESAuditList = gql`
 query adminGetESAudit($indexAliasName: ESIndexAliasEnum, $random: String) {

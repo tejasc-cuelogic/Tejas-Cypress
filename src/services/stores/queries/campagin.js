@@ -39,6 +39,8 @@ const offeringTemplate2 = {
     }
   }`,
   tombstone: `tombstone {
+    offeredBy
+    showOfferedBy
     image {
       url
       fileName
@@ -88,10 +90,7 @@ const offeringTemplate2 = {
   }`,
 };
 
-export const allOfferings = gql`
-query getOfferingList($filters: OfferingListFilterInputType){
-    getOfferingList(filters: $filters) {
-      id
+export const offeringFields = `id
       template
       isAvailablePublicly
       watchListStatus
@@ -167,7 +166,12 @@ query getOfferingList($filters: OfferingListFilterInputType){
         state
         city
       }
-      regulation
+      regulation`;
+
+export const allOfferings = gql`
+query getOfferingList($filters: OfferingListFilterInputType){
+    getOfferingList(filters: $filters) {
+      ${offeringFields}
     }
   }
 `;
@@ -254,6 +258,10 @@ export const campaignDetailsQuery = gql`
     ${offeringTemplate2.content}
     ${offeringTemplate2.misc}
     ${offeringTemplate2.gallery}
+    tombstone {
+      offeredBy
+      showOfferedBy
+    }
     investmentSummary {
       isInvestedInOffering
       tranche
@@ -438,6 +446,7 @@ export const campaignDetailsQuery = gql`
         title
         page
         regulation
+        hideHeader
         toc {
           label
           order
@@ -560,6 +569,7 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
         title
         page
         regulation
+        hideHeader
         toc {
           label
           order

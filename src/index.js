@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import bugsnagReact from '@bugsnag/plugin-react';
 import { BrowserRouter } from 'react-router-dom';
+import ReactDependentScript from 'react-dependent-script';
 import promiseFinally from 'promise.prototype.finally';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
@@ -58,7 +59,13 @@ ReactDOM.render(
   <Provider {...stores}>
     <BrowserRouter>
       <ErrorBoundary>
+      <ReactDependentScript
+        scripts={[
+        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_PLACE_API_KEY}&libraries=places`,
+      ]}
+      >
         <App />
+        </ReactDependentScript>
       </ErrorBoundary>
     </BrowserRouter>
   </Provider>,

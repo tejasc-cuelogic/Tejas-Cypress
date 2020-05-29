@@ -3,7 +3,7 @@ import { goToLoginScreen } from './utility/login.utility';
 describe('Log In', () => {
   beforeEach(() => {
     cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-    cy.applicationUnlock();
+    // cy.applicationUnlock();
     goToLoginScreen();
   });
 
@@ -16,8 +16,8 @@ describe('Log In', () => {
         const { investorLoginCredentials } = userData
         cy.log('investorLoginCredentials=>', investorLoginCredentials)
         cy.log('investorLoginCredentials =>', investorLoginCredentials);
-        cy.get('input[type="email"]').type(investorLoginCredentials.email);
-        cy.get('input[type="password"]').type(investorLoginCredentials.password);
+        cy.get('input[name="email"]').type(investorLoginCredentials.email);
+        cy.get('input[name="password"]').type(investorLoginCredentials.password);
         cy.get('button.button').contains('Log in').click({ force: true });
       });
     });

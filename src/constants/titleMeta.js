@@ -19,9 +19,11 @@ const INVESTOR_INVESTMENT_ACC_META = {};
 
 export const TITLES = {
   '/offerings/': 'Investment Opportunities - NextSeed',
+  '/communities/': 'Communities & Partners - NextSeed',
   '/business': 'How It Works | Businesses - NextSeed',
   '/investors': 'How It Works | Investors - NextSeed',
-  '/about': 'About Us - NextSeed',
+  '/mission': 'Our Mission - NextSeed',
+  '/team': 'Our Team - NextSeed',
   '/group': 'The Group - NextSeed',
   '/insights': 'Insights and Articles - NextSeed',
   '/education-center': 'Education Center - NextSeed',

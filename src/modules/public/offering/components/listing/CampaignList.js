@@ -7,7 +7,7 @@ import { Container, Card, Grid, Label, Icon, Button, Divider, Table } from 'sema
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -77,16 +77,16 @@ export default class CampaignList extends Component {
       );
     } if (customTag) {
       return (
-      <Label.Group size="small">
-        {customTag}
-      </Label.Group>
+        <Label.Group size="small">
+          {customTag}
+        </Label.Group>
       );
     }
     return null;
   }
 
   render() {
-    const { campaigns, loading, isFunded } = this.props;
+    const { campaigns, loading, isFunded, collection } = this.props;
     const isTemplate2 = template => template === 2;
     const tombstoneImage = offering => (isTemplate2(get(offering, 'template')) ? get(offering, 'tombstone.image.url') : get(offering, 'media.tombstoneImage.url'));
     const getTombstoneDescription = offering => (isTemplate2(get(offering, 'template')) ? get(offering, 'tombstone.description') : get(offering, 'offering.overview.tombstoneDescription'));
@@ -102,7 +102,7 @@ export default class CampaignList extends Component {
             {loading ? <InlineLoader />
               : campaigns && campaigns.length
                 ? (
-                  <Grid doubling columns={3} stackable>
+                  <Grid doubling columns={collection ? 2 : 3} stackable>
                     {campaigns.map(offering => (
                       <Grid.Column key={offering.id} data-cy={offering.offeringSlug}>
                         <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}`}>
@@ -112,7 +112,7 @@ export default class CampaignList extends Component {
                                 bg
                                 centered
                                 srcUrl={tombstoneImage(offering) || ''}
-                                alt={`${offering.keyTerms.shorthandBusinessName} poster`}
+                                alt={`${get(offering, 'keyTerms.shorthandBusinessName')} poster`}
                               />
                             </div>
                           </div>
@@ -122,7 +122,7 @@ export default class CampaignList extends Component {
                               <Icon name="heart" />
                             )
                           }
-                          <div className={`campaign-card-details ${!get(offering, 'isAvailablePublicly') ? 'disabled' : ''}`}>
+                          <div className={`campaign-card-details ${((!get(offering, 'isAvailablePublicly') && !collection) || (get(offering, 'scope') === 'HIDDEN' && collection)) ? 'disabled' : ''}`}>
                             <Card.Content>
                               <Card.Header>{offering && offering.keyTerms
                                 && offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
@@ -150,7 +150,7 @@ export default class CampaignList extends Component {
                                       <Table.Body>
                                         {(isFunded ? keyTermList.filter(i => i.forFunded) : keyTermList).map(row => (
                                           <>
-                                            {((isFunded || row.for.includes('ALL') || (row.for.includes(offering.keyTerms.securities) || (['EQUITY'].includes(offering.keyTerms.securities) && get(row, 'equityClass') && get(row, 'equityClass').includes(get(offering, 'keyTerms.equityClass'))))) && ((get(offering, row.key) === 0 || get(offering, row.key)) || row.value))
+                                            {((isFunded || row.for.includes('ALL') || (row.for.includes(get(offering, 'keyTerms.securities')) || (['EQUITY'].includes(get(offering, 'keyTerms.securities')) && get(row, 'equityClass') && get(row, 'equityClass').includes(get(offering, 'keyTerms.equityClass'))))) && ((get(offering, row.key) === 0 || get(offering, row.key)) || row.value))
                                               && (
                                                 <Table.Row verticalAlign="top">
                                                   <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : (row.label === 'Security' && get(offering, row.key) && ((get(offering, row.key) === 'EQUITY' && get(offering, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'))) ? 'Type of Investment' : row.label}</Table.Cell>
@@ -203,18 +203,21 @@ export default class CampaignList extends Component {
                               <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
                             </Card.Content>
                           </div>
-                          <Card.Content extra className={!get(offering, 'isAvailablePublicly') ? 'disabled' : ''}>
+                          <Card.Content extra className={((!get(offering, 'isAvailablePublicly') && !collection) || (get(offering, 'scope') === 'HIDDEN' && collection)) ? 'disabled' : ''}>
                             {showInvestorsCount(offering) && <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} {get(offering, 'keyTerms.securities') !== 'FUNDS' ? `from ${get(offering, 'closureSummary.totalInvestorCount') || 0} investors` : ''}</b></p>}
                             {isFunded
                               && (
                                 <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>
                               )
                             }
-                            <p className="more-info">
-                              Offered by {offering && offering.regulation
-                                ? CAMPAIGN_OFFERED_BY[offering.regulation]
-                                : CAMPAIGN_OFFERED_BY[offering.keyTerms.regulation]}
-                            </p>
+                            {
+                              get(offering, 'tombstone.showOfferedBy') !== false
+                              && (
+                                <p className="more-info">
+                                  Offered by {get(offering, 'tombstone.offeredBy') ? offering.tombstone.offeredBy : 'NextSeed Securities, LLC'}
+                                </p>
+                              )
+                            }
                           </Card.Content>
                           {offering.stage === 'LOCK' && (
                             <Card.Content className="card-hidden">

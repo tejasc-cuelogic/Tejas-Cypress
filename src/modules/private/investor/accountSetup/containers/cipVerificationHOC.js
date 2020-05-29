@@ -96,11 +96,13 @@ function cipVerificationHOC(WrappedComponent) {
             key="city"
             type="text"
             name="city"
+            data-cy="city"
             fielddata={addressForm.fields.city}
             changed={(e, result) => personalInfoChange(e, result, form)}
           />
           <FormDropDown
             name="state"
+            data-cy="state"
             fielddata={{ ...addressForm.fields.state, error: undefined }}
             options={US_STATES.map(s => ({ ...s, ...{ text: Helper.caseify(s.text) } }))}
             search
@@ -113,6 +115,7 @@ function cipVerificationHOC(WrappedComponent) {
           <MaskedInput
             key="zipCode"
             name="zipCode"
+            data-cy="zipCode"
             fielddata={addressForm.fields.zipCode}
             changed={(values, name) => personalInfoMaskedChange(values, name, form)}
             zipCode

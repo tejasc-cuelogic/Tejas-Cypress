@@ -198,7 +198,7 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700', customErrors: { required: 'required' },
   },
   totalProjectCost: {
-    value: '', maxLength: 16, label: 'How much total capital are you raising for your business right now (including other investors, banks, and etc.)?', error: undefined, rule: 'required', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'How much total capital are you raising for your business right now (including other investors, bank loans, and etc.)?', error: undefined, rule: 'required', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
   },
   amountNeeded: {
     value: '',
@@ -246,10 +246,10 @@ export const BUSINESS_PRE_QUALIFICATION = {
   },
   ...BUSINESS_PREQUAL_COMMON,
   businessAgeYears: {
-    value: '', label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1', customErrors: { required_if: 'required' },
+    value: '', label: 'Years', error: undefined, rule: 'required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: '1', customErrors: { required_if: 'required' },
   },
   businessAgeMonths: {
-    value: '', label: 'Months', error: undefined, rule: 'maxVal:11|required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3', customErrors: { required_if: 'required', maxVal: 'Please enter valid value.' },
+    value: '', label: 'Months', error: undefined, rule: 'maxVal:11|required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: '3', customErrors: { required_if: 'required', maxVal: 'Please enter valid value.' },
   },
   franchiseHolder: {
     value: '',
@@ -262,16 +262,16 @@ export const BUSINESS_PRE_QUALIFICATION = {
     customErrors: { required_if: 'required' },
   },
   previousYearGrossSales: {
-    value: '', label: 'Gross Sales', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $750,000', customErrors: { required_if: 'required' },
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: 'e.g. $750,000', customErrors: { required_if: 'required' },
   },
   previousYearCogSold: {
-    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $75,000', customErrors: { required_if: 'required' },
+    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: 'e.g. $75,000', customErrors: { required_if: 'required' },
   },
   previousYearOperatingExpenses: {
-    value: '', label: 'Operating Expenses', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $150,000', customErrors: { required_if: 'required' },
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: 'e.g. $150,000', customErrors: { required_if: 'required' },
   },
   previousYearNetIncome: {
-    value: '', label: 'Net Income', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $525,000', customErrors: { required_if: 'required' },
+    value: '', label: 'Net Income', error: undefined, rule: 'required_if:businessGoal,FIRST_YEAR|required_if:businessGoal,ESTABLISHED', placeHolder: 'e.g. $525,000', customErrors: { required_if: 'required' },
   },
   nextYearGrossSales: {
     value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. $750,000', customErrors: { required: 'required' },
@@ -591,10 +591,10 @@ export const BUSINESS_DETAILS = {
 
 export const BUSINESS_PERF_COMMON = {
   priorToThreeYear: {
-    value: [], uploadtitle: 'Upload a file or drag it here', label: 'Prior 3 Year Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Prior 3 Year Statements', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   ytd: {
-    value: [], uploadtitle: 'Upload a file or drag it here', label: 'YTD Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'YTD Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   fiveYearProjection: {
     value: [], uploadtitle: <span>Upload a file or drag it here <br /> (Excel or CSV format preferred)</span>, label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
