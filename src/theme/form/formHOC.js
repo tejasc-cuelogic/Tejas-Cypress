@@ -229,7 +229,7 @@ function formHoc(WrappedComponent, metaInfo) {
     // }
 
     FormDropDown = (name, props) => {
-      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.props[metaInfo.store][props.multiForm[0]].fields[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormDropDown
           containerwidth={8}
