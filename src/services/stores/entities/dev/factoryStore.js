@@ -431,9 +431,10 @@ export class FactoryStore extends DataModelStore {
 
   evaluateJsonPAyload = (formPayload) => {
     const val = formPayload.viewResponse;
-    let s = `${val}`;
+    const s = val.replace(/"/g, '\'');
+    // let s = `${val}`;
     // eslint-disable-next-line no-useless-escape
-    s = s.replace(/^\"|\"$/g, '');
+    // s = s.replace(/^\"|\"$/g, '');
     // s = s.replace(/((?=^)")/g, '');
     // s = s.replace(/"((^")*)$/, '');
     return s;
