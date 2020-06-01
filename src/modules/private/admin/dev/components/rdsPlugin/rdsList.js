@@ -1,17 +1,20 @@
 /* eslint-disable no-tabs */
-import React from 'react';
+import React, { useState } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Grid, Card, Button, Header } from 'semantic-ui-react';
+import { Grid, Card, Button, Header, Modal } from 'semantic-ui-react';
+import { arrayMove } from 'react-sortable-hoc';
 import { InlineLoader, NsPagination } from '../../../../../../theme/shared';
+import DraggableMenu from '../../../../../../theme/layout/DraggableMenu';
 import { FillTable } from '../../../../../../theme/table/NSTable';
 import Helper from '../../../../../../helper/utility';
 
 function RdsList(props) {
+  const [showModal, setShowModal] = useState(false);
+  const { rdsListingColumns, sortOrder, rdsListingRows, setSortingOrder, totalRecords, requestState, pageRequest } = props.rdsPluginStore;
+
   const handleSort = (clickedColumn) => {
-    const { setSortingOrder, sortOrder } = props.rdsPluginStore;
     setSortingOrder(clickedColumn, clickedColumn === sortOrder.column && sortOrder.direction === 'asc' ? 'desc' : 'asc');
   };
-
 
   const populateCsvData = () => {
     const fields = props.rdsPluginStore.rdsListingColumns.map(r => (r.field));
@@ -36,17 +39,54 @@ function RdsList(props) {
     )
   );
 
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    const movedArr = arrayMove(rdsListingColumns, oldIndex, newIndex);
+    props.rdsPluginStore.setFieldValue('reorderedList', movedArr);
+  };
+
+
   const { loadingArray } = props.nsUiStore;
   if (loadingArray.includes('adminRunRdsQuery')) {
     return <InlineLoader />;
   }
 
-  const { rdsListingColumns, sortOrder, rdsListingRows, totalRecords, requestState, pageRequest } = props.rdsPluginStore;
+  if (showModal) {
+    const navItems = [];
+    rdsListingColumns.map((column, index) => {
+      navItems.push({ title: column.title, to: `${index + 1}`, index });
+      return navItems;
+    });
+    return (
+      <Modal closeOnDimmerClick={false} size="mini" closeIcon onClose={() => setShowModal(false)} open closeOnRootNodeClick={false}>
+        <Modal.Header className="center-align signup-header">
+          <Header as="h4">Reorder Columns</Header>
+        </Modal.Header>
+        <Modal.Content>
+          <DraggableMenu secondary vertical match={props.match} onSortEnd={onSortEnd} navItems={navItems} />
+          <Button
+            primary
+            className="relaxed"
+            content="Confirm"
+            onClick={() => setShowModal(false)}
+          />
+        </Modal.Content>
+      </Modal>
+    );
+  }
+
   return (
     <div className="inner-content-spacer">
       <Header as="h5" className="clearfix">
         <span className="text-align-left regular-text">Total Count: {totalRecords}</span>
         {exportButton()}
+        {<Button
+          primary
+          className="relaxed"
+          content="Reorder"
+          onClick={() => setShowModal(true)}
+          disabled={!props.rdsPluginStore.rdsListingRows.length}
+          floated="right"
+        />}
       </Header>
       <Grid>
         <Grid.Row>

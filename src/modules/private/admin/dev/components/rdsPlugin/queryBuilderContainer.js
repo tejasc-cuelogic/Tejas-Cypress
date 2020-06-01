@@ -31,7 +31,7 @@ function QueryBuilderContainer(props) {
   return (
     <>
       <Card fluid className="elastic-search">
-        <Card.Content header="Trigger File Factory" />
+        <Card.Content header="Trigger Rds Query" />
         <Card.Content>
           <Card.Description>
             <Form onSubmit={QUERY_BUILDER_FRM.meta.isValid && onSubmit}>

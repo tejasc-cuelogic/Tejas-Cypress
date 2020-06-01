@@ -13,6 +13,8 @@ export class RdsPluginStore extends DataModelStore {
 
   rdsData = {};
 
+  reorderedList = [];
+
   sortOrder = {
     column: null,
     direction: 'asc',
@@ -67,6 +69,7 @@ export class RdsPluginStore extends DataModelStore {
         setLoader: 'adminRunRdsQuery',
       });
       this.setFieldValue('rdsData', res);
+      this.setFieldValue('reorderedList', this.initialColumns);
       return true;
     } catch {
       Helper.toast('Something went wrong, please try again later.', 'error');
@@ -87,10 +90,18 @@ export class RdsPluginStore extends DataModelStore {
     return orderBy(list, [this.sortOrder.column], [this.sortOrder.direction]);
   }
 
-  get rdsListingColumns() {
+  get initialColumns() {
     let columns = get(this.rdsData, 'adminRunRdsQuery.results[0]') ? Object.keys(get(this.rdsData, 'adminRunRdsQuery.results[0]')) : [];
     if (columns.length > 0) {
       columns = columns.map(c => ({ title: c.toUpperCase(), field: c }));
+    }
+    return columns;
+  }
+
+  get rdsListingColumns() {
+    let columns = this.initialColumns;
+    if (this.reorderedList.length > 0) {
+      columns = this.reorderedList;
     }
     return columns;
   }
@@ -114,6 +125,7 @@ export class RdsPluginStore extends DataModelStore {
 decorate(RdsPluginStore, {
   ...decorateDefault,
   QUERY_BUILDER_FRM: observable,
+  reorderedList: observable,
   sortOrder: observable,
   rdsData: observable,
   formChangeForTable: action,
