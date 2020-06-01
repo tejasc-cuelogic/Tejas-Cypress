@@ -9,6 +9,7 @@ import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import AccountSetup from './AccountSetup';
+import Helper from '../../../../../helper/utility';
 
 const getModule = component => lazyRetry(() => import(`./${component}`));
 
@@ -20,7 +21,7 @@ const processingMsg = `We are currently processing your account creation request
 export default class AccountDetails extends PureComponent {
   constructor(props) {
     super(props);
-    const accountType = includes(this.props.location.pathname, 'individual') ? 0 : includes(this.props.location.pathname, 'ira') ? 1 : 2;
+    const accountType = Helper.matchRegexWithUrl([/\bindividual(?![-])\b/]) ? 0 : Helper.matchRegexWithUrl([/\bira(?![-])\b/]) ? 1 : 2;
     this.props.accountStore.setAccTypeChange(accountType);
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/portfolio`);
