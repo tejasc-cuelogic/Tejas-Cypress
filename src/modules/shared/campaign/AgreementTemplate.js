@@ -122,11 +122,7 @@ function AgreementTemplate(props) {
     setField('agreementPage', agreementPage - 1);
   };
 
-  const {
-    investmentAmount,
-    agreementDetails,
-    investmentFlowErrorMessage,
-  } = props.investmentStore;
+  const { investmentAmount, agreementDetails, investmentFlowErrorMessage } = props.investmentStore;
   const { AGREEMENT_DETAILS_FORM, setCheckbox, isAgreementFormValid, embedUrl, docLoading, agreementPage } = props.agreementsStore;
   const { getCurrentInvestNowHealthCheck } = props.investmentLimitStore;
   const previouslyInvestedAmount = get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') ? get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') : '0';
@@ -136,6 +132,7 @@ function AgreementTemplate(props) {
   const { campaign, campaignStatus } = props.campaignStore;
   const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
   const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
+  const offeringRegulation = get(offeringDetailsObj, 'keyTerms.regulation');
   // const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
   // const offeringRegulationType = get(campaign, 'keyTerms.regulation');
   const index = agreementPage;
@@ -225,6 +222,7 @@ function AgreementTemplate(props) {
               <DynamicAgreement
                 inProgress={inProgress}
                 showError={showError}
+                offeringRegulation={offeringRegulation}
                 docuSignHandeler={docuSignHandeler}
                 agreementPDFLoader={agreementPDFLoader}
                 submit={submit}
