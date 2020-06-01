@@ -467,6 +467,13 @@ export default class DataModelStore {
     this.currTime = +new Date();
   }
 
+  pageRequest = ({ skip, page }) => {
+    this.requestState.displayTillIndex = this.requestState.perPage * page;
+    this.requestState.page = page;
+    this.requestState.skip = skip;
+    this.initRequest();
+  }
+
   handleUploadLoader = (fileId) => {
     const { inProgress } = commonStore;
     return !!(inProgress === fileId);
@@ -493,6 +500,7 @@ export const decorateDefault = {
   executeMutation: action,
   resetAll: action,
   resetForm: action,
+  pageRequest: action,
   passwordChange: action,
   eventFormChange: action,
   setAddressFields: action,
