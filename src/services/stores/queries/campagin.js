@@ -454,6 +454,12 @@ export const campaignDetailsQuery = gql`
           required
         }
       }
+      config {
+        expectedReturnCalc
+        investmentType
+        showBonusRewards
+        showExpectedReturn
+      }
     }
     closureSummary {
       processingDate
@@ -576,6 +582,12 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
           account
           required
         }
+      }
+      config {
+        expectedReturnCalc
+        investmentType
+        showBonusRewards
+        showExpectedReturn
       }
     }
     closureSummary {

@@ -81,8 +81,13 @@ class FinancialInfo extends Component {
       || this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
       return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
-    const isCenterAlignedCls = campaignStatus.isPreferredEquity ? 'center-align' : '';
-    const isOfferingPreferredEquity = !!campaignStatus.isPreferredEquity;
+    // const isCenterAlignedCls = campaignStatus.isPreferredEquity ? 'center-align' : '';
+    // const isOfferingPreferredEquity = !!campaignStatus.isPreferredEquity;
+
+    const isCenterAlignedCls = get(campaignStatus, 'investmentType') === 'UNITS' ? 'center-align' : '';
+    const isOfferingPreferredEquity = !!(get(campaignStatus, 'investmentType') === 'UNITS');
+    const returnCalculationType = get(campaignStatus, 'expectedReturnCalc');
+
     return (
       <>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
@@ -92,7 +97,7 @@ class FinancialInfo extends Component {
             <>
               <Header as="h4" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{isOfferingPreferredEquity ? Helper.CurrencyFormat(currentInvestedAmount) : Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
               <Divider hidden />
-              {!campaignStatus.isPreferredEquity
+              {!isOfferingPreferredEquity
                 && (<Header as="h4" className={`mb-half ${isCenterAlignedCls}`}>Enter new investment amount. </Header>)
               }
               {!includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) && showLimitComponent
@@ -139,7 +144,7 @@ class FinancialInfo extends Component {
           )
         }
         <Form error>
-          {campaignStatus.isPreferredEquity
+          {isOfferingPreferredEquity
             ? (
               <>
                 <Table unstackable basic className="mt-30" padded="very">
@@ -190,7 +195,8 @@ class FinancialInfo extends Component {
                     </Message>
                   )
                 }
-                {validBonusRewards && validBonusRewards.length > 0
+                {campaignStatus.showBonusRewards
+                 && validBonusRewards && validBonusRewards.length > 0
                   && (
                     <Message className="bg-offwhite no-shadow no-wrap">
                       <Message.Header>Bonus Rewards to be Received:</Message.Header>
@@ -214,7 +220,7 @@ class FinancialInfo extends Component {
                 currency
                 prefix="$ "
                 fielddata={INVESTMONEY_FORM.fields.investmentAmount}
-                changed={values => investMoneyChange(values, 'investmentAmount')}
+                changed={values => investMoneyChange(values, 'investmentAmount', false, returnCalculationType)}
                 onkeyup={validateMaskedInputForAmount}
                 autoFocus
                 allowNegative={false}
@@ -223,7 +229,7 @@ class FinancialInfo extends Component {
               </>
             )}
         </Form>
-        {this.props.changeInvest && !campaignStatus.isPreferredEquity && getDiffInvestmentLimitAmount
+        {this.props.changeInvest && !isOfferingPreferredEquity && getDiffInvestmentLimitAmount
           && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
           ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
         }
@@ -231,6 +237,7 @@ class FinancialInfo extends Component {
         {// isValidInvestAmtInOffering &&
           !campaignStatus.isSafe && estReturnVal && estReturnVal !== '-'
             && investmentAmount
+            && campaignStatus.showExpectedReturn
             ? (
               <Header as="h4">
                 <PopUpModal
@@ -247,7 +254,8 @@ class FinancialInfo extends Component {
         }
         {
           // isValidInvestAmtInOffering &&
-          !campaignStatus.isPreferredEquity
+          !isOfferingPreferredEquity
+          && campaignStatus.showBonusRewards
           && validBonusRewards && validBonusRewards.length > 0
           && validBonusRewards.map(reward => (
             <p className="grey-header">+ {reward.title}</p>
