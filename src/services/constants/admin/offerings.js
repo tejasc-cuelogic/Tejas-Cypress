@@ -1233,7 +1233,8 @@ export const LEADERSHIP = {
       label: 'Percentage Owned',
       placeHolder: '10.0%',
       error: undefined,
-      rule: 'numeric',
+      rule: 'numeric|max:100',
+      customErrors: { max: 'The Percent Owned should be less than or equal to 100%' },
       tooltip: 'List any person who owns, directly or indirectly, 20% or more of the Issuer’s equity, based on voting power',
     },
     companyPosition: {
