@@ -93,7 +93,7 @@ export class RdsPluginStore extends DataModelStore {
   get initialColumns() {
     let columns = get(this.rdsData, 'adminRunRdsQuery.results[0]') ? Object.keys(get(this.rdsData, 'adminRunRdsQuery.results[0]')) : [];
     if (columns.length > 0) {
-      columns = columns.map(c => ({ title: c.toUpperCase(), field: c }));
+      columns = columns.map(c => ({ title: this.QUERY_BUILDER_FRM.fields.selectColumns.values.find(s => s.key === c).text, field: c }));
     }
     return columns;
   }
