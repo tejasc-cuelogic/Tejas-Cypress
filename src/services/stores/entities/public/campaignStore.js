@@ -467,6 +467,7 @@ export class CampaignStore {
     campaignStatus.doneComputing = (get(this.details, 'data.getOfferingDetailsBySlug') && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
     campaignStatus.isAgreementTemplate = !!(get(campaign, 'investNow.template') && get(campaign, 'investNow.template') === 2);
     campaignStatus.investNowToc = get(campaign, 'investNow.page');
+    campaignStatus.investNowConig = !!(get(campaign, 'investNow.config'));
     campaignStatus.investmentType = get(campaign, 'investNow.config.investmentType');
     campaignStatus.showBonusRewards = get(campaign, 'investNow.config.showBonusRewards');
     campaignStatus.showExpectedReturn = get(campaign, 'investNow.config.showExpectedReturn');

@@ -81,12 +81,24 @@ class FinancialInfo extends Component {
       || this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
       return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
-    // const isCenterAlignedCls = campaignStatus.isPreferredEquity ? 'center-align' : '';
-    // const isOfferingPreferredEquity = !!campaignStatus.isPreferredEquity;
+    let isCenterAlignedCls = null;
+    let isOfferingPreferredEquity = null;
+    let returnCalculationType = null;
 
-    const isCenterAlignedCls = get(campaignStatus, 'investmentType') === 'UNITS' ? 'center-align' : '';
-    const isOfferingPreferredEquity = !!(get(campaignStatus, 'investmentType') === 'UNITS');
-    const returnCalculationType = get(campaignStatus, 'expectedReturnCalc');
+    if (campaignStatus.isAgreementTemplate && campaignStatus.investNowConig) {
+      isCenterAlignedCls = get(campaignStatus, 'investmentType') === 'UNITS' ? 'center-align' : '';
+      isOfferingPreferredEquity = !!(get(campaignStatus, 'investmentType') === 'UNITS');
+      returnCalculationType = get(campaignStatus, 'expectedReturnCalc');
+    } else {
+      isCenterAlignedCls = campaignStatus.isPreferredEquity ? 'center-align' : '';
+      isOfferingPreferredEquity = !!campaignStatus.isPreferredEquity;
+    }
+
+    const visibleBonsuRewards = campaignStatus.isAgreementTemplate && campaignStatus.investNowConig ? campaignStatus.showBonusRewards : true;
+    const visibleExpectedReturns = campaignStatus.isAgreementTemplate && campaignStatus.investNowConig ? campaignStatus.showExpectedReturn : true;
+    // const isCenterAlignedCls = get(campaignStatus, 'investmentType') === 'UNITS' ? 'center-align' : '';
+    // const isOfferingPreferredEquity = !!(get(campaignStatus, 'investmentType') === 'UNITS');
+    // const returnCalculationType = get(campaignStatus, 'expectedReturnCalc');
 
     return (
       <>
@@ -111,7 +123,7 @@ class FinancialInfo extends Component {
                         <span>
                           Under Regulation Crowdfunding, you have a limit as to how much you may invest
                           in Reg CF offerings over a 12-month period.
-                           This limit is calculated based on your
+                          This limit is calculated based on your
                           annual income and net worth. <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link> for how this is calculated. If you believe
                           your limit is innacurate, please update your <Link to="/dashboard/account-settings/profile-data">Investor Profile</Link>
                         </span>
@@ -179,7 +191,7 @@ class FinancialInfo extends Component {
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row>
-                    <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
+                      <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
                     </Table.Row>
                   </Table.Body>
                 </Table>
@@ -195,8 +207,8 @@ class FinancialInfo extends Component {
                     </Message>
                   )
                 }
-                {campaignStatus.showBonusRewards
-                 && validBonusRewards && validBonusRewards.length > 0
+                {visibleBonsuRewards
+                  && validBonusRewards && validBonusRewards.length > 0
                   && (
                     <Message className="bg-offwhite no-shadow no-wrap">
                       <Message.Header>Bonus Rewards to be Received:</Message.Header>
@@ -212,20 +224,20 @@ class FinancialInfo extends Component {
             )
             : (
               <>
-              <MaskedInput
-                data-cy="investmentAmount"
-                hidelabel
-                name="investmentAmount"
-                type="tel"
-                currency
-                prefix="$ "
-                fielddata={INVESTMONEY_FORM.fields.investmentAmount}
-                changed={values => investMoneyChange(values, 'investmentAmount', false, returnCalculationType)}
-                onkeyup={validateMaskedInputForAmount}
-                autoFocus
-                allowNegative={false}
-              />
-              <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
+                <MaskedInput
+                  data-cy="investmentAmount"
+                  hidelabel
+                  name="investmentAmount"
+                  type="tel"
+                  currency
+                  prefix="$ "
+                  fielddata={INVESTMONEY_FORM.fields.investmentAmount}
+                  changed={values => investMoneyChange(values, 'investmentAmount', false, returnCalculationType)}
+                  onkeyup={validateMaskedInputForAmount}
+                  autoFocus
+                  allowNegative={false}
+                />
+                <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
               </>
             )}
         </Form>
@@ -237,7 +249,7 @@ class FinancialInfo extends Component {
         {// isValidInvestAmtInOffering &&
           !campaignStatus.isSafe && estReturnVal && estReturnVal !== '-'
             && investmentAmount
-            && campaignStatus.showExpectedReturn
+            && visibleExpectedReturns
             ? (
               <Header as="h4">
                 <PopUpModal
@@ -255,7 +267,7 @@ class FinancialInfo extends Component {
         {
           // isValidInvestAmtInOffering &&
           !isOfferingPreferredEquity
-          && campaignStatus.showBonusRewards
+          && visibleBonsuRewards
           && validBonusRewards && validBonusRewards.length > 0
           && validBonusRewards.map(reward => (
             <p className="grey-header">+ {reward.title}</p>
