@@ -14,6 +14,31 @@ mutation storageDetailsForInvestor($limit: Int = 0) {
     }
   }`;
 
+export const adminRunRdsQuery = gql`
+query adminRunRdsQuery($table: String!, $selectColumns: [String], $where: [RdsWhereColumnInput], $groupByColumns: [String], $orderBy: [RdsOrderByInput], $page: Int, $pageSize: Int) {
+  adminRunRdsQuery(table: $table, selectColumns: $selectColumns, where: $where, groupByColumns: $groupByColumns, orderBy: $orderBy, page: $page, pageSize: $pageSize) {
+    page
+    totalCount
+    resultCount
+    results
+  }
+}
+`;
+
+
+export const adminListRdsPlugins = gql`
+query adminListRdsPlugins {
+  adminListRdsPlugins {
+    tables {
+      key value text
+      columns { key value type }
+    }
+    operators
+    orderTypes { key value }
+  }
+}`;
+
+
 export const updateOfferingRepaymentsMeta = gql`
 mutation updateOfferingRepaymentsMeta($audit: Boolean!, $offeringId: String){
     updateOfferingRepaymentsMeta(audit: $audit, offeringId: $offeringId) {

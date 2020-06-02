@@ -184,6 +184,7 @@ export default class ConfirmPhoneNumber extends Component {
                       autoFocus={!isMobile}
                       type="number"
                       className="otp-field"
+                      autocomplete="one-time-code"
                       pattern="[0-9]*"
                       inputmode="numeric"
                       disabled={(reSendVerificationCode && this.props.uiStore.inProgress) || signUpLoading || (errors && errors.message && errors.message.includes('The number you entered is invalid'))}

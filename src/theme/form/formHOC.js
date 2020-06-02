@@ -63,6 +63,7 @@ function formHoc(WrappedComponent, metaInfo) {
           className="otp-field"
           pattern="[0-9]*"
           inputmode="numeric"
+          autocomplete="one-time-code"
           fielddata={fieldData}
           onChange={e => this.props[metaInfo.store].eventFormChange({ name, value: e }, metaInfo.form)}
           {...props}
@@ -119,6 +120,7 @@ function formHoc(WrappedComponent, metaInfo) {
           className="otp-field"
           pattern="[0-9]*"
           inputmode="numeric"
+          autocomplete="one-time-code"
           fielddata={fieldData}
           onChange={e => this.props[metaInfo.store].eventFormChange({ name, value: e }, metaInfo.form)}
           {...props}
@@ -227,7 +229,7 @@ function formHoc(WrappedComponent, metaInfo) {
     // }
 
     FormDropDown = (name, props) => {
-      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.props[metaInfo.store][props.multiForm[0]].fields[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormDropDown
           containerwidth={8}

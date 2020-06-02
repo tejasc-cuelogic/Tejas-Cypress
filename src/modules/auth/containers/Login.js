@@ -43,6 +43,7 @@ class Login extends Component {
 
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
+    this.props.uiStore.setProgress(false);
   }
 
   handleSubmitForm = (e) => {
