@@ -8,7 +8,6 @@ const updateField = `
   offeringId
   updatedDate
   postUpdateAs
-  sendEmailNotification
   updated {
     date
     by
@@ -59,7 +58,7 @@ export const getUpdate = gql`
 export const editUpdate = gql`
   mutation updateOfferingUpdates ($id: ID!, $updatesInput: OfferingUpdatesInput!, $shouldSendInvestorNotifications:Boolean!) {
     updateOfferingUpdatesInfo (
-      id: $id,
+      id: $id
       updatesInput: $updatesInput
       shouldSendInvestorNotifications: $shouldSendInvestorNotifications
       ) {
