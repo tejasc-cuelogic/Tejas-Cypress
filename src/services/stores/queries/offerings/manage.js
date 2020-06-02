@@ -299,6 +299,14 @@ export const getOfferingClosureProcess = gql`
   }
 `;
 
+export const getOfferingStoreDetails = gql`
+  query getOfferingDetailsBySlug($id: String!) {
+    getOfferingDetailsBySlug(offeringSlug: $id) {
+      storageDetails
+    }
+  }
+`;
+
 export const getOfferingDetails = gql`
   query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug(offeringSlug: $id) {
@@ -341,6 +349,28 @@ export const getOfferingDetails = gql`
             order
             account
             required
+          }
+        }
+        config {
+          investmentType
+          showBonusRewards
+          showExpectedReturn
+          expectedReturnCalc
+        }
+        docuSign {
+          template
+          doc {
+            name
+            mappingRequired
+            mapping {
+              key
+              value
+              customValue
+            }
+            upload {
+              fileId
+              fileName
+            }
           }
         }
       }

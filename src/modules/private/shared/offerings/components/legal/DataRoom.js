@@ -146,7 +146,7 @@ export default class DataRoom extends Component {
     }
   };
   render() {
-    const { match, offeringClose, closingBinder, uiStore, referenceFrom } = this.props;
+    const { match, offeringClose, closingBinder, uiStore, referenceFrom, header } = this.props;
     const { inProgress } = uiStore;
     const { isIssuer } = this.props.userStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -173,7 +173,7 @@ export default class DataRoom extends Component {
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
           <Header as="h4" className={offeringClose ? 'offering-close-header' : ''}>
-            {referenceFrom && referenceFrom === 'BUSINESS_APPLICATION' ? 'Final Legal Document Upload' : !offeringClose ? 'Data Room Documents' : ''}
+            {header ? header : referenceFrom && referenceFrom === 'BUSINESS_APPLICATION' ? 'Final Legal Document Upload' : !offeringClose ? 'Data Room Documents' : ''}
             {!isReadonly &&
               <Button.Group size="mini" floated="right">
                 <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
