@@ -5,7 +5,7 @@ import { Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 
 function DynamicAgreement(props) {
-  const { inProgress, showError, submit, setCheckbox, isAgreementFormValid, investmentFlowErrorMessage, index, offeringRegulation } = props;
+  const { inProgress, showError, submit, setCheckbox, isAgreementFormValid, investmentFlowErrorMessage, index } = props;
   const { AGREEMENT_DETAILS_FORM } = props.agreementsStore;
   const isNextBtnVisible = !!(AGREEMENT_DETAILS_FORM.fields.page.length > 1 && (index !== (AGREEMENT_DETAILS_FORM.fields.page.length - 1)));
   return (
@@ -21,7 +21,7 @@ function DynamicAgreement(props) {
               defaults
               fielddata={AGREEMENT_DETAILS_FORM.fields.page[index].toc}
               name="toc"
-              containerclassname={`ui list very relaxed ${offeringRegulation !== 'BD_506B' ? 'agreement-list' : ''} ${showError && !isAgreementFormValid ? 'error' : ''}`}
+              containerclassname={`ui list very relaxed agreement-list ${showError && !isAgreementFormValid ? 'error' : ''}`}
               changed={(e, res) => setCheckbox(e, res, 'page', index)}
               disabled={inProgress}
             />
