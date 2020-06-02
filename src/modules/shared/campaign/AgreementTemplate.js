@@ -122,11 +122,7 @@ function AgreementTemplate(props) {
     setField('agreementPage', agreementPage - 1);
   };
 
-  const {
-    investmentAmount,
-    agreementDetails,
-    investmentFlowErrorMessage,
-  } = props.investmentStore;
+  const { investmentAmount, agreementDetails, investmentFlowErrorMessage } = props.investmentStore;
   const { AGREEMENT_DETAILS_FORM, setCheckbox, isAgreementFormValid, embedUrl, docLoading, agreementPage } = props.agreementsStore;
   const { getCurrentInvestNowHealthCheck } = props.investmentLimitStore;
   const previouslyInvestedAmount = get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') ? get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') : '0';
