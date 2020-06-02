@@ -227,13 +227,13 @@ export class InvestmentStore {
 
   @action
   calculateEstimatedReturn = (returnCalculationType) => {
-    const { campaign } = campaignStore;
+    const { campaign, campaignStatus } = campaignStore;
     const { getInvestorAccountById } = portfolioStore;
     let offeringSecurityType = '';
     let interestRate = '';
     let investmentMultiple = '';
     let loanTerm = '';
-    const calculationType = returnCalculationType && returnCalculationType === 'TERM_NOTE_CALCULATION' ? 'TERM_NOTE' : 'REV_SHR';
+    let calculationType = '';
 
     if (campaign && campaign.keyTerms) {
       offeringSecurityType = get(campaign, 'keyTerms.securities');
@@ -246,6 +246,13 @@ export class InvestmentStore {
       investmentMultiple = get(getInvestorAccountById, 'offering.closureSummary.keyTerms.multiple') || '0';
       loanTerm = parseFloat(get(getInvestorAccountById, 'offering.keyTerms.maturity'));
     }
+
+    if (campaignStatus.isAgreementTemplate && campaignStatus.investNowConig) {
+      calculationType = returnCalculationType && returnCalculationType === 'TERM_NOTE_CALCULATION' ? 'TERM_NOTE' : 'REV_SHR';
+    } else {
+      calculationType = offeringSecurityType;
+    }
+
     const investAmt = this.investmentAmount;
     if (investAmt >= 100 && !['REAL_ESTATE'].includes(offeringSecurityType)) {
       if (calculationType === 'TERM_NOTE') {
