@@ -69,7 +69,6 @@ export class RdsPluginStore extends DataModelStore {
         setLoader: 'adminRunRdsQuery',
       });
       this.setFieldValue('rdsData', res);
-      this.setFieldValue('reorderedList', this.initialColumns);
       return true;
     } catch {
       Helper.toast('Something went wrong, please try again later.', 'error');
@@ -110,6 +109,12 @@ export class RdsPluginStore extends DataModelStore {
     return get(this.rdsData, 'adminRunRdsQuery.totalCount') || 0;
   }
 
+  resetData = () => {
+    this.requestState.page = 1;
+    this.requestState.perPage = 100;
+    this.reorderedList = [];
+  }
+
   formChangeForTable = (e, result, props) => {
     this.QUERY_BUILDER_FRM = Validator.resetFormData(this.QUERY_BUILDER_FRM);
     this.formChange(e, result, get(props, 'multiForm'), 'dropdown');
@@ -129,6 +134,7 @@ decorate(RdsPluginStore, {
   sortOrder: observable,
   rdsData: observable,
   formChangeForTable: action,
+  resetData: action,
   setSortingOrder: action,
   initRequest: action,
   fetchPlugins: action,
