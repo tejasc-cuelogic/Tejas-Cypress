@@ -247,7 +247,7 @@ export class InvestmentStore {
       loanTerm = parseFloat(get(getInvestorAccountById, 'offering.keyTerms.maturity'));
     }
 
-    if (campaignStatus.isAgreementTemplate && campaignStatus.investNowConig) {
+    if (campaignStatus.campaignTemplate === 2 && campaignStatus.investNowConig) {
       calculationType = returnCalculationType && returnCalculationType === 'TERM_NOTE_CALCULATION' ? 'TERM_NOTE' : 'REV_SHR';
     } else {
       calculationType = offeringSecurityType;

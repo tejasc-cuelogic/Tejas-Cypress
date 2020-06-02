@@ -85,7 +85,7 @@ class FinancialInfo extends Component {
     let isOfferingPreferredEquity = null;
     let returnCalculationType = null;
 
-    if (campaignStatus.isAgreementTemplate && campaignStatus.investNowConig) {
+    if (campaignStatus.campaignTemplate === 2 && campaignStatus.investNowConig) {
       isCenterAlignedCls = get(campaignStatus, 'investmentType') === 'UNITS' ? 'center-align' : '';
       isOfferingPreferredEquity = !!(get(campaignStatus, 'investmentType') === 'UNITS');
       returnCalculationType = get(campaignStatus, 'expectedReturnCalc');
@@ -94,8 +94,8 @@ class FinancialInfo extends Component {
       isOfferingPreferredEquity = !!campaignStatus.isPreferredEquity;
     }
 
-    const visibleBonsuRewards = campaignStatus.isAgreementTemplate && campaignStatus.investNowConig ? campaignStatus.showBonusRewards : true;
-    const visibleExpectedReturns = campaignStatus.isAgreementTemplate && campaignStatus.investNowConig ? campaignStatus.showExpectedReturn : true;
+    const visibleBonsuRewards = campaignStatus.campaignTemplate === 2 && campaignStatus.investNowConig ? campaignStatus.showBonusRewards : true;
+    const visibleExpectedReturns = campaignStatus.campaignTemplate === 2 && campaignStatus.investNowConig ? campaignStatus.showExpectedReturn : true;
     // const isCenterAlignedCls = get(campaignStatus, 'investmentType') === 'UNITS' ? 'center-align' : '';
     // const isOfferingPreferredEquity = !!(get(campaignStatus, 'investmentType') === 'UNITS');
     // const returnCalculationType = get(campaignStatus, 'expectedReturnCalc');
