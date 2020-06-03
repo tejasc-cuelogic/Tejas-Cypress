@@ -250,6 +250,7 @@ class FinancialInfo extends Component {
           !campaignStatus.isSafe && estReturnVal && estReturnVal !== '-'
             && investmentAmount
             && visibleExpectedReturns
+            && !campaignStatus.isRealEstate
             ? (
               <Header as="h4">
                 <PopUpModal
