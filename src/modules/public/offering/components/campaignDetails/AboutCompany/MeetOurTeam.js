@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header, Item, Icon } from 'semantic-ui-react';
-import { filter } from 'lodash';
+import { filter, camelCase } from 'lodash';
 import { InlineLoader, Image64 } from '../../../../../../theme/shared';
 import NSImage from '../../../../../shared/NSImage';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
@@ -20,8 +20,8 @@ class MeetOurTeam extends Component {
     return (
       <>
         <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
-          Meet the Team
-          <span className="anchor" id="team" />
+          <span className="anchor" id={this.props.title ? camelCase(this.props.title) : 'team'} />
+          {this.props.title || 'Meet the Team'}
         </Header>
         {meetTeamOjb.length
           ? (

@@ -135,6 +135,7 @@ export const OFFERING_CONTENT = {
         { key: 'COMMENTS', value: 'COMMENTS', text: 'Comments' },
         { key: 'UPDATES', value: 'UPDATES', text: 'Updates' },
         { key: 'ISSUER_STATEMENT', value: 'ISSUER_STATEMENT', text: 'Issuer Statement' },
+        { key: 'TEAM', value: 'TEAM', text: 'Team' },
       ],
       placeHolder: 'Enter here',
     },

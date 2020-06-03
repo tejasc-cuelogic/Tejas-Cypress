@@ -10,6 +10,7 @@ import BonusRewards from './BonusRewards';
 import Documents from './documents';
 import Comments from './Comments';
 import Gallery from './AboutCompany/Gallery';
+import Team from './AboutCompany/MeetOurTeam';
 import CustomContent from './CustomContent';
 
 @inject('campaignStore')
@@ -32,6 +33,7 @@ class CampaignTemplate2 extends Component {
     updates = orderBy(updates, o => get(o, 'updatedDate') && moment(new Date(o.updatedDate)).unix(), ['asc']);
     const postedComments = get(campaign, 'comments') || [];
     const content = campaignStatus.templateNavs || [];
+    const emptyStatement = 'Detail not found';
     return (
       <>
         {content.map((c, index) => (
@@ -61,51 +63,59 @@ class CampaignTemplate2 extends Component {
                       galleryUrl={refLink}
                       title={c.title}
                     />
-                  ) : c.contentType === 'COMMENTS'
-                    ? (
+                  )
+                : c.contentType === 'TEAM'
+                  ? (
+                    <Team
+                      campaign={campaign}
+                      emptyStatement={emptyStatement}
+                      title={c.title}
+                    />
+                  )
+                : c.contentType === 'COMMENTS'
+                  ? (
+                    <>
+                      <>{!campaignStatus.isFund && <Comments title={c.title} refLink={refLink} newLayout showOnlyOne={!this.state.expandComments} />}</>
                       <>
-                        <>{!campaignStatus.isFund && <Comments title={c.title} refLink={refLink} newLayout showOnlyOne={!this.state.expandComments} />}</>
-                        <>
-                          {postedComments.length > 1
-                            && (
-                              <Button onClick={() => this.handleCollapseExpand('expandComments', '#comments')} className="link-button highlight-text mt-40">
-                                {this.state.expandComments ? 'Collapse' : 'Expand'} All Comments
-                                <Icon className={`ns-caret-${this.state.expandComments ? 'up' : 'down'} right`} />
-                              </Button>
-                            )}
-                        </>
+                        {postedComments.length > 1
+                          && (
+                            <Button onClick={() => this.handleCollapseExpand('expandComments', '#comments')} className="link-button highlight-text mt-40">
+                              {this.state.expandComments ? 'Collapse' : 'Expand'} All Comments
+                              <Icon className={`ns-caret-${this.state.expandComments ? 'up' : 'down'} right`} />
+                            </Button>
+                          )}
                       </>
-                    ) : c.contentType === 'UPDATES'
-                      ? (campaignStatus.updates !== 0
-                        && (
-                          <>
-                            {this.state.expandUpdate
-                              ? <Updates title={c.title} newLayout handleUpdateCollapseExpand={this.handleUpdateCollapseExpand} />
-                              : (
-                                <LatestUpdates
-                                  title={c.title}
-                                  newLayout
-                                  handleUpdateCollapseExpand={this.handleUpdateCollapseExpand}
-                                  updates={updates}
-                                  refLink={this.props.refLink}
-                                  isTabletLand={isTabletLand}
-                                  companyAvatarUrl={campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}
-                                  bussinessName={campaign && campaign.keyTerms
-                                    && campaign.keyTerms.shorthandBusinessName}
-                                />
-                              )
-                            }
-                            {campaign && campaign.updates && campaign.updates.length > 1 ? (
-                              <Button onClick={() => this.handleCollapseExpand('expandUpdate', '#updates')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
-                                {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
-                                <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
-                              </Button>
-                            ) : null
-                            }
-                            <Divider hidden section />
-                          </>
-                        ))
-
+                    </>
+                  ) : c.contentType === 'UPDATES'
+                    ? (campaignStatus.updates !== 0
+                      && (
+                        <>
+                          {this.state.expandUpdate
+                            ? <Updates title={c.title} newLayout handleUpdateCollapseExpand={this.handleUpdateCollapseExpand} />
+                            : (
+                              <LatestUpdates
+                                title={c.title}
+                                newLayout
+                                handleUpdateCollapseExpand={this.handleUpdateCollapseExpand}
+                                updates={updates}
+                                refLink={this.props.refLink}
+                                isTabletLand={isTabletLand}
+                                companyAvatarUrl={campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}
+                                bussinessName={campaign && campaign.keyTerms
+                                  && campaign.keyTerms.shorthandBusinessName}
+                              />
+                            )
+                          }
+                          {campaign && campaign.updates && campaign.updates.length > 1 ? (
+                            <Button onClick={() => this.handleCollapseExpand('expandUpdate', '#updates')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
+                              {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
+                              <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
+                            </Button>
+                          ) : null
+                          }
+                          <Divider hidden section />
+                        </>
+                      ))
                       : ['CUSTOM', 'ISSUER_STATEMENT'].includes(c.contentType)
                         ? (
                           <>

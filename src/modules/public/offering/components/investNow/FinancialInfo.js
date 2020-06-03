@@ -81,8 +81,25 @@ class FinancialInfo extends Component {
       || this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
       return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
-    const isCenterAlignedCls = campaignStatus.isPreferredEquity ? 'center-align' : '';
-    const isOfferingPreferredEquity = !!campaignStatus.isPreferredEquity;
+    let isCenterAlignedCls = null;
+    let isOfferingPreferredEquity = null;
+    let returnCalculationType = null;
+
+    if (campaignStatus.campaignTemplate === 2 && campaignStatus.investNowConig) {
+      isCenterAlignedCls = get(campaignStatus, 'investmentType') === 'UNITS' ? 'center-align' : '';
+      isOfferingPreferredEquity = !!(get(campaignStatus, 'investmentType') === 'UNITS');
+      returnCalculationType = get(campaignStatus, 'expectedReturnCalc');
+    } else {
+      isCenterAlignedCls = campaignStatus.isPreferredEquity ? 'center-align' : '';
+      isOfferingPreferredEquity = !!campaignStatus.isPreferredEquity;
+    }
+
+    const visibleBonsuRewards = campaignStatus.campaignTemplate === 2 && campaignStatus.investNowConig ? campaignStatus.showBonusRewards : true;
+    const visibleExpectedReturns = campaignStatus.campaignTemplate === 2 && campaignStatus.investNowConig ? campaignStatus.showExpectedReturn : true;
+    // const isCenterAlignedCls = get(campaignStatus, 'investmentType') === 'UNITS' ? 'center-align' : '';
+    // const isOfferingPreferredEquity = !!(get(campaignStatus, 'investmentType') === 'UNITS');
+    // const returnCalculationType = get(campaignStatus, 'expectedReturnCalc');
+
     return (
       <>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
@@ -92,7 +109,7 @@ class FinancialInfo extends Component {
             <>
               <Header as="h4" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{isOfferingPreferredEquity ? Helper.CurrencyFormat(currentInvestedAmount) : Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
               <Divider hidden />
-              {!campaignStatus.isPreferredEquity
+              {!isOfferingPreferredEquity
                 && (<Header as="h4" className={`mb-half ${isCenterAlignedCls}`}>Enter new investment amount. </Header>)
               }
               {!includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) && showLimitComponent
@@ -106,7 +123,7 @@ class FinancialInfo extends Component {
                         <span>
                           Under Regulation Crowdfunding, you have a limit as to how much you may invest
                           in Reg CF offerings over a 12-month period.
-                           This limit is calculated based on your
+                          This limit is calculated based on your
                           annual income and net worth. <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link> for how this is calculated. If you believe
                           your limit is innacurate, please update your <Link to="/dashboard/account-settings/profile-data">Investor Profile</Link>
                         </span>
@@ -139,7 +156,7 @@ class FinancialInfo extends Component {
           )
         }
         <Form error>
-          {campaignStatus.isPreferredEquity
+          {isOfferingPreferredEquity
             ? (
               <>
                 <Table unstackable basic className="mt-30" padded="very">
@@ -174,7 +191,7 @@ class FinancialInfo extends Component {
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row>
-                    <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
+                      <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
                     </Table.Row>
                   </Table.Body>
                 </Table>
@@ -190,7 +207,8 @@ class FinancialInfo extends Component {
                     </Message>
                   )
                 }
-                {validBonusRewards && validBonusRewards.length > 0
+                {visibleBonsuRewards
+                  && validBonusRewards && validBonusRewards.length > 0
                   && (
                     <Message className="bg-offwhite no-shadow no-wrap">
                       <Message.Header>Bonus Rewards to be Received:</Message.Header>
@@ -206,24 +224,24 @@ class FinancialInfo extends Component {
             )
             : (
               <>
-              <MaskedInput
-                data-cy="investmentAmount"
-                hidelabel
-                name="investmentAmount"
-                type="tel"
-                currency
-                prefix="$ "
-                fielddata={INVESTMONEY_FORM.fields.investmentAmount}
-                changed={values => investMoneyChange(values, 'investmentAmount')}
-                onkeyup={validateMaskedInputForAmount}
-                autoFocus
-                allowNegative={false}
-              />
-              <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
+                <MaskedInput
+                  data-cy="investmentAmount"
+                  hidelabel
+                  name="investmentAmount"
+                  type="tel"
+                  currency
+                  prefix="$ "
+                  fielddata={INVESTMONEY_FORM.fields.investmentAmount}
+                  changed={values => investMoneyChange(values, 'investmentAmount', false, returnCalculationType)}
+                  onkeyup={validateMaskedInputForAmount}
+                  autoFocus
+                  allowNegative={false}
+                />
+                <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
               </>
             )}
         </Form>
-        {this.props.changeInvest && !campaignStatus.isPreferredEquity && getDiffInvestmentLimitAmount
+        {this.props.changeInvest && !isOfferingPreferredEquity && getDiffInvestmentLimitAmount
           && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
           ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
         }
@@ -231,6 +249,7 @@ class FinancialInfo extends Component {
         {// isValidInvestAmtInOffering &&
           !campaignStatus.isSafe && estReturnVal && estReturnVal !== '-'
             && investmentAmount
+            && visibleExpectedReturns
             ? (
               <Header as="h4">
                 <PopUpModal
@@ -247,7 +266,8 @@ class FinancialInfo extends Component {
         }
         {
           // isValidInvestAmtInOffering &&
-          !campaignStatus.isPreferredEquity
+          !isOfferingPreferredEquity
+          && visibleBonsuRewards
           && validBonusRewards && validBonusRewards.length > 0
           && validBonusRewards.map(reward => (
             <p className="grey-header">+ {reward.title}</p>

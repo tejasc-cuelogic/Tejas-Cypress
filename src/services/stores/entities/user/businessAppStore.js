@@ -508,12 +508,12 @@ export class BusinessAppStore {
           if (data.financialStatements[field] && data.financialStatements[field].length) {
             this.setFileObjectToForm(data.financialStatements[field], 'BUSINESS_PERF_FRM', field);
           } else {
-            this.BUSINESS_PERF_FRM.fields[field].rule = '';
+            this.BUSINESS_PERF_FRM.fields[field].rule = 'optional';
           }
         });
       } else {
         ['priorToThreeYear', 'ytd'].forEach((ele) => {
-          this.BUSINESS_PERF_FRM.fields[ele].rule = '';
+          this.BUSINESS_PERF_FRM.fields[ele].rule = 'optional';
         });
       }
       if (this.currentApplicationType === 'business' && data.performance) {
@@ -584,7 +584,7 @@ export class BusinessAppStore {
               this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', formField[key]);
             }
           } else {
-            this.BUSINESS_DOC_FRM.fields[formField[key]].rule = '';
+            this.BUSINESS_DOC_FRM.fields[formField[key]].rule = 'optional';
           }
         });
         this.checkValidationForTaxReturn();
