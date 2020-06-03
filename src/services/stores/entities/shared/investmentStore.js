@@ -137,13 +137,13 @@ export class InvestmentStore {
   }
 
   @action
-  investMoneyChange = (values, field, isPreferredEquiry = false) => {
+  investMoneyChange = (values, field, isPreferredEquiry = false, returnCalculationType) => {
     this.INVESTMONEY_FORM = Validator.onChange(this.INVESTMONEY_FORM, {
       name: field,
       value: values.floatValue,
     });
     if (!isPreferredEquiry) {
-      this.calculateEstimatedReturn();
+      this.calculateEstimatedReturn(returnCalculationType);
     }
   };
 
@@ -226,13 +226,15 @@ export class InvestmentStore {
   }
 
   @action
-  calculateEstimatedReturn = () => {
-    const { campaign } = campaignStore;
+  calculateEstimatedReturn = (returnCalculationType) => {
+    const { campaign, campaignStatus } = campaignStore;
     const { getInvestorAccountById } = portfolioStore;
     let offeringSecurityType = '';
     let interestRate = '';
     let investmentMultiple = '';
     let loanTerm = '';
+    let calculationType = '';
+
     if (campaign && campaign.keyTerms) {
       offeringSecurityType = get(campaign, 'keyTerms.securities');
       interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
@@ -244,9 +246,16 @@ export class InvestmentStore {
       investmentMultiple = get(getInvestorAccountById, 'offering.closureSummary.keyTerms.multiple') || '0';
       loanTerm = parseFloat(get(getInvestorAccountById, 'offering.keyTerms.maturity'));
     }
+
+    if (campaignStatus.campaignTemplate === 2 && campaignStatus.investNowConig) {
+      calculationType = returnCalculationType && returnCalculationType === 'TERM_NOTE_CALCULATION' ? 'TERM_NOTE' : 'REV_SHR';
+    } else {
+      calculationType = offeringSecurityType;
+    }
+
     const investAmt = this.investmentAmount;
     if (investAmt >= 100 && !['REAL_ESTATE'].includes(offeringSecurityType)) {
-      if (offeringSecurityType === 'TERM_NOTE') {
+      if (calculationType === 'TERM_NOTE') {
         const data = {
           method: 'mortgage',
           apr: parseFloat(interestRate) || 0,

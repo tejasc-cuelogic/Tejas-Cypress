@@ -17,7 +17,7 @@ function RdsList(props) {
   };
 
   const populateCsvData = () => {
-    const fields = props.rdsPluginStore.rdsListingColumns.map(r => (r.field));
+    const fields = props.rdsPluginStore.rdsListingColumns.map(r => ({ label: r.title, value: r.field }));
     const params = {
       fields,
       data: props.rdsPluginStore.rdsListingRows,

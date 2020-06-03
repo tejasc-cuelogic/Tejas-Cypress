@@ -18,6 +18,7 @@ function QueryBuilderContainer(props) {
   }, []);
 
   function onSubmit() {
+    props.rdsPluginStore.resetData();
     props.rdsPluginStore.initRequest();
   }
 
