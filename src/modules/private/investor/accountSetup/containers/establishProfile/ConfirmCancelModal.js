@@ -42,7 +42,7 @@ const OfferingsCards = ({ offerings, isMobile }) => (
       </Card>
     ))}
   </Card.Group>
-);
+  );
 
 const ProgressBar = ({ activeStep, activeIndex }) => (
   <span className="steps" style={activeStep === activeIndex ? { backgroundColor: '#20C86D' } : { backgroundColor: '#E6E6E8' }} />
@@ -90,7 +90,7 @@ export default class ConfirmCancelModal extends React.Component {
         stepToBeRendered: 3,
         header: 'Time to explore your investment opportunities!',
         content: <>Now that you know the basics of your NextSeed account, you can go ahead and <a href={this.props.match.refLink}>complete your account setup</a>, or start exploring our current investment opportunities.</>,
-        note: <div className="protipWrap"><strong>Pro tip:</strong> Be sure to click the ‘Follow’ button on any campaign that interests you in order to receive regular campaign updates and alerts so that you never miss a chance to invest.</div>,
+        note: <div className={`protipWrap ${isMobile ? 'dnone' : 'dblock'}`}><strong>Pro tip:</strong> Be sure to click the ‘Follow’ button on any campaign that interests you in order to receive regular campaign updates and alerts so that you never miss a chance to invest.</div>,
         button: 'Explore All Offerings',
         to: '/offerings',
       },
@@ -138,12 +138,12 @@ export default class ConfirmCancelModal extends React.Component {
                   }
                 </div>
                 <div className={`progressWrap ${isMobile ? 'dnone' : 'dblock'}`}>
-                {interstitialSteps.map((step, index) => (
-                  <ProgressBar
-                    activeStep={this.state.compState}
-                    activeIndex={index}
-                  />
-                ))}
+                  {interstitialSteps.map((step, index) => (
+                    <ProgressBar
+                      activeStep={this.state.compState}
+                      activeIndex={index}
+                    />
+                  ))}
                 </div>
               </Grid.Column>
               <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} className="">
@@ -158,12 +158,12 @@ export default class ConfirmCancelModal extends React.Component {
                   }
                 </div>
                 <div className={`progressWrap ${isMobile ? 'dblock' : 'dnone'}`}>
-                {interstitialSteps.map((step, index) => (
-                  <ProgressBar
-                    activeStep={this.state.compState}
-                    activeIndex={index}
-                  />
-                ))}
+                  {interstitialSteps.map((step, index) => (
+                    <ProgressBar
+                      activeStep={this.state.compState}
+                      activeIndex={index}
+                    />
+                  ))}
                 </div>
                 {currentStep.note && currentStep.note}
               </Grid.Column>
