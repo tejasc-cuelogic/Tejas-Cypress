@@ -248,3 +248,102 @@ export const PARALLEL_INVESTMENT_OPTIONS = {
     // key: 'role',
   },
 };
+
+export const INVESTMENT_SUMMARY_META = [
+  {
+    label: 'Issuer',
+    value: 'keyterms.shorthandBusinessName',
+    isMobile: true,
+    for: ['ALL'],
+  },
+  {
+    label: 'Securities',
+    value: 'keyterms.securities',
+    isMobile: true,
+    for: ['ALL'],
+  },
+  {
+    label: 'Anticipated Opening Date',
+    value: 'launch.expectedOpsDate',
+    isMobile: true,
+    for: ['ALL'],
+  },
+  {
+    label: 'Investment Multiple',
+    value: 'closureSummary.keyTerms.multiple',
+    isMobile: true,
+    for: ['REVENUE_SHARING_NOTE'],
+  },
+  {
+    label: 'Investment Multiple Summary',
+    value: 'keyTerms.investmentMultipleSummary',
+    isMobile: true,
+    for: ['REVENUE_SHARING_NOTE'],
+  },
+  {
+    label: 'Interest Rate',
+    value: 'keyTerms.interestRate',
+    isMobile: true,
+    for: ['TERM_NOTE'],
+  },
+  {
+    label: 'preferredEquityUnit',
+    value: 'closureSummary.keyTerms.priceCalculation',
+    isMobile: true,
+    for: ['EQUITY'],
+  },
+  {
+    label: 'Pre-Money Valuation',
+    value: 'keyTerms.premoneyValuation',
+    isMobile: true,
+    for: ['EQUITY'],
+  },
+  {
+    label: 'Payments',
+    value: 'keyTerms.frequencyOfPayments',
+    isMobile: true,
+    for: ['ALL'],
+  },
+  {
+    label: 'Revenue Sharing Percentage',
+    value: 'closureSummary.keyTerms.revSharePercentage',
+    isMobile: true,
+    for: ['REVENUE_SHARING_NOTE'],
+  },
+  {
+    label: 'Revenue Sharing Percentage Description',
+    value: 'keyTerms.revSharePercentageDescription',
+    isMobile: false,
+    for: ['TERM_NOTE'],
+  },
+  {
+    label: 'Maturity',
+    value: 'keyTerms.maturity',
+    isMobile: true,
+    for: ['ALL'],
+  },
+  {
+    label: 'Maturity Date',
+    value: 'closureSummary.keyTerms.maturityDate',
+    isMobile: true,
+    for: ['SAFE'],
+  },
+  {
+    label: 'Security Interest',
+    value: 'keyTerms.securityInterest',
+    isMobile: false,
+    for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE'],
+  },
+  {
+    label: 'Ownership % Represented by Securities',
+    value: 'keyTerms.securitiesOwnershipPercentage',
+    isMobile: true,
+    for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE'],
+  },
+  {
+    label: 'Close Date',
+    value: 'closureSummary.hardCloseDate',
+    isMobile: true,
+    for: ['TERM_NOTE'],
+  },
+];

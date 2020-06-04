@@ -31,6 +31,12 @@ class Overview extends Component {
     window.addEventListener('message', this.docuSignListener);
   }
 
+  componentWillUnmount() {
+    const { campaign } = this.props.campaignStore;
+    const type = get(campaign, 'keyTerms.regulation');
+    this.props.portfolioStore.setOverviewSummaryData(type);
+  }
+
   docuSignListener = (e) => {
     if (e.data === 'viewing_complete') {
       this.setState({ open: false });
@@ -62,7 +68,8 @@ class Overview extends Component {
 
   render() {
     const { campaign, campaignStatus } = this.props.campaignStore;
-    const chartData = this.props.portfolioStore.getChartData();
+    const { overviewSummaryMeta, getChartData } = this.props.portfolioStore;
+    const chartData = getChartData();
     const { keyTerms, offering } = campaign;
     const overviewToDisplay = campaign && campaign.keyTerms && campaign.keyTerms.securities
       && campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';

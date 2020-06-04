@@ -4,7 +4,7 @@ import moment from 'moment';
 import { forEach, sortBy, get, times } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { CANCEL_INVESTMENT } from '../../../constants/investment';
+import { CANCEL_INVESTMENT, INVESTMENT_SUMMARY_META } from '../../../constants/investment';
 import { getInvestorAccountPortfolio, getInvestmentDetails, investNowCancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
 import { userDetailsStore, uiStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
@@ -37,6 +37,37 @@ export class PortfolioStore {
   @observable apiCall = false;
 
   @observable CANCEL_INVESTMENT_FRM = Validator.prepareFormObject(CANCEL_INVESTMENT);
+
+  @observable overviewSummaryMeta = [];
+  // create a constants file for meta data and populate that observable with the meta from the action based on the scurity type.
+  // create an action that takes a security type as a parameter and call that action in the component will mount methode in overview.js file
+
+  @action
+  setOverviewSummaryData = (type) => {
+    INVESTMENT_SUMMARY_META.map((data) => {
+      switch (type) {
+        case 'TERM_NOTE':
+          if (['TERM_NOTE'].includes(data.for)) {
+            this.overviewSummaryMeta.push(data);
+          }
+          break;
+        case 'REVENUE_SHARING_NOTE':
+          if (['REVENUE_SHARING_NOTE'].includes(data.for)) {
+            this.overviewSummaryMeta.push(data);
+          }
+          break;
+        case 'SAFE':
+          if (['SAFE'].includes(data.for)) {
+            this.overviewSummaryMeta.push(data);
+          }
+          break;
+        default:
+          this.overviewSummaryMeta.push('N/A');
+          break;
+      }
+    return null;
+    });
+  }
 
   @action
   setFieldValue = (field, value) => {
