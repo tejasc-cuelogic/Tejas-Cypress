@@ -46,6 +46,7 @@ export class PortfolioStore {
   setOverviewSummaryData = (type) => {
     INVESTMENT_SUMMARY_META.map((data) => {
       switch (type) {
+        
         case 'TERM_NOTE':
           if (['TERM_NOTE'].includes(data.for)) {
             this.overviewSummaryMeta.push(data);

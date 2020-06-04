@@ -31,7 +31,7 @@ class Overview extends Component {
     window.addEventListener('message', this.docuSignListener);
   }
 
-  componentWillUnmount() {
+  componentDidMount() {
     const { campaign } = this.props.campaignStore;
     const type = get(campaign, 'keyTerms.regulation');
     this.props.portfolioStore.setOverviewSummaryData(type);
@@ -113,7 +113,13 @@ class Overview extends Component {
               <div className="table-wrapper">
                 <Table definition basic="very" className={responsiveVars.isMobile ? 'without-border-shadow' : ''}>
                   <Table.Body>
-                    {keyTerms && keyTerms.shorthandBusinessName
+                    {overviewSummaryMeta.map(data => (
+                      <Table.Row verticalAlign="top" className={responsiveVars.isMobile ? 'pt-0' : ''}>
+                        <Table.Cell width={5}>{data.label}</Table.Cell>
+                        <Table.Cell>{data.value}</Table.Cell>
+                      </Table.Row>
+                    ))}
+                    {/* {keyTerms && keyTerms.shorthandBusinessName
                       ? (
                         <Table.Row verticalAlign="top" className={responsiveVars.isMobile ? 'pt-0' : ''}>
                           <Table.Cell width={5}>Issuer</Table.Cell>
@@ -317,7 +323,7 @@ class Overview extends Component {
                           </Table.Cell>
                         </Table.Row>
                       )
-                    }
+                    } */}
                   </Table.Body>
                 </Table>
 
