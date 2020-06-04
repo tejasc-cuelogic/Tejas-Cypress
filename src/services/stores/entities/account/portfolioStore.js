@@ -5,6 +5,7 @@ import { forEach, sortBy, get, times } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { CANCEL_INVESTMENT } from '../../../constants/investment';
+// import { TERM_NOTE_TABLE_META, REV_SHARE_TABLE_META, EQUITY_CLASS_TABLE_META, CONVERTIBLE_SECURITIES_TABLE_META } from '../../../constants/investmentList';
 import { getInvestorAccountPortfolio, getInvestmentDetails, investNowCancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
 import { userDetailsStore, uiStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
