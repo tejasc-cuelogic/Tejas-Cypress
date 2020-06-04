@@ -166,7 +166,7 @@ const INVESTMENT_CARD_META = [
   {
     label: 'Market Cap',
     key: 'offering.keyTerms.valuationCap',
-    getRowValue: value => `$${value}`,
+    getRowValue: value => `${value}`,
     for: ['active'],
     isMobile: true,
     isDesktop: true,
@@ -175,7 +175,7 @@ const INVESTMENT_CARD_META = [
   {
     label: 'Discount',
     key: 'offering.keyTerms.discount',
-    getRowValue: value => `$${value}`,
+    getRowValue: value => `${value}`,
     for: ['active'],
     isMobile: true,
     isDesktop: true,
@@ -389,7 +389,7 @@ const InvestmentList = (props) => {
             <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : ''}>Total:</Table.HeaderCell>
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
             <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : props.listOf === 'active' ? getCOllapseCount('Net Payments Received', 'Investment Amount', header) : '3'} />
-            {props.listOf !== 'pending' && get(listData, 'offering.keyTerms.securities') !== 'SAFE'
+            {props.listOf !== 'pending' && get(listData[0], 'offering.keyTerms.securities') !== 'SAFE'
             && (
               <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
             )}
