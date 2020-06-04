@@ -8,35 +8,35 @@ import HtmlEditor from '../../../../../shared/HtmlEditor';
 const OfferingsCards = ({ offerings, isMobile }) => (
   <Card.Group itemsPerRow={isMobile ? 1 : 3}>
     {offerings.map(offering => (
-      <Card className="bordered center-align">
+      <Card className="bordered center-align investmentCards">
         {!isMobile
-        ? (
-          <>
-            <NSImage path={offering.imageUrl} centered />
-            <Card.Content>
-              <Header as="h5">{offering.title}</Header>
-              <Card.Meta>
-                {offering.location}
-              </Card.Meta>
-              <Card.Description>
-                <HtmlEditor readOnly content={offering.description} />
-              </Card.Description>
-              <p><b>{offering.meta1}</b></p>
-              <p><b>{offering.meta2}</b></p>
-              <p className="more-info">{offering.offeredBy}</p>
-            </Card.Content>
-          </>
+          ? (
+            <>
+              <NSImage path={offering.imageUrl} centered />
+              <Card.Content>
+                <Header as="h5">{offering.title}</Header>
+                <Card.Meta>
+                  {offering.location}
+                </Card.Meta>
+                <Card.Description>
+                  <HtmlEditor readOnly content={offering.description} />
+                </Card.Description>
+                <p><b>{offering.meta1}</b></p>
+                <p><b>{offering.meta2}</b></p>
+                <p className="more-info">{offering.offeredBy}</p>
+              </Card.Content>
+            </>
           )
-        : (
-          <>
-            <NSImage path={offering.imageUrl} left />
-            <Card.Content>
-              <Header as="h5">{offering.title}</Header>
-              <Card.Description>
-                <HtmlEditor readOnly content={offering.meta1} />
-              </Card.Description>
-            </Card.Content>
-          </>
+          : (
+            <>
+              <NSImage path={offering.imageUrl} left />
+              <Card.Content>
+                <Header as="h5">{offering.title}</Header>
+                <Card.Description>
+                  <HtmlEditor readOnly content={offering.meta1} />
+                </Card.Description>
+              </Card.Content>
+            </>
           )
         }
       </Card>
@@ -45,9 +45,7 @@ const OfferingsCards = ({ offerings, isMobile }) => (
 );
 
 const ProgressBar = ({ activeStep, activeIndex }) => (
-  <ul style={{ display: 'inline-block' }}>
-    <li style={activeStep === activeIndex ? { color: '#20C86D' } : { color: '#E6E6E8' }}>{' '}</li>
-  </ul>
+  <span className="steps" style={activeStep === activeIndex ? { backgroundColor: '#20C86D' } : { backgroundColor: '#E6E6E8' }} />
 );
 
 @inject('investorProfileStore', 'uiStore', 'individualAccountStore')
@@ -92,7 +90,7 @@ export default class ConfirmCancelModal extends React.Component {
         stepToBeRendered: 3,
         header: 'Time to explore your investment opportunities!',
         content: <>Now that you know the basics of your NextSeed account, you can go ahead and <a href={this.props.match.refLink}>complete your account setup</a>, or start exploring our current investment opportunities.</>,
-        note: <><strong>Pro tip:</strong> Be sure to click the ‘Follow’ button on any campaign that interests you in order to receive regular campaign updates and alerts so that you never miss a chance to invest.</>,
+        note: <div className="protipWrap"><strong>Pro tip:</strong> Be sure to click the ‘Follow’ button on any campaign that interests you in order to receive regular campaign updates and alerts so that you never miss a chance to invest.</div>,
         button: 'Explore All Offerings',
         to: '/offerings',
       },
@@ -129,26 +127,44 @@ export default class ConfirmCancelModal extends React.Component {
       <Modal size="large" open className="finish-later" closeIcon onClose={this.handleFinishLater}>
         <Modal.Content>
           <Container className={`investor-signup-container ${responsiveVars.uptoTablet ? 'pl-10 pr-10 pt-55 pb-55 ' : 'pl-15 pr-15 pt-55 pb-55'}`}>
-              <Grid>
+            <Grid>
               <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} className="">
                 <Header as="h3">{currentStep.header}</Header>
                 <p>{currentStep.content}</p>
-                {currentStep.stepToBeRendered === 3
-                  ? <Button primary green className="mt-30" as={Link} to={currentStep.to}>{currentStep.button}</Button>
-                  : <Button primary green className="mt-30" onClick={() => this.handleNextStep()}>{currentStep.button}</Button>
-                }
+                <div className={isMobile ? 'dnone' : 'dblock'}>
+                  {currentStep.stepToBeRendered === 3
+                    ? <Button primary green className="mt-30" as={Link} to={currentStep.to}>{currentStep.button}</Button>
+                    : <Button primary green className="mt-30" onClick={() => this.handleNextStep()}>{currentStep.button}</Button>
+                  }
+                </div>
+                <div className={`progressWrap ${isMobile ? 'dnone' : 'dblock'}`}>
                 {interstitialSteps.map((step, index) => (
                   <ProgressBar
                     activeStep={this.state.compState}
                     activeIndex={index}
                   />
                 ))}
+                </div>
               </Grid.Column>
               <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} className="">
                 {currentStep.stepToBeRendered === 1 || currentStep.stepToBeRendered === 2
-                  ? <>{currentStep.image}</>
+                  ? <NSImage path={currentStep.image} />
                   : <OfferingsCards offerings={offerings} isMobile={isMobile} />
                 }
+                <div className={isMobile ? 'dblock' : 'dnone'}>
+                  {currentStep.stepToBeRendered === 3
+                    ? <Button primary green className="mt-30" as={Link} to={currentStep.to}>{currentStep.button}</Button>
+                    : <Button primary green className="mt-30" onClick={() => this.handleNextStep()}>{currentStep.button}</Button>
+                  }
+                </div>
+                <div className={`progressWrap ${isMobile ? 'dblock' : 'dnone'}`}>
+                {interstitialSteps.map((step, index) => (
+                  <ProgressBar
+                    activeStep={this.state.compState}
+                    activeIndex={index}
+                  />
+                ))}
+                </div>
                 {currentStep.note && currentStep.note}
               </Grid.Column>
             </Grid>
