@@ -132,7 +132,7 @@ class Overview extends Component {
                         </Table.Row>
                       ) : ''
                     }
-                    {offering && offering.launch && offering.launch.expectedOpsDate
+                    {offering && offering.launch && offering.launch.expectedOpsDate && keyTerms.securities !== 'SAFE'
                       ? (
                         <Table.Row verticalAlign="top">
                           <Table.Cell>Anticipated Opening Date</Table.Cell>
