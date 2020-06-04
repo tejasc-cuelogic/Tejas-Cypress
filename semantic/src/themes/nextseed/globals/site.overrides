@@ -130,6 +130,9 @@ h6{
 .mt-0 {
 	margin-top: 0 !important;
 }
+.mt-5{
+	margin-top: 5px !important;
+}
 .mt-10 {
 	margin-top: @10px !important;
 }
@@ -3831,6 +3834,23 @@ h3.ui.header.error-2{
 		right: 0;
 	}
 }
+.upload-docs-subsection{
+	// position: relative;
+	// z-index: 1002;
+	.ui.card.fluid{
+		box-shadow: none !important;
+		border:none !important;
+		.row-wrap{
+			&:first-child{
+				border-color: #b5b8c5 !important;
+			}
+		}
+	}
+	+ .row-wrap{
+		border-color: #b5b8c5 !important;
+		padding-top: 15px !important;
+	}	
+}
 .collection-detail{
 	.campaign-list-wrapper{
 		padding-top: 0 !important;
@@ -3909,6 +3929,32 @@ h3.ui.header.error-2{
 	}
 	@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
 		display: none !important;
+	}
+}
+.upload-doc-table{
+	.row-wrap.thead{
+		>div.balance-half{
+			width: calc(50% - 140px);
+			margin-right: 0 !important;
+		}
+	}
+	.row-wrap-column {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		  .row-wrap>div.balance-half {
+			  width: calc(50% - 140px);
+		  }
+		  .row-wrap.full-width{
+			  z-index: 9 !important;
+		  }
+		  .file-uploader-wrap.undefined{
+			  .downloadable.file-uploader.attached{
+				  button.tiny.ghost-button{
+					  padding-top: 2px !important;
+				  }
+			  }
+		  }
 	}
 }
 .offering-side-menu{

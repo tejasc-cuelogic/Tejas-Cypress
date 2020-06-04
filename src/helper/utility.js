@@ -355,10 +355,14 @@ export class Utility {
     return obj;
   };
 
-  validateDocumentExtension = (ext) => {
+  validateDocumentExtension = (ext, specificUploadExtension = null) => {
+    let UPLOAD_EXTENSIONS = DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS;
+    if (specificUploadExtension && specificUploadExtension.length > 0) {
+      UPLOAD_EXTENSIONS = _.filter(UPLOAD_EXTENSIONS, n => specificUploadExtension.includes(n));
+    }
     const obj = {
-      isInvalid: ext ? !DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()) : true,
-      errorMsg: `Only ${DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
+      isInvalid: ext ? !UPLOAD_EXTENSIONS.includes(ext.toLowerCase()) : true,
+      errorMsg: `Only ${UPLOAD_EXTENSIONS.join(', ')} extensions are allowed.`,
     };
     return obj;
   };

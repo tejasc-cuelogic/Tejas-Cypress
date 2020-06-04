@@ -71,6 +71,8 @@ class Tombstone extends Component {
               <Divider hidden />
               {/* {smartElement.FormTextarea('description', { readOnly: isReadOnly, containerclassname: 'secondary' })} */}
               {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Display Toggle' })}
+              {smartElement.FormCheckBox('showOfferedBy', { customClass: 'custom-toggle', defaults: true, toggle: true })}
+              {smartElement.Input('offeredBy')}
             </Grid.Column>
           </Grid>
           <TombstoneHeaderMeta />

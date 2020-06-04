@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { Card, Grid, Icon, Button, Divider, Table, Label } from 'semantic-ui-react';
 import { Image64 } from '../../../../../../theme/shared';
-import { CAMPAIGN_OFFERED_BY } from '../../../../../../constants/offering';
+// import { CAMPAIGN_OFFERED_BY } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
 import NSImage from '../../../../../shared/NSImage';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
@@ -141,11 +141,13 @@ export default class TombstonePreview extends Component {
                       }
                     </>
                   )}
-                <p className="more-info">
-                  Offered by {get(offer, 'regulation')
-                    ? CAMPAIGN_OFFERED_BY[get(offer, 'regulation')]
-                    : get(offer, 'keyTerms.regulation') && CAMPAIGN_OFFERED_BY[get(offer, 'keyTerms.regulation')]}
-                </p>
+                {
+                  TOMBSTONE_BASIC_FRM.fields.showOfferedBy.value && (
+                    <p className="more-info">
+                      Offered by {!isEmpty(TOMBSTONE_BASIC_FRM.fields.offeredBy.value) ? TOMBSTONE_BASIC_FRM.fields.offeredBy.value : 'NextSeed Securities, LLC'}
+                    </p>
+                  )
+                }
               </Card.Content>
               {TOMBSTONE_BASIC_FRM.fields.stage.value === 'LOCK' && (
                 <Card.Content className="card-hidden">

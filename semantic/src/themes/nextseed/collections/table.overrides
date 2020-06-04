@@ -472,7 +472,15 @@
         //     }
         // }
     }
-
+    &.fundinvestmentTable,&.confirm-transfer-table{
+        max-width: 450px !important;
+        margin: 0 auto;
+        +.note.mt-30{
+            max-width: 450px !important;
+            margin: 0 auto;
+        }
+    }
+    
 }
 
 .compare-table {

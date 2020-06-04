@@ -12,13 +12,15 @@ import { updateAccreditation, investorSelfVerifyAccreditedStatus, adminListAccre
 import { userAccreditationQuery, userDetailsQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_SORT_ENUMS } from '../../../../constants/accreditation';
-import { FILTER_META, CONFIRM_ACCREDITATION, SELF_ACCREDITATION } from '../../../../constants/accreditationRequests';
+import { FILTER_META, CONFIRM_ACCREDITATION, SELF_ACCREDITATION, SELF_ACCREDITATION_PRIVATE } from '../../../../constants/accreditationRequests';
 import { CURR_YEAR } from '../../../../../constants/common';
 
 export class AccreditationStore {
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
 
   @observable SELF_ACCREDITATION_FRM = Validator.prepareFormObject(SELF_ACCREDITATION);
+
+  @observable SELF_ACCREDITATION_PRIVATE_FRM = Validator.prepareFormObject(SELF_ACCREDITATION_PRIVATE);
 
   @observable CONFIRM_ACCREDITATION_FRM = Validator.prepareFormObject(CONFIRM_ACCREDITATION);
 

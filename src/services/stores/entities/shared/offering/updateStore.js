@@ -284,6 +284,7 @@ export class UpdateStore {
           variables: {
             updatesInput: payload,
             id: data.id,
+            shouldSendInvestorNotifications: this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false,
           },
           refetchQueries: [{ query: allUpdates, variables }],
         })
