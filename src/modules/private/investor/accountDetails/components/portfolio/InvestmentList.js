@@ -129,10 +129,10 @@ const INVESTMENT_CARD_META = [
     label: 'Investment Type',
     key: 'offering.keyTerms.securities',
     getRowValue: (value, equityClass, investorInvestedAmount, classThreshold) => getSecurityTitle(value, equityClass, investorInvestedAmount, classThreshold),
-    for: isMobile ? ['pending'] : ['active', 'pending', 'completed'],
+    for: isMobile ? ['pending'] : ['pending', 'completed'],
     isMobile: true,
     isDesktop: true,
-    securityType: ['TERM_NOTE', 'EQUITY', 'REVENUE_SHARING_NOTE', 'PREFERRED_EQUITY_506C', 'REAL_ESTATE', 'FUNDS'],
+    securityType: ['ALL'],
   },
   {
     label: 'Investment Amount',
@@ -269,7 +269,7 @@ const INVESTMENT_CARD_META = [
     key: 'offering.closureSummary.keyTerms.maturityDate',
     for: ['active'],
     getRowValue: value => `${value}`,
-    isMobile: true,
+    isMobile: false,
     isDesktop: true,
     securityType: ['SAFE', 'CONVERTIBLE_NOTE'],
   },
@@ -383,21 +383,19 @@ const InvestmentList = (props) => {
             }
           </Table.Body>
         }
-
         <Table.Footer>
           <Table.Row>
             <Table.HeaderCell colSpan={(props.listOf === 'active' || props.listOf === 'completed') ? '1' : '2'} />
             <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : ''}>Total:</Table.HeaderCell>
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
-            <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : props.listOf === 'active' ? (get(listData, 'regulation') === 'SAFE' || get(listData, 'regulation') === 'CONVERTIBLE_NOTE') ? getCOllapseCount('Investment Amount', header) : getCOllapseCount('Net Payments Received', 'Investment Amount', header) : '3'} />
+            <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : props.listOf === 'active' ? getCOllapseCount('Net Payments Received', 'Investment Amount', header) : '3'} />
+            {props.listOf !== 'pending' && get(listData, 'offering.keyTerms.securities') !== 'SAFE'
+            && (
+              <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
+            )}
             {props.listOf !== 'pending'
-              && (
-                <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
-              )}
-              {props.listOf !== 'pending'
-              && (
-                <Table.HeaderCell colSpan="1" />
-              )}
+            && <Table.HeaderCell colSpan="5" />
+            }
           </Table.Row>
         </Table.Footer>
       </Table>
