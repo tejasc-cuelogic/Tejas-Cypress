@@ -23,6 +23,8 @@ class CollectionsStore extends DataModelStore {
 
   collectionDetails = null;
 
+  isLoadMoreClicked = false;
+
   collectionMappingsData = null;
 
   selectedCollectionArray = []
@@ -40,6 +42,12 @@ class CollectionsStore extends DataModelStore {
   collectionMappingList = [];
 
   collectionIndex = null;
+
+  RECORDS_TO_DISPLAY = 8;
+
+  activeToDisplay = this.RECORDS_TO_DISPLAY;
+
+  pastOfferingToDisplay = this.RECORDS_TO_DISPLAY;
 
   COLLECTION_FRM = Validator.prepareFormObject(COLLECTION);
 
@@ -184,8 +192,18 @@ class CollectionsStore extends DataModelStore {
     return orderBy(this.getOfferingsList.filter(o => ['LIVE'].includes(o.stage)), 'sortOrder', ['ASC']);
   }
 
+  get activeOfferingList() {
+    const offeringList = this.getActiveOfferingsList.slice();
+    return offeringList.splice(0, this.activeToDisplay);
+  }
+
   get getPastOfferingsList() {
     return orderBy(this.getOfferingsList.filter(o => ['COMPLETE', 'IN_REPAYMENT', 'STARTUP_PERIOD', 'DEFAULTED'].includes(o.stage)), 'sortOrder', ['ASC']);
+  }
+
+  get pastOfferingsList() {
+    const offeringList = this.getPastOfferingsList.slice();
+    return offeringList.splice(0, this.pastOfferingToDisplay);
   }
 
   get getInsightsList() {
@@ -404,15 +422,15 @@ class CollectionsStore extends DataModelStore {
         COMPLETE: data.filter(d => d.stage !== 'LIVE'),
       };
       const stage = contentValue === 'ACTIVE_INVESTMENTS' ? 'LIVE' : 'COMPLETE';
+      this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data[stage]);
       this.getOfferings(stage);
       this.setCollectionMetaList(data[stage], true);
-      this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data[stage]);
       tempData[params.type] = data;
     } else if (params.type === 'INSIGHT') {
       tempData[params.type] = this.mapdataByField(data, 'insight');
+      this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data);
       this.requestAllArticlesForCollections();
       this.setCollectionMetaList(tempData[params.type], true);
-      this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data);
     } else {
       tempData[params.type] = data;
     }
@@ -468,6 +486,11 @@ class CollectionsStore extends DataModelStore {
       rej(error);
     }
   });
+
+  resetDisplayCounts = () => {
+    this.activeToDisplay = this.RECORDS_TO_DISPLAY;
+    this.pastOfferingToDisplay = this.RECORDS_TO_DISPLAY;
+  }
 
 
   adminDeleteCollection = id => new Promise(async (res, rej) => {
@@ -730,6 +753,13 @@ class CollectionsStore extends DataModelStore {
     return { options: filterOpns };
   }
 
+  loadMoreRecord = (type) => {
+    const offeringsList = type === 'activeToDisplay' ? this.getActiveOfferingsList : this.getPastOfferingsList;
+    if (offeringsList.length > this[type]) {
+      this[type] += this.RECORDS_TO_DISPLAY;
+    }
+  }
+
   // @computed get active() {
   //   const collectionList = this.orderedActiveList.slice();
   //   return collectionList.splice(0, this.activeToDisplay);
@@ -755,22 +785,29 @@ decorate(CollectionsStore, {
   HEADER_META_FRM: observable,
   TOMBSTONE_FRM: observable,
   selectedCollectionArray: observable,
+  isLoadMoreClicked: observable,
   COLLECTION_MAPPING_CONTENT_FRM: observable,
   contentId: observable,
   collection: observable,
   initLoad: observable,
+  RECORDS_TO_DISPLAY: observable,
+  activeToDisplay: observable,
+  pastOfferingToDisplay: observable,
   initRequest: action,
   updateContent: action,
   upsertCollection: action,
   setCollectionMetaList: action,
   getActiveCollectionLength: computed,
   getCollectionLength: computed,
+  activeOfferingList: computed,
+  pastOfferingsList: computed,
   filterInitLoad: action,
   collectionMappingMutation: action,
   parseData: action,
   setFormData: action,
   getActionType: action,
   setSelectedCollections: action,
+  resetDisplayCounts: action,
   collectionLoading: observable,
   getCollection: action,
   filterContentType: action,
@@ -781,5 +818,6 @@ decorate(CollectionsStore, {
   setOrderForCollectionsMapping: action,
   setOrderForCollections: action,
   evaluateFormFieldToArray: action,
+  loadMoreRecord: action,
 });
 export default new CollectionsStore();

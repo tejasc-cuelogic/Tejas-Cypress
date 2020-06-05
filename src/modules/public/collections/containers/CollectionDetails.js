@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { get, camelCase, orderBy, find, filter } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import scrollIntoView from 'scroll-into-view';
-import { Responsive, Visibility, Container, Grid, Menu, Divider } from 'semantic-ui-react';
+import { Responsive, Visibility, Container, Grid, Menu, Divider, Button, Icon } from 'semantic-ui-react';
 import CollectionHeader from '../components/CollectionHeader';
 import CollectionInsights from '../components/CollectionInsights';
 import CustomContent from '../../offering/components/campaignDetails/CustomContent';
@@ -14,6 +14,14 @@ import HtmlEditor from '../../../shared/HtmlEditor';
 import CollectionMetaTags from '../components/CollectionMetaTags';
 import { UPLOADS_CONFIG } from '../../../../constants/aws';
 
+const LoadMoreBtn = ({ action, param, isMobile }) => (
+  <div id="loadMore" className={`${isMobile ? 'mb-20 mt-40' : 'mb-30 mt-30'}`} data-cy={param}>
+    <Button fluid={isMobile} color="green" className="link-button" onClick={() => action(param)}>
+      View More
+      <Icon size="small" className="ns-caret-down" style={{ marginLeft: '5px' }} color="white" />
+    </Button>
+  </div>
+);
 
 const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
@@ -43,18 +51,29 @@ class CollectionDetails extends Component {
   }
 
   componentDidUpdate() {
-    this.processScroll();
+    if (!this.props.collectionStore.isLoadMoreClicked) {
+      this.processScroll();
+    }
+    this.props.collectionStore.setFieldValue('isLoadMoreClicked', false);
   }
 
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
+    this.props.collectionStore.resetDisplayCounts();
   }
 
   scrollToActiveOfferings = () => {
     document.querySelector('#offeringsShow').scrollIntoView({
       block: 'start',
     });
+  }
+
+  scrollAndLoad = (type) => {
+    const { setFieldValue, loadMoreRecord } = this.props.collectionStore;
+    setFieldValue('isLoadMoreClicked', true);
+    window.scrollBy(0, window.innerHeight * 2);
+    loadMoreRecord(type);
   }
 
   onScrollCallBack = (target) => {
@@ -117,7 +136,7 @@ class CollectionDetails extends Component {
   render() {
     const { collectionStore, uiStore, nsUiStore, location, match } = this.props;
     const { loadingArray } = nsUiStore;
-    const { collectionDetails, getInsightsList, getPastOfferingsList, getActiveOfferingsList } = collectionStore;
+    const { collectionDetails, getInsightsList, getPastOfferingsList, getActiveOfferingsList, activeOfferingList, RECORDS_TO_DISPLAY, activeToDisplay, pastOfferingToDisplay, pastOfferingsList } = collectionStore;
     const { responsiveVars } = uiStore;
     const { isTablet, isMobile } = responsiveVars;
     const collectionHeader = get(collectionDetails, 'marketing.header');
@@ -198,8 +217,16 @@ class CollectionDetails extends Component {
                             collection
                             refLink={this.props.match.url}
                             loading={loadingArray.includes('getCollectionMapping')}
-                            campaigns={getActiveOfferingsList}
+                            campaigns={activeOfferingList}
                             heading={renderHeading(get(c, 'description'))}
+                            loadMoreButton={(
+                              <>
+                                {getActiveOfferingsList && getActiveOfferingsList.length > RECORDS_TO_DISPLAY
+                                  && activeToDisplay < getActiveOfferingsList.length
+                                  && <LoadMoreBtn action={this.scrollAndLoad} param="activeToDisplay" />
+                                }
+                              </>
+                            )}
                           />
                         </>
                       ) : c.contentType === 'COMPLETE_INVESTMENTS' && getPastOfferingsList && getPastOfferingsList.length
@@ -211,8 +238,16 @@ class CollectionDetails extends Component {
                               collection
                               refLink={this.props.match.url}
                               loading={loadingArray.includes('getCollectionMapping')}
-                              campaigns={getPastOfferingsList}
+                              campaigns={pastOfferingsList}
                               heading={renderHeading(get(c, 'description'))}
+                              loadMoreButton={(
+                                <>
+                                  {getPastOfferingsList && getPastOfferingsList.length > RECORDS_TO_DISPLAY
+                                    && pastOfferingToDisplay < getPastOfferingsList.length
+                                    && <LoadMoreBtn action={this.scrollAndLoad} param="pastOfferingToDisplay" />
+                                  }
+                                </>
+                              )}
                             />
                           </>
                         ) : c.contentType === 'INSIGHTS' && getInsightsList && getInsightsList.length
