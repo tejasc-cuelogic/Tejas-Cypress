@@ -39,16 +39,6 @@ function LockUnlockOffering(props) {
   return (
     <>
       <span>
-        {/* <Checkbox
-          disabled={(lock && (currentUserId !== get(lock, 'userId'))) || loadingArray.includes('adminLockOrUnlockOffering')}
-          name="isLocked"
-          value={lockStatus}
-          onChange={(e, result) => adminLockOrUnlockOffering(result)}
-          checked={lockStatus}
-          label={loadingArray.includes('adminLockOrUnlockOffering') ? 'Loading...' : ''}
-          toggle
-          className="negative-toggle ml-30"
-        /> */}
         <Button circular name="isLocked" color={lockStatus ? 'red' : 'green'} className="link-button ml-30" disabled={(lock && (currentUserId !== get(lock, 'userId'))) || loadingArray.includes('adminLockOrUnlockOffering')}>
           <Icon lock={!lockStatus} className={`mr-10 ${lockStatus ? 'ns-lock' : 'ns-unlock'}`} onClick={(e, result) => adminLockOrUnlockOffering(result)} />
         </Button>
