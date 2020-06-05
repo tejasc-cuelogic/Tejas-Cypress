@@ -118,7 +118,7 @@ function DraggableListing(props) {
 
   useEffect(() => {
     props.collectionStore.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, props.allRecords);
-  }, []);
+  }, [props.allRecords]);
 
   const onSortEnd = async ({ oldIndex, newIndex }) => {
     if (oldIndex !== newIndex) {
@@ -149,8 +149,8 @@ function DraggableListing(props) {
     };
     await collectionStore.collectionMappingMutation('adminCollectionMappingUpsert', params);
     collectionStore.setFieldValue('collectionIndex', null);
-    props.history.push(`${props.match.url}`);
     props.uiStore.setConfirmBox('');
+    props.history.push(`${props.match.url}`);
   };
 
   const handleDeleteCancel = () => {
@@ -172,6 +172,7 @@ function DraggableListing(props) {
   if (isLoading || loading) {
     return <InlineLoader />;
   }
+
   return (
     <>
       <ContainerList

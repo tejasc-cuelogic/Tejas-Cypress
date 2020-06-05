@@ -9,7 +9,7 @@ import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING_DROPDOWN, COLLECTION_MAPPING_CONTENT, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META, COLLECTION_MISC } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, adminInsightArticlesListByFilter, getPublicCollections, allOfferings, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
-import { uiStore, authStore } from '../../index';
+import { uiStore, authStore, nsUiStore } from '../../index';
 import { STAGES } from '../../../constants/admin/offerings';
 import { fileUpload } from '../../../actions';
 
@@ -390,6 +390,8 @@ class CollectionsStore extends DataModelStore {
   }
 
   getCollectionMapping = (type, index) => {
+    nsUiStore.setLoader('collectionMappingLoader');
+
     if (this.collectionIndex !== index
       && ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(type)) {
       const params = {
@@ -400,21 +402,25 @@ class CollectionsStore extends DataModelStore {
         .then(action((res) => {
           if (get(res, 'getCollectionMapping')) {
             this.setFieldValue('collectionIndex', index);
-            this.collectionMapping = { ...this.getMappedData(res, params, index) };
+            this.setMappedData(res, params, index);
           }
+          nsUiStore.filterLoaderByOperation('collectionMappingLoader');
         }))
         .catch(() => {
           this.setFieldValue('collectionIndex', index);
+          nsUiStore.filterLoaderByOperation('collectionMappingLoader');
         });
     } else {
       this.setFieldValue('collectionIndex', index);
+      nsUiStore.filterLoaderByOperation('collectionMappingLoader');
     }
   }
 
-  getMappedData = (res, params, index) => {
+  setMappedData = (res, params, index) => {
     let data = orderBy(get(res, 'getCollectionMapping'), ['order', 'asc']);
     const { value: contentValue } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
     const tempData = {};
+    let contentMappingData = data;
     if (params.type === 'OFFERING') {
       data = this.mapdataByField(data, 'offering');
       data = {
@@ -422,18 +428,19 @@ class CollectionsStore extends DataModelStore {
         COMPLETE: data.filter(d => d.stage !== 'LIVE'),
       };
       const stage = contentValue === 'ACTIVE_INVESTMENTS' ? 'LIVE' : 'COMPLETE';
-      this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data[stage]);
+      contentMappingData = data[stage];
       this.getOfferings(stage);
       this.setCollectionMetaList(data[stage], true);
       tempData[params.type] = data;
     } else if (params.type === 'INSIGHT') {
       tempData[params.type] = this.mapdataByField(data, 'insight');
-      this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data);
       this.requestAllArticlesForCollections();
       this.setCollectionMetaList(tempData[params.type], true);
     } else {
       tempData[params.type] = data;
     }
+    this.collectionMapping = { ...tempData };
+    this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, contentMappingData);
     return tempData;
   }
 
@@ -819,5 +826,6 @@ decorate(CollectionsStore, {
   setOrderForCollections: action,
   evaluateFormFieldToArray: action,
   loadMoreRecord: action,
+  setMappedData: action,
 });
 export default new CollectionsStore();
