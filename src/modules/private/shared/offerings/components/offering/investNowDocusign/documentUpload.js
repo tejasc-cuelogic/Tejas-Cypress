@@ -235,7 +235,7 @@ export default class DocumentUpload extends Component {
               <div className="width-70" />
               <div className="balance-half">Document Name</div>
               <div className="balance-half">Document</div>
-              <div className="width-130">Mappeing Required</div>
+              <div className="width-130">Mapping Required</div>
               <div className="action">Actions</div>
             </div>
             <SortableList

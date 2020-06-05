@@ -318,7 +318,13 @@ export default class CampaignHeader extends Component {
                                 {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`}
                               </Button>
                               <p className="mt-10">
-                                {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
+                                {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} {' '}
+                                <PopUpModal
+                                  customTrigger={<span className="popup-label">min investment</span>}
+                                  content="This is the minimum individual investment amount required to participate in this offering. This amount is set by the Issuer."
+                                  position="top center"
+                                  showOnlyPopup={!isMobile}
+                                />
                             </p>
                             </Grid.Column>
                             )}
