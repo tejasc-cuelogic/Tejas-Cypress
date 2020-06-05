@@ -8,6 +8,8 @@ import Contingency from './overview/Contingency';
 import { FormInput } from '../../../../../theme/form';
 import { InlineLoader } from '../../../../../theme/shared';
 import AddToCollection from '../../marketing/AddToCollection';
+import Helper from '../../../../../helper/utility';
+import { DataFormatter } from '../../../../../helper';
 
 @withRouter
 @inject('offeringCreationStore', 'userStore', 'uiStore', 'nsUiStore', 'collectionStore', 'offeringsStore')
@@ -33,6 +35,33 @@ export default class Overview extends Component {
       this.props.history.push(`/dashboard/offering/${OFFERING_DETAILS_FRM.fields.offeringSlug.value}/overview`);
     });
   }
+
+  showValue = props => ((props.type === 1)
+    ? (Helper.CurrencyFormat(props.content))
+    : ((props.type === 2) ? `date ${props.content}` : props.content));
+
+  summary = offer => [
+    {
+      label: 'Date Created',
+      value: offer.created ? DataFormatter.formatedDate(offer.created.date) : 'N/A',
+      type: 0,
+    },
+    {
+      label: 'Primary Contact',
+      value: offer.issuerDetails && offer.issuerDetails.info ? `${offer.issuerDetails.info.firstName} ${offer.issuerDetails.info.lastName}` : 'N/A',
+      type: 0,
+    },
+    {
+      label: 'Date Updated',
+      value: offer.created ? DataFormatter.formatedDate(offer.updated.date) : 'N/A',
+      type: 0,
+    },
+    {
+      label: 'Investment Banking Lead',
+      value: offer.leadDetails && offer.leadDetails.info ? `${offer.leadDetails.info.firstName} ${offer.leadDetails.info.lastName}` : 'N/A',
+      type: 0,
+    },
+  ];
 
   render() {
     const {
@@ -72,14 +101,27 @@ export default class Overview extends Component {
                 />
               ))
             }
-          </Form.Group>
-          {isIssuer ? ''
+            </Form.Group>
+            {isIssuer ? ''
             : (
-              <div className="clearfix">
+              <div className="clearfix mb-14">
                 <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} loading={inProgress} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
               </div>
             )
           }
+            <Form.Group widths={2}>
+            {!isIssuer && offer.stage === 'CREATION'
+              && this.summary(offer).map(field => (
+                <FormInput
+                  name={field.label}
+                  value=""
+                  readOnly
+                  containerclassname="display-only"
+                  fielddata={field}
+                />
+              ))
+            }
+          </Form.Group>
           {
             ['LIVE', 'COMPLETE'].includes(offer.stage)
             && (

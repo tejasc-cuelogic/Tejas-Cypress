@@ -129,14 +129,14 @@ export default class OfferingDetails extends Component {
                   <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}`} className="neutral-text green-hover no-decoration">
                     Preview
                   </Link>
-                  {/* {offer.stage === 'CREATION'
-                    && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
-                  } */}
-                  {/* Lock unlock component */}
+                  {offer.stage === 'CREATION'
+                    && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit POC</Link>
+                  }
                   <LockUnlockOffering />
                 </Header.Subheader>
               </Header>
             </CopyToClipboard>
+            {/* <CreationSummary offer={offer} /> */}
             {offer.stage === 'CREATION' ? '' : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
               <SecondaryMenu isBonusReward bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
