@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { intersection } from 'lodash';
 import { observer, inject } from 'mobx-react';
-import { Form, Header, Button } from 'semantic-ui-react';
+import { Form, Header, Button, Icon } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 import { FormInput } from '../../../../../theme/form';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -34,6 +34,11 @@ export default class Overview extends Component {
     updateOffering(currentOfferingId, OFFERING_DETAILS_FRM.fields).then(() => {
       this.props.history.push(`/dashboard/offering/${OFFERING_DETAILS_FRM.fields.offeringSlug.value}/overview`);
     });
+  }
+
+  handleEditPoc = () => {
+    const { OFFERING_DETAILS_FRM } = this.props.offeringCreationStore;
+    this.props.history.push(`/dashboard/offering/${OFFERING_DETAILS_FRM.fields.offeringSlug.value}/editPoc`);
   }
 
   showValue = props => ((props.type === 1)
@@ -104,12 +109,17 @@ export default class Overview extends Component {
             </Form.Group>
             {isIssuer ? ''
             : (
-              <div className="clearfix mb-14">
+              <div className="clearfix">
                 <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} loading={inProgress} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
               </div>
             )
           }
-            <Form.Group widths={2}>
+          <Header as="h5" className="mt-0">POC
+            {offer.stage === 'CREATION'
+              && <Button as="a" color="green" size="small" className="link link-button" onClick={() => this.handleEditPoc()}><Icon size="small" className="ns-pencil" />Edit</Button>
+            }
+          </Header>
+          <Form.Group widths={2}>
             {!isIssuer && offer.stage === 'CREATION'
               && this.summary(offer).map(field => (
                 <FormInput

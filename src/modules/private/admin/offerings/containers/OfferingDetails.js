@@ -129,9 +129,6 @@ export default class OfferingDetails extends Component {
                   <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}`} className="neutral-text green-hover no-decoration">
                     Preview
                   </Link>
-                  {offer.stage === 'CREATION'
-                    && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit POC</Link>
-                  }
                   <LockUnlockOffering />
                 </Header.Subheader>
               </Header>
