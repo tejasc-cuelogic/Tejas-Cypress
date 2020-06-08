@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { Form, Popup, Icon, TextArea } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
+
 @observer
 export default class FormTextarea extends Component {
   state = { showError: false };
