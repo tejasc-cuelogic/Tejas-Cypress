@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
-import { Checkbox } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 
 function LockUnlockCollection(props) {
   const [lockStatus, setLockStatus] = useState(false);
@@ -15,9 +15,9 @@ function LockUnlockCollection(props) {
   }, [lockStatus]);
   const adminLockOrUnlockCollection = (result, forceUnlockEnabled = false) => {
     const aResult = result;
-    const action = forceUnlockEnabled ? 'FORCE_UNLOCK' : get(aResult, 'checked') ? 'LOCK' : 'UNLOCK';
+    const action = forceUnlockEnabled ? 'FORCE_UNLOCK' : get(aResult, 'lock') ? 'LOCK' : 'UNLOCK';
     props.collectionStore.adminLockOrUnlockCollection(action).then(() => {
-      setLockStatus(get(aResult, 'checked'));
+      setLockStatus(get(aResult, 'lock'));
     }).catch((err) => {
       const message = get(err, 'message') || '';
       if (message.includes('Not authorized.') || message.includes('has the lock')) {
@@ -28,7 +28,7 @@ function LockUnlockCollection(props) {
 
   const handleForceUnlock = (e) => {
     e.preventDefault();
-    adminLockOrUnlockCollection({ checked: true }, true);
+    adminLockOrUnlockCollection({ value: true }, true);
   };
 
   const { nsUiStore, collectionStore, userDetailsStore } = props;
@@ -38,23 +38,19 @@ function LockUnlockCollection(props) {
   const lock = get(collection, 'lock');
   return (
     <>
-      <Checkbox
-        disabled={(lock && (currentUserId !== get(lock, 'id'))) || loadingArray.includes('adminLockOrUnlockCollection')}
-        name="isLocked"
-        value={lockStatus}
-        onChange={(e, result) => adminLockOrUnlockCollection(result)}
-        checked={lockStatus}
-        label={loadingArray.includes('adminLockOrUnlockCollection') ? 'Loading...' : lockStatus ? 'Unlock Collection' : 'Lock Collection'}
-        toggle
-        className="negative-toggle"
-      />
-      {get(lock, 'user') && currentUserId !== get(lock, 'userId')
+      <span>
+        <Button circular name="isLocked" color={lockStatus ? 'red' : 'green'} className="link-button ml-30" disabled={(lock && (currentUserId !== get(lock, 'id'))) || loadingArray.includes('adminLockOrUnlockCollection')}>
+          <Icon lock={!lockStatus} className={`mr-10 ${lockStatus ? 'ns-lock' : 'ns-unlock'}`} onClick={(e, result) => adminLockOrUnlockCollection(result)} />
+        </Button>
+        {get(lock, 'by') && currentUserId !== get(lock, 'id')
         ? (
           <>
-            <div className="mt-10">Collection is locked by {get(lock, 'user')}</div>
-            <Link to="/" onClick={() => handleForceUnlock()} disabled={loadingArray.includes('adminLockOrUnlockCollection')}>Force Unlock</Link>
+            <span className="mt-10">Locked by {get(lock, 'by')} {' '}
+              (<Link to="/" onClick={handleForceUnlock} disabled={loadingArray.includes('adminLockOrUnlockCollection')}>Force Unlock</Link>)
+            </span>
           </>
-        ) : ''}
+        ) : lockStatus ? 'Locked' : 'Unlocked'}
+      </span>
     </>
   );
 }

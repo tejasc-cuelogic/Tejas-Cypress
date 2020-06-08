@@ -213,7 +213,12 @@ export default class CampaignHeaderPreview extends Component {
                                   </Button>
                                   <p className="mt-10">
                                     {Helper.CurrencyFormat(get(offer, 'keyTerms.minInvestAmt'), 0)} min investment
-                            </p>
+                                    <Popup
+                                      trigger={<Icon name="help circle" color="green" />}
+                                      content="This is the minimum individual investment amount required to participate in this offering. This amount is set by the Issuer."
+                                      position="top center"
+                                    />
+                                  </p>
                                 </Grid.Column>
                               )}
                             {followBtn && headerBasicFields.toggleMeta.value.includes('FOLLOW_STATE')
