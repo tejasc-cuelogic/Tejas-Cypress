@@ -72,7 +72,7 @@ class CollectionDetails extends Component {
   scrollAndLoad = (type) => {
     const { setFieldValue, loadMoreRecord } = this.props.collectionStore;
     setFieldValue('isLoadMoreClicked', true);
-    window.scrollBy(0, window.innerHeight * 2);
+    // window.scrollBy(0, window.innerHeight * 2);
     loadMoreRecord(type);
   }
 
