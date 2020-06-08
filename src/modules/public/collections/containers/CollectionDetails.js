@@ -72,8 +72,10 @@ class CollectionDetails extends Component {
   scrollAndLoad = (type) => {
     const { setFieldValue, loadMoreRecord } = this.props.collectionStore;
     setFieldValue('isLoadMoreClicked', true);
-    // window.scrollBy(0, window.innerHeight * 2);
+    this.props.navStore.setFieldValue('currentActiveHash', null);
+    window.removeEventListener('scroll', this.handleOnScroll);
     loadMoreRecord(type);
+    window.addEventListener('scroll', this.handleOnScroll);
   }
 
   onScrollCallBack = (target) => {
