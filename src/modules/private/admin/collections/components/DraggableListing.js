@@ -31,7 +31,7 @@ const SortableItem = SortableElement(({
     <Table.Row className={(record.scope === 'PUBLIC') ? '' : 'row-highlight'} collapsing>
       <Table.Cell collapsing>
         <DragHandle />
-        {isOffering ? offeringTitle(record) : record.title}
+        {isOffering ? offeringTitle(record).length > 50 ? (`${offeringTitle(record).substring(0, 55)}...`) : offeringTitle(record) : record.title.length > 60 ? (`${record.title.substring(0, 55)}...`) : record.title}
       </Table.Cell>
       <Table.Cell>
         {smartElement.ImageCropper('image', { style: { height: '125px' }, multiForm: [metaInfo.form, 'mappingContent', fieldIndex], uploadPath: `collections/${collectionId}`, removeMedia })}
@@ -118,7 +118,7 @@ function DraggableListing(props) {
 
   useEffect(() => {
     props.collectionStore.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, props.allRecords);
-  }, []);
+  }, [props.allRecords]);
 
   const onSortEnd = async ({ oldIndex, newIndex }) => {
     if (oldIndex !== newIndex) {
@@ -134,7 +134,7 @@ function DraggableListing(props) {
     if (action === 'Delete') {
       props.uiStore.setConfirmBox(action, record.id);
     } else if (action === 'Publish') {
-      setisPublic(isPublished === 'PUBLIC' ? 'PUBLIC' : 'HIDDEN');
+      setisPublic(isPublished ? 'PUBLIC' : 'HIDDEN');
       props.uiStore.setConfirmBox(action, record.id, isPublished);
     }
   };
@@ -149,8 +149,8 @@ function DraggableListing(props) {
     };
     await collectionStore.collectionMappingMutation('adminCollectionMappingUpsert', params);
     collectionStore.setFieldValue('collectionIndex', null);
-    props.history.push(`${props.match.url}`);
     props.uiStore.setConfirmBox('');
+    props.history.push(`${props.match.url}`);
   };
 
   const handleDeleteCancel = () => {
@@ -172,6 +172,7 @@ function DraggableListing(props) {
   if (isLoading || loading) {
     return <InlineLoader />;
   }
+
   return (
     <>
       <ContainerList

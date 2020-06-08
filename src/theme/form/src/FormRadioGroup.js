@@ -9,6 +9,18 @@ const FormRadioGroup = observer((props) => {
     values, value, tooltip, error,
   } = props.fielddata;
 
+  const onChange = (e, result) => {
+    if (props.eleName) {
+      const obj = {
+        name: props.eleName,
+        value: result.value,
+      };
+      props.changed(obj, obj);
+    } else {
+      props.changed(e, result);
+    }
+  };
+
   if (!props.iconic) {
     if (props.vertical) {
       return (
@@ -23,7 +35,7 @@ const FormRadioGroup = observer((props) => {
                 value={radio.value}
                 className={`${props.value} ${radio.value}`}
                 checked={value === radio.value}
-                onChange={props.changed}
+                onChange={onChange}
               />
             ))
           }
@@ -37,7 +49,7 @@ const FormRadioGroup = observer((props) => {
               values.map(radio => (
                 <Form.Field>
                   <div className={`ui radio checkbox ${value === radio.value ? 'checked' : ''}`}>
-                    <input type="radio" value={radio.value} checked={value === radio.value} onChange={props.changed} {...props} />
+                    <input type="radio" value={radio.value} checked={value === radio.value} onChange={onChange} {...props} />
                     <label>
                       {radio.icon
                         && <Icon className={radio.icon} />
@@ -76,7 +88,7 @@ const FormRadioGroup = observer((props) => {
                 value={radio.value}
                 className={`${props.value} ${radio.value} ${props.classname}`}
                 checked={value === radio.value}
-                onChange={props.changed}
+                onChange={onChange}
               />
             ))
           }
@@ -93,7 +105,7 @@ const FormRadioGroup = observer((props) => {
       {
         values.map(radio => (
           <div className={`ui radio checkbox ${value === radio.value ? 'checked' : ''}`}>
-            <input type="radio" readOnly value={radio.value} checked={value === radio.value} onChange={props.changed} {...props} />
+            <input type="radio" readOnly value={radio.value} checked={value === radio.value} onChange={onChange} {...props} />
             <label>
               {radio.icon
                 && <Icon className={radio.icon} />

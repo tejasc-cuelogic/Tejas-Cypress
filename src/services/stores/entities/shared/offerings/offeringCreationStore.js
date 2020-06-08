@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, arrow-body-style, max-len, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith, isEqual } from 'lodash';
+import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith, isEqual, remove } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -11,7 +11,7 @@ import {
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS, CLOSING_BINDING,
-  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES, OFFERING_DEFAULT,
+  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES, OFFERING_DEFAULT, UPLOAD_DATA,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore from '../dataModelStore';
@@ -25,7 +25,7 @@ import { adminInvokeProcessorDriver } from '../../../queries/data';
 import { updateBusinessApplicationInformation, adminBusinessApplicationsDetails } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore, businessAppStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore, businessAppStore, manageOfferingStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 import { INDUSTRY_TYPES } from '../../../../../constants/offering';
@@ -113,6 +113,8 @@ export class OfferingCreationStore extends DataModelStore {
 
   @observable DATA_ROOM_FRM = Validator.prepareFormObject(DATA_ROOM);
 
+  @observable UPLOAD_DATA_FRM = Validator.prepareFormObject(UPLOAD_DATA);
+
   @observable CLOSING_BINDER_FRM = Validator.prepareFormObject(CLOSING_BINDING);
 
   @observable POC_DETAILS_FRM = Validator.prepareFormObject(POC_DETAILS);
@@ -179,6 +181,10 @@ export class OfferingCreationStore extends DataModelStore {
   };
 
   @observable oldFormDetails = {}
+
+  @observable currTime = false;
+
+  @observable isMappingValid = true;
 
   constructor() {
     super({ adminInvokeProcessorDriver });
@@ -284,7 +290,7 @@ export class OfferingCreationStore extends DataModelStore {
   resetAllForms = () => {
     offeringInvestorStore.setData('db', undefined);
     offeringInvestorStore.setData('data', []);
-    const forms = ['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
+    const forms = ['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM', 'UPLOAD_DATA_FRM'];
     forms.forEach((f) => {
       this[f] = Validator.resetFormData(this[f]);
     });
@@ -494,10 +500,10 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
-  removeData = (formName, subForm = 'data', isApiDelete = false, isForBusinessApplication = false) => {
+  removeData = (formName, subForm = 'data', isApiDelete = false, isForBusinessApplication = false, documentLength = undefined) => {
     const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
-      if (['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'CLOSING_BINDER_FRM', 'DATA_ROOM_FRM'].includes(formName)) {
+      if (['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'CLOSING_BINDER_FRM', 'DATA_ROOM_FRM', 'UPLOAD_DATA_FRM'].includes(formName)) {
         let removeFileIds = '';
         let removedArr = [];
         if (isForBusinessApplication) {
@@ -518,6 +524,10 @@ export class OfferingCreationStore extends DataModelStore {
     this.confirmModalName = null;
     if (subForm === 'leadership') {
       this.leadershipExperience[this.removeIndex] = LEADERSHIP_EXP.employer;
+    }
+    if (formName === 'UPLOAD_DATA_FRM' && documentLength && documentLength === 1) {
+      this.resetForm(formName);
+      this[formName] = Validator.prepareFormObject(UPLOAD_DATA);
     }
     this.removeIndex = null;
   }
@@ -581,6 +591,40 @@ export class OfferingCreationStore extends DataModelStore {
       if (form === 'LEADERSHIP_EXP_FRM') {
         this.leadershipExperience[index2] = this[form];
       }
+    }
+    if (form === 'UPLOAD_DATA_FRM') {
+      this.validateMultiLevelArrayFormChange(index);
+    }
+    this.currTime = +new Date();
+  }
+
+  @action
+  validateMultiLevelArrayFormChange = (index) => {
+    const uploadform = this.UPLOAD_DATA_FRM.fields.documents;
+    const mappedForm = manageOfferingStore.DOCUMENT_UPLOAD_MAPPING_FRM;
+    if (uploadform && uploadform.length > 0) {
+      if (!uploadform[index].mappingRequired.value) {
+        this.setFieldValue('isMappingValid', true);
+      } else {
+        this.setFieldValue('isMappingValid', mappedForm[index].meta.isValid);
+      }
+    } else {
+      this.setFieldValue('isMappingValid', true);
+    }
+  }
+
+  @action
+  validateMultiLevelArrayForm = () => {
+    const uploadform = this.UPLOAD_DATA_FRM.fields.documents;
+    const mappedForm = manageOfferingStore.DOCUMENT_UPLOAD_MAPPING_FRM;
+    if (uploadform && uploadform.length > 0) {
+      forEach(uploadform, (obj, index) => {
+        if (obj.mappingRequired.value) {
+          this.setFieldValue('isMappingValid', mappedForm[index].meta.isValid);
+        }
+      });
+    } else {
+      this.setFieldValue('isMappingValid', true);
     }
   }
 
@@ -672,6 +716,14 @@ export class OfferingCreationStore extends DataModelStore {
           const fileData = Helper.getFormattedFileData(file);
           this.isUploadingFile = true;
           this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
+          // const fileData = {
+          //   fileName: '[PE-LLC] Purchase Agreement.docx',
+          //   fileType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          //   fileExtension: 'docx',
+          //   fileSize: '76745',
+          // };
+          // fileUpload.setFileUploadData('', fileData, 'DOCUMENTS_INVEST_NOW', 'ADMIN', '', 'b4f565d0-7ef5-11ea-bb8c-b7a0276e2a1a')
+
           fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
             const { fileId, preSignedUrl } = result.data.createUploadEntry;
             fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(action(() => {
@@ -916,6 +968,12 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
+  addMoreUploadForm = (form, key, count = 1) => {
+    this[form] = Validator.addMoreRecordToSubSection(this[form], key, count, true);
+    this[form].fields[key][this[form].fields[key].length - 1].upload.showLoader = false;
+  }
+
+  @action
   setContingencyDataOnAdd = (formName, arrayKey) => {
     const { fields } = this.ADD_NEW_CONTINGENCY_FRM;
     const dataLength = this[formName].fields[arrayKey].length;
@@ -1006,6 +1064,19 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
+  setFormDataForUploadDocuments = (form, ref) => {
+    this.resetForm(form);
+    this.setFieldValue('removedFileData', [], 'documents');
+    const { offer } = offeringsStore;
+    const evaluatedFormData = Helper.replaceKeysDeep(offer, { doc: 'documents' });
+    const formDetails = Validator.setFormData(this[form], evaluatedFormData, ref);
+    this[form] = formDetails;
+    this.setFieldValue('oldFormDetails', formDetails.fields);
+    this.checkFormValid(form, true, false);
+    return false;
+  }
+
+  @action
   stringTemplateFormatting = (form, data) => {
     const currentForm = this[form];
     forEach(currentForm.fields, (field, key) => {
@@ -1038,6 +1109,7 @@ export class OfferingCreationStore extends DataModelStore {
       DOCUMENTATION_FRM: { isMultiForm: false },
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
       DATA_ROOM_FRM: { isMultiForm: true },
+      UPLOAD_DATA_FRM: { isMultiForm: true },
       CLOSING_BINDER_FRM: { isMultiForm: true },
       POC_DETAILS_FRM: { isMultiForm: false },
       OFFERING_CLOSE_1: { isMultiForm: false },
@@ -1471,6 +1543,59 @@ export class OfferingCreationStore extends DataModelStore {
       fromS3, res, rej, msgType, isLaunchContingency, approvedObj,
     );
   });
+
+  singleFileUpload = (form, uploadFormKey, fieldName, firstFileRecord, uploadEnum) => new Promise((resolve, reject) => {
+    this.bulkFileUpload(form, uploadFormKey, fieldName, firstFileRecord, uploadEnum, true).then(() => {
+      resolve(true);
+    }).catch(action((error) => {
+      reject(error);
+    }));
+  });
+
+  @action
+  updateUploadDocs = async (uploadMeta, uploadDocumentArr = undefined, fromS3 = false) => {
+    uiStore.setProgress('save');
+    const { form, uploadFormKey, fieldName, uploadEnum } = uploadMeta;
+    let isBulkCall = false;
+    if (uploadDocumentArr.length > 1) {
+      // eslint-disable-next-line no-irregular-whitespace
+      const firstFileRecord = remove(uploadDocumentArr, (n, i) => i === 0);
+      isBulkCall = await this.singleFileUpload(form, uploadFormKey, fieldName, firstFileRecord, uploadEnum);
+    } else {
+      isBulkCall = true;
+    }
+    if (isBulkCall) {
+      this.bulkFileUpload(form, uploadFormKey, fieldName, uploadDocumentArr, uploadEnum, true).then(() => {
+        const dataRoomDocs = Validator.evaluateFormData(this[form].fields).documents || [];
+        // const removedDataRoomsDocs = Validator.evaluateFormData(this.removedFileData).documents || [];
+        // const oldDataRoomDocs = Validator.evaluateFormData(this.oldFormDetails).documents;
+        const finalDataRoomDocs = [];
+        dataRoomDocs.map((data, index) => {
+          if (data.accreditedOnly !== undefined) {
+            delete data.accreditedOnly;
+          }
+          if (data.name !== '' || data.upload.fileId !== '') {
+            finalDataRoomDocs.push(data);
+          }
+          return finalDataRoomDocs;
+        });
+        const payloadData = {
+          template: 2,
+          doc: cleanDeep(finalDataRoomDocs),
+        };
+        // manageOfferingStore.updateOffering({ keyName: 'investNow', offeringData: { docuSign: payloadData } })
+        manageOfferingStore.updateDocument(payloadData)
+          .then(() => {
+            this.removeUploadedFiles(fromS3);
+            // Helper.toast('Document has been saved successfully.', 'success');
+            uiStore.setProgress(false);
+          });
+      }).catch(action((error) => {
+        window.logger(error);
+        uiStore.setProgress(false);
+      }));
+    }
+  }
 
   @action
   updateApplication = (uploadDocumentArr = undefined, fromS3 = false) => {
@@ -2165,7 +2290,8 @@ export class OfferingCreationStore extends DataModelStore {
   }
 
   @action
-  setDataRoomDocsOrder = (orderedForm) => {
+  setDataRoomDocsOrder = (orderedForm, formName = false) => {
+    const activeForm = formName || 'DATA_ROOM_FRM';
     const dataRoomDocs = toJS(orderedForm).map((d) => {
       return {
         name: d.name.value,
@@ -2173,7 +2299,23 @@ export class OfferingCreationStore extends DataModelStore {
         upload: { fileId: d.upload.fileId, fileName: d.upload.value },
       };
     });
-    this.DATA_ROOM_FRM = Validator.setFormData(this.DATA_ROOM_FRM, { documents: dataRoomDocs });
+    this[activeForm] = Validator.setFormData(this[activeForm], { documents: dataRoomDocs });
+  }
+
+  @action
+  setUploadDocsOrder = (orderedForm, formName = false) => {
+    const activeForm = formName || 'DATA_ROOM_FRM';
+    const uploadDocs = toJS(orderedForm).map((d) => {
+      return {
+        name: d.name.value,
+        accreditedOnly: d.accreditedOnly.value,
+        upload: { fileId: d.upload.fileId, fileName: d.upload.value },
+        mappingRequired: d.mappingRequired.value,
+      };
+    });
+    this[activeForm] = Validator.setFormData(this[activeForm], { documents: uploadDocs });
+    const multiForm = this.getActionType(activeForm, 'isMultiForm');
+    this.checkFormValid(activeForm, multiForm);
   }
 
   @action
@@ -2198,14 +2340,14 @@ export class OfferingCreationStore extends DataModelStore {
       });
   }
 
-  bulkFileUpload = (form, arrayName, field, files, stepName) => new Promise((resolve, reject) => {
+  bulkFileUpload = (form, arrayName, field, files, stepName, isOffering = false) => new Promise((resolve, reject) => {
     // resolve();
     if (typeof files !== 'undefined' && files.length) {
       const funcArray = [];
       forEach(files, (file, index) => {
         const fileData = Helper.getFormattedFileData(file);
         this.isUploadingFile = true;
-        funcArray.push(this.uploadFiles(form, arrayName, field, file, stepName, fileData, file.currentIndex));
+        funcArray.push(this.uploadFiles(form, arrayName, field, file, stepName, fileData, file.currentIndex, isOffering));
       });
       Promise.all(funcArray).then((responseArr) => {
         window.logger(responseArr);
@@ -2219,10 +2361,10 @@ export class OfferingCreationStore extends DataModelStore {
     }
   });
 
-  uploadFiles = (form, arrayName, field, file, stepName, fileData, index) => new Promise((resolve, reject) => {
+  uploadFiles = (form, arrayName, field, file, stepName, fileData, index, isOffering = false) => new Promise((resolve, reject) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
-    const businessApplicationId = businessApplicationDetailsAdmin.applicationId;
-    const issuerId = businessApplicationDetailsAdmin.userId;
+    const businessApplicationId = isOffering ? '' : businessApplicationDetailsAdmin.applicationId;
+    const issuerId = isOffering ? '' : businessApplicationDetailsAdmin.userId;
     fileUpload.setFileUploadData(businessApplicationId, fileData, stepName, 'ADMIN', issuerId, this.currentOfferingId).then((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(action(() => {

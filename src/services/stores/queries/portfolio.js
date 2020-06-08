@@ -93,6 +93,8 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
             investmentMultiple
             interestRate
             regulation
+            valuationCap
+            discount
             minOfferingAmount506
             maxOfferingAmount506
             minOfferingAmount506C

@@ -207,11 +207,11 @@ const PrivacyPolicy = () => (
             of the NextSeed family of companies.
           </List.Item>
           <List.Item as="li" className="item">
-            <b>To Issuers:</b> We may provide certain contact information such as email and contact
-            information to issuers for the purposes of providing services to you under the
-            applicable investment agreements. These providers are not authorized to further disclose
-            Personal Information or to use Personal Information for any other purpose other than
-            providing such services.
+            <b>To Issuers:</b> We may provide certain contact information such as your name, email,
+            location and contact information to issuers that you commit to invest in, for the purposes
+            of providing services to you under the applicable investment agreements and for general
+            fundraising and marketing analysis. Issuers are not authorized to further disclose
+            Personal Information or to use Personal Information for any other purpose.
           </List.Item>
           <List.Item as="li" className="item">
             <b>To Other Users:</b>  The Service may include features where you can post comments or

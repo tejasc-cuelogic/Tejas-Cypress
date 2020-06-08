@@ -18,3 +18,13 @@ mutation adminLockOrUnlockOffering($offeringId: String!, $action: OfferingLockAc
   }
 }
 `;
+
+export const adminGetInvestNowMappings = gql`
+query _adminGetInvestNowMappings {
+  adminGetInvestNowMappings {
+    label
+    value
+    defaultKey
+  }
+}
+`;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Header, Button, Message, Responsive } from 'semantic-ui-react';
+import { Header, Button, Message, Responsive, List, ListItem } from 'semantic-ui-react';
 import money from 'money-math';
 import { get, includes } from 'lodash';
 import BasicTransferRequest from './transferRequest/basicTransferRequest';
@@ -83,8 +83,8 @@ function TransferRequest(props) {
     investmentFlowErrorMessage,
   } = investmentStore;
   const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
-  const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
-  const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
+  const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
+  const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
   const getPreviousInvestedAmount = (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
   const bankAndAccountName = userAmountDetails && userAmountDetails.bankNameAndAccountNumber ? userAmountDetails.bankNameAndAccountNumber : '-';
   let headerTitle = showTransferRequest === 'basic' ? 'Confirm Transfer Request' : 'How would you like to fund this investment?';
@@ -152,8 +152,16 @@ function TransferRequest(props) {
             : advanceTransferStepStatement
           : transferRequestMethod === 'ACH'
             ? <sapn>By clicking the “Confirm” button, I authorize the transfer from my <span className="positive-text">{bankAndAccountName}</span> account in the amount equal to the Transfer Requested above. I understand this transfer will be <span className="positive-text">initiated within 1 business day of the Transfer Date.</span></sapn>
-            : <span>By clicking the “Confirm” button, I acknowledge that <span className="positive-text">I will initiate a wire transfer with these instructions within 5 business days.</span> If funds are not received by GoldStar Trust within this time period, my investment will be canceled.</span>
-        }
+            : (
+              <>
+                <Header as="h6">By clicking the Confirm button, I acknowledge that</Header>
+                <List bulleted className="confirmWireAmtList">
+                  <ListItem>I will initiate a transfer with these instructions within 5 business days.</ListItem>
+                  <ListItem>If funds are not received by GoldStar Trust within this time period, my investment will be canceled.</ListItem>
+                </List>
+              </>
+            )
+          }
       </p>
       {investmentFlowErrorMessage
         && (
@@ -173,7 +181,7 @@ function TransferRequest(props) {
             </div>
           )
           : (
-            <div className={isMobile ? 'mt-20' : 'center-align'}>
+            <div className={isMobile ? 'mt-20' : 'center-align mt-30'}>
               <Button primary fluid={isMobile ? true : ''} content="Transfer Funds Via ACH" type="button" onClick={() => renderTransferStep('ACH')} />
               <Responsive maxWidth={768} as="br" />
               <Button primary fluid={isMobile ? true : ''} content="Wire Funds" onClick={() => renderTransferStep('WIRE')} />
