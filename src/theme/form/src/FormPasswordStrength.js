@@ -5,6 +5,7 @@ import { Form, Popup, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import ReactPasswordStrength from 'react-password-strength';
 import { FieldError } from '../../shared';
+
 @inject('authStore')
 @observer
 export default class FormPasswordStrength extends Component {
