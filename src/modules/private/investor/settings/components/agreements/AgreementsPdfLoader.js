@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../../../theme/shared';
+
 @inject('agreementsStore', 'userDetailsStore')
 @observer
 export default class AgreementsPdfLoader extends Component {

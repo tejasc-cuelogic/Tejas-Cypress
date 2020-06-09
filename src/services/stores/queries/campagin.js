@@ -161,6 +161,8 @@ export const offeringFields = `id
         shorthandBusinessName
         legalBusinessName
         securities
+        valuationCap
+        discount
         equityClass
         industry
         state
@@ -454,6 +456,12 @@ export const campaignDetailsQuery = gql`
           required
         }
       }
+      config {
+        expectedReturnCalc
+        investmentType
+        showBonusRewards
+        showExpectedReturn
+      }
     }
     closureSummary {
       processingDate
@@ -577,6 +585,12 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
           required
         }
       }
+      config {
+        expectedReturnCalc
+        investmentType
+        showBonusRewards
+        showExpectedReturn
+      }
     }
     closureSummary {
       processingDate
@@ -640,6 +654,8 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
       isTX
       state
       city
+      valuationCap
+      discount
     }
     offering {
       launch {

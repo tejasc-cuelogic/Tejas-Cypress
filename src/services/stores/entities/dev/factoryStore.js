@@ -1,10 +1,11 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { get, isEmpty, forEach, find, includes, keyBy, has, pickBy, identity, pick } from 'lodash';
+import { get, isEmpty, forEach, find, includes, keyBy, has, pickBy, identity, pick, filter, remove } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { adminListFilePlugins, getPluginList, adminSendEmail, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile } from '../../queries/data';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META, REQUESTFACTORY_LOG__META, PROCESSFACTORY_LOG__META, FILEFACTORY_META, EMAILFACTORY_META } from '../../../constants/admin/data';
+import { offeringsStore } from '../../index';
 
 export class FactoryStore extends DataModelStore {
   constructor() {
@@ -185,7 +186,7 @@ export class FactoryStore extends DataModelStore {
     }
   }
 
-  fetchPluginsForFileFactory = async () => {
+  fetchPluginsForFileFactory = async (fetchSpecificPlugins = false) => {
     try {
       const res = await this.executeQuery({
         client: 'PRIVATE',
@@ -196,7 +197,14 @@ export class FactoryStore extends DataModelStore {
       if (get(res, 'adminListFilePlugins')) {
         const fileData = { adminListFilePlugins: { plugins: get(res, 'adminListFilePlugins') } };
         this.setFieldValue('pluginListArr', fileData);
-        this.setFieldValue('FILEFACTORY_FRM', this.dropDownValuesForPlugin('adminListFilePlugins'), 'fields.method.values');
+        if (fetchSpecificPlugins) {
+          const filePlugins = this.dropDownValuesForPlugin('adminListFilePlugins');
+          const investNowFilePluginList = filter(filePlugins, o => o.value.includes(fetchSpecificPlugins));
+          const filteredFilePluginList = this.filterPluginAsperRegulation(investNowFilePluginList);
+          this.setFieldValue('FILEFACTORY_FRM', filteredFilePluginList, 'fields.method.values');
+        } else {
+          this.setFieldValue('FILEFACTORY_FRM', this.dropDownValuesForPlugin('adminListFilePlugins'), 'fields.method.values');
+        }
       }
     } catch (error) {
       Helper.toast('Something went wrong, please try again later.', 'error');
@@ -366,11 +374,24 @@ export class FactoryStore extends DataModelStore {
     }
   });
 
-  fileFactoryPluginTrigger = () => new Promise(async (resolve, reject) => {
-    const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields;
-    const formPayloadData = Validator.evaluateFormData(fieldsPayload, true);
-    const TestformData = this.ExtractToJSON(formPayloadData, true);
-    if (TestformData.payload && TestformData.payload !== '' && !this.isValidJson(TestformData.payload)) {
+  fileFactoryPluginTrigger = (investNowDocuSign = false) => new Promise(async (resolve, reject) => {
+    const { offer, offeringStorageDetails, getofferingStorageDetailBySlug } = offeringsStore;
+    const isEmptyStoreDetails = !!(isEmpty(offeringStorageDetails) || !get(offeringStorageDetails, 'data.getOfferingDetailsBySlug.storageDetails.Legal.GeneratedInvestNowDocs.id'));
+    let TestformData = {};
+    if (investNowDocuSign) {
+      const filePayload = this.FILEFACTORY_FRM.fields;
+      const filePayloadData = Validator.evaluateFormData(filePayload, true);
+      const fileDropdownData = this.ExtractToJSON(filePayloadData, true);
+      TestformData.identifier = fileDropdownData.method;
+      TestformData.ownerId = offer.id;
+      TestformData.resourceId = offer.id;
+    } else {
+      const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields;
+      const formPayloadData = Validator.evaluateFormData(fieldsPayload, true);
+      TestformData = this.ExtractToJSON(formPayloadData, true);
+    }
+
+    if (TestformData.payload && TestformData.payload !== '' && !this.isValidJson(TestformData.payload) && !investNowDocuSign) {
       this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
       this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid = false;
     } else {
@@ -382,9 +403,17 @@ export class FactoryStore extends DataModelStore {
           setLoader: adminGenerateFile,
           message: { error: 'Something went wrong, please try again later.' },
         });
-        if (get(result, 'data.generateFile')) {
-          Helper.toast('Your request is processed.', 'success');
-          resolve(result.data.generateFile);
+        if (get(result, 'data.adminGenerateFile')) {
+          if (investNowDocuSign && isEmptyStoreDetails) {
+            getofferingStorageDetailBySlug(offer.offeringSlug)
+              .then((res) => {
+                Helper.toast('Your request is processed.', 'success');
+                resolve(res);
+              });
+          } else {
+            Helper.toast('Your request is processed.', 'success');
+            resolve(result.data.adminGenerateFile);
+          }
         }
       } catch (error) {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -501,6 +530,25 @@ export class FactoryStore extends DataModelStore {
     this.setFieldValue('pluginListArr', fileData);
     const dropDownValues = identifierArrList.length > 0 ? identifierArrList.map(o => pick(o, ['key', 'value', 'text', 'pluginInput'])) : [];
     this.EMAILFACTORY_FRM.fields.method.values = dropDownValues;
+  }
+
+  filterPluginAsperRegulation = (pluginList) => {
+    const { offeringStatus } = offeringsStore;
+    const offeringSecurity = offeringStatus.isPreferredEquity ? 'PREFERRED_EQUITY' : offeringStatus.isTermNote ? 'TERM_NOTE' : offeringStatus.isRevenueShare ? 'REVENUE_SHARING' : 'OTHER';
+    const dropDownList = pluginList;
+    const npaAgrement = remove(dropDownList, n => n.value.includes('NotePurchaseAgreement'));
+    if (offeringSecurity === 'PREFERRED_EQUITY') {
+      return dropDownList;
+    } if (offeringSecurity === 'TERM_NOTE') {
+      npaAgrement[0].text = 'TermNote NPA';
+      npaAgrement[0].key = 'TermNote NPA';
+      return npaAgrement;
+    } if (offeringSecurity === 'REVENUE_SHARING') {
+      npaAgrement[0].text = 'RevShare NPA';
+      npaAgrement[0].key = 'RevShare NPA';
+      return npaAgrement;
+    }
+    return [];
   }
 }
 

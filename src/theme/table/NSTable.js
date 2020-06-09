@@ -1,16 +1,22 @@
 import React from 'react';
+import { get } from 'lodash';
 import { Table, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import Helper from '../../helper/utility';
 
 
-export const THeader = ({ columns }) => (
+export const THeader = ({ handleSort, columns, sortOrder }) => (
   <Table.Header>
     <Table.Row>
       {
         columns.map(col => (
-          <Table.HeaderCell key={col.field} textAlign={col.textAlign}>{col.title}</Table.HeaderCell>
+          <Table.HeaderCell
+            sorted={get(sortOrder, 'column') === col.field && get(sortOrder, 'direction') === 'asc' ? 'ascending' : 'descending'}
+            key={col.field}
+            textAlign={col.textAlign}
+            onClick={() => handleSort(col.field)}
+          >{col.title}</Table.HeaderCell>
         ))
       }
     </Table.Row>
@@ -49,52 +55,52 @@ export const NoR = ({ cols, msg }) => (
 );
 
 export const FillTable = ({
-  result, loading, error, download, additionalActions, aRule, instructions,
+  result, loading, error, download, handleSort, isSortable, sortOrder, additionalActions, aRule, instructions,
 }) => (
-  <div className="table-wrapper">
-    <Table unstackable singleLine className="investment-details">
-      <THeader columns={result.columns} />
-      <Table.Body>
-        {
-          error ? <NoR cols={result.columns.length} msg="Error while loading data" /> : (
-            loading ? <NoR cols={result.columns.length} msg="Loading.." /> : (
-              result.rows.length === 0 ? (
-                <NoR cols={result.columns.length} msg="No record to display" />
-              ) : (
-                result.rows.map(row => (
-                  <Table.Row key={Helper.guid()}>
-                    {
-                      result.columns.map(col => (
-                        <Table.Cell key={col.field} textAlign={col.textAlign}>
-                          {(col.field === 'file') ? (
-                            <Actions
-                              download={download}
-                              actions={{ fileId: row.fileId }}
-                              additionalActions={aRule
-                                && aRule.val.includes(parseFloat(row[aRule.key]))
-                                ? additionalActions : false
+    <div className="table-wrapper">
+      <Table unstackable sortable={isSortable} singleLine className="investment-details">
+        <THeader sortOrder={sortOrder} handleSort={handleSort} columns={result.columns} />
+        <Table.Body>
+          {
+            error ? <NoR cols={result.columns.length} msg="Error while loading data" /> : (
+              loading ? <NoR cols={result.columns.length} msg="Loading.." /> : (
+                result.rows.length === 0 ? (
+                  <NoR cols={result.columns.length} msg="No record to display" />
+                ) : (
+                    result.rows.map(row => (
+                      <Table.Row key={Helper.guid()}>
+                        {
+                          result.columns.map(col => (
+                            <Table.Cell key={col.field} textAlign={col.textAlign}>
+                              {(col.field === 'file') ? (
+                                <Actions
+                                  download={download}
+                                  actions={{ fileId: row.fileId }}
+                                  additionalActions={aRule
+                                    && aRule.val.includes(parseFloat(row[aRule.key]))
+                                    ? additionalActions : false
+                                  }
+                                  dataSet={{
+                                    instructions,
+                                    mapKey: aRule ? row[aRule.key] : null,
+                                  }}
+                                  record={row}
+                                  label={col.label}
+                                />
+                              ) : (
+                                  Array.isArray(row[col.field]) ? row[col.field].join(' and ') : row[col.field]
+                                )
                               }
-                              dataSet={{
-                                instructions,
-                                mapKey: aRule ? row[aRule.key] : null,
-                              }}
-                              record={row}
-                              label={col.label}
-                            />
-                          ) : (
-                            Array.isArray(row[col.field]) ? row[col.field].join(' and ') : row[col.field]
-                          )
-                          }
-                        </Table.Cell>
-                      ))
-                    }
-                  </Table.Row>
-                ))
+                            </Table.Cell>
+                          ))
+                        }
+                      </Table.Row>
+                    ))
+                  )
               )
             )
-          )
-        }
-      </Table.Body>
-    </Table>
-  </div>
-);
+          }
+        </Table.Body>
+      </Table>
+    </div>
+  );

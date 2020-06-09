@@ -91,7 +91,7 @@ class OfferingsPassProtected extends Component {
                       className="pt-10"
                     />
                     <FieldError error={this.state.error} />
-                    <Button loading={this.state.previewPassLoader} primary content="Confirm" className="mt-20" disabled={isDisabled || this.state.previewPassLoader} />
+                    <Button loading={this.state.previewPassLoader} fluid={responsiveVars.uptoTablet} primary content="Confirm" className="mt-20" disabled={isDisabled || this.state.previewPassLoader} />
                   </Form>
                 </Grid.Column>
               </Grid>

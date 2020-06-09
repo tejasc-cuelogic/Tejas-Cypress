@@ -5,6 +5,7 @@ import { Container, Menu, Button, Responsive, Visibility } from 'semantic-ui-rea
 import { NavItems } from '../../layout/NavigationItems';
 import { MobileDropDownNav } from '..';
 import Logo from './Logo';
+
 @inject('navStore')
 @withRouter
 @observer
