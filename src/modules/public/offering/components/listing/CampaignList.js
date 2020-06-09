@@ -111,7 +111,7 @@ export default class CampaignList extends Component {
                               <Image64
                                 bg
                                 centered
-                                srcUrl={collection ? get(offering, 'image.url') : tombstoneImage(offering) || ''}
+                                srcUrl={collection && offering.image ? get(offering, 'image.url') : tombstoneImage(offering) || ''}
                                 alt={`${get(offering, 'keyTerms.shorthandBusinessName')} poster`}
                               />
                             </div>
