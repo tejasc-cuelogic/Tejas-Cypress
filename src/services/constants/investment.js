@@ -254,19 +254,19 @@ export const INVESTMENT_SUMMARY_META = [
     label: 'Issuer',
     value: 'keyterms.shorthandBusinessName',
     isMobile: true,
-    for: ['ALL'],
+    for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE', 'SAFE', 'CONVERTIBLE_NOTES', 'EQUITY', 'REAL_ESTATE', 'FUNDS'],
   },
   {
     label: 'Securities',
     value: 'keyterms.securities',
     isMobile: true,
-    for: ['ALL'],
+    for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE', 'SAFE', 'CONVERTIBLE_NOTES', 'EQUITY', 'REAL_ESTATE', 'FUNDS'],
   },
   {
     label: 'Anticipated Opening Date',
     value: 'launch.expectedOpsDate',
     isMobile: true,
-    for: ['ALL'],
+    for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE', 'SAFE', 'CONVERTIBLE_NOTES', 'EQUITY', 'REAL_ESTATE', 'FUNDS'],
   },
   {
     label: 'Investment Multiple',
@@ -281,10 +281,22 @@ export const INVESTMENT_SUMMARY_META = [
     for: ['REVENUE_SHARING_NOTE'],
   },
   {
-    label: 'Interest Rate',
+    label: 'Annualized Interest Rate',
     value: 'keyTerms.interestRate',
     isMobile: true,
-    for: ['TERM_NOTE'],
+    for: ['TERM_NOTE', 'SAFE', 'CONVERTIBLE_NOTES'],
+  },
+  {
+    label: 'Market Cap',
+    value: 'keyTerms.valuationCap',
+    isMobile: true,
+    for: ['SAFE', 'CONVERTIBLE_NOTES'],
+  },
+  {
+    label: 'Discount',
+    value: 'keyTerms.discount',
+    isMobile: true,
+    for: ['SAFE', 'CONVERTIBLE_NOTES'],
   },
   {
     label: 'preferredEquityUnit',
@@ -302,7 +314,7 @@ export const INVESTMENT_SUMMARY_META = [
     label: 'Payments',
     value: 'keyTerms.frequencyOfPayments',
     isMobile: true,
-    for: ['ALL'],
+    for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE', 'SAFE', 'CONVERTIBLE_NOTES', 'EQUITY', 'REAL_ESTATE', 'FUNDS'],
   },
   {
     label: 'Revenue Sharing Percentage',
@@ -320,7 +332,7 @@ export const INVESTMENT_SUMMARY_META = [
     label: 'Maturity',
     value: 'keyTerms.maturity',
     isMobile: true,
-    for: ['ALL'],
+    for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE', 'SAFE', 'CONVERTIBLE_NOTES', 'EQUITY', 'REAL_ESTATE', 'FUNDS'],
   },
   {
     label: 'Maturity Date',
