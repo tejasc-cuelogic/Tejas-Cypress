@@ -58,12 +58,15 @@ function CollectionDetails(props) {
               {collection.name}
               <Header.Subheader className="mt-10">
                 <Link target="_blank" to={`/communities/${collection.slug}`}>
-                  <Icon className="ns-view" /><b>Preview collection page</b>
+                  <Icon className="ns-view" />
                 </Link>
+                <Link target="_blank" to={`/communities/${collection.slug}`} className="neutral-text green-hover no-decoration">
+                  Preview
+                </Link>
+              <LockUnlockCollection />
               </Header.Subheader>
             </Header>
           </CopyToClipboard>
-          <LockUnlockCollection />
           <Card fluid>
             <SecondaryMenu isBonusReward bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
             <SuspenseBoundary fallback={<InlineLoader styledAs={{ marginTop: '100px' }} />}>

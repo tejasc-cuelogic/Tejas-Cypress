@@ -145,7 +145,7 @@ class Overview extends Component {
                         </Table.Row>
                       ) : ''
                     }
-                    {offering && offering.launch && offering.launch.expectedOpsDate
+                    {offering && offering.launch && offering.launch.expectedOpsDate && keyTerms.securities !== 'SAFE'
                       ? (
                         <Table.Row verticalAlign="top">
                           <Table.Cell>Anticipated Opening Date</Table.Cell>
@@ -153,6 +153,32 @@ class Overview extends Component {
                             {offering && offering.launch
                               && offering.launch.expectedOpsDate
                               ? DataFormatter.getDateAsPerTimeZone(offering.launch.expectedOpsDate, false, true, false, undefined, 'CST', true)
+                              : 'N/A'
+                            }
+                          </Table.Cell>
+                        </Table.Row>
+                      ) : ''
+                    }
+                    {keyTerms && keyTerms.valuationCap
+                      ? (
+                        <Table.Row verticalAlign="top">
+                          <Table.Cell>Market Cap</Table.Cell>
+                          <Table.Cell>
+                            {keyTerms && keyTerms.valuationCap
+                              ? keyTerms && keyTerms.valuationCap
+                              : 'N/A'
+                            }
+                          </Table.Cell>
+                        </Table.Row>
+                      ) : ''
+                    }
+                    {keyTerms && keyTerms.valuationCap
+                      ? (
+                        <Table.Row verticalAlign="top">
+                          <Table.Cell>Discount</Table.Cell>
+                          <Table.Cell>
+                            {keyTerms && keyTerms.discount
+                              ? keyTerms && keyTerms.discount
                               : 'N/A'
                             }
                           </Table.Cell>

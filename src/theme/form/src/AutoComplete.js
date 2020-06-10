@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { Form } from 'semantic-ui-react';
 import Autocomplete from 'react-google-autocomplete';
 import { FieldError } from '../../shared';
+
 @observer
 export default class AutoComplete extends Component {
   state = { showError: false };
