@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { get, isEmpty } from 'lodash';
-import beautify from 'json-beautify';
-import { Card, Button, Form, Grid, Divider, Modal, Header } from 'semantic-ui-react';
+import { get } from 'lodash';
+import { Card, Button, Form, Grid, Divider } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import formHOC from '../../../../../../theme/form/formHOC';
 import DynamicFormInput from './dynamicFormInput';
+import ShowResponseModal from './showResponseModal';
+
 
 const metaInfo = {
   store: 'factoryStore',
@@ -24,6 +25,7 @@ class RequestFactory extends Component {
     this.props.factoryStore.resetForm('REQUESTFACTORY_FRM');
     this.props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {}, 'REQUESTFACTORY');
     this.props.factoryStore.setFieldValue('inProgress', false, 'requestFactory');
+    this.props.factoryStore.setFieldValue('factoryResponse', {});
     this.props.factoryStore.setFieldValue('REQUESTFACTORY_FRM', 'RequestResponse', 'fields.invocationType.value');
   }
 
@@ -33,14 +35,14 @@ class RequestFactory extends Component {
     });
   }
 
-  handleCloseModel(e, val) {
+  handleCloseModel = (e, val) => {
     e.preventDefault();
     this.setState({ prev: val });
     this.setState({ visibleProp: val });
     this.props.factoryStore.setFieldValue('factoryResponse', {});
   }
 
-  showModel(e, val) {
+  showModel = (e, val) => {
     e.preventDefault();
     this.setState({ prev: val });
   }
@@ -52,23 +54,7 @@ class RequestFactory extends Component {
     } = factoryStore;
     return (
       <>
-        <Modal open={this.state.prev} size="small" closeOnDimmerClick={false} closeIcon onClose={e => this.handleCloseModel(e, false)}>
-          <Modal.Content>
-            <Header as="h3">Response Payload</Header>
-            {factoryResponse && !isEmpty(factoryResponse)
-              ? (
-                <pre className="no-updates bg-offwhite padded json-text">
-                  {beautify(factoryResponse, null, 2, 100)}
-                </pre>
-              )
-              : (
-                <section className="bg-offwhite mb-20 center-align">
-                  <Header as="h5">No Response Available.</Header>
-                </section>
-              )
-            }
-          </Modal.Content>
-        </Modal>
+        <ShowResponseModal open={this.state.prev} factoryResponse={factoryResponse} handleCloseModel={this.handleCloseModel} />
         <Card fluid className="elastic-search">
           <Card.Content header="Trigger Request Factory Plugin" />
           <Card.Content>

@@ -279,6 +279,9 @@ export class FactoryStore extends DataModelStore {
         });
         Helper.toast('Your request is processed.', 'success');
         if (get(result, 'data.adminInvokeRequest')) {
+          const requestReponse = result.data.adminInvokeProcessorDriver;
+          const response = this.isValidJson(requestReponse) ? JSON.parse(requestReponse) : requestReponse;
+          this.setFieldValue('factoryResponse', response);
           this.setFieldValue('factoryResponse', JSON.parse(result.data.adminInvokeRequest));
           resolve(result);
         }
@@ -401,6 +404,9 @@ export class FactoryStore extends DataModelStore {
           if (investNowDocuSign && isEmptyStoreDetails) {
             getofferingStorageDetailBySlug(offer.offeringSlug)
               .then((res) => {
+                const requestReponse = result.data.adminGenerateFile;
+                const response = this.isValidJson(requestReponse) ? JSON.parse(requestReponse) : requestReponse;
+                this.setFieldValue('factoryResponse', response);
                 Helper.toast('Your request is processed.', 'success');
                 resolve(res);
               });

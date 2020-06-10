@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import beautify from 'json-beautify';
-import { isEmpty } from 'lodash';
-import { Card, Button, Form, Grid, Divider, Modal, Header } from 'semantic-ui-react';
+import { Card, Button, Form, Grid, Divider } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import formHOC from '../../../../../../theme/form/formHOC';
+import ShowResponseModal from './showResponseModal';
 import DynamicFormInput from './dynamicFormInput';
 
 const metaInfo = {
@@ -49,23 +48,7 @@ function ProcessFactory(props) {
 
   return (
     <>
-      <Modal open={prev} size="small" closeOnDimmerClick={false} closeIcon onClose={e => handleCloseModel(e, false)}>
-        <Modal.Content>
-          <Header as="h3">Response Payload</Header>
-          {factoryResponse && !isEmpty(factoryResponse)
-            ? (
-              <pre className="no-updates bg-offwhite padded json-text">
-                {beautify(factoryResponse, null, 2, 100)}
-              </pre>
-            )
-            : (
-              <section className="bg-offwhite mb-20 center-align">
-                <Header as="h5">No Response Available.</Header>
-              </section>
-            )
-          }
-        </Modal.Content>
-      </Modal>
+      <ShowResponseModal open={prev} factoryResponse={factoryResponse} handleCloseModel={handleCloseModel} />
       <Card fluid className="elastic-search">
         <Card.Content header="Trigger Process Factory Plugin" />
         <Card.Content>
