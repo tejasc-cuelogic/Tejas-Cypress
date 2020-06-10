@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Card, Button, Form, Grid, Divider } from 'semantic-ui-react';
+import { Card, Button, Form, Grid, Divider, Header } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import { isEmpty, get } from 'lodash';
 import formHOC from '../../../../../../theme/form/formHOC';
 import DynamicFormInput from './dynamicFormInput';
 
@@ -29,6 +30,7 @@ class RequestFactory extends Component {
     const {
       REQUESTFACTORY_FRM, formChangeForPlugin, pluginObj, inProgress, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
     } = factoryStore;
+    const isExtraInfoVisible = !!(DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY && DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY.fields && !isEmpty(DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY.fields));
     return (
       <Card fluid className="elastic-search">
         <Card.Content header="Trigger Request Factory Plugin" />
@@ -47,6 +49,18 @@ class RequestFactory extends Component {
                         options: REQUESTFACTORY_FRM.fields[field].values,
                       })
                     ))}
+                    <Divider hidden />
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Note: <span className="regular-text">{pluginObj.note}</span>
+                        </Header>
+                      )}
+
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Description: <span className="regular-text">{pluginObj.description}</span>
+                        </Header>
+                      )}
                     <Divider section hidden />
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY.meta.isValid} loading={inProgress.requestFactory} />
                   </Grid.Column>

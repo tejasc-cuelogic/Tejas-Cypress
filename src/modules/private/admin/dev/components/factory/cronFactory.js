@@ -99,7 +99,7 @@ class CronFactory extends Component {
                           <Header as="h6">{resp.cronMetaType}</Header>
                         </Table.Cell>
                         <Table.Cell singleLine>
-                          <Header as="h6">{DataFormatter.getDateAsPerTimeZone(resp.execInitiatedOn, true, false, false)}</Header>
+                          <Header as="h6">{resp.execInitiatedOn ? DataFormatter.getDateAsPerTimeZone(resp.execInitiatedOn, true, false, false) : '-'}</Header>
                         </Table.Cell>
                       </Table.Row>
                     ))

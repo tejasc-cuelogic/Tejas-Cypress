@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { isEmpty, get, pick } from 'lodash';
+import { isEmpty, pick } from 'lodash';
 import { Form, Header } from 'semantic-ui-react';
 import { inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
@@ -23,6 +23,7 @@ const DynamicFormInput = React.memo((props) => {
         name={fieldKey}
         fielddata={formProps}
         changed={(e, result) => formChangeForPlugin(e, result, props.formObj, true)}
+        showerror
       />
     );
   }
@@ -40,7 +41,7 @@ const DynamicFormInput = React.memo((props) => {
     return elem;
   }
 
-  const { formPayload, pluginObj } = props;
+  const { formPayload } = props;
   const tempFormPAyload = { ...formPayload };
 
   return (
@@ -49,8 +50,7 @@ const DynamicFormInput = React.memo((props) => {
 
         tempFormPAyload && tempFormPAyload.fields && !isEmpty(tempFormPAyload.fields) ? (
           <>
-
-            {get(pluginObj, 'note')
+            {/* {get(pluginObj, 'note')
               && (
                 <Header as="h5">Note: <span className="regular-text">{pluginObj.note}</span>
                 </Header>
@@ -60,9 +60,9 @@ const DynamicFormInput = React.memo((props) => {
               && (
                 <Header as="h5">Description: <span className="regular-text">{pluginObj.description}</span>
                 </Header>
-              )}
-            <Header as="h5">Payload</Header>
+              )} */}
             <div className="featured-section">
+              <Header as="h5">Payload</Header>
               <SuspenseBoundary>
                 <Header as="h6">Note: Below field(s) are prefilled with dummy values.</Header>
                 <Form>
