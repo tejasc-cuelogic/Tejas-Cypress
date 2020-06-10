@@ -298,3 +298,14 @@ export const FILEFACTORY_META = FormHelper.generateMeta([
     },
   ],
 ]);
+
+export const EMAILFACTORY_META = FormHelper.generateMeta([
+  ['method', 'Email Identifier', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+]);

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Form, Grid, Divider } from 'semantic-ui-react';
+import { get, isEmpty } from 'lodash';
+
+import { Card, Button, Form, Grid, Divider, Header } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import formHOC from '../../../../../../theme/form/formHOC';
@@ -43,7 +45,7 @@ function ProcessFactory(props) {
   const {
     PROCESSFACTORY_FRM, pluginObj, formChangeForPlugin, inProgress, factoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
   } = factoryStore;
-
+  const isExtraInfoVisible = !!(DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY && DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.fields && !isEmpty(DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.fields));
   return (
     <>
       <ShowResponseModal open={prev} factoryResponse={factoryResponse} handleCloseModel={handleCloseModel} />
@@ -64,6 +66,18 @@ function ProcessFactory(props) {
                       options: PROCESSFACTORY_FRM.fields.method.values,
                       className: 'mb-80',
                     })}
+                    <Divider hidden />
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Note: <span className="regular-text">{pluginObj.note}</span>
+                        </Header>
+                      )}
+
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Description: <span className="regular-text">{pluginObj.description}</span>
+                        </Header>
+                      )}
                     <Divider section hidden />
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.processFactory || !PROCESSFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.meta.isValid} loading={inProgress.processFactory} />
                     {(visibleProp && factoryResponse) && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
