@@ -1,13 +1,16 @@
+import React from 'react';
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { forEach, sortBy, get, times } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator } from '../../../../helper';
+import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { CANCEL_INVESTMENT, INVESTMENT_SUMMARY_META } from '../../../constants/investment';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_EQUITY_CLASS } from '../../../../constants/offering';
 import { getInvestorAccountPortfolio, getInvestmentDetails, investNowCancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
-import { userDetailsStore, uiStore, offeringCreationStore } from '../../index';
+import { userDetailsStore, uiStore, offeringCreationStore, campaignStore } from '../../index';
 import Helper from '../../../../helper/utility';
+import { DateTimeFormat } from '../../../../theme/shared';
 
 export class PortfolioStore {
   @observable investmentLists = null;
@@ -39,34 +42,66 @@ export class PortfolioStore {
   @observable CANCEL_INVESTMENT_FRM = Validator.prepareFormObject(CANCEL_INVESTMENT);
 
   @observable overviewSummaryMeta = [];
-  // create a constants file for meta data and populate that observable with the meta from the action based on the scurity type.
-  // create an action that takes a security type as a parameter and call that action in the component will mount methode in overview.js file
+
+  @action
+  getSecurityTitle = (securities) => {
+    const { campaign } = campaignStore;
+    const equityClass = get(campaign, 'keyTerms.equityClass');
+    let text = CAMPAIGN_KEYTERMS_SECURITIES[securities] || 'N/A';
+    if (securities === 'EQUITY' && equityClass === 'PREFERRED') {
+      text = CAMPAIGN_KEYTERMS_SECURITIES.PREFERRED_EQUITY_506C;
+    } else if (securities === 'EQUITY' && equityClass === 'LLC_MEMBERSHIP_UNITS') {
+      text = CAMPAIGN_KEYTERMS_SECURITIES.REAL_ESTATE;
+    } else if (securities === 'EQUITY' && ['CLASS_A_SHARES', 'CLASS_B_SHARES'].includes(equityClass)) {
+      text = CAMPAIGN_KEYTERMS_EQUITY_CLASS[equityClass] || 'N/A';
+    }
+    return text;
+  };
+
+  @action
+  getOverviewSummaryData = (data, type) => {
+    const { campaign } = campaignStore;
+    const summaryData = { ...data };
+    switch (data.key) {
+      case 'securities':
+        summaryData.value = this.getSecurityTitle(type);
+        break;
+      case 'expectedOpsDate':
+        summaryData.value = DataFormatter.getDateAsPerTimeZone(data.value, false, true, false, undefined, 'CST', true);
+        break;
+      case 'multiple':
+        summaryData.value = `${get(campaign, data.value)}x`;
+        break;
+      case 'interestRate':
+        summaryData.value = `${get(campaign, data.value)}%`;
+        break;
+      case 'revSharePercentage':
+        summaryData.value = `${get(campaign, data.value)}%`;
+        break;
+      case 'securitiesOwnershipPercentage':
+        summaryData.value = `${data.value}% equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`;
+        break;
+        case 'hardCloseDate':
+        summaryData.value = <DateTimeFormat isCSTFormat datetime={get(campaign, data.value)} />;
+        break;
+      default:
+        summaryData.value = get(campaign, data.value);
+        break;
+    }
+    return summaryData;
+  }
 
   @action
   setOverviewSummaryData = (type) => {
-    INVESTMENT_SUMMARY_META.map((data) => {
-      switch (type) {
-        case 'TERM_NOTE':
-          if (['TERM_NOTE'].includes(data.for)) {
-            this.overviewSummaryMeta.push(data);
-          }
-          break;
-        case 'REVENUE_SHARING_NOTE':
-          if (['REVENUE_SHARING_NOTE'].includes(data.for)) {
-            this.overviewSummaryMeta.push(data);
-          }
-          break;
-        case 'SAFE':
-          if (['SAFE'].includes(data.for)) {
-            this.overviewSummaryMeta.push(data);
-          }
-          break;
-        default:
-          this.overviewSummaryMeta.push('N/A');
-          break;
-      }
-    return null;
+    const overviewSummaryMetaData = {};
+    const overviewSummaryMetaDataArr = [];
+    let dataFor = [];
+    INVESTMENT_SUMMARY_META.map(data => {
+      dataFor = data.for.includes(type);
+      overviewSummaryMetaData = this.getOverviewSummaryData(data, type);
+      overviewSummaryMetaDataArr.push(overviewSummaryMetaData)
     });
+    this.overviewSummaryMeta = overviewSummaryMetaData;
   }
 
   @action
