@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import { Responsive, Icon, Header, Container, Grid, Menu } from 'semantic-ui-react';
+import { Responsive, Icon, Header, Container, Grid, Menu, Button } from 'semantic-ui-react';
 import { Image64 } from '../../../../theme/shared';
 import HtmlEditor from '../../../shared/HtmlEditor';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
@@ -11,6 +11,11 @@ import { NavItems } from '../../../../theme/layout/NavigationItems';
 @withRouter
 @observer
 export default class CollectionHeader extends Component {
+  handleBack = (e) => {
+    e.preventDefault();
+    this.props.history.push('/communities');
+  }
+
   render() {
     const { uiStore, data, scrollToActiveOfferings, activeOfferings } = this.props;
     const { responsiveVars } = uiStore;
@@ -36,16 +41,27 @@ export default class CollectionHeader extends Component {
                   <Responsive minWidth={768} as={Container} className="pt-100 pb-100">
                     <Grid relaxed stackable centered>
                       <Grid.Column width={6} className="zi-9">
-                        <div className="video-wrapper campaign">
-                          <Image64
-                            reRender
-                            bg
-                            originalImg
-                            srcUrl={get(data, 'image.url')}
-                            imgType="heroImage"
+                        <Grid.Row>
+                          <Button
+                            style={{ color: get(data, 'descriptionColor') }}
+                            icon={{ className: 'ns-chevron-left' }}
+                            className="prev link-button pb-30"
+                            onClick={e => this.handleBack(e)}
+                            content="Explore more Communities"
                           />
-                          {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p style={{ color: get(data, 'tag.textColor') }}>{get(data, 'tag.text')}</p></div>}
-                        </div>
+                        </Grid.Row>
+                        <Grid.Row>
+                          <div className="video-wrapper campaign">
+                            <Image64
+                              reRender
+                              bg
+                              originalImg
+                              srcUrl={get(data, 'image.url')}
+                              imgType="heroImage"
+                            />
+                            {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p style={{ color: get(data, 'tag.textColor') }}>{get(data, 'tag.text')}</p></div>}
+                          </div>
+                        </Grid.Row>
                         <div className="clearfix social-links mt-20">
                           {get(data, 'social[0]')
                             ? get(data, 'social').map(site => (
@@ -79,6 +95,15 @@ export default class CollectionHeader extends Component {
                   {get(data, 'bgImage.url')
                     && <Image64 reRender originalImg bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
                   }
+                  <div className="left-align">
+                    <Button
+                      style={{ color: get(data, 'descriptionColor') }}
+                      icon={{ className: 'ns-chevron-left' }}
+                      className="prev link-button pb-20"
+                      onClick={e => this.handleBack(e)}
+                      content="Explore more Communities"
+                    />
+                  </div>
                   <div className="video-wrapper campaign">
                     <Image64
                       bg
