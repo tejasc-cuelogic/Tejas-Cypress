@@ -89,8 +89,8 @@ export default class Documents extends Component {
           }
         </Grid>
         {isNotPublic && this.state.doc
-        ? <DocumentModal doc={this.state.doc} close={this.close} />
-        : <Route path={`${this.props.match.params}/:fileId`} component={<DocumentModal doc={this.state.doc} close={this.close} />} />
+          ? <DocumentModal doc={this.state.doc} close={this.close} />
+          : <Route path={`${this.props.match.params}/:fileId`} component={<DocumentModal doc={this.state.doc} close={this.close} />} />
         }
       </div>
       </>
