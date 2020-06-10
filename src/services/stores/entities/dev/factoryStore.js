@@ -53,7 +53,7 @@ export class FactoryStore extends DataModelStore {
 
   requestLogList = [];
 
-  processFactoryResponse = {};
+  factoryResponse = {};
 
   confirmModal = false;
 
@@ -290,6 +290,13 @@ export class FactoryStore extends DataModelStore {
           setLoader: adminInvokeRequest,
         });
         Helper.toast('Your request is processed.', 'success');
+        if (get(result, 'data.adminInvokeRequest')) {
+          const requestReponse = result.data.adminInvokeProcessorDriver;
+          const response = this.isValidJson(requestReponse) ? JSON.parse(requestReponse) : requestReponse;
+          this.setFieldValue('factoryResponse', response);
+          this.setFieldValue('factoryResponse', JSON.parse(result.data.adminInvokeRequest));
+          resolve(result);
+        }
         if (result.imageProcessing) {
           resolve(result.imageProcessing);
         }
@@ -361,9 +368,11 @@ export class FactoryStore extends DataModelStore {
           setLoader: adminInvokeProcessorDriver,
         });
         Helper.toast('Your request is processed.', 'success');
-        if (result.data.adminInvokeProcessorDriver) {
-          this.setFieldValue('processFactoryResponse', result.data.adminInvokeProcessorDriver);
-          resolve(result.data.adminInvokeProcessorDriver);
+        const requestReponse = result.data.adminInvokeProcessorDriver;
+        if (requestReponse) {
+          const response = this.isValidJson(requestReponse) ? JSON.parse(requestReponse) : requestReponse;
+          this.setFieldValue('factoryResponse', response);
+          resolve(requestReponse);
         }
       }
     } catch (error) {
@@ -407,6 +416,9 @@ export class FactoryStore extends DataModelStore {
           if (investNowDocuSign && isEmptyStoreDetails) {
             getofferingStorageDetailBySlug(offer.offeringSlug)
               .then((res) => {
+                const requestReponse = result.data.adminGenerateFile;
+                const response = this.isValidJson(requestReponse) ? JSON.parse(requestReponse) : requestReponse;
+                this.setFieldValue('factoryResponse', response);
                 Helper.toast('Your request is processed.', 'success');
                 resolve(res);
               });
@@ -568,7 +580,7 @@ decorate(FactoryStore, {
   cronLogList: observable,
   requestLogList: observable,
   selectedFactory: observable,
-  processFactoryResponse: observable,
+  factoryResponse: observable,
   confirmModal: observable,
   confirmModalName: observable,
   pluginObj: observable,
