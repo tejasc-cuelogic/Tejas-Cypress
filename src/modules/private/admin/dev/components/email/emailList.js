@@ -21,14 +21,15 @@ function EmailList(props) {
   const [requestDate, setRequestDate] = useState(false);
 
   useEffect(() => {
-    props.emailStore.fetchAdminListEmailTypesAndIdentifier().then(() => {
-      props.emailStore.setInitiateSrch('emailType', 'DEV');
-      props.emailStore.initRequest();
-    });
+    // props.emailStore.fetchAdminListEmailTypesAndIdentifier().then(() => {
+    //   props.emailStore.setInitiateSrch('emailType', 'DEV');
+    //   props.emailStore.initRequest();
+    // });
     props.emailStore.resetForm('EMAIL_LIST_FRM');
     return () => {
       props.emailStore.resetFilters();
       props.emailStore.setFieldValue('emailLogList', []);
+      props.emailStore.setFieldValue('emailPlugin', {});
       setdisplyRecord(false);
     };
   }, []);
@@ -57,6 +58,8 @@ function EmailList(props) {
 
   const handleCloseModal = () => {
     toggleModal(false);
+    // setShowActionModal(false);
+    // setEmailIdentity(null);
   };
 
   const { loadingArray } = props.nsUiStore;
@@ -77,22 +80,26 @@ function EmailList(props) {
         />
       )
       }
-      <Filters
-        requestState={requestState}
-        filters={filters}
-        setSearchParam={setSearchParam}
-        change={change}
-        paginate={paginate}
-        totalRecords={totalRecords}
-        FILTER_FRM={EMAIL_LIST_FRM}
-      />
       <Card fluid className="elastic-search">
-        <Card.Description>
-          <EmailsListing loading={loadingArray.includes('adminFetchEmails')} emailList={emailList} displyNoEmails={displyNoEmails} handleModel={handleModel} />
-        </Card.Description>
+        <Card.Content header="Manage Email List" />
+        <Card.Content>
+          <Card.Description>
+            <Filters
+              requestState={requestState}
+              filters={filters}
+              setSearchParam={setSearchParam}
+              change={change}
+              paginate={paginate}
+              totalRecords={totalRecords}
+              FILTER_FRM={EMAIL_LIST_FRM}
+              isCustomClass="search-filters"
+            />
+            <EmailsListing loading={loadingArray.includes('adminFetchEmails')} emailList={emailList} displyNoEmails={displyNoEmails} handleModel={handleModel} />
+          </Card.Description>
+        </Card.Content>
       </Card>
     </>
   );
 }
 
-export default inject('nsUiStore')(withRouter(formHOC(observer(EmailList), metaInfo)));
+export default inject('nsUiStore', 'factoryStore')(withRouter(formHOC(observer(EmailList), metaInfo)));

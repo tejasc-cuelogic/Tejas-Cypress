@@ -166,9 +166,9 @@ class CollectionsStore extends DataModelStore {
         };
         res.getCollectionMapping.forEach((c) => {
           if (c.referenceId === get(c.offering, 'id')) {
-            data.offerings.push({ ...c.offering, sortOrder: c.order, scope: c.scope });
+            data.offerings.push({ ...c.offering, sortOrder: c.order, scope: c.scope, image: c.image });
           } else if (c.referenceId === get(c.insight, 'id')) {
-            data.insights.push({ ...c.insight, sortOrder: c.order, scope: c.scope });
+            data.insights.push({ ...c.insight, sortOrder: c.order, scope: c.scope, image: c.image });
           }
         });
         this.setFieldValue('collectionMappingsData', data);

@@ -45,6 +45,7 @@ export default class Documents extends Component {
 
   render() {
     const { campaign, dataRoomDocs, loading } = this.props.campaignStore;
+    const isNotPublic = this.props.match.url.includes('dashboard');
     if (loading && this.props.portfolioSection) {
       return <InlineLoader />;
     }
@@ -77,8 +78,8 @@ export default class Documents extends Component {
                     className="relaxed"
                     primary
                     compact
-                    as={Link}
-                    to={`${this.props.match.url}/data-room#${indexOf(dataRoomDocs, l) + 1}`}
+                    as={isNotPublic ? null : Link}
+                    to={isNotPublic ? '' : `${this.props.match.url}/data-room#${indexOf(dataRoomDocs, l) + 1}`}
                   >
                     View
                   </Button>
@@ -87,8 +88,9 @@ export default class Documents extends Component {
             ))
           }
         </Grid>
-        {this.state.doc &&
-          <Route path={`${this.props.match.params}/:fileId`} component={<DocumentModal doc={this.state.doc} close={this.close} />} />
+        {isNotPublic && this.state.doc
+        ? <DocumentModal doc={this.state.doc} close={this.close} />
+        : <Route path={`${this.props.match.params}/:fileId`} component={<DocumentModal doc={this.state.doc} close={this.close} />} />
         }
       </div>
       </>

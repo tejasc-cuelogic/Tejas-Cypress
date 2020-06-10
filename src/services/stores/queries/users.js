@@ -743,6 +743,7 @@ query adminFetchEmails ($recipientId: String, $emailIdentifier: String, $subject
       toEmail
       subject
       requestDate
+      emailIdentifier
       emailContent
       attachments {
         content
@@ -773,6 +774,18 @@ export const fetchAdminListEmailTypesAndIdentifier = gql`
   adminListEmailType
   adminListEmailPluginsByIndex {
     emailIdentifier
+    config {
+      note
+      description
+      pluginInputs{   
+        label
+        type
+        key
+        value
+        rule
+        defaultValue
+       }
+    }
   }
 }
 `;
