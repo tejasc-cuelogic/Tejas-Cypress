@@ -216,7 +216,16 @@ const INVESTMENT_CARD_META = [
     getRowValue: value => `${value}%`,
     isMobile: true,
     isDesktop: true,
-    securityType: ['TERM_NOTE', 'SAFE', 'CONVERTIBLE_NOTE'],
+    securityType: ['TERM_NOTE'],
+  },
+  {
+    label: 'Interest Rate',
+    key: 'offering.keyTerms.interestRate',
+    for: ['active'],
+    getRowValue: value => `${value}%`,
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['SAFE', 'CONVERTIBLE_NOTE'],
   },
   {
     label: 'Term',
