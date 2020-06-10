@@ -238,6 +238,7 @@ class CollectionDetails extends Component {
                             <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
                             <CampaignList
                               collection
+                              isFunded
                               refLink={this.props.match.url}
                               loading={loadingArray.includes('getCollectionMapping')}
                               campaigns={pastOfferingsList}
