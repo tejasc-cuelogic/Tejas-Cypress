@@ -20,7 +20,7 @@ function ProcessFactory(props) {
     props.factoryStore.resetForm('PROCESSFACTORY_FRM');
     props.factoryStore.setFieldValue('inProgress', false, 'processFactory');
     props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {}, 'PROCESSFACTORY');
-    props.factoryStore.setFieldValue('processFactoryResponse', {});
+    props.factoryStore.setFieldValue('factoryResponse', {});
   }, []);
 
   function onSubmit() {
@@ -34,7 +34,7 @@ function ProcessFactory(props) {
     e.preventDefault();
     setPrev(val);
     setVisibleProp(false);
-    props.factoryStore.setFieldValue('processFactoryResponse', {});
+    props.factoryStore.setFieldValue('factoryResponse', {});
   }
 
   function showModel(e, val) {
@@ -44,7 +44,7 @@ function ProcessFactory(props) {
 
   const { factoryStore, smartElement } = props;
   const {
-    PROCESSFACTORY_FRM, pluginObj, formChangeForPlugin, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
+    PROCESSFACTORY_FRM, pluginObj, formChangeForPlugin, inProgress, factoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
   } = factoryStore;
 
   return (
@@ -52,10 +52,10 @@ function ProcessFactory(props) {
       <Modal open={prev} size="small" closeOnDimmerClick={false} closeIcon onClose={e => handleCloseModel(e, false)}>
         <Modal.Content>
           <Header as="h3">Response Payload</Header>
-          {processFactoryResponse && !isEmpty(processFactoryResponse)
+          {factoryResponse && !isEmpty(factoryResponse)
             ? (
               <pre className="no-updates bg-offwhite padded json-text">
-                {beautify(processFactoryResponse, null, 2, 100)}
+                {beautify(factoryResponse, null, 2, 100)}
               </pre>
             )
             : (
@@ -79,6 +79,7 @@ function ProcessFactory(props) {
                       containerclassname: 'dropdown-field mlr-0',
                       placeholder: 'Choose here',
                       containerwidth: 16,
+                      search: true,
                       options: PROCESSFACTORY_FRM.fields.method.values,
                       className: 'mb-80',
                     })}

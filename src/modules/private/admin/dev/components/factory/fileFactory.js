@@ -41,6 +41,7 @@ function FileFactory(props) {
                       containerclassname: 'dropdown-field mlr-0',
                       placeholder: 'Choose here',
                       containerwidth: 16,
+                      search: true,
                       options: FILEFACTORY_FRM.fields.method.values,
                       className: 'mb-80',
                     })}
