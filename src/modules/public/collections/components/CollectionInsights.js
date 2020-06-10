@@ -23,7 +23,7 @@ class CollectionInsights extends Component {
                   <Card as={Link} to={`/insights/${article.slug}`} className="campaign insights" fluid>
                     <Image64
                       centered
-                      srcUrl={article.featuredImage ? article.featuredImage : null
+                      srcUrl={article.image ? article.image.url : article.featuredImage ? article.featuredImage : null
                       }
                     />
                     <Card.Content>
