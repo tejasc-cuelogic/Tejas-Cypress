@@ -21,14 +21,14 @@ function FileFactory(props) {
   }, []);
 
   function onSubmit() {
-    props.factoryStore.fileFactoryPluginTrigger();
+    props.factoryStore.fileFactoryPluginTrigger().then(() => {
+      setVisibleProp(true);
+    });
   }
 
   function handleCloseModel(e, val) {
     e.preventDefault();
     setPrev(val);
-    setVisibleProp(false);
-    props.factoryStore.setFieldValue('factoryResponse', {});
   }
 
   function showModel(e, val) {
@@ -63,7 +63,7 @@ function FileFactory(props) {
                     })}
                     <Divider section hidden />
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} />
-                    {visibleProp && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
+                    {(visibleProp && factoryResponse) && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <DynamicFormInput {...props} listType="adminListFilePlugins" pluginObj={pluginObj} formPayload={DYNAMCI_PAYLOAD_FRM.FILEFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'FILEFACTORY' }} selectedPlugin={currentPluginSelected} />

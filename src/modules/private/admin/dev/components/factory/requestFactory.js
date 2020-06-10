@@ -38,8 +38,6 @@ class RequestFactory extends Component {
   handleCloseModel = (e, val) => {
     e.preventDefault();
     this.setState({ prev: val });
-    this.setState({ visibleProp: val });
-    this.props.factoryStore.setFieldValue('factoryResponse', {});
   }
 
   showModel = (e, val) => {
@@ -75,7 +73,7 @@ class RequestFactory extends Component {
                       ))}
                       <Divider section hidden />
                       <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid || !get(DYNAMCI_PAYLOAD_FRM, 'REQUESTFACTORY.meta.isValid')} loading={inProgress.requestFactory} />
-                      {this.state.visibleProp && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => this.showModel(e, true)} title="Show Response"> Show Response </Link>}
+                      {(this.state.visibleProp && factoryResponse) && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => this.showModel(e, true)} title="Show Response"> Show Response </Link>}
 
                     </Grid.Column>
                     <Grid.Column width={8}>

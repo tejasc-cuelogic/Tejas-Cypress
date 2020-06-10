@@ -32,8 +32,6 @@ function ProcessFactory(props) {
   function handleCloseModel(e, val) {
     e.preventDefault();
     setPrev(val);
-    setVisibleProp(false);
-    props.factoryStore.setFieldValue('factoryResponse', {});
   }
 
   function showModel(e, val) {
@@ -68,7 +66,7 @@ function ProcessFactory(props) {
                     })}
                     <Divider section hidden />
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.processFactory || !PROCESSFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.meta.isValid} loading={inProgress.processFactory} />
-                    {visibleProp && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
+                    {(visibleProp && factoryResponse) && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <DynamicFormInput {...props} pluginObj={pluginObj} listType="adminListProcessorPlugins" formPayload={DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'PROCESSFACTORY' }} selectedPlugin={currentPluginSelected} />
