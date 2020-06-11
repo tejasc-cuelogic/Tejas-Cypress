@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import beautify from 'json-beautify';
-import { isEmpty } from 'lodash';
-import { Card, Button, Form, Grid, Divider, Modal, Header } from 'semantic-ui-react';
+import { get, isEmpty } from 'lodash';
+
+import { Card, Button, Form, Grid, Divider, Header } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import formHOC from '../../../../../../theme/form/formHOC';
+import ShowResponseModal from './showResponseModal';
 import DynamicFormInput from './dynamicFormInput';
 
 const metaInfo = {
@@ -20,7 +21,7 @@ function ProcessFactory(props) {
     props.factoryStore.resetForm('PROCESSFACTORY_FRM');
     props.factoryStore.setFieldValue('inProgress', false, 'processFactory');
     props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {}, 'PROCESSFACTORY');
-    props.factoryStore.setFieldValue('processFactoryResponse', {});
+    props.factoryStore.setFieldValue('factoryResponse', {});
   }, []);
 
   function onSubmit() {
@@ -33,8 +34,6 @@ function ProcessFactory(props) {
   function handleCloseModel(e, val) {
     e.preventDefault();
     setPrev(val);
-    setVisibleProp(false);
-    props.factoryStore.setFieldValue('processFactoryResponse', {});
   }
 
   function showModel(e, val) {
@@ -44,28 +43,12 @@ function ProcessFactory(props) {
 
   const { factoryStore, smartElement } = props;
   const {
-    PROCESSFACTORY_FRM, pluginObj, formChangeForPlugin, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
+    PROCESSFACTORY_FRM, pluginObj, formChangeForPlugin, inProgress, factoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
   } = factoryStore;
-
+  const isExtraInfoVisible = !!(DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY && DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.fields && !isEmpty(DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.fields));
   return (
     <>
-      <Modal open={prev} size="small" closeOnDimmerClick={false} closeIcon onClose={e => handleCloseModel(e, false)}>
-        <Modal.Content>
-          <Header as="h3">Response Payload</Header>
-          {processFactoryResponse && !isEmpty(processFactoryResponse)
-            ? (
-              <pre className="no-updates bg-offwhite padded json-text">
-                {beautify(processFactoryResponse, null, 2, 100)}
-              </pre>
-            )
-            : (
-              <section className="bg-offwhite mb-20 center-align">
-                <Header as="h5">No Response Available.</Header>
-              </section>
-            )
-          }
-        </Modal.Content>
-      </Modal>
+      <ShowResponseModal open={prev} factoryResponse={factoryResponse} handleCloseModel={handleCloseModel} />
       <Card fluid className="elastic-search">
         <Card.Content header="Trigger Process Factory Plugin" />
         <Card.Content>
@@ -79,12 +62,25 @@ function ProcessFactory(props) {
                       containerclassname: 'dropdown-field mlr-0',
                       placeholder: 'Choose here',
                       containerwidth: 16,
+                      search: true,
                       options: PROCESSFACTORY_FRM.fields.method.values,
                       className: 'mb-80',
                     })}
+                    <Divider hidden />
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Note: <span className="regular-text">{pluginObj.note}</span>
+                        </Header>
+                      )}
+
+                    {isExtraInfoVisible && get(pluginObj, 'note')
+                      && (
+                        <Header as="h6">Description: <span className="regular-text">{pluginObj.description}</span>
+                        </Header>
+                      )}
                     <Divider section hidden />
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.processFactory || !PROCESSFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.meta.isValid} loading={inProgress.processFactory} />
-                    {visibleProp && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
+                    {(visibleProp && factoryResponse) && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <DynamicFormInput {...props} pluginObj={pluginObj} listType="adminListProcessorPlugins" formPayload={DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'PROCESSFACTORY' }} selectedPlugin={currentPluginSelected} />

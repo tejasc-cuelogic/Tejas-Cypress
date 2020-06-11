@@ -81,6 +81,7 @@ const FormColorPikcer = (props) => {
         displayColorPicker ? (
           <SketchPicker
             color={background}
+            presetColors={['#FFFFFF', '#31333D', '#676A73', '#20C86D', '#0073E6', '#695F54', '#567991']}
             onChange={handleChangeComplete}
           />
         ) : null
