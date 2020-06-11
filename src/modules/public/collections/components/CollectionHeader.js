@@ -39,25 +39,29 @@ export default class CollectionHeader extends Component {
               <div className="campaign-banner collection-banner collection-header-wrap">
                 <section className="banner" style={{ backgroundColor: get(data, 'bgColor') }}>
                   <Responsive minWidth={768} as={Container} className="pt-100 pb-100">
-                    <Button
-                      style={{ color: get(data, 'descriptionColor') }}
-                      icon={{ className: 'ns-chevron-left' }}
-                      className="prev link-button pb-30 left-align"
-                      onClick={e => this.handleBack(e)}
-                      content="Explore more Communities"
-                    />
                     <Grid relaxed stackable centered>
                       <Grid.Column width={6} className="zi-9">
-                        <div className="video-wrapper campaign">
-                          <Image64
-                            reRender
-                            bg
-                            originalImg
-                            srcUrl={get(data, 'image.url')}
-                            imgType="heroImage"
+                        <Grid.Row>
+                          <Button
+                            style={{ color: get(data, 'descriptionColor') }}
+                            icon={{ className: 'ns-chevron-left' }}
+                            className="prev link-button pb-30"
+                            onClick={e => this.handleBack(e)}
+                            content="Explore more Communities"
                           />
-                          {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p style={{ color: get(data, 'tag.textColor') }}>{get(data, 'tag.text')}</p></div>}
-                        </div>
+                        </Grid.Row>
+                        <Grid.Row>
+                          <div className="video-wrapper campaign">
+                            <Image64
+                              reRender
+                              bg
+                              originalImg
+                              srcUrl={get(data, 'image.url')}
+                              imgType="heroImage"
+                            />
+                            {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p style={{ color: get(data, 'tag.textColor') }}>{get(data, 'tag.text')}</p></div>}
+                          </div>
+                        </Grid.Row>
                         <div className="clearfix social-links mt-20">
                           {get(data, 'social[0]')
                             ? get(data, 'social').map(site => (
@@ -70,10 +74,13 @@ export default class CollectionHeader extends Component {
                         </div>
                       </Grid.Column>
                       <Grid.Column width={10} className="zi-9">
-                        <Header style={{ color: get(data, 'descriptionColor') }} as="h3" inverted>
-                          {title}
-                        </Header>
-                        <p style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></p>
+                        <Grid.Row className="pb-50">{' '}</Grid.Row>
+                        <Grid.Row>
+                          <Header style={{ color: get(data, 'descriptionColor') }} as="h3" inverted>
+                            {title}
+                          </Header>
+                          <p style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></p>
+                        </Grid.Row>
                       </Grid.Column>
                       {get(data, 'bgImage.url')
                         && <Image64 reRender originalImg bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
