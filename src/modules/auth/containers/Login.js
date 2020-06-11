@@ -90,6 +90,7 @@ class Login extends Component {
 
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.authStore.setFieldvalue('loginModalClose', true);
     this.props.history.push(this.props.uiStore.authRef || '/');
   }
 
