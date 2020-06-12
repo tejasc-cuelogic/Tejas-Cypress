@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get, sortBy } from 'lodash';
 import { withRouter, Link, Route } from 'react-router-dom';
-import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button, Divider, Menu } from 'semantic-ui-react';
+import { Responsive, Icon, Header, Container, Progress, Statistic, Grid, Button, Divider, Menu } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import share from './Share';
 // import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
@@ -157,35 +157,40 @@ export default class CampaignHeaderV2 extends Component {
                           ) : null}
                         {!campaignStatus.isFund
                           ? (
-                            <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
-                              <Popup
-                                trigger={<Icon name="help circle" color="green" />}
-                                content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
-                                position="top center"
-                              />
-                            </p>
-                          )
-                          : (
                             <>
                               <p>
-                                <span className="mr-10">{Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
-                                  <Popup
-                                    trigger={<Icon name="help circle" color="green" />}
-                                    content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                                    position="top center"
-                                  />
-                                </span>
-                              |
-                            <span className="ml-10">{Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
-                                  <Popup
-                                    trigger={<Icon name="help circle" color="green" />}
-                                    content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
-                                    position="top center"
-                                  />
-                                </span>
+                                {Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)}{' '}
+                                <PopUpModal
+                                  customTrigger={<span className="popup-label">{minFlagStatus ? 'max target' : 'min target'}</span>}
+                                  content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
+                                  position="top center"
+                                  showOnlyPopup={!isMobile}
+                                />
                               </p>
                             </>
-                          )}
+                          ) : (
+                            <>
+                              <p>
+                                {Helper.CurrencyFormat(minOffering, 0)}{' '}
+                                <PopUpModal
+                                  customTrigger={<span className="popup-label">min target</span>}
+                                  content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                                  position="top center"
+                                  showOnlyPopup={!isMobile}
+                                />
+                              </p>
+                              <p>
+                                {Helper.CurrencyFormat(maxOffering, 0)}{' '}
+                                <PopUpModal
+                                  customTrigger={<span className="popup-label">max target</span>}
+                                  content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                                  position="top center"
+                                  showOnlyPopup={!isMobile}
+                                />
+                              </p>
+                            </>
+                          )
+                        }
                         {headerMeta.length > 0 && headerMeta.map(row => (
                           <>
                             {(
@@ -217,11 +222,12 @@ export default class CampaignHeaderV2 extends Component {
                                           {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`}
                                         </Button>
                                         <p className="mt-10">
-                                          {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
-                                          <Popup
-                                            trigger={<Icon name="help circle" color="green" />}
+                                          {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} {' '}
+                                          <PopUpModal
+                                            customTrigger={<span className="popup-label">min investment</span>}
                                             content="This is the minimum individual investment amount required to participate in this offering. This amount is set by the Issuer."
                                             position="top center"
+                                            showOnlyPopup={!isMobile}
                                           />
                                         </p>
                                       </Grid.Column>
@@ -299,38 +305,40 @@ export default class CampaignHeaderV2 extends Component {
                   }
                   {!campaignStatus.isFund
                     ? (
-                      <p className={newLayout ? 'mt-10' : ''}>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
-                        {isMobile
-                          ? (<PopUpModal label={minFlagStatus ? 'Max target' : 'Min target'} content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account." />)
-                          : (
-                            <Popup
-                              trigger={<Icon name="help circle" color="green" />}
-                              content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                              position="top center"
-                            />
-                          )
-                        }
-                      </p>
-                    ) : (
                       <>
-                        <p className={`${newLayout ? 'mt-10' : ''} mr-10`}>
-                          {Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                        <p>
+                          {Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)}{' '}
+                          <PopUpModal
+                            customTrigger={<span className="popup-label">{minFlagStatus ? 'max target' : 'min target'}</span>}
+                            content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
                             position="top center"
-                          />
-                        </p>
-                        <p className={`${newLayout ? 'mt-10' : ''} mr-10`}>
-                          {Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
-                            position="top center"
+                            showOnlyPopup={!isMobile}
                           />
                         </p>
                       </>
-                    )}
+                    ) : (
+                      <>
+                        <p>
+                          {Helper.CurrencyFormat(minOffering, 0)}{' '}
+                          <PopUpModal
+                            customTrigger={<span className="popup-label">min target</span>}
+                            content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                            position="top center"
+                            showOnlyPopup={!isMobile}
+                          />
+                        </p>
+                        <p>
+                          {Helper.CurrencyFormat(maxOffering, 0)}{' '}
+                          <PopUpModal
+                            customTrigger={<span className="popup-label">max target</span>}
+                            content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                            position="top center"
+                            showOnlyPopup={!isMobile}
+                          />
+                        </p>
+                      </>
+                    )
+                  }
                   {get(campaign, 'header.toggleMeta[0]')
                     ? (
                       <div className="offer-stats">
@@ -409,11 +417,12 @@ export default class CampaignHeaderV2 extends Component {
                                   {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`}
                                 </Button>
                                 <p className="mt-10">
-                                  {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
-                                  <Popup
-                                    trigger={<Icon name="help circle" color="green" />}
+                                  {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} {' '}
+                                  <PopUpModal
+                                    customTrigger={<span className="popup-label">min investment</span>}
                                     content="This is the minimum individual investment amount required to participate in this offering. This amount is set by the Issuer."
                                     position="top center"
+                                    showOnlyPopup={!isMobile}
                                   />
                                 </p>
                               </>
