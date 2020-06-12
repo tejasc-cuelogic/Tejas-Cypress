@@ -24,6 +24,8 @@ export class AuthStore extends DataModelStore {
 
   privateOfferingAccess = false;
 
+  loginModalClose = false;
+
   hasPrivateAccess = cookie.load('HAS_PRIVATE_ACCESS') || false;
 
   newPasswordRequired = false;
@@ -522,6 +524,7 @@ decorate(AuthStore, {
   currentScore: observable,
   idleTimer: observable,
   checkEmail: observable,
+  loginModalClose: observable,
   resetIdelTimer: action,
   setDefaultPwdType: action,
   setPwdVisibilityStatus: action,

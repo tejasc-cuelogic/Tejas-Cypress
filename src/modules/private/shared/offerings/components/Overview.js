@@ -21,7 +21,8 @@ export default class Overview extends Component {
       const {
         currentOfferingId,
       } = this.props.offeringCreationStore;
-      this.props.collectionStore.initRequest('ACTIVE_INVESTMENTS', currentOfferingId);
+      const { offer } = this.props.offeringsStore;
+      this.props.collectionStore.initRequest('ACTIVE_INVESTMENTS', currentOfferingId || offer.id);
     }
   }
 
