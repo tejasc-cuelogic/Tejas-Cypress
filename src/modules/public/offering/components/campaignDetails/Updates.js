@@ -34,7 +34,7 @@ class Updates extends Component {
     const { newLayout } = this.props;
     const { campaign } = this.props.campaignStore;
     let updates = campaign && campaign.updates;
-    updates = orderBy(updates, o => get(o, 'updatedDate') && moment(new Date(o.updatedDate)).unix(), ['asc']);
+    updates = orderBy(updates, o => get(o, 'updatedDate') && moment(new Date(o.updatedDate)).unix(), ['desc']);
     const readMoreStatus = this.props.campaignStore.curretnStatusForReadMore;
     const readLessStatus = this.props.campaignStore.curretnStatusForReadLess;
     const companyAvatarUrl = campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : '';
@@ -60,6 +60,7 @@ class Updates extends Component {
                     date={(index - 1) > 0
                       ? updates[index - 1].updatedDate !== dataItem.updatedDate
                         ? moment(updates[index].updatedDate).format('MMMM YYYY') : null : null}
+                    contentArrowStyle={{ border: 'transparent' }}
                   >
                     <Item.Group>
                       <Item>
