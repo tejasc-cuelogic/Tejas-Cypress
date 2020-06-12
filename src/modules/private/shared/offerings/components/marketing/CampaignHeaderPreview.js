@@ -30,8 +30,6 @@ export default class CampaignHeaderPreview extends Component {
     const countDown = (['Minute Left', 'Minutes Left'].includes(diffForProcessingText.label) && diffForProcessingText.value > 0) || diffForProcessingText.value <= 48 ? { valueToShow: diffForProcessingText.value, labelToShow: diffForProcessingText.label } : { valueToShow: diff, labelToShow: diff === 1 ? 'Day Left' : 'Days Left' };
     const headerMetaFields = TOMBSTONE_HEADER_META_FRM.fields;
     const miscFields = OFFERING_MISC_FRM.fields;
-    const isDisplayMinTarget = !headerBasicFields.toggleMeta.value.includes('MINIMUM_TARGET');
-    const isDisplayMaxTarget = !headerBasicFields.toggleMeta.value.includes('MAXIMUM_TARGET');
     return (
       <>
         <div className="campaign-banner">
@@ -154,45 +152,32 @@ export default class CampaignHeaderPreview extends Component {
                     ) : null}
                   {!campaignStatus.isFund
                     ? (
-                      <>
-                        {
-                          ((minFlagStatus && isDisplayMaxTarget) || (!minFlagStatus && isDisplayMinTarget)) && (
-                            <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
-                              <Popup
-                                trigger={<Icon name="help circle" color="green" />}
-                                content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
-                                position="top center"
-                              />
-                            </p>
-                          )
-                        }
-                      </>
+                      <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
+                          position="top center"
+                        />
+                      </p>
                     )
                     : (
                       <>
                         <p>
-                          {isDisplayMinTarget && (
-                            <span className="mr-10">{Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
-                              <Popup
-                                trigger={<Icon name="help circle" color="green" />}
-                                content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                                position="top center"
-                              />
-                            </span>
-                          )
-                          }
-                          {isDisplayMaxTarget && isDisplayMinTarget && '|'}
-                          {isDisplayMaxTarget && (
-                            <>
-                              <span className="ml-10">{Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
-                                <Popup
-                                  trigger={<Icon name="help circle" color="green" />}
-                                  content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
-                                  position="top center"
-                                />
-                              </span>
-                            </>
-                          )}
+                          <span className="mr-10">{Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
+                            <Popup
+                              trigger={<Icon name="help circle" color="green" />}
+                              content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                              position="top center"
+                            />
+                          </span>
+                          |
+                          <span className="ml-10">{Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
+                            <Popup
+                              trigger={<Icon name="help circle" color="green" />}
+                              content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                              position="top center"
+                            />
+                          </span>
                         </p>
                       </>
                     )}
