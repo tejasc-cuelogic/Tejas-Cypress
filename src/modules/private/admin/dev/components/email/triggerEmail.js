@@ -86,6 +86,7 @@ function TriggerEmail(props) {
                       containerclassname: 'dropdown-field mlr-0',
                       placeholder: 'Choose here',
                       containerwidth: 16,
+                      search: true,
                       options: EMAILFACTORY_FRM.fields.method.values,
                       className: 'mb-80',
                     })}
