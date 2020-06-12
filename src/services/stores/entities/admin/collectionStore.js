@@ -9,7 +9,7 @@ import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING_DROPDOWN, COLLECTION_MAPPING_CONTENT, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META, COLLECTION_MISC } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, adminInsightArticlesListByFilter, getPublicCollections, allOfferings, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
-import { uiStore, authStore, nsUiStore } from '../../index';
+import { uiStore, authStore, nsUiStore, campaignStore } from '../../index';
 import { STAGES } from '../../../constants/admin/offerings';
 import { fileUpload } from '../../../actions';
 
@@ -193,7 +193,9 @@ class CollectionsStore extends DataModelStore {
   }
 
   get activeOfferingList() {
-    const offeringList = this.getActiveOfferingsList.slice();
+    const { generateBanner } = campaignStore;
+    const orderedActiveListArr = generateBanner(this.getActiveOfferingsList, true);
+    const offeringList = orderedActiveListArr.slice();
     return offeringList.splice(0, this.activeToDisplay);
   }
 

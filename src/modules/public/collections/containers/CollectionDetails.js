@@ -134,7 +134,6 @@ class CollectionDetails extends Component {
     return val;
   };
 
-
   render() {
     const { collectionStore, uiStore, nsUiStore, location, match } = this.props;
     const { loadingArray } = nsUiStore;
@@ -165,6 +164,10 @@ class CollectionDetails extends Component {
       content = orderBy(filter(content, con => con.scope !== 'HIDDEN'), c => c.order, ['ASC']);
       content.forEach((c, i) => validate(c) && navItems.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }
+
+  const backToTop = { title: <>Back to Top {<Icon className="ns-chevron-up icon" size="small" />}</>, to: '' };
+    navItems.push(backToTop);
+
     const renderHeading = (contentData) => {
       if (contentData) {
         return <p className="mb-30"><HtmlEditor readOnly content={contentData} /></p>;
@@ -238,6 +241,7 @@ class CollectionDetails extends Component {
                             <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
                             <CampaignList
                               collection
+                              isFunded
                               refLink={this.props.match.url}
                               loading={loadingArray.includes('getCollectionMapping')}
                               campaigns={pastOfferingsList}

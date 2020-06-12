@@ -43,7 +43,7 @@ export default class CollectionHeader extends Component {
                       <Grid.Column width={6} className="zi-9">
                         <Grid.Row>
                           <Button
-                            style={{ color: get(data, 'descriptionColor') }}
+                            style={{ color: get(data, 'descriptionColor') || 'white' }}
                             icon={{ className: 'ns-chevron-left' }}
                             className="prev link-button pb-30"
                             onClick={e => this.handleBack(e)}
@@ -67,17 +67,20 @@ export default class CollectionHeader extends Component {
                             ? get(data, 'social').map(site => (
                               <React.Fragment key={site.type}>
                                 {site.url
-                                  && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase() === 'website' ? 'globe' : site.type.toLowerCase()} style={{ color: get(data, 'descriptionColor') }} /></a>
+                                  && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase() === 'website' ? 'globe' : site.type.toLowerCase()} style={{ color: get(data, 'descriptionColor') || 'white' }} /></a>
                                 }
                               </React.Fragment>
                             )) : ''}
                         </div>
                       </Grid.Column>
                       <Grid.Column width={10} className="zi-9">
-                        <Header style={{ color: get(data, 'descriptionColor') }} as="h3" inverted>
-                          {title}
-                        </Header>
-                        <p style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></p>
+                        <Grid.Row className="pb-50">{' '}</Grid.Row>
+                        <Grid.Row>
+                          <Header style={{ color: get(data, 'descriptionColor') }} as="h3" inverted>
+                            {title}
+                          </Header>
+                          <p style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></p>
+                        </Grid.Row>
                       </Grid.Column>
                       {get(data, 'bgImage.url')
                         && <Image64 reRender originalImg bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
