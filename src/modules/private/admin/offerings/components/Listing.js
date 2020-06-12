@@ -5,12 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
 import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
-<<<<<<< HEAD
 import { STAGES, SECURITIES_VALUES, REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
-=======
-import { STAGES } from '../../../../../services/constants/admin/offerings';
-import { CAMPAIGN_KEYTERMS_SECURITIES, OFFERING_REGULATIONS } from '../../../../../constants/offering';
->>>>>>> 930b71f6bcf97a8f82dcb578770d3f9ff8808fb4
 import Helper from '../../../../../helper/utility';
 
 const actions = {
@@ -134,7 +129,6 @@ export default class Listing extends Component {
                         {`[${offering.template || '1'}] ${OFFERING_REGULATIONS[offering.keyTerms.regulation] ? `${OFFERING_REGULATIONS[offering.keyTerms.regulation] }-` : '' } ${CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}`}
                       </Link>
                     </Table.Cell>
-<<<<<<< HEAD
                     <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
                       {(() => {
                         const security = SECURITIES_VALUES.find(s => s.value === get(offering, 'keyTerms.securities'));
@@ -147,8 +141,6 @@ export default class Listing extends Component {
                         return exemption ? exemption.text : 'N/A';
                       })()}
                     </Table.Cell>
-=======
->>>>>>> 930b71f6bcf97a8f82dcb578770d3f9ff8808fb4
                     {stage !== 'creation'
                       && (
                         <Table.Cell className="text-capitalize">
