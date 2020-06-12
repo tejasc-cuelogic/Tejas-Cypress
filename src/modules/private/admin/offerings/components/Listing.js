@@ -5,8 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
 import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
-import { STAGES, SECURITIES_VALUES } from '../../../../../services/constants/admin/offerings';
-import { CAMPAIGN_KEYTERMS_SECURITIES, OFFERING_REGULATIONS } from '../../../../../constants/offering';
+import { STAGES, SECURITIES_VALUES, REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
 import Helper from '../../../../../helper/utility';
 
 const actions = {
@@ -136,7 +135,10 @@ export default class Listing extends Component {
                       })()}
                     </Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
-                      {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
+                    {(() => {
+                        const exemption = REGULATION_VALUES.find(s => s.value === get(offering, 'keyTerms.regulation'));
+                        return exemption ? exemption.text : 'N/A';
+                      })()}
                     </Table.Cell>
                     {stage !== 'creation'
                       && (
