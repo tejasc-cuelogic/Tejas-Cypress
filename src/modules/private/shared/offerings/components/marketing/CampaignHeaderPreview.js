@@ -31,8 +31,8 @@ export default class CampaignHeaderPreview extends Component {
     const headerMetaFields = TOMBSTONE_HEADER_META_FRM.fields;
     const miscFields = OFFERING_MISC_FRM.fields;
     const isHeadrToggleMetaExists = headerBasicFields.toggleMeta.value.length;
-    const isDisplayMinTarget = isHeadrToggleMetaExists && headerBasicFields.toggleMeta.value.includes('MINIMUM_TARGET');
-    const isDisplayMaxTarget = isHeadrToggleMetaExists && headerBasicFields.toggleMeta.value.includes('MAXIMUM_TARGET');
+    const isDisplayMinTarget = isHeadrToggleMetaExists && !headerBasicFields.toggleMeta.value.includes('MINIMUM_TARGET');
+    const isDisplayMaxTarget = isHeadrToggleMetaExists && !headerBasicFields.toggleMeta.value.includes('MAXIMUM_TARGET');
     return (
       <>
         <div className="campaign-banner">

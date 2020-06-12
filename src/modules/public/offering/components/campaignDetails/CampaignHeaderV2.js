@@ -31,8 +31,8 @@ export default class CampaignHeaderV2 extends Component {
     } = campaignStatus;
     const headerMeta = get(campaign, 'header.meta[0]') ? sortBy(get(campaign, 'header.meta'), ['order', 'asc']) : [];
     const isHeadrToggleMetaExists = !!get(campaign, 'header.toggleMeta[0]');
-    const isDisplayMinTarget = isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('MINIMUM_TARGET');
-    const isDisplayMaxTarget = isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('MAXIMUM_TARGET');
+    const isDisplayMinTarget = isHeadrToggleMetaExists && !get(campaign, 'header.toggleMeta').includes('MINIMUM_TARGET');
+    const isDisplayMaxTarget = isHeadrToggleMetaExists && !get(campaign, 'header.toggleMeta').includes('MAXIMUM_TARGET');
     return (
       <>
         {!isMobile
