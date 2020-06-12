@@ -30,9 +30,8 @@ export default class CampaignHeaderPreview extends Component {
     const countDown = (['Minute Left', 'Minutes Left'].includes(diffForProcessingText.label) && diffForProcessingText.value > 0) || diffForProcessingText.value <= 48 ? { valueToShow: diffForProcessingText.value, labelToShow: diffForProcessingText.label } : { valueToShow: diff, labelToShow: diff === 1 ? 'Day Left' : 'Days Left' };
     const headerMetaFields = TOMBSTONE_HEADER_META_FRM.fields;
     const miscFields = OFFERING_MISC_FRM.fields;
-    const isHeadrToggleMetaExists = headerBasicFields.toggleMeta.value.length;
-    const isDisplayMinTarget = isHeadrToggleMetaExists && !headerBasicFields.toggleMeta.value.includes('MINIMUM_TARGET');
-    const isDisplayMaxTarget = isHeadrToggleMetaExists && !headerBasicFields.toggleMeta.value.includes('MAXIMUM_TARGET');
+    const isDisplayMinTarget = !headerBasicFields.toggleMeta.value.includes('MINIMUM_TARGET');
+    const isDisplayMaxTarget = !headerBasicFields.toggleMeta.value.includes('MAXIMUM_TARGET');
     return (
       <>
         <div className="campaign-banner">
