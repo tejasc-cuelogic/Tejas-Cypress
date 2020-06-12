@@ -5,7 +5,12 @@ import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
 import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
+<<<<<<< HEAD
 import { STAGES, SECURITIES_VALUES, REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
+=======
+import { STAGES } from '../../../../../services/constants/admin/offerings';
+import { CAMPAIGN_KEYTERMS_SECURITIES, OFFERING_REGULATIONS } from '../../../../../constants/offering';
+>>>>>>> 930b71f6bcf97a8f82dcb578770d3f9ff8808fb4
 import Helper from '../../../../../helper/utility';
 
 const actions = {
@@ -82,8 +87,6 @@ export default class Listing extends Component {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Offering Name</Table.HeaderCell>
-                <Table.HeaderCell>Security Type</Table.HeaderCell>
-                <Table.HeaderCell>Exemption</Table.HeaderCell>
                 {stage !== 'creation'
                   && <Table.HeaderCell>Status</Table.HeaderCell>
                 }
@@ -121,13 +124,17 @@ export default class Listing extends Component {
                   <Table.Row key={offering.offeringSlug} className={(offering.isAvailablePublicly) ? (this.props.uiStore.inProgressArray.length && offering.offeringId === this.state.loadingOfferId) ? 'disabled' : '' : 'row-highlight'}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
                       <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
-                        <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
-                          ? offering.keyTerms.shorthandBusinessName : (
-                            (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
-                          ))}
+                        <b>
+                          {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
+                            ? offering.keyTerms.shorthandBusinessName : (
+                              (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
+                            ))}
                         </b>
+                        <br />
+                        {`[${offering.template || '1'}] ${OFFERING_REGULATIONS[offering.keyTerms.regulation] ? `${OFFERING_REGULATIONS[offering.keyTerms.regulation] }-` : '' } ${CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}`}
                       </Link>
                     </Table.Cell>
+<<<<<<< HEAD
                     <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
                       {(() => {
                         const security = SECURITIES_VALUES.find(s => s.value === get(offering, 'keyTerms.securities'));
@@ -140,6 +147,8 @@ export default class Listing extends Component {
                         return exemption ? exemption.text : 'N/A';
                       })()}
                     </Table.Cell>
+=======
+>>>>>>> 930b71f6bcf97a8f82dcb578770d3f9ff8808fb4
                     {stage !== 'creation'
                       && (
                         <Table.Cell className="text-capitalize">
@@ -163,7 +172,7 @@ export default class Listing extends Component {
                             Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
                             Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
                             Days till close: {offering.closureSummary && offering.closureSummary.processingDate
-                            ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
+                              ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
                             }
                           </div>
                         </Table.Cell>
