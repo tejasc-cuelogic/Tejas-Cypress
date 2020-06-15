@@ -88,6 +88,12 @@ h6{
 *:focus{
 	outline:none;
 }
+.dnone{
+	display: none !important;
+}
+.dblock{
+	display: block !important;
+}
 .mb-0{
 	margin-bottom:0 !important;
 }
@@ -3964,5 +3970,52 @@ h3.ui.header.error-2{
 .offering-side-menu{
 	&.collection-header-wrap{
 		max-height: 100% !important;
+	}
+}
+.investor-signup-container{
+	.ui.primary.button{
+		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+			width: 100% !important;
+		}
+	}
+	.progressWrap {
+		margin: 0 auto;
+		max-width: 120px !important;
+		text-align: center;
+		margin-top: 53px;
+		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+			margin-top: 28px;
+		}
+		.steps{
+			width: 20px !important;
+			height: 3px !important;
+			border-radius: 10px !important;
+			color: transparent !important;
+			display: inline-block;
+			margin-right: 15px;
+		}
+	}
+	.protipWrap{
+		padding: 20px 24px;
+		background-color:@neutral-offwhite;
+		border-radius: 4px;
+		margin-top: 21px;
+	}
+	.investmentCards{
+		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+			flex-direction: row !important;
+			height: 100px !important;
+			.content{
+				padding: 15px !important;
+				justify-content: center !important;
+				align-items: center !important;
+				display: flex !important;
+				flex-direction: column !important;
+				.ui.header,.description{
+					font-size: 13px !important;
+					margin-bottom: 0 !important;
+				}
+			}
+		}
 	}
 }
