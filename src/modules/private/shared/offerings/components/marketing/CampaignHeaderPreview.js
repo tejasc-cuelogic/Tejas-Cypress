@@ -12,6 +12,12 @@ const isMobile = document.documentElement.clientWidth < 992;
 @withRouter
 @observer
 export default class CampaignHeaderPreview extends Component {
+  constructor(props) {
+    super(props);
+    const { offer } = this.props.offeringsStore;
+    this.props.manageOfferingStore.setFieldValue('HEADER_BASIC_FRM', offer.stage, 'fields.stage.value');
+  }
+
   render() {
     const { offeringsStore, manageOfferingStore, followBtn, newLayout } = this.props;
     const { offer } = offeringsStore;
@@ -62,12 +68,12 @@ export default class CampaignHeaderPreview extends Component {
                         />
                       )
                     }
-                    {headerBasicFields.toggleMeta.value && headerBasicFields.toggleMeta.value.length
-                      ? (
+                    {/* {headerBasicFields.toggleMeta.value && headerBasicFields.toggleMeta.value.length */}
+                      {/* ? ( */}
                         <div className="offer-stats">
                           <Statistic.Group>
                             <>
-                              {isLive && headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
+                              {isLive && !headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
                                 && (
                                   <Statistic size="mini" className="basic">
                                     <Statistic.Value>{countDown.valueToShow || 'X'}</Statistic.Value>
@@ -84,7 +90,7 @@ export default class CampaignHeaderPreview extends Component {
                                   </Statistic>
                                 )}
                             </>
-                            {isClosed && headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT') && headerBasicFields.repaymentCount.value > 0
+                            {isClosed && !headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT') && headerBasicFields.repaymentCount.value > 0
                               && (
                                 <Statistic size="mini" className="basic">
                                   <Statistic.Value>
@@ -94,7 +100,7 @@ export default class CampaignHeaderPreview extends Component {
                                 </Statistic>
                               )
                             }
-                            {!isClosed && headerBasicFields.toggleMeta.value.includes('EARLY_BIRD') && headerBasicFields.earlyBird.value > 0
+                            {!isClosed && !headerBasicFields.toggleMeta.value.includes('EARLY_BIRD') && headerBasicFields.earlyBird.value > 0
                               ? (
                                 <Statistic size="mini" className="basic">
                                   <Statistic.Value>
@@ -106,7 +112,7 @@ export default class CampaignHeaderPreview extends Component {
                             }
                           </Statistic.Group>
                         </div>
-                      ) : null}
+                      {/* ) : null} */}
                   </div>
                   <div className="clearfix social-links mt-10">
                     {['facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url', 'yelp_url'].map(field => (
@@ -124,12 +130,12 @@ export default class CampaignHeaderPreview extends Component {
                 <Grid.Column width={6}>
                   <Header as="h3" inverted>
                     {offer && offer.keyTerms && offer.keyTerms.shorthandBusinessName}
-                    {headerBasicFields.toggleMeta.value.includes('BUSINESS_LOCATION')
+                    {!headerBasicFields.toggleMeta.value.includes('BUSINESS_LOCATION')
                       && (<Header.Subheader>{address}</Header.Subheader>)
                     }
                   </Header>
                   <Statistic inverted size="tiny" className={`${isMobile && 'mt-40'} basic mb-0`}>
-                    {headerBasicFields.toggleMeta.value.includes('FUNDINGRAISING_STATE')
+                    {!headerBasicFields.toggleMeta.value.includes('FUNDINGRAISING_STATE')
                       && (
                         <Statistic.Value>
                           <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
@@ -144,7 +150,7 @@ export default class CampaignHeaderPreview extends Component {
                       )
                     }
                   </Statistic>
-                  {!campaignStatus.isFund && headerBasicFields.toggleMeta.value.includes('FUNDINGRAISING_STATE')
+                  {!campaignStatus.isFund && !headerBasicFields.toggleMeta.value.includes('FUNDINGRAISING_STATE')
                     ? (
                       !isClosed
                         ? <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
@@ -202,7 +208,7 @@ export default class CampaignHeaderPreview extends Component {
                           <Grid>
                             {(!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
                               && (
-                                <Grid.Column width={followBtn && headerBasicFields.toggleMeta.value.includes('FOLLOW_STATE') ? '10' : ''} className="center-align">
+                                <Grid.Column width={followBtn && !headerBasicFields.toggleMeta.value.includes('FOLLOW_STATE') ? '10' : ''} className="center-align">
                                   <Button
                                     primary={!isInProcessing}
                                     disabled={maxFlagStatus || isInProcessing}
@@ -221,7 +227,7 @@ export default class CampaignHeaderPreview extends Component {
                                   </p>
                                 </Grid.Column>
                               )}
-                            {followBtn && headerBasicFields.toggleMeta.value.includes('FOLLOW_STATE')
+                            {followBtn && !headerBasicFields.toggleMeta.value.includes('FOLLOW_STATE')
                               && (
                                 <Grid.Column width="6">
                                   <>{followBtn}</>

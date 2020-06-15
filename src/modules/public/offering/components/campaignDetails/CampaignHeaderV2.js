@@ -30,7 +30,7 @@ export default class CampaignHeaderV2 extends Component {
       // dataRooms,
     } = campaignStatus;
     const headerMeta = get(campaign, 'header.meta[0]') ? sortBy(get(campaign, 'header.meta'), ['order', 'asc']) : [];
-    const isHeadrToggleMetaExists = !!get(campaign, 'header.toggleMeta[0]');
+    // const isHeadrToggleMetaExists = !!get(campaign, 'header.toggleMeta[0]');
     return (
       <>
         {!isMobile
@@ -64,19 +64,19 @@ export default class CampaignHeaderV2 extends Component {
                               />
                             )
                           }
-                          {get(campaign, 'header.toggleMeta[0]')
+                          {!get(campaign, 'header.toggleMeta[0]')
                             ? (
                               <div className="offer-stats">
                                 <Statistic.Group>
                                   <>
-                                    {get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
+                                    {!get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
                                       && (
                                         <Statistic size="mini" className="basic">
                                           <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
                                           <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
                                         </Statistic>
                                       )}
-                                    {get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
+                                    {!get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
                                       && (
                                         <Statistic size="mini" className="basic">
                                           <Statistic.Value>
@@ -86,23 +86,23 @@ export default class CampaignHeaderV2 extends Component {
                                         </Statistic>
                                       )}
                                   </>
-                                  {get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
+                                  {!get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
                                     && (
                                       <Statistic size="mini" className="basic">
                                         <Statistic.Value>
-                                          {get(campaign, 'closureSummary.repayment.count') || 0}
+                                          {!get(campaign, 'closureSummary.repayment.count') || 0}
                                         </Statistic.Value>
                                         <Statistic.Label>Payments made</Statistic.Label>
                                       </Statistic>
                                     )
                                   }
-                                  {get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
+                                  {!get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
                                     && isEarlyBirdRewards && !isClosed
                                     && bonusRewards
                                     ? (
                                       <Statistic size="mini" className="basic">
                                         <Statistic.Value>
-                                          {get(campaign, 'earlyBird.available') || 0}
+                                          {!get(campaign, 'earlyBird.available') || 0}
                                         </Statistic.Value>
                                         <Statistic.Label>Early Bird Rewards</Statistic.Label>
                                       </Statistic>
@@ -113,7 +113,7 @@ export default class CampaignHeaderV2 extends Component {
                             ) : null}
                         </div>
                         <div className="clearfix social-links mt-10">
-                          {campaign && get(campaign, 'misc.social')
+                          {campaign && !get(campaign, 'misc.social')
                             ? campaign.misc.social.map(site => (
                               <React.Fragment key={site.type}>
                                 {site.url
@@ -129,12 +129,12 @@ export default class CampaignHeaderV2 extends Component {
                       <Grid.Column width={6}>
                         <Header as="h3" inverted>
                           {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
-                          {isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('BUSINESS_LOCATION')
+                          {!get(campaign, 'header.toggleMeta').includes('BUSINESS_LOCATION')
                             && (<Header.Subheader>{address}</Header.Subheader>)
                           }
                         </Header>
                         <Statistic inverted size="tiny" className={`${isMobile && 'mt-40'} basic mb-0`}>
-                          {isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
+                          {!get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
                             && (
                               <Statistic.Value>
                                 <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
@@ -149,7 +149,7 @@ export default class CampaignHeaderV2 extends Component {
                             )
                           }
                         </Statistic>
-                        {!campaignStatus.isFund && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
+                        {!campaignStatus.isFund && !get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
                           ? (
                             !isClosed
                               ? <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
@@ -207,7 +207,7 @@ export default class CampaignHeaderV2 extends Component {
                                 <Grid>
                                   {(!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
                                     && (
-                                      <Grid.Column width={followBtn && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE') ? '10' : ''} className="center-align">
+                                      <Grid.Column width={followBtn && !get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE') ? '10' : ''} className="center-align">
                                         <Button
                                           primary={!isInProcessing}
                                           disabled={maxFlagStatus || isInProcessing}
@@ -226,7 +226,7 @@ export default class CampaignHeaderV2 extends Component {
                                         </p>
                                       </Grid.Column>
                                     )}
-                                  {followBtn && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE')
+                                  {followBtn && !get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE')
                                     && (
                                       <Grid.Column width="6">
                                         <>{followBtn}</>
@@ -250,7 +250,7 @@ export default class CampaignHeaderV2 extends Component {
                 <div className={`${newLayout && isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
                   <Header as="h4" inverted>
                     {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
-                    {!campaignStatus.isFund && address && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('BUSINESS_LOCATION')
+                    {!campaignStatus.isFund && address && !get(campaign, 'header.toggleMeta').includes('BUSINESS_LOCATION')
                       && <Header.Subheader>{address}</Header.Subheader>}
                   </Header>
                   <div className="video-wrapper campaign">
@@ -275,7 +275,7 @@ export default class CampaignHeaderV2 extends Component {
                     }
                   </div>
                   <Statistic inverted size="tiny" className={`${isMobile && 'mt-30'} basic mb-0`}>
-                    {isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
+                    {!get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
                       && (
                         <Statistic.Value>
                           <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> {!campaignStatus.isFund ? 'raised' : 'invested'}
@@ -290,7 +290,7 @@ export default class CampaignHeaderV2 extends Component {
                       )
                     }
                   </Statistic>
-                  {!campaignStatus.isFund && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
+                  {!campaignStatus.isFund && !get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
                     ? (
                       !isClosed
                         ? <Progress className={`${(newLayout && isMobile) ? 'mt-40' : ''} mb-0`} percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
@@ -331,19 +331,19 @@ export default class CampaignHeaderV2 extends Component {
                         </p>
                       </>
                     )}
-                  {get(campaign, 'header.toggleMeta[0]')
+                  {!get(campaign, 'header.toggleMeta[0]')
                     ? (
                       <div className="offer-stats">
                         <Statistic.Group>
                           <>
-                            {get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
+                            {!get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
                               && (
                                 <Statistic size="mini" className="basic">
                                   <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
                                   <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
                                 </Statistic>
                               )}
-                            {get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
+                            {!get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
                               && (
                                 <Statistic size="mini" className="basic">
                                   <Statistic.Value>
@@ -353,7 +353,7 @@ export default class CampaignHeaderV2 extends Component {
                                 </Statistic>
                               )}
                           </>
-                          {get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
+                          {!get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
                             && (
                               <Statistic size="mini" className="basic">
                                 <Statistic.Value>
@@ -363,7 +363,7 @@ export default class CampaignHeaderV2 extends Component {
                               </Statistic>
                             )
                           }
-                          {get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
+                          {!get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
                             && isEarlyBirdRewards && !isClosed
                             && bonusRewards
                             ? (
@@ -418,7 +418,7 @@ export default class CampaignHeaderV2 extends Component {
                                 </p>
                               </>
                             )}
-                          {isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE')
+                          {!get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE')
                             && followBtn}
                         </Button.Group>
                       </>
