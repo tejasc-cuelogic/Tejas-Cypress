@@ -8,6 +8,7 @@ const updateField = `
   offeringId
   updatedDate
   postUpdateAs
+  sendEmailNotification
   updated {
     date
     by
