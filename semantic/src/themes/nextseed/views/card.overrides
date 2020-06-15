@@ -29,6 +29,10 @@
                 .content .description{
                     min-height:63px;
                     max-height:63px;
+                    @media only screen and (min-width : @mobileBreakpoint ) and (max-width:@largestMobileScreen ){
+                        min-height: 0px;
+                        max-height: 100%;
+                    }
                 }
             }
             .ui.labels, .icon.heart{
@@ -162,6 +166,10 @@
                     line-height:@20px;
                     color: @neutral;
                     transition: all 0.3s ease-in-out;
+                    @media only screen and (min-width : @mobileBreakpoint ) and (max-width:@largestMobileScreen ){
+                        min-height: 0px;
+                        max-height: 100%;
+                    }
                 }
                 .campaign-card-table-wrapper{
                     min-height: 115px;

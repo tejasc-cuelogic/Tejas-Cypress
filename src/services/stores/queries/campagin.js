@@ -39,6 +39,8 @@ const offeringTemplate2 = {
     }
   }`,
   tombstone: `tombstone {
+    offeredBy
+    showOfferedBy
     image {
       url
       fileName
@@ -159,6 +161,8 @@ export const offeringFields = `id
         shorthandBusinessName
         legalBusinessName
         securities
+        valuationCap
+        discount
         equityClass
         industry
         state
@@ -256,6 +260,10 @@ export const campaignDetailsQuery = gql`
     ${offeringTemplate2.content}
     ${offeringTemplate2.misc}
     ${offeringTemplate2.gallery}
+    tombstone {
+      offeredBy
+      showOfferedBy
+    }
     investmentSummary {
       isInvestedInOffering
       tranche
@@ -448,6 +456,12 @@ export const campaignDetailsQuery = gql`
           required
         }
       }
+      config {
+        expectedReturnCalc
+        investmentType
+        showBonusRewards
+        showExpectedReturn
+      }
     }
     closureSummary {
       processingDate
@@ -571,6 +585,12 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
           required
         }
       }
+      config {
+        expectedReturnCalc
+        investmentType
+        showBonusRewards
+        showExpectedReturn
+      }
     }
     closureSummary {
       processingDate
@@ -634,6 +654,8 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
       isTX
       state
       city
+      valuationCap
+      discount
     }
     offering {
       launch {

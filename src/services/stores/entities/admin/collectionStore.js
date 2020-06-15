@@ -9,7 +9,7 @@ import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING_DROPDOWN, COLLECTION_MAPPING_CONTENT, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META, COLLECTION_MISC } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, adminInsightArticlesListByFilter, getPublicCollections, allOfferings, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
-import { uiStore, authStore } from '../../index';
+import { uiStore, authStore, nsUiStore, campaignStore } from '../../index';
 import { STAGES } from '../../../constants/admin/offerings';
 import { fileUpload } from '../../../actions';
 
@@ -22,6 +22,8 @@ class CollectionsStore extends DataModelStore {
   collectionApiHit = false;
 
   collectionDetails = null;
+
+  isLoadMoreClicked = false;
 
   collectionMappingsData = null;
 
@@ -40,6 +42,12 @@ class CollectionsStore extends DataModelStore {
   collectionMappingList = [];
 
   collectionIndex = null;
+
+  RECORDS_TO_DISPLAY = 8;
+
+  activeToDisplay = this.RECORDS_TO_DISPLAY;
+
+  pastOfferingToDisplay = this.RECORDS_TO_DISPLAY;
 
   COLLECTION_FRM = Validator.prepareFormObject(COLLECTION);
 
@@ -158,9 +166,9 @@ class CollectionsStore extends DataModelStore {
         };
         res.getCollectionMapping.forEach((c) => {
           if (c.referenceId === get(c.offering, 'id')) {
-            data.offerings.push({ ...c.offering, sortOrder: c.order, scope: c.scope });
+            data.offerings.push({ ...c.offering, sortOrder: c.order, scope: c.scope, image: c.image });
           } else if (c.referenceId === get(c.insight, 'id')) {
-            data.insights.push({ ...c.insight, sortOrder: c.order, scope: c.scope });
+            data.insights.push({ ...c.insight, sortOrder: c.order, scope: c.scope, image: c.image });
           }
         });
         this.setFieldValue('collectionMappingsData', data);
@@ -184,8 +192,20 @@ class CollectionsStore extends DataModelStore {
     return orderBy(this.getOfferingsList.filter(o => ['LIVE'].includes(o.stage)), 'sortOrder', ['ASC']);
   }
 
+  get activeOfferingList() {
+    const { generateBanner } = campaignStore;
+    const orderedActiveListArr = generateBanner(this.getActiveOfferingsList, true);
+    const offeringList = orderedActiveListArr.slice();
+    return offeringList.splice(0, this.activeToDisplay);
+  }
+
   get getPastOfferingsList() {
     return orderBy(this.getOfferingsList.filter(o => ['COMPLETE', 'IN_REPAYMENT', 'STARTUP_PERIOD', 'DEFAULTED'].includes(o.stage)), 'sortOrder', ['ASC']);
+  }
+
+  get pastOfferingsList() {
+    const offeringList = this.getPastOfferingsList.slice();
+    return offeringList.splice(0, this.pastOfferingToDisplay);
   }
 
   get getInsightsList() {
@@ -372,6 +392,8 @@ class CollectionsStore extends DataModelStore {
   }
 
   getCollectionMapping = (type, index) => {
+    nsUiStore.setLoader('collectionMappingLoader');
+
     if (this.collectionIndex !== index
       && ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(type)) {
       const params = {
@@ -382,21 +404,25 @@ class CollectionsStore extends DataModelStore {
         .then(action((res) => {
           if (get(res, 'getCollectionMapping')) {
             this.setFieldValue('collectionIndex', index);
-            this.collectionMapping = { ...this.getMappedData(res, params, index) };
+            this.setMappedData(res, params, index);
           }
+          nsUiStore.filterLoaderByOperation('collectionMappingLoader');
         }))
         .catch(() => {
           this.setFieldValue('collectionIndex', index);
+          nsUiStore.filterLoaderByOperation('collectionMappingLoader');
         });
     } else {
       this.setFieldValue('collectionIndex', index);
+      nsUiStore.filterLoaderByOperation('collectionMappingLoader');
     }
   }
 
-  getMappedData = (res, params, index) => {
+  setMappedData = (res, params, index) => {
     let data = orderBy(get(res, 'getCollectionMapping'), ['order', 'asc']);
     const { value: contentValue } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
     const tempData = {};
+    let contentMappingData = data;
     if (params.type === 'OFFERING') {
       data = this.mapdataByField(data, 'offering');
       data = {
@@ -404,18 +430,19 @@ class CollectionsStore extends DataModelStore {
         COMPLETE: data.filter(d => d.stage !== 'LIVE'),
       };
       const stage = contentValue === 'ACTIVE_INVESTMENTS' ? 'LIVE' : 'COMPLETE';
+      contentMappingData = data[stage];
       this.getOfferings(stage);
       this.setCollectionMetaList(data[stage], true);
-      this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data[stage]);
       tempData[params.type] = data;
     } else if (params.type === 'INSIGHT') {
       tempData[params.type] = this.mapdataByField(data, 'insight');
       this.requestAllArticlesForCollections();
       this.setCollectionMetaList(tempData[params.type], true);
-      this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, data);
     } else {
       tempData[params.type] = data;
     }
+    this.collectionMapping = { ...tempData };
+    this.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, contentMappingData);
     return tempData;
   }
 
@@ -468,6 +495,11 @@ class CollectionsStore extends DataModelStore {
       rej(error);
     }
   });
+
+  resetDisplayCounts = () => {
+    this.activeToDisplay = this.RECORDS_TO_DISPLAY;
+    this.pastOfferingToDisplay = this.RECORDS_TO_DISPLAY;
+  }
 
 
   adminDeleteCollection = id => new Promise(async (res, rej) => {
@@ -730,6 +762,13 @@ class CollectionsStore extends DataModelStore {
     return { options: filterOpns };
   }
 
+  loadMoreRecord = (type) => {
+    const offeringsList = type === 'activeToDisplay' ? this.getActiveOfferingsList : this.getPastOfferingsList;
+    if (offeringsList.length > this[type]) {
+      this[type] += this.RECORDS_TO_DISPLAY;
+    }
+  }
+
   // @computed get active() {
   //   const collectionList = this.orderedActiveList.slice();
   //   return collectionList.splice(0, this.activeToDisplay);
@@ -755,22 +794,29 @@ decorate(CollectionsStore, {
   HEADER_META_FRM: observable,
   TOMBSTONE_FRM: observable,
   selectedCollectionArray: observable,
+  isLoadMoreClicked: observable,
   COLLECTION_MAPPING_CONTENT_FRM: observable,
   contentId: observable,
   collection: observable,
   initLoad: observable,
+  RECORDS_TO_DISPLAY: observable,
+  activeToDisplay: observable,
+  pastOfferingToDisplay: observable,
   initRequest: action,
   updateContent: action,
   upsertCollection: action,
   setCollectionMetaList: action,
   getActiveCollectionLength: computed,
   getCollectionLength: computed,
+  activeOfferingList: computed,
+  pastOfferingsList: computed,
   filterInitLoad: action,
   collectionMappingMutation: action,
   parseData: action,
   setFormData: action,
   getActionType: action,
   setSelectedCollections: action,
+  resetDisplayCounts: action,
   collectionLoading: observable,
   getCollection: action,
   filterContentType: action,
@@ -781,5 +827,7 @@ decorate(CollectionsStore, {
   setOrderForCollectionsMapping: action,
   setOrderForCollections: action,
   evaluateFormFieldToArray: action,
+  loadMoreRecord: action,
+  setMappedData: action,
 });
 export default new CollectionsStore();

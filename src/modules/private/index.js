@@ -28,12 +28,13 @@ export default class Private extends React.Component {
     setTimeout(() => {
       this.props.uiStore.setFieldvalue('resizeLoader', false);
     }, 500);
+    const { isUserLoggedIn, loginModalClose, setFieldvalue } = this.props.authStore;
     const { userStore, referralsStore, userDetailsStore } = this.props;
-    if (!this.props.authStore.isUserLoggedIn) {
+    if (!isUserLoggedIn) {
       this.props.uiStore.setRedirectURL(this.props.location.pathname);
-      this.props.uiStore.setAuthRef('/');
-      // this.props.uiStore.setAuthRef(this.props.location.pathname);
-      this.props.history.push('/login');
+      this.props.uiStore.setAuthRef(this.props.location.pathname);
+      this.props.history.push(loginModalClose ? '/' : '/login');
+      setFieldvalue(loginModalClose, false);
     } else if (userStore.isInvestor && get(userDetailsStore, 'signupStatus.activeAccounts') && get(userDetailsStore, 'signupStatus.activeAccounts').length) {
       referralsStore.getUserReferralDetails(false, false);
     }

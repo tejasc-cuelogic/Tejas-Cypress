@@ -21,7 +21,7 @@ function DynamicAgreement(props) {
               defaults
               fielddata={AGREEMENT_DETAILS_FORM.fields.page[index].toc}
               name="toc"
-              containerclassname={`ui list agreement-list very relaxed ${showError && !isAgreementFormValid ? 'error' : ''}`}
+              containerclassname={`ui list very relaxed agreement-list ${showError && !isAgreementFormValid ? 'error' : ''}`}
               changed={(e, res) => setCheckbox(e, res, 'page', index)}
               disabled={inProgress}
             />

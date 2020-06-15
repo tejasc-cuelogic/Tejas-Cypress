@@ -52,6 +52,10 @@ settingEnv()
 	REACT_APP_FROALA_API_KEY_NEW=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/froala\/apiKey/ { print $3 }')
 	sed -i.bak "s#^\(REACT_APP_FROALA_API_KEY_NEW=\).*#\1${REACT_APP_FROALA_API_KEY_NEW}#" .envTEMPLATE
 
+	#GOOGLEMAPAPI
+	REACT_APP_GOOGLE_PLACE_API_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/googlePlace\/apiKey/ { print $3 }')
+	sed -i.bak "s#^\(REACT_APP_GOOGLE_PLACE_API_KEY=\).*#\1${REACT_APP_GOOGLE_PLACE_API_KEY}#" .envTEMPLATE
+
 	#HONEYPOT URL
 	REACT_APP_HONEYPOT_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/v1\/waf\/honeypotEndpoint/ { print $3 }')
 	sed -i.bak "s#^\(REACT_APP_HONEYPOT_URL=\).*#\1${REACT_APP_HONEYPOT_URL}#" .envTEMPLATE

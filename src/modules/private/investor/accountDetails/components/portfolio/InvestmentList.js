@@ -98,14 +98,108 @@ const getSecurityTitle = (securities, equityClass, investorInvestedAmount, class
   return text;
 };
 
+const getSecurityHeaderTitle = (type) => {
+  let headerTitle = CAMPAIGN_KEYTERMS_SECURITIES[type] || 'N/A';
+  if (type === 'SAFE' || type === 'CONVERTIBLE_NOTES') {
+    headerTitle = 'Convertible Securities';
+  }
+  return headerTitle;
+};
+
 const INVESTMENT_CARD_META = [
-  { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, className: 'collapsing', isMobile: false, isDesktop: true, securityType: ['ALL'] },
-  { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], children: data => offeringName(data), isMobile: true, isDesktop: true, securityType: ['ALL'] },
-  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: (value, equityClass, investorInvestedAmount, classThreshold) => getSecurityTitle(value, equityClass, investorInvestedAmount, classThreshold), for: isMobile ? ['pending'] : ['pending', 'completed'], isMobile: true, isDesktop: true, securityType: ['ALL'] },
-  { label: 'Investment Amount', key: 'investedAmount', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], getRowValue: value => Helper.CurrencyFormat(value), children: data => investedAmount(data), isMobile: true, isDesktop: true, className: 'text-capitalize', securityType: ['ALL'] },
-  { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], children: data => closeDate(data), isMobile: true, isDesktop: true, securityType: ['ALL'] },
-  { label: 'Investment Multiple', key: 'offering.closureSummary.keyTerms.multiple', for: ['active'], getRowValue: value => `${value}x`, isMobile: true, isDesktop: true, securityType: ['REVENUE_SHARING_NOTE'] },
-  { label: 'Status', key: 'offering.stage', for: isMobile ? ['pending', 'completed'] : ['pending', 'completed'], getRowValue: value => STAGES[value].label, children: data => stageLabel(data), isMobile: true, isDesktop: true, securityType: ['ALL'] },
+  {
+    label: '',
+    for: ['active', 'pending', 'completed'],
+    children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />,
+    className: 'collapsing',
+    isMobile: false,
+    isDesktop: true,
+    securityType: ['ALL'],
+  },
+  {
+    label: 'Offering',
+    key: 'offering.keyTerms.shorthandBusinessName',
+    for: isMobile ? ['pending'] : ['active', 'pending', 'completed'],
+    children: data => offeringName(data),
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['ALL'],
+  },
+  {
+    label: 'Investment Type',
+    key: 'offering.keyTerms.securities',
+    getRowValue: (value, equityClass, investorInvestedAmount, classThreshold) => getSecurityTitle(value, equityClass, investorInvestedAmount, classThreshold),
+    for: isMobile ? ['pending'] : ['pending', 'completed'],
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['ALL'],
+  },
+  {
+    label: 'Investment Amount',
+    key: 'investedAmount',
+    for: isMobile ? ['pending'] : ['active', 'pending', 'completed'],
+    getRowValue: value => Helper.CurrencyFormat(value),
+    children: data => investedAmount(data),
+    isMobile: true,
+    isDesktop: true,
+    className: 'text-capitalize',
+    securityType: ['ALL'],
+  },
+  {
+    label: 'Close Date',
+    key: 'offering.closureSummary.hardCloseDate',
+    for: ['active', 'completed'],
+    children: data => closeDate(data),
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['ALL'],
+  },
+  {
+    label: 'Security Type',
+    key: 'offering.keyTerms.securities',
+    getRowValue: (value, equityClass, investorInvestedAmount, classThreshold) => getSecurityTitle(value, equityClass, investorInvestedAmount, classThreshold),
+    for: ['active'],
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['SAFE', 'CONVERTIBLE_NOTES'],
+  },
+  {
+    label: 'Market Cap',
+    key: 'offering.keyTerms.valuationCap',
+    getRowValue: value => `${value}`,
+    for: ['active'],
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['SAFE', 'CONVERTIBLE_NOTES'],
+  },
+  {
+    label: 'Discount',
+    key: 'offering.keyTerms.discount',
+    getRowValue: value => `${value}`,
+    for: ['active'],
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['SAFE', 'CONVERTIBLE_NOTES'],
+  },
+  {
+    label: 'Investment Multiple',
+    key: 'offering.closureSummary.keyTerms.multiple',
+    for: ['active'],
+    getRowValue: value => `${value}x`,
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['REVENUE_SHARING_NOTE'],
+  },
+  {
+    label: 'Status',
+    key: 'offering.stage',
+    for: ['pending', 'completed'],
+    getRowValue: value => STAGES[value].label,
+    children: data => stageLabel(data),
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['ALL'],
+  },
   {
     label: 'Days to close',
     key: 'offering.closureSummary.processingDate',
@@ -115,14 +209,86 @@ const INVESTMENT_CARD_META = [
     securityType: ['ALL'],
     getRowValue: value => ((DataFormatter.diffDays(value, false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label}` : DataFormatter.diffInDaysHoursMin(value).diffText)) || 'N/A',
   },
-  { label: 'Annualized Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%`, isMobile: true, isDesktop: true, securityType: ['TERM_NOTE'] },
-  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months`, isMobile: true, isDesktop: true, securityType: ['ALL'] },
-  { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['ALL'] },
-  { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['TERM_NOTE'] }, // pending
-  { label: 'Realized Multiple', key: 'realizedMultiple', getRowValue: value => `${value}x`, for: ['completed', 'active'], isMobile: true, isDesktop: true, securityType: [], equityClass: ['PREFERRED'] },
-  { label: 'Payments Remaining', key: 'remainingPayment', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['REVENUE_SHARING_NOTE'] },
   {
-    label: '', for: ['pending'], children: data => handleActions(data), isMobile: false, isDesktop: true, securityType: ['ALL'],
+    label: 'Annualized Interest Rate',
+    key: 'offering.keyTerms.interestRate',
+    for: ['active'],
+    getRowValue: value => `${value}%`,
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['TERM_NOTE'],
+  },
+  {
+    label: 'Interest Rate',
+    key: 'offering.keyTerms.interestRate',
+    for: ['active'],
+    getRowValue: value => `${value}%`,
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['SAFE', 'CONVERTIBLE_NOTE'],
+  },
+  {
+    label: 'Term',
+    key: 'offering.keyTerms.maturity',
+    for: ['active'],
+    getRowValue: value => `${value} months`,
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['TERM_NOTE', 'EQUITY', 'REVENUE_SHARING_NOTE', 'PREFERRED_EQUITY_506C', 'REAL_ESTATE', 'FUNDS'],
+  },
+  {
+    label: 'Net Payments Received',
+    key: 'netPaymentsReceived',
+    for: ['completed', 'active'],
+    getRowValue: value => `$${value}`,
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['TERM_NOTE', 'EQUITY', 'REVENUE_SHARING_NOTE', 'PREFERRED_EQUITY_506C', 'REAL_ESTATE', 'FUNDS'],
+  },
+  {
+    label: 'Principal Remaining',
+    key: 'remainingPrincipal',
+    for: ['active'],
+    getRowValue: value => `$${value}`,
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['TERM_NOTE'],
+  }, // pending
+  {
+    label: 'Realized Multiple',
+    key: 'realizedMultiple',
+    getRowValue: value => `${value}x`,
+    for: ['completed'],
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['ALL'],
+    equityClass: ['PREFERRED'],
+  },
+  {
+    label: 'Payments Remaining',
+    key: 'remainingPayment',
+    for: ['active'],
+    getRowValue: value => `$${value}`,
+    isMobile: true,
+    isDesktop: true,
+    securityType: ['REVENUE_SHARING_NOTE'],
+  },
+  {
+    label: 'Maturity Date',
+    key: 'offering.closureSummary.keyTerms.maturityDate',
+    for: ['active'],
+    getRowValue: value => `${value}`,
+    isMobile: false,
+    isDesktop: true,
+    securityType: ['SAFE', 'CONVERTIBLE_NOTE'],
+  },
+  {
+    label: '',
+    for: ['pending'],
+    children: data => handleActions(data),
+    isMobile: false,
+    isDesktop: true,
+    securityType: ['ALL'],
   },
 ];
 
@@ -174,7 +340,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
             {((!get(data, 'tranche') || get(data, 'tranche') < 1) && !isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0))))
               && <Button className="mt-20" primary fluid onClick={e => handleInvestNowClick(e, data.offering.offeringSlug, data.offering.id)} content="Change Investment Amount" />
             }
-            {((!get(data, 'tranche') || get(data, 'tranche') < 1) && (isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)))))
+            {((!get(data, 'tranche') || get(data, 'tranche') < 1) && (isAdmin || ((!(get(data, 'offering.keyTerms.securities') === 'EQUITY' && get(data, 'offering.keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS')) && (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))))
               && <Button className="mt-20 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
             }
           </>
@@ -226,21 +392,19 @@ const InvestmentList = (props) => {
             }
           </Table.Body>
         }
-
         <Table.Footer>
           <Table.Row>
             <Table.HeaderCell colSpan={(props.listOf === 'active' || props.listOf === 'completed') ? '1' : '2'} />
             <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : ''}>Total:</Table.HeaderCell>
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
             <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : props.listOf === 'active' ? getCOllapseCount('Net Payments Received', 'Investment Amount', header) : '3'} />
+            {props.listOf !== 'pending' && get(listData[0], 'offering.keyTerms.securities') !== 'SAFE'
+            && (
+              <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
+            )}
             {props.listOf !== 'pending'
-              && (
-                <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
-              )}
-              {props.listOf !== 'pending'
-              && (
-                <Table.HeaderCell colSpan="1" />
-              )}
+            && <Table.HeaderCell colSpan="5" />
+            }
           </Table.Row>
         </Table.Footer>
       </Table>
@@ -308,7 +472,7 @@ const InvestmentList = (props) => {
                       {listAsPerSecurityType[type] && listAsPerSecurityType[type].length
                         ? (
                           <>
-                            <Header as="h5" className="investment-list" content={CAMPAIGN_KEYTERMS_SECURITIES[type]} />
+                            <Header as="h5" className="investment-list" content={getSecurityHeaderTitle(type)} />
                             <ListTable listData={listAsPerSecurityType[type]} header={listHeaderAsPerSecurityType[type]} />
                           </>
                         ) : null

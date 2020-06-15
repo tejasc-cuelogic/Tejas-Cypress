@@ -200,9 +200,37 @@ export default class DataModelStore {
         checked,
       );
     } else {
-      this[formName] = FormValidator.onChange(this[formName], FormValidator.pullValues(e, result), type, checked);
+      this[formName] = FormValidator.onChange(this[formName], FormValidator.pullValues(e, result), type, true, checked);
     }
     this.currTime = +new Date();
+  };
+
+  formChangeForMultilevelArray = (e, res, form, subForm, index, isArrayChange = false) => {
+    if (isArrayChange) {
+      this[form.parentForm][form.childForm] = FormValidator.onArrayFieldChange(
+        this[form.parentForm][form.childForm],
+        FormValidator.pullValues(e, res),
+        subForm,
+        index,
+      );
+    } else {
+      this[form.parentForm][form.childForm] = FormValidator.onChange(this[form.parentForm][form.childForm], FormValidator.pullValues(e, res));
+    }
+    if (form.parentForm === 'DOCUMENT_UPLOAD_MAPPING_FRM') {
+      // this.validateMappingForm();
+      this.validateMappingForFormChange(form.childForm);
+    }
+    this.currTime = +new Date();
+    // const dynamicFormFields = { ...this[form.parentForm][form.childForm].fields };
+    // const mappedArr = [];
+    // Object.keys(dynamicFormFields).forEach((key) => {
+    //   const validObj = pickBy(dynamicFormFields[key], identity);
+    //   const hasKey = has(validObj, 'defaultValuesMapping');
+    //   if (hasKey) {
+    //     const mappedOBj = { mappedKey: key, mappedVal: dynamicFormFields[key].defaultValuesMapping };
+    //     mappedArr.push(mappedOBj);
+    //   }
+    // });
   };
 
   passwordChange = (e, result, form) => {
@@ -383,6 +411,29 @@ export default class DataModelStore {
     this.currTime = +new Date();
   }
 
+  addMoreForNlevelForm = (form, subForm, key, count = 1) => {
+    this[form][subForm] = FormValidator.addMoreRecordToSubSection(this[form][subForm], key, count, true);
+    this.currTime = +new Date();
+    if (form === 'DOCUMENT_UPLOAD_MAPPING_FRM') {
+      this[form][subForm] = FormValidator.validateForm(this[form][subForm], true, false, false);
+      // this.validateMappingForm();
+      this.validateMappingForFormChange(subForm);
+    }
+  }
+
+  removeOneForNlevelForm = (form, subForm, arrayName, index, e = undefined) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this[form][subForm].fields[arrayName].splice(index, 1);
+    this.currTime = +new Date();
+    if (form === 'DOCUMENT_UPLOAD_MAPPING_FRM') {
+      this[form][subForm] = FormValidator.validateForm(this[form][subForm], true, false, false);
+      // this.validateMappingForm();
+      this.validateMappingForFormChange(subForm);
+    }
+  }
+
   resetAll = () => {
     this.client.clearStore();
     this.currTime = +new Date();
@@ -467,9 +518,32 @@ export default class DataModelStore {
     this.currTime = +new Date();
   }
 
+  pageRequest = ({ skip, page }) => {
+    this.requestState.displayTillIndex = this.requestState.perPage * page;
+    this.requestState.page = page;
+    this.requestState.skip = skip;
+    this.initRequest();
+  }
+
   handleUploadLoader = (fileId) => {
     const { inProgress } = commonStore;
     return !!(inProgress === fileId);
+  }
+
+  moveArray = (form, oldIndex, newIndex) => {
+    const array = this[form];
+    if (newIndex >= array.length) {
+      let k = newIndex - array.length + 1;
+      // eslint-disable-next-line no-plusplus
+      while (k--) {
+        array.push(undefined);
+      }
+    }
+    array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
+    if (form === 'DOCUMENT_UPLOAD_MAPPING_FRM') {
+      this.validateMappingForm();
+    }
+    return array;
   }
 }
 
@@ -493,6 +567,7 @@ export const decorateDefault = {
   executeMutation: action,
   resetAll: action,
   resetForm: action,
+  pageRequest: action,
   passwordChange: action,
   eventFormChange: action,
   setAddressFields: action,
@@ -514,4 +589,8 @@ export const decorateDefault = {
   resetStoreData: action,
   resetAllForms: action,
   resetLoader: action,
+  addMoreForNlevelForm: action,
+  removeOneForNlevelForm: action,
+  formChangeForMultilevelArray: action,
+  moveArray: action,
 };

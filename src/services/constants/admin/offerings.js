@@ -1233,7 +1233,8 @@ export const LEADERSHIP = {
       label: 'Percentage Owned',
       placeHolder: '10.0%',
       error: undefined,
-      rule: 'numeric',
+      rule: 'numeric|max:100',
+      customErrors: { max: 'The Percent Owned should be less than or equal to 100%' },
       tooltip: 'List any person who owns, directly or indirectly, 20% or more of the Issuer’s equity, based on voting power',
     },
     companyPosition: {
@@ -2899,6 +2900,20 @@ export const CLOSING_BINDING = {
   }],
 };
 
+export const UPLOAD_DATA = {
+  documents: [{
+    ...DATA_ROOM_COMMON,
+    mappingRequired: {
+      value: false,
+      values: [{ label: 'No', value: false }, { label: 'Yes', value: true }],
+      label: 'Is mapping required?',
+      error: undefined,
+      defaultValue: false,
+      rule: 'optional',
+    },
+  }],
+};
+
 export const POC_DETAILS = {
   issuerId: {
     value: '',
@@ -3182,4 +3197,13 @@ export const OFFERING_DEFAULT = {
     error: undefined,
     rule: 'optional',
   },
+};
+
+export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
+  TERM_NOTE: 'TERM_NOTE',
+  EQUITY: 'EQUITY',
+  REVENUE_SHARING_NOTE: 'REVENUE_SHARING_NOTE',
+  CONVERTIBLE_NOTES: 'CONVERTIBLE_NOTES',
+  SAFE: 'SAFE',
+  FUNDS: 'FUNDS',
 };

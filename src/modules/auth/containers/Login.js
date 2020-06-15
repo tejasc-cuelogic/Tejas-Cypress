@@ -43,6 +43,7 @@ class Login extends Component {
 
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
+    this.props.uiStore.setProgress(false);
   }
 
   handleSubmitForm = (e) => {
@@ -89,6 +90,7 @@ class Login extends Component {
 
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.authStore.setFieldvalue('loginModalClose', true);
     this.props.history.push(this.props.uiStore.authRef || '/');
   }
 

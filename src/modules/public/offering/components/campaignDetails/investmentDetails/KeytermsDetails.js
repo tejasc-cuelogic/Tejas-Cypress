@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 // import money from 'money-math';
 import { Table, Divider, Grid } from 'semantic-ui-react';
 import {
-  CAMPAIGN_OFFERED_BY,
   CAMPAIGN_REGULATION_DETAILED,
   CAMPAIGN_KEYTERMS_REGULATION_PARALLEL,
   CAMPAIGN_SECURITIES_DETAILED,
@@ -23,7 +22,7 @@ const KeyTermsFieldHoc = ({ data, title, field, content, titleAddon, noBgOffWhit
     ? (
       <Table.Row className={!noBgOffWhite ? 'bg-offwhite' : ''} verticalAlign="top">
         <Table.Cell width={7} className="neutral-text"><b>{title}{' '}</b>{titleAddon}</Table.Cell>
-        <Table.Cell>{content || get(data, field)}</Table.Cell>
+        <Table.Cell className="pr-18">{content || get(data, field)}</Table.Cell>
       </Table.Row>
     ) : ''
 );
@@ -48,7 +47,7 @@ class KeyTermsDetails extends Component {
     ];
     return (
       <>
-        <Grid columns={3} divided stackable className="key-terms vertical-gutter neutral-text">
+        <Grid columns={get(campaign, 'tombstone.showOfferedBy') !== false ? 3 : 2} divided stackable className="key-terms vertical-gutter neutral-text">
           <Grid.Column>
             <p><b className={newLayout ? 'neutral-text' : ''}>{campaignStatus.isFund ? 'Fund' : 'Issuer'}</b><br />{get(keyTerms, 'legalBusinessName') || 'NA'}</p>
           </Grid.Column>
@@ -70,11 +69,19 @@ class KeyTermsDetails extends Component {
               {get(campaign, 'regulation') ? get(campaign, 'regulation') === 'BD_CF_506C' ? CAMPAIGN_KEYTERMS_REGULATION_PARALLEL[campaign.regulation] : CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}
             </p>
           </Grid.Column>
-          <Grid.Column>
-            <p><b className={newLayout ? 'neutral-text' : ''}>Offered By</b><br />
-              {CAMPAIGN_OFFERED_BY[get(keyTerms, 'regulation')]}
-            </p>
-          </Grid.Column>
+          {
+
+          }
+          {get(campaign, 'tombstone.showOfferedBy') !== false
+            && (
+              <Grid.Column>
+                <p><b className={newLayout ? 'neutral-text' : ''}>Offered By</b><br />
+                  {
+                    get(campaign, 'tombstone.offeredBy') ? campaign.tombstone.offeredBy : 'NextSeed Securities, LLC'
+                  }
+                </p>
+              </Grid.Column>
+            )}
         </Grid>
         {!isMobile ? <Divider hidden={newLayout} /> : null}
         <Table basic="very" className="key-terms-table">
@@ -118,31 +125,31 @@ class KeyTermsDetails extends Component {
             }
             {!campaignStatus.isFund
               && (
-              <KeyTermsFieldHoc
-                data={campaign}
-                field="closureSummary.totalInvestmentAmount"
-                title="Raised to date"
-                noBgOffWhite
-                content={(
-                  <>
-                    <p>
-                      {Helper.CurrencyFormat(totalInvestmentAmount, 0)}
-                    </p>
-                    {get(keyTerms, 'regulation') === 'BD_CF_506C'
-                      && (
-                        <>
-                          <p>
-                            <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
-                          </p>
-                          <p>
-                            <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
-                          </p>
-                        </>
-                      )
-                    }
-                  </>
-                )}
-              />
+                <KeyTermsFieldHoc
+                  data={campaign}
+                  field="closureSummary.totalInvestmentAmount"
+                  title="Raised to date"
+                  noBgOffWhite
+                  content={(
+                    <>
+                      <p>
+                        {Helper.CurrencyFormat(totalInvestmentAmount, 0)}
+                      </p>
+                      {get(keyTerms, 'regulation') === 'BD_CF_506C'
+                        && (
+                          <>
+                            <p>
+                              <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
+                            </p>
+                            <p>
+                              <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
+                            </p>
+                          </>
+                        )
+                      }
+                    </>
+                  )}
+                />
               )}
             <KeyTermsFieldHoc
               data={keyTerms}
@@ -150,29 +157,29 @@ class KeyTermsDetails extends Component {
               title="Type of Securities"
               content={
                 CAMPAIGN_SECURITIES_DETAILED.TOOLTIP[offerStructure]
-                ? (
-                <PopUpModal
-                  customTrigger={<span className="popup-label">{offerStructure ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure] : 'NA'}</span>}
-                  content={CAMPAIGN_SECURITIES_DETAILED.TOOLTIP[keyTerms.securities]}
-                  position="top center"
-                  showOnlyPopup={!isMobile}
-                  hoverable
-                />
-                )
-                : (
-                  <span>{offerStructure ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure] : 'NA'}</span>
-                )
+                  ? (
+                    <PopUpModal
+                      customTrigger={<span className="popup-label">{offerStructure ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure] : 'NA'}</span>}
+                      content={CAMPAIGN_SECURITIES_DETAILED.TOOLTIP[keyTerms.securities]}
+                      position="top center"
+                      showOnlyPopup={!isMobile}
+                      hoverable
+                    />
+                  )
+                  : (
+                    <span>{offerStructure ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure] : 'NA'}</span>
+                  )
               }
             />
             {campaignStatus.isEquity
-            && (
-              <KeyTermsFieldHoc
-                data={keyTerms}
-                field="equityClass"
-                title="Equity Class"
-                content={get(keyTerms, 'equityClass') && CAMPAIGN_KEYTERMS_EQUITY_CLASS[get(keyTerms, 'equityClass')]}
-              />
-            )}
+              && (
+                <KeyTermsFieldHoc
+                  data={keyTerms}
+                  field="equityClass"
+                  title="Equity Class"
+                  content={get(keyTerms, 'equityClass') && CAMPAIGN_KEYTERMS_EQUITY_CLASS[get(keyTerms, 'equityClass')]}
+                />
+              )}
             <KeyTermsFieldHoc
               data={keyTerms}
               field="investmentMultiple"
@@ -408,7 +415,7 @@ class KeyTermsDetails extends Component {
                     equity interests in the Issuer or
                     any voting or management rights with respect to the Issuer as a result of
                     an investment in Securities.
-              </p>
+                  </p>
                 )
                 : 'NA'
               }
@@ -419,7 +426,7 @@ class KeyTermsDetails extends Component {
                 <Table.Row className="bg-offwhite" verticalAlign="top">
                   <Table.Cell width={7} className="neutral-text"><div className="parsed-data overflow-wrap"><b>{item.label}{' '}</b></div>
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="pr-18">
                     <HtmlEditor
                       readOnly
                       content={item.description || ''}

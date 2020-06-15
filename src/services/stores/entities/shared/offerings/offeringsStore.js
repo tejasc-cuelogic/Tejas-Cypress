@@ -2,16 +2,18 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
+import { Calculator } from 'amortizejs';
 import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes, orderBy, set } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../../api/publicApi';
-import { STAGES } from '../../../../constants/admin/offerings';
+import { STAGES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/admin/offerings';
 import {
   allOfferings, allOfferingsCompact, updateOffering,
   adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings, getofferingById,
+  getOfferingStoreDetails,
 } from '../../../queries/offerings/manage';
-import { offeringCreationStore, userStore, uiStore, campaignStore, collectionStore } from '../../../index';
-import { ClientDb, DataFormatter } from '../../../../../helper';
+import { offeringCreationStore, userStore, uiStore, campaignStore, collectionStore, investmentStore } from '../../../index';
+import { ClientDb, DataFormatter, FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
 export class OfferingsStore {
@@ -51,6 +53,8 @@ export class OfferingsStore {
   @observable totalRaisedAmount = [];
 
   @observable orderedActiveLiveList = [];
+
+  @observable offeringStorageDetails = null;
 
   @action
   initRequest = (props, forceResetDb = false) => new Promise(async (resolve) => {
@@ -516,6 +520,150 @@ export class OfferingsStore {
       ...offeringFaildArr,
     ];
     return sortedResultObject;
+  }
+
+  @action
+  getofferingStorageDetailBySlug = id => new Promise((resolve) => {
+    this.offerLoading = true;
+    this.offeringStorageDetails = graphql({
+      client,
+      query: getOfferingStoreDetails,
+      fetchPolicy: 'no-cache',
+      variables: { id },
+      onFetch: (res) => {
+        if (!this.offerLoading) {
+          this.offerLoading = false;
+          resolve(res.getOfferingDetailsBySlug.storageDetails);
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  });
+
+  @computed get offeringSecurity() {
+    return get(this.offer, 'keyTerms.securities') || '';
+  }
+
+  adminInvestmentBonusRewards = (investedAmount) => {
+    const { offer } = this;
+    const offeringInvestedAmount = typeof investedAmount === 'string' ? parseFloat(investedAmount || '0.00') : (investedAmount || 0);
+    let rewardsTiers = [];
+    if (offer && offer.bonusRewards) {
+      offer.bonusRewards.map((reward) => {
+        rewardsTiers = reward.tiers.concat(rewardsTiers);
+        return false;
+      });
+    }
+    rewardsTiers = [...new Set(toJS(rewardsTiers))].sort((a, b) => b - a);
+    const matchTier = rewardsTiers ? rewardsTiers.find(t => offeringInvestedAmount >= t) : 0;
+    let bonusRewards = [];
+    bonusRewards = offer && offer.bonusRewards && offer.bonusRewards
+      .filter(reward => reward.tiers.includes(matchTier));
+    return bonusRewards;
+  }
+
+  @action
+  admininvestMoneyChange = (inputValues, field, isPreferredEquiry = false, returnCalculationType) => {
+    investmentStore.INVESTMONEY_FORM = Validator.onChange(investmentStore.INVESTMONEY_FORM, {
+      name: field,
+      value: inputValues.floatValue,
+    });
+    if (!isPreferredEquiry) {
+      this.adminCalculateEstimatedReturn(returnCalculationType);
+    }
+  };
+
+  adminCalculateEstimatedReturn = (returnCalculationType) => {
+    const { offer } = this;
+    let offeringSecurityType = '';
+    let interestRate = '';
+    let investmentMultiple = '';
+    let loanTerm = '';
+    offeringSecurityType = get(offer, 'keyTerms.securities');
+    const calculationType = returnCalculationType && returnCalculationType === 'TERM_NOTE_CALCULATION' ? 'TERM_NOTE' : 'REV_SHR';
+    interestRate = get(offer, 'keyTerms.interestRate') && get(offer, 'keyTerms.interestRate') !== null ? get(offer, 'keyTerms.interestRate') : '0';
+    investmentMultiple = get(offer, 'closureSummary.keyTerms.multiple') || '0';
+    loanTerm = parseFloat(get(offer, 'keyTerms.maturity'));
+
+    const investAmt = investmentStore.investmentAmount;
+    if (investAmt >= 100 && !['REAL_ESTATE'].includes(offeringSecurityType)) {
+      if (calculationType === 'TERM_NOTE') {
+        const data = {
+          method: 'mortgage',
+          apr: parseFloat(interestRate) || 0,
+          balance: parseFloat(investAmt) || 0,
+          loanTerm: loanTerm || 0,
+        };
+        const { totalPayment } = Calculator.calculate(data);
+        const finalAmtM = money.floatToAmount(Math.floor(totalPayment) || '');
+        const estReturnMIN = Helper.CurrencyFormat(finalAmtM, 0, 0);
+        investmentStore.estReturnVal = estReturnMIN;
+        return investmentStore.estReturnVal;
+      }
+      const formatedInvestmentMultiple = money.floatToAmount(investmentMultiple);
+      const estReturnMIN = Helper.CurrencyFormat(money.mul(formatedInvestmentMultiple, investAmt), 0);
+      investmentStore.estReturnVal = estReturnMIN;
+      return investmentStore.estReturnVal;
+    } if (investAmt <= 100) {
+      investmentStore.setFieldValue('estReturnVal', '-');
+      return investmentStore.estReturnVal;
+    }
+    return investmentStore.estReturnVal;
+  }
+
+  @action
+  adminInvestMoneyChangeForEquity = (val, field) => {
+    investmentStore.PREFERRED_EQUITY_INVESTMONEY_FORM = Validator.onChange(investmentStore.PREFERRED_EQUITY_INVESTMONEY_FORM, {
+      name: field,
+      value: val.floatValue,
+    });
+    this.adminCalculatedInvestmentAmountForPreferredEquity();
+  }
+
+  @action
+  adminCalculatedInvestmentAmountForPreferredEquity = () => {
+    const { offer } = this;
+    investmentStore.setFieldValue('investmentFlowEquityErrorMessage', null);
+    const pricePerShare = money.floatToAmount(investmentStore.PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares.value || 0);
+    const priceCalculation = get(offer, 'closureSummary.keyTerms.priceCalculation') || '0';
+    const sharePrice = money.floatToAmount(priceCalculation || 0);
+    const resultAmount = money.mul(sharePrice, pricePerShare);
+    const investedAmount = money.isZero(resultAmount) ? '0' : resultAmount;
+    investmentStore.investMoneyChange({ floatValue: investedAmount }, 'investmentAmount', true);
+    const formatedInvestedAmount = Helper.CurrencyFormat(investedAmount);
+    investmentStore.setFieldValue('equityInvestmentAmount', formatedInvestedAmount);
+  }
+
+  @action
+  adminEquityCalculateShareAmount = () => {
+    const { offer } = this;
+    const prefferedEquityLabel = get(offer, 'keyTerms.equityUnitType');
+    const offeringMinInvestmentAmount = Helper.CurrencyFormat((get(offer, 'keyTerms.minInvestAmt') || '0'), 0);
+    const priceCalculation = get(offer, 'closureSummary.keyTerms.priceCalculation') || '0';
+    const offeringMinInvestment = get(offer, 'keyTerms.minInvestAmt') || '0';
+    const formatedUnitPrice = money.floatToAmount(priceCalculation || 0);
+    const formatedMinInvestment = money.floatToAmount(offeringMinInvestment || 0);
+    const result = Math.ceil(money.div(formatedMinInvestment, formatedUnitPrice));
+    const dynamicLabel = result <= 1 ? `${prefferedEquityLabel}` : `${prefferedEquityLabel}s`;
+    const returnStatement = `*Minimum investment amount: ${result} ${dynamicLabel} = ${offeringMinInvestmentAmount}`;
+    return returnStatement;
+  }
+
+  @computed get offeringStatus() {
+    const { offer } = this;
+    const offeringStatus = {};
+    offeringStatus.revenueSharingSummary = get(offer, 'keyTerms.revShareSummary');
+    offeringStatus.isRevenueShare = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE;
+    offeringStatus.isTermNote = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
+    offeringStatus.isFund = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS;
+    offeringStatus.isSafe = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE;
+    offeringStatus.isConvertibleNotes = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.CONVERTIBLE_NOTES;
+    offeringStatus.isEquity = this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY;
+    offeringStatus.isRealEstate = ((this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(offer, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
+    offeringStatus.isPreferredEquity = ((this.offeringSecurity === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(offer, 'keyTerms.equityClass') === 'PREFERRED' || (['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(offer, 'keyTerms.equityClass'))))));
+    return offeringStatus;
   }
 }
 

@@ -7,7 +7,7 @@ import { Container, Card, Grid, Label, Icon, Button, Divider, Table } from 'sema
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -77,9 +77,9 @@ export default class CampaignList extends Component {
       );
     } if (customTag) {
       return (
-      <Label.Group size="small">
-        {customTag}
-      </Label.Group>
+        <Label.Group size="small">
+          {customTag}
+        </Label.Group>
       );
     }
     return null;
@@ -111,7 +111,7 @@ export default class CampaignList extends Component {
                               <Image64
                                 bg
                                 centered
-                                srcUrl={tombstoneImage(offering) || ''}
+                                srcUrl={collection && offering.image ? get(offering, 'image.url') : tombstoneImage(offering) || ''}
                                 alt={`${get(offering, 'keyTerms.shorthandBusinessName')} poster`}
                               />
                             </div>
@@ -210,11 +210,14 @@ export default class CampaignList extends Component {
                                 <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>
                               )
                             }
-                            <p className="more-info">
-                              Offered by {offering && offering.regulation
-                                ? CAMPAIGN_OFFERED_BY[offering.regulation]
-                                : CAMPAIGN_OFFERED_BY[offering.keyTerms.regulation]}
-                            </p>
+                            {
+                              get(offering, 'tombstone.showOfferedBy') !== false
+                              && (
+                                <p className="more-info">
+                                  Offered by {get(offering, 'tombstone.offeredBy') ? offering.tombstone.offeredBy : 'NextSeed Securities, LLC'}
+                                </p>
+                              )
+                            }
                           </Card.Content>
                           {offering.stage === 'LOCK' && (
                             <Card.Content className="card-hidden">

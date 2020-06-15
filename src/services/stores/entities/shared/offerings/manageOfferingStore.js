@@ -1,5 +1,5 @@
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { startCase, get, includes, filter, orderBy } from 'lodash';
+import { startCase, get, includes, filter, orderBy, forEach, find } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
@@ -9,18 +9,18 @@ import DataModelStore, * as dataModelStore from '../dataModelStore';
 import {
   TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC, SUB_HEADER_BASIC, GALLERY,
 } from '../../../../constants/offering/formMeta/offering';
-import { INVEST_NOW_TOC, INVEST_NOW_PAGE } from '../../../../constants/offering/formMeta';
+import { INVEST_NOW_TOC, INVEST_NOW_PAGE, DOCUMENT_MAPPING, INVEST_NOW_CONFIG_META } from '../../../../constants/offering/formMeta';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore, userDetailsStore, campaignStore } from '../../../index';
 import * as investNowTocDefaults from '../../../../constants/offering/InvestNowToc';
-import { offeringUpsert, adminLockOrUnlockOffering } from '../../../queries/offerings/manageOffering';
+import { offeringUpsert, adminLockOrUnlockOffering, adminGetInvestNowMappings } from '../../../queries/offerings/manageOffering';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_EQUITY_CLASS_ENUM } from '../../../../../constants/offering';
 
 
 export class ManageOfferingStore extends DataModelStore {
   constructor() {
-    super({ adminLockOrUnlockOffering });
+    super({ adminLockOrUnlockOffering, adminGetInvestNowMappings });
   }
 
   TOMBSTONE_BASIC_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
@@ -41,9 +41,17 @@ export class ManageOfferingStore extends DataModelStore {
 
   INVEST_NOW_PAGE_FRM = Validator.prepareFormObject(INVEST_NOW_PAGE);
 
+  DOCUMENT_MAPPING_FRM = Validator.prepareFormObject(DOCUMENT_MAPPING);
+
   onDragSaveEnable = false;
 
+  DOCUMENT_UPLOAD_MAPPING_FRM = [];
+
   initLoad = [];
+
+  DOCUMENT_MAPPING_OPTIONS = [];
+
+  INVEST_NOW_CONFIG_FRM = Validator.prepareFormObject(INVEST_NOW_CONFIG_META);
 
   getInvestNowTocDefaults = (isPublic = false) => {
     const { offer } = offeringsStore;
@@ -318,6 +326,27 @@ export class ManageOfferingStore extends DataModelStore {
     return labelBannerSecond;
   }
 
+  updateDocument = payloadData => new Promise(async (res) => {
+    const mappingForm = this.DOCUMENT_UPLOAD_MAPPING_FRM;
+    const uploadDocumentArry = payloadData.doc;
+    forEach(uploadDocumentArry, (value, index) => {
+      let mappedArray = [];
+      const documentObj = value;
+      if (value.mappingRequired) {
+        mappedArray = Validator.evaluateFormData(mappingForm[index].fields).mapping || [];
+      }
+      documentObj.mapping = mappedArray;
+    });
+    // console.log(uploadDocumentArry);
+    const payload = {
+      template: 2,
+      doc: cleanDeep(uploadDocumentArry),
+    };
+    // console.log(payload);
+    const result = await this.updateOffering({ keyName: 'investNow', offeringData: { docuSign: payload } });
+    res(result);
+  });
+
   updateOffering = params => new Promise((res) => {
     const { keyName, forms, cleanData, offeringData, tocAction } = params;
     let offeringDetails = {};
@@ -371,7 +400,7 @@ export class ManageOfferingStore extends DataModelStore {
   updateOfferingMutation = (params) => {
     const {
       id, offeringDetails, keyName, notify = true, successMsg = undefined, fromS3 = false, res, msgType = 'success',
-     } = params;
+    } = params;
     uiStore.setProgress('save');
     const variables = {
       id,
@@ -439,6 +468,7 @@ export class ManageOfferingStore extends DataModelStore {
       OFFERING_MISC_FRM: { isMultiForm: false },
       INVEST_NOW_TOC_FRM: { isMultiForm: true },
       GALLERY_FRM: { isMultiForm: true },
+      INVEST_NOW_CONFIG_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -465,6 +495,18 @@ export class ManageOfferingStore extends DataModelStore {
     if (!offer) {
       return false;
     }
+    if (form === 'INVEST_NOW_CONFIG_FRM') {
+      const configDtails = get(offer, 'investNow.config');
+      if (configDtails) {
+        configDtails.toggleMeta = [];
+        if (configDtails.showExpectedReturn) {
+          configDtails.toggleMeta.push('EXPECTED_RETURN');
+        }
+        if (configDtails.showBonusRewards) {
+          configDtails.toggleMeta.push('BONUS_REWARDS');
+        }
+      }
+    }
     this[form] = Validator.setFormData(this[form], offer, ref, keepAtLeastOne);
     const multiForm = this.getActionType(form, 'isMultiForm');
     this[form] = Validator.validateForm(this[form], multiForm, false, false);
@@ -478,7 +520,7 @@ export class ManageOfferingStore extends DataModelStore {
       const index = investNow.findIndex(i => i.page === page && i.regulation === regulation);
       if (index > -1) {
         const pageData = investNow[index];
-        const toc = pageData.toc && pageData.toc.length ? pageData.toc[tocIndex] : { };
+        const toc = pageData.toc && pageData.toc.length ? pageData.toc[tocIndex] : {};
         this.INVEST_NOW_TOC_FRM = Validator.setFormData(this.INVEST_NOW_TOC_FRM, toc);
         this.INVEST_NOW_TOC_FRM = Validator.validateForm(this.INVEST_NOW_TOC_FRM);
       }
@@ -491,6 +533,97 @@ export class ManageOfferingStore extends DataModelStore {
         this.INVEST_NOW_PAGE_FRM = Validator.validateForm(this.INVEST_NOW_PAGE_FRM);
       }
     }
+  }
+
+  adminGetInvestNowMappings = async () => {
+    try {
+      const res = await this.executeQuery({
+        client: 'PRIVATE',
+        query: 'adminGetInvestNowMappings',
+        setLoader: 'adminGetInvestNowMappings',
+        // fetchPolicy: 'cache-first',
+      });
+      if (get(res, 'adminGetInvestNowMappings')) {
+        // console.log('lit obtained');
+        this.setFieldValue('DOCUMENT_MAPPING_OPTIONS', this.dropDownValuesForPlugin(get(res, 'adminGetInvestNowMappings')));
+      }
+    } catch (error) {
+      Helper.toast('Something went wrong, please try again later.', 'error');
+    }
+  }
+
+  dropDownValuesForPlugin = (pluginList) => {
+    const pluginArr = [];
+    const plugins = pluginList;
+    plugins.forEach((val) => {
+      const tempObj = {};
+      tempObj.key = val.label;
+      tempObj.text = val.label;
+      tempObj.value = val.value;
+      tempObj.defaultKey = val.defaultKey;
+      pluginArr.push(tempObj);
+    });
+    return pluginArr;
+  }
+
+  prepareDocumentMappingForm = (form, index = 0) => {
+    const mappingFields = DOCUMENT_MAPPING.mapping;
+    forEach(mappingFields, (val) => {
+      const formField = val;
+      formField.value.options = this.DOCUMENT_MAPPING_OPTIONS;
+    });
+    this[form][index] = Validator.prepareFormObject(DOCUMENT_MAPPING);
+  }
+
+  setMappingFormData = (form, ref, index = 0, keepAtLeastOne) => {
+    const { offer } = offeringsStore;
+    const mappingData = get(offer, `investNow.docuSign.doc[${index}]`);
+    this[form][index] = Validator.setFormData(this[form][index], mappingData, ref, keepAtLeastOne);
+    this[form][index] = Validator.validateForm(this[form][index], true, false, false);
+  }
+
+  updateConfig = () => {
+    const configDetails = Validator.evaluateFormData(this.INVEST_NOW_CONFIG_FRM.fields);
+    configDetails.showExpectedReturn = false;
+    configDetails.showBonusRewards = false;
+    if (configDetails.toggleMeta && configDetails.toggleMeta.length > 0) {
+      forEach(configDetails.toggleMeta, (value) => {
+        if (value === 'EXPECTED_RETURN') {
+          configDetails.showExpectedReturn = true;
+        }
+        if (value === 'BONUS_REWARDS') {
+          configDetails.showBonusRewards = true;
+        }
+      });
+    }
+    if (!get(configDetails, 'showExpectedReturn')) {
+      delete configDetails.expectedReturnCalc;
+    }
+    delete configDetails.toggleMeta;
+    // console.log(configDetails);
+    this.updateOffering({ keyName: 'investNow', offeringData: { config: configDetails } });
+  }
+
+  setDefulatKeyForTypeSelect = (e, res, form, subForm, index, isArrayChange = false, findDefaultValue = false) => {
+    this.formChangeForMultilevelArray(e, res, form, subForm, index, isArrayChange);
+    if (findDefaultValue) {
+      const defaultKey = this.pullDefaultKeyForInput(e, res);
+      const respObj = { name: 'key', value: defaultKey };
+      this.setDefulatKeyForTypeSelect(e, respObj, form, subForm, index, true, false);
+    }
+  }
+
+  pullDefaultKeyForInput = (e, data) => {
+    const pluginInputData = find(data.fielddata.options, o => o.value === data.value && o.defaultKey);
+    return pluginInputData.defaultKey;
+  };
+
+  validateMappingForm = () => {
+    offeringCreationStore.validateMultiLevelArrayForm();
+  }
+
+  validateMappingForFormChange = (index) => {
+    offeringCreationStore.validateMultiLevelArrayFormChange(index);
   }
 }
 
@@ -517,6 +650,14 @@ decorate(ManageOfferingStore, {
   updateOfferingMutation: action,
   setFormData: action,
   setFormDataV2: action,
+  adminGetInvestNowMappings: action,
+  DOCUMENT_MAPPING_FRM: observable,
+  DOCUMENT_UPLOAD_MAPPING_FRM: observable,
+  prepareDocumentMappingForm: action,
+  DOCUMENT_MAPPING_OPTIONS: observable,
+  setMappingFormData: action,
+  INVEST_NOW_CONFIG_FRM: observable,
+  setDefulatKeyForTypeSelect: action,
 });
 
 export default new ManageOfferingStore();

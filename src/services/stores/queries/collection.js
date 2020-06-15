@@ -69,6 +69,11 @@ query getCollectionMapping($collectionId: String!) {
     type
     scope
     order
+    image {
+      id
+      url
+      fileName
+    }
     offering {
       ${offeringFields}
     }

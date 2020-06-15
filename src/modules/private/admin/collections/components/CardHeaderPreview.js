@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
-import { Grid, Header, Container, Responsive, Icon } from 'semantic-ui-react';
+import { Grid, Header, Container, Responsive, Icon, Button } from 'semantic-ui-react';
 import { Image64 } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
@@ -34,20 +34,31 @@ export default class CardHeaderPreview extends Component {
           <Responsive minWidth={768} as={Container} className="pt-100 pb-100">
             <Grid relaxed stackable centered>
               <Grid.Column width={7}>
-                <div className="video-wrapper campaign">
-                  <Image64
-                    bg
-                    srcUrl={get(collection, 'image.preSignedUrl')}
-                    imgType="heroImage"
+                <Grid.Row>
+                  <Button
+                    style={{ color: get(collection, 'descriptionColor.value') || 'white' }}
+                    icon={{ className: 'ns-chevron-left' }}
+                    className="prev link-button pb-30"
+                    onClick={e => this.handleBack(e)}
+                    content="Explore more Communities"
                   />
-                  {get(collection, 'text.value') && <div style={{ backgroundColor: get(collection, 'color.value') || 'green' }} className="ns_flgs_box"><p style={{ color: get(collection, 'textColor.value') }}>{get(collection, 'text.value')}</p></div>}
-                </div>
+                </Grid.Row>
+                <Grid.Row>
+                  <div className="video-wrapper campaign">
+                    <Image64
+                      bg
+                      srcUrl={get(collection, 'image.preSignedUrl')}
+                      imgType="heroImage"
+                    />
+                    {get(collection, 'text.value') && <div style={{ backgroundColor: get(collection, 'color.value') || 'green' }} className="ns_flgs_box"><p style={{ color: get(collection, 'textColor.value') }}>{get(collection, 'text.value')}</p></div>}
+                  </div>
+                </Grid.Row>
                 <div className="clearfix social-links mt-20">
                   {socialDetails.length > 0
                     ? socialDetails.map(site => (
                       <React.Fragment key={site.type.value}>
                         {site.url.value
-                          && <a target="_blank" rel="noopener noreferrer" href={site.url.value.includes('http') ? site.url.value : `http://${site.url.value}`}><Icon name={site.type.value.toLowerCase() === 'website' ? 'globe' : site.type.value.toLowerCase()} style={{ color: get(collection, 'descriptionColor.value') }} /></a>
+                          && <a target="_blank" rel="noopener noreferrer" href={site.url.value.includes('http') ? site.url.value : `http://${site.url.value}`}><Icon name={site.type.value.toLowerCase() === 'website' ? 'globe' : site.type.value.toLowerCase()} style={{ color: get(collection, 'descriptionColor.value') || 'white' }} /></a>
                         }
                       </React.Fragment>
                     )) : ''
@@ -55,10 +66,13 @@ export default class CardHeaderPreview extends Component {
                 </div>
               </Grid.Column>
               <Grid.Column width={8}>
-                <Header style={{ color: get(collection, 'descriptionColor.value') }} as="h3" inverted>
-                  {get(collection, 'title.value')}
-                </Header>
-                <span style={{ color: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} style={{ color: get(collection, 'descriptionColor.value') }} /></span>
+              <Grid.Row className="pb-50">{' '}</Grid.Row>
+                <Grid.Row>
+                  <Header style={{ color: get(collection, 'descriptionColor.value') }} as="h3" inverted>
+                    {get(collection, 'title.value')}
+                  </Header>
+                  <span style={{ color: get(collection, 'descriptionColor.value') }}><HtmlEditor readOnly content={get(collection, 'description.value')} style={{ color: get(collection, 'descriptionColor.value') }} /></span>
+                </Grid.Row>
               </Grid.Column>
             </Grid>
           </Responsive>
