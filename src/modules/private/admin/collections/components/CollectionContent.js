@@ -6,6 +6,7 @@ import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react'
 import formHOC from '../../../../../theme/form/formHOC';
 import DraggableListing from './DraggableListing';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
+import Gallery from './Gallery';
 
 
 const metaInfo = {
@@ -123,7 +124,10 @@ class CollectionContent extends Component {
               </>
             ))
           }
-          {(this.state.editable)
+          {
+            contentTypeValue === 'GALLERY' && (<Gallery />)
+          }
+          {(contentTypeValue !== 'GALLERY' || this.state.editable)
             && (
               <>
                 <div className="sticky-actions">

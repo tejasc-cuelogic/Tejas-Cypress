@@ -240,6 +240,9 @@ export const getCollection = gql`
           meta
           description
         }
+        gallery {
+          caption
+        }
         tombstone {
           title
           description

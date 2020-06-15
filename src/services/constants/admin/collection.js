@@ -103,6 +103,42 @@ export const COLLECTION_MISC = FormHelper.generateMeta([
   ['twitter_featuredImageUpload', 'Featured Upload image', '', 'optional', 'e.g. Company was formed...', { s3Upload: true, asIn: true, props: { find: 'type', type: 'twitter', skipField: true, ArrayObjItem: true }, objRef: 'social' }],
 ]);
 
+export const GALLERY = {
+  gallery: [{
+    caption: {
+      label: 'Caption',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. Hero Image',
+    },
+    image: {
+      fileName: '', value: '', base64String: '', objType: 's3File', confirmModal: false, src: '', meta: {}, label: 'Image', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: '', fileId: '', fileData: '',
+    },
+    order: {
+      label: 'Order',
+      value: 1,
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. 1',
+      defaultValue: 1,
+    },
+    isVisible: {
+      value: true,
+      defaultValue: true,
+      values: [
+        {
+          label: 'Is Visible',
+          value: 'TRUE',
+        },
+      ],
+      error: undefined,
+      rule: 'optional',
+      placeHolder: '',
+    },
+  }],
+};
+
 
 export const CONTENT = {
   content: [{
@@ -151,6 +187,7 @@ export const CONTENT = {
         { key: 'ACTIVE_INVESTMENTS', value: 'ACTIVE_INVESTMENTS', text: 'Active Investments' },
         { key: 'COMPLETE_INVESTMENTS', value: 'COMPLETE_INVESTMENTS', text: 'Complete Investments' },
         { key: 'INSIGHTS', value: 'INSIGHTS', text: 'Insights' },
+        { key: 'GALLERY', value: 'GALLERY', text: 'Gallery' },
       ],
       placeHolder: 'Enter here',
     },
