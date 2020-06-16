@@ -60,11 +60,11 @@ class Tombstone extends Component {
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
-              <Header as="h4">Tombstone</Header>
+              <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.customTag.label}</Header>
               {smartElement.Input('customTag', { readOnly: isReadOnly })}
               <Form.Group widths={1}>
                 <Form.Field>
-                  <Header as="h6">{TOMBSTONE_BASIC_FRM.fields.description.label}</Header>
+                  <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.description.label}</Header>
                   {smartElement.HtmlEditor('description', { readOnly: isReadOnly, imageUploadPath: `offerings/${currentOfferingId}` })}
                 </Form.Field>
               </Form.Group>

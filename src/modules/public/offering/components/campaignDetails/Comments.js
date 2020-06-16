@@ -14,7 +14,7 @@ const readMoreLength = 250;
 
 const CommentHeader = ({ newLayout, refLink, isMobile }) => (
   <>
-    <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
+    <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-20' : 'mt-20 mb-30'} anchor-wrap`}>
       Comments
       <span className="anchor" id="comments" />
     </Header>
@@ -67,7 +67,7 @@ const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHan
             Note that both NextSeed and issuers are notified of all comments
             immediately, but there may be a slight delay in response to
             questions submitted outside of standard business hours (9am to
-            5pm CST, Monday through Friday).Most questions will be answered
+            5pm CST, Monday through Friday). Most questions will be answered
             by issuers in approximately two business days, although some
             questions require more thorough analyses and will take additional
             time.

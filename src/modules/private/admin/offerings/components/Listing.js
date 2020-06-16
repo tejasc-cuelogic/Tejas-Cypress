@@ -5,7 +5,8 @@ import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
 import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
-import { STAGES, SECURITIES_VALUES, REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
+import { CAMPAIGN_REGULATION_DETAILED } from '../../../../../constants/offering';
+import { STAGES, SECURITIES_VALUES } from '../../../../../services/constants/admin/offerings';
 import Helper from '../../../../../helper/utility';
 
 const actions = {
@@ -81,7 +82,10 @@ export default class Listing extends Component {
           <Table unstackable className="application-list clickable striped">
             <Table.Header>
               <Table.Row>
+                <Table.HeaderCell>Template</Table.HeaderCell>
                 <Table.HeaderCell>Offering Name</Table.HeaderCell>
+                <Table.HeaderCell>Security Type</Table.HeaderCell>
+                <Table.HeaderCell>Exemption</Table.HeaderCell>
                 {stage !== 'creation'
                   && <Table.HeaderCell>Status</Table.HeaderCell>
                 }
@@ -118,6 +122,9 @@ export default class Listing extends Component {
                 : offeringList.map(offering => (
                   <Table.Row key={offering.offeringSlug} className={(offering.isAvailablePublicly) ? (this.props.uiStore.inProgressArray.length && offering.offeringId === this.state.loadingOfferId) ? 'disabled' : '' : 'row-highlight'}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
+                      {`[${offering.template || '1'}]`}
+                    </Table.Cell>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
                       <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
                         <b>
                           {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
@@ -126,7 +133,6 @@ export default class Listing extends Component {
                             ))}
                         </b>
                         <br />
-                        {`[${offering.template || '1'}] ${OFFERING_REGULATIONS[offering.keyTerms.regulation] ? `${OFFERING_REGULATIONS[offering.keyTerms.regulation] }-` : '' } ${CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}`}
                       </Link>
                     </Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
@@ -136,10 +142,7 @@ export default class Listing extends Component {
                       })()}
                     </Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
-                    {(() => {
-                        const exemption = REGULATION_VALUES.find(s => s.value === get(offering, 'keyTerms.regulation'));
-                        return exemption ? exemption.text : 'N/A';
-                      })()}
+                      {CAMPAIGN_REGULATION_DETAILED.REGULATION[offering.keyTerms.regulation] ? `${CAMPAIGN_REGULATION_DETAILED.REGULATION[offering.keyTerms.regulation]}` : 'N/A' }
                     </Table.Cell>
                     {stage !== 'creation'
                       && (
@@ -161,7 +164,7 @@ export default class Listing extends Component {
                       ? (
                         <Table.Cell>
                           <div className="balance width-250">
-                            Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
+                            Created: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
                             Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
                             Days till close: {offering.closureSummary && offering.closureSummary.processingDate
                               ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
