@@ -1,10 +1,10 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Card } from 'semantic-ui-react';
+import { Card, Header } from 'semantic-ui-react';
 import { NsInterstitial } from '../../../../../../theme/shared';
-import NSImage from '../../../modules/shared/NSImage';
-import HtmlEditor from '../../../modules/shared/HtmlEditor';
+import NSImage from '../../../../../shared/NSImage';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 const OfferingCards = ({ offerings, isMobile }) => (
   <>
@@ -53,37 +53,6 @@ export default class ConfirmCancelModal extends React.Component {
   render() {
     const { responsiveVars } = this.props.uiStore;
     const { isMobile } = responsiveVars;
-    const interstitialSteps = {
-      label: 'Profile Interstitial',
-      key: 'profileInterstitial',
-      steps: [
-        {
-          stepToBeRendered: 1,
-          header: 'Let’s have a look around your new account',
-          content: <>Once you’ve made your first investment on NextSeed, this is where you’ll find information related to your investment portfolio — including payments, updates, returns and more.<br /><br />Also, check your Profile Settings to keep your investment limits and Accredited Investor status up to date.</>,
-          image: `${!isMobile ? 'interstitial/portfolio.png' : 'interstitial/portfolioMobile.png'}`,
-          component: NSImage,
-          button: 'Next',
-          to: `${this.handleNextStep}`,
-        }, {
-          stepToBeRendered: 2,
-          header: 'Flexible account options, rigid security',
-          content: <>When you invest on NextSeed, you will do so with an FDIC-insured investment account set up with our partner bank, Goldstar Trust.<br /><br />After we verify your identity using bank-level security measures, you will be asked to create one of three types of accounts based on your preference.</>,
-          image: `${!isMobile ? 'interstitial/accounts.png' : 'interstitial/accountsMobile.png'}`,
-          component: NSImage,
-          button: 'Next',
-          to: `${this.handleNextStep}`,
-        }, {
-          stepToBeRendered: 3,
-          header: 'Time to explore your investment opportunities!',
-          content: <>Now that you know the basics of your NextSeed account, you can go ahead and <a href={this.props.match.refLink}>complete your account setup</a>, or start exploring our current investment opportunities.</>,
-          note: <div className={`protipWrap ${isMobile ? 'dnone' : 'dblock'}`}><strong>Pro tip:</strong> Be sure to click the ‘Follow’ button on any campaign that interests you in order to receive regular campaign updates and alerts so that you never miss a chance to invest.</div>,
-          component: OfferingCards,
-          button: 'Explore All Offerings',
-          to: '/offerings',
-        },
-      ],
-    };
     const offerings = [
       {
         title: 'Bravery Chef Hall',
@@ -111,6 +80,32 @@ export default class ConfirmCancelModal extends React.Component {
         imageUrl: `${!isMobile ? 'interstitial/buffbrew.png' : 'interstitial/buffbrewMobile.png'}`,
       },
     ];
+    const interstitialSteps = {
+      label: 'Profile Interstitial',
+      key: 'profileInterstitial',
+      steps: [
+        {
+          stepToBeRendered: 1,
+          header: 'Let’s have a look around your new account',
+          content: <>Once you’ve made your first investment on NextSeed, this is where you’ll find information related to your investment portfolio — including payments, updates, returns and more.<br /><br />Also, check your Profile Settings to keep your investment limits and Accredited Investor status up to date.</>,
+          component: <NSImage path={`${!isMobile ? 'interstitial/portfolio.png' : 'interstitial/portfolioMobile.png'}`} />,
+          button: 'Next',
+        }, {
+          stepToBeRendered: 2,
+          header: 'Flexible account options, rigid security',
+          content: <>When you invest on NextSeed, you will do so with an FDIC-insured investment account set up with our partner bank, Goldstar Trust.<br /><br />After we verify your identity using bank-level security measures, you will be asked to create one of three types of accounts based on your preference.</>,
+          component: <NSImage path={`${!isMobile ? 'interstitial/accounts.png' : 'interstitial/accountsMobile.png'}`} />,
+          button: 'Next',
+        }, {
+          stepToBeRendered: 3,
+          header: 'Time to explore your investment opportunities!',
+          content: <>Now that you know the basics of your NextSeed account, you can go ahead and <a href={this.props.match.refLink}>complete your account setup</a>, or start exploring our current investment opportunities.</>,
+          note: <div className={`protipWrap ${isMobile ? 'dnone' : 'dblock'}`}><strong>Pro tip:</strong> Be sure to click the ‘Follow’ button on any campaign that interests you in order to receive regular campaign updates and alerts so that you never miss a chance to invest.</div>,
+          component: <OfferingCards offerings={offerings} />,
+          button: 'Explore All Offerings',
+        },
+      ],
+    };
     return (
       <NsInterstitial
         closeOnDimmerClick={false}

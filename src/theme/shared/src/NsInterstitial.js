@@ -1,10 +1,12 @@
 import React from 'react';
 import { Modal, Container, Grid, Header, Button } from 'semantic-ui-react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { last } from 'lodash';
+import { indexOf, last } from 'lodash';
+// import NSImage from '../../../modules/shared/NSImage';
+// import HtmlEditor from '../../../modules/shared/HtmlEditor';
 
-const getModule = component => lazyRetry(() => import(`./${component}`));
+// const getModule = component => lazyRetry(() => import(`./${component}`));
 
 const ProgressBar = ({ activeStep, activeIndex }) => (
   <span className="steps" style={activeStep === activeIndex ? { backgroundColor: '#20C86D' } : { backgroundColor: '#E6E6E8' }} />
@@ -23,7 +25,11 @@ export default class ConfirmCancelModal extends React.Component {
 
   handleNextStep = () => {
     const { currentStep } = this.state;
-    this.setState({ currentStep: currentStep + 1 });
+    const { steps } = this.props.interstitialSteps;
+    const lastStep = indexOf(steps, last(steps));
+    if (this.state.currentStep !== lastStep) {
+      this.setState({ currentStep: currentStep + 1 });
+    } else this.props.history.push('/offerings');
   }
 
   handleFinishLater = (e, url) => {
@@ -34,10 +40,8 @@ export default class ConfirmCancelModal extends React.Component {
   render() {
     const { responsiveVars } = this.props.uiStore;
     const { isMobile } = responsiveVars;
-    const { url, offerings, interstitialSteps, size, closeOnDimmerClick } = this.props;
+    const { url, interstitialSteps, size, closeOnDimmerClick } = this.props;
     const stepToRender = interstitialSteps.steps[this.state.currentStep];
-    const lastStep = last(interstitialSteps.steps);
-    const CurrentComponent = getModule(stepToRender.component);
     return (
       <Modal size={size || 'large'} open className="finish-later" closeIcon onClose={e => this.handleFinishLater(e, url)} closeOnDimmerClick={Boolean(closeOnDimmerClick)}>
         <Modal.Content>
@@ -47,10 +51,7 @@ export default class ConfirmCancelModal extends React.Component {
                 <Header as="h3">{stepToRender.header}</Header>
                 <p>{stepToRender.content}</p>
                 <div className={isMobile ? 'dnone' : 'dblock'}>
-                  {this.state.currentStep !== lastStep
-                    ? <Button primary green className="mt-30" onClick={() => this.handleNextStep()}>{stepToRender.button}</Button>
-                    : <Button primary green className="mt-30" as={Link} to={stepToRender.to}>{stepToRender.button}</Button>
-                  }
+                  <Button primary green className="mt-30" onClick={() => this.handleNextStep()}>{stepToRender.button}</Button>
                 </div>
                 <div className={`progressWrap ${isMobile ? 'dnone' : 'dblock'}`}>
                   {interstitialSteps.steps.map((step, index) => (
@@ -62,7 +63,7 @@ export default class ConfirmCancelModal extends React.Component {
                 </div>
               </Grid.Column>
               <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16} className="">
-                <CurrentComponent offerings={offerings} isMobile={isMobile} path={stepToRender.image} />
+                {stepToRender.component}
                 {stepToRender.note && stepToRender.note}
               </Grid.Column>
             </Grid>
