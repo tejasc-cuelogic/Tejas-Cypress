@@ -11,7 +11,7 @@ const metaInfo = {
 };
 
 const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-large mr-10" />);
-const SortableItem = SortableElement(({ toggleVisible, GALLERY_FRM, isReadOnly, fieldIndex, smartElement, removeOne, currentOfferingId, removeMedia }) => (
+const SortableItem = SortableElement(({ toggleVisible, GALLERY_FRM, isReadOnly, fieldIndex, smartElement, removeOne, collectionId, removeMedia }) => (
   <div className="row-wrap">
     <Form.Group className="mlr-0 plr-0 pt-0 pb-0">
       <Table basic compact className="form-table bg-white">
@@ -25,7 +25,7 @@ const SortableItem = SortableElement(({ toggleVisible, GALLERY_FRM, isReadOnly, 
             </Table.Cell>
             <Table.Cell>
               <Header as="h4">{GALLERY_FRM.fields.gallery[fieldIndex].image.label}</Header>
-              {smartElement.ImageCropper('image', { style: { height: '125px' }, disabled: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], uploadPath: `offerings/${currentOfferingId}`, removeMedia })}
+              {smartElement.ImageCropper('image', { style: { height: '125px' }, disabled: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], uploadPath: `collections/${collectionId}`, removeMedia })}
             </Table.Cell>
             <Table.Cell collapsing>
               <Button className="link-button">
@@ -46,7 +46,7 @@ const SortableItem = SortableElement(({ toggleVisible, GALLERY_FRM, isReadOnly, 
     </Form.Group>
   </div>
 ));
-const SortableList = SortableContainer(({ toggleVisible, GALLERY_FRM, isReadOnly, smartElement, currentOfferingId, removeMedia, removeOne }) => (
+const SortableList = SortableContainer(({ toggleVisible, GALLERY_FRM, isReadOnly, smartElement, collectionId, removeMedia, removeOne }) => (
   <div className="tbody">
     {GALLERY_FRM.fields.gallery.map((field, index) => (
       <SortableItem
@@ -58,7 +58,7 @@ const SortableList = SortableContainer(({ toggleVisible, GALLERY_FRM, isReadOnly
         isReadOnly={isReadOnly}
         smartElement={smartElement}
         GALLERY_FRM={GALLERY_FRM}
-        currentOfferingId={currentOfferingId}
+        collectionId={collectionId}
         removeMedia={removeMedia}
         removeOne={removeOne}
         toggleVisible={toggleVisible}
@@ -67,7 +67,7 @@ const SortableList = SortableContainer(({ toggleVisible, GALLERY_FRM, isReadOnly
   </div>
 ));
 
-const GalleryList = ({ toggleVisible, GALLERY_FRM, isReadOnly, onSortEnd, smartElement, currentOfferingId, removeMedia, removeOne }) => (
+const GalleryList = ({ toggleVisible, GALLERY_FRM, isReadOnly, onSortEnd, smartElement, collectionId, removeMedia, removeOne }) => (
   <div className="ui card fluid">
     <SortableList
       GALLERY_FRM={GALLERY_FRM}
@@ -77,7 +77,7 @@ const GalleryList = ({ toggleVisible, GALLERY_FRM, isReadOnly, onSortEnd, smartE
       useDragHandle
       isReadOnly={isReadOnly}
       smartElement={smartElement}
-      currentOfferingId={currentOfferingId}
+      collectionId={collectionId}
       removeMedia={removeMedia}
       removeOne={removeOne}
       toggleVisible={toggleVisible}
@@ -87,7 +87,7 @@ const GalleryList = ({ toggleVisible, GALLERY_FRM, isReadOnly, onSortEnd, smartE
 
 function Gallery(props) {
   const { smartElement, title, noAddMore, uiStore } = props;
-  const { GALLERY_FRM, removeOne, addMore } = props.collectionStore;
+  const { GALLERY_FRM, removeOne, collectionId, addMore, toggleVisible } = props.collectionStore;
 
   const { loadingArray } = props.nsUiStore;
   const removeMedia = (form, name) => {
@@ -99,6 +99,7 @@ function Gallery(props) {
     };
     props.collectionStore.upsertCollection(params);
   };
+
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const gallery = [...props.collectionStore.GALLERY_FRM.fields.gallery];
     props.collectionStore.reOrderHandle(arrayMove(gallery, oldIndex, newIndex), 'GALLERY_FRM', 'gallery');
@@ -116,7 +117,9 @@ function Gallery(props) {
         removeOne={removeOne}
         removeMedia={removeMedia}
         smartElement={smartElement}
+        collectionId={collectionId}
         onSortEnd={onSortEnd}
+        toggleVisible={toggleVisible}
       />
       <div className="sticky-actions">
         <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>

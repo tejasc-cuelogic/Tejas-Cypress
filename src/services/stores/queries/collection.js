@@ -242,6 +242,12 @@ export const getCollection = gql`
         }
         gallery {
           caption
+          order
+          image {
+            url
+            fileName
+          }
+          isVisible
         }
         tombstone {
           title

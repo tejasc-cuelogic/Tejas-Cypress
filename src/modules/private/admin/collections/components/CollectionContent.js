@@ -127,7 +127,14 @@ class CollectionContent extends Component {
           {
             contentTypeValue === 'GALLERY' && (<Gallery />)
           }
-          {(contentTypeValue !== 'GALLERY' || this.state.editable)
+
+          {
+            ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
+            && (
+              <AddToCollection isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
+            )
+          }
+          {(contentTypeValue !== 'GALLERY' && this.state.editable)
             && (
               <>
                 <div className="sticky-actions">
@@ -137,13 +144,6 @@ class CollectionContent extends Component {
                 </div>
               </>
             )}
-          {
-            ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
-            && (
-              <AddToCollection isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
-            )
-          }
-
           <Divider hidden />
         </Form>
         <Confirm

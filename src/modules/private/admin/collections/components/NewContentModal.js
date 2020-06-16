@@ -25,9 +25,8 @@ class NewContentModal extends React.Component {
       keyName: false,
       forms: ['COLLECTION_CONTENT_FRM'],
     };
-    const { reOrderHandle, COLLECTION_CONTENT_FRM, setFieldValue, upsertCollection } = this.props.collectionStore;
+    const { setFieldValue, upsertCollection } = this.props.collectionStore;
     await upsertCollection(params);
-    reOrderHandle(COLLECTION_CONTENT_FRM.fields.content);
     setFieldValue('newContentModal', false);
     this.props.collectionStore.setFieldValue('collectionIndex', null);
     this.props.history.push(`${this.props.refLink}/${this.props.index + 1}`);

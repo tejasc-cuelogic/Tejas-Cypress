@@ -313,11 +313,16 @@ class CollectionsStore extends DataModelStore {
     if (Array.isArray(forms)) {
       forms.forEach((f) => {
         if (f === 'COLLECTION_CONTENT_FRM') {
-          const contentObj = Validator.evaluateFormData(this[f].fields);
-          data = { collectionDetails: { marketing: contentObj } };
+          this.reOrderHandle(this[f].fields.content, 'COLLECTION_CONTENT_FRM', 'content');
+          data = {
+            collectionDetails: {
+              marketing: Validator.evaluateFormData(this[f].fields),
+            },
+          };
         } else if (f === 'TOMBSTONE_FRM') {
           data = { collectionDetails: { marketing: { tombstone: Validator.evaluateFormData(this[f].fields) } } };
         } else if (f === 'GALLERY_FRM') {
+          this.reOrderHandle(this[f].fields.gallery, 'GALLERY_FRM', 'gallery');
           data = { collectionDetails: { marketing: Validator.evaluateFormData(this[f].fields) } };
         } else if (['CARD_HEADER_META_FRM', 'CARD_HEADER_SOCIAL_FRM', ''].includes(f)) {
           data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
@@ -352,6 +357,17 @@ class CollectionsStore extends DataModelStore {
     //   collectionData = { ...data };
     // }
     return collectionData;
+  }
+
+
+  toggleVisible = (index) => {
+    this.GALLERY_FRM = Validator.onArrayFieldChange(
+      this.GALLERY_FRM,
+      { name: 'isVisible', value: !this.GALLERY_FRM.fields.gallery[index].isVisible.value },
+      'gallery',
+      index,
+    );
+    this.currTime = +new Date();
   }
 
   parseData = (data) => {
@@ -807,6 +823,7 @@ decorate(CollectionsStore, {
   initRequest: action,
   updateContent: action,
   upsertCollection: action,
+  toggleVisible: action,
   setCollectionMetaList: action,
   getActiveCollectionLength: computed,
   getCollectionLength: computed,
