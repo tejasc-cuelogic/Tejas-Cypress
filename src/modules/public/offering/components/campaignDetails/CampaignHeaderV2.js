@@ -334,88 +334,113 @@ export default class CampaignHeaderV2 extends Component {
                   {!campaignStatus.isFund
                     ? (
                       <>
-                        <p>
-                          {Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)}{' '}
-                          <PopUpModal
-                            customTrigger={<span className="popup-label">{minFlagStatus ? 'max target' : 'min target'}</span>}
-                            content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
-                            position="top center"
-                            showOnlyPopup={!isMobile}
-                          />
-                        </p>
+                        {(minFlagStatus && !get(campaign, 'header.toggleMeta').includes('MAXIMUM_TARGET'))
+                          && (
+                            <p>
+                              {Helper.CurrencyFormat(maxOffering, 0)}{' '}
+                              <PopUpModal
+                                customTrigger={<span className="popup-label">max target</span>}
+                                content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                                position="top center"
+                                showOnlyPopup={!isMobile}
+                              />
+                            </p>
+                          )}
+                        {
+                          (!minFlagStatus && !get(campaign, 'header.toggleMeta').includes('MINIMUM_TARGET'))
+                          && (
+                            <p>
+                              {Helper.CurrencyFormat(minOffering, 0)}{' '}
+                              <PopUpModal
+                                customTrigger={<span className="popup-label">min target</span>}
+                                content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                                position="top center"
+                                showOnlyPopup={!isMobile}
+                              />
+                            </p>
+                          )
+                        }
                       </>
                     ) : (
                       <>
                         <p>
-                          <span>
-                            {Helper.CurrencyFormat(minOffering, 0)}{' '}
-                            <PopUpModal
-                              customTrigger={<span className="popup-label">min target</span>}
-                              content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                              position="top center"
-                              showOnlyPopup={!isMobile}
-                            />
-                          </span>
-                          |
-                          <span>
-                            {Helper.CurrencyFormat(maxOffering, 0)}{' '}
-                            <PopUpModal
-                              customTrigger={<span className="popup-label">max target</span>}
-                              content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
-                              position="top center"
-                              showOnlyPopup={!isMobile}
-                            />
-                          </span>
+                          <>
+                            {!get(campaign, 'header.toggleMeta').includes('MINIMUM_TARGET')
+                              && (
+                                <span className="mr-10">
+                                  {Helper.CurrencyFormat(minOffering, 0)}{' '}
+                                  <PopUpModal
+                                    customTrigger={<span className="popup-label">min target</span>}
+                                    content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                                    position="top center"
+                                    showOnlyPopup={!isMobile}
+                                  />
+                                </span>
+                              )
+                            }
+                            {!get(campaign, 'header.toggleMeta').includes('MINIMUM_TARGET') && !get(campaign, 'header.toggleMeta').includes('MAXIMUM_TARGET') && '|'}
+                            {!get(campaign, 'header.toggleMeta').includes('MAXIMUM_TARGET')
+                              && (
+                                <span className="ml-10">
+                                  {Helper.CurrencyFormat(maxOffering, 0)}{' '}
+                                  <PopUpModal
+                                    customTrigger={<span className="popup-label">max target</span>}
+                                    content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                                    position="top center"
+                                    showOnlyPopup={!isMobile}
+                                  />
+                                </span>
+                              )
+                            }
+                          </>
                         </p>
                       </>
-                    )}
-                  {!get(campaign, 'header.toggleMeta[0]')
-                    ? (
-                      <div className="offer-stats">
-                        <Statistic.Group>
-                          <>
-                            {!get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
-                              && (
-                                <Statistic size="mini" className="basic">
-                                  <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                                  <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
-                                </Statistic>
-                              )}
-                            {!get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
-                              && (
-                                <Statistic size="mini" className="basic">
-                                  <Statistic.Value>
-                                    {get(campaign, 'closureSummary.totalInvestorCount') || 0}
-                                  </Statistic.Value>
-                                  <Statistic.Label>Investors</Statistic.Label>
-                                </Statistic>
-                              )}
-                          </>
-                          {!get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
-                            && (
-                              <Statistic size="mini" className="basic">
-                                <Statistic.Value>
-                                  {get(campaign, 'closureSummary.repayment.count') || 0}
-                                </Statistic.Value>
-                                <Statistic.Label>Payments made</Statistic.Label>
-                              </Statistic>
-                            )
-                          }
-                          {!get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
-                            && isEarlyBirdRewards && !isClosed
-                            && bonusRewards
-                            ? (
-                              <Statistic size="mini" className="basic">
-                                <Statistic.Value>
-                                  {get(campaign, 'earlyBird.available') || 0}
-                                </Statistic.Value>
-                                <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                              </Statistic>
-                            ) : ''
-                          }
-                        </Statistic.Group>
-                      </div>
-                    ) : null}
+                    )
+                  }
+                  <div className={`${!intersection(get(campaign, 'header.toggleMeta'), ['DAYS_LEFT', 'INVESTOR_COUNT', 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
+                    <Statistic.Group>
+                      <>
+                        {!get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
+                          && (
+                            <Statistic size="mini" className="basic">
+                              <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                              <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                            </Statistic>
+                          )}
+                        {!get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
+                          && (
+                            <Statistic size="mini" className="basic">
+                              <Statistic.Value>
+                                {get(campaign, 'closureSummary.totalInvestorCount') || 0}
+                              </Statistic.Value>
+                              <Statistic.Label>Investors</Statistic.Label>
+                            </Statistic>
+                          )}
+                      </>
+                      {!get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
+                        && (
+                          <Statistic size="mini" className="basic">
+                            <Statistic.Value>
+                              {get(campaign, 'closureSummary.repayment.count') || 0}
+                            </Statistic.Value>
+                            <Statistic.Label>Payments made</Statistic.Label>
+                          </Statistic>
+                        )
+                      }
+                      {!get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
+                        && isEarlyBirdRewards && !isClosed
+                        && bonusRewards
+                        ? (
+                          <Statistic size="mini" className="basic">
+                            <Statistic.Value>
+                              {get(campaign, 'earlyBird.available') || 0}
+                            </Statistic.Value>
+                            <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                          </Statistic>
+                        ) : ''
+                      }
+                    </Statistic.Group>
+                  </div>
                   {headerMeta.length > 0 && headerMeta.map((row, i) => (
                     <>
                       {(

@@ -78,7 +78,7 @@ export default class CampaignHeaderPreview extends Component {
                                 <Statistic.Label>{countDown.labelToShow || 'Days Left'}</Statistic.Label>
                               </Statistic>
                             )}
-                          {!headerBasicFields.toggleMeta.value.includes('INVESTOR_COUNT') && headerBasicFields.investorCount.value > 0
+                          {!headerBasicFields.toggleMeta.value.includes('INVESTOR_COUNT')
                             && (
                               <Statistic size="mini" className="basic">
                                 <Statistic.Value>
