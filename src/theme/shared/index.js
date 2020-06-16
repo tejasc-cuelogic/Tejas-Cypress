@@ -34,3 +34,4 @@ export { default as VideoModal } from './src/VideoModal';
 export { default as MessageModal } from './src/MessageModal';
 export { default as ProgressModalHeader } from './src/ProgessModalHeader';
 export { default as NsModal } from './src/NsModal';
+export { default as NsInterstitial } from './src/NsInterstitial';
