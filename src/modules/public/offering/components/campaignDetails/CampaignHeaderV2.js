@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get, sortBy } from 'lodash';
+import { get, sortBy, intersection } from 'lodash';
 import { withRouter, Link, Route } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Statistic, Grid, Button, Divider, Menu } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
@@ -64,53 +64,51 @@ export default class CampaignHeaderV2 extends Component {
                               />
                             )
                           }
-                          {!get(campaign, 'header.toggleMeta[0]')
-                            ? (
-                              <div className="offer-stats">
-                                <Statistic.Group>
-                                  <>
-                                    {!get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
-                                      && (
-                                        <Statistic size="mini" className="basic">
-                                          <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                                          <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
-                                        </Statistic>
-                                      )}
-                                    {!get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
-                                      && (
-                                        <Statistic size="mini" className="basic">
-                                          <Statistic.Value>
-                                            {get(campaign, 'closureSummary.totalInvestorCount') || 0}
-                                          </Statistic.Value>
-                                          <Statistic.Label>Investors</Statistic.Label>
-                                        </Statistic>
-                                      )}
-                                  </>
-                                  {!get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
-                                    && (
-                                      <Statistic size="mini" className="basic">
-                                        <Statistic.Value>
-                                          {!get(campaign, 'closureSummary.repayment.count') || 0}
-                                        </Statistic.Value>
-                                        <Statistic.Label>Payments made</Statistic.Label>
-                                      </Statistic>
-                                    )
-                                  }
-                                  {!get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
-                                    && isEarlyBirdRewards && !isClosed
-                                    && bonusRewards
-                                    ? (
-                                      <Statistic size="mini" className="basic">
-                                        <Statistic.Value>
-                                          {!get(campaign, 'earlyBird.available') || 0}
-                                        </Statistic.Value>
-                                        <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                                      </Statistic>
-                                    ) : ''
-                                  }
-                                </Statistic.Group>
-                              </div>
-                            ) : null}
+
+                          <div className={`${!intersection(get(campaign, 'header.toggleMeta'), ['DAYS_LEFT', 'INVESTOR_COUNT', 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
+                            <Statistic.Group>
+                              <>
+                                {!get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
+                                  && (
+                                    <Statistic size="mini" className="basic">
+                                      <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                                      <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                                    </Statistic>
+                                  )}
+                                {!get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
+                                  && (
+                                    <Statistic size="mini" className="basic">
+                                      <Statistic.Value>
+                                        {get(campaign, 'closureSummary.totalInvestorCount') || 0}
+                                      </Statistic.Value>
+                                      <Statistic.Label>Investors</Statistic.Label>
+                                    </Statistic>
+                                  )}
+                              </>
+                              {!get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
+                                && (
+                                  <Statistic size="mini" className="basic">
+                                    <Statistic.Value>
+                                      {!get(campaign, 'closureSummary.repayment.count') || 0}
+                                    </Statistic.Value>
+                                    <Statistic.Label>Payments made</Statistic.Label>
+                                  </Statistic>
+                                )
+                              }
+                              {!get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
+                                && isEarlyBirdRewards && !isClosed
+                                && bonusRewards
+                                ? (
+                                  <Statistic size="mini" className="basic">
+                                    <Statistic.Value>
+                                      {!get(campaign, 'earlyBird.available') || 0}
+                                    </Statistic.Value>
+                                    <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                                  </Statistic>
+                                ) : ''
+                              }
+                            </Statistic.Group>
+                          </div>
                         </div>
                         <div className="clearfix social-links mt-10">
                           {campaign && !get(campaign, 'misc.social')

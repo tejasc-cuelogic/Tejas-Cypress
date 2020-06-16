@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get } from 'lodash';
+import { get, intersection } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Statistic, Grid, Button } from 'semantic-ui-react';
 import { Image64, PopUpModal } from '../../../../../../theme/shared';
@@ -68,51 +68,48 @@ export default class CampaignHeaderPreview extends Component {
                         />
                       )
                     }
-                    {/* {headerBasicFields.toggleMeta.value && headerBasicFields.toggleMeta.value.length */}
-                      {/* ? ( */}
-                        <div className="offer-stats">
-                          <Statistic.Group>
-                            <>
-                              {isLive && !headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
-                                && (
-                                  <Statistic size="mini" className="basic">
-                                    <Statistic.Value>{countDown.valueToShow || 'X'}</Statistic.Value>
-                                    <Statistic.Label>{countDown.labelToShow || 'Days Left'}</Statistic.Label>
-                                  </Statistic>
-                                )}
-                              {headerBasicFields.toggleMeta.value.includes('INVESTOR_COUNT') && headerBasicFields.investorCount.value > 0
-                                && (
-                                  <Statistic size="mini" className="basic">
-                                    <Statistic.Value>
-                                      {headerBasicFields.investorCount.value || 0}
-                                    </Statistic.Value>
-                                    <Statistic.Label>Investors</Statistic.Label>
-                                  </Statistic>
-                                )}
-                            </>
-                            {isClosed && !headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT') && headerBasicFields.repaymentCount.value > 0
-                              && (
-                                <Statistic size="mini" className="basic">
-                                  <Statistic.Value>
-                                    {headerBasicFields.repaymentCount.value || 0}
-                                  </Statistic.Value>
-                                  <Statistic.Label>Payments made</Statistic.Label>
-                                </Statistic>
-                              )
-                            }
-                            {!isClosed && !headerBasicFields.toggleMeta.value.includes('EARLY_BIRD') && headerBasicFields.earlyBird.value > 0
-                              ? (
-                                <Statistic size="mini" className="basic">
-                                  <Statistic.Value>
-                                    {headerBasicFields.earlyBird.value || 0}
-                                  </Statistic.Value>
-                                  <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                                </Statistic>
-                              ) : ''
-                            }
-                          </Statistic.Group>
-                        </div>
-                      {/* ) : null} */}
+                    <div className={`${!intersection(headerBasicFields.toggleMeta.value, ['DAYS_LEFT', 'INVESTOR_COUNT', 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
+                      <Statistic.Group>
+                        <>
+                          {isLive && !headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
+                            && (
+                              <Statistic size="mini" className="basic">
+                                <Statistic.Value>{countDown.valueToShow || 'X'}</Statistic.Value>
+                                <Statistic.Label>{countDown.labelToShow || 'Days Left'}</Statistic.Label>
+                              </Statistic>
+                            )}
+                          {!headerBasicFields.toggleMeta.value.includes('INVESTOR_COUNT') && headerBasicFields.investorCount.value > 0
+                            && (
+                              <Statistic size="mini" className="basic">
+                                <Statistic.Value>
+                                  {headerBasicFields.investorCount.value || 0}
+                                </Statistic.Value>
+                                <Statistic.Label>Investors</Statistic.Label>
+                              </Statistic>
+                            )}
+                        </>
+                        {isClosed && !headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT') && headerBasicFields.repaymentCount.value > 0
+                          && (
+                            <Statistic size="mini" className="basic">
+                              <Statistic.Value>
+                                {headerBasicFields.repaymentCount.value || 0}
+                              </Statistic.Value>
+                              <Statistic.Label>Payments made</Statistic.Label>
+                            </Statistic>
+                          )
+                        }
+                        {!isClosed && !headerBasicFields.toggleMeta.value.includes('EARLY_BIRD') && headerBasicFields.earlyBird.value > 0
+                          ? (
+                            <Statistic size="mini" className="basic">
+                              <Statistic.Value>
+                                {headerBasicFields.earlyBird.value || 0}
+                              </Statistic.Value>
+                              <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                            </Statistic>
+                          ) : ''
+                        }
+                      </Statistic.Group>
+                    </div>
                   </div>
                   <div className="clearfix social-links mt-10">
                     {['facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url', 'yelp_url'].map(field => (
