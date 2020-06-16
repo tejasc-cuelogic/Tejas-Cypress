@@ -60,7 +60,6 @@ class Tombstone extends Component {
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
-              <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.customTag.label}</Header>
               {smartElement.Input('customTag', { readOnly: isReadOnly })}
               <Form.Group widths={1}>
                 <Form.Field>

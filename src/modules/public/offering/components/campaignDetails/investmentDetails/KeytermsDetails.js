@@ -22,7 +22,7 @@ const KeyTermsFieldHoc = ({ data, title, field, content, titleAddon, noBgOffWhit
     ? (
       <Table.Row className={!noBgOffWhite ? 'bg-offwhite' : ''} verticalAlign="top">
         <Table.Cell width={7} className="neutral-text"><b>{title}{' '}</b>{titleAddon}</Table.Cell>
-        <Table.Cell className="pr-18">{content || get(data, field)}</Table.Cell>
+        <Table.Cell>{content || get(data, field)}</Table.Cell>
       </Table.Row>
     ) : ''
 );
@@ -84,7 +84,7 @@ class KeyTermsDetails extends Component {
             )}
         </Grid>
         {!isMobile ? <Divider hidden={newLayout} /> : null}
-        <Table basic="very" className="key-terms-table">
+        <Table basic className="key-terms-table">
           <Table.Body>
             {keytermsMeta.map(type => (
               <React.Fragment key={type.key}>
@@ -426,7 +426,7 @@ class KeyTermsDetails extends Component {
                 <Table.Row className="bg-offwhite" verticalAlign="top">
                   <Table.Cell width={7} className="neutral-text"><div className="parsed-data overflow-wrap"><b>{item.label}{' '}</b></div>
                   </Table.Cell>
-                  <Table.Cell className="pr-18">
+                  <Table.Cell>
                     <HtmlEditor
                       readOnly
                       content={item.description || ''}

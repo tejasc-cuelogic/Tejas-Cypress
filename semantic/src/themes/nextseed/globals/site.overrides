@@ -215,9 +215,6 @@ h6{
 .pr-15{
 	padding-right: 15px !important;
 }
-.pr-18{
-	padding-right: 18px !important
-}
 .pl-15{
 	padding-left: 15px !important;
 }
