@@ -6,7 +6,7 @@ import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
-import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING_DROPDOWN, COLLECTION_MAPPING_CONTENT, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META, COLLECTION_MISC } from '../../../constants/admin/collection';
+import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING_DROPDOWN, GALLERY, COLLECTION_MAPPING_CONTENT, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META, COLLECTION_MISC } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, adminInsightArticlesListByFilter, getPublicCollections, allOfferings, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
 import Helper from '../../../../helper/utility';
 import { uiStore, authStore, nsUiStore, campaignStore } from '../../index';
@@ -56,6 +56,8 @@ class CollectionsStore extends DataModelStore {
   COLLECTION_CONTENT_FRM = Validator.prepareFormObject(CONTENT);
 
   TOMBSTONE_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
+
+  GALLERY_FRM = Validator.prepareFormObject(GALLERY);
 
   HEADER_META_FRM = Validator.prepareFormObject(HEADER_META);
 
@@ -232,6 +234,8 @@ class CollectionsStore extends DataModelStore {
       }))
         : [];
       this[form] = Validator.setFormData(this[form], { mappingContent: mappingContentList }, ref, keepAtLeastOne);
+    } else if (form === 'GALLERY_FRM') {
+      this[form] = Validator.setFormData(this[form], { gallery: get(collection, 'marketing.gallery') || [] }, ref, keepAtLeastOne);
     } else {
       this[form] = Validator.setFormData(this[form], collection, ref, keepAtLeastOne);
     }
@@ -309,16 +313,18 @@ class CollectionsStore extends DataModelStore {
     if (Array.isArray(forms)) {
       forms.forEach((f) => {
         if (f === 'COLLECTION_CONTENT_FRM') {
-          // const headerFields = Validator.evaluateFormData(this.HEADER_META_FRM.fields);
-          const contentObj = Validator.evaluateFormData(this[f].fields);
-          // const contentWithMeta = contentObj.content.map((c, index) => {
-          //   c.meta = JSON.stringify(headerFields.meta[index]);
-          //   return c;
-          // });
-          data = { collectionDetails: { marketing: contentObj } };
+          this.reOrderHandle(this[f].fields.content, 'COLLECTION_CONTENT_FRM', 'content');
+          data = {
+            collectionDetails: {
+              marketing: Validator.evaluateFormData(this[f].fields),
+            },
+          };
         } else if (f === 'TOMBSTONE_FRM') {
           data = { collectionDetails: { marketing: { tombstone: Validator.evaluateFormData(this[f].fields) } } };
-        } else if (['CARD_HEADER_META_FRM', 'CARD_HEADER_SOCIAL_FRM'].includes(f)) {
+        } else if (f === 'GALLERY_FRM') {
+          this.reOrderHandle(this[f].fields.gallery, 'GALLERY_FRM', 'gallery');
+          data = { collectionDetails: { marketing: Validator.evaluateFormData(this[f].fields) } };
+        } else if (['CARD_HEADER_META_FRM', 'CARD_HEADER_SOCIAL_FRM', ''].includes(f)) {
           data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
         } else if (f === 'COLLECTION_MISC_FRM') {
           data = this.evaluateFormFieldToArray(this[f].fields, false);
@@ -351,6 +357,17 @@ class CollectionsStore extends DataModelStore {
     //   collectionData = { ...data };
     // }
     return collectionData;
+  }
+
+
+  toggleVisible = (index) => {
+    this.GALLERY_FRM = Validator.onArrayFieldChange(
+      this.GALLERY_FRM,
+      { name: 'isVisible', value: !this.GALLERY_FRM.fields.gallery[index].isVisible.value },
+      'gallery',
+      index,
+    );
+    this.currTime = +new Date();
   }
 
   parseData = (data) => {
@@ -794,6 +811,7 @@ decorate(CollectionsStore, {
   HEADER_META_FRM: observable,
   TOMBSTONE_FRM: observable,
   selectedCollectionArray: observable,
+  GALLERY_FRM: observable,
   isLoadMoreClicked: observable,
   COLLECTION_MAPPING_CONTENT_FRM: observable,
   contentId: observable,
@@ -805,6 +823,7 @@ decorate(CollectionsStore, {
   initRequest: action,
   updateContent: action,
   upsertCollection: action,
+  toggleVisible: action,
   setCollectionMetaList: action,
   getActiveCollectionLength: computed,
   getCollectionLength: computed,

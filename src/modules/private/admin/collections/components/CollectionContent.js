@@ -6,6 +6,7 @@ import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react'
 import formHOC from '../../../../../theme/form/formHOC';
 import DraggableListing from './DraggableListing';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
+import Gallery from './Gallery';
 
 
 const metaInfo = {
@@ -123,7 +124,17 @@ class CollectionContent extends Component {
               </>
             ))
           }
-          {(this.state.editable)
+          {
+            contentTypeValue === 'GALLERY' && (<Gallery />)
+          }
+
+          {
+            ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
+            && (
+              <AddToCollection isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
+            )
+          }
+          {(contentTypeValue !== 'GALLERY' && this.state.editable)
             && (
               <>
                 <div className="sticky-actions">
@@ -133,13 +144,6 @@ class CollectionContent extends Component {
                 </div>
               </>
             )}
-          {
-            ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
-            && (
-              <AddToCollection isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
-            )
-          }
-
           <Divider hidden />
         </Form>
         <Confirm
