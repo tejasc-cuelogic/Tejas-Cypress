@@ -22,7 +22,7 @@ const KeyTermsFieldHoc = ({ data, title, field, content, titleAddon, noBgOffWhit
     ? (
       <Table.Row className={!noBgOffWhite ? 'bg-offwhite' : ''} verticalAlign="top">
         <Table.Cell width={7} className="neutral-text"><b>{title}{' '}</b>{titleAddon}</Table.Cell>
-        <Table.Cell>{content || get(data, field)}</Table.Cell>
+        <Table.Cell className="pr-18">{content || get(data, field)}</Table.Cell>
       </Table.Row>
     ) : ''
 );
@@ -426,7 +426,7 @@ class KeyTermsDetails extends Component {
                 <Table.Row className="bg-offwhite" verticalAlign="top">
                   <Table.Cell width={7} className="neutral-text"><div className="parsed-data overflow-wrap"><b>{item.label}{' '}</b></div>
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="pr-18">
                     <HtmlEditor
                       readOnly
                       content={item.description || ''}

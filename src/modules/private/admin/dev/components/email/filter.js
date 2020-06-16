@@ -23,10 +23,10 @@ export default class Filters extends Component {
                 <DateRangeFilter filters={requestState.search} label="Date" name="createdAt" change={change} />
               </Grid.Column>
               <Grid.Column width={3}>
-                <DropdownFilter value={requestState.search.emailType} label="Email Type" name="emailType" change={setSearchParam} options={listEmailTypes} />
+                <DropdownFilter value={requestState.search.emailType} search label="Email Type" name="emailType" change={setSearchParam} options={listEmailTypes} />
               </Grid.Column>
               <Grid.Column width={3}>
-                <DropdownFilter value={requestState.search.emailIdentifier} label="Email Identifier" name="emailIdentifier" change={setSearchParam} options={listEmailIdentifiers.length > 0 ? listEmailIdentifiers.map(o => pick(o, ['key', 'value', 'text'])) : []} />
+                <DropdownFilter value={requestState.search.emailIdentifier} search label="Plugin" name="emailIdentifier" change={setSearchParam} options={listEmailIdentifiers.length > 0 ? listEmailIdentifiers.map(o => pick(o, ['key', 'value', 'text'])) : []} />
               </Grid.Column>
               <Grid.Column width={6}>
                 <NsPaginationHookType floated="right" initRequest={({ first, page }) => paginate({ first, page, noFilter: true })} meta={{ totalRecords, requestState }} />
