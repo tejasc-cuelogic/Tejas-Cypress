@@ -37,13 +37,11 @@ function Image64(props) {
   function handelOnError(e) {
     e.target.error = null;
     if (!e.target.src.includes('data:') && (e.target.src.includes('http://') || e.target.src.includes('https://'))) {
-      const urlList = e.target.src.split('/');
       const email = {
         graphqlError: { operationName: 'Image Processing' },
         filePath: e.target.src,
         urlLocation: window.location.href,
         message: 'The requested file is not found in bucket.',
-        folderName: `${urlList[3]}/${urlList[4]}`,
         key: props.srcUrl,
       };
 
