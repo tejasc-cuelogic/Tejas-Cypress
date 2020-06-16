@@ -83,8 +83,7 @@ class CampaignHeader extends Component {
               {smartElement.Input('heroVideoURL', { displayMode: isReadOnly })}
             </Grid.Column>
             <Grid.Column>
-            <Header as="h4">Display Toggle</Header>
-              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field' })}
+              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Hide Component' })}
             </Grid.Column>
           </Grid>
           <CampaignHeaderSocial />

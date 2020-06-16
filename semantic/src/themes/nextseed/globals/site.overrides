@@ -215,6 +215,9 @@ h6{
 .pr-15{
 	padding-right: 15px !important;
 }
+.pr-18{
+	padding-right: 18px !important
+}
 .pl-15{
 	padding-left: 15px !important;
 }
@@ -3703,8 +3706,8 @@ h3.ui.header.error-2{
 			display: flex;
 			border:1px solid #E6E6E8;
 			box-shadow: none !important;
-			min-height: 575px !important;
-			max-height: 590px !important;
+			min-height: 470px !important;
+			max-height: 500px !important;
 			height: 100% !important;
 			.full-width{
 				flex: auto;
@@ -3719,8 +3722,8 @@ h3.ui.header.error-2{
 					display: -webkit-box;
 					-webkit-line-clamp: 6;
 					-webkit-box-orient: vertical;
-					max-height: 150px;
-					min-height: 150px;
+					max-height: 120px;
+					min-height: 110px;
 					section{
 						padding: 0 !important;
 					}

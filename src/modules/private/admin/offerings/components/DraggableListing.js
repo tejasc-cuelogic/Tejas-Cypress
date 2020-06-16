@@ -30,7 +30,7 @@ const SortableItem = SortableElement(({
               ))}
           </b>
           <br />
-          {`[${offering.template || '1'}] ${OFFERING_REGULATIONS[offering.keyTerms.regulation] ? `${OFFERING_REGULATIONS[offering.keyTerms.regulation] }-` : '' } ${CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}`}
+          {`[${offering.template || '1'}] ${OFFERING_REGULATIONS[offering.keyTerms.regulation] ? `${OFFERING_REGULATIONS[offering.keyTerms.regulation] }-` : '' } ${CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] ? CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] : ''}`}
         </Link>
       </div>
       <div className="balance width-130">

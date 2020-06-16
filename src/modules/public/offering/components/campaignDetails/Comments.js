@@ -7,32 +7,40 @@ import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import { FormTextarea } from '../../../../../theme/form';
-import { ListErrors } from '../../../../../theme/shared';
+import { ListErrors, PopUpModal } from '../../../../../theme/shared';
 import { DataFormatter } from '../../../../../helper';
 
 const readMoreLength = 250;
 
-const CommentHeader = ({ newLayout, refLink, isMobile }) => (
+const commentTooltip = {
+  tooltip:
   <>
-    <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-20' : 'mt-20 mb-30'} anchor-wrap`}>
-      Comments
-      <span className="anchor" id="comments" />
-    </Header>
     <p>
       Note that both NextSeed and issuers are notified of all comments immediately,
       but there may be a slight delay in response to questions submitted outside of
       standard business hours (9am to 5pm CST, Monday through Friday).
-      </p>
+    </p>
     <p>
       Most questions will be answered by issuers in approximately two business days,
       although some questions require more thorough analyses and will take additional
       time.
-      </p>
+    </p>
+  </>,
+};
+
+const CommentHeader = ({ newLayout, refLink, isMobile }) => (
+  <>
+    <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-20' : 'mt-20 mb-20'} anchor-wrap`}>
+      <PopUpModal
+        customTrigger={<span className="popup-label">Comments</span>}
+        content={commentTooltip.tooltip}
+        position="top center"
+        showOnlyPopup={!isMobile}
+        hoverable
+      />
+      <span className="anchor" id="comments" />
+    </Header>
     <p>See our <Link to={`${refLink}/community-guidelines`}>community guidelines</Link> on posting.</p>
-    {/* <p>
-      If you have any technical questions or questions about NextSeed, please
-        email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
-        </p> */}
   </>
 );
 
