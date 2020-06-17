@@ -205,6 +205,15 @@ query getCollection($slug: String!) {
         meta
         description
       }
+      gallery {
+        caption
+        order
+        image {
+          url
+          fileName
+        }
+        isVisible
+      }
       social {
         type
         shareLink

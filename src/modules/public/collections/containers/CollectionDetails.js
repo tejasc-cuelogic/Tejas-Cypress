@@ -7,6 +7,7 @@ import { Responsive, Visibility, Container, Grid, Menu, Divider, Button, Icon } 
 import CollectionHeader from '../components/CollectionHeader';
 import CollectionInsights from '../components/CollectionInsights';
 import CustomContent from '../../offering/components/campaignDetails/CustomContent';
+import CollectionGallery from '../components/CollectionGallery';
 import CampaignList from '../../offering/components/listing/CampaignList';
 import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
@@ -137,7 +138,7 @@ class CollectionDetails extends Component {
   render() {
     const { collectionStore, uiStore, nsUiStore, location, match } = this.props;
     const { loadingArray } = nsUiStore;
-    const { collectionDetails, getInsightsList, getPastOfferingsList, getActiveOfferingsList, activeOfferingList, RECORDS_TO_DISPLAY, activeToDisplay, pastOfferingToDisplay, pastOfferingsList } = collectionStore;
+    const { collectionDetails, getInsightsList, getGalleryImages, getPastOfferingsList, getActiveOfferingsList, activeOfferingList, RECORDS_TO_DISPLAY, activeToDisplay, pastOfferingToDisplay, pastOfferingsList } = collectionStore;
     const { responsiveVars } = uiStore;
     const { isTablet, isMobile } = responsiveVars;
     const collectionHeader = get(collectionDetails, 'marketing.header');
@@ -153,6 +154,8 @@ class CollectionDetails extends Component {
       } else if (con.contentType === 'COMPLETE_INVESTMENTS' && getPastOfferingsList && getPastOfferingsList.length) {
         isValid = true;
       } else if (con.contentType === 'INSIGHTS' && getInsightsList && getInsightsList.length) {
+        isValid = true;
+      } else if (con.contentType === 'GALLERY' && getGalleryImages && getGalleryImages.length) {
         isValid = true;
       } else if (con.contentType === 'CUSTOM' && con.customValue) {
         isValid = true;
@@ -267,8 +270,16 @@ class CollectionDetails extends Component {
                                 InsightArticles={getInsightsList}
                               />
                             </>
-                          )
-                          : c.contentType === 'CUSTOM' && c.customValue
+                          ) : c.contentType === 'GALLERY'
+                            ? (
+                              <CollectionGallery
+                                galleryImages={getGalleryImages}
+                                processScroll={this.processScroll}
+                                newLayout
+                                galleryUrl={this.props.match.url}
+                                title={c.title}
+                              />
+                            ) : c.contentType === 'CUSTOM' && c.customValue
                             ? (
                               <>
                                 {i !== 0 && <Divider hidden section />}
