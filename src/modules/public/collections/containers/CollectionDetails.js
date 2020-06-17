@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get, camelCase, orderBy, find, filter } from 'lodash';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 import scrollIntoView from 'scroll-into-view';
 import { Responsive, Visibility, Container, Grid, Menu, Divider, Button, Icon } from 'semantic-ui-react';
 import CollectionHeader from '../components/CollectionHeader';
@@ -13,6 +13,8 @@ import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import HtmlEditor from '../../../shared/HtmlEditor';
 import CollectionMetaTags from '../components/CollectionMetaTags';
+import AboutGallery from '../components/AboutGallery';
+
 import { UPLOADS_CONFIG } from '../../../../constants/aws';
 
 const LoadMoreBtn = ({ action, param, isMobile }) => (
@@ -168,7 +170,7 @@ class CollectionDetails extends Component {
       content.forEach((c, i) => validate(c) && navItems.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }
 
-  const backToTop = { title: <>Back to Top {<Icon className="ns-chevron-up icon" size="small" />}</>, to: '' };
+    const backToTop = { title: <>Back to Top {<Icon className="ns-chevron-up icon" size="small" />}</>, to: '' };
     navItems.push(backToTop);
 
     const renderHeading = (contentData) => {
@@ -280,18 +282,19 @@ class CollectionDetails extends Component {
                                 title={c.title}
                               />
                             ) : c.contentType === 'CUSTOM' && c.customValue
-                            ? (
-                              <>
-                                {i !== 0 && <Divider hidden section />}
-                                <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
-                                <CustomContent content={c.customValue} isTablet={isTablet} />
-                              </>
-                            )
-                            : null
+                              ? (
+                                <>
+                                  {i !== 0 && <Divider hidden section />}
+                                  <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
+                                  <CustomContent content={c.customValue} isTablet={isTablet} />
+                                </>
+                              )
+                              : null
                   ))}
                 </Grid.Column>
               </Grid>
             </section>
+            <Route path={`${this.props.match.url}/photogallery`} component={AboutGallery} />
           </Container>
         </div>
       </>

@@ -172,6 +172,15 @@ query getCollection($slug: String!) {
     slug
     status
     marketing {
+      gallery {
+        caption
+        order
+        image {
+          url
+          fileName
+        }
+        isVisible
+      }
       header {
         image {
           url
@@ -204,15 +213,6 @@ query getCollection($slug: String!) {
         title
         meta
         description
-      }
-      gallery {
-        caption
-        order
-        image {
-          url
-          fileName
-        }
-        isVisible
       }
       social {
         type

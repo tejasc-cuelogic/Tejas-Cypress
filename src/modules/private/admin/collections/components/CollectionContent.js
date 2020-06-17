@@ -108,6 +108,17 @@ class CollectionContent extends Component {
                 </Form.Field>
               </Form.Group>
             )}
+
+          {(this.state.editable && contentTypeValue === 'GALLERY')
+            && (
+              <>
+              <div className="sticky-actions">
+                <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
+                  <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                </Button.Group>
+              </div>
+            </>
+            )}
           <Divider hidden />
           {get(collectionMapping, 'OFFERING')
             && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
