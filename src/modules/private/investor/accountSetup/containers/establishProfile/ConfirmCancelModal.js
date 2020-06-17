@@ -112,6 +112,7 @@ export default class ConfirmCancelModal extends React.Component {
         open
         interstitialSteps={interstitialSteps}
         offerings={offerings}
+        finishUrl="/offerings"
         url="/dashboard/setup"
         size="large"
       />
