@@ -8,7 +8,7 @@ import { Logo, TopBanner } from '../shared';
 
 const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
-@inject('navStore', 'uiStore', 'userDetailsStore', 'userStore', 'collectionStore')
+@inject('navStore', 'uiStore', 'userDetailsStore', 'userStore', 'collectionStore', 'campaignStore')
 @observer
 export class NavItems extends Component {
   state = {
@@ -92,10 +92,11 @@ export class NavItems extends Component {
     const { activeIndex } = this.state;
     const {
       location, isApp, roles, refMatch, isMobile, onToggle, refLink, newLayout, userDetailsStore, needNavLink,
-      collectionStore,
+      collectionStore, campaignStore,
     } = this.props;
     let { match } = this.props;
     const { getActiveCollectionLength } = collectionStore;
+    const { campaignStatus } = campaignStore;
     const { signupStatus, hasAnyAccount } = userDetailsStore;
     const app = (isApp) ? 'dashboard' : '';
     const validateNav = (nav) => {
@@ -214,7 +215,9 @@ export class NavItems extends Component {
                         }
                         {item.external
                           ? (<a className="item" href={item.to} rel="noopener noreferrer" target="_blank">{item.title}</a>)
-                          : (
+                          : item.contentType === 'UPDATES' && campaignStatus.updates === 0
+                            ? null
+                            : (
                             <>
                               <Menu.Item
                                 key={item.to}
