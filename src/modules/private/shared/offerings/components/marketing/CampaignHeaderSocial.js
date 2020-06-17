@@ -15,11 +15,7 @@ function CampaignHeaderSocial(props) {
   const isReadOnly = campaignStatus.lock;
   return (
     <>
-      <Header as="h4">Social Media
-            <Header.Subheader>
-              Links to social media profiles where investors can learn more about offering
-            </Header.Subheader>
-          </Header>
+      <Header as="h4">External Links</Header>
           {
             ['facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url', 'yelp_url'].map(field => (
               smartElement.Input(field, { displayMode: isReadOnly, key: field })
