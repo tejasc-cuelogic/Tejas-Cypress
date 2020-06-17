@@ -30,7 +30,7 @@ const commentTooltip = {
 
 const CommentHeader = ({ newLayout, refLink, isMobile }) => (
   <>
-    <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
+    <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-20' : 'mt-20 mb-20'} anchor-wrap`}>
       <PopUpModal
         customTrigger={<span className="popup-label">Comments</span>}
         content={commentTooltip.tooltip}
@@ -41,10 +41,6 @@ const CommentHeader = ({ newLayout, refLink, isMobile }) => (
       <span className="anchor" id="comments" />
     </Header>
     <p>See our <Link to={`${refLink}/community-guidelines`}>community guidelines</Link> on posting.</p>
-    {/* <p>
-      If you have any technical questions or questions about NextSeed, please
-        email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
-        </p> */}
   </>
 );
 
@@ -79,7 +75,7 @@ const ReplyBox = ({ MESSAGE_FRM, msgEleChange, buttonLoader, isFormValid, btnHan
             Note that both NextSeed and issuers are notified of all comments
             immediately, but there may be a slight delay in response to
             questions submitted outside of standard business hours (9am to
-            5pm CST, Monday through Friday).Most questions will be answered
+            5pm CST, Monday through Friday). Most questions will be answered
             by issuers in approximately two business days, although some
             questions require more thorough analyses and will take additional
             time.
