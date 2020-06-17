@@ -215,9 +215,6 @@ h6{
 .pr-15{
 	padding-right: 15px !important;
 }
-.pr-18{
-	padding-right: 18px !important
-}
 .pl-15{
 	padding-left: 15px !important;
 }
@@ -1544,8 +1541,8 @@ a.icon-link {
 		}
 	}
 	.vertical-timeline-element-icon {
-		left: 0;
-		top: 15px;
+		left: 1px;
+		top: 10px;
 		box-shadow: none;
 	}
 	.vertical-timeline-element {
@@ -1554,7 +1551,7 @@ a.icon-link {
 			.vertical-timeline-element-icon{
 				height: @25px;
 				width: @25px;
-				left: -@13px;
+				left: -@12px;
 				top: 17px;
 				background-color: @neutral-darkwhite !important;
 				margin-left: 0;

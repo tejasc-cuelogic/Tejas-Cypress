@@ -31,6 +31,11 @@ function LockUnlockCollection(props) {
     adminLockOrUnlockCollection({ value: true }, true);
   };
 
+  const handlePersonalUnlock = (e) => {
+    e.preventDefault();
+    adminLockOrUnlockCollection({ value: true }, false);
+  };
+
   const { nsUiStore, collectionStore, userDetailsStore } = props;
   const { currentUserId } = userDetailsStore;
   const { loadingArray } = nsUiStore;
@@ -49,7 +54,14 @@ function LockUnlockCollection(props) {
               (<Link to="/" onClick={handleForceUnlock} disabled={loadingArray.includes('adminLockOrUnlockCollection')}>Force Unlock</Link>)
             </span>
           </>
-        ) : lockStatus ? 'Locked' : 'Unlocked'}
+        ) : lockStatus
+        ? (
+          <>
+            <span className="mt-10">Locked by me {' '}
+              (<Link to="/" onClick={handlePersonalUnlock} disabled={loadingArray.includes('adminLockOrUnlockCollection')}>Unlock</Link>)
+            </span>
+          </>
+        ) : 'Unlocked'}
       </span>
     </>
   );

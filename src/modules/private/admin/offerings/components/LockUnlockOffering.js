@@ -31,6 +31,11 @@ function LockUnlockOffering(props) {
     adminLockOrUnlockOffering({ value: true }, true);
   };
 
+  const handlePersonalUnlock = (e) => {
+    e.preventDefault();
+    adminLockOrUnlockOffering({ value: true }, false);
+  };
+
   const { nsUiStore, offeringsStore, userDetailsStore } = props;
   const { currentUserId } = userDetailsStore;
   const { loadingArray } = nsUiStore;
@@ -49,7 +54,14 @@ function LockUnlockOffering(props) {
               (<Link to="/" onClick={handleForceUnlock} disabled={loadingArray.includes('adminLockOrUnlockOffering')}>Force Unlock</Link>)
             </span>
           </>
-        ) : lockStatus ? 'Locked' : 'Unlocked'}
+        ) : lockStatus
+        ? (
+          <>
+            <span className="mt-10">Locked by me {' '}
+              (<Link to="/" onClick={handlePersonalUnlock} disabled={loadingArray.includes('adminLockOrUnlockCollection')}>Unlock</Link>)
+            </span>
+          </>
+        ) : 'Unlocked'}
       </span>
     </>
   );
