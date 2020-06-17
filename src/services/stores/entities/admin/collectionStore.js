@@ -214,6 +214,13 @@ class CollectionsStore extends DataModelStore {
     return get(this.collectionMappingsData, 'insights[0]') ? orderBy(toJS(get(this.collectionMappingsData, 'insights')), 'sortOrder', ['ASC']) : [];
   }
 
+  get getGalleryImages() {
+    let gallery = [];
+    const galleryObj = get(this.collectionDetails, 'marketing.gallery') || [];
+    gallery = orderBy(galleryObj.filter(i => i.isVisible), ['order'], ['asc']);
+    return gallery;
+  }
+
   setFormData = (form, ref, keepAtLeastOne, data = undefined) => {
     Validator.resetFormData(this[form]);
     this.initLoad.push(form);
@@ -799,6 +806,7 @@ decorate(CollectionsStore, {
   collectionApiHit: observable,
   getOfferingsList: computed,
   getInsightsList: computed,
+  getGalleryImages: computed,
   collectionDetails: observable,
   PARTNER_FRM: observable,
   OVERVIEW_FRM: observable,
