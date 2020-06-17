@@ -9,7 +9,7 @@ import NSImage from '../../../shared/NSImage';
 @inject('uiStore', 'campaignStore', 'collectionStore')
 @withRouter
 @observer
-class Gallery extends Component {
+class CollectionGallery extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.processScroll();
@@ -57,4 +57,4 @@ class Gallery extends Component {
   }
 }
 
-export default Gallery;
+export default CollectionGallery;
