@@ -37,7 +37,7 @@ export default class CampaignHeaderPreview extends Component {
     const headerMetaFields = TOMBSTONE_HEADER_META_FRM.fields;
     const miscFields = OFFERING_MISC_FRM.fields;
     const toggleMetaValue = headerBasicFields.toggleMeta.value;
-    const isOfferStats = !toggleMetaValue.includes('DAYS_LEFT') || !toggleMetaValue.includes('INVESTOR_COUNT') || !toggleMetaValue.includes('REPAYMENT_COUNT');
+    const isOfferStats = !toggleMetaValue.includes('DAYS_LEFT') || !toggleMetaValue.includes('INVESTOR_COUNT') || !toggleMetaValue.includes('REPAYMENT_COUNT') || !toggleMetaValue.includes('EARLY_BIRD');
 
     return (
       <>
