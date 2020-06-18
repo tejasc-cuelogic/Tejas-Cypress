@@ -746,7 +746,7 @@ class CollectionsStore extends DataModelStore {
     return socialData;
   }
 
-  uploadMedia = (name, form, path, files = false) => new Promise(async (resolve) => {
+  uploadMedia = (name, form, path, files = false) => {
     const formName = Array.isArray(form) ? form[0] : form;
     const arrayName = Array.isArray(form) ? form[1] : false;
     const index = Array.isArray(form) ? form[2] : -1;
@@ -755,14 +755,13 @@ class CollectionsStore extends DataModelStore {
       name: Helper.sanitize(files ? files[0].name : index > -1 ? this[formName].fields[arrayName][index][name].fileName : this[formName].fields[name].fileName),
     };
     this.setMediaAttribute(formName, 'showLoader', true, name, index, arrayName);
-    fileUpload.uploadToS3(fileObj, path, true)
+    fileUpload.uploadToS3(fileObj, path)
       .then(async (res) => {
         window.logger(res);
         const url = res.split('/');
         this.setMediaAttribute(formName, 'value', url[url.length - 1], name, index, arrayName);
         this.setMediaAttribute(formName, 'preSignedUrl', res, name, index, arrayName);
         this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
-        resolve();
         if (formName === 'COLLECTION_MAPPING_CONTENT_FRM') {
           const imageObj = Validator.evaluateFormData(this[formName].fields);
           delete imageObj.mappingContent[index].image.isPublic;
@@ -776,7 +775,7 @@ class CollectionsStore extends DataModelStore {
         this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
         window.logger(err);
       });
-  });
+  };
 
   filterContentType = (index) => {
     const allContentValues = this.COLLECTION_CONTENT_FRM.fields.content.map(c => c.contentType.value);
