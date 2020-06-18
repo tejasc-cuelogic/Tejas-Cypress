@@ -316,7 +316,7 @@ export default class DataModelStore {
     this.currTime = +new Date();
   }
 
-  uploadMedia = (name, form, path, files = false) => {
+  uploadMedia = (name, form, path, files = false) => new Promise(async (resolve) => {
     const formName = Array.isArray(form) ? form[0] : form;
     const arrayName = Array.isArray(form) ? form[1] : false;
     const index = Array.isArray(form) ? form[2] : -1;
@@ -332,6 +332,7 @@ export default class DataModelStore {
         this.setMediaAttribute(formName, 'value', url[url.length - 1], name, index, arrayName);
         this.setMediaAttribute(formName, 'preSignedUrl', res, name, index, arrayName);
         this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
+        resolve();
       })
       .catch((err) => {
         this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);
