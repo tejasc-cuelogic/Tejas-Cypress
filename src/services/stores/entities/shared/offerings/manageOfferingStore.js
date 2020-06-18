@@ -73,8 +73,6 @@ export class ManageOfferingStore extends DataModelStore {
       nsDefaultData = get(investNowTocDefaults.TERM_NOTE, 'investNow.page');
     } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
       nsDefaultData = get(investNowTocDefaults.REVENUE_SHARING_NOTE, 'investNow.page');
-    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE) {
-      nsDefaultData = get(investNowTocDefaults.SAFE, 'investNow.page');
     } else {
       nsDefaultData = get(investNowTocDefaults.NS_DEFAULTS, 'investNow.page');
     }
