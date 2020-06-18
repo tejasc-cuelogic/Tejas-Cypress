@@ -24,7 +24,7 @@ export default class CampaignHeaderV2 extends Component {
     const { campaignStore, newLayout, followBtn } = this.props;
     const { campaign, campaignStatus, campaignSideBarShow, navCountData } = campaignStore;
     const {
-      isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
+      isClosed, isCreation, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
       percentBefore, diffForProcessing, countDown, investmentSummary, isBonusReward,
       // dataRooms,
@@ -66,7 +66,7 @@ export default class CampaignHeaderV2 extends Component {
                             )
                           }
 
-                          <div className={`${!intersection(toggleMetaArr, ['DAYS_LEFT', 'INVESTOR_COUNT', 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
+                          <div className={`${!intersection(toggleMetaArr, ['DAYS_LEFT' || 'INVESTOR_COUNT' || 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
                             <Statistic.Group>
                               <>
                                 {!toggleMetaArr.includes('DAYS_LEFT')
@@ -97,8 +97,7 @@ export default class CampaignHeaderV2 extends Component {
                                 )
                               }
                               {!toggleMetaArr.includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
-                                && isEarlyBirdRewards && !isClosed
-                                && bonusRewards
+                                && !isClosed && bonusRewards
                                 ? (
                                   <Statistic size="mini" className="basic">
                                     <Statistic.Value>
@@ -398,7 +397,7 @@ export default class CampaignHeaderV2 extends Component {
                       </>
                     )
                   }
-                  <div className={`${!intersection(get(campaign, 'header.toggleMeta'), ['DAYS_LEFT', 'INVESTOR_COUNT', 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
+                  <div className={`${!intersection(get(campaign, 'header.toggleMeta'), ['DAYS_LEFT' || 'INVESTOR_COUNT' || 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
                     <Statistic.Group>
                       <>
                         {!get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
@@ -429,8 +428,7 @@ export default class CampaignHeaderV2 extends Component {
                         )
                       }
                       {!get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
-                        && isEarlyBirdRewards && !isClosed
-                        && bonusRewards
+                        && !isClosed && bonusRewards
                         ? (
                           <Statistic size="mini" className="basic">
                             <Statistic.Value>
