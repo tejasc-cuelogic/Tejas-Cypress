@@ -10,10 +10,15 @@ class VideoModal extends Component {
   handleClose = () => this.props.history.goBack();
 
   render() {
-    const { campaign } = this.props.campaignStore;
+    const { campaign, campaignStatus } = this.props.campaignStore;
     const { isTabletLand } = this.props;
-    const videoUrl = (campaign && campaign.media
-     && campaign.media.heroVideo && campaign.media.heroVideo.fileName) || null;
+    let isTemplate2 = false;
+    if (campaignStatus.campaignTemplate === 2) {
+      isTemplate2 = true;
+    }
+    const videoUrl = !isTemplate2 ? (campaign && campaign.media
+     && campaign.media.heroVideo && campaign.media.heroVideo.fileName) : (campaign && campaign.header
+      && campaign.header.heroVideoURL) || null;
     const vimeoId = (videoUrl && get(videoUrl.split('/'), '[0]')) || null;
     return (
       <Modal open onClose={this.handleClose} size="large" closeIcon className="video-modal">
