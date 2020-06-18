@@ -6,6 +6,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { isProduction } from '../../../../../constants/common';
 import { CROWDPAY_ACCOUNTS_STATUS } from '../../../../../services/constants/crowdpayAccounts';
 import Helper from '../../../../../helper/utility';
+
 @inject('crowdpayStore', 'identityStore', 'userDetailsStore')
 @withRouter
 @observer

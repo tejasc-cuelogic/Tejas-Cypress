@@ -4,6 +4,7 @@ import { get } from 'lodash';
 import { Modal, Header, Button, Form } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { FormTextarea } from '../../../../../../../theme/form';
+
 @inject('userDetailsStore', 'uiStore', 'accountStore')
 @withRouter
 @observer

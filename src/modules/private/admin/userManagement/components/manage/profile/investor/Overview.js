@@ -7,6 +7,7 @@ import { get } from 'lodash';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import SaasquatchInformation from '../SaasquatchInformation.';
 import ReferralsInformation from '../ReferralsInformation';
+
 @inject('userDetailsStore', 'uiStore', 'referralsStore')
 @withRouter
 @observer

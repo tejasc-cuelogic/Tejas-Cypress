@@ -142,7 +142,8 @@ export default class CampaignList extends Component {
                                   content={getTombstoneDescription(offering) || ''}
                                 />
                               </Card.Description>
-                              <Divider />
+                              <Button className="mt-10" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
+                              {/* <Divider /> */}
                               <div className="campaign-card-table-wrapper">
                                 <Table basic="very" compact="very" unstackable className="no-border campaign-card">
                                   {!isTemplate2(get(offering, 'template'))
@@ -200,7 +201,6 @@ export default class CampaignList extends Component {
                                   }
                                 </Table>
                               </div>
-                              <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
                             </Card.Content>
                           </div>
                           <Card.Content extra className={((!get(offering, 'isAvailablePublicly') && !collection) || (get(offering, 'scope') === 'HIDDEN' && collection)) ? 'disabled' : ''}>

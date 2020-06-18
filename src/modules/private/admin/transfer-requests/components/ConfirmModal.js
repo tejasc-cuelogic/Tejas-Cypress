@@ -4,6 +4,7 @@ import { Modal, Header, Button, Form, Checkbox } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { FormTextarea } from '../../../../../theme/form';
 import { STATUS_MAPPING } from '../../../../../services/constants/admin/transactions';
+
 @inject('transactionsStore')
 @withRouter
 @observer
