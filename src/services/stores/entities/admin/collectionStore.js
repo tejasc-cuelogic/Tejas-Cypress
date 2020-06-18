@@ -759,7 +759,6 @@ class CollectionsStore extends DataModelStore {
       .then(async (res) => {
         window.logger(res);
         const url = res.split('/');
-        console.log('preSignedUrl', res);
         this.setMediaAttribute(formName, 'value', url[url.length - 1], name, index, arrayName);
         this.setMediaAttribute(formName, 'preSignedUrl', res, name, index, arrayName);
         this.setMediaAttribute(formName, 'showLoader', false, name, index, arrayName);

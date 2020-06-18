@@ -339,7 +339,7 @@ export default class DataModelStore {
         window.logger(err);
       });
     this.currTime = +new Date();
-  };
+  });
 
   removeUploadedData = (form, field, index = null, arrayName = null) => {
     const path = (arrayName && index !== null) ? `fields.${arrayName}[${index}].${field}` : `fields.${field}`;
