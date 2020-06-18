@@ -74,7 +74,7 @@ export default class CampaignHeaderV2 extends Component {
                                   && (
                                     <Statistic size="mini" className="basic">
                                       <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                                      <Statistic.Label>{countDown.labelToShow || 'Days Left'}</Statistic.Label>
+                                      <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
                                     </Statistic>
                                   )}
                                 {!toggleMetaArr.includes('INVESTOR_COUNT')

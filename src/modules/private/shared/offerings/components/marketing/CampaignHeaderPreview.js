@@ -71,11 +71,7 @@ export default class CampaignHeaderPreview extends Component {
                         />
                       )
                     }
-<<<<<<< Updated upstream
-                    <div className={`${!intersection(headerBasicFields.toggleMeta.value, ['DAYS_LEFT' || 'INVESTOR_COUNT' || 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
-=======
                     <div className={`${isOfferStats ? 'offer-stats' : ''}`}>
->>>>>>> Stashed changes
                       <Statistic.Group>
                         <>
                           {isLive && !headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
