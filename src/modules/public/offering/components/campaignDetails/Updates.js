@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react';
 import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import { Image64, InlineLoader, UserAvatar } from '../../../../../theme/shared';
+import Helper from '../../../../../helper/utility';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 992;
@@ -43,7 +44,7 @@ class Updates extends Component {
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
         <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
           {this.props.title || 'Updates'}
-          <span className="anchor" id={newLayout ? this.props.title ? camelCase(this.props.title) : 'updates' : ''} />
+          <span className="anchor" id={this.props.newLayout ? this.props.title ? camelCase(Helper.sanitize(this.props.title)) : 'updates' : ''} />
         </Header>
         {updates && updates.length
           ? (
