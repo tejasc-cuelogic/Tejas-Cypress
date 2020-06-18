@@ -177,9 +177,10 @@ class CampaignLayout extends Component {
   }
 
   processScroll = () => {
-    if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
+    const sanitizedHash = Helper.sanitize(this.props.location.hash);
+    if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${sanitizedHash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      document.querySelector(`${sanitizedHash}`).scrollIntoView({
         block: 'start',
         // behavior: 'smooth',
       });
