@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get, sortBy, intersection } from 'lodash';
+import { get, sortBy } from 'lodash';
 import { withRouter, Link, Route } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Statistic, Grid, Button, Divider, Menu } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
@@ -32,6 +32,7 @@ export default class CampaignHeaderV2 extends Component {
     const headerMeta = get(campaign, 'header.meta[0]') ? sortBy(get(campaign, 'header.meta'), ['order', 'asc']) : [];
     // const isHeadrToggleMetaExists = !!get(campaign, 'header.toggleMeta[0]');
     const toggleMetaArr = get(campaign, 'header.toggleMeta[0]') || [];
+    const isOfferStats = !toggleMetaArr.includes('DAYS_LEFT') || !toggleMetaArr.includes('INVESTOR_COUNT') || !toggleMetaArr.includes('REPAYMENT_COUNT');
     return (
       <>
         {!isMobile
@@ -66,14 +67,14 @@ export default class CampaignHeaderV2 extends Component {
                             )
                           }
 
-                          <div className={`${!intersection(toggleMetaArr, ['DAYS_LEFT' || 'INVESTOR_COUNT' || 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
+                          <div className={`${isOfferStats ? 'offer-stats' : ''}`}>
                             <Statistic.Group>
                               <>
                                 {!toggleMetaArr.includes('DAYS_LEFT')
                                   && (
                                     <Statistic size="mini" className="basic">
                                       <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                                      <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                                      <Statistic.Label>{countDown.labelToShow || 'Days Left'}</Statistic.Label>
                                     </Statistic>
                                   )}
                                 {!toggleMetaArr.includes('INVESTOR_COUNT')
@@ -397,7 +398,7 @@ export default class CampaignHeaderV2 extends Component {
                       </>
                     )
                   }
-                  <div className={`${!intersection(get(campaign, 'header.toggleMeta'), ['DAYS_LEFT' || 'INVESTOR_COUNT' || 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
+                  <div className={`${isOfferStats ? 'offer-stats' : ''}`}>
                     <Statistic.Group>
                       <>
                         {!get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
