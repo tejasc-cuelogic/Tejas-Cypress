@@ -102,7 +102,7 @@ export default class CampaignHeaderV2 extends Component {
                                 ? (
                                   <Statistic size="mini" className="basic">
                                     <Statistic.Value>
-                                      {!get(campaign, 'earlyBird.available') || 0}
+                                      {get(campaign, 'earlyBird.available') || 0}
                                     </Statistic.Value>
                                     <Statistic.Label>Early Bird Rewards</Statistic.Label>
                                   </Statistic>
