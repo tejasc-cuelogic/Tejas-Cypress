@@ -84,7 +84,7 @@ class KeyTermsDetails extends Component {
             )}
         </Grid>
         {!isMobile ? <Divider hidden={newLayout} /> : null}
-        <Table basic="very" className="key-terms-table">
+        <Table basic className="key-terms-table">
           <Table.Body>
             {keytermsMeta.map(type => (
               <React.Fragment key={type.key}>

@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get, camelCase, orderBy, find, filter } from 'lodash';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 import scrollIntoView from 'scroll-into-view';
 import { Responsive, Visibility, Container, Grid, Menu, Divider, Button, Icon } from 'semantic-ui-react';
 import CollectionHeader from '../components/CollectionHeader';
 import CollectionInsights from '../components/CollectionInsights';
 import CustomContent from '../../offering/components/campaignDetails/CustomContent';
+import CollectionGallery from '../components/CollectionGallery';
 import CampaignList from '../../offering/components/listing/CampaignList';
 import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import HtmlEditor from '../../../shared/HtmlEditor';
 import CollectionMetaTags from '../components/CollectionMetaTags';
+import AboutGallery from '../components/AboutGallery';
+
 import { UPLOADS_CONFIG } from '../../../../constants/aws';
 
 const LoadMoreBtn = ({ action, param, isMobile }) => (
@@ -134,11 +137,10 @@ class CollectionDetails extends Component {
     return val;
   };
 
-
   render() {
     const { collectionStore, uiStore, nsUiStore, location, match } = this.props;
     const { loadingArray } = nsUiStore;
-    const { collectionDetails, getInsightsList, getPastOfferingsList, getActiveOfferingsList, activeOfferingList, RECORDS_TO_DISPLAY, activeToDisplay, pastOfferingToDisplay, pastOfferingsList } = collectionStore;
+    const { collectionDetails, getInsightsList, getGalleryImages, getPastOfferingsList, getActiveOfferingsList, activeOfferingList, RECORDS_TO_DISPLAY, activeToDisplay, pastOfferingToDisplay, pastOfferingsList } = collectionStore;
     const { responsiveVars } = uiStore;
     const { isTablet, isMobile } = responsiveVars;
     const collectionHeader = get(collectionDetails, 'marketing.header');
@@ -155,6 +157,8 @@ class CollectionDetails extends Component {
         isValid = true;
       } else if (con.contentType === 'INSIGHTS' && getInsightsList && getInsightsList.length) {
         isValid = true;
+      } else if (con.contentType === 'GALLERY' && getGalleryImages && getGalleryImages.length) {
+        isValid = true;
       } else if (con.contentType === 'CUSTOM' && con.customValue) {
         isValid = true;
       }
@@ -165,6 +169,10 @@ class CollectionDetails extends Component {
       content = orderBy(filter(content, con => con.scope !== 'HIDDEN'), c => c.order, ['ASC']);
       content.forEach((c, i) => validate(c) && navItems.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }
+
+    const backToTop = { title: <>Back to Top {<Icon className="ns-chevron-up icon" size="small" />}</>, to: '' };
+    navItems.push(backToTop);
+
     const renderHeading = (contentData) => {
       if (contentData) {
         return <p className="mb-30"><HtmlEditor readOnly content={contentData} /></p>;
@@ -238,6 +246,7 @@ class CollectionDetails extends Component {
                             <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
                             <CampaignList
                               collection
+                              isFunded
                               refLink={this.props.match.url}
                               loading={loadingArray.includes('getCollectionMapping')}
                               campaigns={pastOfferingsList}
@@ -263,20 +272,29 @@ class CollectionDetails extends Component {
                                 InsightArticles={getInsightsList}
                               />
                             </>
-                          )
-                          : c.contentType === 'CUSTOM' && c.customValue
+                          ) : c.contentType === 'GALLERY'
                             ? (
-                              <>
-                                {i !== 0 && <Divider hidden section />}
-                                <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
-                                <CustomContent content={c.customValue} isTablet={isTablet} />
-                              </>
-                            )
-                            : null
+                              <CollectionGallery
+                                galleryImages={getGalleryImages}
+                                processScroll={this.processScroll}
+                                newLayout
+                                galleryUrl={this.props.match.url}
+                                title={c.title}
+                              />
+                            ) : c.contentType === 'CUSTOM' && c.customValue
+                              ? (
+                                <>
+                                  {i !== 0 && <Divider hidden section />}
+                                  <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
+                                  <CustomContent content={c.customValue} isTablet={isTablet} />
+                                </>
+                              )
+                              : null
                   ))}
                 </Grid.Column>
               </Grid>
             </section>
+            <Route path={`${this.props.match.url}/photogallery`} component={AboutGallery} />
           </Container>
         </div>
       </>
