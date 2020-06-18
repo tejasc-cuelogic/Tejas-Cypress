@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get, intersection } from 'lodash';
+import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Statistic, Grid, Button } from 'semantic-ui-react';
 import { Image64, PopUpModal } from '../../../../../../theme/shared';
@@ -36,6 +36,9 @@ export default class CampaignHeaderPreview extends Component {
     const countDown = (['Minute Left', 'Minutes Left'].includes(diffForProcessingText.label) && diffForProcessingText.value > 0) || diffForProcessingText.value <= 48 ? { valueToShow: diffForProcessingText.value, labelToShow: diffForProcessingText.label } : { valueToShow: diff, labelToShow: diff === 1 ? 'Day Left' : 'Days Left' };
     const headerMetaFields = TOMBSTONE_HEADER_META_FRM.fields;
     const miscFields = OFFERING_MISC_FRM.fields;
+    const toggleMetaValue = headerBasicFields.toggleMeta.value;
+    const isOfferStats = !toggleMetaValue.includes('DAYS_LEFT') || !toggleMetaValue.includes('INVESTOR_COUNT') || !toggleMetaValue.includes('REPAYMENT_COUNT') || !toggleMetaValue.includes('EARLY_BIRD');
+
     return (
       <>
         <div className="campaign-banner">
@@ -68,7 +71,7 @@ export default class CampaignHeaderPreview extends Component {
                         />
                       )
                     }
-                    <div className={`${!intersection(headerBasicFields.toggleMeta.value, ['DAYS_LEFT', 'INVESTOR_COUNT', 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
+                    <div className={`${isOfferStats ? 'offer-stats' : ''}`}>
                       <Statistic.Group>
                         <>
                           {isLive && !headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
