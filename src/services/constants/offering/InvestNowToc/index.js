@@ -632,7 +632,7 @@ export const NS_DEFAULTS = {
         required: true,
       }, {
         account: 'ALL',
-        label: 'I have reviewed and agree to the terms of the |||DOCUSIGN_ENVELOPE--Document Name|||.',
+        label: 'I have reviewed and agree to the terms of the |||DOCUSIGN_ENVELOPE--Investment Document|||.',
         order: 5,
         required: true,
       }, {
@@ -668,7 +668,7 @@ export const NS_DEFAULTS = {
         required: true,
       }, {
         account: 'ALL',
-        label: 'I have reviewed and agree to the terms of the |||DOCUSIGN_ENVELOPE--Document Name|||.',
+        label: 'I have reviewed and agree to the terms of the |||DOCUSIGN_ENVELOPE--Investment Document|||.',
         order: 5,
         required: true,
       }, {
@@ -708,7 +708,7 @@ export const NS_DEFAULTS = {
       },
       {
         account: 'ALL',
-        label: 'I have reviewed and agree to the terms of the |||DOCUSIGN_ENVELOPE--Document Name|||.',
+        label: 'I have reviewed and agree to the terms of the |||DOCUSIGN_ENVELOPE--Investment Document|||.',
         order: 5,
         required: true,
       },
