@@ -75,6 +75,8 @@ export class ManageOfferingStore extends DataModelStore {
       nsDefaultData = get(investNowTocDefaults.REVENUE_SHARING_NOTE, 'investNow.page');
     } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE) {
       nsDefaultData = get(investNowTocDefaults.SAFE, 'investNow.page');
+    } else {
+      nsDefaultData = get(investNowTocDefaults.NS_DEFAULTS, 'investNow.page');
     }
     const regCheck = regulation === 'BD_CF_506C' ? ['BD_506C', 'BD_CF'] : [regulation];
     nsDefaultData = nsDefaultData.filter(t => regCheck.includes(t.regulation));
