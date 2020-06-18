@@ -4,7 +4,6 @@ import { get, camelCase, orderBy, find, filter } from 'lodash';
 import { withRouter, Route } from 'react-router-dom';
 import scrollIntoView from 'scroll-into-view';
 import { Responsive, Visibility, Container, Grid, Menu, Divider, Button, Icon } from 'semantic-ui-react';
-import Helper from '../../../../helper/utility';
 import CollectionHeader from '../components/CollectionHeader';
 import CollectionInsights from '../components/CollectionInsights';
 import CustomContent from '../../offering/components/campaignDetails/CustomContent';
@@ -115,10 +114,10 @@ class CollectionDetails extends Component {
   }
 
   processScroll = () => {
-    const sanitizedHash = Helper.sanitize(this.props.location.hash)
-    if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${sanitizedHash}`)) {
+    if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      document.querySelector(`${sanitizedHash}`).scrollIntoView({
+      const { hash } = this.props.location;
+      document.querySelector(`${hash}`).scrollIntoView({
         block: 'start',
         // behavior: 'smooth',
       });

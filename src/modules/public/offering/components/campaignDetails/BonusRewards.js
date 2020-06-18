@@ -7,6 +7,7 @@ import BonusRewardsList from './BonusRewardsList';
 import Helper from '../../../../../helper/utility';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
+
 const isMobile = document.documentElement.clientWidth < 992;
 const isTablet = document.documentElement.clientWidth >= 768
   && document.documentElement.clientWidth < 992;
@@ -36,60 +37,60 @@ class BonusRewards extends Component {
     return (
       <div className={this.props.newLayout ? '' : 'campaign-content-wrapper'}>
         <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
-          <span className="anchor" id={this.props.newLayout ? this.props.title ? camelCase(this.props.title) : 'bonus-rewards' : ''} />
+          <span className="anchor" id={this.props.newLayout ? this.props.title ? camelCase(Helper.sanitize(this.props.title)) : 'bonus-rewards' : ''} />
           {this.props.title || 'Bonus Rewards'}
         </Header>
         {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
           ? (
-<>
-            {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
-            && bonusRewards
-              ? (
-<Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 2}>
-                {(earlyBird && earlyBird.quantity && isEarlyBirdRewards)
-                  ? (
-<Grid.Column>
-                    <Segment padded className={`${this.props.newLayout && isMobile ? 'reward-block-v2' : ''} reward-block`}>
-                      <>
-                        <Header textAlign="left" as="h6" className={`${isMobile ? 'mb-20' : 'mb-40'} text-uppercase`}>Early Bird Reward
+            <>
+              {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
+                && bonusRewards
+                ? (
+                  <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 2}>
+                    {(earlyBird && earlyBird.quantity && isEarlyBirdRewards)
+                      ? (
+                        <Grid.Column>
+                          <Segment padded className={`${this.props.newLayout && isMobile ? 'reward-block-v2' : ''} reward-block`}>
+                            <>
+                              <Header textAlign="left" as="h6" className={`${isMobile ? 'mb-20' : 'mb-40'} text-uppercase`}>Early Bird Reward
                           <Label size="small" color="green" className="text-uppercase pull-right">{get(earlyBird, 'available') || 0} remaining</Label>
-                        </Header>
-                        <Header as="h5" className="note">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
-                      </>
-                      <BonusRewardsList
-                        earlyBird
-                        bonusRewards={bonusRewards}
-                        tier={earlyBird.amount}
-                      />
-                    </Segment>
-                  </Grid.Column>
-                  ) : ''
-                }
-                {rewardsTiers.map(tier => (
-                  <Grid.Column>
-                    <Segment padded className={`${this.props.newLayout && isMobile ? 'reward-block-v2' : ''} reward-block`}>
-                      <>
-                        <Header as="h6" className={`${isMobile && 'mb-0'} text-uppercase`}>Invest</Header>
-                        <Header as="h3" className="highlight-text">{`${Helper.CurrencyFormat(tier, 0)}+`}</Header>
-                      </>
-                      <BonusRewardsList bonusRewards={bonusRewards} tier={tier} />
-                    </Segment>
-                  </Grid.Column>
-                ))}
-              </Grid>
-              ) : <InlineLoader text="No bonus rewards are available." className="bg-offwhite" />
-            }
-            {offeringMISC
-            && (
-<Grid columns="1">
-              <Grid.Column>
-                <Segment padded className={`${this.props.newLayout && isMobile ? 'reward-block-v2' : ''} reward-block`}>
-                  <HtmlEditor readOnly content={offeringMISC} />
-                </Segment>
-              </Grid.Column>
-            </Grid>
-            )
-            }
+                              </Header>
+                              <Header as="h5" className="note">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
+                            </>
+                            <BonusRewardsList
+                              earlyBird
+                              bonusRewards={bonusRewards}
+                              tier={earlyBird.amount}
+                            />
+                          </Segment>
+                        </Grid.Column>
+                      ) : ''
+                    }
+                    {rewardsTiers.map(tier => (
+                      <Grid.Column>
+                        <Segment padded className={`${this.props.newLayout && isMobile ? 'reward-block-v2' : ''} reward-block`}>
+                          <>
+                            <Header as="h6" className={`${isMobile && 'mb-0'} text-uppercase`}>Invest</Header>
+                            <Header as="h3" className="highlight-text">{`${Helper.CurrencyFormat(tier, 0)}+`}</Header>
+                          </>
+                          <BonusRewardsList bonusRewards={bonusRewards} tier={tier} />
+                        </Segment>
+                      </Grid.Column>
+                    ))}
+                  </Grid>
+                ) : <InlineLoader text="No bonus rewards are available." className="bg-offwhite" />
+              }
+              {offeringMISC
+                && (
+                  <Grid columns="1">
+                    <Grid.Column>
+                      <Segment padded className={`${this.props.newLayout && isMobile ? 'reward-block-v2' : ''} reward-block`}>
+                        <HtmlEditor readOnly content={offeringMISC} />
+                      </Segment>
+                    </Grid.Column>
+                  </Grid>
+                )
+              }
             </>
           )
           : <InlineLoader text="No Bonus Rewards" className="bg-offwhite" />

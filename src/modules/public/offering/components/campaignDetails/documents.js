@@ -8,6 +8,8 @@ import { Header, Grid, Segment, Button, Divider } from 'semantic-ui-react';
 import DocumentModal from './DataRoom/DocumentModal';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
+import Helper from '../../../../../helper/utility';
+
 
 const isTablet = document.documentElement.clientWidth < 992;
 @inject('campaignStore', 'uiStore', 'accreditationStore', 'authStore')
@@ -52,47 +54,47 @@ export default class Documents extends Component {
     const { responsiveVars } = this.props.uiStore;
     return (
       <>
-      {this.props.portfolioSection && responsiveVars.isMobile
-      && <SecondaryMenu refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
-      }
-      <div className={this.props.portfolioSection ? 'content-spacer' : ''}>
-        {(dataRoomDocs.length && ['LIVE', 'CREATION'].includes(get(campaign, 'stage')))
-          ? (
-            <>
-              <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
-                <span className="anchor" id={this.props.title ? camelCase(this.props.title) : 'data-room'} />
-                {this.props.title || 'Documents'}
-              </Header>
-            </>
-          ) : null
+        {this.props.portfolioSection && responsiveVars.isMobile
+          && <SecondaryMenu refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
-        {!this.props.newLayout && <Divider hidden />}
-        <Grid columns={3} stackable doubling>
-          {
-            dataRoomDocs.length && dataRoomDocs.map(l => (
-              <Grid.Column>
-                <Segment padded textAlign="center" className="legal-documents">
-                  <p>{l.name}</p>
-                  <Button
-                    onClick={() => this.openDocument(l)}
-                    className="relaxed"
-                    primary
-                    compact
-                    as={isNotPublic ? null : Link}
-                    to={isNotPublic ? '' : `${this.props.match.url}/data-room#${indexOf(dataRoomDocs, l) + 1}`}
-                  >
-                    View
-                  </Button>
-                </Segment>
-              </Grid.Column>
-            ))
+        <div className={this.props.portfolioSection ? 'content-spacer' : ''}>
+          {(dataRoomDocs.length && ['LIVE', 'CREATION'].includes(get(campaign, 'stage')))
+            ? (
+              <>
+                <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
+                  <span className="anchor" id={this.props.title ? camelCase(Helper.sanitize(this.props.title)) : 'data-room'} />
+                  {this.props.title || 'Documents'}
+                </Header>
+              </>
+            ) : null
           }
-        </Grid>
-        {isNotPublic && this.state.doc
-          ? <DocumentModal doc={this.state.doc} close={this.close} />
-          : <Route path={`${this.props.match.params}/:fileId`} component={<DocumentModal doc={this.state.doc} close={this.close} />} />
-        }
-      </div>
+          {!this.props.newLayout && <Divider hidden />}
+          <Grid columns={3} stackable doubling>
+            {
+              dataRoomDocs.length && dataRoomDocs.map(l => (
+                <Grid.Column>
+                  <Segment padded textAlign="center" className="legal-documents">
+                    <p>{l.name}</p>
+                    <Button
+                      onClick={() => this.openDocument(l)}
+                      className="relaxed"
+                      primary
+                      compact
+                      as={isNotPublic ? null : Link}
+                      to={isNotPublic ? '' : `${this.props.match.url}/data-room#${indexOf(dataRoomDocs, l) + 1}`}
+                    >
+                      View
+                  </Button>
+                  </Segment>
+                </Grid.Column>
+              ))
+            }
+          </Grid>
+          {isNotPublic && this.state.doc
+            ? <DocumentModal doc={this.state.doc} close={this.close} />
+            : <Route path={`${this.props.match.params}/:fileId`} component={<DocumentModal doc={this.state.doc} close={this.close} />} />
+          }
+        </div>
       </>
     );
   }
