@@ -204,7 +204,7 @@
             }
         }
         >.content.extra {
-            padding:0 @28px @21px;
+            padding:@19px @28px @21px;
             border-top: 0!important;
             // position: absolute;
             bottom: 0;
