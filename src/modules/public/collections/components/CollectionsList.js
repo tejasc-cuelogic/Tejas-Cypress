@@ -6,7 +6,7 @@ import { Container, Button, Header, Card } from 'semantic-ui-react';
 import { Image64, InlineLoader } from '../../../../theme/shared';
 import HtmlEditor from '../../../shared/HtmlEditor';
 
-const CollectionCards = ({ responsiveVars, collections, collectionLength, toggleHover, isHovered, expandCollection }) => (
+const CollectionCards = ({ responsiveVars, collections, collectionLength, toggleHover, isHovered, offering, expandCollection, handleNavigate }) => (
   <>
     <Container className="collection-listings-box">
       <Card.Group style={{ justifyContent: responsiveVars.isTablet ? 'space-evenly' : '' }} itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
@@ -34,6 +34,11 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength, toggle
           ))}
       </Card.Group>
     </Container>
+    {((collections.length > collectionLength) || offering) && !expandCollection && (
+      <div className="mt-80 center-align">
+        <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All" onClick={handleNavigate} />
+      </div>
+    )}
   </>
 );
 
