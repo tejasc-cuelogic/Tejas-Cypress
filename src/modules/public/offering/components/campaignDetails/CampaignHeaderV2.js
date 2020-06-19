@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get, sortBy, intersection } from 'lodash';
+import { get, sortBy } from 'lodash';
 import { withRouter, Link, Route } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Statistic, Grid, Button, Divider, Menu } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
@@ -24,14 +24,15 @@ export default class CampaignHeaderV2 extends Component {
     const { campaignStore, newLayout, followBtn } = this.props;
     const { campaign, campaignStatus, campaignSideBarShow, navCountData } = campaignStore;
     const {
-      isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
+      isClosed, isCreation, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
       percentBefore, diffForProcessing, countDown, investmentSummary, isBonusReward,
       // dataRooms,
     } = campaignStatus;
     const headerMeta = get(campaign, 'header.meta[0]') ? sortBy(get(campaign, 'header.meta'), ['order', 'asc']) : [];
     // const isHeadrToggleMetaExists = !!get(campaign, 'header.toggleMeta[0]');
-    const toggleMetaArr = get(campaign, 'header.toggleMeta[0]') || [];
+    const toggleMetaArr = get(campaign, 'header.toggleMeta') || [];
+    const isOfferStats = !toggleMetaArr.includes('DAYS_LEFT') || !toggleMetaArr.includes('INVESTOR_COUNT') || !toggleMetaArr.includes('REPAYMENT_COUNT') || !toggleMetaArr.includes('EARLY_BIRD');
     return (
       <>
         {!isMobile
@@ -66,7 +67,7 @@ export default class CampaignHeaderV2 extends Component {
                             )
                           }
 
-                          <div className={`${!intersection(toggleMetaArr, ['DAYS_LEFT', 'INVESTOR_COUNT', 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
+                          <div className={`${isOfferStats ? 'offer-stats' : ''}`}>
                             <Statistic.Group>
                               <>
                                 {!toggleMetaArr.includes('DAYS_LEFT')
@@ -97,8 +98,7 @@ export default class CampaignHeaderV2 extends Component {
                                 )
                               }
                               {!toggleMetaArr.includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
-                                && isEarlyBirdRewards && !isClosed
-                                && bonusRewards
+                                && !isClosed && bonusRewards
                                 ? (
                                   <Statistic size="mini" className="basic">
                                     <Statistic.Value>
@@ -398,17 +398,17 @@ export default class CampaignHeaderV2 extends Component {
                       </>
                     )
                   }
-                  <div className={`${!intersection(get(campaign, 'header.toggleMeta'), ['DAYS_LEFT', 'INVESTOR_COUNT', 'REPAYMENT_COUNT']).length > 0 ? 'offer-stats' : ''}`}>
+                  <div className={`${isOfferStats ? 'offer-stats' : ''}`}>
                     <Statistic.Group>
                       <>
-                        {!get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
+                        {!toggleMetaArr.includes('DAYS_LEFT')
                           && (
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
                               <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
                             </Statistic>
                           )}
-                        {!get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
+                        {!toggleMetaArr.includes('INVESTOR_COUNT')
                           && (
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>
@@ -418,7 +418,7 @@ export default class CampaignHeaderV2 extends Component {
                             </Statistic>
                           )}
                       </>
-                      {!get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
+                      {!toggleMetaArr.includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
                         && (
                           <Statistic size="mini" className="basic">
                             <Statistic.Value>
@@ -428,9 +428,8 @@ export default class CampaignHeaderV2 extends Component {
                           </Statistic>
                         )
                       }
-                      {!get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
-                        && isEarlyBirdRewards && !isClosed
-                        && bonusRewards
+                      {!toggleMetaArr.includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
+                        && !isClosed && bonusRewards
                         ? (
                           <Statistic size="mini" className="basic">
                             <Statistic.Value>
