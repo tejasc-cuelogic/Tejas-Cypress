@@ -313,7 +313,7 @@ function formHoc(WrappedComponent, metaInfo) {
               {!props.isReadonly
                 && <Button onClick={() => setConfirmModal(true)} circular icon={{ className: 'ns-close-light' }} />
               }
-              <Image64 srcUrl={fieldData.preSignedUrl} />
+              <Image64 srcUrl={fieldData.preSignedUrl} originalImg />
               <Confirm
                 content="Are you sure you want to remove this media file?"
                 open={fieldData.confirmModal}
