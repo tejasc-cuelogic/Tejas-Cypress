@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom';
 import moment from 'moment';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { Image64, UserAvatar } from '../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
+
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -31,7 +33,7 @@ class LatestUpdates extends Component {
       <>
         <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
           {this.props.title || 'Updates'}
-          <span className="anchor" id={this.props.title ? camelCase(this.props.title) : 'updates'} />
+          <span className="anchor" id={this.props.title ? camelCase(Helper.sanitize(this.props.title)) : 'updates'} />
         </Header>
         <Item.Group className="update-items">
           <Item>

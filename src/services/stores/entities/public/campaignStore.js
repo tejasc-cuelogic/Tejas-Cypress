@@ -443,7 +443,7 @@ export class CampaignStore {
     if (campaignStatus.campaignTemplate === 2 && get(campaign, 'content[0]')) {
       let content = get(campaign, 'content').filter(c => this.checkValidContent(c, get(campaign, 'stage')));
       content = orderBy(content, c => c.order, ['ASC']);
-      content.forEach((c, i) => templateNavs.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
+      content.forEach((c, i) => templateNavs.push({ ...c, title: c.title, to: `#${camelCase(Helper.sanitize(c.title))}`, useRefLink: true, defaultActive: i === 0 }));
     }
     campaignStatus.templateNavs = templateNavs;
     campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
