@@ -28,7 +28,7 @@ class KeyTerms extends Component {
           Investment Highlights
           <span className="anchor" id="investment-highlights" />
         </Header>
-        <Table basic="very" className="key-terms-table neutral-text">
+        <Table basic className="key-terms-table neutral-text">
           <Table.Body>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Issuer</b>

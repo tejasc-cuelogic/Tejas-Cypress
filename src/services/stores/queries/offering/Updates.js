@@ -8,7 +8,6 @@ const updateField = `
   offeringId
   updatedDate
   postUpdateAs
-  sendEmailNotification
   updated {
     date
     by
@@ -46,6 +45,7 @@ export const getUpdate = gql`
       id: $id
     ) {
       ${updateField}
+      sendEmailNotification
       notificationSent {
         by
         date
@@ -64,6 +64,7 @@ export const editUpdate = gql`
       shouldSendInvestorNotifications: $shouldSendInvestorNotifications
       ) {
         ${updateField}
+        sendEmailNotification
       }
   }
 `;
