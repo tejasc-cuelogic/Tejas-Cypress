@@ -54,7 +54,7 @@ class CustomValidations extends Component {
 
     Validator.register('fiftys', (value) => {
       const amount = parseFloat(value) || 0;
-      return amount >= 100 && amount % 50 === 0;
+      return amount >= 50 && amount % 50 === 0;
     }, 'Investments must be in increments of $50');
 
     // TODO need to otimize alphaBrokerage and alphaPublicCompanyRel validators
