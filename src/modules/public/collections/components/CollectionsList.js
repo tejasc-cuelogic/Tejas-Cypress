@@ -6,10 +6,10 @@ import { Container, Button, Header, Card } from 'semantic-ui-react';
 import { Image64, InlineLoader } from '../../../../theme/shared';
 import HtmlEditor from '../../../shared/HtmlEditor';
 
-const CollectionCards = ({ responsiveVars, collections, collectionLength, toggleHover, isHovered, offering, expandCollection, handleNavigate }) => (
+const CollectionCards = ({ responsiveVars, collections, collectionLength, toggleHover, isHovered, expandCollection }) => (
   <>
     <Container className="collection-listings-box">
-      <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
+      <Card.Group style={{ justifyContent: responsiveVars.isTablet ? 'space-evenly' : '' }} itemsPerRow={responsiveVars.isMobile ? 1 : responsiveVars.isTablet ? 2 : 3}>
         {
           collections.map((collection, i) => (!collectionLength || expandCollection || (i < collectionLength)) && (
             <Card className={get(collection, 'status') !== 'ACTIVE' ? 'border-red' : ''} as={Link} to={`/communities/${get(collection, 'slug')}`} style={{ backgroundColor: get(collection, 'marketing.tombstone.bgColor') }}>
@@ -34,11 +34,6 @@ const CollectionCards = ({ responsiveVars, collections, collectionLength, toggle
           ))}
       </Card.Group>
     </Container>
-    {((collections.length > collectionLength) || (collections.length && !collectionLength) || offering) && !expandCollection && (
-      <div className="mt-80 center-align">
-        <Button fluid={responsiveVars.isMobile} color="green" inverted content="View All" onClick={handleNavigate} />
-      </div>
-    )}
   </>
 );
 
@@ -75,7 +70,6 @@ export default class CollectionsList extends Component {
     const { collectionLength, nsUiStore, offering } = this.props;
     const { loadingArray } = nsUiStore;
     const { responsiveVars } = this.props.uiStore;
-    const { isMobile } = responsiveVars;
     const { publicCollections } = this.props.collectionStore;
     if (loadingArray.includes('getCollections')) {
       return <InlineLoader />;
@@ -88,7 +82,6 @@ export default class CollectionsList extends Component {
           ? (
             <CollectionCards
               collections={publicCollections}
-              isMobile={isMobile}
               responsiveVars={responsiveVars}
               toggleHover={this.toggleHover}
               isHovered={this.state.isHovered}
