@@ -138,6 +138,7 @@ export class InvestmentStore {
 
   @action
   investMoneyChange = (values, field, isPreferredEquiry = false, returnCalculationType) => {
+    this.overrideMultipleValidationForInvestment(true);
     this.INVESTMONEY_FORM = Validator.onChange(this.INVESTMONEY_FORM, {
       name: field,
       value: values.floatValue,
