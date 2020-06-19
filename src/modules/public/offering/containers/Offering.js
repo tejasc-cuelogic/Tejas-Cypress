@@ -143,6 +143,7 @@ class Offering extends Component {
         <Divider as={Container} fitted />
         {!loading
           && (
+            <div className="successCampaigns">
             <CampaignList
               isFunded
               loading={completedLoading}
@@ -158,6 +159,7 @@ class Offering extends Component {
                 </>
               )}
             />
+            </div>
           )
         }
       </>
