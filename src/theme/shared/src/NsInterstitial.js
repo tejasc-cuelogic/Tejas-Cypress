@@ -4,9 +4,6 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { indexOf, last } from 'lodash';
 
-// const getModule = component => lazyRetry(() => import(`./${component}`));
-
-
 @inject('investorProfileStore', 'uiStore', 'individualAccountStore')
 @observer
 @withRouter

@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { NsInterstitial, NsOfferingsCards } from '../../../../../../theme/shared';
+import { NsInterstitial } from '../../../../../../theme/shared';
 import NSImage from '../../../../../shared/NSImage';
 
 @inject('investorProfileStore', 'uiStore', 'individualAccountStore')
@@ -59,7 +59,8 @@ export default class ConfirmCancelModal extends React.Component {
           header: 'Time to explore your investment opportunities!',
           content: <>Now that you know the basics of your NextSeed account, you can go ahead and <a href={this.props.match.refLink}>complete your account setup</a>, or start exploring our current investment opportunities.</>,
           note: <div className={`protipWrap ${isMobile ? 'dblock' : 'dblock'}`}><strong>Pro tip:</strong> Be sure to click the ‘Follow’ button on any campaign that interests you in order to receive regular campaign updates and alerts so that you never miss a chance to invest.</div>,
-          component: <NsOfferingsCards offerings={offerings} isMobile={isMobile} />,
+          // component: <NsOfferingsCards offerings={offerings} isMobile={isMobile} />,
+          component: <NSImage path={`${!isMobile ? 'interstitial/offerings.png' : 'interstitial/offeringsMobile.png'}`} />,
           button: 'Explore All Offerings',
         },
       ],
