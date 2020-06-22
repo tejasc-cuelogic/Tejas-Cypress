@@ -18,11 +18,13 @@ export default class Overview extends Component {
   constructor(props) {
     super(props);
     if (this.props.match.isExact) {
-      const {
-        currentOfferingId,
-      } = this.props.offeringCreationStore;
       const { offer } = this.props.offeringsStore;
-      this.props.collectionStore.initRequest('ACTIVE_INVESTMENTS', currentOfferingId || offer.id);
+      if (this.props.collectionStore.COLLECTION_MAP_DROPDOWN.fields.mappingMeta.value.length === 0 && offer.stage === 'LIVE') {
+        const {
+          currentOfferingId,
+        } = this.props.offeringCreationStore;
+        this.props.collectionStore.initRequest('ACTIVE_INVESTMENTS', currentOfferingId || offer.id);
+      }
     }
   }
 
