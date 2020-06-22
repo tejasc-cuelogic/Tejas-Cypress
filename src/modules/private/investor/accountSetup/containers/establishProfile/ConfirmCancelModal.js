@@ -1,51 +1,9 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Card, Header } from 'semantic-ui-react';
-import { NsInterstitial } from '../../../../../../theme/shared';
+import { NsInterstitial, NsOfferingsCards } from '../../../../../../theme/shared';
 import NSImage from '../../../../../shared/NSImage';
-import HtmlEditor from '../../../../../shared/HtmlEditor';
 
-const OfferingCards = ({ offerings, isMobile }) => (
-  <>
-    <Card.Group itemsPerRow={isMobile ? 1 : 3}>
-      {offerings.map(offering => (
-        <Card className="bordered center-align investmentCards">
-          {!isMobile
-            ? (
-              <>
-                <NSImage path={offering.imageUrl} centered />
-                <Card.Content>
-                  <Header as="h5">{offering.title}</Header>
-                  <Card.Meta>
-                    {offering.location}
-                  </Card.Meta>
-                  <Card.Description>
-                    <HtmlEditor readOnly content={offering.description} />
-                  </Card.Description>
-                  <p><b>{offering.meta1}</b></p>
-                  <p><b>{offering.meta2}</b></p>
-                  <p className="more-info">{offering.offeredBy}</p>
-                </Card.Content>
-              </>
-            )
-            : (
-              <>
-                <NSImage path={offering.imageUrl} left />
-                <Card.Content>
-                  <Header as="h5">{offering.title}</Header>
-                  <Card.Description>
-                    <HtmlEditor readOnly content={offering.meta1} />
-                  </Card.Description>
-                </Card.Content>
-              </>
-            )
-          }
-        </Card>
-      ))}
-    </Card.Group>
-  </>
-);
 @inject('investorProfileStore', 'uiStore', 'individualAccountStore')
 @observer
 @withRouter
@@ -100,8 +58,8 @@ export default class ConfirmCancelModal extends React.Component {
           stepToBeRendered: 3,
           header: 'Time to explore your investment opportunities!',
           content: <>Now that you know the basics of your NextSeed account, you can go ahead and <a href={this.props.match.refLink}>complete your account setup</a>, or start exploring our current investment opportunities.</>,
-          note: <div className={`protipWrap ${isMobile ? 'dnone' : 'dblock'}`}><strong>Pro tip:</strong> Be sure to click the ‘Follow’ button on any campaign that interests you in order to receive regular campaign updates and alerts so that you never miss a chance to invest.</div>,
-          component: <OfferingCards offerings={offerings} />,
+          note: <div className={`protipWrap ${isMobile ? 'dblock' : 'dblock'}`}><strong>Pro tip:</strong> Be sure to click the ‘Follow’ button on any campaign that interests you in order to receive regular campaign updates and alerts so that you never miss a chance to invest.</div>,
+          component: <NsOfferingsCards offerings={offerings} isMobile={isMobile} />,
           button: 'Explore All Offerings',
         },
       ],
@@ -112,7 +70,7 @@ export default class ConfirmCancelModal extends React.Component {
         open
         interstitialSteps={interstitialSteps}
         offerings={offerings}
-        finishUrl="/offerings"
+        endUrl="/offerings"
         url="/dashboard/setup"
         size="large"
       />
