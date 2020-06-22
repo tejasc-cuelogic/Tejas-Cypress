@@ -59,7 +59,7 @@ const CompletedCard = ({ collection, offering, showBusinessLocation, getTombston
           content={getTombstoneDescription(offering) || ''}
         />
       </Card.Description>
-      <Button className="mt-10" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
+      <Button className="mt-20 mb-0" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
     </Card.Content>
     <Card.Content extra className={((!get(offering, 'isAvailablePublicly') && !collection) || (get(offering, 'scope') === 'HIDDEN' && collection)) ? 'disabled' : ''}>
       {showInvestorsCount(offering) && <p><b>Raised {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} {get(offering, 'keyTerms.securities') !== 'FUNDS' ? `from ${get(offering, 'closureSummary.totalInvestorCount') || 0} investors` : ''}</b></p>}
