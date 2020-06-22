@@ -126,7 +126,7 @@ export const REQUESTFACTORY_META = FormHelper.generateMeta([
       },
     },
   ],
-  ['invocationType', 'Invocation Type', '', 'required', '',
+  ['invocationType', 'Invocation Type', 'RequestResponse', 'required', '',
     {
       asIn: true,
       props: {
@@ -163,7 +163,7 @@ export const REQUESTFACTORY_LOG__META = FormHelper.generateMeta([
 ]);
 
 export const PROCESSFACTORY_META = FormHelper.generateMeta([
-  ['method', 'Method', '', 'required', '',
+  ['method', 'Plugin', '', 'required', '',
     {
       asIn: true,
       props: {
@@ -262,7 +262,7 @@ export const PROCESSFACTORY_LOG__META = FormHelper.generateMeta([
 
 
 export const CRONFACTORY_META = FormHelper.generateMeta([
-  ['cron', 'Cron', '', 'required', '',
+  ['cron', 'Plugin', '', 'required', '',
     {
       asIn: true,
       props: {
@@ -289,7 +289,7 @@ export const EMAILLIST_META = FormHelper.generateMeta([
 ]);
 
 export const FILEFACTORY_META = FormHelper.generateMeta([
-  ['method', 'Method', '', 'required', '',
+  ['method', 'Plugin', '', 'required', '',
     {
       asIn: true,
       props: {
@@ -300,7 +300,7 @@ export const FILEFACTORY_META = FormHelper.generateMeta([
 ]);
 
 export const EMAILFACTORY_META = FormHelper.generateMeta([
-  ['method', 'Email Identifier', '', 'required', '',
+  ['method', 'Plugin', '', 'required', '',
     {
       asIn: true,
       props: {

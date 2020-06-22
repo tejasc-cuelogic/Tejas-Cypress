@@ -13,6 +13,8 @@ const HEADER_TOGGLE_META = [
   { label: 'Fundraising State', value: 'FUNDINGRAISING_STATE' },
   { label: 'Follow Button', value: 'FOLLOW_STATE' },
   { label: 'Business Location', value: 'BUSINESS_LOCATION' },
+  { label: 'Maximum Target', value: 'MAXIMUM_TARGET' },
+  { label: 'Minimum Target', value: 'MINIMUM_TARGET' },
 ];
 
 const SUB_HEADER_TOGGLE_META = [

@@ -172,6 +172,15 @@ query getCollection($slug: String!) {
     slug
     status
     marketing {
+      gallery {
+        caption
+        order
+        image {
+          url
+          fileName
+        }
+        isVisible
+      }
       header {
         image {
           url
@@ -239,6 +248,15 @@ export const getCollection = gql`
           title
           meta
           description
+        }
+        gallery {
+          caption
+          order
+          image {
+            url
+            fileName
+          }
+          isVisible
         }
         tombstone {
           title

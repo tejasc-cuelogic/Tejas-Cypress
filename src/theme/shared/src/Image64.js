@@ -42,7 +42,9 @@ function Image64(props) {
         filePath: e.target.src,
         urlLocation: window.location.href,
         message: 'The requested file is not found in bucket.',
+        key: props.srcUrl,
       };
+
       const params = {
         emailContent: JSON.stringify(email),
       };

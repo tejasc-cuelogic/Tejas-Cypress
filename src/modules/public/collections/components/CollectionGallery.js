@@ -3,16 +3,13 @@ import { Header, Button, Icon } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { get, camelCase } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Image64 } from '../../../../../../theme/shared';
-import NSImage from '../../../../../shared/NSImage';
-import Helper from '../../../../../../helper/utility';
+import { Image64 } from '../../../../theme/shared';
+import NSImage from '../../../shared/NSImage';
 
-
-const isTablet = document.documentElement.clientWidth < 992;
-@inject('campaignStore')
+@inject('uiStore', 'campaignStore', 'collectionStore')
 @withRouter
 @observer
-class Gallery extends Component {
+class CollectionGallery extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.processScroll();
@@ -26,28 +23,28 @@ class Gallery extends Component {
   }
 
   render() {
-    const { campaignStore, newLayout } = this.props;
-    const { campaignStatus } = campaignStore;
-    const isTemplate2 = campaignStatus.campaignTemplate === 2;
+    const { uiStore, newLayout, title, galleryImages } = this.props;
+    const { responsiveVars } = uiStore;
+    const { isTablet } = responsiveVars;
     return (
       <>
-        <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
-        <span className="anchor" id={this.props.title ? camelCase(Helper.sanitize(this.props.title)) : 'gallery'} />
-          {this.props.title || 'Gallery'}
+        <Header as="h3" className={`${(newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
+          <span className="anchor" id={title ? camelCase(title) : 'gallery'} />
+          {title || 'Gallery'}
         </Header>
         <div className="gallery-preview">
-          {campaignStatus.galleryImages && campaignStatus.galleryImages.length
-            ? campaignStatus.galleryImages.map((data, index) => (
+          {galleryImages && galleryImages.length
+            ? galleryImages.map((image, index) => (
               <>
                 {index < (newLayout ? 1 : 3)
-                  && <Image64 onClick={e => this.handleViewGallery(e, index)} fluid={!newLayout} className="about-gallery-bg" srcUrl={isTemplate2 ? get(data, 'image.url') : data.url} />
+                  && <Image64 onClick={e => this.handleViewGallery(e, index)} fluid={!newLayout} className="about-gallery-bg" srcUrl={get(image, 'image.url')} />
                 }
               </>
             ))
             : <NSImage fluid={!newLayout} className="about-gallery-bg" path="gallery-placeholder-16-9.jpg" />
           }
         </div>
-        {campaignStatus.galleryImages && campaignStatus.galleryImages.length > 0
+        {galleryImages && galleryImages.length > 0
           && (
             <Button fluid={!newLayout && isTablet} onClick={e => this.handleViewGallery(e, null)} basic={!newLayout} compact={!newLayout} className={`${newLayout ? 'link-button' : ''} highlight-text mt-40`}>
               View Gallery
@@ -60,4 +57,4 @@ class Gallery extends Component {
   }
 }
 
-export default Gallery;
+export default CollectionGallery;

@@ -6,6 +6,7 @@ import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react'
 import formHOC from '../../../../../theme/form/formHOC';
 import DraggableListing from './DraggableListing';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
+import Gallery from './Gallery';
 
 
 const metaInfo = {
@@ -107,6 +108,17 @@ class CollectionContent extends Component {
                 </Form.Field>
               </Form.Group>
             )}
+
+          {(this.state.editable && contentTypeValue === 'GALLERY')
+            && (
+              <>
+              <div className="sticky-actions">
+                <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
+                  <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                </Button.Group>
+              </div>
+            </>
+            )}
           <Divider hidden />
           {get(collectionMapping, 'OFFERING')
             && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
@@ -123,7 +135,17 @@ class CollectionContent extends Component {
               </>
             ))
           }
-          {(this.state.editable)
+          {
+            contentTypeValue === 'GALLERY' && (<Gallery />)
+          }
+
+          {
+            ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
+            && (
+              <AddToCollection isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
+            )
+          }
+          {(contentTypeValue !== 'GALLERY' && this.state.editable)
             && (
               <>
                 <div className="sticky-actions">
@@ -133,13 +155,6 @@ class CollectionContent extends Component {
                 </div>
               </>
             )}
-          {
-            ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
-            && (
-              <AddToCollection isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
-            )
-          }
-
           <Divider hidden />
         </Form>
         <Confirm
