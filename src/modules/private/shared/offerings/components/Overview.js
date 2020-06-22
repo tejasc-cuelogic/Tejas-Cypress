@@ -18,11 +18,13 @@ export default class Overview extends Component {
   constructor(props) {
     super(props);
     if (this.props.match.isExact) {
-      const {
-        currentOfferingId,
-      } = this.props.offeringCreationStore;
       const { offer } = this.props.offeringsStore;
-      this.props.collectionStore.initRequest('ACTIVE_INVESTMENTS', currentOfferingId || offer.id);
+      if (this.props.collectionStore.COLLECTION_MAP_DROPDOWN.fields.mappingMeta.value.length === 0 && offer.stage === 'LIVE') {
+        const {
+          currentOfferingId,
+        } = this.props.offeringCreationStore;
+        this.props.collectionStore.initRequest('ACTIVE_INVESTMENTS', currentOfferingId || offer.id);
+      }
     }
   }
 
@@ -87,9 +89,11 @@ export default class Overview extends Component {
       && CLOSING_CONTITNGENCIES_FRM.fields.close.length > 0;
     const offeringMetaFields = isIssuer ? ['previewPassword', 'referralCode'] : ['offeringSlug', 'previewPassword', 'referralCode'];
     const { loadingArray } = this.props.nsUiStore;
+    const isAddtoCollection = intersection(loadingArray, ['adminCollectionMappingUpsert', 'adminDeleteCollectionMapping']).length > 0;
     if (intersection(loadingArray, ['getCollections', 'getCollectionMapping']).length > 0) {
       return <InlineLoader />;
     }
+
     return (
       <div className={isIssuer ? 'ui card fluid form-card' : 'inner-content-spacer'}>
         <Form>
@@ -111,7 +115,7 @@ export default class Overview extends Component {
             {isIssuer ? ''
             : (
               <div className="clearfix">
-                <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} loading={inProgress} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
+                <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid || isAddtoCollection} loading={inProgress} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
               </div>
             )
           }
