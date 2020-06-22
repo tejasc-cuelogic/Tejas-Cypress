@@ -17,7 +17,6 @@ export default class Creation extends Component {
     super(props);
     const { getBonusRewards, setTiersForBonusRewardsForm, currentOfferingId } = this.props.offeringCreationStore;
     setTiersForBonusRewardsForm();
-    console.log('props', this.props);
     if (currentOfferingId) {
       getBonusRewards();
     }
