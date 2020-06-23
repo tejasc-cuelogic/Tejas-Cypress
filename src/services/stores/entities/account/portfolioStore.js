@@ -93,13 +93,14 @@ export class PortfolioStore {
 
   @action
   setOverviewSummaryData = (type) => {
-    const overviewSummaryMetaData = {};
+    let overviewSummaryMetaData = {};
     const overviewSummaryMetaDataArr = [];
     let dataFor = [];
-    INVESTMENT_SUMMARY_META.map(data => {
+    INVESTMENT_SUMMARY_META.map((data) => {
       dataFor = data.for.includes(type);
       overviewSummaryMetaData = this.getOverviewSummaryData(data, type);
-      overviewSummaryMetaDataArr.push(overviewSummaryMetaData)
+      overviewSummaryMetaDataArr.push(overviewSummaryMetaData);
+      return dataFor;
     });
     this.overviewSummaryMeta = overviewSummaryMetaData;
   }
