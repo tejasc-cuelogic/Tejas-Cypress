@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { get, capitalize, sortBy } from 'lodash';
-import { Container, Card, Grid, Label, Icon, Button, Divider, Table } from 'semantic-ui-react';
+import { Container, Card, Grid, Label, Icon, Button, Table } from 'semantic-ui-react';
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
@@ -59,7 +59,7 @@ const CompletedCard = ({ collection, offering, showBusinessLocation, getTombston
           content={getTombstoneDescription(offering) || ''}
         />
       </Card.Description>
-      <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
+      <Button className="mt-20 mb-0" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
     </Card.Content>
     <Card.Content extra className={((!get(offering, 'isAvailablePublicly') && !collection) || (get(offering, 'scope') === 'HIDDEN' && collection)) ? 'disabled' : ''}>
       {showInvestorsCount(offering) && <p><b>Raised {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} {get(offering, 'keyTerms.securities') !== 'FUNDS' ? `from ${get(offering, 'closureSummary.totalInvestorCount') || 0} investors` : ''}</b></p>}
@@ -201,7 +201,7 @@ export default class CampaignList extends Component {
                                     content={getTombstoneDescription(offering) || ''}
                                   />
                                 </Card.Description>
-                                <Divider />
+                                <Button className="mt-20 mb-0" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
                                 <div className="campaign-card-table-wrapper">
                                   <Table basic="very" compact="very" unstackable className="no-border campaign-card">
                                     {!isTemplate2(get(offering, 'template'))
@@ -259,8 +259,7 @@ export default class CampaignList extends Component {
                                     }
                                   </Table>
                                 </div>
-                                <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
-                              </Card.Content>
+                                </Card.Content>
                             </div>
                             <Card.Content extra className={((!get(offering, 'isAvailablePublicly') && !collection) || (get(offering, 'scope') === 'HIDDEN' && collection)) ? 'disabled' : ''}>
                               {showInvestorsCount(offering) && <p><b>Already raised {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} {get(offering, 'keyTerms.securities') !== 'FUNDS' ? `from ${get(offering, 'closureSummary.totalInvestorCount') || 0} investors` : ''}</b></p>}

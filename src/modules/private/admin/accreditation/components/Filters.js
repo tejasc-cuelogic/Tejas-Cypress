@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { Form, Grid } from 'semantic-ui-react';
 // import { FormCheckbox } from '../../../../../theme/form';
 import { DropdownFilter, DateRangeFilter } from '../../../../../theme/form/Filters';
+
 @observer
 export default class Filters extends Component {
   render() {

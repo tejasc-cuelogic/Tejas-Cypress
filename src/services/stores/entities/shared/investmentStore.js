@@ -138,6 +138,7 @@ export class InvestmentStore {
 
   @action
   investMoneyChange = (values, field, isPreferredEquiry = false, returnCalculationType) => {
+    this.overrideMultipleValidationForInvestment(true);
     this.INVESTMONEY_FORM = Validator.onChange(this.INVESTMONEY_FORM, {
       name: field,
       value: values.floatValue,
@@ -597,7 +598,11 @@ export class InvestmentStore {
   }
 
   isValidMultipleAmount = (amount) => {
+    const { campaignStatus } = campaignStore;
     const formatedAmount = parseFloat(amount) || 0;
+    if (campaignStatus.isConvertibleNotes) {
+      return formatedAmount >= 100 && formatedAmount % 50 === 0;
+    }
     return formatedAmount >= 100 && formatedAmount % 100 === 0;
   }
 
@@ -631,8 +636,11 @@ export class InvestmentStore {
 
   @action
   overrideMultipleValidationForInvestment = (isReset = false) => {
+    const { campaignStatus } = campaignStore;
     if (!isReset) {
       this.INVESTMONEY_FORM.fields.investmentAmount.rule = 'required';
+    } else if (campaignStatus.isConvertibleNotes) {
+      this.INVESTMONEY_FORM.fields.investmentAmount.rule = 'required|fiftys';
     } else {
       this.INVESTMONEY_FORM.fields.investmentAmount.rule = 'required|hundreds';
     }

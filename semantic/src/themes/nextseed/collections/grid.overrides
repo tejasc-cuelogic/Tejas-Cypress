@@ -233,6 +233,45 @@
 .campaign-list-wrapper .ui.grid .column:not(.row){
     display: flex;
 }
+.successCampaigns{
+    .ui.card.campaign{
+        padding-bottom: 24px !important;
+        .meta{
+            margin-bottom: 11px !important;
+        }
+        &:hover{
+            .campaign-image-wrap .campaign-card-image{
+                padding-top: 66.66% !important;
+            }
+            .campaign-card-details {
+                min-height: 300px !important;
+                max-height: 300px !important;
+                transition: none !important;
+            }
+            .ui.labels{
+                display: block !important;
+            }
+        }
+        .campaign-card-details{
+            min-height: 300px !important;
+            max-height: 300px !important;
+            transition: none !important;
+            .content{
+                transition: none !important;
+                padding: 21px 28px 15px 28px !important;
+                &.extra{
+                    padding-top: 0 !important;
+                    padding-bottom: 0 !important;
+                }
+                .description{
+                    min-height: 80px !important;
+                    max-height: 100px !important;
+                    transition: none !important;
+                }
+            }
+        }
+    }
+}
 .legal-section.ui.grid {
     @media only screen and (max-width: @largestTabletScreen) {
         padding: 0;
