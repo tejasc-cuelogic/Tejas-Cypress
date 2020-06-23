@@ -15,9 +15,11 @@ import Helper from '../../../../../../helper/utility';
 export default class Creation extends Component {
   constructor(props) {
     super(props);
-    const { getBonusRewards, setTiersForBonusRewardsForm } = this.props.offeringCreationStore;
+    const { getBonusRewards, setTiersForBonusRewardsForm, currentOfferingId } = this.props.offeringCreationStore;
     setTiersForBonusRewardsForm();
-    getBonusRewards();
+    if (currentOfferingId) {
+      getBonusRewards();
+    }
   }
 
   confirmRemoveTier = (e, name, amount, earlyBirdQuantity) => {
