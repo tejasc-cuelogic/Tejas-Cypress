@@ -185,7 +185,7 @@ class CollectionDetails extends Component {
         {collectionDetails
           && <CollectionMetaTags collection={collectionDetails} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
-        {!isMobile && collectionHeaderComponent}
+        {!isMobile && !isTablet && collectionHeaderComponent}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
@@ -205,7 +205,7 @@ class CollectionDetails extends Component {
           <Container>
             <section>
               <Grid centered>
-                {!isMobile
+                {!isMobile && !isTablet
                   && (
                     <Grid.Column width={4} className="left-align">
                       <div className={`collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu `}>
@@ -286,7 +286,7 @@ class CollectionDetails extends Component {
                                 <>
                                   {i !== 0 && <Divider hidden section />}
                                   <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
-                                  <CustomContent content={c.customValue} isTablet={isTablet} />
+                                  <CustomContent content={c.customValue} isTablet={isTablet} isMobile={isMobile} />
                                 </>
                               )
                               : null
