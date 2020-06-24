@@ -571,6 +571,7 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     offeringSlug
     isAvailablePublicly
     stage
+    template
     investNow {
       template
       page {
