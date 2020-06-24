@@ -162,7 +162,7 @@ export default class NewUpdate extends Component {
             <List ordered relaxed>
               {
                 PBUILDER_FRM.fields.notificationTo.value && PBUILDER_FRM.fields.notificationTo.value.map(investor => (
-                  <List.Item>{ investor }</List.Item>
+                <List.Item><span className="pl-15" />{ investor }</List.Item>
                 ))
               }
             </List>
