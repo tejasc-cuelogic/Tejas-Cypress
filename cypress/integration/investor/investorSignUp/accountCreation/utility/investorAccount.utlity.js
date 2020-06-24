@@ -5,12 +5,12 @@ import { registerApiCall, btnClickAndWait, uploadFile, enterCodeAndConfirm, getJ
 
 export const investorFlowProcess = () => {
   cy.visit('/', { failOnStatusCode: false });
-  cy.applicationUnlock();
+  // cy.applicationUnlock();
   fillSignUpFormAndProceed();
   enterCodeAndConfirm('confirmEmail', '**/graphql');
   confirmEmailAddressScreen();
   fillLegalFormAndProceed();
-  enterCodeAndConfirm('confirmPhone', 'dev/graphql');
+  enterCodeAndConfirm('confirmPhone');
   completeInvestorProfile();
 };
 
@@ -114,7 +114,7 @@ export const individualPlaidProcess = (count) => {
     stripe = cy.wrap($body);
     stripe.find('button[type="submit"]').click();
     stripe = cy.wrap($body);
-    stripe.find('div.AccountItem:first').click({ force: true });
+    stripe.find('div.AccountItem:first').dblclick();
     stripe = cy.wrap($body);
     stripe.find('button').contains('Continue').click({ force: true });
     cy.wait('@plaidAccount');
