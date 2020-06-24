@@ -90,8 +90,8 @@ class Team extends Component {
                 )}
                 <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
                   {loading ? (<InlineLoader />)
-                    : jobsList.lenght > 0 ?
-                      (
+                    : jobsList.lenght > 0
+                      ? (
                         <div id="job-position">
                           <Header as="h3" className={responsiveVars.isMobile ? 'mt-40' : 'mt-50'}>Current Positions</Header>
                           <List divided relaxed="very" className="job-list">
