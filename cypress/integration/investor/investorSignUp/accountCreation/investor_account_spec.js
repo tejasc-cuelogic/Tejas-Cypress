@@ -51,9 +51,8 @@ describe('Account Creation', () => {
     iraAccountCreation();
   });
 
-  it.skip('should create Entity account successfully', () => {
+  it('should create Entity account successfully', () => {
     cy.get('.btn-item').contains('Add New Account').click({ force: true });
-    cy.log('click->',"add accountr")
     cy.get('[data-cy=2]').click();
     cy.log('click->',"add account type")
     entityAccountCreation();
