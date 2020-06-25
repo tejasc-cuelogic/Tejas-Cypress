@@ -1,8 +1,9 @@
-import { camelCase, upperFirst, reduce, assign, get, forEach } from 'lodash';
+import { camelCase, upperFirst, reduce, assign, get, forEach, find } from 'lodash';
 import moment from 'moment';
 import momentZone from 'moment-timezone';
 import { DEFAULT_TIME_ZONE_TO_DISPLAY, ELIGIBLE_TAGS } from '../../constants/common';
 import Helper from '../utility';
+import { UPLOADS_CONFIG } from '../../constants/aws';
 
 
 class DataFormatter {
@@ -207,6 +208,15 @@ class DataFormatter {
 
   // eslint-disable-next-line no-useless-escape
   validateEmail = email => email.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm);
+
+  getOgDataFromSocial = (obj, type, att) => {
+    const data = find(obj, o => o.type === type);
+    let val = get(data, att) || '';
+    if (att === 'featuredImageUpload.url') {
+      val = (val.includes('https://') || val.includes('http://')) ? val : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(val)}`;
+    }
+    return val;
+  };
 }
 
 export default new DataFormatter();
