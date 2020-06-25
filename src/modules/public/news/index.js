@@ -164,7 +164,6 @@ class News extends Component {
                         minScore={4}
                         iconDisplay
                         tooShortWord="Weak"
-                        // scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
                         scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
                         inputProps={{
                           name: 'password', autoComplete: 'off', placeholder: 'Password',
@@ -194,7 +193,7 @@ class News extends Component {
                           </Message>
                         )
                       }
-                      <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid || !currentScore} />
+                      <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!(SIGNUP_FRM.meta.isValid && currentScore > 1)} />
                     </Form>
                   </Segment>
                 </Grid.Column>
