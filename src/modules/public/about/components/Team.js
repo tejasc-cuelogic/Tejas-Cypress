@@ -89,25 +89,26 @@ class Team extends Component {
                   </Grid.Column>
                 )}
                 <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
-                {loading
-                  ? (<InlineLoader />)
-                  : (
-                    <div id="job-position">
-                      <Header as="h3" className={responsiveVars.isMobile ? 'mt-40' : 'mt-50'}>Current Positions</Header>
-                      <List divided relaxed="very" className="job-list">
-                        {jobsList.map(i => (
-                          <List.Item>
-                            <List.Content>
-                              <List.Header style={{ cursor: 'pointer' }} onClick={() => this.openDoc(i.BOX_FILE_ID)} className="highlight-text">{i.POSITION}</List.Header>
-                              <List.Description className="neutral-text">{`${i.CITY} ${i.STATE}`}</List.Description>
-                            </List.Content>
-                          </List.Item>
-                        ))
-                        }
-                      </List>
-                    </div>
-                  )
-                }
+                  {loading ? (<InlineLoader />)
+                    : jobsList.lenght > 0
+                      ? (
+                        <div id="job-position">
+                          <Header as="h3" className={responsiveVars.isMobile ? 'mt-40' : 'mt-50'}>Current Positions</Header>
+                          <List divided relaxed="very" className="job-list">
+                            {jobsList.map(i => (
+                              <List.Item>
+                                <List.Content>
+                                  <List.Header style={{ cursor: 'pointer' }} onClick={() => this.openDoc(i.BOX_FILE_ID)} className="highlight-text">{i.POSITION}</List.Header>
+                                  <List.Description className="neutral-text">{`${i.CITY} ${i.STATE}`}</List.Description>
+                                </List.Content>
+                              </List.Item>
+                            ))
+                            }
+                          </List>
+                        </div>
+                      )
+                      : <></>
+                    }
                 </Grid.Column>
             </Grid>
           </Container>

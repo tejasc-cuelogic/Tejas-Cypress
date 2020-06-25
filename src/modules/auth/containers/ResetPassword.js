@@ -85,7 +85,7 @@ class ResetPassword extends Component {
               </Message>
             )}
             <div className="mt-30 center-align">
-              <Button primary size="large" className="very relaxed" content="Set new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid || !currentScore} />
+              <Button primary size="large" className="very relaxed" content="Set new password" loading={this.props.uiStore.inProgress} disabled={!(RESET_PASS_FRM.meta.isValid && currentScore > 1)} />
             </div>
           </Form>
         </Modal.Content>
