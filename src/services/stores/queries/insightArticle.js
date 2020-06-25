@@ -41,6 +41,10 @@ query adminInsightsArticle($id: ID!) {
     author
     slug
     articleStatus
+    social {
+      type url blurb shareLink
+      featuredImageUpload { id url fileName isPublic }
+    }
     updated {
       by
       date

@@ -1,5 +1,5 @@
 import { observable, action, toJS } from 'mobx';
-import { set, forEach, isEmpty, get } from 'lodash';
+import { set, forEach, isEmpty, get, map } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
@@ -545,6 +545,68 @@ export default class DataModelStore {
     }
     return array;
   }
+
+  evaluateFormFieldToArray = (fields, includeHighlight = true) => {
+    const social = [];
+    const highlight = [];
+    map(fields, (ele, key) => {
+      try {
+        const records = toJS(fields[key]);
+        if (fields[key].ArrayObjItem) {
+          const toObj = social.find(obj => obj.type === records.type);
+          if (toObj) {
+            if (key === `${records.type}_url`) {
+              toObj.url = records.value || null;
+            }
+            if (key === `${records.type}_shareLink`) {
+              toObj.shareLink = records.value || null;
+            }
+            if (key === `${records.type}_blurb`) {
+              toObj.blurb = records.value || null;
+            }
+            if (key === `${records.type}_featuredImageUpload`) {
+              toObj.featuredImageUpload = {
+                id: records.fileId,
+                url: records.preSignedUrl,
+                fileName: records.value,
+                isPublic: true,
+              };
+            }
+          } else {
+            const object = {};
+            object.type = records.type;
+            if (key === `${records.type}_url`) {
+              object.url = records.value || null;
+            }
+            if (key === `${records.type}_shareLink`) {
+              object.shareLink = records.value || null;
+            }
+            if (key === `${records.type}_blurb`) {
+              object.blurb = records.value || null;
+            }
+            if (key === `${records.type}_featuredImageUpload`) {
+              object.featuredImageUpload = {
+                id: records.fileId,
+                url: records.preSignedUrl,
+                fileName: records.fileName,
+                isPublic: true,
+              };
+            }
+            social.push(object);
+          }
+        }
+        if (includeHighlight && Array.isArray(toJS(fields[key]))) {
+          records.forEach((field) => {
+            highlight.push(field.highlight.value);
+          });
+        }
+      } catch (e) {
+        window.logger(e);
+      }
+    });
+    const socialData = includeHighlight ? { social, highlight } : { social };
+    return socialData;
+  }
 }
 
 export const decorateDefault = {
@@ -592,5 +654,6 @@ export const decorateDefault = {
   addMoreForNlevelForm: action,
   removeOneForNlevelForm: action,
   formChangeForMultilevelArray: action,
+  evaluateFormFieldToArray: action,
   moveArray: action,
 };
