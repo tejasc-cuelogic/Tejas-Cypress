@@ -1,9 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { get, find } from 'lodash';
+import { get } from 'lodash';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
-import { BUSINESS_INDUSTRIES, SECURITIES_VALUES } from '../../../../services/constants/admin/offerings';
 
 const InsightMetaTags = ({ insight }) => (
     <Helmet>
@@ -17,8 +16,8 @@ const InsightMetaTags = ({ insight }) => (
       <meta property="og:url" content={window.location.href} />
       <meta property="og:site_name" content="NextSeed" />
       <meta property="article:publisher" content="https://www.facebook.com/thenextseed" />
-      <meta property="article:tag" content="" />
-      <meta property="article:section" content="" />
+      <meta property="article:tag" content={get(insight, 'tags') ? get(insight, 'tags').join(', ') : ''} />
+      <meta property="article:section" content={get(insight, 'category')} />
       <meta property="fb:app_id" content="1806635959569619" />
       <meta property="og:image" content={DataFormatter.getOgDataFromSocial(get(insight, 'social'), 'facebook', 'featuredImageUpload.url')} />
       <meta property="og:image:secure_url" content={DataFormatter.getOgDataFromSocial(get(insight, 'social'), 'facebook', 'featuredImageUpload.url')} />
