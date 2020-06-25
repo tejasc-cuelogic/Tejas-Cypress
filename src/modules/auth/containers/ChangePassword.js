@@ -58,8 +58,8 @@ function ChangePassword(props) {
               ['oldPasswd', 'newPasswd', 'retypePasswd'].map(field => (
                 (field === 'newPasswd')
                   ? (
-                    smartElement.FormPasswordStrength(field, { scoreWords: ['Weak', 'Okay', 'Good', 'Strong', 'Stronger'],
-                      inputProps: { name: 'newPasswd', autoComplete: 'off', placeholder: 'New Password', key: 'newPasswd' },
+                    smartElement.FormPasswordStrength(field,
+                      { inputProps: { name: 'newPasswd', autoComplete: 'off', placeholder: 'New Password', key: 'newPasswd' },
                       changed: changePassChange })
                   )
                   : (
@@ -75,7 +75,7 @@ function ChangePassword(props) {
               )
             }
             <div className="mt-30 center-align">
-              <Button primary size="large" className="very relaxed" content="Set new password" loading={inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid || !currentScore} />
+              <Button primary size="large" className="very relaxed" content="Set new password" loading={inProgress} disabled={!(CHANGE_PASS_FRM.meta.isValid && currentScore > 1)} />
             </div>
           </Form>
         </Modal.Content>
