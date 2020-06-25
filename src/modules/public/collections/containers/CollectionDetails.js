@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get, camelCase, orderBy, find, filter } from 'lodash';
+import { get, camelCase, orderBy, filter } from 'lodash';
 import { withRouter, Route } from 'react-router-dom';
 import scrollIntoView from 'scroll-into-view';
 import { Responsive, Visibility, Container, Grid, Menu, Divider, Button, Icon } from 'semantic-ui-react';
@@ -14,8 +14,6 @@ import { NavItems } from '../../../../theme/layout/NavigationItems';
 import HtmlEditor from '../../../shared/HtmlEditor';
 import CollectionMetaTags from '../components/CollectionMetaTags';
 import AboutGallery from '../components/AboutGallery';
-
-import { UPLOADS_CONFIG } from '../../../../constants/aws';
 
 const LoadMoreBtn = ({ action, param, isMobile }) => (
   <div id="loadMore" className={`${isMobile ? 'mb-20 mt-40' : 'mb-30 mt-30'}`} data-cy={param}>
@@ -127,15 +125,6 @@ class CollectionDetails extends Component {
   handleUpdate = (e, { calculations }) => {
     this.props.navStore.setMobileNavStatus(calculations);
   }
-
-  getOgDataFromSocial = (obj, type, att) => {
-    const data = find(obj, o => o.type === type);
-    let val = get(data, att) || '';
-    if (att === 'featuredImageUpload.url') {
-      val = (val.includes('https://') || val.includes('http://')) ? val : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(val)}`;
-    }
-    return val;
-  };
 
   render() {
     const { collectionStore, uiStore, nsUiStore, location, match } = this.props;
