@@ -19,7 +19,7 @@ export default class CollectionHeader extends Component {
   render() {
     const { uiStore, data, scrollToActiveOfferings, activeOfferings } = this.props;
     const { responsiveVars } = uiStore;
-    const { isMobile } = responsiveVars;
+    const { isMobile, isTablet } = responsiveVars;
     const title = get(data, 'title');
     const actionText = get(data, 'actionText');
     const headerDownClick = (activeOfferings && actionText) ? (
@@ -33,7 +33,7 @@ export default class CollectionHeader extends Component {
     ) : null;
     return (
       <>
-        {!isMobile
+        {!isMobile && !isTablet
           ? (
             <>
               <div className="campaign-banner collection-banner collection-header-wrap">
@@ -92,9 +92,9 @@ export default class CollectionHeader extends Component {
               </div>
             </>
           ) : (
-            <div className={`${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu collection-header-wrap`}>
+            <div className={`${isMobile || isTablet ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu collection-header-wrap`}>
               <Responsive maxWidth={991} as={React.Fragment}>
-                <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`} style={{ backgroundColor: get(data, 'bgColor') }}>
+                <div className={`${isMobile || isTablet ? 'offering-intro-v2' : ''} offering-intro center-align`} style={{ backgroundColor: get(data, 'bgColor') }}>
                   {get(data, 'bgImage.url')
                     && <Image64 reRender originalImg bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
                   }
@@ -134,7 +134,7 @@ export default class CollectionHeader extends Component {
                 </div>
               </Responsive>
               { headerDownClick }
-              {!isMobile
+              {!isMobile && !isTablet
                 && (
                   <>
                     <Menu vertical>
