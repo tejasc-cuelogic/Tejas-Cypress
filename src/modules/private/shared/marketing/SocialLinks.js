@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { capitalize } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { Divider, Header, Form, Button } from 'semantic-ui-react';
-import formHOC from '../../../../../theme/form/formHOC';
+import formHOC from '../../../../theme/form/formHOC';
 
 const metaInfo = {
   store: ['articleStore'],

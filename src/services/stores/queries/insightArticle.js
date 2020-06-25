@@ -73,6 +73,10 @@ query insightArticleBySlug($slug:String ) {
     title
     featuredImage
     content
+    social {
+      type url blurb shareLink
+      featuredImageUpload { id url fileName isPublic }
+    }
   }
 }
 `;

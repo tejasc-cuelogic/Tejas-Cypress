@@ -8,7 +8,7 @@ import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/a
 import { Image64, InlineLoader } from '../../../../../theme/shared';
 import Actions from './Actions';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
-import SocialLinks from './SocialLinks';
+import SocialLinks from '../../../shared/marketing/SocialLinks';
 
 
 @inject('articleStore', 'userStore', 'uiStore', 'collectionStore')

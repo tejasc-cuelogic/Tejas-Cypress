@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Helmet } from 'react-helmet';
 import { Header, Container, Grid, Breadcrumb } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../theme/shared';
-import Helper from '../../../../helper/utility';
 import HtmlEditor from '../../../shared/HtmlEditor';
+import InsightMetaTags from '../components/InsightMetaTags';
 
 @inject('articleStore')
 @observer
@@ -26,9 +25,7 @@ export default class InsightsDetails extends Component {
     }
     return (
       <>
-        <Helmet>
-          <title>{Helper.pageTitle(`${ArticlesDetails.title} - NextSeed`)}</title>
-        </Helmet>
+        <InsightMetaTags insight={ArticlesDetails} />
         <Container>
           <section className="insight-post">
             <Breadcrumb className="mb-30">
