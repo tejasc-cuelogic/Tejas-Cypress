@@ -140,7 +140,7 @@ class Success extends Component {
                                 minLength={8}
                                 minScore={4}
                                 tooShortWord="Weak"
-                                scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                                scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
                                 inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
                                 changed={signupChange}
                                 fielddata={fields[field]}
@@ -196,7 +196,7 @@ class Success extends Component {
               )
             }
             <Divider section hidden />
-            <Button primary size="large" className="very relaxed" content="Proceed" loading={inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && (!SIGNUP_FRM.meta.isValid || !currentScore) && !userExists) || inProgress} />
+            <Button primary size="large" className="very relaxed" content="Proceed" loading={inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && (!(SIGNUP_FRM.meta.isValid && currentScore > 1)) && !userExists) || inProgress} />
           </Grid.Column>
         </Grid>
         {this.state.showProgressLoader

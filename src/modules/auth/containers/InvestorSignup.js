@@ -64,10 +64,10 @@ class InvestorSignup extends Component {
   render() {
     const { smartElement } = this.props;
     const {
-      SIGNUP_FRM,
+      SIGNUP_FRM, currentScore,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
-    const isDisabled = !([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !SIGNUP_FRM.meta.isValid;
+    const isDisabled = !([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !(SIGNUP_FRM.meta.isValid && currentScore > 1);
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
