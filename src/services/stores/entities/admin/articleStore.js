@@ -61,6 +61,7 @@ export class ArticleStore extends DataModelStore {
     this.initiateFilters();
   }
 
+  @action
   setInitiateSrch = (name, value) => {
     const srchParams = { ...this.requestState.search };
     if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
@@ -341,6 +342,7 @@ export class ArticleStore extends DataModelStore {
     }
   };
 
+  @action
   maskChange = (values, field) => {
     if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
       const isoDate = field === 'startDate' ? moment(new Date(values.formattedValue)).toISOString()
