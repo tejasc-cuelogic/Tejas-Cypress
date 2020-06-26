@@ -160,6 +160,11 @@ export class ArticleStore extends DataModelStore {
       delete (data.minuteRead);
     }
     const payload = { ...data };
+
+    if (id === 'new') {
+      payload.visible = true;
+    }
+
     payload.tags = payload.tags.split(',').filter(tag => tag !== '');
     client
       .mutate({
