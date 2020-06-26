@@ -1,3 +1,5 @@
+import { FormHelper } from '../../../helper';
+
 export const ARTICLES = {
   title: {
     value: '', label: 'Title', error: undefined, rule: 'required', placeholder: 'Click to edit article name',
@@ -45,6 +47,20 @@ export const CATEGORY_VALUES = [
   { key: 'For Investors', value: 'forInvestors', text: 'For Investors' },
   { key: 'NextSeed Stories', value: 'nextSeedStories', text: 'NextSeed Stories' },
 ];
+
+export const SOCIAL = FormHelper.generateMeta([
+  ['facebook_url', 'Facebook', '', 'optional', 'e.g. http://facebook.com/nextbrewery', { asIn: true, props: { find: 'type', type: 'facebook', skipField: true, ArrayObjItem: true, objRef: 'social' } }],
+  ['twitter_url', 'Twitter', '', 'optional', 'e.g. http://twitter.com/nextbrewery', { asIn: true, props: { find: 'type', type: 'twitter', skipField: true, ArrayObjItem: true, objRef: 'social' } }],
+  ['linkedin_url', 'LinkedIn', '', 'optional', 'e.g. http://linkedin.com/nextbrewery', { asIn: true, props: { find: 'type', type: 'linkedin', skipField: true, ArrayObjItem: true, objRef: 'social' } }],
+  ['instagram_url', 'Instagram', '', 'optional', 'e.g. http://instagram.com/nextbrewery', { asIn: true, props: { find: 'type', type: 'instagram', skipField: true, ArrayObjItem: true, objRef: 'social' } }],
+  ['yelp_url', 'Yelp', '', 'optional', 'e.g. http://yelp.com/nextbrewery', { asIn: true, props: { find: 'type', type: 'yelp', skipField: true, ArrayObjItem: true, objRef: 'social' } }],
+  ['facebook_shareLink', 'Sharelink', '', 'optional', 'e.g. http://facebook.com/nextbrewery', { asIn: true, props: { find: 'type', type: 'facebook', skipField: true, ArrayObjItem: true, objRef: 'social' } }],
+  ['facebook_blurb', 'Blurb', '', 'optional', 'e.g. Company was formed...', { asIn: true, props: { find: 'type', type: 'facebook', skipField: true, ArrayObjItem: true, objRef: 'social' } }],
+  ['facebook_featuredImageUpload', 'Featured Upload image', '', 'optional', 'e.g. Company was formed...', { s3Upload: true, asIn: true, props: { find: 'type', type: 'facebook', skipField: true, ArrayObjItem: true }, objRef: 'social' }],
+  ['twitter_shareLink', 'Sharelink', '', 'optional', 'e.g. http://twitter.com/nextbrewery', { asIn: true, props: { find: 'type', type: 'twitter', skipField: true, ArrayObjItem: true, objRef: 'social' } }],
+  ['twitter_blurb', 'Blurb', '', 'optional', 'e.g. Company was formed...', { asIn: true, props: { find: 'type', type: 'twitter', skipField: true, ArrayObjItem: true, objRef: 'social' } }],
+  ['twitter_featuredImageUpload', 'Featured Upload image', '', 'optional', 'e.g. Company was formed...', { s3Upload: true, asIn: true, props: { find: 'type', type: 'twitter', skipField: true, ArrayObjItem: true }, objRef: 'social' }],
+]);
 
 export const TAGS = [
   { key: 'All', value: 'All', text: 'All' },
