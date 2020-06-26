@@ -1,6 +1,6 @@
 /* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
-import { get, find, has, cloneDeep, includes } from 'lodash';
+import { get, has, cloneDeep, includes } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Responsive, Container, Grid, Visibility, Button, Icon } from 'semantic-ui-react';
@@ -105,11 +105,6 @@ class offerDetails extends Component {
     this.props.navStore.setFieldValue('navStatus', 'main');
     this.props.campaignStore.setFieldValue('details', {});
   }
-
-  getOgDataFromSocial = (obj, type, att) => {
-    const data = find(obj, o => o.type === type);
-    return get(data, att) || '';
-  };
 
   authPreviewOffer = (isAuthenticated) => {
     if (isAuthenticated) {
