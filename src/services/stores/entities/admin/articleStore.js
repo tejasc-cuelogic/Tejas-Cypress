@@ -55,6 +55,7 @@ export class ArticleStore extends DataModelStore {
     direction: 'asc',
   }
 
+  @action
   initiateSearch = (srchParams) => {
     this.requestState.search = srchParams;
     this.initiateFilters();
@@ -593,8 +594,6 @@ decorate(ArticleStore, {
   isReadOnly: observable,
   requestState: observable,
   sortOrder: observable,
-  initiateSearch: action,
-  setInitiateSrch: action,
   initiateFilters: action,
   setGlobalAction: action,
   toggleSearch: action,
@@ -613,7 +612,6 @@ decorate(ArticleStore, {
   getArticleDetailsBySlug: action,
   htmlContentChange: action,
   articleChange: action,
-  maskChange: action,
   creteSlug: action,
   selectRecordsOnPage: action,
   addSelectedRecords: action,
