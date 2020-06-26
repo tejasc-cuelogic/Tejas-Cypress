@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Grid } from 'semantic-ui-react';
+import { Header, Form, Grid, Responsive } from 'semantic-ui-react';
 import { NsModal } from '../../../theme/shared';
 import { FormArrowButton } from '../../../theme/form';
 
 const redirectByRole = {
-  investor: { to: '/register-investor' },
-  'issuer-type1': { to: '/business-application' },
+  'issuer-type1': { to: '/business-application/business' },
+  'issuer-type2': { to: '/business-application/commercial-real-estate' },
 };
 
 @inject('authStore', 'uiStore', 'navStore')
 @observer
-class signupInitial extends Component {
+class signupBusiness extends Component {
   constructor(props) {
     super(props);
     this.props.uiStore.clearErrors();
@@ -50,17 +49,17 @@ class signupInitial extends Component {
       >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
           <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
-            <Header as="h3">Join the NextSeed community</Header>
+            <Header as="h3">Would you like to raise capital for a business or a commercial real <Responsive as="br" /> estate project?</Header>
             <Form error className={isMobile ? '' : 'account-type-tab'}>
               <FormArrowButton
                 name="role"
                 fielddata={SIGNUP_FRM.fields.role}
                 changed={(e, result) => this.handleSignupChange(e, result)}
                 classname="icon-arrow-button"
-                ignoreValues={['issuer-type2']}
+                ignoreValues={['investor']}
+                business
               />
             </Form>
-            <p className="mt-40">Already have an account? <Link to="/login">Log in</Link></p>
           </Grid.Column>
         </Grid>
       </NsModal>
@@ -68,4 +67,4 @@ class signupInitial extends Component {
   }
 }
 
-export default signupInitial;
+export default signupBusiness;
