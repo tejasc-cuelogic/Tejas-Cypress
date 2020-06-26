@@ -1,13 +1,17 @@
+import React from 'react';
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { forEach, sortBy, get, times } from 'lodash';
+import { forEach, sortBy, get, times, capitalize } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { CANCEL_INVESTMENT } from '../../../constants/investment';
+import { CANCEL_INVESTMENT, INVESTMENT_SUMMARY_META } from '../../../constants/investment';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_EQUITY_CLASS } from '../../../../constants/offering';
 import { getInvestorAccountPortfolio, getInvestmentDetails, investNowCancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
-import { userDetailsStore, uiStore, offeringCreationStore } from '../../index';
+import { userDetailsStore, uiStore, offeringCreationStore, campaignStore } from '../../index';
 import Helper from '../../../../helper/utility';
+import HtmlEditor from '../../../../modules/shared/HtmlEditor';
+import { DateTimeFormat } from '../../../../theme/shared';
 
 export class PortfolioStore {
   @observable investmentLists = null;
@@ -37,6 +41,87 @@ export class PortfolioStore {
   @observable apiCall = false;
 
   @observable CANCEL_INVESTMENT_FRM = Validator.prepareFormObject(CANCEL_INVESTMENT);
+
+  @observable overviewSummaryMeta = [];
+
+  @action
+  getSecurityTitle = (securities) => {
+    const { campaign } = campaignStore;
+    const equityClass = get(campaign, 'keyTerms.equityClass');
+    let text = CAMPAIGN_KEYTERMS_SECURITIES[securities] || 'N/A';
+    if (securities === 'EQUITY' && equityClass === 'PREFERRED') {
+      text = CAMPAIGN_KEYTERMS_SECURITIES.PREFERRED_EQUITY_506C;
+    } else if (securities === 'EQUITY' && equityClass === 'LLC_MEMBERSHIP_UNITS') {
+      text = CAMPAIGN_KEYTERMS_SECURITIES.REAL_ESTATE;
+    } else if (securities === 'EQUITY' && ['CLASS_A_SHARES', 'CLASS_B_SHARES'].includes(equityClass)) {
+      text = CAMPAIGN_KEYTERMS_EQUITY_CLASS[equityClass] || 'N/A';
+    }
+    return text;
+  };
+
+  @action
+  getOverviewSummaryData = (data) => {
+    const { campaign } = campaignStore;
+    const summaryData = { ...data };
+    switch (data.key) {
+      case 'securities':
+        summaryData.value = this.getSecurityTitle(get(campaign, data.value));
+        break;
+      case 'expectedOpsDate':
+        summaryData.value = get(campaign, data.value) && <DateTimeFormat isCSTFormat datetime={get(campaign, data.value)} />;
+        break;
+      case 'maturity':
+        summaryData.value = get(campaign, 'keyTerms.startupPeriod') ? `${get(campaign, data.value)} months, including a ${get(campaign, 'keyTerms.startupPeriod')}-month startup period for ramp up` : `${get(campaign, data.value)} months`;
+        break;
+      case 'priceCalculation':
+        summaryData.label = `${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price`;
+        summaryData.value = Helper.CurrencyFormat(get(campaign, data.value));
+        break;
+      case 'premoneyValuation':
+        summaryData.value = Helper.CurrencyFormat(get(campaign, data.value), 0);
+        break;
+      case 'interestRate':
+        summaryData.value = `${get(campaign, data.value)}%`;
+        break;
+      case 'revSharePercentage':
+        summaryData.value = `${get(campaign, data.value)}%`;
+        break;
+      case 'securitiesOwnershipPercentage':
+        summaryData.value = `${get(campaign, data.value)}% equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`;
+        break;
+        case 'hardCloseDate':
+        summaryData.value = get(campaign, data.value) && <DateTimeFormat isCSTFormat datetime={get(campaign, data.value)} />;
+        break;
+        case 'multiple':
+          summaryData.value = (
+          <>{get(campaign, data.value)}x <br />{get(campaign, 'keyTerms.investmentMultipleSummary')
+            && (
+            <HtmlEditor
+              readOnly
+              content={(get(campaign, 'keyTerms.investmentMultipleSummary')
+                && get(campaign, 'keyTerms.investmentMultipleSummary'))}
+            />
+          )}</>
+          );
+          break;
+      default:
+        summaryData.value = get(campaign, data.value);
+        break;
+    }
+    return summaryData;
+  }
+
+  @action
+  setOverviewSummaryData = (type) => {
+    const overviewSummaryMetaData = [];
+    INVESTMENT_SUMMARY_META.map((data) => {
+      if (data.for.includes(type)) {
+        overviewSummaryMetaData.push(this.getOverviewSummaryData(data));
+      }
+      return overviewSummaryMetaData;
+    });
+    this.overviewSummaryMeta = overviewSummaryMetaData;
+  }
 
   @action
   setFieldValue = (field, value) => {
