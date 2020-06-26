@@ -50,7 +50,7 @@ class signupInitial extends Component {
       >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
           <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
-            <Header as="h3">Welcome! Let's get started.</Header>
+            <Header as="h3">Welcome! Let{'\''}s get started.</Header>
             <Form error className={isMobile ? '' : 'account-type-tab'}>
               <FormArrowButton
                 name="role"
