@@ -265,6 +265,13 @@ export const INVESTMENT_SUMMARY_META = [
     for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE', 'SAFE', 'CONVERTIBLE_NOTES', 'EQUITY', 'REAL_ESTATE', 'FUNDS'],
   },
   {
+    label: 'Close Date',
+    key: 'hardCloseDate',
+    value: 'closureSummary.hardCloseDate',
+    isMobile: true,
+    for: ['TERM_NOTE'],
+  },
+  {
     label: 'Anticipated Opening Date',
     key: 'expectedOpsDate',
     value: 'offering.launch.expectedOpsDate',
@@ -283,7 +290,7 @@ export const INVESTMENT_SUMMARY_META = [
     key: 'interestRate',
     value: 'keyTerms.interestRate',
     isMobile: true,
-    for: ['TERM_NOTE', 'SAFE', 'CONVERTIBLE_NOTES'],
+    for: ['TERM_NOTE'],
   },
   {
     label: 'Market Cap',
@@ -296,6 +303,13 @@ export const INVESTMENT_SUMMARY_META = [
     label: 'Discount',
     key: 'discount',
     value: 'keyTerms.discount',
+    isMobile: true,
+    for: ['SAFE', 'CONVERTIBLE_NOTES'],
+  },
+  {
+    label: 'Interest Rate',
+    key: 'interestRate',
+    value: 'keyTerms.interestRate',
     isMobile: true,
     for: ['SAFE', 'CONVERTIBLE_NOTES'],
   },
@@ -328,13 +342,6 @@ export const INVESTMENT_SUMMARY_META = [
     for: ['REVENUE_SHARING_NOTE'],
   },
   {
-    label: 'Revenue Sharing Percentage Description',
-    key: 'revSharePercentageDescription',
-    value: 'keyTerms.revSharePercentageDescription',
-    isMobile: false,
-    for: ['REVENUE_SHARING_NOTE'],
-  },
-  {
     label: 'Maturity',
     key: 'maturity',
     value: 'keyTerms.maturity',
@@ -362,12 +369,5 @@ export const INVESTMENT_SUMMARY_META = [
     value: 'keyTerms.securitiesOwnershipPercentage',
     isMobile: true,
     for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE'],
-  },
-  {
-    label: 'Close Date',
-    key: 'hardCloseDate',
-    value: 'closureSummary.hardCloseDate',
-    isMobile: true,
-    for: ['TERM_NOTE'],
   },
 ];

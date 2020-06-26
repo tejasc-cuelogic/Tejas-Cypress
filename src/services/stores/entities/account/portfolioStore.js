@@ -73,19 +73,6 @@ export class PortfolioStore {
       case 'maturity':
         summaryData.value = get(campaign, 'keyTerms.startupPeriod') ? `${get(campaign, data.value)} months, including a ${get(campaign, 'keyTerms.startupPeriod')}-month startup period for ramp up` : `${get(campaign, data.value)} months`;
         break;
-      case 'multiple':
-        summaryData.value = (
-        <>{get(campaign, data.value)}x <br />
-          {get(campaign, 'keyTerms.investmentMultipleSummary')
-          && (
-          <HtmlEditor
-            readOnly
-            content={(get(campaign, 'keyTerms.investmentMultipleSummary')
-              && get(campaign, 'keyTerms.investmentMultipleSummary'))}
-          />
-        )}</>
-        );
-        break;
       case 'priceCalculation':
         summaryData.label = `${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price`;
         summaryData.value = Helper.CurrencyFormat(get(campaign, data.value));
@@ -105,6 +92,18 @@ export class PortfolioStore {
         case 'hardCloseDate':
         summaryData.value = get(campaign, data.value) && <DateTimeFormat isCSTFormat datetime={get(campaign, data.value)} />;
         break;
+        case 'multiple':
+          summaryData.value = (
+          <>{get(campaign, data.value)}x <br />{get(campaign, 'keyTerms.investmentMultipleSummary')
+            && (
+            <HtmlEditor
+              readOnly
+              content={(get(campaign, 'keyTerms.investmentMultipleSummary')
+                && get(campaign, 'keyTerms.investmentMultipleSummary'))}
+            />
+          )}</>
+          );
+          break;
       default:
         summaryData.value = get(campaign, data.value);
         break;
