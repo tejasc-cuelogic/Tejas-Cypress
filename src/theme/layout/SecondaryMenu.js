@@ -75,7 +75,7 @@ class SecondaryMenu extends Component {
 
   render() {
     const {
-      navItems, match, refMatch, location, vertical,
+      navItems, match, history, refMatch, location, vertical,
       noinvert, attached, className, stepsStatus, addon, heading,
       force2ary, navCustomClick, responsiveVars,
     } = this.props;
@@ -111,7 +111,7 @@ class SecondaryMenu extends Component {
               stepsStatus={stepsStatus}
               navCustomClick={navCustomClick}
             />
-            {showMoreMenu && <Dropdown selectOnBlur={false} onChange={(e, data) => this.props.history.push(data.value)} text="More..." options={options} className="more-items link item" />}
+            {showMoreMenu && <Dropdown selectOnBlur={false} onChange={(e, data) => history.replace(`${match.url}/${data.value}`)} text="More..." options={options} className="more-items link item" />}
             {this.props.rightLabel}
           </Menu>
         </Responsive>
