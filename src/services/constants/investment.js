@@ -260,7 +260,7 @@ export const INVESTMENT_SUMMARY_META = [
   {
     label: 'Securities',
     key: 'securities',
-    value: 'keyterms.securities',
+    value: 'keyTerms.securities',
     isMobile: true,
     for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE', 'SAFE', 'CONVERTIBLE_NOTES', 'EQUITY', 'REAL_ESTATE', 'FUNDS'],
   },
@@ -269,19 +269,12 @@ export const INVESTMENT_SUMMARY_META = [
     key: 'expectedOpsDate',
     value: 'offering.launch.expectedOpsDate',
     isMobile: true,
-    for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE', 'SAFE', 'CONVERTIBLE_NOTES', 'EQUITY', 'REAL_ESTATE', 'FUNDS'],
+    for: ['TERM_NOTE', 'REVENUE_SHARING_NOTE', 'EQUITY', 'REAL_ESTATE', 'FUNDS'],
   },
   {
     label: 'Investment Multiple',
     key: 'multiple',
     value: 'closureSummary.keyTerms.multiple',
-    isMobile: true,
-    for: ['REVENUE_SHARING_NOTE'],
-  },
-  {
-    label: 'Investment Multiple Summary',
-    key: 'investmentMultipleSummary',
-    value: 'keyTerms.investmentMultipleSummary',
     isMobile: true,
     for: ['REVENUE_SHARING_NOTE'],
   },
@@ -307,7 +300,7 @@ export const INVESTMENT_SUMMARY_META = [
     for: ['SAFE', 'CONVERTIBLE_NOTES'],
   },
   {
-    label: 'preferredEquityUnit',
+    label: '',
     key: 'priceCalculation',
     value: 'closureSummary.keyTerms.priceCalculation',
     isMobile: true,
@@ -339,7 +332,7 @@ export const INVESTMENT_SUMMARY_META = [
     key: 'revSharePercentageDescription',
     value: 'keyTerms.revSharePercentageDescription',
     isMobile: false,
-    for: ['TERM_NOTE'],
+    for: ['REVENUE_SHARING_NOTE'],
   },
   {
     label: 'Maturity',

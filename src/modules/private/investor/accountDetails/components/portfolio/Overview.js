@@ -3,7 +3,7 @@ import { includes, get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Grid, Statistic, Button, Divider, Icon } from 'semantic-ui-react';
-import { AccTypeTitle, InlineLoader, IframeModal } from '../../../../../../theme/shared';
+import { AccTypeTitle, InlineLoader, IframeModal, PopUpModal } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
 import { DataFormatter } from '../../../../../../helper';
@@ -108,36 +108,20 @@ class Overview extends Component {
               <div className="table-wrapper">
                 <Table definition basic="very" className={isMobile ? 'without-border-shadow' : ''}>
                   <Table.Body>
-                    {overviewSummaryMeta.map(data => (
-                      <Table.Row verticalAlign="top" className={isMobile ? 'pt-0' : ''}>
-                        <Table.Cell width={5}>{data.label}</Table.Cell>
-                        <Table.Cell>{data.value}</Table.Cell>
-                      </Table.Row>
-                    ))}
-                    {/* {campaignStatus.isPreferredEquity
+                    {campaign && campaign.keyTerms && overviewSummaryMeta.map(data => (
+                      data.value
                       && (
-                        <>
-                          <Table.Row verticalAlign="top">
-                            <Table.Cell>{preferredEquityUnit}</Table.Cell>
-                            <Table.Cell>
-                              {get(campaign, 'closureSummary.keyTerms.priceCalculation')
-                                ? Helper.CurrencyFormat(get(campaign, 'closureSummary.keyTerms.priceCalculation'))
-                                : 'N/A'
-                              }
-                            </Table.Cell>
-                          </Table.Row>
-                          <Table.Row verticalAlign="top">
-                            <Table.Cell>Pre-Money Valuation</Table.Cell>
-                            <Table.Cell>
-                              {get(campaign, 'keyTerms.premoneyValuation')
-                                ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0)
-                                : 'N/A'
-                              }
-                            </Table.Cell>
-                          </Table.Row>
-                        </>
-                      )
-                    } */}
+                        <Table.Row verticalAlign="top" className={isMobile ? 'pt-0' : ''}>
+                          {data.tooltip
+                          ? (
+                          <Table.Cell width={5}>{' '}
+                            <PopUpModal position="top left" content={data.tooltip} customTrigger={<span className="popup-label">{data.label}</span>} showOnlyPopup={!isMobile} />
+                          </Table.Cell>
+                          ) : <Table.Cell width={5}>{data.label}</Table.Cell>
+                          }
+                          <Table.Cell>{data.value}</Table.Cell>
+                        </Table.Row>
+                      )))}
                     {(agreementIds && agreementIds.length) || (aggrementDocs && aggrementDocs.length)
                       ? (
                         <Table.Row verticalAlign="top" className={isMobile ? 'pb-0' : ''}>

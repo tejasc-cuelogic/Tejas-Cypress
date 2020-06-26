@@ -2,14 +2,15 @@ import React from 'react';
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { forEach, sortBy, get, times } from 'lodash';
+import { forEach, sortBy, get, times, capitalize } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator, DataFormatter } from '../../../../helper';
+import { FormValidator as Validator } from '../../../../helper';
 import { CANCEL_INVESTMENT, INVESTMENT_SUMMARY_META } from '../../../constants/investment';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_EQUITY_CLASS } from '../../../../constants/offering';
 import { getInvestorAccountPortfolio, getInvestmentDetails, investNowCancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
 import { userDetailsStore, uiStore, offeringCreationStore, campaignStore } from '../../index';
 import Helper from '../../../../helper/utility';
+import HtmlEditor from '../../../../modules/shared/HtmlEditor';
 import { DateTimeFormat } from '../../../../theme/shared';
 
 export class PortfolioStore {
@@ -59,18 +60,38 @@ export class PortfolioStore {
   };
 
   @action
-  getOverviewSummaryData = (data, type) => {
+  getOverviewSummaryData = (data) => {
     const { campaign } = campaignStore;
     const summaryData = { ...data };
     switch (data.key) {
       case 'securities':
-        summaryData.value = this.getSecurityTitle(type);
+        summaryData.value = this.getSecurityTitle(get(campaign, data.value));
         break;
       case 'expectedOpsDate':
-        summaryData.value = DataFormatter.getDateAsPerTimeZone(data.value, false, true, false, undefined, 'CST', true);
+        summaryData.value = get(campaign, data.value) && <DateTimeFormat isCSTFormat datetime={get(campaign, data.value)} />;
+        break;
+      case 'maturity':
+        summaryData.value = get(campaign, 'keyTerms.startupPeriod') ? `${get(campaign, data.value)} months, including a ${get(campaign, 'keyTerms.startupPeriod')}-month startup period for ramp up` : `${get(campaign, data.value)} months`;
         break;
       case 'multiple':
-        summaryData.value = `${get(campaign, data.value)}x`;
+        summaryData.value = (
+        <>{get(campaign, data.value)}x <br />
+          {get(campaign, 'keyTerms.investmentMultipleSummary')
+          && (
+          <HtmlEditor
+            readOnly
+            content={(get(campaign, 'keyTerms.investmentMultipleSummary')
+              && get(campaign, 'keyTerms.investmentMultipleSummary'))}
+          />
+        )}</>
+        );
+        break;
+      case 'priceCalculation':
+        summaryData.label = `${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price`;
+        summaryData.value = Helper.CurrencyFormat(get(campaign, data.value));
+        break;
+      case 'premoneyValuation':
+        summaryData.value = Helper.CurrencyFormat(get(campaign, data.value), 0);
         break;
       case 'interestRate':
         summaryData.value = `${get(campaign, data.value)}%`;
@@ -79,10 +100,10 @@ export class PortfolioStore {
         summaryData.value = `${get(campaign, data.value)}%`;
         break;
       case 'securitiesOwnershipPercentage':
-        summaryData.value = `${data.value}% equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`;
+        summaryData.value = `${get(campaign, data.value)}% equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`;
         break;
         case 'hardCloseDate':
-        summaryData.value = <DateTimeFormat isCSTFormat datetime={get(campaign, data.value)} />;
+        summaryData.value = get(campaign, data.value) && <DateTimeFormat isCSTFormat datetime={get(campaign, data.value)} />;
         break;
       default:
         summaryData.value = get(campaign, data.value);
@@ -93,14 +114,12 @@ export class PortfolioStore {
 
   @action
   setOverviewSummaryData = (type) => {
-    let overviewSummaryMetaData = {};
-    const overviewSummaryMetaDataArr = [];
-    let dataFor = [];
+    const overviewSummaryMetaData = [];
     INVESTMENT_SUMMARY_META.map((data) => {
-      dataFor = data.for.includes(type);
-      overviewSummaryMetaData = this.getOverviewSummaryData(data, type);
-      overviewSummaryMetaDataArr.push(overviewSummaryMetaData);
-      return dataFor;
+      if (data.for.includes(type)) {
+        overviewSummaryMetaData.push(this.getOverviewSummaryData(data));
+      }
+      return overviewSummaryMetaData;
     });
     this.overviewSummaryMeta = overviewSummaryMetaData;
   }
