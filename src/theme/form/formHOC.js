@@ -13,13 +13,10 @@ import Helper from '../../helper/utility';
 
 function formHoc(WrappedComponent, metaInfo) {
   // eslint-disable-next-line no-unused-expressions
-
   return inject(metaInfo.store, 'nsUiStore')(observer((class extends React.Component {
     constructor(props) {
       super(props);
-      if (metaInfo.form && metaInfo.store) {
-        this.fieldsData = this.props[metaInfo.store][metaInfo.form].fields;
-      }
+      this.fieldsData = this.props[metaInfo.store][metaInfo.form].fields;
     }
 
     Input = (name, props) => {
