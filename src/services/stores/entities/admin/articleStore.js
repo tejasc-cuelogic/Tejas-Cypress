@@ -545,7 +545,7 @@ export class ArticleStore extends DataModelStore {
 
   setMiscFormData = (data) => {
     this.ARTICLE_MISC_FRM = Validator.setFormData(this.ARTICLE_MISC_FRM, data);
-    const multiForm = this.getAction('ARTICLE_MISC_FRM', 'isMultiForm');
+    const multiForm = this.getActionType('ARTICLE_MISC_FRM', 'isMultiForm');
     this.ARTICLE_MISC_FRM = Validator.validateForm(this.ARTICLE_MISC_FRM, multiForm, false, false);
   }
 

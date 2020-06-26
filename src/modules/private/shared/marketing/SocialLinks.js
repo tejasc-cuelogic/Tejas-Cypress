@@ -1,17 +1,9 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 import { capitalize } from 'lodash';
-import { withRouter } from 'react-router-dom';
 import { Divider, Header, Form, Button } from 'semantic-ui-react';
-import formHOC from '../../../../theme/form/formHOC';
 
-const metaInfo = {
-  store: ['articleStore'],
-  form: '',
-};
 function SocialLinks(props) {
   const { smartElement, store, isReadOnly, form, uploadPath, handleFormSubmit, loading } = props;
-  metaInfo.form = form;
   const commonProps = field => ({
     fielddata: props[store][form].fields[field],
     changed: (e, result) => props[store].formChange(e, result, form),
@@ -31,14 +23,18 @@ function SocialLinks(props) {
           </>
         ))
       }
-      <div className="sticky-actions">
-        <Button.Group>
-          <Button disabled={loading} loading={loading} primary onClick={handleFormSubmit} color="green" className="relaxed">Save</Button>
-        </Button.Group>
-      </div>
+      {handleFormSubmit
+        && (
+          <div className="sticky-actions">
+            <Button.Group>
+              <Button disabled={loading} loading={loading} primary onClick={handleFormSubmit} color="green" className="relaxed">Save</Button>
+            </Button.Group>
+          </div>
+        )
+      }
       <Divider section />
     </>
   );
 }
 
-export default (withRouter(formHOC(observer(SocialLinks), metaInfo)));
+export default SocialLinks;
