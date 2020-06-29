@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get, camelCase, orderBy, find, filter } from 'lodash';
+import { get, camelCase, orderBy, filter } from 'lodash';
 import { withRouter, Route } from 'react-router-dom';
 import scrollIntoView from 'scroll-into-view';
 import { Responsive, Visibility, Container, Grid, Menu, Divider, Button, Icon } from 'semantic-ui-react';
@@ -14,8 +14,6 @@ import { NavItems } from '../../../../theme/layout/NavigationItems';
 import HtmlEditor from '../../../shared/HtmlEditor';
 import CollectionMetaTags from '../components/CollectionMetaTags';
 import AboutGallery from '../components/AboutGallery';
-
-import { UPLOADS_CONFIG } from '../../../../constants/aws';
 
 const LoadMoreBtn = ({ action, param, isMobile }) => (
   <div id="loadMore" className={`${isMobile ? 'mb-20 mt-40' : 'mb-30 mt-30'}`} data-cy={param}>
@@ -128,15 +126,6 @@ class CollectionDetails extends Component {
     this.props.navStore.setMobileNavStatus(calculations);
   }
 
-  getOgDataFromSocial = (obj, type, att) => {
-    const data = find(obj, o => o.type === type);
-    let val = get(data, att) || '';
-    if (att === 'featuredImageUpload.url') {
-      val = (val.includes('https://') || val.includes('http://')) ? val : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(val)}`;
-    }
-    return val;
-  };
-
   render() {
     const { collectionStore, uiStore, nsUiStore, location, match } = this.props;
     const { loadingArray } = nsUiStore;
@@ -185,7 +174,7 @@ class CollectionDetails extends Component {
         {collectionDetails
           && <CollectionMetaTags collection={collectionDetails} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
-        {!isMobile && collectionHeaderComponent}
+        {!isMobile && !isTablet && collectionHeaderComponent}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
@@ -205,7 +194,7 @@ class CollectionDetails extends Component {
           <Container>
             <section>
               <Grid centered>
-                {!isMobile
+                {!isMobile && !isTablet
                   && (
                     <Grid.Column width={4} className="left-align">
                       <div className={`collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu `}>
@@ -286,7 +275,7 @@ class CollectionDetails extends Component {
                                 <>
                                   {i !== 0 && <Divider hidden section />}
                                   <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
-                                  <CustomContent content={c.customValue} isTablet={isTablet} />
+                                  <CustomContent content={c.customValue} isTablet={isTablet} isMobile={isMobile} />
                                 </>
                               )
                               : null

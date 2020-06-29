@@ -8,6 +8,7 @@ import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/a
 import { Image64, InlineLoader } from '../../../../../theme/shared';
 import Actions from './Actions';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
+import InsightsSocial from './InsightsSocial';
 
 
 @inject('articleStore', 'userStore', 'uiStore', 'collectionStore')
@@ -51,7 +52,7 @@ export default class EditArticle extends Component {
 
   handleDelDoc = () => {
     const { id } = this.props.match.params;
-    this.props.articleStore.removeMedia('featuredImage', id);
+    this.props.articleStore.removeMediaUpload('featuredImage', id);
   }
 
   handleresetProfilePhoto = (field) => {
@@ -132,6 +133,11 @@ export default class EditArticle extends Component {
                   <Card fluid>
                     <Card.Content>
                       <AddToCollection referenceId={this.props.match.params.id} />
+                    </Card.Content>
+                  </Card>
+                  <Card fluid>
+                    <Card.Content>
+                      <InsightsSocial {...this.props} />
                     </Card.Content>
                   </Card>
                 </Form>

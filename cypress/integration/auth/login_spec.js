@@ -1,6 +1,6 @@
 import { goToLoginScreen } from './utility/login.utility';
 
-describe('Log In', () => {
+describe.skip('Log In', () => {
   beforeEach(() => {
     cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
     // cy.applicationUnlock();

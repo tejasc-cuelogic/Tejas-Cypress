@@ -1,53 +1,56 @@
-import { observable, action, computed, toJS } from 'mobx';
+import { action, computed, toJS, decorate, observable } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
-import { map, kebabCase, sortBy, remove, orderBy, filter, get, join } from 'lodash';
+import { map, kebabCase, sortBy, remove, orderBy, filter, get, join, pick } from 'lodash';
 import isArray from 'lodash/isArray';
 import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { ARTICLES, THUMBNAIL_EXTENSIONS } from '../../../constants/admin/article';
+import { ARTICLES, THUMBNAIL_EXTENSIONS, SOCIAL } from '../../../constants/admin/article';
 import { getArticleDetailsBySlug, adminDeleteArticle, allInsightArticles, getArticleDetails, adminInsightsArticle, adminCreateArticle, adminUpdateArticleInfo, adminInsightArticlesListByFilter } from '../../queries/insightArticle';
 import { getCategories, adminCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 import { uiStore, commonStore } from '../..';
 import { fileUpload } from '../../../actions';
+import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 
-export class ArticleStore {
-  @observable data = [];
+export class ArticleStore extends DataModelStore {
+  data = [];
 
-  @observable Categories = [];
+  Categories = [];
 
-  @observable article = null;
+  article = null;
 
-  @observable ARTICLE_FRM = Validator.prepareFormObject(ARTICLES);
+  ARTICLE_FRM = Validator.prepareFormObject(ARTICLES);
 
-  @observable featuredData = [];
+  ARTICLE_MISC_FRM = Validator.prepareFormObject(SOCIAL);
 
-  @observable featuredCategoryId = '406735f5-f83f-43f5-8272-180a1ea570b0';
+  featuredData = [];
 
-  @observable filters = false;
+  featuredCategoryId = '406735f5-f83f-43f5-8272-180a1ea570b0';
 
-  @observable currentArticleId = null;
+  filters = false;
 
-  @observable globalAction = '';
+  currentArticleId = null;
 
-  @observable allInsightsList = [];
+  globalAction = '';
 
-  @observable db = [];
+  allInsightsList = [];
 
-  @observable selectedRecords = [];
+  db = [];
 
-  @observable isReadOnly = true;
+  selectedRecords = [];
 
-  @observable requestState = {
+  isReadOnly = true;
+
+  requestState = {
     filters: false,
     search: {},
   };
 
-  @observable sortOrder = {
+  sortOrder = {
     column: null,
     direction: 'asc',
   }
@@ -70,7 +73,6 @@ export class ArticleStore {
     this.initiateSearch(srchParams);
   }
 
-  @action
   initiateFilters = () => {
     const { title } = this.requestState.search;
     if (title) {
@@ -82,17 +84,14 @@ export class ArticleStore {
     }
   }
 
-  @action
   setGlobalAction = (name, globalAction) => {
     this[name] = globalAction;
   }
 
-  @action
   toggleSearch = () => {
     this.filters = !this.filters;
   }
 
-  @action
   requestAllArticles = (isPublic = true, sortAsc = false, categoryId = null) => {
     const apiClient = isPublic ? clientPublic : client;
     this.data = graphql({
@@ -103,7 +102,6 @@ export class ArticleStore {
     });
   }
 
-  @action
   getSingleInsightAdmin = (id) => {
     this.article = graphql({
       client,
@@ -113,12 +111,12 @@ export class ArticleStore {
       onFetch: (res) => {
         if (res && res.adminInsightsArticle) {
           this.setForm(res.adminInsightsArticle);
+          this.setMiscFormData(res.adminInsightsArticle);
         }
       },
     });
   }
 
-  @action
   setFormData = (id) => {
     const formData = this.adminInsightList.find(obj => obj.id === id);
     this.ARTICLE_FRM = Validator.setFormData(
@@ -132,7 +130,6 @@ export class ArticleStore {
     Validator.validateForm(this.ARTICLE_FRM);
   }
 
-  @action
   setForm = (res) => {
     Validator.validateForm(this.ARTICLE_FRM);
     // if (!this.article.loading) {
@@ -151,12 +148,10 @@ export class ArticleStore {
     // }
   }
 
-  @action
   setThumbnail(attr, value, field) {
     this.ARTICLE_FRM.fields[field][attr] = value;
   }
 
-  @action
   save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
     uiStore.setProgress();
     this.ARTICLE_FRM.fields.articleStatus.value = status;
@@ -165,6 +160,11 @@ export class ArticleStore {
       delete (data.minuteRead);
     }
     const payload = { ...data };
+
+    if (id === 'new') {
+      payload.visible = true;
+    }
+
     payload.tags = payload.tags.split(',').filter(tag => tag !== '');
     client
       .mutate({
@@ -182,13 +182,12 @@ export class ArticleStore {
       });
   });
 
-  @action
   toggleArticleVisibility = (id, payload) => {
     uiStore.setProgress();
     client
       .mutate({
-      mutation: adminUpdateArticleInfo,
-      variables: { payload, id },
+        mutation: adminUpdateArticleInfo,
+        variables: { payload, id },
       }).then(() => {
         Helper.toast('Article visibility Updated successfully.', 'success');
       }).catch(() => {
@@ -201,7 +200,6 @@ export class ArticleStore {
 
   sortBydate = data => orderBy(data, o => (o.updated.date ? new Date(o.updated.date) : ''), ['desc'])
 
-  @action
   sortArticlesByFilter = () => {
     this.allInsightsList = graphql({
       client,
@@ -215,13 +213,12 @@ export class ArticleStore {
     });
   }
 
-  @action
   setSortingOrder = (column = null, direction = null) => {
     this.sortOrder.column = column;
     this.sortOrder.direction = direction;
   }
 
-  @computed get adminInsightList() {
+  get adminInsightList() {
     if (this.sortOrder.column && this.sortOrder.direction && this.db) {
       return orderBy(
         this.db,
@@ -235,20 +232,19 @@ export class ArticleStore {
     return this.db || [];
   }
 
-  @computed get getInsightArticleListing() {
+  get getInsightArticleListing() {
     return (this.allInsightsList.data && (toJS(this.allInsightsList.data.insightArticlesByCategoryId))) || [];
   }
 
-  @computed get adminInsightArticleListing() {
+  get adminInsightArticleListing() {
     return (this.allInsightsList && this.allInsightsList.data
       && this.allInsightsList.data.adminInsightArticlesListByFilter) || [];
   }
 
-  @computed get articleListingLoader() {
+  get articleListingLoader() {
     return this.allInsightsList.loading;
   }
 
-  @action
   deleteArticle = id => new Promise((resolve, reject) => {
     uiStore.setProgress();
     client
@@ -264,7 +260,6 @@ export class ArticleStore {
       }).finally(() => uiStore.setProgress(false));
   });
 
-  @action
   featuredRequestArticles = () => {
     this.featuredData = graphql({
       client: clientPublic,
@@ -274,12 +269,10 @@ export class ArticleStore {
     });
   }
 
-  @action
   getArticle = (id) => {
     this.article = graphql({ client: clientPublic, query: getArticleDetails, variables: { id } });
   }
 
-  @action
   getArticleDetailsBySlug = (slug) => {
     this.article = graphql({
       client: clientPublic,
@@ -288,29 +281,28 @@ export class ArticleStore {
     });
   }
 
-  @computed get InsightArticles() {
+  get InsightArticles() {
     return (toJS(this.data.data.insightArticlesByCategoryId)
       || toJS(this.data.data.getInsightsArticles)) || [];
   }
 
-  @computed get InsightFeaturedArticles() {
+  get InsightFeaturedArticles() {
     const featured = get(this.featuredData, 'data.getInsightsArticles') || [];
     return filter(featured, a => a.isFeatured);
   }
 
-  @computed get ArticlesDetails() {
+  get ArticlesDetails() {
     return (this.article.data && toJS(this.article.data.insightArticleBySlug)) || null;
   }
 
-  @computed get singleArticlesDetails() {
+  get singleArticlesDetails() {
     return (this.article.data && toJS(this.article.data.adminInsightsArticle)) || null;
   }
 
-  @computed get articleLoading() {
+  get articleLoading() {
     return this.article.loading;
   }
 
-  @action
   getCategoryList = (isPublic = true, types = ['INSIGHTS']) => {
     const apiClient = isPublic ? clientPublic : client;
     this.Categories = graphql({
@@ -321,7 +313,7 @@ export class ArticleStore {
     });
   }
 
-  @computed get InsightCategories() {
+  get InsightCategories() {
     const iMap = { categoryName: 'title', id: 'to' };
     const categories = (this.Categories.data && toJS(this.Categories.data.categories)) || [];
     const categoryRoutes = map(categories, i => mapKeys(i, (v, k) => iMap[k] || k));
@@ -329,17 +321,15 @@ export class ArticleStore {
     return categoryRoutesModified;
   }
 
-  @computed get loading() {
+  get publicArticleloading() {
     return (this.data.loading || this.featuredData.loading);
   }
 
-  @action
   htmlContentChange = (field, value) => {
     this.ARTICLE_FRM.fields[field].value = value;
     Validator.validateForm(this.ARTICLE_FRM);
   }
 
-  @action
   articleChange = (e, result) => {
     if (result && result.type === 'checkbox') {
       this.ARTICLE_FRM = Validator.onChange(
@@ -374,17 +364,16 @@ export class ArticleStore {
     }
   }
 
-  @action
   creteSlug = (formName, field) => {
     const { value } = this[formName].fields[field];
     this[formName].fields.slug.value = kebabCase(value);
   }
 
-  @computed get getSelectedRecords() {
+  get getSelectedRecords() {
     return toJS(this.selectedRecords);
   }
 
-  @action selectRecordsOnPage = (isChecked) => {
+  selectRecordsOnPage = (isChecked) => {
     if (isChecked) {
       const data = this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)
         || [];
@@ -400,7 +389,6 @@ export class ArticleStore {
     }
   }
 
-  @action
   addSelectedRecords = (id) => {
     this.isReadOnly = false;
     if (!this.selectedRecords.includes(id)) {
@@ -408,7 +396,6 @@ export class ArticleStore {
     }
   }
 
-  @action
   removeSelectedRecords = (id) => {
     remove(this.selectedRecords, e => e === id);
     if (this.selectedRecords && this.selectedRecords.length <= 0) {
@@ -416,22 +403,20 @@ export class ArticleStore {
     }
   }
 
-  @computed get selectedRecordsCount() {
+  get selectedRecordsCount() {
     return this.selectedRecords.length || 0;
   }
 
-  @action
   pageRequest = ({ skip, page }) => {
     this.requestState.displayTillIndex = this.requestState.perPage * page;
     this.requestState.page = page;
     this.requestState.skip = skip;
   }
 
-  @computed get count() {
+  get count() {
     return (this.db && this.db.length) || 0;
   }
 
-  @action
   setDb = (data) => {
     const d = map(data, (dd) => {
       const de = { categoryId: dd.categoryId, ...dd };
@@ -440,7 +425,7 @@ export class ArticleStore {
     this.db = ClientDb.initiateDb(d, true);
   }
 
-  @computed get allInsightsListing() {
+  get allInsightsListing() {
     return (this.allInsightsList && this.allInsightsList.data
       && this.allInsightsList.data.adminInsightArticlesListByFilter
       && toJS(sortBy(
@@ -449,7 +434,7 @@ export class ArticleStore {
       ).slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
   }
 
-  @computed get categoriesDropdown() {
+  get categoriesDropdown() {
     const categoriesArray = [];
     if (this.Categories.data && this.Categories.data.adminCategories) {
       this.Categories.data.adminCategories.map((ele) => {
@@ -461,7 +446,6 @@ export class ArticleStore {
     return null;
   }
 
-  @action
   setFileUploadData = (form, name, files, id) => {
     let fileField = '';
     fileField = this[form].fields[name];
@@ -483,26 +467,7 @@ export class ArticleStore {
       }));
   }
 
-  @action
-  uploadMedia = (name, form = 'ARTICLE_FRM', id) => {
-    const fileObj = {
-      obj: this[form].fields[name].base64String,
-      // type: this[form].fields[name].meta.type,
-      name: this[form].fields[name].fileName,
-    };
-    fileUpload.uploadToS3(fileObj, `insights/${id}`)
-      .then((res) => {
-        Helper.toast(`${this[form].fields[name].label} uploaded successfully.`, 'success');
-        this.resetFormField(form, name, { fileName: fileObj.name, location: res });
-      })
-      .catch((err) => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        window.logger(err);
-      });
-  }
-
-  @action
-  removeMedia = (name, id) => {
+  removeMediaUpload = (name, id) => {
     let filename = '';
     filename = this.ARTICLE_FRM.fields[name].value;
     commonStore.deleteCdnS3File(`insights/${id}/${filename}`)
@@ -519,7 +484,6 @@ export class ArticleStore {
       });
   }
 
-  @action
   resetFormField = (form, field, fileObj, RemoveIndex) => {
     if (fileObj && Array.isArray(toJS(this.ARTICLE_FRM.fields[field].preSignedUrl))) {
       this.ARTICLE_FRM.fields[field].preSignedUrl.push(fileObj.location);
@@ -546,7 +510,6 @@ export class ArticleStore {
     };
   }
 
-  @action
   resetThumbnail = (field) => {
     const attributes = ['src', 'error', 'meta'];
     attributes.forEach((val) => {
@@ -558,7 +521,42 @@ export class ArticleStore {
     });
   }
 
-  @action
+  adminUpdateSocialLinks = id => new Promise((resolve, reject) => {
+    uiStore.setProgress(true);
+    const payload = {
+      ...pick(Validator.evaluateFormData(this.ARTICLE_FRM.fields), ['title', 'articleStatus']),
+      ...this.evaluateFormFieldToArray(this.ARTICLE_MISC_FRM.fields, false),
+    };
+    client
+      .mutate({
+        mutation: adminUpdateArticleInfo,
+        variables: {
+          payload, id, isPartialData: true,
+        },
+      }).then(() => {
+        Helper.toast('Category Saved successfully.', 'success');
+        uiStore.setProgress(false);
+        resolve();
+      }).catch(() => {
+        uiStore.setProgress(false);
+        Helper.toast('Error while Saving Category', 'error');
+        reject();
+      });
+  })
+
+  getActionType = (formName, getField = 'actionType') => {
+    const metaDataMapping = {
+      [formName]: { isMultiForm: true },
+    };
+    return metaDataMapping[formName][getField];
+  }
+
+  setMiscFormData = (data) => {
+    this.ARTICLE_MISC_FRM = Validator.setFormData(this.ARTICLE_MISC_FRM, data);
+    const multiForm = this.getActionType('ARTICLE_MISC_FRM', 'isMultiForm');
+    this.ARTICLE_MISC_FRM = Validator.validateForm(this.ARTICLE_MISC_FRM, multiForm, false, false);
+  }
+
   handleVerifyFileExtension = (fileExt) => {
     if (THUMBNAIL_EXTENSIONS.indexOf(fileExt) === -1) {
       const field = 'error';
@@ -567,8 +565,6 @@ export class ArticleStore {
     }
   }
 
-
-  @action
   removeUploadedData(field) {
     const { fileId } = this.ARTICLE_FRM.fields[field];
     fileUpload.removeUploadedData(fileId).then(action(() => {
@@ -582,11 +578,78 @@ export class ArticleStore {
       .catch(() => { });
   }
 
-  @action
   reset = () => {
     Validator.resetFormData(this.ARTICLE_FRM);
   }
 }
 
+decorate(ArticleStore, {
+  ...decorateDefault,
+  data: observable,
+  Categories: observable,
+  article: observable,
+  ARTICLE_FRM: observable,
+  ARTICLE_MISC_FRM: observable,
+  featuredData: observable,
+  featuredCategoryId: observable,
+  filters: observable,
+  currentArticleId: observable,
+  globalAction: observable,
+  allInsightsList: observable,
+  db: observable,
+  selectedRecords: observable,
+  isReadOnly: observable,
+  requestState: observable,
+  sortOrder: observable,
+  initiateFilters: action,
+  setGlobalAction: action,
+  toggleSearch: action,
+  requestAllArticles: action,
+  getSingleInsightAdmin: action,
+  setFormData: action,
+  setForm: action,
+  setThumbnail: action,
+  save: action,
+  toggleArticleVisibility: action,
+  sortArticlesByFilter: action,
+  setSortingOrder: action,
+  deleteArticle: action,
+  featuredRequestArticles: action,
+  getArticle: action,
+  getArticleDetailsBySlug: action,
+  htmlContentChange: action,
+  articleChange: action,
+  creteSlug: action,
+  selectRecordsOnPage: action,
+  addSelectedRecords: action,
+  removeSelectedRecords: action,
+  setDb: action,
+  pageRequest: action,
+  setFileUploadData: action,
+  removeMediaUpload: action,
+  resetFormField: action,
+  resetThumbnail: action,
+  handleVerifyFileExtension: action,
+  removeUploadedData: action,
+  reset: action,
+  getCategoryList: action,
+  adminUpdateSocialLinks: action,
+  getInsightArticleListing: computed,
+  adminInsightArticleListing: computed,
+  articleListingLoader: computed,
+  InsightArticles: computed,
+  InsightFeaturedArticles: computed,
+  ArticlesDetails: computed,
+  singleArticlesDetails: computed,
+  articleLoading: computed,
+  InsightCategories: computed,
+  getSelectedRecords: computed,
+  selectedRecordsCount: computed,
+  count: computed,
+  allInsightsListing: computed,
+  categoriesDropdown: computed,
+  adminInsightList: computed,
+  publicArticleloading: computed,
+});
 
 export default new ArticleStore();

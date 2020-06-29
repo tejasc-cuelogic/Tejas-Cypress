@@ -121,7 +121,7 @@ Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
       }
 
       if (!dataSet[key].skip && !dataSet[key].isNotType) {
-        cySelector.type(dataSet[key].value);
+        cySelector.type(dataSet[key].value, { force: true });
       }
 
       if (!dataSet[key].skip && dataSet[key].isCheckBox) {

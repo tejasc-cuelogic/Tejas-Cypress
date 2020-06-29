@@ -41,6 +41,10 @@ query adminInsightsArticle($id: ID!) {
     author
     slug
     articleStatus
+    social {
+      type url blurb shareLink
+      featuredImageUpload { id url fileName isPublic }
+    }
     updated {
       by
       date
@@ -69,6 +73,12 @@ query insightArticleBySlug($slug:String ) {
     title
     featuredImage
     content
+    category
+    tags
+    social {
+      type url blurb shareLink
+      featuredImageUpload { id url fileName isPublic }
+    }
   }
 }
 `;

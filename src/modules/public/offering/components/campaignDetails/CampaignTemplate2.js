@@ -121,7 +121,7 @@ class CampaignTemplate2 extends Component {
                           <>
                             {index !== 0 && <Divider hidden section />}
                             <div className={`${index !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
-                            <CustomContent content={c.customValue} isTablet={isTablet} />
+                            <CustomContent isOffering content={c.customValue} isTablet={isTablet} />
                           </>
                         )
                         : null
