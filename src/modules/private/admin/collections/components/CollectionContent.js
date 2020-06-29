@@ -69,6 +69,7 @@ class CollectionContent extends Component {
 
   render() {
     const { smartElement, collectionStore, uiStore } = this.props;
+    const { htmlEditorImageLoading } = this.props;
     const index = parseInt(this.props.match.params.index, 10) - 1 || 0;
     const { COLLECTION_CONTENT_FRM, collectionId, collectionMapping } = collectionStore;
     const { value: contentTypeValue } = COLLECTION_CONTENT_FRM.fields.content[index].contentType;
@@ -150,7 +151,7 @@ class CollectionContent extends Component {
               <>
                 <div className="sticky-actions">
                   <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
-                    <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                    <Button disabled={!this.state.editable || htmlEditorImageLoading || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
                   </Button.Group>
                 </div>
               </>
