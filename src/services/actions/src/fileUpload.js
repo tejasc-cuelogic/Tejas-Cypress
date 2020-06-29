@@ -80,11 +80,11 @@ export class FileUpload {
     field.rule = 'required';
   }
 
-  uploadToS3 = (fileObj, dir, fullUrl = false) => new Promise((resolve, reject) => {
+  uploadToS3 = (fileObj, dir, fullUrl = false, allowGif = false) => new Promise((resolve, reject) => {
     const key = `${dir}/${moment().unix()}_${Helper.sanitize(fileObj.name)}`;
     const dataToUpload = Helper.isBase64(fileObj.obj) ? Helper.b64toBlob(fileObj.obj)
       : fileObj.obj;
-    commonStore.getCdnSignedUrl(key).then((res) => {
+    commonStore.getCdnSignedUrl(key, allowGif).then((res) => {
       apiService.uploadOnS3(res.data.createCdnSignedUrl, dataToUpload, fileObj.type).then(() => resolve(fullUrl ? `${S3_BUCKET_URL}/${key}` : `${key}`))
         .catch(err => reject(err));
     }).catch(err => reject(err));
