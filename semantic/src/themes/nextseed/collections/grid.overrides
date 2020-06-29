@@ -264,8 +264,8 @@
                     padding-bottom: 0 !important;
                 }
                 .description{
-                    min-height: 80px !important;
-                    max-height: 100px !important;
+                    min-height: 50px !important;
+                    max-height: 82px !important;
                     transition: none !important;
                 }
             }
