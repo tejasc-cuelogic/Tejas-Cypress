@@ -60,7 +60,7 @@ export default class Insights extends Component {
   render() {
     const {
       InsightCategories,
-      loading,
+      publicArticleloading,
       InsightFeaturedArticles,
     } = this.props.articleStore;
     const settings = {
@@ -141,7 +141,7 @@ export default class Insights extends Component {
         </Responsive>
         <section>
           <Container>
-            {loading ? <InlineLoader /> : <InsightArticlesList />}
+            {publicArticleloading ? <InlineLoader /> : <InsightArticlesList />}
           </Container>
         </section>
       </>

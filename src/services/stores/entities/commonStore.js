@@ -92,11 +92,11 @@ export class CommonStore {
   });
 
   @action
-  getCdnSignedUrl = key => new Promise((resolve, reject) => {
+  getCdnSignedUrl = (key, allowGif = false) => new Promise((resolve, reject) => {
     client
       .mutate({
         mutation: createCdnSignedUrl,
-        variables: { key },
+        variables: { key, allowGif },
       })
       .then(res => resolve(res))
       .catch(() => {

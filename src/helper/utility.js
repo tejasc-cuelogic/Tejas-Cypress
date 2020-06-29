@@ -347,10 +347,11 @@ export class Utility {
     }
   };
 
-  validateImageExtension = (ext) => {
+  validateImageExtension = (ext, allowedGif = false) => {
+    const ALLOWED_IMAGE_EXTENSIONS = allowedGif ? [...IMAGE_UPLOAD_ALLOWED_EXTENSIONS, 'gif'] : IMAGE_UPLOAD_ALLOWED_EXTENSIONS;
     const obj = {
-      isInvalid: ext ? !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()) : true,
-      errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
+      isInvalid: ext ? !ALLOWED_IMAGE_EXTENSIONS.includes(ext.toLowerCase()) : true,
+      errorMsg: `Only ${ALLOWED_IMAGE_EXTENSIONS.join(', ')} extensions are allowed.`,
     };
     return obj;
   };
