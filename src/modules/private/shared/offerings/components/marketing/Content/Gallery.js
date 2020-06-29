@@ -102,6 +102,7 @@ function Gallery(props) {
   };
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const gallery = [...props.manageOfferingStore.GALLERY_FRM.fields.gallery];
+    console.log(arrayMove(gallery, oldIndex, newIndex));
     props.manageOfferingStore.reOrderHandle(arrayMove(gallery, oldIndex, newIndex), 'GALLERY_FRM', 'gallery');
     props.manageOfferingStore.setFieldValue('onDragSaveEnable', true);
   };
