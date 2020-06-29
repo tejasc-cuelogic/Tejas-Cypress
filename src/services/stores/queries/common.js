@@ -39,9 +39,10 @@ export const getBoxFileDetails = gql`
 `;
 
 export const createCdnSignedUrl = gql`
-  mutation createCdnSignedUrl($key: String!){
+  mutation createCdnSignedUrl($key: String!, $allowGif: Boolean){
     createCdnSignedUrl(
       key: $key
+      allowGif: $allowGif,
     )
   }
 `;
