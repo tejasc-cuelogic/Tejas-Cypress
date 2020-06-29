@@ -92,6 +92,10 @@ mutation adminCreateArticle($payload:  InsightsArticleInput!, $isPartial: Boolea
     category
     slug
     isFeatured
+    social {
+      type url blurb shareLink
+      featuredImageUpload { id url fileName isPublic }
+    }
   }
 }
 `;
@@ -104,6 +108,10 @@ mutation adminUpdateArticleInfo($id: ID!, $payload:  InsightsArticleInput!, $isP
     articleStatus
     category
     slug
+    social {
+      type url blurb shareLink
+      featuredImageUpload { id url fileName isPublic }
+    }
   }
 }
 `;

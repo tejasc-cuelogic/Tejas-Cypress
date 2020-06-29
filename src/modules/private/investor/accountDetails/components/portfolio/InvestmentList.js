@@ -225,7 +225,7 @@ const INVESTMENT_CARD_META = [
     getRowValue: value => `${value}%`,
     isMobile: true,
     isDesktop: true,
-    securityType: ['SAFE', 'CONVERTIBLE_NOTE'],
+    securityType: ['SAFE', 'CONVERTIBLE_NOTES'],
   },
   {
     label: 'Term',
@@ -280,7 +280,7 @@ const INVESTMENT_CARD_META = [
     getRowValue: value => `${value}`,
     isMobile: false,
     isDesktop: true,
-    securityType: ['SAFE', 'CONVERTIBLE_NOTE'],
+    securityType: ['SAFE', 'CONVERTIBLE_NOTES'],
   },
   {
     label: '',

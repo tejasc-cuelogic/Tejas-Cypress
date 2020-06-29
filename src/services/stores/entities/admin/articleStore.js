@@ -159,7 +159,10 @@ export class ArticleStore extends DataModelStore {
     if (data.minuteRead === null || data.minuteRead === '') {
       delete (data.minuteRead);
     }
-    const payload = { ...data };
+    const payload = {
+      ...data,
+      ...this.evaluateFormFieldToArray(this.ARTICLE_MISC_FRM.fields, false),
+    };
 
     if (id === 'new') {
       payload.visible = true;
@@ -579,7 +582,9 @@ export class ArticleStore extends DataModelStore {
   }
 
   reset = () => {
-    Validator.resetFormData(this.ARTICLE_FRM);
+    ['ARTICLE_FRM', 'ARTICLE_MISC_FRM'].forEach((form) => {
+      Validator.resetFormData(this[form]);
+    });
   }
 }
 

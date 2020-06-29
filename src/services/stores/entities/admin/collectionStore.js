@@ -620,20 +620,25 @@ class CollectionsStore extends DataModelStore {
   }
 
   collectionMappingMutation = (mutation, params) => new Promise(async (res, rej) => {
-    const variables = {
-      ...params,
-    };
-    try {
-      const data = await this.executeMutation({
-        mutation,
-        setLoader: mutation,
-        variables,
-      });
-      window.logger(data);
-      res();
-    } catch (error) {
-      rej(error);
-      Helper.toast('Something went wrong.', 'error');
+    if (!this.apiHit) {
+      this.setFieldValue('apiHit', true);
+      const variables = {
+        ...params,
+      };
+      try {
+        const data = await this.executeMutation({
+          mutation,
+          setLoader: mutation,
+          variables,
+        });
+        window.logger(data);
+        this.setFieldValue('apiHit', false);
+        res();
+      } catch (error) {
+        rej(error);
+        this.setFieldValue('apiHit', false);
+        Helper.toast('Something went wrong.', 'error');
+      }
     }
   });
 
