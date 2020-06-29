@@ -142,7 +142,7 @@ export default class CampaignHeaderPreview extends Component {
                         </Statistic.Value>
                       )
                     }
-                    {minFlagStatus
+                    {!headerBasicFields.toggleMeta.value.includes('FUNDINGRAISING_STATE') && minFlagStatus
                       && (
                         <Statistic.Label className="flag-status">
                           <Icon name="flag" /> Surpassed minimum goal

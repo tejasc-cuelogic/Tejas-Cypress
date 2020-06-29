@@ -85,7 +85,7 @@ class CampaignHeader extends Component {
             </Grid.Column>
             <Grid.Column>
               <Header as="h4">Hide Component</Header>
-              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: ' ' })}
+              {smartElement.FormCheckBox('toggleMeta', { defaults: true, toggle: true, containerclassname: 'ui list field', label: ' ' })}
             </Grid.Column>
           </Grid>
           <CampaignHeaderSocial />
