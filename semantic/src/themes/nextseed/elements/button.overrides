@@ -285,6 +285,10 @@
                     margin-left: 0;
                 }
             }
+            .secondary-label {
+                position: relative;
+                padding: 14px 0 14px 10px !important;
+            }
             &:focus, &:hover, &.active{
                 .details .ui.header i.icon{
                     color: @primary-one;
