@@ -419,9 +419,10 @@ export class ManageOfferingStore extends DataModelStore {
         } else if (notify) {
           Helper.toast(`${keyName ? startCase(keyName) : 'Offering'} has been saved successfully.`, 'success');
         }
-        offeringsStore.getOne(get(data, 'data.offeringUpsert.offeringSlug'), false);
-        uiStore.setProgress(false);
-        res();
+        offeringsStore.getOne(get(data, 'data.offeringUpsert.offeringSlug'), false).then(() => {
+          uiStore.setProgress(false);
+          res();
+        });
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
