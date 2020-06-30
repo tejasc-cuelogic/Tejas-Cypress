@@ -1,9 +1,10 @@
 import { registerApiCall, enterCodeAndConfirm } from '../../../../../support/common';
 import { fillSignUpFormAndProceed, confirmEmailAddressScreen } from '../../basicSignUp/utility/basicSignup.utlity';
 
-export const fillLegalDetailsForm = (legalDetails = undefined) => {
+export const fillLegalDetailsForm = async(legalDetails = undefined) => {
   cy.fixture('investor/identityVerification.json').then((legalData) => {
-    const legalDetailObject = legalDetails || legalData.legalDetailsMeta;
+    const legalDetailObject = legalData.legalDetailsMeta || legalDetails;
+    cy.log('legalDetailObject', legalDetailObject);
     cy.formFill(legalDetailObject, 'cip-form');
   });
 };

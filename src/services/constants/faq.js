@@ -12,7 +12,7 @@ export const FAQ = {
     value: '', label: 'Answer', error: undefined, rule: 'required', placeHolder: 'Describe the answer',
   },
   faqType: {
-    value: null, label: 'FAQ Type', placeHolder: '', error: undefined, rule: 'optional',
+    value: null, label: 'FAQ Type', placeHolder: '', error: undefined, rule: 'required',
   },
   // author: {
   //   value: '', label: 'Author', error: undefined, rule: 'required',

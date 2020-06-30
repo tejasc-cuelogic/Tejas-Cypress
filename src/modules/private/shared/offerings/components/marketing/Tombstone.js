@@ -60,7 +60,8 @@ class Tombstone extends Component {
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
-              {smartElement.Input('customTag', { readOnly: isReadOnly })}
+              <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.customTag.label}</Header>
+              {smartElement.Input('customTag', { readOnly: isReadOnly, label: ' ' })}
               <Form.Group widths={1}>
                 <Form.Field>
                   <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.description.label}</Header>
@@ -69,7 +70,8 @@ class Tombstone extends Component {
               </Form.Group>
               <Divider hidden />
               {/* {smartElement.FormTextarea('description', { readOnly: isReadOnly, containerclassname: 'secondary' })} */}
-              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Display Toggle' })}
+              <Header as="h4">Display Toggle</Header>
+              {smartElement.FormCheckBox('toggleMeta', { defaults: true, toggle: true, containerclassname: 'ui list field', label: ' ' })}
               {smartElement.FormCheckBox('showOfferedBy', { customClass: 'custom-toggle', defaults: true, toggle: true })}
               {smartElement.Input('offeredBy')}
             </Grid.Column>

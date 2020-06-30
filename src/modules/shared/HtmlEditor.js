@@ -82,9 +82,9 @@ export default class HtmlEditor extends React.Component {
               name: fileName,
             };
             const fileExt = (fileName && typeof fileName === 'string') ? get(fileName.split('.'), `[${fileName.split('.').length - 1}]`) : '';
-            const validate = Helper.validateImageExtension(fileExt);
+            const validate = Helper.validateImageExtension(fileExt, true);
             if (!validate.isInvalid) {
-              fileUpload.uploadToS3(fileObj, this.props.imageUploadPath || 'RichTextEditor').then((res) => {
+              fileUpload.uploadToS3(fileObj, this.props.imageUploadPath || 'RichTextEditor', false, true).then((res) => {
                 editor.edit.off();
                 if (editor && editor.image && editor.image.get()) {
                   editor.edit.off();

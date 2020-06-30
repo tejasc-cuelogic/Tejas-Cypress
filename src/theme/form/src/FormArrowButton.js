@@ -14,7 +14,7 @@ const FormArrowButton = observer((props) => {
     // error,
     // placeHolder,
   } = props.fielddata;
-  const { name, changed, action, ctaErrors, classname, formName, activeClass, ignoreValues } = props;
+  const { name, changed, action, ctaErrors, classname, formName, activeClass, ignoreValues, business } = props;
   if (values && Array.isArray(toJS(values))) {
     return (
 <Button.Group fluid vertical>{values.map(field => (
@@ -37,12 +37,13 @@ const FormArrowButton = observer((props) => {
       data-cy={field.value}
       className={`arrow-button ${classname} ${value === field.value ? 'active' : ''} ${ctaErrors && ctaErrors.for === field.value ? 'error' : ''}`}
     >
-    <div className="details">
+    <div className={!business ? 'details' : 'secondary-label'}>
       {field.label && field.labelDescription
         ? (
         <>
-      {field.label && <Header as="h5" className="mb-0">{field.label}</Header>}
-      {field.labelDescription && field.labelDescription}
+      {field.label && !business && <Header as="h5" className="mb-0">{field.label}</Header>}
+      {field.secondaryLabel && business && <span>{field.secondaryLabel}</span>}
+      {field.labelDescription && !business && field.labelDescription}
         </>
         ) : (field.label && <span>{field.label}</span>)
       }
