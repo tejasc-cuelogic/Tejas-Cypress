@@ -186,6 +186,7 @@ export class ManageOfferingStore extends DataModelStore {
     const maxOfferingD = get(offer, 'keyTerms.maxOfferingAmount506') && get(offer, 'keyTerms.maxOfferingAmount506') !== '0.00' ? get(offer, 'keyTerms.maxOfferingAmount506') : get(offer, 'keyTerms.maxOfferingAmount506C') ? get(offer, 'keyTerms.maxOfferingAmount506C') : '0.00';
     campaignStatus.maxOffering = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
     campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering && campaignStatus.minOffering !== '0.00';
+    campaignStatus.showOfferedBy = get(offer, 'tombstone.showOfferedBy');
     campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
     const formattedRaisedAmount = money.floatToAmount(campaignStatus.collected);
     const formattedMaxOfferingAmount = money.floatToAmount(campaignStatus.maxOffering);
