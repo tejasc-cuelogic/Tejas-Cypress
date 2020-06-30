@@ -150,7 +150,7 @@ class Success extends Component {
                             <>
                               <FormInput
                                 key={field}
-                                readOnly={field === 'email' && userRoles.includes('issuer')}
+                                readOnly={field === 'email' || userRoles.includes('issuer')}
                                 type={field !== 'email' ? pwdInputType : 'text'}
                                 name={field}
                                 fielddata={fields[field]}
