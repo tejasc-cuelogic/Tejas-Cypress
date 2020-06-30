@@ -284,7 +284,7 @@ export class OfferingsStore {
   }
 
   @action
-  getOne = (id, loading = true) => {
+  getOne = (id, loading = true) => new Promise((resolve) => {
     this.initLoad.push('getOne');
     if (loading) {
       this.offerLoading = true;
@@ -308,13 +308,14 @@ export class OfferingsStore {
           setFormData('OFFERING_DETAILS_FRM', false);
           setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
           setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
+          resolve();
         }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
-  }
+  })
 
   @action
   getofferingById = id => new Promise((resolve) => {
