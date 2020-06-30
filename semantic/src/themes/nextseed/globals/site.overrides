@@ -3975,28 +3975,40 @@ h3.ui.header.error-2{
 			width: 100% !important;
 		}
 	}
-	.progressWrap {
-		margin: 0 auto;
-		max-width: 120px !important;
-		text-align: center;
-		margin-top: 53px;
-		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
-			margin-top: 28px;
-		}
-		.steps{
-			width: 20px !important;
-			height: 3px !important;
-			border-radius: 10px !important;
-			color: transparent !important;
-			display: inline-block;
-			margin-right: 15px;
+	.p{
+		font-size: 15px !important;
+		line-height: 24px !important;
+	}
+	.ui.grid{
+		>.column{
+			display: flex;
+			flex-direction: column !important;
+			.progressWrap {
+				margin: 0 auto;
+				max-width: 120px !important;
+				text-align: center;
+				@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+				margin-top: 28px;
+				}
+				.steps{
+					align-content: flex-end !important;
+					width: 20px !important;
+					height: 3px !important;
+					border-radius: 10px !important;
+					color: transparent !important;
+					display: inline-block;
+					margin-right: 15px;
+				}
+			}
 		}
 	}
 	.protipWrap{
+		font-size: 13px !important;
+		line-height: 18px !important;
 		padding: 20px 24px;
 		background-color:@neutral-offwhite;
 		border-radius: 4px;
-		margin-top: 21px;
+		margin-top: 38px;
 	}
 	.investmentCards{
 		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
