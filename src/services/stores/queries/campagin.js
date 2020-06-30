@@ -161,6 +161,8 @@ export const offeringFields = `id
         shorthandBusinessName
         legalBusinessName
         securities
+        valuationCap
+        discount
         equityClass
         industry
         state
@@ -569,6 +571,7 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     offeringSlug
     isAvailablePublicly
     stage
+    template
     investNow {
       template
       page {
@@ -652,6 +655,8 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
       isTX
       state
       city
+      valuationCap
+      discount
     }
     offering {
       launch {

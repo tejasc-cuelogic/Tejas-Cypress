@@ -95,7 +95,7 @@ function TransferRequest(props) {
   const offeringReuglation = get(campaignStore.campaign, 'keyTerms.regulation') || get(portfolioStore.getInvestorAccountById, 'offering.keyTerms.regulation');
   const advanceTransferStepStatement = offeringReuglation === 'BD_506B'
     ? `Since the Balance Required exceeds ${Helper.CurrencyFormat(MINIMUM_AUTODRAFT_AMOUNT_WIRE, 0)} and this is an investment under Rule 506(b) of Regulation D, you have the option to initiate a transfer of funds or wire funds after you reserve your investment.`
-    : `Since the Balance Required exceeds ${Helper.CurrencyFormat(MINIMUM_AUTODRAFT_AMOUNT_WIRE, 0)} and your accredited investor status has been verified, you have the option to schedule a transfer of funds for a future date or wire funds after you reserve your investment.`;
+    : `Since the Balance Required exceeds ${Helper.CurrencyFormat(MINIMUM_AUTODRAFT_AMOUNT_WIRE, 0)} and your accredited investor status has been verified, you have the option to initiate a transfer of funds or wire funds after you reserve your investment.`;
   const { userDetails, investorActiveAccountDetails } = userDetailsStore;
   const investorFullName = `${get(userDetails, 'info.firstName')} ${get(userDetails, 'info.lastName')}`;
   const accountDetailsMeta = {

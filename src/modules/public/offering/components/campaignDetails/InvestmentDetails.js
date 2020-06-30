@@ -74,7 +74,7 @@ class InvestmentDetails extends Component {
         <>
         <Header as="h3" className={`${this.props.newLayout ? 'mt-40 mb-30' : ''} ${!isMobile ? 'mb-40' : 'mb-20'} anchor-wrap`}>
           {this.props.title || (campaignStatus.isFund ? 'Summary of Terms' : 'Investment Terms')}
-          <span className="anchor" id={this.props.title ? camelCase(this.props.title) : 'key-terms'} />
+          <span className="anchor" id={this.props.title ? camelCase(Helper.sanitize(this.props.title)) : 'key-terms'} />
         </Header>
         <KeytermsDetails
           refLink={this.props.refLink}

@@ -1,10 +1,10 @@
-/*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Popup, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import ReactPasswordStrength from 'react-password-strength';
 import { FieldError } from '../../shared';
+
 @inject('authStore')
 @observer
 export default class FormPasswordStrength extends Component {
@@ -40,28 +40,28 @@ export default class FormPasswordStrength extends Component {
       >
         {!props.ishidelabel && label !== ''
           && (
-<label>
-            {props.label || label}{props.asterisk && props.asterisk === 'true' ? '*' : ''}
-            {tooltip
-              && (
-<Popup
-  hoverable={props.hoverable}
-  trigger={<Icon className="ns-help-circle" />}
-  content={tooltip}
-  position="top center"
-  className="center-align"
-  wide
-/>
-              )
-            }
-            {props.removed
-              && (
-<Link to={props.linkto} onClick={e => props.removed(e)}>
-                <Icon className="ns-close-circle" color="grey" />
-              </Link>
-              )
-            }
-          </label>
+            <label>
+              {props.label || label}{props.asterisk && props.asterisk === 'true' ? '*' : ''}
+              {tooltip
+                && (
+                  <Popup
+                    hoverable={props.hoverable}
+                    trigger={<Icon className="ns-help-circle" />}
+                    content={tooltip}
+                    position="top center"
+                    className="center-align"
+                    wide
+                  />
+                )
+              }
+              {props.removed
+                && (
+                  <Link to={props.linkto} onClick={e => props.removed(e)}>
+                    <Icon className="ns-close-circle" color="grey" />
+                  </Link>
+                )
+              }
+            </label>
           )
         }
         {props.type === 'password'

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import { Responsive, Icon, Header, Container, Grid, Menu } from 'semantic-ui-react';
+import { Responsive, Icon, Header, Container, Grid, Menu, Button } from 'semantic-ui-react';
 import { Image64 } from '../../../../theme/shared';
 import HtmlEditor from '../../../shared/HtmlEditor';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
@@ -11,10 +11,15 @@ import { NavItems } from '../../../../theme/layout/NavigationItems';
 @withRouter
 @observer
 export default class CollectionHeader extends Component {
+  handleBack = (e) => {
+    e.preventDefault();
+    this.props.history.push('/communities');
+  }
+
   render() {
     const { uiStore, data, scrollToActiveOfferings, activeOfferings } = this.props;
     const { responsiveVars } = uiStore;
-    const { isMobile } = responsiveVars;
+    const { isMobile, isTablet } = responsiveVars;
     const title = get(data, 'title');
     const actionText = get(data, 'actionText');
     const headerDownClick = (activeOfferings && actionText) ? (
@@ -28,7 +33,7 @@ export default class CollectionHeader extends Component {
     ) : null;
     return (
       <>
-        {!isMobile
+        {!isMobile && !isTablet
           ? (
             <>
               <div className="campaign-banner collection-banner collection-header-wrap">
@@ -36,32 +41,46 @@ export default class CollectionHeader extends Component {
                   <Responsive minWidth={768} as={Container} className="pt-100 pb-100">
                     <Grid relaxed stackable centered>
                       <Grid.Column width={6} className="zi-9">
-                        <div className="video-wrapper campaign">
-                          <Image64
-                            reRender
-                            bg
-                            originalImg
-                            srcUrl={get(data, 'image.url')}
-                            imgType="heroImage"
+                        <Grid.Row>
+                          <Button
+                            style={{ color: get(data, 'descriptionColor') || 'white' }}
+                            icon={{ className: 'ns-chevron-left' }}
+                            className="prev link-button pb-30"
+                            onClick={e => this.handleBack(e)}
+                            content="Explore more Communities"
                           />
-                          {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p style={{ color: get(data, 'tag.textColor') }}>{get(data, 'tag.text')}</p></div>}
-                        </div>
+                        </Grid.Row>
+                        <Grid.Row>
+                          <div className="video-wrapper campaign">
+                            <Image64
+                              reRender
+                              bg
+                              originalImg
+                              srcUrl={get(data, 'image.url')}
+                              imgType="heroImage"
+                            />
+                            {get(data, 'tag.text') && <div style={{ backgroundColor: get(data, 'tag.color') || 'green' }} className="ns_flgs_box"><p style={{ color: get(data, 'tag.textColor') }}>{get(data, 'tag.text')}</p></div>}
+                          </div>
+                        </Grid.Row>
                         <div className="clearfix social-links mt-20">
                           {get(data, 'social[0]')
                             ? get(data, 'social').map(site => (
                               <React.Fragment key={site.type}>
                                 {site.url
-                                  && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase() === 'website' ? 'globe' : site.type.toLowerCase()} style={{ color: get(data, 'descriptionColor') }} /></a>
+                                  && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase() === 'website' ? 'globe' : site.type.toLowerCase()} style={{ color: get(data, 'descriptionColor') || 'white' }} /></a>
                                 }
                               </React.Fragment>
                             )) : ''}
                         </div>
                       </Grid.Column>
                       <Grid.Column width={10} className="zi-9">
-                        <Header style={{ color: get(data, 'descriptionColor') }} as="h3" inverted>
-                          {title}
-                        </Header>
-                        <p style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></p>
+                        <Grid.Row className="pb-50">{' '}</Grid.Row>
+                        <Grid.Row>
+                          <Header style={{ color: get(data, 'descriptionColor') }} as="h3" inverted>
+                            {title}
+                          </Header>
+                          <p style={{ color: get(data, 'descriptionColor') }}><HtmlEditor readOnly content={get(data, 'description')} /></p>
+                        </Grid.Row>
                       </Grid.Column>
                       {get(data, 'bgImage.url')
                         && <Image64 reRender originalImg bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
@@ -73,12 +92,21 @@ export default class CollectionHeader extends Component {
               </div>
             </>
           ) : (
-            <div className={`${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu collection-header-wrap`}>
+            <div className={`${isMobile || isTablet ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu collection-header-wrap`}>
               <Responsive maxWidth={991} as={React.Fragment}>
-                <div className={`${isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`} style={{ backgroundColor: get(data, 'bgColor') }}>
+                <div className={`${isMobile || isTablet ? 'offering-intro-v2' : ''} offering-intro center-align`} style={{ backgroundColor: get(data, 'bgColor') }}>
                   {get(data, 'bgImage.url')
                     && <Image64 reRender originalImg bg className="campaign-details-banner" srcUrl={get(data, 'bgImage.url')} />
                   }
+                  <div className="left-align">
+                    <Button
+                      style={{ color: get(data, 'descriptionColor') }}
+                      icon={{ className: 'ns-chevron-left' }}
+                      className="prev link-button pb-20"
+                      onClick={e => this.handleBack(e)}
+                      content="Explore more Communities"
+                    />
+                  </div>
                   <div className="video-wrapper campaign">
                     <Image64
                       bg
@@ -106,7 +134,7 @@ export default class CollectionHeader extends Component {
                 </div>
               </Responsive>
               { headerDownClick }
-              {!isMobile
+              {!isMobile && !isTablet
                 && (
                   <>
                     <Menu vertical>

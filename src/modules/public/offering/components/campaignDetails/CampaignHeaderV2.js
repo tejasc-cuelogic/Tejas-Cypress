@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get, sortBy } from 'lodash';
 import { withRouter, Link, Route } from 'react-router-dom';
-import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button, Divider, Menu } from 'semantic-ui-react';
+import { Responsive, Icon, Header, Container, Progress, Statistic, Grid, Button, Divider, Menu } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import share from './Share';
 // import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
@@ -24,13 +24,15 @@ export default class CampaignHeaderV2 extends Component {
     const { campaignStore, newLayout, followBtn } = this.props;
     const { campaign, campaignStatus, campaignSideBarShow, navCountData } = campaignStore;
     const {
-      isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
+      isClosed, isCreation, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
       percentBefore, diffForProcessing, countDown, investmentSummary, isBonusReward,
       // dataRooms,
     } = campaignStatus;
     const headerMeta = get(campaign, 'header.meta[0]') ? sortBy(get(campaign, 'header.meta'), ['order', 'asc']) : [];
-    const isHeadrToggleMetaExists = !!get(campaign, 'header.toggleMeta[0]');
+    // const isHeadrToggleMetaExists = !!get(campaign, 'header.toggleMeta[0]');
+    const toggleMetaArr = get(campaign, 'header.toggleMeta') || [];
+    const isOfferStats = !toggleMetaArr.includes('DAYS_LEFT') || !toggleMetaArr.includes('INVESTOR_COUNT') || !toggleMetaArr.includes('REPAYMENT_COUNT') || !toggleMetaArr.includes('EARLY_BIRD');
     return (
       <>
         {!isMobile
@@ -64,53 +66,50 @@ export default class CampaignHeaderV2 extends Component {
                               />
                             )
                           }
-                          {get(campaign, 'header.toggleMeta[0]')
-                            ? (
-                              <div className="offer-stats">
-                                <Statistic.Group>
-                                  <>
-                                    {get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
-                                      && (
-                                        <Statistic size="mini" className="basic">
-                                          <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                                          <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
-                                        </Statistic>
-                                      )}
-                                    {get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
-                                      && (
-                                        <Statistic size="mini" className="basic">
-                                          <Statistic.Value>
-                                            {get(campaign, 'closureSummary.totalInvestorCount') || 0}
-                                          </Statistic.Value>
-                                          <Statistic.Label>Investors</Statistic.Label>
-                                        </Statistic>
-                                      )}
-                                  </>
-                                  {get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
-                                    && (
-                                      <Statistic size="mini" className="basic">
-                                        <Statistic.Value>
-                                          {get(campaign, 'closureSummary.repayment.count') || 0}
-                                        </Statistic.Value>
-                                        <Statistic.Label>Payments made</Statistic.Label>
-                                      </Statistic>
-                                    )
-                                  }
-                                  {get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
-                                    && isEarlyBirdRewards && !isClosed
-                                    && bonusRewards
-                                    ? (
-                                      <Statistic size="mini" className="basic">
-                                        <Statistic.Value>
-                                          {get(campaign, 'earlyBird.available') || 0}
-                                        </Statistic.Value>
-                                        <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                                      </Statistic>
-                                    ) : ''
-                                  }
-                                </Statistic.Group>
-                              </div>
-                            ) : null}
+
+                          <div className={`${isOfferStats ? 'offer-stats' : ''}`}>
+                            <Statistic.Group>
+                              <>
+                                {!toggleMetaArr.includes('DAYS_LEFT')
+                                  && (
+                                    <Statistic size="mini" className="basic">
+                                      <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                                      <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                                    </Statistic>
+                                  )}
+                                {!toggleMetaArr.includes('INVESTOR_COUNT')
+                                  && (
+                                    <Statistic size="mini" className="basic">
+                                      <Statistic.Value>
+                                        {get(campaign, 'closureSummary.totalInvestorCount') || 0}
+                                      </Statistic.Value>
+                                      <Statistic.Label>Investors</Statistic.Label>
+                                    </Statistic>
+                                  )}
+                              </>
+                              {!toggleMetaArr.includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
+                                && (
+                                  <Statistic size="mini" className="basic">
+                                    <Statistic.Value>
+                                      {!get(campaign, 'closureSummary.repayment.count') || 0}
+                                    </Statistic.Value>
+                                    <Statistic.Label>Payments made</Statistic.Label>
+                                  </Statistic>
+                                )
+                              }
+                              {!toggleMetaArr.includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
+                                && !isClosed && bonusRewards
+                                ? (
+                                  <Statistic size="mini" className="basic">
+                                    <Statistic.Value>
+                                      {get(campaign, 'earlyBird.available') || 0}
+                                    </Statistic.Value>
+                                    <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                                  </Statistic>
+                                ) : ''
+                              }
+                            </Statistic.Group>
+                          </div>
                         </div>
                         <div className="clearfix social-links mt-10">
                           {campaign && get(campaign, 'misc.social')
@@ -129,19 +128,19 @@ export default class CampaignHeaderV2 extends Component {
                       <Grid.Column width={6}>
                         <Header as="h3" inverted>
                           {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
-                          {isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('BUSINESS_LOCATION')
+                          {!toggleMetaArr.includes('BUSINESS_LOCATION')
                             && (<Header.Subheader>{address}</Header.Subheader>)
                           }
                         </Header>
                         <Statistic inverted size="tiny" className={`${isMobile && 'mt-40'} basic mb-0`}>
-                          {isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
+                          {!toggleMetaArr.includes('FUNDINGRAISING_STATE')
                             && (
                               <Statistic.Value>
                                 <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
                               </Statistic.Value>
                             )
                           }
-                          {minFlagStatus
+                          {!toggleMetaArr.includes('FUNDINGRAISING_STATE') && minFlagStatus
                             && (
                               <Statistic.Label className="flag-status">
                                 <Icon name="flag" /> Surpassed minimum goal
@@ -149,7 +148,7 @@ export default class CampaignHeaderV2 extends Component {
                             )
                           }
                         </Statistic>
-                        {!campaignStatus.isFund && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
+                        {!campaignStatus.isFund && !toggleMetaArr.includes('FUNDINGRAISING_STATE')
                           ? (
                             !isClosed
                               ? <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
@@ -157,35 +156,70 @@ export default class CampaignHeaderV2 extends Component {
                           ) : null}
                         {!campaignStatus.isFund
                           ? (
-                            <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
-                              <Popup
-                                trigger={<Icon name="help circle" color="green" />}
-                                content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
-                                position="top center"
-                              />
-                            </p>
-                          )
-                          : (
+                            <>
+                              {(minFlagStatus && !toggleMetaArr.includes('MAXIMUM_TARGET'))
+                                && (
+                                  <p>
+                                    {Helper.CurrencyFormat(maxOffering, 0)}{' '}
+                                    <PopUpModal
+                                      customTrigger={<span className="popup-label">max target</span>}
+                                      content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                                      position="top center"
+                                      showOnlyPopup={!isMobile}
+                                    />
+                                  </p>
+                                )}
+                              {
+                                (!minFlagStatus && !toggleMetaArr.includes('MINIMUM_TARGET'))
+                                && (
+                                  <p>
+                                    {Helper.CurrencyFormat(minOffering, 0)}{' '}
+                                    <PopUpModal
+                                      customTrigger={<span className="popup-label">min target</span>}
+                                      content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                                      position="top center"
+                                      showOnlyPopup={!isMobile}
+                                    />
+                                  </p>
+                                )
+                              }
+                            </>
+                          ) : (
                             <>
                               <p>
-                                <span className="mr-10">{Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
-                                  <Popup
-                                    trigger={<Icon name="help circle" color="green" />}
-                                    content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                                    position="top center"
-                                  />
-                                </span>
-                              |
-                            <span className="ml-10">{Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
-                                  <Popup
-                                    trigger={<Icon name="help circle" color="green" />}
-                                    content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
-                                    position="top center"
-                                  />
-                                </span>
+                                <>
+                                  {!toggleMetaArr.includes('MINIMUM_TARGET')
+                                    && (
+                                      <span className="mr-10">
+                                        {Helper.CurrencyFormat(minOffering, 0)}{' '}
+                                        <PopUpModal
+                                          customTrigger={<span className="popup-label">min target</span>}
+                                          content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                                          position="top center"
+                                          showOnlyPopup={!isMobile}
+                                        />
+                                      </span>
+                                    )
+                                  }
+                                  {!toggleMetaArr.includes('MINIMUM_TARGET') && !toggleMetaArr.includes('MAXIMUM_TARGET') && '|'}
+                                  {!toggleMetaArr.includes('MAXIMUM_TARGET')
+                                    && (
+                                      <span className="ml-10">
+                                        {Helper.CurrencyFormat(maxOffering, 0)}{' '}
+                                        <PopUpModal
+                                          customTrigger={<span className="popup-label">max target</span>}
+                                          content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                                          position="top center"
+                                          showOnlyPopup={!isMobile}
+                                        />
+                                      </span>
+                                    )
+                                  }
+                                </>
                               </p>
                             </>
-                          )}
+                          )
+                        }
                         {headerMeta.length > 0 && headerMeta.map(row => (
                           <>
                             {(
@@ -207,7 +241,7 @@ export default class CampaignHeaderV2 extends Component {
                                 <Grid>
                                   {(!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
                                     && (
-                                      <Grid.Column width={followBtn && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE') ? '10' : ''} className="center-align">
+                                      <Grid.Column width={followBtn && !toggleMetaArr.includes('FOLLOW_STATE') ? '10' : ''} className="center-align">
                                         <Button
                                           primary={!isInProcessing}
                                           disabled={maxFlagStatus || isInProcessing}
@@ -217,11 +251,17 @@ export default class CampaignHeaderV2 extends Component {
                                           {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`}
                                         </Button>
                                         <p className="mt-10">
-                                          {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
-                              </p>
+                                          {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} {' '}
+                                          <PopUpModal
+                                            customTrigger={<span className="popup-label">min investment</span>}
+                                            content="This is the minimum individual investment amount required to participate in this offering. This amount is set by the Issuer."
+                                            position="top center"
+                                            showOnlyPopup={!isMobile}
+                                          />
+                                        </p>
                                       </Grid.Column>
                                     )}
-                                  {followBtn && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE')
+                                  {followBtn && !toggleMetaArr.includes('FOLLOW_STATE')
                                     && (
                                       <Grid.Column width="6">
                                         <>{followBtn}</>
@@ -245,7 +285,7 @@ export default class CampaignHeaderV2 extends Component {
                 <div className={`${newLayout && isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
                   <Header as="h4" inverted>
                     {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
-                    {!campaignStatus.isFund && address && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('BUSINESS_LOCATION')
+                    {!campaignStatus.isFund && address && !toggleMetaArr.includes('BUSINESS_LOCATION')
                       && <Header.Subheader>{address}</Header.Subheader>}
                   </Header>
                   <div className="video-wrapper campaign">
@@ -270,7 +310,7 @@ export default class CampaignHeaderV2 extends Component {
                     }
                   </div>
                   <Statistic inverted size="tiny" className={`${isMobile && 'mt-30'} basic mb-0`}>
-                    {isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
+                    {!toggleMetaArr.includes('FUNDINGRAISING_STATE')
                       && (
                         <Statistic.Value>
                           <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> {!campaignStatus.isFund ? 'raised' : 'invested'}
@@ -285,7 +325,7 @@ export default class CampaignHeaderV2 extends Component {
                       )
                     }
                   </Statistic>
-                  {!campaignStatus.isFund && isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FUNDINGRAISING_STATE')
+                  {!campaignStatus.isFund && !toggleMetaArr.includes('FUNDINGRAISING_STATE')
                     ? (
                       !isClosed
                         ? <Progress className={`${(newLayout && isMobile) ? 'mt-40' : ''} mb-0`} percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
@@ -294,85 +334,113 @@ export default class CampaignHeaderV2 extends Component {
                   }
                   {!campaignStatus.isFund
                     ? (
-                      <p className={newLayout ? 'mt-10' : ''}>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
-                        {isMobile
-                          ? (<PopUpModal label={minFlagStatus ? 'Max target' : 'Min target'} content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account." />)
-                          : (
-                            <Popup
-                              trigger={<Icon name="help circle" color="green" />}
-                              content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                              position="top center"
-                            />
+                      <>
+                        {(minFlagStatus && !toggleMetaArr.includes('MAXIMUM_TARGET'))
+                          && (
+                            <p>
+                              {Helper.CurrencyFormat(maxOffering, 0)}{' '}
+                              <PopUpModal
+                                customTrigger={<span className="popup-label">max target</span>}
+                                content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                                position="top center"
+                                showOnlyPopup={!isMobile}
+                              />
+                            </p>
+                          )}
+                        {
+                          (!minFlagStatus && !toggleMetaArr.includes('MINIMUM_TARGET'))
+                          && (
+                            <p>
+                              {Helper.CurrencyFormat(minOffering, 0)}{' '}
+                              <PopUpModal
+                                customTrigger={<span className="popup-label">min target</span>}
+                                content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                                position="top center"
+                                showOnlyPopup={!isMobile}
+                              />
+                            </p>
                           )
                         }
-                      </p>
+                      </>
                     ) : (
                       <>
-                        <p className={`${newLayout ? 'mt-10' : ''} mr-10`}>
-                          {Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                            position="top center"
-                          />
-                        </p>
-                        <p className={`${newLayout ? 'mt-10' : ''} mr-10`}>
-                          {Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
-                            position="top center"
-                          />
+                        <p>
+                          <>
+                            {!get(campaign, 'header.toggleMeta').includes('MINIMUM_TARGET')
+                              && (
+                                <span className="mr-10">
+                                  {Helper.CurrencyFormat(minOffering, 0)}{' '}
+                                  <PopUpModal
+                                    customTrigger={<span className="popup-label">min target</span>}
+                                    content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                                    position="top center"
+                                    showOnlyPopup={!isMobile}
+                                  />
+                                </span>
+                              )
+                            }
+                            {!get(campaign, 'header.toggleMeta').includes('MINIMUM_TARGET') && !get(campaign, 'header.toggleMeta').includes('MAXIMUM_TARGET') && '|'}
+                            {!get(campaign, 'header.toggleMeta').includes('MAXIMUM_TARGET')
+                              && (
+                                <span className="ml-10">
+                                  {Helper.CurrencyFormat(maxOffering, 0)}{' '}
+                                  <PopUpModal
+                                    customTrigger={<span className="popup-label">max target</span>}
+                                    content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                                    position="top center"
+                                    showOnlyPopup={!isMobile}
+                                  />
+                                </span>
+                              )
+                            }
+                          </>
                         </p>
                       </>
-                    )}
-                  {get(campaign, 'header.toggleMeta[0]')
-                    ? (
-                      <div className="offer-stats">
-                        <Statistic.Group>
-                          <>
-                            {get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
-                              && (
-                                <Statistic size="mini" className="basic">
-                                  <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                                  <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
-                                </Statistic>
-                              )}
-                            {get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
-                              && (
-                                <Statistic size="mini" className="basic">
-                                  <Statistic.Value>
-                                    {get(campaign, 'closureSummary.totalInvestorCount') || 0}
-                                  </Statistic.Value>
-                                  <Statistic.Label>Investors</Statistic.Label>
-                                </Statistic>
-                              )}
-                          </>
-                          {get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
-                            && (
-                              <Statistic size="mini" className="basic">
-                                <Statistic.Value>
-                                  {get(campaign, 'closureSummary.repayment.count') || 0}
-                                </Statistic.Value>
-                                <Statistic.Label>Payments made</Statistic.Label>
-                              </Statistic>
-                            )
-                          }
-                          {get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
-                            && isEarlyBirdRewards && !isClosed
-                            && bonusRewards
-                            ? (
-                              <Statistic size="mini" className="basic">
-                                <Statistic.Value>
-                                  {get(campaign, 'earlyBird.available') || 0}
-                                </Statistic.Value>
-                                <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                              </Statistic>
-                            ) : ''
-                          }
-                        </Statistic.Group>
-                      </div>
-                    ) : null}
+                    )
+                  }
+                  <div className={`${isOfferStats ? 'offer-stats' : ''}`}>
+                    <Statistic.Group>
+                      <>
+                        {!toggleMetaArr.includes('DAYS_LEFT')
+                          && (
+                            <Statistic size="mini" className="basic">
+                              <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                              <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                            </Statistic>
+                          )}
+                        {!toggleMetaArr.includes('INVESTOR_COUNT')
+                          && (
+                            <Statistic size="mini" className="basic">
+                              <Statistic.Value>
+                                {get(campaign, 'closureSummary.totalInvestorCount') || 0}
+                              </Statistic.Value>
+                              <Statistic.Label>Investors</Statistic.Label>
+                            </Statistic>
+                          )}
+                      </>
+                      {!toggleMetaArr.includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
+                        && (
+                          <Statistic size="mini" className="basic">
+                            <Statistic.Value>
+                              {get(campaign, 'closureSummary.repayment.count') || 0}
+                            </Statistic.Value>
+                            <Statistic.Label>Payments made</Statistic.Label>
+                          </Statistic>
+                        )
+                      }
+                      {!toggleMetaArr.includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
+                        && !isClosed && bonusRewards
+                        ? (
+                          <Statistic size="mini" className="basic">
+                            <Statistic.Value>
+                              {get(campaign, 'earlyBird.available') || 0}
+                            </Statistic.Value>
+                            <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                          </Statistic>
+                        ) : ''
+                      }
+                    </Statistic.Group>
+                  </div>
                   {headerMeta.length > 0 && headerMeta.map((row, i) => (
                     <>
                       {(
@@ -404,11 +472,17 @@ export default class CampaignHeaderV2 extends Component {
                                   {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`}
                                 </Button>
                                 <p className="mt-10">
-                                  {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
+                                  {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} {' '}
+                                  <PopUpModal
+                                    customTrigger={<span className="popup-label">min investment</span>}
+                                    content="This is the minimum individual investment amount required to participate in this offering. This amount is set by the Issuer."
+                                    position="top center"
+                                    showOnlyPopup={!isMobile}
+                                  />
                                 </p>
                               </>
                             )}
-                          {isHeadrToggleMetaExists && get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE')
+                          {!get(campaign, 'header.toggleMeta').includes('FOLLOW_STATE')
                             && followBtn}
                         </Button.Group>
                       </>

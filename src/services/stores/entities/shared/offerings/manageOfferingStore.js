@@ -73,8 +73,8 @@ export class ManageOfferingStore extends DataModelStore {
       nsDefaultData = get(investNowTocDefaults.TERM_NOTE, 'investNow.page');
     } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
       nsDefaultData = get(investNowTocDefaults.REVENUE_SHARING_NOTE, 'investNow.page');
-    } else if (securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE) {
-      nsDefaultData = get(investNowTocDefaults.SAFE, 'investNow.page');
+    } else {
+      nsDefaultData = get(investNowTocDefaults.NS_DEFAULTS, 'investNow.page');
     }
     const regCheck = regulation === 'BD_CF_506C' ? ['BD_506C', 'BD_CF'] : [regulation];
     nsDefaultData = nsDefaultData.filter(t => regCheck.includes(t.regulation));
@@ -185,7 +185,7 @@ export class ManageOfferingStore extends DataModelStore {
     const maxOffering = get(offer, 'keyTerms.maxOfferingAmountCF') || 0;
     const maxOfferingD = get(offer, 'keyTerms.maxOfferingAmount506') && get(offer, 'keyTerms.maxOfferingAmount506') !== '0.00' ? get(offer, 'keyTerms.maxOfferingAmount506') : get(offer, 'keyTerms.maxOfferingAmount506C') ? get(offer, 'keyTerms.maxOfferingAmount506C') : '0.00';
     campaignStatus.maxOffering = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
-    campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering;
+    campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering && campaignStatus.minOffering !== '0.00';
     campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
     const formattedRaisedAmount = money.floatToAmount(campaignStatus.collected);
     const formattedMaxOfferingAmount = money.floatToAmount(campaignStatus.maxOffering);

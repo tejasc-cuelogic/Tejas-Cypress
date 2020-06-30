@@ -1792,7 +1792,7 @@ export const NEW_OFFER = {
   offeringSlug: { ...OFFERING_DETAILS.offeringSlug },
   regulation: {
     value: '',
-    label: 'Regulation',
+    label: 'Exemption',
     error: undefined,
     rule: 'required',
     placeHolder: 'Choose here',

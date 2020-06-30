@@ -7,8 +7,7 @@ import { FormArrowButton } from '../../../theme/form';
 
 const redirectByRole = {
   investor: { to: '/register-investor' },
-  'issuer-type1': { to: '/business-application/business' },
-  'issuer-type2': { to: '/business-application/commercial-real-estate' },
+  'issuer-type1': { to: '/business-application' },
 };
 
 @inject('authStore', 'uiStore', 'navStore')
@@ -51,14 +50,14 @@ class signupInitial extends Component {
       >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
           <Grid.Column mobile={16} tablet={12} computer={8} className="pt-0">
-            <Header as="h3">Join the NextSeed community</Header>
+            <Header as="h3">Welcome! Let{'\''}s get started.</Header>
             <Form error className={isMobile ? '' : 'account-type-tab'}>
               <FormArrowButton
                 name="role"
                 fielddata={SIGNUP_FRM.fields.role}
                 changed={(e, result) => this.handleSignupChange(e, result)}
                 classname="icon-arrow-button"
-                ignoreValues={(this.props.uiStore.authRef === '/business') ? ['investor'] : []}
+                ignoreValues={['issuer-type2']}
               />
             </Form>
             <p className="mt-40">Already have an account? <Link to="/login">Log in</Link></p>

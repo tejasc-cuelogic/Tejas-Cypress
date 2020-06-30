@@ -1,19 +1,28 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get, camelCase, orderBy, find, filter } from 'lodash';
-import { withRouter } from 'react-router-dom';
+import { get, camelCase, orderBy, filter } from 'lodash';
+import { withRouter, Route } from 'react-router-dom';
 import scrollIntoView from 'scroll-into-view';
-import { Responsive, Visibility, Container, Grid, Menu, Divider } from 'semantic-ui-react';
+import { Responsive, Visibility, Container, Grid, Menu, Divider, Button, Icon } from 'semantic-ui-react';
 import CollectionHeader from '../components/CollectionHeader';
 import CollectionInsights from '../components/CollectionInsights';
 import CustomContent from '../../offering/components/campaignDetails/CustomContent';
+import CollectionGallery from '../components/CollectionGallery';
 import CampaignList from '../../offering/components/listing/CampaignList';
 import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import HtmlEditor from '../../../shared/HtmlEditor';
 import CollectionMetaTags from '../components/CollectionMetaTags';
-import { UPLOADS_CONFIG } from '../../../../constants/aws';
+import AboutGallery from '../components/AboutGallery';
 
+const LoadMoreBtn = ({ action, param, isMobile }) => (
+  <div id="loadMore" className={`${isMobile ? 'mb-20 mt-40' : 'mb-30 mt-30'}`} data-cy={param}>
+    <Button fluid={isMobile} color="green" className="link-button" onClick={() => action(param)}>
+      View More
+      <Icon size="small" className="ns-caret-down" style={{ marginLeft: '5px' }} color="white" />
+    </Button>
+  </div>
+);
 
 const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
@@ -43,18 +52,31 @@ class CollectionDetails extends Component {
   }
 
   componentDidUpdate() {
-    this.processScroll();
+    if (!this.props.collectionStore.isLoadMoreClicked) {
+      this.processScroll();
+    }
+    this.props.collectionStore.setFieldValue('isLoadMoreClicked', false);
   }
 
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
+    this.props.collectionStore.resetDisplayCounts();
   }
 
   scrollToActiveOfferings = () => {
     document.querySelector('#offeringsShow').scrollIntoView({
       block: 'start',
     });
+  }
+
+  scrollAndLoad = (type) => {
+    const { setFieldValue, loadMoreRecord } = this.props.collectionStore;
+    setFieldValue('isLoadMoreClicked', true);
+    this.props.navStore.setFieldValue('currentActiveHash', null);
+    window.removeEventListener('scroll', this.handleOnScroll);
+    loadMoreRecord(type);
+    window.addEventListener('scroll', this.handleOnScroll);
   }
 
   onScrollCallBack = (target) => {
@@ -104,20 +126,10 @@ class CollectionDetails extends Component {
     this.props.navStore.setMobileNavStatus(calculations);
   }
 
-  getOgDataFromSocial = (obj, type, att) => {
-    const data = find(obj, o => o.type === type);
-    let val = get(data, att) || '';
-    if (att === 'featuredImageUpload.url') {
-      val = (val.includes('https://') || val.includes('http://')) ? val : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(val)}`;
-    }
-    return val;
-  };
-
-
   render() {
     const { collectionStore, uiStore, nsUiStore, location, match } = this.props;
     const { loadingArray } = nsUiStore;
-    const { collectionDetails, getInsightsList, getPastOfferingsList, getActiveOfferingsList } = collectionStore;
+    const { collectionDetails, getInsightsList, getGalleryImages, getPastOfferingsList, getActiveOfferingsList, activeOfferingList, RECORDS_TO_DISPLAY, activeToDisplay, pastOfferingToDisplay, pastOfferingsList } = collectionStore;
     const { responsiveVars } = uiStore;
     const { isTablet, isMobile } = responsiveVars;
     const collectionHeader = get(collectionDetails, 'marketing.header');
@@ -134,6 +146,8 @@ class CollectionDetails extends Component {
         isValid = true;
       } else if (con.contentType === 'INSIGHTS' && getInsightsList && getInsightsList.length) {
         isValid = true;
+      } else if (con.contentType === 'GALLERY' && getGalleryImages && getGalleryImages.length) {
+        isValid = true;
       } else if (con.contentType === 'CUSTOM' && con.customValue) {
         isValid = true;
       }
@@ -144,6 +158,10 @@ class CollectionDetails extends Component {
       content = orderBy(filter(content, con => con.scope !== 'HIDDEN'), c => c.order, ['ASC']);
       content.forEach((c, i) => validate(c) && navItems.push({ ...c, title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true, defaultActive: i === 0 }));
     }
+
+    const backToTop = { title: <>Back to Top {<Icon className="ns-chevron-up icon" size="small" />}</>, to: '' };
+    navItems.push(backToTop);
+
     const renderHeading = (contentData) => {
       if (contentData) {
         return <p className="mb-30"><HtmlEditor readOnly content={contentData} /></p>;
@@ -156,7 +174,7 @@ class CollectionDetails extends Component {
         {collectionDetails
           && <CollectionMetaTags collection={collectionDetails} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
-        {!isMobile && collectionHeaderComponent}
+        {!isMobile && !isTablet && collectionHeaderComponent}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
@@ -176,7 +194,7 @@ class CollectionDetails extends Component {
           <Container>
             <section>
               <Grid centered>
-                {!isMobile
+                {!isMobile && !isTablet
                   && (
                     <Grid.Column width={4} className="left-align">
                       <div className={`collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-layout-menu offering-side-menu `}>
@@ -198,8 +216,16 @@ class CollectionDetails extends Component {
                             collection
                             refLink={this.props.match.url}
                             loading={loadingArray.includes('getCollectionMapping')}
-                            campaigns={getActiveOfferingsList}
+                            campaigns={activeOfferingList}
                             heading={renderHeading(get(c, 'description'))}
+                            loadMoreButton={(
+                              <>
+                                {getActiveOfferingsList && getActiveOfferingsList.length > RECORDS_TO_DISPLAY
+                                  && activeToDisplay < getActiveOfferingsList.length
+                                  && <LoadMoreBtn action={this.scrollAndLoad} param="activeToDisplay" />
+                                }
+                              </>
+                            )}
                           />
                         </>
                       ) : c.contentType === 'COMPLETE_INVESTMENTS' && getPastOfferingsList && getPastOfferingsList.length
@@ -209,10 +235,19 @@ class CollectionDetails extends Component {
                             <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
                             <CampaignList
                               collection
+                              isFunded
                               refLink={this.props.match.url}
                               loading={loadingArray.includes('getCollectionMapping')}
-                              campaigns={getPastOfferingsList}
+                              campaigns={pastOfferingsList}
                               heading={renderHeading(get(c, 'description'))}
+                              loadMoreButton={(
+                                <>
+                                  {getPastOfferingsList && getPastOfferingsList.length > RECORDS_TO_DISPLAY
+                                    && pastOfferingToDisplay < getPastOfferingsList.length
+                                    && <LoadMoreBtn action={this.scrollAndLoad} param="pastOfferingToDisplay" />
+                                  }
+                                </>
+                              )}
                             />
                           </>
                         ) : c.contentType === 'INSIGHTS' && getInsightsList && getInsightsList.length
@@ -226,20 +261,29 @@ class CollectionDetails extends Component {
                                 InsightArticles={getInsightsList}
                               />
                             </>
-                          )
-                          : c.contentType === 'CUSTOM' && c.customValue
+                          ) : c.contentType === 'GALLERY'
                             ? (
-                              <>
-                                {i !== 0 && <Divider hidden section />}
-                                <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
-                                <CustomContent content={c.customValue} isTablet={isTablet} />
-                              </>
-                            )
-                            : null
+                              <CollectionGallery
+                                galleryImages={getGalleryImages}
+                                processScroll={this.processScroll}
+                                newLayout
+                                galleryUrl={this.props.match.url}
+                                title={c.title}
+                              />
+                            ) : c.contentType === 'CUSTOM' && c.customValue
+                              ? (
+                                <>
+                                  {i !== 0 && <Divider hidden section />}
+                                  <div className={`${i !== 0 ? 'mt-40' : 'mt-20'} anchor-wrap`}><span className="anchor" id={camelCase(c.title)} /></div>
+                                  <CustomContent content={c.customValue} isTablet={isTablet} isMobile={isMobile} />
+                                </>
+                              )
+                              : null
                   ))}
                 </Grid.Column>
               </Grid>
             </section>
+            <Route path={`${this.props.match.url}/photogallery`} component={AboutGallery} />
           </Container>
         </div>
       </>

@@ -6,6 +6,7 @@ import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react'
 import formHOC from '../../../../../theme/form/formHOC';
 import DraggableListing from './DraggableListing';
 import AddToCollection from '../../../shared/marketing/AddToCollection';
+import Gallery from './Gallery';
 
 
 const metaInfo = {
@@ -68,6 +69,7 @@ class CollectionContent extends Component {
 
   render() {
     const { smartElement, collectionStore, uiStore } = this.props;
+    const { htmlEditorImageLoading } = this.props;
     const index = parseInt(this.props.match.params.index, 10) - 1 || 0;
     const { COLLECTION_CONTENT_FRM, collectionId, collectionMapping } = collectionStore;
     const { value: contentTypeValue } = COLLECTION_CONTENT_FRM.fields.content[index].contentType;
@@ -107,6 +109,17 @@ class CollectionContent extends Component {
                 </Form.Field>
               </Form.Group>
             )}
+
+          {(this.state.editable && contentTypeValue === 'GALLERY')
+            && (
+              <>
+              <div className="sticky-actions">
+                <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
+                  <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                </Button.Group>
+              </div>
+            </>
+            )}
           <Divider hidden />
           {get(collectionMapping, 'OFFERING')
             && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
@@ -123,23 +136,26 @@ class CollectionContent extends Component {
               </>
             ))
           }
-          {(this.state.editable)
-            && (
-              <>
-                <div className="sticky-actions">
-                  <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
-                    <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
-                  </Button.Group>
-                </div>
-              </>
-            )}
+          {
+            contentTypeValue === 'GALLERY' && (<Gallery />)
+          }
+
           {
             ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
             && (
               <AddToCollection isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
             )
           }
-
+          {(contentTypeValue !== 'GALLERY' && this.state.editable)
+            && (
+              <>
+                <div className="sticky-actions">
+                  <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
+                    <Button disabled={!this.state.editable || htmlEditorImageLoading || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                  </Button.Group>
+                </div>
+              </>
+            )}
           <Divider hidden />
         </Form>
         <Confirm

@@ -144,7 +144,7 @@ export default class TombstonePreview extends Component {
                 {
                   TOMBSTONE_BASIC_FRM.fields.showOfferedBy.value && (
                     <p className="more-info">
-                      Offered by {!isEmpty(TOMBSTONE_BASIC_FRM.fields.offeredBy.value) ? TOMBSTONE_BASIC_FRM.fields.offeredBy.value : 'NextSeed Securities, LLC'}
+                      {!isEmpty(TOMBSTONE_BASIC_FRM.fields.offeredBy.value) ? TOMBSTONE_BASIC_FRM.fields.offeredBy.value : 'Offered by NextSeed Securities, LLC'}
                     </p>
                   )
                 }

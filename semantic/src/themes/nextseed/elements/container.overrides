@@ -31,24 +31,24 @@ section{
                     margin-bottom: @45px;  
                 }
             }
-        }
-        >.banner-meta {
-            color: @neutral;
-            font-size: @13px;
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            padding: @16px @28px;
-            background-color: fade(@white, 50%);
-            text-align: right;
-            p{
-                line-height: 20px;
-            }
-            @media only screen and (max-width: @largestMobileScreen) {
+            .banner-meta {
+                color: @neutral;
+                font-size: @13px;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                padding: @16px @28px;
                 background-color: fade(@white, 50%);
-                width: 100%;
-                padding: @relative14px;
-                text-align: left;
+                text-align: right;
+                p{
+                    line-height: 20px;
+                }
+                @media only screen and (max-width: @largestMobileScreen) {
+                    background-color: fade(@white, 50%);
+                    width: 100%;
+                    padding: @relative14px;
+                    text-align: left;
+                }
             }
         }
         &.home-banner{

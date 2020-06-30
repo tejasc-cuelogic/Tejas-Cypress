@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Form, Divider, Grid } from 'semantic-ui-react';
+import { Form, Divider, Grid, Header } from 'semantic-ui-react';
 import OfferingButtonGroup from '../OfferingButtonGroup';
 import formHOC from '../../../../../../theme/form/formHOC';
 import TombstoneHeaderMeta from './TombstoneHeaderMeta';
@@ -59,8 +59,9 @@ class CampaignSubHeader extends Component {
           <CampaignSubHeaderPreview />
           <Divider section />
           <Grid columns="1">
+            <Header as="h4" className="pt-20 pb-0">Display Toggle</Header>
             <Grid.Column>
-              {smartElement.FormCheckBox('toggleMeta', { fielddata: SUB_HEADER_BASIC_FRM.fields.toggleMeta, defaults: true, containerclassname: 'ui list field', label: 'Display Toggle' })}
+              {smartElement.FormCheckBox('toggleMeta', { customClass: 'secondary', fielddata: SUB_HEADER_BASIC_FRM.fields.toggleMeta, defaults: true, containerclassname: 'ui list field', label: ' ', toggle: true })}
             </Grid.Column>
           </Grid>
           <TombstoneHeaderMeta hideHighlight noAddMore title="Additional Fields" />

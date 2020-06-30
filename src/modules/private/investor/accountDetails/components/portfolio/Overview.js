@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import { includes, get, capitalize } from 'lodash';
+import { includes, get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Grid, Statistic, Button, Divider, Icon } from 'semantic-ui-react';
-import { AccTypeTitle, InlineLoader, IframeModal, PopUpModal, DateTimeFormat } from '../../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import { AccTypeTitle, InlineLoader, IframeModal, PopUpModal } from '../../../../../../theme/shared';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
-import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { DataFormatter } from '../../../../../../helper';
-import Helper from '../../../../../../helper/utility';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 
-const isMobile = document.documentElement.clientWidth < 768;
 @inject('portfolioStore', 'campaignStore', 'userDetailsStore', 'transactionStore', 'uiStore')
 @observer
 class Overview extends Component {
@@ -29,6 +26,12 @@ class Overview extends Component {
     this.props.portfolioStore.getPayOffData(accountType, isAdmin);
     this.props.transactionStore.getInvestmentsByOfferingId(isAdmin);
     window.addEventListener('message', this.docuSignListener);
+  }
+
+  componentDidMount() {
+    const { campaign } = this.props.campaignStore;
+    const type = get(campaign, 'keyTerms.securities');
+    this.props.portfolioStore.setOverviewSummaryData(type);
   }
 
   docuSignListener = (e) => {
@@ -61,20 +64,19 @@ class Overview extends Component {
   }
 
   render() {
-    const { campaign, campaignStatus } = this.props.campaignStore;
-    const chartData = this.props.portfolioStore.getChartData();
-    const { keyTerms, offering } = campaign;
+    const { campaign } = this.props.campaignStore;
+    const { overviewSummaryMeta, getChartData } = this.props.portfolioStore;
+    const { responsiveVars } = this.props.uiStore;
+    const { isMobile } = responsiveVars;
+    const chartData = getChartData();
+    const { offering } = campaign;
     const overviewToDisplay = campaign && campaign.keyTerms && campaign.keyTerms.securities
       && campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
     const isPreviewLinkShow = campaign && campaign.isAvailablePublicly;
-    const preferredEquityUnit = get(campaign, 'keyTerms.equityUnitType') ? `${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price` : 'N/A';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
-    const maturityMonth = get(campaign, 'keyTerms.maturity') ? `${get(campaign, 'keyTerms.maturity')} months` : 'N/A';
-    const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     const { agreementIds, loading } = this.props.transactionStore;
     let aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents') || [];
     aggrementDocs = aggrementDocs.length ? aggrementDocs.filter(d => d.isVisible && get(d, 'upload.fileHandle.boxFileId')) : [];
-    const { responsiveVars } = this.props.uiStore;
     if (loading) {
       return (
         <InlineLoader />
@@ -82,13 +84,13 @@ class Overview extends Component {
     }
     return (
       <>
-        <div className={`${responsiveVars.isMobile ? '' : 'bg-offwhite'} inner-content-spacer`}>
+        <div className={`${isMobile ? '' : 'bg-offwhite'} inner-content-spacer`}>
           <span className="pull-left">
             <Header as="h5">
               <AccTypeTitle moreText="investment" />
             </Header>
           </span>
-          {isPreviewLinkShow && !responsiveVars.isMobile
+          {isPreviewLinkShow && !isMobile
             && (
               <span className="pull-right">
                 <Link target="_blank" to={`/offerings/${campaign.offeringSlug}`} className="pull-right">View offering page</Link>
@@ -96,198 +98,33 @@ class Overview extends Component {
             )
           }
         </div>
-        {responsiveVars.isMobile
+        {isMobile
           && <SecondaryMenu classname="no-shadow" bonusRewards isBonusReward refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
         <div className="inner-content-spacer">
           <Grid>
             <Grid.Column width={isMobile ? 16 : 9}>
-              {!responsiveVars.isMobile && <Header as="h4">Offering Summary</Header>}
+              {!isMobile && <Header as="h4">Offering Summary</Header>}
               <div className="table-wrapper">
-                <Table definition basic="very" className={responsiveVars.isMobile ? 'without-border-shadow' : ''}>
+                <Table definition basic="very" className={isMobile ? 'without-border-shadow' : ''}>
                   <Table.Body>
-                    {keyTerms && keyTerms.shorthandBusinessName
-                      ? (
-                        <Table.Row verticalAlign="top" className={responsiveVars.isMobile ? 'pt-0' : ''}>
-                          <Table.Cell width={5}>Issuer</Table.Cell>
-                          <Table.Cell>
-                            {keyTerms && keyTerms.shorthandBusinessName
-                              ? keyTerms.shorthandBusinessName
-                              : 'N/A'
-                            }
-                          </Table.Cell>
-                        </Table.Row>
-                      ) : ''
-                    }
-                    {keyTerms && keyTerms.securities
-                      ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Securities</Table.Cell>
-                          <Table.Cell>
-                            {keyTerms && keyTerms.securities
-                              ? CAMPAIGN_KEYTERMS_SECURITIES[keyTerms.securities]
-                              : 'N/A'
-                            }
-                          </Table.Cell>
-                        </Table.Row>
-                      ) : ''
-                    }
-                    {offering && offering.launch && offering.launch.expectedOpsDate
-                      ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Anticipated Opening Date</Table.Cell>
-                          <Table.Cell>
-                            {offering && offering.launch
-                              && offering.launch.expectedOpsDate
-                              ? DataFormatter.getDateAsPerTimeZone(offering.launch.expectedOpsDate, false, true, false, undefined, 'CST', true)
-                              : 'N/A'
-                            }
-                          </Table.Cell>
-                        </Table.Row>
-                      ) : ''
-                    }
-                    {get(campaign, 'keyTerms.interestRate') || get(campaign, 'closureSummary.keyTerms.multiple')
-                      ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>
-                            {overviewToDisplay && overviewToDisplay === 'REVENUE'
-                              ? 'Investment Multiple'
-                              : 'Interest Rate'
-                            }
-                          </Table.Cell>
-                          {overviewToDisplay && overviewToDisplay === 'REVENUE'
-                            ? (
-                              <Table.Cell>
-                                {campaign && get(campaign, 'closureSummary.keyTerms.multiple') ? `${get(campaign, 'closureSummary.keyTerms.multiple')}x` : 'N/A'}{' '}
-                                <HtmlEditor
-                                  readOnly
-                                  content={(keyTerms && keyTerms.investmentMultipleSummary
-                                    ? keyTerms.investmentMultipleSummary : '')}
-                                />
-                              </Table.Cell>
-                            )
-                            : (
-                              <Table.Cell>
-                                {campaign && get(campaign, 'keyTerms.interestRate')
-                                  ? `${get(campaign, 'keyTerms.interestRate')}%` : 'N/A'
-                                }
-                              </Table.Cell>
-                            )
-                          }
-                        </Table.Row>
-                      ) : ''
-                    }
-                    {campaignStatus.isPreferredEquity
+                    {campaign && campaign.keyTerms && overviewSummaryMeta.map(data => (
+                      data.value
                       && (
-                        <>
-                          <Table.Row verticalAlign="top">
-                            <Table.Cell>{preferredEquityUnit}</Table.Cell>
-                            <Table.Cell>
-                              {get(campaign, 'closureSummary.keyTerms.priceCalculation')
-                                ? Helper.CurrencyFormat(get(campaign, 'closureSummary.keyTerms.priceCalculation'))
-                                : 'N/A'
-                              }
-                            </Table.Cell>
-                          </Table.Row>
-                          <Table.Row verticalAlign="top">
-                            <Table.Cell>Pre-Money Valuation</Table.Cell>
-                            <Table.Cell>
-                              {get(campaign, 'keyTerms.premoneyValuation')
-                                ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0)
-                                : 'N/A'
-                              }
-                            </Table.Cell>
-                          </Table.Row>
-                        </>
-                      )
-                    }
-                    {keyTerms && keyTerms.frequencyOfPayments
-                      ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Payments</Table.Cell>
-                          <Table.Cell>
-                            {keyTerms && keyTerms.frequencyOfPayments
-                              ? keyTerms.frequencyOfPayments : 'N/A'}
-                          </Table.Cell>
-                        </Table.Row>
-                      ) : ''
-                    }
-                    {overviewToDisplay && overviewToDisplay === 'REVENUE' && get(campaign, 'closureSummary.keyTerms.revSharePercentage')
-                      ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Revenue Sharing Percentage</Table.Cell>
-                          <Table.Cell>
-                            {campaign && get(campaign, 'closureSummary.keyTerms.revSharePercentage')
-                              ? get(campaign, 'closureSummary.keyTerms.revSharePercentage').includes('%')
-                                ? get(campaign, 'closureSummary.keyTerms.revSharePercentage') : `${get(campaign, 'closureSummary.keyTerms.revSharePercentage')}%`
-                              : 'N/A'}
-                            <HtmlEditor
-                              readOnly
-                              content={(keyTerms && keyTerms.revSharePercentageDescription
-                                ? keyTerms.revSharePercentageDescription : '')}
-                            />
-                          </Table.Cell>
-                        </Table.Row>
-                      )
-                      : ''
-                    }
-                    {maturityMonth
-                      ? (
-                        <Table.Row verticalAlign="top">
+                        <Table.Row verticalAlign="top" className={isMobile ? 'pt-0' : ''}>
+                          {data.tooltip
+                          ? (
                           <Table.Cell width={5}>{' '}
-                            <PopUpModal position="top left" content={<>This is the deadline by which the issuer is obligated to make payment in full to investors.</>} customTrigger={<span className="popup-label">Maturity</span>} showOnlyPopup={!isMobile} />
+                            <PopUpModal position="top left" content={data.tooltip} customTrigger={<span className="popup-label">{data.label}</span>} showOnlyPopup={!isMobile} />
                           </Table.Cell>
-                          <Table.Cell>
-                            {maturityMonth
-                              ? `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
-                              : 'N/A'
-                            }
-                          </Table.Cell>
+                          ) : <Table.Cell width={5}>{data.label}</Table.Cell>
+                          }
+                          <Table.Cell>{data.value}</Table.Cell>
                         </Table.Row>
-                      ) : ''
-                    }
-                    {keyTerms && keyTerms.securityInterest
-                      ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Security Interest</Table.Cell>
-                          <Table.Cell>
-                            {keyTerms && keyTerms.securityInterest
-                              ? keyTerms.securityInterest
-                              : 'N/A'
-                            }
-                          </Table.Cell>
-                        </Table.Row>
-                      ) : ''
-                    }
-                    {keyTerms && keyTerms.securitiesOwnershipPercentage
-                      ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Ownership % Represented by Securities</Table.Cell>
-                          <Table.Cell>
-                            {keyTerms && keyTerms.securitiesOwnershipPercentage
-                              ? `${keyTerms.securitiesOwnershipPercentage}%
-                          equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`
-                              : 'N/A'
-                            }
-                          </Table.Cell>
-                        </Table.Row>
-                      ) : ''
-                    }
-
-                    {overviewToDisplay && overviewToDisplay === 'TERM' && get(offering, 'closureSummary.hardCloseDate')
-                      ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Close Date</Table.Cell>
-                          <Table.Cell>
-                            {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'
-                            }
-                          </Table.Cell>
-                        </Table.Row>
-                      ) : ''
-                    }
+                      )))}
                     {(agreementIds && agreementIds.length) || (aggrementDocs && aggrementDocs.length)
                       ? (
-                        <Table.Row verticalAlign="top" className={responsiveVars.isMobile ? 'pb-0' : ''}>
+                        <Table.Row verticalAlign="top" className={isMobile ? 'pb-0' : ''}>
                           <Table.Cell>Investor Agreement{(agreementIds.length + aggrementDocs.length) > 1 && 's'} </Table.Cell>
                           <Table.Cell>
                             <Button.Group vertical>
@@ -302,7 +139,7 @@ class Overview extends Component {
                         </Table.Row>
                       ) : null
                     }
-                    {edgarLink && !responsiveVars.isMobile
+                    {edgarLink && !isMobile
                       && (
                         <Table.Row>
                           <Table.Cell colSpan="2">
@@ -349,7 +186,7 @@ class Overview extends Component {
             }
           </Grid>
         </div>
-        {isPreviewLinkShow && responsiveVars.isMobile
+        {isPreviewLinkShow && isMobile
           && (
             <>
               <Divider fitted />
@@ -359,7 +196,7 @@ class Overview extends Component {
             </>
           )
         }
-        {(chartData.length > 0 && !responsiveVars.isMobile && overviewToDisplay !== 'REVENUE')
+        {(chartData.length > 0 && !isMobile && overviewToDisplay !== 'REVENUE')
           && (
             <>
               <Divider />
@@ -375,7 +212,7 @@ class Overview extends Component {
           srcUrl={this.state.embedUrl}
           loading={false}
         />
-        {edgarLink && responsiveVars.isMobile
+        {edgarLink && isMobile
           && (
             <div className="card-bottom-button">
               <Button className="mt-30" fluid onClick={() => window.open(edgarLink.includes('http') ? edgarLink : `http://${edgarLink}`, '_blank')} primary content="View Form C Filing" />
