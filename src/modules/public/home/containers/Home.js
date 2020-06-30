@@ -68,13 +68,13 @@ class Home extends Component {
                   we make it easy to raise money from thousands of local investors.
                 </p>
                 {!userStore.isIssuer && !responsiveVars.isMobile
-                  && <Button as={Link} to="/register" className="relaxed" primary>Apply Online</Button>}
+                  && <Button as={Link} to="/business-application" className="relaxed" primary>Apply Online</Button>}
                 {responsiveVars.isMobile && <NSImage path="home.jpg" />}
               </Grid.Column>
               <Grid.Column>
                 {!responsiveVars.isMobile && <NSImage path="home.jpg" />}
                 {!userStore.isIssuer && responsiveVars.isMobile
-                && <Button as={Link} to="/register" primary fluid className="mb-20 mt-10 relaxed">Apply Online</Button>}
+                && <Button as={Link} to="/business-application" primary fluid className="mb-20 mt-10 relaxed">Apply Online</Button>}
               </Grid.Column>
             </Grid>
             <Divider section />

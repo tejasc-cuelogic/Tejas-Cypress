@@ -410,7 +410,7 @@ export class CampaignStore {
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const maxOfferingD = get(campaign, 'keyTerms.maxOfferingAmount506') && get(campaign, 'keyTerms.maxOfferingAmount506') !== '0.00' ? get(campaign, 'keyTerms.maxOfferingAmount506') : get(campaign, 'keyTerms.maxOfferingAmount506C') ? get(campaign, 'keyTerms.maxOfferingAmount506C') : '0.00';
     campaignStatus.maxOffering = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
-    campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering && (campaignStatus.minOffering !== '0.00');
+    campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering && campaignStatus.minOffering !== '0.00';
     campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
     const formattedRaisedAmount = money.floatToAmount(campaignStatus.collected);
     const formattedMaxOfferingAmount = money.floatToAmount(campaignStatus.maxOffering);
