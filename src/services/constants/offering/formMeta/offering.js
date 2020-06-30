@@ -101,6 +101,9 @@ export const OFFERING_CONTENT = {
       error: undefined,
       rule: 'required',
       placeHolder: 'e.g. Investment Term',
+      customErrors: {
+        required: 'required',
+      },
     },
     order: {
       label: 'Order',
