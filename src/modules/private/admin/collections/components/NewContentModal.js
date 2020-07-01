@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Modal, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
@@ -15,9 +16,12 @@ const metaInfo = {
 class NewContentModal extends React.Component {
   constructor(props) {
     super(props);
+    const { filterContentType, setFieldValue } = this.props.collectionStore;
+    const { index } = this.props;
     this.state = {
-      options: this.props.collectionStore.filterContentType(this.props.index),
+      options: filterContentType(index),
     };
+    setFieldValue('COLLECTION_CONTENT_FRM', moment().unix().toString(), `fields.content[${index}].customValue.value`);
   }
 
   handleFormSubmit = async () => {

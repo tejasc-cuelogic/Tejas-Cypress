@@ -18,11 +18,12 @@ export const adminCollectionUpsert = gql`
   }`;
 
 export const getCollectionMapping = gql`
-  query getCollectionMapping($collectionId: String, $referenceId: String, $type: CollectionMappingTypeEnum) {
+  query getCollectionMapping($collectionId: String, $customValue: String, $referenceId: String, $type: CollectionMappingTypeEnum) {
     getCollectionMapping(
       collectionId: $collectionId
       referenceId: $referenceId
       type: $type
+      customValue: $customValue
     ) {
       collectionId
       referenceId
@@ -342,6 +343,7 @@ export const adminCollectionMappingUpsert = gql`
     $type: CollectionMappingTypeEnum!
     $order: Int
     $image: CollectionMappingMediaInput
+    $customValue: String
     $scope: ScopeEnumType!){
     adminCollectionMappingUpsert(
       collectionId: $collectionId,
@@ -350,6 +352,7 @@ export const adminCollectionMappingUpsert = gql`
       order: $order,
       image: $image,
       scope: $scope,
+      customValue: $customValue,
       ) {
         collectionId
         referenceId

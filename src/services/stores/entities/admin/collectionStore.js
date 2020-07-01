@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { get, orderBy, isArray, pickBy, map, countBy } from 'lodash';
+import { get, orderBy, isArray, pickBy, map, countBy, kebabCase } from 'lodash';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator } from '../../../../helper';
@@ -125,6 +125,14 @@ class CollectionsStore extends DataModelStore {
       resolve();
     }));
   })
+
+  collectionChange = (e, result, form) => {
+    this.formChange(e, result, form);
+    if (result.name !== 'slug') {
+      const { value } = this[form].fields[result.name];
+      this[form].fields.slug.value = kebabCase(value);
+    }
+  }
 
   setCollectionMetaList = (data, isContentMapping) => {
     const mappingId = isContentMapping ? 'id' : 'collectionId';
@@ -423,6 +431,7 @@ class CollectionsStore extends DataModelStore {
       const params = {
         type: this.getContentType(type),
         collectionId: this.collectionId,
+        customvalue: this.COLLECTION_CONTENT_FRM.fields.content[index].customValue.value,
       };
       this.collectionMappingWrapper(params)
         .then(action((res) => {
@@ -860,6 +869,7 @@ decorate(CollectionsStore, {
   setOrderForCollections: action,
   evaluateFormFieldToArray: action,
   loadMoreRecord: action,
+  collectionChange: action,
   setMappedData: action,
 });
 export default new CollectionsStore();

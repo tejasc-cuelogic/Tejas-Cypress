@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get, camelCase, orderBy, filter } from 'lodash';
+import { get, camelCase, orderBy, filter, intersection } from 'lodash';
 import { withRouter, Route } from 'react-router-dom';
 import scrollIntoView from 'scroll-into-view';
 import { Responsive, Visibility, Container, Grid, Menu, Divider, Button, Icon } from 'semantic-ui-react';
@@ -135,7 +135,7 @@ class CollectionDetails extends Component {
     const collectionHeader = get(collectionDetails, 'marketing.header');
     let content = get(collectionDetails, 'marketing.content') || [];
     const getNotHiddenActiveOfferingsList = filter(content, con => con.contentType === 'ACTIVE_INVESTMENTS' && con.scope !== 'HIDDEN');
-    if (loadingArray.includes('getCollection')) {
+    if (intersection(loadingArray, ['getCollection', 'getCollectionMapping']).length > 0) {
       return <InlineLoader />;
     }
     const validate = (con) => {

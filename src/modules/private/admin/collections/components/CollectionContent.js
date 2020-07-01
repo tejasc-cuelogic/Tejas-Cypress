@@ -72,7 +72,8 @@ class CollectionContent extends Component {
     const { htmlEditorImageLoading } = this.props;
     const index = parseInt(this.props.match.params.index, 10) - 1 || 0;
     const { COLLECTION_CONTENT_FRM, collectionId, collectionMapping } = collectionStore;
-    const { value: contentTypeValue } = COLLECTION_CONTENT_FRM.fields.content[index].contentType;
+    const { contentType, customValue } = COLLECTION_CONTENT_FRM.fields.content[index];
+    const { value: contentTypeValue } = contentType;
     const { loadingArray } = this.props.nsUiStore;
     return (
       <div className="inner-content-spacer">
@@ -143,7 +144,7 @@ class CollectionContent extends Component {
           {
             ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
             && (
-              <AddToCollection isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
+              <AddToCollection customValue={customValue.value} isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
             )
           }
           {(contentTypeValue !== 'GALLERY' && this.state.editable)
