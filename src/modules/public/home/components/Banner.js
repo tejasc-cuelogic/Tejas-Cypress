@@ -61,7 +61,7 @@ class Banner extends Component {
         <Container>
           <div className="banner-caption">
             <Header as="h2">
-              Build an investment<br />portfolio you care about
+              Expand your portfolio.<br />Invest in small business.
             </Header>
             { showButton
               ? (

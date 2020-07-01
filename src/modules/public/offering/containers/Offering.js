@@ -86,7 +86,7 @@ class Offering extends Component {
     // };
     return (
       <>
-      <div className="successCampaigns">
+      <div>
         <CampaignList
           refLink={this.props.match.url}
           loading={loading}

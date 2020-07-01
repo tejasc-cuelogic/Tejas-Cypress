@@ -178,7 +178,9 @@ export default class CampaignList extends Component {
                             {offering.stage === 'LIVE' ? this.renderBaners(offering, getCustomTag(offering)) : null}
                             {(['INVESTOR', 'WATCHING'].includes(offering.watchListStatus))
                               && (
-                                <Icon name="heart" />
+                                <p className="more-info">
+                                  {get(offering, 'tombstone.offeredBy') ? offering.tombstone.offeredBy : 'Offered by NextSeed Securities, LLC'}
+                                </p>
                               )
                             }
                             <div className={`campaign-card-details ${((!get(offering, 'isAvailablePublicly') && !collection) || (get(offering, 'scope') === 'HIDDEN' && collection)) ? 'disabled' : ''}`}>

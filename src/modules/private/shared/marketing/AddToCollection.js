@@ -30,6 +30,9 @@ export default class AddToCollection extends React.Component {
       .then(() => {
         if (mutation === 'adminCollectionMappingUpsert') {
           setFieldValue('selectedCollectionArray', res.value);
+        } else {
+          const { selectedCollectionArray } = this.props.collectionStore;
+          setFieldValue('selectedCollectionArray', selectedCollectionArray.filter(c => res.value.includes(c)));
         }
         setFieldValue('COLLECTION_MAP_DROPDOWN', res.value, 'fields.mappingMeta.value');
         setFieldValue('collectionIndex', null);
