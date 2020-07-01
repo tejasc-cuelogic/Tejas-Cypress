@@ -21,7 +21,7 @@ export default class ConfirmCancelModal extends React.Component {
           stepToBeRendered: 1,
           header: <>Let’s have a look around<br />your new account</>,
           content: <>Once you’ve made your first investment on NextSeed, use your Dashboard to find information related to your investment portfolio — including payments, updates, returns and more.</>,
-          component: <NSImage path={`${!isMobile ? 'interstitial/portfolio.png' : 'interstitial/portfolioMobile.png'}`} />,
+          component: <NSImage path={`${!isMobile ? 'interstitial/portfolio.gif' : 'interstitial/portfolioMobile.png'}`} />,
           imageFooter: '*Sample Portfolio',
           button: 'Next',
         }, {
