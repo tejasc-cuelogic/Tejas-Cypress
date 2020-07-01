@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { get, capitalize, sortBy } from 'lodash';
-import { Container, Card, Grid, Label, Button, Table } from 'semantic-ui-react';
+import { Container, Card, Grid, Label, Icon, Divider, Button, Table } from 'semantic-ui-react';
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
@@ -67,7 +67,7 @@ const CompletedCard = ({ collection, offering, showBusinessLocation, getTombston
         get(offering, 'tombstone.showOfferedBy') !== false
         && (
           <p className="more-info">
-            Offered by {get(offering, 'tombstone.offeredBy') ? offering.tombstone.offeredBy : 'NextSeed Securities, LLC'}
+            {get(offering, 'tombstone.offeredBy') ? offering.tombstone.offeredBy : 'Offered by NextSeed Securities, LLC'}
           </p>
         )
       }
@@ -178,9 +178,7 @@ export default class CampaignList extends Component {
                             {offering.stage === 'LIVE' ? this.renderBaners(offering, getCustomTag(offering)) : null}
                             {(['INVESTOR', 'WATCHING'].includes(offering.watchListStatus))
                               && (
-                                <p className="more-info">
-                                  {get(offering, 'tombstone.offeredBy') ? offering.tombstone.offeredBy : 'Offered by NextSeed Securities, LLC'}
-                                </p>
+                                <Icon name="heart" />
                               )
                             }
                             <div className={`campaign-card-details ${((!get(offering, 'isAvailablePublicly') && !collection) || (get(offering, 'scope') === 'HIDDEN' && collection)) ? 'disabled' : ''}`}>
@@ -203,7 +201,7 @@ export default class CampaignList extends Component {
                                     content={getTombstoneDescription(offering) || ''}
                                   />
                                 </Card.Description>
-                                <Button className="mt-20 mb-0" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
+                                <Divider />
                                 <div className="campaign-card-table-wrapper">
                                   <Table basic="very" compact="very" unstackable className="no-border campaign-card">
                                     {!isTemplate2(get(offering, 'template'))
@@ -261,6 +259,7 @@ export default class CampaignList extends Component {
                                     }
                                   </Table>
                                 </div>
+                                <Button className="mt-20 mb-0" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
                                 </Card.Content>
                             </div>
                             <Card.Content extra className={((!get(offering, 'isAvailablePublicly') && !collection) || (get(offering, 'scope') === 'HIDDEN' && collection)) ? 'disabled' : ''}>

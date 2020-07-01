@@ -5,8 +5,6 @@
 .ui.card{
     &.campaign{ 
         box-shadow:none;
-        border-radius: 4px;
-        border: 1px solid #E6E6E8;
         padding-bottom: 73px;
         &:hover, &:focus {
             text-decoration: none;
@@ -20,10 +18,8 @@
             }
             .campaign-card-details{
                 margin-top: 0;
-                // min-height: 450px;
-                // max-height: 450px;
-                min-height: 300px;
-                max-height: 300px;
+                min-height: 450px;
+                max-height: 450px;
                 border-top-left-radius: 6px;
                 border-top-right-radius: 6px;
                 @media only screen and (max-width : @monitorBreakpoint){
@@ -162,8 +158,8 @@
                     line-height: 24px;
                 }
                 .description{
-                    min-height:150px;
-                    max-height:150px;
+                    min-height:120px;
+                    max-height:120px;
                     margin:@14px 0 0;
                     overflow:hidden;
                     font-size:@15px;
@@ -199,7 +195,7 @@
             }
         }
         >.content.extra {
-            padding:@19px @28px @21px;
+            padding:0 @28px @21px;
             border-top: 0!important;
             position: absolute;
             bottom: 0;

@@ -256,16 +256,25 @@
             min-height: 220px !important;
             max-height: 300px !important;
             transition: none !important;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
             .content{
                 transition: none !important;
-                padding: 21px 28px 15px 28px !important;
+                padding: 18px 25px 15px 25px !important;
                 &.extra{
                     padding-top: 0 !important;
                     padding-bottom: 0 !important;
                 }
+                .header{
+                    font-weight: 500 !important;
+                }
+                .meta{
+                    margin-bottom: 0 !important;
+                }
                 .description{
-                    min-height: 82px !important;
-                    max-height: 82px !important;
+                    margin-top: 11px;
+                    min-height: 99px !important;
+                    max-height: 99px !important;
                     transition: none !important;
                 }
             }
