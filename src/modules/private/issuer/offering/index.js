@@ -52,7 +52,7 @@ export default class Offering extends Component {
     return (
       <>
         <Helmet>
-          <title>{Helper.pageTitle(`${get(offer, 'keyTerms.shorthandBusinessName' || 'Alternative Investments Made Simple')} - NextSeed`)}</title>
+          <title>{Helper.pageTitle(`${get(offer, 'keyTerms.shorthandBusinessName' || 'Invest in Small Business')} | NextSeed`)}</title>
         </Helmet>
         <PrivateLayout
           {...this.props}

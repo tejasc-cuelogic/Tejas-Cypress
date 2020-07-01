@@ -5,6 +5,7 @@ import { arrayMove, SortableContainer, SortableElement, sortableHandle } from 'r
 import { Form, Button, Icon, Header, Table, Divider } from 'semantic-ui-react';
 import formHOC from '../../../../../../../theme/form/formHOC';
 import OfferingButtonGroup from '../../OfferingButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 const metaInfo = {
   store: 'manageOfferingStore',
@@ -87,9 +88,10 @@ const GalleryList = ({ toggleVisible, GALLERY_FRM, isReadOnly, onSortEnd, smartE
 );
 
 function Gallery(props) {
-  const { smartElement, manageOfferingStore, title, noAddMore, offeringCreationStore } = props;
+  const { smartElement, manageOfferingStore, title, noAddMore, offeringCreationStore, uiStore } = props;
   const { GALLERY_FRM, removeOne, addMore, campaignStatus, toggleVisible } = manageOfferingStore;
   const { currentOfferingId } = offeringCreationStore;
+  const { inProgress } = uiStore;
   const isReadOnly = campaignStatus.lock;
   const removeMedia = (form, name) => {
     window.logger(form, name);
@@ -105,6 +107,9 @@ function Gallery(props) {
     props.manageOfferingStore.reOrderHandle(arrayMove(gallery, oldIndex, newIndex), 'GALLERY_FRM', 'gallery');
     props.manageOfferingStore.setFieldValue('onDragSaveEnable', true);
   };
+  if (inProgress === 'save') {
+    return <InlineLoader />;
+  }
   return (
     <>
       <Header as="h4">
@@ -156,4 +161,4 @@ function Gallery(props) {
   );
 }
 
-export default inject('offeringCreationStore')(withRouter(formHOC(observer(Gallery), metaInfo)));
+export default inject('offeringCreationStore', 'uiStore')(withRouter(formHOC(observer(Gallery), metaInfo)));
