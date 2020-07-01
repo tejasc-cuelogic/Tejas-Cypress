@@ -162,6 +162,7 @@ export class ArticleStore extends DataModelStore {
     const payload = {
       ...data,
       ...this.evaluateFormFieldToArray(this.ARTICLE_MISC_FRM.fields, false),
+      featuredImage: this.ARTICLE_FRM.fields.featuredImage.preSignedUrl,
     };
 
     if (id === 'new') {
