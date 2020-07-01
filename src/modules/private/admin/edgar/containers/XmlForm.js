@@ -331,10 +331,9 @@ export default class XmlForm extends React.Component {
 
   handleXmlSubmissionSubmit = () => {
     const { currentOfferingSlug } = this.props.offeringCreationStore;
-    const { offer } = this.props.offeringsStore;
     businessActions.submitXMLInformation('xmlSubmission')
       .then(() => {
-        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}${offer.stage === 'CREATION' ? '' : '/offering-creation'}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/legal/generate-docs`);
         Helper.toast('XML form submitted successfully', 'success');
       })
       .catch((errors) => {
@@ -346,10 +345,9 @@ export default class XmlForm extends React.Component {
     this.props.uiStore.setProgress();
     this.props.uiStore.setLoaderMessage('Copy the XML submission');
     const { currentOfferingSlug } = this.props.offeringCreationStore;
-    const { offer } = this.props.offeringsStore;
     businessActions.copyXMLInformation()
       .then(() => {
-        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}${offer.stage === 'CREATION' ? '' : '/offering-creation'}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/legal/generate-docs`);
         Helper.toast('Copy XML submission successfully', 'success');
       })
       .catch((error) => {
