@@ -3989,7 +3989,7 @@ h3.ui.header.error-2{
 		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
 			margin-top: 28px;
 			position: relative;
-			bottom: 0%;
+			bottom: 1%;
 			left: 4.5%;
 		}
 		.steps{
