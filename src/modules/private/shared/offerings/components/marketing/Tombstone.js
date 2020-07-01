@@ -37,6 +37,7 @@ class Tombstone extends Component {
     const { manageOfferingStore, offeringCreationStore, smartElement } = this.props;
     const { TOMBSTONE_BASIC_FRM, campaignStatus } = manageOfferingStore;
     const { currentOfferingId } = offeringCreationStore;
+    // const { showOfferedBy } = campaignStatus;
     const isReadOnly = campaignStatus.lock;
     return (
       <div className="inner-content-spacer">
@@ -73,7 +74,9 @@ class Tombstone extends Component {
               <Header as="h4">Display Toggle</Header>
               {smartElement.FormCheckBox('toggleMeta', { defaults: true, toggle: true, containerclassname: 'ui list field', label: ' ' })}
               {smartElement.FormCheckBox('showOfferedBy', { customClass: 'custom-toggle', defaults: true, toggle: true })}
-              {smartElement.Input('offeredBy')}
+              {TOMBSTONE_BASIC_FRM.fields.showOfferedBy.value
+              && smartElement.Input('offeredBy')
+              }
             </Grid.Column>
           </Grid>
           <TombstoneHeaderMeta />

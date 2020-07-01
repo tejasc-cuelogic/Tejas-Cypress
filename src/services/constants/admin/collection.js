@@ -148,6 +148,9 @@ export const CONTENT = {
       error: undefined,
       rule: 'required',
       placeHolder: 'e.g. Investment Term',
+      customErrors: {
+        required: 'required',
+      },
     },
     description: {
       label: 'Description',

@@ -58,5 +58,5 @@ export const TITLES = {
   '/dashboard/setup/account-creation': 'Create Investment Account - NextSeed',
   '/dashboard/setup': 'Investor Dashboard - NextSeed',
   '/dashboard/referrals': 'Referrals - NextSeed',
-  '/': 'Alternative Investments Made Simple - NextSeed',
+  '/': 'Invest in Small Business | NextSeed',
 };
