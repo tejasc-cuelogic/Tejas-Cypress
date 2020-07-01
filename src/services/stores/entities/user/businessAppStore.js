@@ -579,13 +579,18 @@ export class BusinessAppStore {
             if (data[field] && data[field].length) {
               this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', formField[key]);
             }
-          } else if (this.currentApplicationType === 'business' && !this.getBusinessTypeCondtion && formField[key] !== 'bankStatements') {
+          } else if (this.currentApplicationType === 'business' && !this.getBusinessTypeCondtion) {
             if (data[field] && data[field].length) {
-              this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', formField[key]);
-            }
+              if (formField[key] !== 'bankStatements') {
+                this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', formField[key]);
+              } else {
+                this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', formField[key]);
+                this.BUSINESS_DOC_FRM.fields[formField[key]].rule = 'optional';
+              }
           } else {
             this.BUSINESS_DOC_FRM.fields[formField[key]].rule = 'optional';
           }
+        }
         });
         this.checkValidationForTaxReturn();
       } else {
