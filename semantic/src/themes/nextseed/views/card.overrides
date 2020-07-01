@@ -176,7 +176,6 @@
                     }
                 }
                 .campaign-card-table-wrapper{
-                    display: none;
                     min-height: 115px;
                     @media only screen and (max-width : @monitorBreakpoint){
                         min-height: auto;

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { get, capitalize, sortBy } from 'lodash';
-import { Container, Card, Grid, Label, Icon, Button, Table } from 'semantic-ui-react';
+import { Container, Card, Grid, Label, Button, Table } from 'semantic-ui-react';
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
