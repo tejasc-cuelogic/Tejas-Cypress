@@ -96,11 +96,13 @@ export const SIGNUP = {
       },
       {
         label: <><Icon className="ns-business-circle" />Business</>,
+        secondaryLabel: <>Business</>,
         labelDescription: <>Apply for funding for your business</>,
         value: 'issuer-type1',
       },
       {
         label: <><Icon className="ns-building-circle" />Commercial Real Estate</>,
+        secondaryLabel: <>Commercial Real Estate</>,
         labelDescription: <>Apply for real estate funding</>,
         value: 'issuer-type2',
       },

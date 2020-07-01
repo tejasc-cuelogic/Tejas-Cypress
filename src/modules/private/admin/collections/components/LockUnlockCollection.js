@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
+import { DataFormatter } from '../../../../../helper';
 
 function LockUnlockCollection(props) {
   const [lockStatus, setLockStatus] = useState(false);
@@ -50,14 +51,14 @@ function LockUnlockCollection(props) {
         {get(lock, 'by') && currentUserId !== get(lock, 'id')
         ? (
           <>
-            <span className="mt-10">Locked by {get(lock, 'by')} {' '}
+            <span className="mt-10">Locked by {get(lock, 'by')} on {DataFormatter.formatedDate(get(lock, 'date'))} {' '}
               (<Link to="/" onClick={handleForceUnlock} disabled={loadingArray.includes('adminLockOrUnlockCollection')}>Force Unlock</Link>)
             </span>
           </>
         ) : lockStatus
         ? (
           <>
-            <span className="mt-10">Locked by me {' '}
+            <span className="mt-10">Locked by me on {DataFormatter.formatedDate(get(lock, 'date'))} {' '}
               (<Link to="/" onClick={handlePersonalUnlock} disabled={loadingArray.includes('adminLockOrUnlockCollection')}>Unlock</Link>)
             </span>
           </>

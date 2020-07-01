@@ -7,12 +7,14 @@ import Failure from '../../../shared/businessApplication/components/Failure';
 import Application from '../../../shared/businessApplication/components/lendio/Application';
 import LendioSuccess from '../../../shared/businessApplication/components/lendio/LendioSuccess';
 import NeedHelpModal from '../../../shared/businessApplication/components/NeedHelpModal';
+import SignupBusiness from '../../../auth/containers/SignupBusiness';
 
 class Signup extends Component {
   render() {
     return (
       <Segment vertical className="content">
         <Switch>
+          <Route exact path="/business-application" render={props => <SignupBusiness isPublic {...props} />} />
           <Route exact path="/business-application/questions/need-help" render={props => <NeedHelpModal isPublic {...props} />} />
           <Route exact path="/business-application/:applicationType" render={props => <PreQualification isPublic {...props} />} />
           <Route exact path="/business-application/:applicationType/:id/lendio" render={props => <Application isPublic {...props} />} />

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { arrayMove, SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
@@ -115,10 +115,6 @@ function DraggableListing(props) {
   const removeMedia = (form, name) => {
     window.logger(form, name);
   };
-
-  useEffect(() => {
-    props.collectionStore.setFormData('COLLECTION_MAPPING_CONTENT_FRM', false, true, props.allRecords);
-  }, [props.allRecords]);
 
   const onSortEnd = async ({ oldIndex, newIndex }) => {
     if (oldIndex !== newIndex) {

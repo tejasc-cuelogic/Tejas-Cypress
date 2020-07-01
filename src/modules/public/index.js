@@ -112,7 +112,7 @@ export default class Public extends React.Component {
     const NoHeader = ['/invest/get-started'];
     const hasHeader = !NoHeader.find(item => matchPath(location.pathname, { path: item }));
     const { visible } = this.state;
-    const authAllowed = ['login', 'register', 'register-investor', 'confirm-email', 'change-password', 'reset-password', 'forgot-password', 'welcome-email'];
+    const authAllowed = ['login', 'register', 'register-investor', 'business-application', 'confirm-email', 'change-password', 'reset-password', 'forgot-password', 'welcome-email'];
     const isAuthLocation = (authAllowed.find(item => matchPath(location.pathname, { path: `/${item}` })));
     if (this.props.uiStore.inProgressArray.includes('publicLoading')) {
       return <Spinner loaderMessage="Loading..." />;

@@ -46,7 +46,7 @@ class Business extends Component {
       this.setState({ isInvestorModal: true });
     } else {
       this.props.uiStore.setAuthRef('/business');
-      this.props.history.push('/register');
+      this.props.history.push('/business-application');
     }
   }
 
