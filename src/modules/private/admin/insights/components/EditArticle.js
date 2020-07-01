@@ -7,7 +7,7 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/article';
 import { Image64, InlineLoader } from '../../../../../theme/shared';
 import Actions from './Actions';
-import AddToCollection from '../../../shared/marketing/AddToCollection';
+// import AddToCollection from '../../../shared/marketing/AddToCollection';
 import InsightsSocial from './InsightsSocial';
 
 
@@ -20,9 +20,9 @@ export default class EditArticle extends Component {
     this.state = { displayMode: false };
     const { id } = this.props.match.params;
 
-    if (this.props.match.isExact) {
-      this.props.collectionStore.initRequest('INSIGHTS', id);
-    }
+    // if (this.props.match.isExact) {
+    //   this.props.collectionStore.initRequest('INSIGHTS', id);
+    // }
 
     if (id !== 'new') {
       this.props.articleStore.getSingleInsightAdmin(id);
@@ -130,11 +130,11 @@ export default class EditArticle extends Component {
                     name="content"
                     content={ARTICLE_FRM.fields.content.value}
                   />
-                  <Card fluid>
+                  {/* <Card fluid>
                     <Card.Content>
                       <AddToCollection referenceId={this.props.match.params.id} />
                     </Card.Content>
-                  </Card>
+                  </Card> */}
                   <Card fluid>
                     <Card.Content>
                       <InsightsSocial {...this.props} />
