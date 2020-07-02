@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { get, orderBy, isArray, pickBy, map, countBy, kebabCase } from 'lodash';
+import { get, orderBy, isArray, pickBy, map, countBy, kebabCase, groupBy } from 'lodash';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator } from '../../../../helper';
@@ -170,15 +170,17 @@ class CollectionsStore extends DataModelStore {
       variables: { collectionId },
     }).then((res) => {
       if (get(res, 'getCollectionMapping')) {
+        const sortedMapping = groupBy(get(res, 'getCollectionMapping'), 'customValue');
+        console.log('sortedMapping', sortedMapping);
         const data = {
           offerings: [],
           insights: [],
         };
         res.getCollectionMapping.forEach((c) => {
           if (c.referenceId === get(c.offering, 'id')) {
-            data.offerings.push({ ...c.offering, sortOrder: c.order, scope: c.scope, image: c.image });
+            data.offerings.push({ ...c.offering, sortOrder: c.order, scope: c.scope, image: c.image, customValue: c.customValue });
           } else if (c.referenceId === get(c.insight, 'id')) {
-            data.insights.push({ ...c.insight, sortOrder: c.order, scope: c.scope, image: c.image });
+            data.insights.push({ ...c.insight, sortOrder: c.order, scope: c.scope, image: c.image, customValue: c.customValue });
           }
         });
         this.setFieldValue('collectionMappingsData', data);
@@ -431,7 +433,7 @@ class CollectionsStore extends DataModelStore {
       const params = {
         type: this.getContentType(type),
         collectionId: this.collectionId,
-        customvalue: this.COLLECTION_CONTENT_FRM.fields.content[index].customValue.value,
+        customValue: this.COLLECTION_CONTENT_FRM.fields.content[index].customValue.value,
       };
       this.collectionMappingWrapper(params)
         .then(action((res) => {
