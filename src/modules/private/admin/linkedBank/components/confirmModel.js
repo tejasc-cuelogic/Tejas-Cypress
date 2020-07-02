@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Header, Button, Form } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { FormTextarea } from '../../../../../theme/form';
+
 @inject('bankAccountStore', 'uiStore', 'accountStore')
 @withRouter
 @observer
