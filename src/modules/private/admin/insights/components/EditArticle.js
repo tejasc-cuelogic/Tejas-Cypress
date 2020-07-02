@@ -47,7 +47,7 @@ export default class EditArticle extends Component {
 
   uploadMedia = (name) => {
     const { id } = this.props.match.params;
-    this.props.articleStore.uploadMedia(name, 'ARTICLE_FRM', id);
+    this.props.articleStore.uploadMedia(name, 'ARTICLE_FRM', `insights/${id}`);
   }
 
   handleDelDoc = () => {
