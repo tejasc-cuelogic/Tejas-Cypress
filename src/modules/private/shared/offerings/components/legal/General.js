@@ -6,6 +6,7 @@ import { Form, Header, Icon, Confirm, Divider } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormTextarea, FormDropDown } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
+
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class General extends Component {
