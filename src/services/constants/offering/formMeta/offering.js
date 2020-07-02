@@ -43,7 +43,7 @@ export const TOMBSTONE_BASIC = FormHelper.generateMeta([
   ['description', 'Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
   ['customTag', 'Custom Tag', '', 'optional', 'Enter here...'],
   ['offeredBy', 'Footer Text', '', 'optional', 'Enter here...'],
-  ['showOfferedBy', '', false, 'optional', '', {
+  ['showOfferedBy', '', true, 'optional', '', {
     asIn: true,
     props: {
       defaultValue: false, values: [{ label: 'Footer Toggle', value: true }],
@@ -101,6 +101,9 @@ export const OFFERING_CONTENT = {
       error: undefined,
       rule: 'required',
       placeHolder: 'e.g. Investment Term',
+      customErrors: {
+        required: 'required',
+      },
     },
     order: {
       label: 'Order',

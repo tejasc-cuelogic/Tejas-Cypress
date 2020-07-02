@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { ResponsiveContainer, Bar, ComposedChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import Helper from '../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../theme/shared';
+
 @withRouter
 export default class PayOffChart extends Component {
   formatY = item => Helper.CurrencyFormat(item);

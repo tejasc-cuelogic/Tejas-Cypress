@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Form, Button, Modal } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { FormInput } from '../../../../../../theme/form';
+
 @inject('offeringCreationStore')
 @withRouter
 @observer
