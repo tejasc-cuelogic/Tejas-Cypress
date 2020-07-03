@@ -98,8 +98,8 @@ mutation adminCreateKnowledgeBaseItem($payload:  KnowledgeBaseItem!, $isPartial:
 `;
 
 export const adminUpdateKnowledgeBaseItem = gql`
-mutation adminUpdateKnowledgeBaseItem($id:ID!,$payload:  KnowledgeBaseItem!, $isPartial: Boolean) {
-  adminUpdateKnowledgeBaseItem(id:$id,knowledgeBaseDetailsInput: $payload, isPartialData: $isPartial) {
+mutation adminUpdateKnowledgeBaseItem($id:ID!,$payload:  KnowledgeBaseItem!) {
+  adminUpdateKnowledgeBaseItem(id:$id,knowledgeBaseDetailsInput: $payload) {
     id
     title
     content
