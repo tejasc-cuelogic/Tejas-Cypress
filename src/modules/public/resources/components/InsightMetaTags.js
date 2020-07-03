@@ -1,12 +1,27 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { get } from 'lodash';
+import { get, find } from 'lodash';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
+import { UPLOADS_CONFIG } from '../../../../constants/aws';
+
 
 const insightContent = insight => (
   get(insight, 'content') ? get(insight, 'content').replace(/<[^>]*>?/gm, '').slice(0, 70).trim() : ''
 );
+
+const insightImage = (insight, type) => {
+  let val = '';
+  const image = get(insight, 'featuredImage');
+  const data = find(get(insight, 'social'), o => o.type === type);
+  if (data) {
+    val = DataFormatter.getOgDataFromSocial(get(insight, 'social'), type, 'featuredImageUpload.url');
+  }
+  if (image) {
+    val = (image.includes('https://') || image.includes('http://')) ? image : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(image)}`;
+  }
+  return val;
+};
 
 const InsightMetaTags = ({ insight }) => (
   <Helmet>
@@ -23,15 +38,15 @@ const InsightMetaTags = ({ insight }) => (
     <meta property="article:tag" content={get(insight, 'tags') ? get(insight, 'tags').join(', ') : ''} />
     <meta property="article:section" content={get(insight, 'category')} />
     <meta property="fb:app_id" content="1806635959569619" />
-    <meta property="og:image" content={DataFormatter.getOgDataFromSocial(get(insight, 'social'), 'facebook', 'featuredImageUpload.url') || get(insight, 'featuredImage')} />
-    <meta property="og:image:secure_url" content={DataFormatter.getOgDataFromSocial(get(insight, 'social'), 'facebook', 'featuredImageUpload.url') || get(insight, 'featuredImage')} />
+    <meta property="og:image" content={DataFormatter.getOgDataFromSocial(get(insight, 'social'), 'facebook', 'featuredImageUpload.url') || insightImage(insight, 'facebook')} />
+    <meta property="og:image:secure_url" content={insightImage(insight, 'facebook')} />
     <meta property="og:image:width" content="1218" />
     <meta property="og:image:height" content="542" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:description" content={DataFormatter.getOgDataFromSocial(get(insight, 'social'), 'twitter', 'blurb') || insightContent(insight)} />
     <meta name="twitter:title" content={`${get(insight, 'title')} | NextSeed`} />
     <meta name="twitter:site" content="@thenextseed" />
-    <meta name="twitter:image" content={DataFormatter.getOgDataFromSocial(get(insight, 'social'), 'twitter', 'featuredImageUpload.url') || get(insight, 'featuredImage')} />
+    <meta name="twitter:image" content={DataFormatter.getOgDataFromSocial(get(insight, 'social'), 'twitter', 'featuredImageUpload.url') || insightImage(insight, 'twitter')} />
     <meta name="twitter:creator" content="@thenextseed" />
   </Helmet>
 );
