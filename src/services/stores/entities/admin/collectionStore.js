@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { get, orderBy, isArray, pickBy, map, countBy, kebabCase, groupBy } from 'lodash';
+import { get, orderBy, isArray, pickBy, map, countBy, kebabCase } from 'lodash';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { FormValidator as Validator } from '../../../../helper';
@@ -170,7 +170,6 @@ class CollectionsStore extends DataModelStore {
       variables: { collectionId },
     }).then((res) => {
       if (get(res, 'getCollectionMapping')) {
-        const sortedMapping = groupBy(get(res, 'getCollectionMapping'), 'customValue');
         const data = {
           offerings: [],
           insights: [],
