@@ -171,7 +171,6 @@ class CollectionsStore extends DataModelStore {
     }).then((res) => {
       if (get(res, 'getCollectionMapping')) {
         const sortedMapping = groupBy(get(res, 'getCollectionMapping'), 'customValue');
-        console.log('sortedMapping', sortedMapping);
         const data = {
           offerings: [],
           insights: [],
