@@ -431,8 +431,11 @@ class CollectionsStore extends DataModelStore {
       const params = {
         type: this.getContentType(type),
         collectionId: this.collectionId,
-        customValue: this.COLLECTION_CONTENT_FRM.fields.content[index].customValue.value,
       };
+      const { customValue } = this.COLLECTION_CONTENT_FRM.fields.content[index];
+      if (customValue.value !== '') {
+        params.customValue = customValue.value;
+      }
       this.collectionMappingWrapper(params)
         .then(action((res) => {
           if (get(res, 'getCollectionMapping')) {
@@ -854,7 +857,6 @@ decorate(CollectionsStore, {
   filterInitLoad: action,
   collectionMappingMutation: action,
   parseData: action,
-  setFormData: action,
   getActionType: action,
   setSelectedCollections: action,
   resetDisplayCounts: action,
