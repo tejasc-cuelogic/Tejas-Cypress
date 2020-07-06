@@ -48,7 +48,7 @@ export default class CampaignHeaderPreview extends Component {
           <section className="banner">
             <Responsive minWidth={768} as={Container}>
               <Grid relaxed stackable centered>
-                <Grid.Column width={9}>
+                <Grid.Column width={10}>
                   <div className="video-wrapper campaign">
                     {headerBasicFields.heroVideoURL.value
                       ? (
