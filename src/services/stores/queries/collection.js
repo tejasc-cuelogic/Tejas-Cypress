@@ -27,6 +27,7 @@ export const getCollectionMapping = gql`
     ) {
       collectionId
       referenceId
+      customValue
       type
       order
       scope

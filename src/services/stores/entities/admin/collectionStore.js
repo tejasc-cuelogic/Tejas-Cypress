@@ -457,7 +457,7 @@ class CollectionsStore extends DataModelStore {
         .then(action((res) => {
           if (get(res, 'getCollectionMapping')) {
             this.setFieldValue('collectionIndex', index);
-            this.setMappedData(res, params, index);
+            this.setMappedData(res, params, index, params.customValue);
           }
           nsUiStore.filterLoaderByOperation('collectionMappingLoader');
         }))
@@ -471,8 +471,8 @@ class CollectionsStore extends DataModelStore {
     }
   }
 
-  setMappedData = (res, params, index) => {
-    let data = get(res, 'getCollectionMapping');
+  setMappedData = (res, params, index, isCustomValue = false) => {
+    let data = isCustomValue ? get(res, 'getCollectionMapping') : get(res, 'getCollectionMapping').filter(c => c.customValue === null);
     const { value: contentValue } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
     const tempData = {};
     let contentMappingData = data;

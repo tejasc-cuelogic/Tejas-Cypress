@@ -127,7 +127,17 @@ class CollectionDetails extends Component {
     this.props.navStore.setMobileNavStatus(calculations);
   }
 
-  filterByCustomValue = (data, customValue) => ((customValue !== null && data.length > 0) ? data.filter(o => customValue === o.customValue) : data || [])
+  filterByCustomValue = (data, customValue) => {
+    let filteredValue = [];
+    if (data.length > 0) {
+      if (customValue === null) {
+        filteredValue = data.filter(c => c.customValue === null);
+      } else {
+        filteredValue = data.filter(o => customValue === o.customValue);
+      }
+    }
+    return filteredValue;
+  }
 
   render() {
     const { collectionStore, uiStore, nsUiStore, location, match } = this.props;
