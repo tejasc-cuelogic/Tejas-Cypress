@@ -13,9 +13,7 @@ function ManageCollections(props) {
   }, []);
 
   const search = (e) => {
-    if (e.charCode === 13) {
-      // search goes here..
-    }
+    props.collectionStore.executeSearch(e.target.value);
   };
 
   const { match } = props;

@@ -4,7 +4,7 @@ import { decorate, observable, action, computed, toJS } from 'mobx';
 import { get, orderBy, isArray, pickBy, map, countBy, kebabCase } from 'lodash';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
-import { FormValidator as Validator } from '../../../../helper';
+import { ClientDb, FormValidator as Validator } from '../../../../helper';
 import DataModelStore, * as dataModelStore from '../shared/dataModelStore';
 import { COLLECTION, OVERVIEW, CONTENT, TOMBSTONE_BASIC, COLLECTION_MAPPING_DROPDOWN, GALLERY, COLLECTION_MAPPING_CONTENT, HEADER_META, CARD_HEADER_META, CARD_HEADER_SOCIAL_META, COLLECTION_MISC } from '../../../constants/admin/collection';
 import { adminCollectionUpsert, getCollections, adminInsightArticlesListByFilter, getPublicCollections, allOfferings, adminSetOrderForCollectionMapping, adminSetOrderForCollection, getPublicCollection, getPublicCollectionMapping, getCollection, adminLockOrUnlockCollection, adminCollectionMappingUpsert, adminDeleteCollectionMapping, getCollectionMapping, adminDeleteCollection } from '../../queries/collection';
@@ -36,6 +36,8 @@ class CollectionsStore extends DataModelStore {
   initLoad = [];
 
   collection = {};
+
+  db = [];
 
   collectionMapping = {};
 
@@ -92,6 +94,7 @@ class CollectionsStore extends DataModelStore {
           } else {
             this.setCollectionMetaList(get(res, 'getCollections'));
             this.setFieldValue('collections', get(res, 'getCollections'));
+            this.setDb(get(res, 'getCollections'));
           }
         }
         this.setFieldValue('apiHit', false);
@@ -113,6 +116,20 @@ class CollectionsStore extends DataModelStore {
         this.setFieldValue('collectionApiHit', true);
       });
     }
+  }
+
+  executeSearch = (keyWord) => {
+    this.setDb(this.collections);
+    ClientDb.filterFromNestedObjs('name', keyWord);
+    this.db = ClientDb.getDatabase();
+  }
+
+  setDb = (data) => {
+    this.db = ClientDb.initiateDb(data);
+  }
+
+  get allCollections() {
+    return orderBy(this.db, ['order'], ['asc']);
   }
 
   setSelectedCollections = (type, referenceId, isContentMapping = false) => new Promise(async (resolve) => {
@@ -845,6 +862,8 @@ decorate(CollectionsStore, {
   RECORDS_TO_DISPLAY: observable,
   activeToDisplay: observable,
   pastOfferingToDisplay: observable,
+  db: observable,
+  setDb: action,
   initRequest: action,
   updateContent: action,
   upsertCollection: action,
@@ -873,5 +892,7 @@ decorate(CollectionsStore, {
   loadMoreRecord: action,
   collectionChange: action,
   setMappedData: action,
+  executeSearch: action,
+  allCollections: computed,
 });
 export default new CollectionsStore();
