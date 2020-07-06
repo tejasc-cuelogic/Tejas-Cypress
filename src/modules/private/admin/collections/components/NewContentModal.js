@@ -16,12 +16,10 @@ const metaInfo = {
 class NewContentModal extends React.Component {
   constructor(props) {
     super(props);
-    const { filterContentType, setFieldValue } = this.props.collectionStore;
-    const { index } = this.props;
+    const { filterContentType } = this.props.collectionStore;
     this.state = {
-      options: filterContentType(index),
+      options: filterContentType(this.props.index),
     };
-    setFieldValue('COLLECTION_CONTENT_FRM', moment().unix().toString(), `fields.content[${index}].customValue.value`);
   }
 
   handleFormSubmit = async () => {
@@ -30,6 +28,8 @@ class NewContentModal extends React.Component {
       forms: ['COLLECTION_CONTENT_FRM'],
     };
     const { setFieldValue, upsertCollection } = this.props.collectionStore;
+    const { index } = this.props;
+    setFieldValue('COLLECTION_CONTENT_FRM', moment().unix().toString(), `fields.content[${index}].customValue.value`);
     await upsertCollection(params);
     setFieldValue('newContentModal', false);
     this.props.collectionStore.setFieldValue('collectionIndex', null);
