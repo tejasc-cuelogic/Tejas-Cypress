@@ -472,7 +472,7 @@ class CollectionsStore extends DataModelStore {
   }
 
   setMappedData = (res, params, index) => {
-    let data = orderBy(get(res, 'getCollectionMapping'), ['order', 'asc']);
+    let data = get(res, 'getCollectionMapping');
     const { value: contentValue } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
     const tempData = {};
     let contentMappingData = data;
