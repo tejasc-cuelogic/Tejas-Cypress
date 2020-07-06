@@ -75,6 +75,7 @@ class CollectionContent extends Component {
     const { contentType, customValue } = COLLECTION_CONTENT_FRM.fields.content[index];
     const { value: contentTypeValue } = contentType;
     const { loadingArray } = this.props.nsUiStore;
+    const isCtaDisabled = !this.state.editable || htmlEditorImageLoading || loadingArray.includes('adminCollectionUpsert') || !COLLECTION_CONTENT_FRM.meta.isValid;
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -114,12 +115,12 @@ class CollectionContent extends Component {
           {(this.state.editable && contentTypeValue === 'GALLERY')
             && (
               <>
-              <div className="sticky-actions">
-                <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
-                  <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
-                </Button.Group>
-              </div>
-            </>
+                <div className="sticky-actions">
+                  <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
+                    <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                  </Button.Group>
+                </div>
+              </>
             )}
           <Divider hidden />
           {get(collectionMapping, 'OFFERING')
@@ -152,7 +153,7 @@ class CollectionContent extends Component {
               <>
                 <div className="sticky-actions">
                   <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
-                    <Button disabled={!this.state.editable || htmlEditorImageLoading || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                    <Button disabled={isCtaDisabled} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
                   </Button.Group>
                 </div>
               </>
