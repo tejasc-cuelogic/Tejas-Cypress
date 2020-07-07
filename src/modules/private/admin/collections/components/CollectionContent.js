@@ -127,7 +127,7 @@ class CollectionContent extends Component {
             && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
               && (
                 <>
-                  <DraggableListing allRecords={collectionMapping.OFFERING[key]} isOffering isLoading={loadingArray.includes('getCollectionMapping')} />
+                  <DraggableListing allRecords={collectionMapping.OFFERING[key]} isOffering isLoading={loadingArray.includes('getCollectionMapping')} index={index} />
                 </>
               ))))}
 

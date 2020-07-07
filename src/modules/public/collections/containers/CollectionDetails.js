@@ -128,15 +128,15 @@ class CollectionDetails extends Component {
   }
 
   filterByCustomValue = (data, customValue) => {
-    let filteredValue = [];
+    let filteredData = [];
     if (data.length > 0) {
       if (customValue === null) {
-        filteredValue = data.filter(c => c.customValue === null);
+        filteredData = data.filter(c => c.customValue === null);
       } else {
-        filteredValue = data.filter(o => customValue === o.customValue);
+        filteredData = data.filter(o => customValue === o.customValue);
       }
     }
-    return filteredValue;
+    return orderBy(filteredData, 'sortOrder', ['ASC']);
   }
 
   render() {

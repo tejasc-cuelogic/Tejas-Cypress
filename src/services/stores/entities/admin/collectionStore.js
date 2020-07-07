@@ -216,7 +216,7 @@ class CollectionsStore extends DataModelStore {
   }
 
   get getActiveOfferingsList() {
-    return orderBy(this.getOfferingsList.filter(o => ['LIVE'].includes(o.stage)), 'sortOrder', ['ASC']);
+    return orderBy(this.getOfferingsList.filter(o => ['LIVE'].includes(o.stage)), ['order'], ['ASC']);
   }
 
   get activeOfferingList() {
@@ -227,7 +227,7 @@ class CollectionsStore extends DataModelStore {
   }
 
   get getPastOfferingsList() {
-    return orderBy(this.getOfferingsList.filter(o => ['COMPLETE', 'IN_REPAYMENT', 'STARTUP_PERIOD', 'DEFAULTED'].includes(o.stage)), 'sortOrder', ['ASC']);
+    return orderBy(this.getOfferingsList.filter(o => ['COMPLETE', 'IN_REPAYMENT', 'STARTUP_PERIOD', 'DEFAULTED'].includes(o.stage)), ['order'], ['ASC']);
   }
 
   get pastOfferingsList() {
@@ -472,7 +472,8 @@ class CollectionsStore extends DataModelStore {
   }
 
   setMappedData = (res, params, index, isCustomValue = false) => {
-    let data = isCustomValue ? get(res, 'getCollectionMapping') : get(res, 'getCollectionMapping').filter(c => c.customValue === null);
+    const orderedData = orderBy(get(res, 'getCollectionMapping'), 'order', ['ASC']);
+    let data = isCustomValue ? orderedData : orderedData.filter(c => c.customValue === null);
     const { value: contentValue } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
     const tempData = {};
     let contentMappingData = data;
