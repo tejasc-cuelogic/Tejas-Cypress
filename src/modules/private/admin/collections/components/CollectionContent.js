@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { get } from 'lodash';
+import { get, intersection } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
@@ -134,7 +134,7 @@ class CollectionContent extends Component {
           {(contentTypeValue === 'INSIGHTS' && collectionMapping.INSIGHT && collectionMapping.INSIGHT.length > 0
             && (
               <>
-                <DraggableListing allRecords={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
+                <DraggableListing allRecords={collectionMapping.INSIGHT} isLoading={intersection(loadingArray, ['adminCollectionMappingUpsert']).length > 0} index={index} />
               </>
             ))
           }
@@ -145,7 +145,7 @@ class CollectionContent extends Component {
           {
             ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
             && (
-              <AddToCollection customValue={customValue.value} isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
+              <AddToCollection customValue={customValue.value} index={index} isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
             )
           }
           {(contentTypeValue !== 'GALLERY' && this.state.editable)
