@@ -69,12 +69,12 @@ class CampaignHeader extends Component {
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{HEADER_BASIC_FRM.fields.heroImage.label}</Header>
-              {smartElement.ImageCropper('heroImage', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia, isImagePreviewDisabled: true })}
+              {smartElement.ImageCropper('heroImage', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia, isImagePreviewDisabled: true, aspectTwo: true })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
               <Header as="h4">{HEADER_BASIC_FRM.fields.heroBackgroundImage.label}</Header>
-              {smartElement.ImageCropper('heroBackgroundImage', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia, isImagePreviewDisabled: true })}
+              {smartElement.ImageCropper('heroBackgroundImage', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia, isImagePreviewDisabled: true, aspectTwo: true })}
               <Divider hidden />
             </Grid.Column>
           </Grid>

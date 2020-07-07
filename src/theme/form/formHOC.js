@@ -366,7 +366,7 @@ function formHoc(WrappedComponent, metaInfo) {
                   modalUploadAction={fieldName => this.props[metaInfo.store].uploadMedia(fieldName, (get(props, 'multiForm') || metaInfo.form), props.uploadPath)}
                   name={name}
                   cropInModal
-                  aspect={3 / 2}
+                  aspect={props.aspectOne ? 1 / 1 : props.aspectTwo ? 16 / 9 : 3 / 2}
                   size="small"
                 />
               )
