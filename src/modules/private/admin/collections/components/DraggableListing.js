@@ -136,14 +136,16 @@ function DraggableListing(props) {
   };
 
   const handlePublishOffering = async () => {
-    const { collectionStore, uiStore } = props;
+    const { collectionStore, uiStore, index } = props;
+    const { customValue } = collectionStore.COLLECTION_CONTENT_FRM.fields.content[index];
     const params = {
       type: isOffering ? 'OFFERING' : 'INSIGHT',
       collectionId: collectionStore.collectionId,
       referenceId: uiStore.confirmBox.refId,
+      customValue: customValue.value,
       scope: isPublic === 'PUBLIC' ? 'PUBLIC' : 'HIDDEN',
     };
-    await collectionStore.collectionMappingMutation('adminCollectionMappingUpsert', params);
+    await collectionStore.collectionMappingMutation('adminCollectionMappingUpsert', params, index);
     collectionStore.setFieldValue('collectionIndex', null);
     props.uiStore.setConfirmBox('');
     props.history.push(`${props.match.url}`);
@@ -154,10 +156,12 @@ function DraggableListing(props) {
   };
 
   const handleDeleteCollection = async () => {
-    const { collectionStore, uiStore } = props;
+    const { collectionStore, uiStore, index } = props;
+    const { customValue } = collectionStore.COLLECTION_CONTENT_FRM.fields.content[index];
     const params = {
       type: isOffering ? 'OFFERING' : 'INSIGHT',
       collectionId: collectionStore.collectionId,
+      customValue: customValue.value,
       referenceId: uiStore.confirmBox.refId,
     };
     await collectionStore.collectionMappingMutation('adminDeleteCollectionMapping', params);

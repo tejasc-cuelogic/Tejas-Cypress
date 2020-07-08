@@ -18,14 +18,16 @@ export const adminCollectionUpsert = gql`
   }`;
 
 export const getCollectionMapping = gql`
-  query getCollectionMapping($collectionId: String, $referenceId: String, $type: CollectionMappingTypeEnum) {
+  query getCollectionMapping($collectionId: String, $customValue: String, $referenceId: String, $type: CollectionMappingTypeEnum) {
     getCollectionMapping(
       collectionId: $collectionId
       referenceId: $referenceId
       type: $type
+      customValue: $customValue
     ) {
       collectionId
       referenceId
+      customValue
       type
       order
       scope
@@ -62,10 +64,11 @@ export const getCollectionMapping = gql`
   }`;
 
 export const getPublicCollectionMapping = gql`
-query getCollectionMapping($collectionId: String!) {
-  getCollectionMapping(collectionId: $collectionId) {
+query getCollectionMapping($collectionId: String!, $customValue: String) {
+  getCollectionMapping(collectionId: $collectionId, customValue: $customValue) {
     collectionId
     referenceId
+    customValue
     type
     scope
     order
@@ -342,6 +345,7 @@ export const adminCollectionMappingUpsert = gql`
     $type: CollectionMappingTypeEnum!
     $order: Int
     $image: CollectionMappingMediaInput
+    $customValue: String
     $scope: ScopeEnumType!){
     adminCollectionMappingUpsert(
       collectionId: $collectionId,
@@ -350,6 +354,7 @@ export const adminCollectionMappingUpsert = gql`
       order: $order,
       image: $image,
       scope: $scope,
+      customValue: $customValue,
       ) {
         collectionId
         referenceId
