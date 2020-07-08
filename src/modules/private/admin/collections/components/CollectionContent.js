@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { get } from 'lodash';
+import { get, intersection } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Icon, Confirm, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
@@ -72,8 +72,10 @@ class CollectionContent extends Component {
     const { htmlEditorImageLoading } = this.props;
     const index = parseInt(this.props.match.params.index, 10) - 1 || 0;
     const { COLLECTION_CONTENT_FRM, collectionId, collectionMapping } = collectionStore;
-    const { value: contentTypeValue } = COLLECTION_CONTENT_FRM.fields.content[index].contentType;
+    const { contentType, customValue } = COLLECTION_CONTENT_FRM.fields.content[index];
+    const { value: contentTypeValue } = contentType;
     const { loadingArray } = this.props.nsUiStore;
+    const isCtaDisabled = !this.state.editable || htmlEditorImageLoading || loadingArray.includes('adminCollectionUpsert') || !COLLECTION_CONTENT_FRM.meta.isValid;
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -113,26 +115,26 @@ class CollectionContent extends Component {
           {(this.state.editable && contentTypeValue === 'GALLERY')
             && (
               <>
-              <div className="sticky-actions">
-                <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
-                  <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
-                </Button.Group>
-              </div>
-            </>
+                <div className="sticky-actions">
+                  <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
+                    <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                  </Button.Group>
+                </div>
+              </>
             )}
           <Divider hidden />
           {get(collectionMapping, 'OFFERING')
             && (Object.keys(offeringMeta).map(key => (contentTypeValue === offeringMeta[key] && collectionMapping.OFFERING[key].length > 0
               && (
                 <>
-                  <DraggableListing allRecords={collectionMapping.OFFERING[key]} isOffering isLoading={loadingArray.includes('getCollectionMapping')} />
+                  <DraggableListing allRecords={collectionMapping.OFFERING[key]} isOffering isLoading={loadingArray.includes('getCollectionMapping')} index={index} />
                 </>
               ))))}
 
           {(contentTypeValue === 'INSIGHTS' && collectionMapping.INSIGHT && collectionMapping.INSIGHT.length > 0
             && (
               <>
-                <DraggableListing allRecords={collectionMapping.INSIGHT} isLoading={loadingArray.includes('getCollectionMapping')} />
+                <DraggableListing allRecords={collectionMapping.INSIGHT} isLoading={intersection(loadingArray, ['adminCollectionMappingUpsert']).length > 0} index={index} />
               </>
             ))
           }
@@ -143,7 +145,7 @@ class CollectionContent extends Component {
           {
             ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
             && (
-              <AddToCollection isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
+              <AddToCollection customValue={customValue.value} index={index} isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
             )
           }
           {(contentTypeValue !== 'GALLERY' && this.state.editable)
@@ -151,7 +153,7 @@ class CollectionContent extends Component {
               <>
                 <div className="sticky-actions">
                   <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
-                    <Button disabled={!this.state.editable || htmlEditorImageLoading || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                    <Button disabled={isCtaDisabled} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
                   </Button.Group>
                 </div>
               </>

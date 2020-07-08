@@ -29,7 +29,7 @@ function NewCollection(props) {
     handleCloseModal();
   };
 
-  const { COLLECTION_FRM } = props.collectionStore;
+  const { COLLECTION_FRM, collectionChange } = props.collectionStore;
   const { smartElement } = props;
   const { loadingArray } = props.nsUiStore;
 
@@ -45,10 +45,12 @@ function NewCollection(props) {
         <Form onSubmit={handleSubmit}>
           {
             ['name', 'slug'].map(field => (
-              smartElement.Input(field)
+              smartElement.Input(field, {
+                changed: (e, result) => collectionChange(e, result, 'COLLECTION_FRM'),
+              })
             ))
           }
-            <div className="center-align">
+          <div className="center-align">
             <Button primary content="Create Collection" disabled={!COLLECTION_FRM.meta.isValid} />
           </div>
         </Form>
