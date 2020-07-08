@@ -42,12 +42,13 @@ class Misc extends Component {
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{OFFERING_MISC_FRM.fields.logo.label}</Header>
-              {smartElement.ImageCropper('logo', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
+              {smartElement.ImageCropper('logo', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia, aspectOne: true })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
               <Header as="h4">{OFFERING_MISC_FRM.fields.avatar.label}</Header>
-              {smartElement.ImageCropper('avatar', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}            </Grid.Column>
+              {smartElement.ImageCropper('avatar', { disabled: isReadOnly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia, aspectOne: true })}
+            </Grid.Column>
           </Grid>
           <Form.Field>
             <Header as="h6">{OFFERING_MISC_FRM.fields.issuerStatement.label}</Header>
