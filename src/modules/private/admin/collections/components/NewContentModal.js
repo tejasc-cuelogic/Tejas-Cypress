@@ -14,14 +14,6 @@ const metaInfo = {
 @withRouter
 @observer
 class NewContentModal extends React.Component {
-  constructor(props) {
-    super(props);
-    const { filterContentType } = this.props.collectionStore;
-    this.state = {
-      options: filterContentType(this.props.index),
-    };
-  }
-
   handleFormSubmit = async () => {
     const params = {
       keyName: false,
@@ -51,7 +43,7 @@ class NewContentModal extends React.Component {
               <Form.Group widths={2}>
                 {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index] })}
                 {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index] })}
-                {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], fielddata: { ...COLLECTION_CONTENT_FRM.fields.content[index].contentType, ...this.state.options } })}
+                {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], fielddata: { ...COLLECTION_CONTENT_FRM.fields.content[index].contentType } })}
               </Form.Group>
               <Divider hidden />
             </Form>

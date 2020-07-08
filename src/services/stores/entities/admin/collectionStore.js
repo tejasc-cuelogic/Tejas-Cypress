@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { decorate, observable, action, computed, toJS } from 'mobx';
-import { get, orderBy, isArray, pickBy, map, countBy, kebabCase } from 'lodash';
+import { get, orderBy, isArray, pickBy, map, kebabCase } from 'lodash';
 import cleanDeep from 'clean-deep';
 import omitDeep from 'omit-deep';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
@@ -812,15 +812,6 @@ class CollectionsStore extends DataModelStore {
       });
   };
 
-  filterContentType = (index) => {
-    const allContentValues = this.COLLECTION_CONTENT_FRM.fields.content.map(c => c.contentType.value);
-    const { options } = this.COLLECTION_CONTENT_FRM.fields.content[index].contentType;
-    const countContentType = countBy(allContentValues);
-    const filteredOptions = Object.keys(countContentType).filter(key => countContentType[key] >= 2 && !['CUSTOM', ''].includes(key));
-    const filterOpns = options.filter(c => !filteredOptions.includes(c.value));
-    return { options: filterOpns };
-  }
-
   loadMoreRecord = (type) => {
     const offeringsList = type === 'activeToDisplay' ? this.getActiveOfferingsList : this.getPastOfferingsList;
     if (offeringsList.length > this[type]) {
@@ -882,7 +873,6 @@ decorate(CollectionsStore, {
   resetDisplayCounts: action,
   collectionLoading: observable,
   getCollection: action,
-  filterContentType: action,
   CARD_HEADER_META_FRM: observable,
   CARD_HEADER_SOCIAL_FRM: observable,
   reOrderHandle: action,
