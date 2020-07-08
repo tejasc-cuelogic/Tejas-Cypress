@@ -100,7 +100,7 @@ class CampaignTemplate2 extends Component {
                                 updates={updates}
                                 refLink={this.props.refLink}
                                 isTabletLand={isTabletLand}
-                                companyAvatarUrl={campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}
+                                companyAvatarUrl={campaign && campaign.misc && campaign.misc.avatar && campaign.misc.avatar.url ? `${campaign.misc.avatar.url}` : ''}
                                 bussinessName={campaign && campaign.keyTerms
                                   && campaign.keyTerms.shorthandBusinessName}
                               />

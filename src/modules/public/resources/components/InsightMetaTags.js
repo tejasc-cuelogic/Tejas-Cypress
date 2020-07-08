@@ -41,6 +41,10 @@ const InsightMetaTags = ({ insight }) => (
     <meta name="twitter:site" content="@thenextseed" />
     <meta name="twitter:image" content={insightImage(insight, 'twitter')} />
     <meta name="twitter:creator" content="@thenextseed" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:title" content={`${get(insight, 'title')} | NextSeed`} />
+    <meta prefix="og: http://ogp.me/ns#" property="og:type" content="article" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:image" content={insightImage(insight, 'facebook')} />
+    <meta prefix="og: http://ogp.me/ns#" property="og:url" content={window.location.href} />
   </Helmet>
 );
 
