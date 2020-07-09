@@ -163,12 +163,16 @@
                     margin:@14px 0 0;
                     overflow:hidden;
                     font-size:@15px;
-                    line-height:@20px;
+                    line-height:@22px;
                     color: @neutral;
                     transition: all 0.3s ease-in-out;
                     @media only screen and (min-width : @mobileBreakpoint ) and (max-width:@largestMobileScreen ){
                         min-height: 0px;
                         max-height: 100%;
+                    }
+                    .fr-view, .fr-view p, .fr-view ul li{
+                        line-height: @22px;
+                        font-size: @15px;
                     }
                 }
                 .campaign-card-table-wrapper{
