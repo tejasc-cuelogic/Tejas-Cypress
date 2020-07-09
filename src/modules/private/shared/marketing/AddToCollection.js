@@ -15,7 +15,7 @@ export default class AddToCollection extends React.Component {
 
   handleCollectionChange = (e, res) => {
     const { collectionMappingMutation, setFieldValue } = this.props.collectionStore;
-    const { referenceId, isOffering, isContentMapping, collectionId } = this.props;
+    const { referenceId, isOffering, isContentMapping, collectionId, customValue } = this.props;
     const { value } = this.props.collectionStore.COLLECTION_MAP_DROPDOWN.fields.mappingMeta;
     const mutation = res.value.length > value.length ? 'adminCollectionMappingUpsert' : 'adminDeleteCollectionMapping';
     const dropdownItem = mutation === 'adminCollectionMappingUpsert' ? res.value[res.value.length - 1] : this.getCollectionId(res.value);
@@ -23,6 +23,7 @@ export default class AddToCollection extends React.Component {
     const params = {
       ...groupIds,
       type: isOffering ? 'OFFERING' : 'INSIGHT',
+      customValue,
       order: res.value.length - 1,
       scope: 'PUBLIC',
     };

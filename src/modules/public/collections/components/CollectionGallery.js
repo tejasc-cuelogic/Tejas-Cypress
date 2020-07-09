@@ -5,6 +5,7 @@ import { get, camelCase } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Image64 } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
+import Helper from '../../../../helper/utility';
 
 @inject('uiStore', 'campaignStore', 'collectionStore')
 @withRouter
@@ -29,7 +30,7 @@ class CollectionGallery extends Component {
     return (
       <>
         <Header as="h3" className={`${(newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
-          <span className="anchor" id={title ? camelCase(title) : 'gallery'} />
+          <span className="anchor" id={title ? camelCase(Helper.sanitize(title)) : 'gallery'} />
           {title || 'Gallery'}
         </Header>
         <div className="gallery-preview">

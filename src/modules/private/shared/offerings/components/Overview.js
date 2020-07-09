@@ -7,7 +7,7 @@ import { Form, Header, Button, Icon } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 import { FormInput } from '../../../../../theme/form';
 import { InlineLoader } from '../../../../../theme/shared';
-import AddToCollection from '../../marketing/AddToCollection';
+// import AddToCollection from '../../marketing/AddToCollection';
 import Helper from '../../../../../helper/utility';
 import { DataFormatter } from '../../../../../helper';
 
@@ -15,19 +15,6 @@ import { DataFormatter } from '../../../../../helper';
 @inject('offeringCreationStore', 'userStore', 'uiStore', 'nsUiStore', 'collectionStore', 'offeringsStore')
 @observer
 export default class Overview extends Component {
-  constructor(props) {
-    super(props);
-    if (this.props.match.isExact) {
-      const { offer } = this.props.offeringsStore;
-      if (this.props.collectionStore.COLLECTION_MAP_DROPDOWN.fields.mappingMeta.value.length === 0 && offer.stage === 'LIVE') {
-        const {
-          currentOfferingId,
-        } = this.props.offeringCreationStore;
-        this.props.collectionStore.initRequest('ACTIVE_INVESTMENTS', currentOfferingId || offer.id);
-      }
-    }
-  }
-
   handleSubmitOfferingDetails = () => {
     const {
       OFFERING_DETAILS_FRM,
@@ -78,7 +65,6 @@ export default class Overview extends Component {
       OFFERING_DETAILS_FRM,
       formChange,
       formArrayChange,
-      currentOfferingId,
     } = this.props.offeringCreationStore;
     const { offer } = this.props.offeringsStore;
     const { isIssuer } = this.props.userStore;
@@ -137,12 +123,12 @@ export default class Overview extends Component {
               ))
             }
           </Form.Group>
-          {
+          {/* {
             ['LIVE', 'COMPLETE'].includes(offer.stage)
             && (
               <AddToCollection isOffering referenceId={currentOfferingId} />
             )
-          }
+          } */}
           {isLaunchContingency
             && <Contingency formArrayChange={formArrayChange} isIssuer={isIssuer} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
           }

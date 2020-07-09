@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import { Form, Divider, Header, Modal, Button } from 'semantic-ui-react';
 import formHOC from '../../../../../theme/form/formHOC';
@@ -13,19 +14,14 @@ const metaInfo = {
 @withRouter
 @observer
 class NewContentModal extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      options: this.props.collectionStore.filterContentType(this.props.index),
-    };
-  }
-
   handleFormSubmit = async () => {
     const params = {
       keyName: false,
       forms: ['COLLECTION_CONTENT_FRM'],
     };
     const { setFieldValue, upsertCollection } = this.props.collectionStore;
+    const { index } = this.props;
+    setFieldValue('COLLECTION_CONTENT_FRM', moment().unix().toString(), `fields.content[${index}].customValue.value`);
     await upsertCollection(params);
     setFieldValue('newContentModal', false);
     this.props.collectionStore.setFieldValue('collectionIndex', null);
@@ -47,7 +43,7 @@ class NewContentModal extends React.Component {
               <Form.Group widths={2}>
                 {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index] })}
                 {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index] })}
-                {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], fielddata: { ...COLLECTION_CONTENT_FRM.fields.content[index].contentType, ...this.state.options } })}
+                {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], fielddata: { ...COLLECTION_CONTENT_FRM.fields.content[index].contentType } })}
               </Form.Group>
               <Divider hidden />
             </Form>
