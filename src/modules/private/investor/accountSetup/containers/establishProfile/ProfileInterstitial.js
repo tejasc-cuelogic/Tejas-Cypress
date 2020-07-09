@@ -1,18 +1,28 @@
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-// import { Button } from 'semantic-ui-react';
 import { NsInterstitial } from '../../../../../../theme/shared';
 import NSImage from '../../../../../shared/NSImage';
 
-@inject('investorProfileStore', 'uiStore', 'individualAccountStore')
+@inject('investorProfileStore', 'uiStore')
 @observer
 @withRouter
-export default class ConfirmCancelModal extends React.Component {
+export default class ProfileInterstitial extends React.Component {
+  // componentWillMount() {
+  //   const { viewedInterstitial } = this.props.investorProfileStore;
+  //   if (viewedInterstitial) {
+  //     this.props.history.push('/dashboard/setup');
+  //   }
+  // }
+
+  componentDidMount() {
+    this.props.investorProfileStore.setInterstitialCookie(true);
+  }
+
   render() {
     const { responsiveVars } = this.props.uiStore;
+    const { viewedInterstitial } = this.props.investorProfileStore;
     const { isMobile } = responsiveVars;
-    // className="link-button" color="green" to={Link} content="complete your account setup"
     const interstitialSteps = {
       label: 'Profile Interstitial',
       key: 'profileInterstitial',
@@ -21,7 +31,7 @@ export default class ConfirmCancelModal extends React.Component {
           stepToBeRendered: 1,
           header: <>Let’s have a look around<br />your new account</>,
           content: <>Once you’ve made your first investment on NextSeed, use your Dashboard to find information related to your investment portfolio — including payments, updates, returns and more.</>,
-          component: <NSImage path={`${!isMobile ? 'interstitial/portfolio.gif' : 'interstitial/portfolioMobile.png'}`} />,
+          component: <NSImage path={`${!isMobile ? 'interstitial/portfolio.gif' : 'interstitial/portfolioMobile.gif'}`} />,
           imageFooter: '*Sample Portfolio',
           button: 'Next',
         }, {
@@ -41,6 +51,10 @@ export default class ConfirmCancelModal extends React.Component {
         },
       ],
     };
+    if (viewedInterstitial) {
+      this.props.history.push('/dashboard/setup');
+      return null;
+    }
     return (
       <NsInterstitial
         closeOnDimmerClick={false}

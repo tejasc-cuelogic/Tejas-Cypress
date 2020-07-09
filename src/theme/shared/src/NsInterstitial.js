@@ -7,7 +7,7 @@ import { indexOf, last } from 'lodash';
 @inject('investorProfileStore', 'uiStore', 'individualAccountStore')
 @observer
 @withRouter
-export default class ConfirmCancelModal extends React.Component {
+export default class NsInterstitial extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

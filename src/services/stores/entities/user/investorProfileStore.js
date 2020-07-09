@@ -1,4 +1,5 @@
 import { decorate, action, observable, runInAction, computed } from 'mobx';
+import cookie from 'react-cookies';
 import { isEmpty, isUndefined, intersection, pick } from 'lodash';
 import { updateInvestorProfileData } from '../../queries/account';
 import { EMPLOYMENT_STATUS, BROKERAGE_EMPLOYMENT, PUBLIC_COMPANY_REL, FINANCES, INVESTOR_PROFILE_FULL_META, INVESTMENT_EXPERIENCE } from '../../../../constants/account';
@@ -35,6 +36,20 @@ export class InvestorProfileStore extends DataModelStore {
   formArr = [...this.invProfileForms, ...['INVESTMENT_EXP_FRM']];
 
   isFormSubmitted = false;
+
+  viewedInterstitial = cookie.load('VIEWED_INTERSTITIAL') || false;
+
+  setViewedInterstitial = () => {
+    this.viewedInterstitial = cookie.load('VIEWED_INTERSTITIAL');
+  }
+
+  setInterstitialCookie = (status) => {
+    this.viewedInterstitial = status;
+    if (status) {
+      cookie.save('VIEWED_INTERSTITIAL', status, { maxAge: 604800 });
+    }
+    this.setViewedInterstitial();
+  }
 
   @action
   upsertInvestorProfile = async (currentStep) => {
@@ -193,6 +208,9 @@ decorate(InvestorProfileStore, {
   INVESTMENT_EXP_FRM: observable,
   INVESTOR_PROFILE_FULL: observable,
   isFormSubmitted: observable,
+  viewedInterstitial: observable,
+  setInterstitialCookie: action,
+  setViewedInterstitial: action,
   setInvestorDetailInfo: action,
   populateData: action,
   setFormDataWithRadio: action,
