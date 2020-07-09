@@ -105,7 +105,7 @@ export default class CollectionsListing extends Component {
   render() {
     const { loadingArray } = this.props.nsUiStore;
     const { confirmBox } = this.props.uiStore;
-    const { collections } = this.props.collectionStore;
+    const { allCollections } = this.props.collectionStore;
     if (loadingArray.includes('getCollections')) {
       return <InlineLoader />;
     }
@@ -120,7 +120,7 @@ export default class CollectionsListing extends Component {
             <div className="action right-align width-70" />
           </div>
           <SortableList
-            allCollectionList={collections}
+            allCollectionList={allCollections}
             pressDelay={100}
             handleAction={this.handleAction}
             onSortEnd={e => this.onSortEnd(e)}

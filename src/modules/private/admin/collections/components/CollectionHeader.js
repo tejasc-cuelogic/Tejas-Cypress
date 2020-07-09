@@ -63,6 +63,7 @@ class CollectionHeader extends Component {
                 uploadPath: `collection/${collectionId}`,
                 removeMedia: this.removeMedia,
                 isImagePreviewDisabled: true,
+                aspectTwo: true,
               })}
             </Grid.Column>
             <Grid.Column>
@@ -71,6 +72,7 @@ class CollectionHeader extends Component {
                 uploadPath: `collection/${collectionId}`,
                 removeMedia: this.removeMedia,
                 isImagePreviewDisabled: true,
+                aspectTwo: true,
               })}
               <Divider hidden />
             </Grid.Column>

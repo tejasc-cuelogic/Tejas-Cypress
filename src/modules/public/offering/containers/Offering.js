@@ -86,6 +86,7 @@ class Offering extends Component {
     // };
     return (
       <>
+      <div>
         <CampaignList
           refLink={this.props.match.url}
           loading={loading}
@@ -95,6 +96,7 @@ class Offering extends Component {
           subheading={<p className={responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}>Browse the newest investment opportunities on NextSeed. {!responsiveVars.isMobile && <br /> }The next big thing may be inviting you to participate.</p>}
         />
         <Divider section hidden />
+        </div>
         {getCollectionLength
         ? (
          <>
@@ -143,6 +145,7 @@ class Offering extends Component {
         <Divider as={Container} fitted />
         {!loading
           && (
+            <div className="successCampaigns">
             <CampaignList
               isFunded
               loading={completedLoading}
@@ -158,6 +161,7 @@ class Offering extends Component {
                 </>
               )}
             />
+            </div>
           )
         }
       </>
