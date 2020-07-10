@@ -61,7 +61,7 @@ export default class TombstonePreview extends Component {
     return (
       <div className="inner-content-spacer">
         <Grid centered>
-          <Grid.Column width="6">
+          <Grid.Column width="6" className="match-height">
             <Card className="campaign" fluid to={`/offerings/${offer.offeringSlug}`}>
               <div className="campaign-image-wrap">
                 <div className="campaign-card-image">
