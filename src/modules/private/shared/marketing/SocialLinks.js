@@ -20,7 +20,7 @@ function SocialLinks(props) {
             <Header as="h6">{capitalize(field)}</Header>
             <Form.Group>
               {smartElement.Input(`${field}_shareLink`, { displayMode: isReadOnly, key: field, containerwidth: '10', ...commonProps(`${field}_shareLink`) })}
-              {smartElement.DropZone(`${field}_featuredImageUpload`, { S3Upload: true, uploadPath, displayMode: isReadOnly, key: field, uploadtitle: 'Choose a file or drag it here', containerclassname: 'field six wide', ...commonProps(`${field}_featuredImageUpload`) })}
+              {smartElement.DropZone(`${field}_featuredImageUpload`, { S3Upload: true, uploadPath, disabled: isReadOnly, key: field, uploadtitle: 'Choose a file or drag it here', containerclassname: 'field six wide', ...commonProps(`${field}_featuredImageUpload`) })}
             </Form.Group>
             {smartElement.FormTextarea(`${field}_blurb`, { readOnly: isReadOnly, containerclassname: 'secondary', ...commonProps(`${field}_blurb`) })}
           </>

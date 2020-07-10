@@ -87,7 +87,7 @@ const GalleryList = ({ toggleVisible, GALLERY_FRM, isReadOnly, onSortEnd, smartE
 
 function Gallery(props) {
   const { smartElement, title, noAddMore, uiStore } = props;
-  const { GALLERY_FRM, removeOne, collectionId, addMore, toggleVisible } = props.collectionStore;
+  const { GALLERY_FRM, removeOne, collectionId, addMore, toggleVisible, isLocked } = props.collectionStore;
 
   const { loadingArray } = props.nsUiStore;
   const removeMedia = (form, name) => {
@@ -120,6 +120,7 @@ function Gallery(props) {
         collectionId={collectionId}
         onSortEnd={onSortEnd}
         toggleVisible={toggleVisible}
+        isReadOnly={isLocked}
       />
       <div className="sticky-actions">
         <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
