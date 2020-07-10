@@ -1792,6 +1792,9 @@ a.icon-link {
 	p b {
 		color: @neutral;
 	}
+	>.ui.centered.grid >.match-height{
+		max-height: 552px;
+	}
 }
 .secondary-section{
 	background-color:@neutral-offwhite;
