@@ -64,8 +64,8 @@ export const getCollectionMapping = gql`
   }`;
 
 export const getPublicCollectionMapping = gql`
-query getCollectionMapping($collectionId: String!, $customValue: String) {
-  getCollectionMapping(collectionId: $collectionId, customValue: $customValue) {
+query getCollectionMapping($collectionId: String!) {
+  getCollectionMapping(collectionId: $collectionId) {
     collectionId
     referenceId
     customValue
