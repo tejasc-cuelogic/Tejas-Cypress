@@ -53,7 +53,7 @@ class BonusRewards extends Component {
                           <Segment padded className={`${this.props.newLayout && isMobile ? 'reward-block-v2' : ''} reward-block`}>
                             <>
                               <Header textAlign="left" as="h6" className={`${isMobile ? 'mb-20' : 'mb-40'} text-uppercase`}>Early Bird Reward
-                          <Label size="small" color="green" className="text-uppercase pull-right">{get(earlyBird, 'available') || 0} remaining</Label>
+                                <Label size="small" color="green" className="text-uppercase pull-right">{get(earlyBird, 'available') || 0} remaining</Label>
                               </Header>
                               <Header as="h5" className="note">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
                             </>
