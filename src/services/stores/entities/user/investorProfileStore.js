@@ -37,18 +37,18 @@ export class InvestorProfileStore extends DataModelStore {
 
   isFormSubmitted = false;
 
-  viewedInterstitial = cookie.load('VIEWED_INTERSTITIAL') || false;
+  profileOnboardingFlag = cookie.load('PROFILE_ONBOARDED') || false;
 
-  setViewedInterstitial = () => {
-    this.viewedInterstitial = cookie.load('VIEWED_INTERSTITIAL');
+  setProfileOnboardingCookie = () => {
+    this.profileOnboardingFlag = cookie.load('PROFILE_ONBOARDED');
   }
 
-  setInterstitialCookie = (status) => {
-    this.viewedInterstitial = status;
+  setProfileOnboarding = (status) => {
+    this.profileOnboardingFlag = status;
     if (status) {
-      cookie.save('VIEWED_INTERSTITIAL', status, { maxAge: 604800 });
+      cookie.save('PROFILE_ONBOARDED', status, { maxAge: 604800 });
     }
-    this.setViewedInterstitial();
+    this.setProfileOnboardingCookie();
   }
 
   @action
@@ -208,9 +208,9 @@ decorate(InvestorProfileStore, {
   INVESTMENT_EXP_FRM: observable,
   INVESTOR_PROFILE_FULL: observable,
   isFormSubmitted: observable,
-  viewedInterstitial: observable,
-  setInterstitialCookie: action,
-  setViewedInterstitial: action,
+  profileOnboardingFlag: observable,
+  setProfileOnboardingCookie: action,
+  setProfileOnboarding: action,
   setInvestorDetailInfo: action,
   populateData: action,
   setFormDataWithRadio: action,
