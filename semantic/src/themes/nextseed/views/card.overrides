@@ -170,9 +170,18 @@
                         min-height: 0px;
                         max-height: 100%;
                     }
-                    .fr-view, .fr-view p, .fr-view ul li{
+                    .fr-view, .fr-view p{
                         line-height: @22px;
                         font-size: @15px;
+                    }
+                    .fr-view {
+                        ul{
+                            margin-top: 10px;
+                            li{
+                                line-height: @22px;
+                                font-size: @15px;
+                            }
+                        }
                     }
                 }
                 .campaign-card-table-wrapper{
