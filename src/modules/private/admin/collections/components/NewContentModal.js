@@ -19,9 +19,12 @@ class NewContentModal extends React.Component {
       keyName: false,
       forms: ['COLLECTION_CONTENT_FRM'],
     };
-    const { setFieldValue, upsertCollection } = this.props.collectionStore;
+    const { setFieldValue, upsertCollection, COLLECTION_CONTENT_FRM } = this.props.collectionStore;
     const { index } = this.props;
-    setFieldValue('COLLECTION_CONTENT_FRM', moment().unix().toString(), `fields.content[${index}].customValue.value`);
+    const { contentType } = COLLECTION_CONTENT_FRM.fields.content[index];
+    if (contentType.value !== 'CUSTOM') {
+      setFieldValue('COLLECTION_CONTENT_FRM', moment().unix().toString(), `fields.content[${index}].customValue.value`);
+    }
     await upsertCollection(params);
     setFieldValue('newContentModal', false);
     this.props.collectionStore.setFieldValue('collectionIndex', null);
