@@ -152,7 +152,7 @@ export class ArticleStore extends DataModelStore {
     this.ARTICLE_FRM.fields[field][attr] = value;
   }
 
-  save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
+  save = (id, status) => new Promise((resolve, reject) => {
     uiStore.setProgress();
     this.ARTICLE_FRM.fields.articleStatus.value = status;
     const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
@@ -173,7 +173,7 @@ export class ArticleStore extends DataModelStore {
     client
       .mutate({
         mutation: id === 'new' ? adminCreateArticle : adminUpdateArticleInfo,
-        variables: id === 'new' ? { payload, isPartial: isDraft } : { payload, id, isPartial: isDraft },
+        variables: id === 'new' ? { payload } : { payload, id },
       }).then(() => {
         Helper.toast('Category Saved successfully.', 'success');
         resolve();
