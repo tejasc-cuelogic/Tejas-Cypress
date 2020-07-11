@@ -53,31 +53,30 @@ export default class AccountSetup extends Component {
     } = this.props.userDetailsStore;
     const { isInvestor } = this.props.userStore;
     return (
+      <>
+      {currentUser.loading
+      ? <InlineLoader />
+      : (
       <PrivateLayout
         {...this.props}
         forceTitle="Setup"
-        P5={!signupStatus.finalStatus ? !currentUser.loading
+        P5={!signupStatus.finalStatus
           ? (
             <StickyNotification
               isInvestor={isInvestor}
               signupStatus={signupStatus}
               userDetailsStore={this.props.userDetailsStore}
             />
-          ) : <InlineLoader /> : ''}
+          ) : ''}
       >
         <Header as={isMobile ? 'h5' : 'h4'} className={isMobile ? 'mb-30 center-align' : 'mt-80 mb-30'}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
-        {!currentUser.loading
-          ? (
-            <ProgressCard
-              {...this.props}
-              isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
-              signupStatus={signupStatus}
-              getStepStatus={getStepStatus}
-              navToAccTypes={this.navToAccTypes}
-            />
-          ) : <InlineLoader />
-
-        }
+        <ProgressCard
+          {...this.props}
+          isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
+          signupStatus={signupStatus}
+          getStepStatus={getStepStatus}
+          navToAccTypes={this.navToAccTypes}
+        />
         <Switch>
           <Redirect from="*/identity-verification/0" to="/dashboard/setup/cip" />
           <Route path={`${match.url}/cip`} component={CipVerification} />
@@ -86,6 +85,8 @@ export default class AccountSetup extends Component {
           <Route path={`${match.url}/account-creation`} component={AccountCreation} />
         </Switch>
       </PrivateLayout>
+      )}
+      </>
     );
   }
 }
