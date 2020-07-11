@@ -3526,7 +3526,6 @@ h3.ui.header.error-2{
 		}
 		&.banner-section{
 			position: relative;
-			background: #e7f5f1;
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width: @largestTabletScreen){
 				padding-left: 100px !important;
 				padding-right: 100px !important;
@@ -3538,22 +3537,6 @@ h3.ui.header.error-2{
 			@media only screen and (min-width : 1367px){
 				padding-left: 105px !important;
 				padding-right: 105px !important;
-			}
-			&:before{
-				content: '';
-				width: 40px;
-				height: 40px;
-				position: absolute;
-				left: 0px;
-				top: 50%;
-				margin-left: -20px;
-				margin-top: -20px;
-				transform: rotate(45deg);
-				background: #e7f5f1;
-				@media only screen and (max-width : @largestTabletScreen){
-					left: 50%;
-					top: 0;
-				}
 			}
 		}
 	}
