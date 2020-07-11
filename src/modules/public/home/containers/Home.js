@@ -9,8 +9,9 @@ import FeaturedOn from '../../shared/components/FeaturedOn';
 import CampaignList from '../../offering/components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 import NSImage from '../../../shared/NSImage';
+import CovidBanner from '../components/CovidBanner';
 
-@inject('campaignStore', 'uiStore', 'userStore', 'publicStore')
+@inject('campaignStore', 'uiStore', 'userStore', 'publicStore', 'authStore')
 @observer
 class Home extends Component {
   constructor(props) {
@@ -25,16 +26,23 @@ class Home extends Component {
 
   render() {
     const { active, loading } = this.props.campaignStore;
-    const { isMobile } = this.props.uiStore.responsiveVars;
+    const { isMobile, uptoTablet, isTabletLand } = this.props.uiStore.responsiveVars;
+    const { isUserLoggedIn } = this.props.authStore;
     const { isIssuer } = this.props.userStore;
-    const { setShowButton, getRedirectUrl } = this.props.publicStore;
+    const { setShowButton, getRedirectUrl, showButton, redirectUrl } = this.props.publicStore;
+    const covidBanner = <CovidBanner isTabletLand={isTabletLand} uptoTablet={uptoTablet} isMobile={isMobile} showButton={showButton} redirectUrl={redirectUrl} />;
     setShowButton();
     getRedirectUrl();
     return (
       <>
         <Banner />
         <Responsive as={React.Fragment} fireOnMount onUpdate={this.handleOnUpdate}>
-          <HowItWorksSummary isMobile={isMobile} />
+          <HowItWorksSummary
+            isMobile={isMobile}
+            uptoTablet={uptoTablet}
+            isUserLoggedIn={isUserLoggedIn}
+            covidBanner={covidBanner}
+          />
         </Responsive>
         <CampaignList
           loading={loading}

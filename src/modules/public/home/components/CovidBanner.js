@@ -69,7 +69,7 @@ export default class CovidBanner extends Component {
                 ) : ''
               }
             </Grid.Column>
-            <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} className={`${uptoTablet ? 'pt-50 pb-50' : 'pt-70 pb-70'} banner-section`}>
+            <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} className={`${uptoTablet ? 'pb-50' : 'pt-70 pb-70'} banner-section`}>
               {
                 bannerButtonsMeta.map(i => (
                   <>
