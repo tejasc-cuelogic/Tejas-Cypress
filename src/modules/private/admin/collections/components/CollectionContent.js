@@ -106,7 +106,9 @@ class CollectionContent extends Component {
             && (
               <Form.Group widths={1}>
                 <Form.Field>
-                  <Header as="h6">{COLLECTION_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM' ? COLLECTION_CONTENT_FRM.fields.content[index].customValue.label : 'Issuer Statement'}</Header>
+                  {this.state.editable
+                    && <Header as="h6">{COLLECTION_CONTENT_FRM.fields.content[index].customValue.label}</Header>
+                  }
                   {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: !this.state.editable, imageUploadPath: `collections/${collectionId}` })}
                 </Form.Field>
               </Form.Group>
