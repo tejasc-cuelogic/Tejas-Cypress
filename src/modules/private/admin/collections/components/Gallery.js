@@ -27,12 +27,16 @@ const SortableItem = SortableElement(({ toggleVisible, GALLERY_FRM, isReadOnly, 
               <Header as="h4">{GALLERY_FRM.fields.gallery[fieldIndex].image.label}</Header>
               {smartElement.ImageCropper('image', { style: { height: '125px' }, disabled: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], uploadPath: `collections/${collectionId}`, removeMedia })}
             </Table.Cell>
-            <Table.Cell collapsing>
-              <Button className="link-button">
-                <Icon onClick={() => toggleVisible(fieldIndex)} color="blue" name={GALLERY_FRM.fields.gallery[fieldIndex].isVisible.value ? 'ns-view' : 'ns-no-view'} />
-              </Button>
-              {/* {smartElement.FormCheckBox('isVisible', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], toggle: true, defaults: true })} */}
-            </Table.Cell>
+            {!isReadOnly
+              && (
+                <Table.Cell collapsing>
+                  <Button className="link-button">
+                    <Icon onClick={() => toggleVisible(fieldIndex)} color="blue" name={GALLERY_FRM.fields.gallery[fieldIndex].isVisible.value ? 'ns-view' : 'ns-no-view'} />
+                  </Button>
+                  {/* {smartElement.FormCheckBox('isVisible', { customClass: 'customToggle', displayMode: isReadOnly, multiForm: [metaInfo.form, 'gallery', fieldIndex], toggle: true, defaults: true })} */}
+                </Table.Cell>
+              )
+            }
             {!isReadOnly && GALLERY_FRM.fields.gallery.length > 1 && (
               <Table.Cell collapsing>
                 <Button icon circular floated="right" className="link-button">
@@ -124,7 +128,7 @@ function Gallery(props) {
       />
       <div className="sticky-actions">
         <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
-          <Button disabled={loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={handleFormSubmit} color="green" className="relaxed">Save</Button>
+          <Button disabled={isLocked || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={handleFormSubmit} color="green" className="relaxed">Save</Button>
         </Button.Group>
       </div>
       <Divider section />
