@@ -30,7 +30,7 @@ const SortableItem = SortableElement(({
 }) => (
     <Table.Row className={(record.scope === 'PUBLIC') ? '' : 'row-highlight'} collapsing>
       <Table.Cell collapsing>
-        <DragHandle />
+        {!isReadOnly && <DragHandle />}
         {isOffering ? offeringTitle(record).length > 50 ? (`${offeringTitle(record).substring(0, 55)}...`) : offeringTitle(record) : record.title.length > 60 ? (`${record.title.substring(0, 55)}...`) : record.title}
       </Table.Cell>
       <Table.Cell>
