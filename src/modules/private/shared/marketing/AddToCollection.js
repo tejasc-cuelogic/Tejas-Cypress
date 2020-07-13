@@ -52,7 +52,7 @@ export default class AddToCollection extends React.Component {
         name="collection"
         fielddata={COLLECTION_MAP_DROPDOWN.fields.mappingMeta}
         options={collectionMappingList}
-        disabled={intersection(loadingArray, ['adminCollectionMappingUpsert', 'adminDeleteCollectionMapping']).length > 0 || this.props.isdisabled}
+        disabled={intersection(loadingArray, ['adminCollectionMappingUpsert', 'adminDeleteCollectionMapping']).length > 0 || this.props.isDisabled}
         multiple
         selection
         search

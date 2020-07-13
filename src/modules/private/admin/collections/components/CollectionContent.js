@@ -71,33 +71,38 @@ class CollectionContent extends Component {
     const { smartElement, collectionStore, uiStore } = this.props;
     const { htmlEditorImageLoading } = this.props;
     const index = parseInt(this.props.match.params.index, 10) - 1 || 0;
-    const { COLLECTION_CONTENT_FRM, collectionId, collectionMapping } = collectionStore;
+    const { COLLECTION_CONTENT_FRM, collectionId, collectionMapping, isLocked } = collectionStore;
     const { contentType, customValue } = COLLECTION_CONTENT_FRM.fields.content[index];
     const { value: contentTypeValue } = contentType;
     const { loadingArray } = this.props.nsUiStore;
-    const isCtaDisabled = !this.state.editable || htmlEditorImageLoading || loadingArray.includes('adminCollectionUpsert') || !COLLECTION_CONTENT_FRM.meta.isValid;
+    const isReadOnly = isLocked || !this.state.editable;
+    const isCtaDisabled = isReadOnly || htmlEditorImageLoading || loadingArray.includes('adminCollectionUpsert') || !COLLECTION_CONTENT_FRM.meta.isValid;
     return (
       <div className="inner-content-spacer">
         <Form>
-          <small className="pull-right">
-            {!this.state.editable
-              ? <Link to="/" onClick={(e) => { e.preventDefault(); this.updateState(true); }}><Icon className="ns-pencil" />Edit</Link>
-              : <Link to="/" className="text-link mr-10" onClick={(e) => { e.preventDefault(); this.updateState(false); }}>Cancel</Link>
-            }
-            {COLLECTION_CONTENT_FRM.fields.content.length > 1 && <Link to="/" className="ml-10 negative-text" disabled onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>}
-          </small>
+          {!isLocked
+            && (
+              <small className="pull-right">
+                {!this.state.editable
+                  ? <Link to="/" onClick={(e) => { e.preventDefault(); this.updateState(true); }}><Icon className="ns-pencil" />Edit</Link>
+                  : <Link to="/" className="text-link mr-10" onClick={(e) => { e.preventDefault(); this.updateState(false); }}>Cancel</Link>
+                }
+                {COLLECTION_CONTENT_FRM.fields.content.length > 1 && <Link to="/" className="ml-10 negative-text" disabled onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>}
+              </small>
+            )
+          }
           <Form.Group widths={2}>
-            {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
-            {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
+            {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: isReadOnly })}
+            {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: isReadOnly })}
             {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: true })}
-            {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
+            {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: isReadOnly })}
           </Form.Group>
           {['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
             && (
               <Form.Group widths={1}>
                 <Form.Field>
                   <Header as="h6">Description</Header>
-                  {smartElement.HtmlEditor('description', { multiForm: [metaInfo.form, 'content', index], index, readOnly: !this.state.editable, imageUploadPath: `collections/${collectionId}` })}
+                  {smartElement.HtmlEditor('description', { multiForm: [metaInfo.form, 'content', index], index, readOnly: isReadOnly, imageUploadPath: `collections/${collectionId}` })}
                 </Form.Field>
               </Form.Group>
             )}
@@ -109,7 +114,7 @@ class CollectionContent extends Component {
                   {this.state.editable
                     && <Header as="h6">{COLLECTION_CONTENT_FRM.fields.content[index].customValue.label}</Header>
                   }
-                  {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: !this.state.editable, imageUploadPath: `collections/${collectionId}` })}
+                  {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: isReadOnly, imageUploadPath: `collections/${collectionId}` })}
                 </Form.Field>
               </Form.Group>
             )}
@@ -119,7 +124,7 @@ class CollectionContent extends Component {
               <>
                 <div className="sticky-actions">
                   <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
-                    <Button disabled={!this.state.editable || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
+                    <Button disabled={isReadOnly || loadingArray.includes('adminCollectionUpsert')} loading={loadingArray.includes('adminCollectionUpsert')} primary onClick={this.handleFormSubmit} color="green" className="relaxed">Save</Button>
                   </Button.Group>
                 </div>
               </>
@@ -145,9 +150,9 @@ class CollectionContent extends Component {
           }
 
           {
-            ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
+            !isLocked && ['ACTIVE_INVESTMENTS', 'COMPLETE_INVESTMENTS', 'INSIGHTS'].includes(contentTypeValue)
             && (
-              <AddToCollection customValue={customValue.value} index={index} isDisabled={!this.state.editable} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} {...this.props} />
+              <AddToCollection customValue={customValue.value} index={index} isDisabled={isReadOnly} collectionId={collectionId} isContentMapping isOffering={contentTypeValue !== 'INSIGHTS'} />
             )
           }
           {(contentTypeValue !== 'GALLERY' && this.state.editable)
