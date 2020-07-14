@@ -13,7 +13,7 @@ const insightContent = insight => (
 const insightImage = (insight, type) => {
   const data = find(get(insight, 'social'), o => o.type === type);
   const image = get(data, 'featuredImageUpload.url') ? get(data, 'featuredImageUpload.url') : get(insight, 'featuredImage');
-  return (image.includes('https://') || image.includes('http://')) ? image : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(image)}`;
+  return (image && (image.includes('https://') || image.includes('http://'))) ? image : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(image)}`;
 };
 
 const InsightMetaTags = ({ insight }) => (
