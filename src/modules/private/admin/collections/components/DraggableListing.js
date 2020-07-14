@@ -26,28 +26,32 @@ const offeringTitle = record => (
 
 const DragHandle = sortableHandle(() => <Icon className="ml-10 ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  record, handleAction, smartElement, removeMedia, isOffering, fieldIndex, collectionId,
+  record, handleAction, smartElement, removeMedia, isOffering, fieldIndex, collectionId, isReadOnly,
 }) => (
     <Table.Row className={(record.scope === 'PUBLIC') ? '' : 'row-highlight'} collapsing>
       <Table.Cell collapsing>
-        <DragHandle />
+        {!isReadOnly && <DragHandle />}
         {isOffering ? offeringTitle(record).length > 50 ? (`${offeringTitle(record).substring(0, 55)}...`) : offeringTitle(record) : record.title.length > 60 ? (`${record.title.substring(0, 55)}...`) : record.title}
       </Table.Cell>
       <Table.Cell>
-        {smartElement.ImageCropper('image', { style: { height: '125px' }, multiForm: [metaInfo.form, 'mappingContent', fieldIndex], uploadPath: `collections/${collectionId}`, removeMedia })}
+        {smartElement.ImageCropper('image', { style: { height: '125px' }, multiForm: [metaInfo.form, 'mappingContent', fieldIndex], uploadPath: `collections/${collectionId}`, disabled: isReadOnly, removeMedia })}
       </Table.Cell>
-      <Table.Cell collapsing>
-        <Button.Group>
-          {Object.keys(actions).map(action => (
-            <Button icon className="link-button">
-              <Icon className={`ns-${record.scope === 'PUBLIC' ? actions[action].icon : actions[action].icon1}`} onClick={() => handleAction(actions[action].label, record, record.scope !== 'PUBLIC')} />
-            </Button>
-          ))}
-          <Button icon className="link-button">
-            <Icon className="ns-trash" onClick={() => handleAction('Delete', record, !record.scope)} />
-          </Button>
-        </Button.Group>
-      </Table.Cell>
+      {!isReadOnly
+        && (
+          <Table.Cell collapsing>
+            <Button.Group>
+              {Object.keys(actions).map(action => (
+                <Button icon className="link-button">
+                  <Icon className={`ns-${record.scope === 'PUBLIC' ? actions[action].icon : actions[action].icon1}`} onClick={() => handleAction(actions[action].label, record, record.scope !== 'PUBLIC')} />
+                </Button>
+              ))}
+              <Button icon className="link-button">
+                <Icon className="ns-trash" onClick={() => handleAction('Delete', record, !record.scope)} />
+              </Button>
+            </Button.Group>
+          </Table.Cell>
+        )
+      }
     </Table.Row>
   ));
 const SortableList = SortableContainer(({ toggleVisible, isOffering, collectionId, allRecordsList, handleAction, isReadOnly, smartElement, removeMedia, removeOne }) => (
@@ -59,7 +63,8 @@ const SortableList = SortableContainer(({ toggleVisible, isOffering, collectionI
             <Table.Row>
               <Table.HeaderCell>{isOffering ? 'Offering' : 'Title'}</Table.HeaderCell>
               <Table.HeaderCell>Image</Table.HeaderCell>
-              <Table.HeaderCell textAlign="right">Action</Table.HeaderCell>
+              {!isReadOnly && <Table.HeaderCell textAlign="right">Action</Table.HeaderCell>
+              }
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -111,6 +116,7 @@ function DraggableListing(props) {
   const [isPublic, setisPublic] = useState(false);
 
   const { smartElement, allRecords, isLoading, isOffering } = props;
+  const { isLocked } = props.collectionStore;
   const { confirmBox } = props.uiStore;
   const removeMedia = (form, name) => {
     window.logger(form, name);
@@ -182,6 +188,7 @@ function DraggableListing(props) {
         handleAction={handleAction}
         onSortEnd={onSortEnd}
         isOffering={isOffering}
+        isReadOnly={isLocked}
         collectionId={props.collectionStore.collectionId}
       />
       <Confirm

@@ -29,8 +29,7 @@ class Tombstone extends Component {
 
   render() {
     const { collectionStore, smartElement } = this.props;
-    const { TOMBSTONE_FRM, collectionId } = collectionStore;
-    const isReadOnly = false;
+    const { TOMBSTONE_FRM, collectionId, isLocked } = collectionStore;
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -39,13 +38,13 @@ class Tombstone extends Component {
           <Grid columns="2">
             <Grid.Column>
               {smartElement.Input('title', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
                 // fielddata: TOMBSTONE_FRM.fields.title,
               })}
             </Grid.Column>
             <Grid.Column>
               {smartElement.ColorPikcer('bgColor', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
             </Grid.Column>
           </Grid>
@@ -56,6 +55,7 @@ class Tombstone extends Component {
                 uploadPath: `collection/${collectionId}`,
                 removeMedia: this.removeMedia,
                 isImagePreviewDisabled: true,
+                disabled: isLocked,
               })}
             </Grid.Column>
             <Grid.Column>
@@ -64,6 +64,7 @@ class Tombstone extends Component {
                 uploadPath: `collection/${collectionId}`,
                 removeMedia: this.removeMedia,
                 isImagePreviewDisabled: true,
+                disabled: isLocked,
               })}
               <Divider hidden />
             </Grid.Column>
@@ -71,19 +72,19 @@ class Tombstone extends Component {
           <Grid columns="2">
             <Grid.Column>
               {smartElement.ColorPikcer('descriptionColor', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
               <Divider hidden />
               {smartElement.Input('text', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
               <Divider hidden />
               {smartElement.ColorPikcer('color', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
               <Divider hidden />
               {smartElement.ColorPikcer('textColor', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
               <Divider hidden />
             </Grid.Column>
@@ -92,6 +93,7 @@ class Tombstone extends Component {
                   <Header as="h6">{TOMBSTONE_FRM.fields.description.label}</Header>
                   {smartElement.HtmlEditor('description', {
                     imageUploadPath: `collection/${collectionId}`,
+                    readOnly: isLocked,
                   })}
                 </Form.Field>
             </Grid.Column>
@@ -109,7 +111,7 @@ class Tombstone extends Component {
             </Grid.Column>
           </Grid> */}
           <Divider section />
-          <OfferingButtonGroup isDisable={!(TOMBSTONE_FRM.meta.isValid)} updateOffer={this.handleFormSubmit} />
+          <OfferingButtonGroup isDisable={!(TOMBSTONE_FRM.meta.isValid) || isLocked} updateOffer={this.handleFormSubmit} />
         </Form>
       </div>
     );
