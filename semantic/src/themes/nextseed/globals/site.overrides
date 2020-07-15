@@ -3255,6 +3255,12 @@ input[type='range']::-webkit-slider-thumb {
 		left:0;
 		top:-140px;
 	}
+	>.anchor-top{
+		height:1px;
+		width:1px;
+		position:absolute;
+		top:-160px;
+	}
 	>.anchor-scroll{
 		top:-70px;
 	}
