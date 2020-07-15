@@ -64,7 +64,7 @@ export default class Content extends React.Component {
 
   render() {
     const { match } = this.props;
-    const { COLLECTION_CONTENT_FRM } = this.props.collectionStore;
+    const { COLLECTION_CONTENT_FRM, isLocked } = this.props.collectionStore;
     const navItems = [];
     const loadingList = ['getCollectionMapping', 'adminCollectionUpsert', 'collectionMappingLoader', 'adminCollectionMappingUpsert', 'adminDeleteCollectionMapping'];
     const { loadingArray } = this.props.nsUiStore;
@@ -83,7 +83,7 @@ export default class Content extends React.Component {
             <div className="sticky-sidebar">
               <DraggableMenu secondary vertical match={match} onSortEnd={this.onSortEnd} navItems={navItems} />
               {COLLECTION_CONTENT_FRM.fields.content.length < 15
-                && <Button size="small" color="blue" className="link-button mt-20" onClick={this.addMore}>+ Add another content block</Button>
+                && <Button size="small" color="blue" className="link-button mt-20" disabled={isLocked} onClick={this.addMore}>+ Add another content block</Button>
               }
             </div>
           </Grid.Column>
