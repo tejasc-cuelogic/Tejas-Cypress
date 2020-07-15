@@ -173,7 +173,7 @@ export class ArticleStore extends DataModelStore {
     client
       .mutate({
         mutation: id === 'new' ? adminCreateArticle : adminUpdateArticleInfo,
-        variables: id === 'new' ? { payload, isPartial: isDraft } : { payload, id, isPartial: isDraft },
+        variables: id === 'new' ? { payload, isPartial: isDraft } : { payload, id },
       }).then(() => {
         Helper.toast('Category Saved successfully.', 'success');
         resolve();
