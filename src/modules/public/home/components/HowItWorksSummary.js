@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Header, Container, Button, Grid, Item, Divider, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import NSImage from '../../../shared/NSImage';
+import CovidBanner from './CovidBanner';
 
 const highlights = [
   {
@@ -80,7 +81,11 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
       </p>
     </Container>
   </section>
-  <Divider as={Container} fitted />
+  <Divider as={Container} hidden />
+  <section>
+    <CovidBanner />
+  </section>
+  <Divider as={Container} hidden />
   <section>
     <Container className={uiStore.responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
       <Grid>

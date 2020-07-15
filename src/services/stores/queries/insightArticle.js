@@ -101,8 +101,8 @@ mutation adminCreateArticle($payload:  InsightsArticleInput!, $isPartial: Boolea
 `;
 
 export const adminUpdateArticleInfo = gql`
-mutation adminUpdateArticleInfo($id: ID!, $payload:  InsightsArticleInput!, $isPartial: Boolean) {
-  adminUpdateArticleInfo(id:$id, articleDetailsInput: $payload, isPartialData: $isPartial) {
+mutation adminUpdateArticleInfo($id: ID!, $payload:  InsightsArticleInput!) {
+  adminUpdateArticleInfo(id:$id, articleDetailsInput: $payload) {
     id
     title
     articleStatus

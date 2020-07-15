@@ -35,8 +35,7 @@ class CollectionHeader extends Component {
 
   render() {
     const { collectionStore, smartElement } = this.props;
-    const { CARD_HEADER_META_FRM, collectionId } = collectionStore;
-    const isReadOnly = false;
+    const { CARD_HEADER_META_FRM, collectionId, isLocked } = collectionStore;
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -46,13 +45,13 @@ class CollectionHeader extends Component {
           <Grid columns="2">
             <Grid.Column>
               {smartElement.Input('title', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
                 // fielddata: CARD_HEADER_META_FRM.fields.title,
               })}
             </Grid.Column>
             <Grid.Column>
               {smartElement.ColorPikcer('bgColor', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
             </Grid.Column>
           </Grid>
@@ -63,6 +62,7 @@ class CollectionHeader extends Component {
                 uploadPath: `collection/${collectionId}`,
                 removeMedia: this.removeMedia,
                 isImagePreviewDisabled: true,
+                isReadonly: isLocked,
                 aspectTwo: true,
               })}
             </Grid.Column>
@@ -72,6 +72,7 @@ class CollectionHeader extends Component {
                 uploadPath: `collection/${collectionId}`,
                 removeMedia: this.removeMedia,
                 isImagePreviewDisabled: true,
+                isReadonly: isLocked,
                 aspectTwo: true,
               })}
               <Divider hidden />
@@ -80,26 +81,26 @@ class CollectionHeader extends Component {
           <Grid columns="2">
             <Grid.Column>
               {smartElement.ColorPikcer('descriptionColor', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
               <Divider hidden />
               {smartElement.Input('text', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
               <Divider hidden />
               {smartElement.ColorPikcer('color', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
               <Divider hidden />
               {smartElement.ColorPikcer('textColor', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
               <Divider hidden />
               {smartElement.Input('actionText', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
               <Divider hidden />
               <Form.Group widths={1}>
@@ -107,6 +108,7 @@ class CollectionHeader extends Component {
                   <Header as="h6">{CARD_HEADER_META_FRM.fields.description.label}</Header>
                   {smartElement.HtmlEditor('description', {
                     imageUploadPath: `collection/${collectionId}`,
+                    readOnly: isLocked,
                   })}
                 </Form.Field>
               </Form.Group>
@@ -115,18 +117,18 @@ class CollectionHeader extends Component {
           {/* <Grid columns="2">
             <Grid.Column>
               {smartElement.Input('text', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
             </Grid.Column>
             <Grid.Column>
               {smartElement.Input('color', {
-                readOnly: isReadOnly,
+                readOnly: isLocked,
               })}
             </Grid.Column>
           </Grid> */}
-          <CardHeaderMeta additinalInfoLenght={6} />
+          <CardHeaderMeta additinalInfoLenght={6} isReadOnly={isLocked} />
           <Divider section />
-          <OfferingButtonGroup isDisable={!(CARD_HEADER_META_FRM.meta.isValid)} updateOffer={this.handleFormSubmit} />
+          <OfferingButtonGroup isDisable={!(CARD_HEADER_META_FRM.meta.isValid) || isLocked} updateOffer={this.handleFormSubmit} />
         </Form>
       </div>
     );
