@@ -1794,6 +1794,7 @@ a.icon-link {
 	}
 	>.ui.centered.grid >.match-height{
 		max-height: 552px;
+		max-width: 385px;
 	}
 }
 .secondary-section{
