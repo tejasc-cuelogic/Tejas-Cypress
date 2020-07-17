@@ -1794,6 +1794,7 @@ a.icon-link {
 	}
 	>.ui.centered.grid >.match-height{
 		max-height: 552px;
+		max-width: 385px;
 	}
 }
 .secondary-section{
@@ -3254,6 +3255,12 @@ input[type='range']::-webkit-slider-thumb {
 		position:absolute;
 		left:0;
 		top:-140px;
+	}
+	>.anchor-top{
+		height:1px;
+		width:1px;
+		position:absolute;
+		top:-160px;
 	}
 	>.anchor-scroll{
 		top:-70px;

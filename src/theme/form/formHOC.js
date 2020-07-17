@@ -326,6 +326,7 @@ function formHoc(WrappedComponent, metaInfo) {
           ) : fieldData.value && props.isImagePreviewDisabled ? (
             <div className="file-uploader attached">
               <Responsive
+                {...props}
                 as={Button}
                 minWidth={768}
                 size="tiny"
@@ -336,6 +337,7 @@ function formHoc(WrappedComponent, metaInfo) {
                 Remove
                     </Responsive>
               <Responsive
+                {...props}
                 as={Icon}
                 maxWidth={767}
                 name="remove"
@@ -368,6 +370,7 @@ function formHoc(WrappedComponent, metaInfo) {
                   cropInModal
                   aspect={props.aspectOne ? 1 / 1 : props.aspectTwo ? 16 / 9 : 3 / 2}
                   size="small"
+                  {...props}
                 />
               )
           }
