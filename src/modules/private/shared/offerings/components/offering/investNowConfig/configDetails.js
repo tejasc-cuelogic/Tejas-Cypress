@@ -5,6 +5,7 @@ import { Form, Grid, Divider, Icon, Modal } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../OfferingButtonGroup';
 import formHOC from '../../../../../../../theme/form/formHOC';
 import ConfigPreview from './configPreview';
+import CongratulationPreview from './CongratulationPreview';
 
 const metaInfo = {
   store: 'manageOfferingStore',
@@ -13,6 +14,8 @@ const metaInfo = {
 
 function ConfigDetails(props) {
   const [prev, setPrev] = useState(false);
+  const [prevType, setPrevType] = useState(false);
+
 
   //   useEffect(() => {
   //     props.factoryStore.resetForm('INVEST_NOW_CONFIG_FRM');
@@ -23,9 +26,10 @@ function ConfigDetails(props) {
     props.manageOfferingStore.updateConfig();
   };
 
-  const togglePreivew = (e) => {
+  const togglePreivew = (e, type = '') => {
     e.preventDefault();
     setPrev(!prev);
+    setPrevType(type);
   };
 
   const { smartElement, manageOfferingStore, uiStore } = props;
@@ -38,7 +42,10 @@ function ConfigDetails(props) {
     <>
       <div className="inner-content-spacer">
         <Link to="#" onClick={e => togglePreivew(e)}>
-          <Icon className="ns-view" /><b>Preview</b>
+          <Icon className="ns-view" /><b>Preview Investment Page</b>
+        </Link>
+        <Link to="#" className="ml-10" onClick={e => togglePreivew(e, 'confirmation')}>
+          <Icon className="ns-view" /><b>Preview confirmation Page</b>
         </Link>
         <Form>
           <Modal
@@ -50,11 +57,16 @@ function ConfigDetails(props) {
             size="large"
           >
             <Modal.Content className="multistep">
-              <Grid centered textAlign="left">
-                <Grid.Column mobile={16} tablet={10} computer={8}>
-                  <ConfigPreview open={prev} />
-                </Grid.Column>
-              </Grid>
+              {prevType !== 'confirmation'
+                ? (
+                  <Grid centered textAlign="left">
+                    <Grid.Column mobile={16} tablet={10} computer={8}>
+                      <ConfigPreview open={prev} />
+                    </Grid.Column>
+                  </Grid>
+                )
+                : <CongratulationPreview handleCloseModal={e => togglePreivew(e)} />
+              }
             </Modal.Content>
           </Modal>
           <Divider section />
@@ -71,6 +83,16 @@ function ConfigDetails(props) {
               </Grid.Column>
             )}
           </Grid>
+          <Divider section />
+          <Grid className="mt-10">
+            {smartElement.HtmlEditor('confirmationMessage', { displayMode: isReadOnly })}
+          </Grid>
+          <Grid className="mt-30">
+            {smartElement.FormCheckBox('toggleConfirmation', { defaults: true, containerclassname: 'ui list field', label: 'Display Toggle' })}
+          </Grid>
+          {/* <Grid className="mt-20">
+            {smartElement.FormCheckBox('hideConfirmationHeader', { displayMode: isReadOnly })}
+          </Grid> */}
           <Divider section />
           <OfferingButtonGroup
             updateOffer={onSubmit}

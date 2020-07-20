@@ -472,6 +472,9 @@ export class CampaignStore {
     campaignStatus.showBonusRewards = get(campaign, 'investNow.config.showBonusRewards');
     campaignStatus.showExpectedReturn = get(campaign, 'investNow.config.showExpectedReturn');
     campaignStatus.expectedReturnCalc = get(campaign, 'investNow.config.expectedReturnCalc');
+    campaignStatus.hideConfirmationHeader = get(campaign, 'investNow.config.hideConfirmationHeader');
+    campaignStatus.hideConfirmationReferral = get(campaign, 'investNow.config.hideConfirmationReferral');
+    campaignStatus.confirmationMessage = get(campaign, 'investNow.config.confirmationMessage');
     return campaignStatus;
   }
 

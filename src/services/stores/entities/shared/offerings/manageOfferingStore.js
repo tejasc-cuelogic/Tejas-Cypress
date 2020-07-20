@@ -501,11 +501,22 @@ export class ManageOfferingStore extends DataModelStore {
       const configDtails = get(offer, 'investNow.config');
       if (configDtails) {
         configDtails.toggleMeta = [];
+        configDtails.toggleConfirmation = [];
+        configDtails.toggleConfirmation = [];
+
         if (configDtails.showExpectedReturn) {
           configDtails.toggleMeta.push('EXPECTED_RETURN');
         }
         if (configDtails.showBonusRewards) {
           configDtails.toggleMeta.push('BONUS_REWARDS');
+        }
+
+        if (get(offer, 'investNow.config.hideConfirmationHeader') === false) {
+          configDtails.toggleConfirmation.push('HIDE_HEADER');
+        }
+
+        if (get(offer, 'investNow.config.hideConfirmationReferral') === false) {
+          configDtails.toggleConfirmation.push('HIDE_REFERRAL');
         }
       }
     }
@@ -588,6 +599,9 @@ export class ManageOfferingStore extends DataModelStore {
     const configDetails = Validator.evaluateFormData(this.INVEST_NOW_CONFIG_FRM.fields);
     configDetails.showExpectedReturn = false;
     configDetails.showBonusRewards = false;
+    configDetails.hideConfirmationHeader = !configDetails.toggleConfirmation.includes('HIDE_HEADER');
+    configDetails.hideConfirmationReferral = !configDetails.toggleConfirmation.includes('HIDE_REFERRAL');
+    delete configDetails.toggleConfirmation;
     if (configDetails.toggleMeta && configDetails.toggleMeta.length > 0) {
       forEach(configDetails.toggleMeta, (value) => {
         if (value === 'EXPECTED_RETURN') {
@@ -598,6 +612,7 @@ export class ManageOfferingStore extends DataModelStore {
         }
       });
     }
+
     if (!get(configDetails, 'showExpectedReturn')) {
       delete configDetails.expectedReturnCalc;
     }
