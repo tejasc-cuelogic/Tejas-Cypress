@@ -149,7 +149,7 @@ class Cip extends React.Component {
                 <Button fluid={isMobile} primary content="Verify my identity" disabled={!ID_VERIFICATION_FRM.meta.isValid || signUpLoading} />
               </div>
               <div className={isMobile && 'center-align'}>
-                <Link to="/dashboard/setup" onClick={cipUtility.closeModal}>I’ll finish this later</Link>
+                <Link to="/dashboard/setup/establish-profile/confirm" onClick={cipUtility.closeModal}>I’ll finish this later</Link>
               </div>
             </Form>
           </Grid.Column>
