@@ -13,6 +13,15 @@ export default class CovidBanner extends Component {
     this.props.history.push('/');
   }
 
+  urlHandle = (link) => {
+    if (link === '/offerings') {
+      this.props.history.push(link);
+      window.scrollTo(0, 0);
+    } else {
+      this.props.history.push(link);
+    }
+  }
+
   render() {
     const { isTabletLand, uptoTablet, isMobile } = this.props.uiStore.responsiveVars;
     const { showButton, redirectUrl } = this.props.publicStore;
@@ -69,7 +78,7 @@ export default class CovidBanner extends Component {
                 ) : ''
               }
             </Grid.Column>
-            <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} className={`${uptoTablet ? 'pb-50' : 'pt-70 pb-70'} banner-section`}>
+            <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} className={`${uptoTablet ? 'pt-50 pb-50' : 'pt-70 pb-70'} banner-section`}>
               {
                 bannerButtonsMeta.map(i => (
                   <>
@@ -81,7 +90,7 @@ export default class CovidBanner extends Component {
                       labelPosition="left"
                       className="arrow-button bg-white"
                       onClick={() => (
-                        i.showLifeFund ? this.lifeFundUrl(i.link) : this.props.history.push(i.link)
+                        i.showLifeFund ? this.lifeFundUrl(i.link) : this.urlHandle(i.link)
                       )}
                     >
                       <div className="details">
