@@ -22,13 +22,11 @@ export default class NsInterstitial extends React.Component {
     if (this.state.currentStep !== lastStep) {
       this.setState({ currentStep: currentStep + 1 });
     } else {
-      this.props.onboardingFlag(true);
       this.props.history.push(endUrl);
     }
   }
 
   handleClose = (url) => {
-    this.props.onboardingFlag(true);
     this.props.history.push(url);
   }
 

@@ -37,20 +37,6 @@ export class InvestorProfileStore extends DataModelStore {
 
   isFormSubmitted = false;
 
-  profileOnboardingFlag = cookie.load('PROFILE_ONBOARDED') || false;
-
-  setProfileOnboardingCookie = () => {
-    this.profileOnboardingFlag = cookie.load('PROFILE_ONBOARDED');
-  }
-
-  setProfileOnboarding = (status) => {
-    this.profileOnboardingFlag = status;
-    if (status) {
-      cookie.save('PROFILE_ONBOARDED', status, { maxAge: 604800 });
-    }
-    this.setProfileOnboardingCookie();
-  }
-
   @action
   upsertInvestorProfile = async (currentStep) => {
     const { fields } = this[currentStep.form];
@@ -208,9 +194,6 @@ decorate(InvestorProfileStore, {
   INVESTMENT_EXP_FRM: observable,
   INVESTOR_PROFILE_FULL: observable,
   isFormSubmitted: observable,
-  profileOnboardingFlag: observable,
-  setProfileOnboardingCookie: action,
-  setProfileOnboarding: action,
   setInvestorDetailInfo: action,
   populateData: action,
   setFormDataWithRadio: action,

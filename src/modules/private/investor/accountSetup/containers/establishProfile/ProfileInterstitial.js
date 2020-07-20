@@ -8,16 +8,8 @@ import NSImage from '../../../../../shared/NSImage';
 @observer
 @withRouter
 export default class ProfileInterstitial extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      profileOnboarding: this.props.investorProfileStore.profileOnboardingFlag,
-    };
-  }
-
   render() {
     const { responsiveVars } = this.props.uiStore;
-    const { setProfileOnboarding } = this.props.investorProfileStore;
     const { isMobile } = responsiveVars;
     const interstitialSteps = {
       label: 'Profile Interstitial',
@@ -47,13 +39,8 @@ export default class ProfileInterstitial extends React.Component {
         },
       ],
     };
-    if (this.state.profileOnboarding) {
-      this.props.history.push('/dashboard/setup');
-      return null;
-    }
     return (
       <NsInterstitial
-        onboardingFlag={status => setProfileOnboarding(status)}
         key={interstitialSteps.key}
         closeOnDimmerClick={false}
         open
