@@ -84,13 +84,14 @@ export default class Congratulation extends React.Component {
                   </>
                 )
               }
+              <Divider hidden />
               {campaignStatus.confirmationMessage !== '' && (
                 <HtmlEditor
                   readOnly
                   content={campaignStatus.confirmationMessage}
                 />
               )}
-
+              <Divider hidden />
               {(campaignStatus.hideConfirmationReferral !== true || campaignStatus.confirmationMessage === '')
                 && (
                   <>
@@ -106,13 +107,13 @@ export default class Congratulation extends React.Component {
                   </>
                 )
               }
-                <Divider hidden />
-                <Button
-                  as={Link}
-                  primary
-                  to={accountRedirectURL}
-                >
-                  View Portfolio
+              <Divider hidden />
+              <Button
+                as={Link}
+                primary
+                to={accountRedirectURL}
+              >
+                View Portfolio
               </Button>
             </Grid.Column>
           </Grid>
