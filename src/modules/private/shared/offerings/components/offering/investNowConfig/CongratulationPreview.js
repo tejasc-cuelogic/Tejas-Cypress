@@ -29,7 +29,7 @@ export default class CongratulationPreview extends React.Component {
             {confirmMessage !== '' && (
               <HtmlEditor
                 readOnly
-                content={confirmMessage.value}
+                content={confirmMessage}
               />
             )}
 

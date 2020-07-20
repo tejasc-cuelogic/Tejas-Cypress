@@ -511,11 +511,11 @@ export class ManageOfferingStore extends DataModelStore {
           configDtails.toggleMeta.push('BONUS_REWARDS');
         }
 
-        if (get(offer, 'investNow.config.hideConfirmationHeader') === false) {
+        if (get(offer, 'investNow.config.hideConfirmationHeader') === true) {
           configDtails.toggleConfirmation.push('HIDE_HEADER');
         }
 
-        if (get(offer, 'investNow.config.hideConfirmationReferral') === false) {
+        if (get(offer, 'investNow.config.hideConfirmationReferral') === true) {
           configDtails.toggleConfirmation.push('HIDE_REFERRAL');
         }
       }
@@ -599,8 +599,8 @@ export class ManageOfferingStore extends DataModelStore {
     const configDetails = Validator.evaluateFormData(this.INVEST_NOW_CONFIG_FRM.fields);
     configDetails.showExpectedReturn = false;
     configDetails.showBonusRewards = false;
-    configDetails.hideConfirmationHeader = !configDetails.toggleConfirmation.includes('HIDE_HEADER');
-    configDetails.hideConfirmationReferral = !configDetails.toggleConfirmation.includes('HIDE_REFERRAL');
+    configDetails.hideConfirmationHeader = configDetails.toggleConfirmation.includes('HIDE_HEADER');
+    configDetails.hideConfirmationReferral = configDetails.toggleConfirmation.includes('HIDE_REFERRAL');
     delete configDetails.toggleConfirmation;
     if (configDetails.toggleMeta && configDetails.toggleMeta.length > 0) {
       forEach(configDetails.toggleMeta, (value) => {

@@ -74,7 +74,7 @@ export default class Congratulation extends React.Component {
           <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
             <Grid.Column width="9" className="pt-0">
               {
-                (campaignStatus.hideConfirmationHeader === false || campaignStatus.confirmationMessage === '')
+                (campaignStatus.hideConfirmationHeader !== true || campaignStatus.confirmationMessage === '')
                 && (
                   <>
                     <Header as="h2">Congratulations!</Header>
@@ -91,13 +91,13 @@ export default class Congratulation extends React.Component {
                 />
               )}
 
-              {(campaignStatus.hideConfirmationReferral === false || campaignStatus.confirmationMessage === '')
+              {(campaignStatus.hideConfirmationReferral !== true || campaignStatus.confirmationMessage === '')
                 && (
                   <>
-                    <p>
+                    <p className="mt-20">
                       Now, earn an additional $20 credit by giving $20. Invite your
                       friends to build the community together, and you both earn credits.
-                  </p>
+                    </p>
                     <Divider hidden />
                     <Link to="/" onClick={e => this.handleCloseModalWithRefferalLink(e)} className="text-link">
                       <Icon className="ns-arrow-right" color="green" />
