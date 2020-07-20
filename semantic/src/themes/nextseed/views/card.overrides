@@ -317,7 +317,8 @@
             .tags{
                 color:@primary-one;
                 text-transform:uppercase;
-                >span{
+                .read-duration{
+                    font-size: 13px !important;
                     color:@neutral-middark;
                     text-transform:none;
                 }

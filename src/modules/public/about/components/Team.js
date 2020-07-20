@@ -113,7 +113,7 @@ class Team extends Component {
             </Grid>
           </Container>
         </section>
-        <Divider fitted as={Container} />
+        {/* <Divider fitted as={Container} />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
           <Container>
             <Grid centered stackable>
@@ -131,7 +131,7 @@ class Team extends Component {
               </Grid.Column>
             </Grid>
           </Container>
-        </section>
+        </section> */}
         <IframeModal
           open={this.state.open}
           close={this.closeModal}

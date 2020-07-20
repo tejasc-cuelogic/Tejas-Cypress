@@ -224,7 +224,7 @@ export default class EditArticle extends Component {
                           {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
                             <div className="file-uploader attached">
                               <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
-                              <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
+                              <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} reRender originalImg />
                             </div>
                           ) : (
                               <ImageCropper
