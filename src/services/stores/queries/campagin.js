@@ -461,6 +461,9 @@ export const campaignDetailsQuery = gql`
         investmentType
         showBonusRewards
         showExpectedReturn
+        confirmationMessage
+        hideConfirmationReferral
+        hideConfirmationHeader
       }
     }
     closureSummary {
@@ -591,6 +594,9 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
         investmentType
         showBonusRewards
         showExpectedReturn
+        hideConfirmationHeader
+        confirmationMessage
+        hideConfirmationReferral
       }
     }
     closureSummary {

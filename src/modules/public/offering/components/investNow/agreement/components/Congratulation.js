@@ -5,6 +5,7 @@ import { get, isEmpty } from 'lodash';
 import { Header, Button, Icon, Divider, Grid } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 import { NsModal } from '../../../../../../../theme/shared';
+import HtmlEditor from '../../../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore', 'investmentLimitStore')
@@ -72,26 +73,47 @@ export default class Congratulation extends React.Component {
         >
           <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
             <Grid.Column width="9" className="pt-0">
-              <Header as="h2">Congratulations!</Header>
-              <Header as="h3">
-                You have invested <span className="positive-text">{campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in { businessName}.
-              </Header>
-              <p>
-              Now, earn an additional $20 credit by giving $20. Invite your
-              friends to build the community together, and you both earn credits.
-              </p>
+              {
+                (campaignStatus.hideConfirmationHeader !== true || campaignStatus.confirmationMessage === '')
+                && (
+                  <>
+                    <Header as="h2">Congratulations!</Header>
+                    <Header as="h3">
+                      You have invested <span className="positive-text">{campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
+                    </Header>
+                  </>
+                )
+              }
               <Divider hidden />
-              <Link to="/" onClick={e => this.handleCloseModalWithRefferalLink(e)} className="text-link">
-                <Icon className="ns-arrow-right" color="green" />
-                Give $20 & Get $20
-              </Link>
+              {campaignStatus.confirmationMessage !== '' && (
+                <HtmlEditor
+                  readOnly
+                  content={campaignStatus.confirmationMessage}
+                />
+              )}
+              <Divider hidden />
+              {(campaignStatus.hideConfirmationReferral !== true || campaignStatus.confirmationMessage === '')
+                && (
+                  <>
+                    <p className="mt-20">
+                      Now, earn an additional $20 credit by giving $20. Invite your
+                      friends to build the community together, and you both earn credits.
+                    </p>
+                    <Divider hidden />
+                    <Link to="/" onClick={e => this.handleCloseModalWithRefferalLink(e)} className="text-link">
+                      <Icon className="ns-arrow-right" color="green" />
+                      Give $20 & Get $20
+                    </Link>
+                  </>
+                )
+              }
               <Divider hidden />
               <Button
                 as={Link}
                 primary
                 to={accountRedirectURL}
               >
-              View Portfolio
+                View Portfolio
               </Button>
             </Grid.Column>
           </Grid>
