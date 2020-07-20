@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Container, Button, Grid, Item, Divider, Responsive } from 'semantic-ui-react';
-import { inject, observer } from 'mobx-react';
 import NSImage from '../../../shared/NSImage';
-import CovidBanner from './CovidBanner';
 
 const highlights = [
   {
@@ -46,12 +44,12 @@ const highlights = [
   },
 ];
 
-const HowItWorksSummary = ({ uiStore, authStore }) => (
+const HowItWorksSummary = ({ covidBanner, isUserLoggedIn, isMobile, uptoTablet }) => (
   <>
   <section>
-    <Container className={uiStore.responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'} textAlign={uiStore.responsiveVars.isMobile ? 'left' : 'center'}>
-      <Header as="h2" className={uiStore.responsiveVars.isMobile ? 'mb-40' : 'mb-60'}>Small business investing, made easy</Header>
-      <Grid stackable centered className={!uiStore.responsiveVars.isMobile && 'mt-40'}>
+    <Container className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'} textAlign={isMobile ? 'left' : 'center'}>
+      <Header as="h2" className={isMobile ? 'mb-40' : 'mb-60'}>Small business investing, made easy</Header>
+      <Grid stackable centered className={!isMobile && 'mt-40'}>
         <Grid.Column width={14}>
           <Item.Group className="horizontal-items home-page">
             {
@@ -71,11 +69,11 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
         </Grid.Column>
       </Grid>
       <div className="center-align mb-50">
-        { !authStore.isUserLoggedIn
-          && <Button fluid={uiStore.responsiveVars.isMobile} className={!uiStore.responsiveVars.isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/register-investor" primary>Create a  Free Account</Button>
+        { !isUserLoggedIn
+          && <Button fluid={isMobile} className={!isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/register-investor" primary>Create a  Free Account</Button>
         }
       </div>
-      <p className={`${uiStore.responsiveVars.isMobile ? '' : 'center-align'} note`}>
+      <p className={`${isMobile ? '' : 'center-align'} note`}>
         <sup>1</sup>This represents the percent of businesses that began the application
         process, passed NextSeed&apos;s objective diligence criteria, and launched an offering on the platform since NextSeed&apos;s inception.
       </p>
@@ -83,33 +81,33 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
   </section>
   <Divider as={Container} hidden />
   <section>
-    <CovidBanner />
+    {covidBanner}
   </section>
   <Divider as={Container} hidden />
   <section>
-    <Container className={uiStore.responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
+    <Container className={isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
       <Grid>
         <Grid.Row>
           <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-            <Header as="h2" className={uiStore.responsiveVars.uptoTablet ? 'mb-30' : 'mb-40'}>We’ve built an alternative<Responsive minWidth={768} as="br" /> investment platform<Responsive minWidth={768} as="br" /> from the ground up.</Header>
-            <p className={`${uiStore.responsiveVars.uptoTablet ? 'mb-14' : 'mb-50'} neutral-text`}>
+            <Header as="h2" className={uptoTablet ? 'mb-30' : 'mb-40'}>We’ve built an alternative<Responsive minWidth={768} as="br" /> investment platform<Responsive minWidth={768} as="br" /> from the ground up.</Header>
+            <p className={`${uptoTablet ? 'mb-14' : 'mb-50'} neutral-text`}>
             Browse highly vetted companies and invest <Responsive minWidth={768} as="br" />
             in just a few clicks, on any device.
             </p>
-            {!authStore.isUserLoggedIn && !uiStore.responsiveVars.isMobile
+            {!isUserLoggedIn && !isMobile
               && (
                 <Button as={Link} to="/register-investor" primary className="mb-30">Create a  Free Account</Button>
               )
             }
-            {uiStore.responsiveVars.isMobile
+            {isMobile
              && <NSImage path="phones-mockup.png" className="mb-20" />
             }
           </Grid.Column>
           <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-            {!uiStore.responsiveVars.isMobile
+            {!isMobile
              && <NSImage path="phones-mockup.png" className="mb-20" />
             }
-            {!authStore.isUserLoggedIn && uiStore.responsiveVars.isMobile
+            {!isUserLoggedIn && isMobile
               && (
                 <Button fluid as={Link} to="/register-investor" primary>Create a  Free Account</Button>
               )
@@ -123,5 +121,4 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
   </>
 );
 
-// export default HowItWorksSummary;
-export default inject('uiStore', 'authStore')(observer(HowItWorksSummary));
+export default HowItWorksSummary;
