@@ -1,5 +1,4 @@
 import { decorate, action, observable, runInAction, computed } from 'mobx';
-import cookie from 'react-cookies';
 import { isEmpty, isUndefined, intersection, pick } from 'lodash';
 import { updateInvestorProfileData } from '../../queries/account';
 import { EMPLOYMENT_STATUS, BROKERAGE_EMPLOYMENT, PUBLIC_COMPANY_REL, FINANCES, INVESTOR_PROFILE_FULL_META, INVESTMENT_EXPERIENCE } from '../../../../constants/account';
