@@ -1,3 +1,0 @@
-describe.skip('basic singup', () => {
-  
-});

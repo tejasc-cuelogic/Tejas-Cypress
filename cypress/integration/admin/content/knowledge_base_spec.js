@@ -1,3 +1,0 @@
-describe.skip('Knowledgebase spec', () => {
-
-});

@@ -1,3 +1,0 @@
-describe.skip('Categories spec', () => {
-
-});

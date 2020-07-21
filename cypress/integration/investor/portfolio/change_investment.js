@@ -1,3 +1,0 @@
-describe.skip('Change investment', () => {
-
-});

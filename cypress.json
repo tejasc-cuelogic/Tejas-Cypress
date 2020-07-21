@@ -1,9 +1,10 @@
 {
-  "baseUrl": "http://localhost:3000",
+  "baseUrl": "https://dev.nextseed.qa",
   "chromeWebSecurity": false,
   "pageTimeoutLoad": 80000,
-  "defaultCommandTimeout": 80000,
+  "defaultCommandTimeout": 100000,
   "requestTimeout": 60000,
+   "taskTimeout": 80000,
   "ignoreTestFiles": "*.utility.js",
   "screenshotsFolder": "cypress/reports/screenshots",
   "videosFolder": "cypress/reports/videos",
