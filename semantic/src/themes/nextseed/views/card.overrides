@@ -163,12 +163,25 @@
                     margin:@14px 0 0;
                     overflow:hidden;
                     font-size:@15px;
-                    line-height:@20px;
+                    line-height:@22px;
                     color: @neutral;
                     transition: all 0.3s ease-in-out;
                     @media only screen and (min-width : @mobileBreakpoint ) and (max-width:@largestMobileScreen ){
                         min-height: 0px;
                         max-height: 100%;
+                    }
+                    .fr-view, .fr-view p{
+                        line-height: @22px;
+                        font-size: @15px;
+                    }
+                    .fr-view {
+                        ul{
+                            margin-top: 10px;
+                            li{
+                                line-height: @22px;
+                                font-size: @15px;
+                            }
+                        }
                     }
                 }
                 .campaign-card-table-wrapper{
@@ -304,7 +317,8 @@
             .tags{
                 color:@primary-one;
                 text-transform:uppercase;
-                >span{
+                .read-duration{
+                    font-size: 13px !important;
                     color:@neutral-middark;
                     text-transform:none;
                 }

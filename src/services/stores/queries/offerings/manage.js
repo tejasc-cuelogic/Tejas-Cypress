@@ -356,6 +356,9 @@ export const getOfferingDetails = gql`
           showBonusRewards
           showExpectedReturn
           expectedReturnCalc
+          confirmationMessage
+          hideConfirmationReferral
+          hideConfirmationHeader
         }
         docuSign {
           template

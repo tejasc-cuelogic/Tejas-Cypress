@@ -26,7 +26,7 @@ function cipVerificationHOC(WrappedComponent) {
     handleCloseModal = () => {
       this.props.identityStore.setFieldValue('cipErrors', null);
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-      this.props.history.push('/dashboard/setup');
+      this.props.history.push('/dashboard/setup/establish-profile/confirm');
     }
 
     handleBack = (isAddressOrPhoneFailure = undefined) => {

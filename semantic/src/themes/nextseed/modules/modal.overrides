@@ -1031,3 +1031,13 @@
 .custom-modal-wrapper .ui.dimmer.inverted{
     background: @white;
 }
+
+// NsInterstitial
+.finish-later{
+    @media only screen and (max-width : @largestMobileScreen ){
+       height: 95% !important;
+       width: 95% !important;
+    }
+    height: 590px !important;
+    width: 1151px !important;
+}

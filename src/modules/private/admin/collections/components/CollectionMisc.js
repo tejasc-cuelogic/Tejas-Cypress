@@ -29,13 +29,13 @@ class Misc extends Component {
 
   render() {
     const { collectionStore } = this.props;
-    const { COLLECTION_MISC_FRM, collectionId } = collectionStore;
+    const { COLLECTION_MISC_FRM, collectionId, isLocked } = collectionStore;
     return (
       <div className="inner-content-spacer">
         <Form>
-          <SocialLinks {...this.props} store={metaInfo.store} form={metaInfo.form} uploadPath={`collections/${collectionId}`} />
+          <SocialLinks {...this.props} isReadOnly={isLocked} store={metaInfo.store} form={metaInfo.form} uploadPath={`collections/${collectionId}`} />
           <OfferingButtonGroup
-            isDisable={!(COLLECTION_MISC_FRM.meta.isValid)}
+            isDisable={!(COLLECTION_MISC_FRM.meta.isValid) || isLocked}
             updateOffer={this.handleFormSubmit}
           />
         </Form>

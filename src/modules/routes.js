@@ -36,6 +36,7 @@ import {
   // UserAuthorization,
 } from './shared/Authorization';
 
+
 export const publicRoutes = [
   {
     path: '/',

@@ -30,6 +30,8 @@
         }
     }
     &.reward-block {
+        padding-right: 24px !important;
+        padding-left: 25px !important;
         .ui.header{
             color: @neutral-middark;
             font-weight: @bold;

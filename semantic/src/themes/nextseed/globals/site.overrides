@@ -88,6 +88,12 @@ h6{
 *:focus{
 	outline:none;
 }
+.dnone{
+	display: none !important;
+}
+.dblock{
+	display: block !important;
+}
 .mb-0{
 	margin-bottom:0 !important;
 }
@@ -239,6 +245,9 @@ h6{
 .pt-50{
 	padding-top:@50px !important;
 }
+.pt-55{
+	padding-top: 55px;
+}
 .pt-70{
 	padding-top:@70px !important;
 }
@@ -269,6 +278,9 @@ h6{
 .pb-50{
 	padding-bottom: @50px !important;
 }
+.pb-55{
+	padding-bottom: 55px;
+}
 .pb-70{
 	padding-bottom: @70px !important;
 }
@@ -277,6 +289,12 @@ h6{
 }
 .pr-20{
 	padding-right: @20px !important;
+}
+.pr-15 {
+	padding-right: 15px;
+}
+.pl-15 {
+	padding-left: 15px;
 }
 .pl-20{
 	padding-left: @20px !important;
@@ -1792,6 +1810,10 @@ a.icon-link {
 	p b {
 		color: @neutral;
 	}
+	>.ui.centered.grid >.match-height{
+		max-height: 552px;
+		max-width: 385px;
+	}
 }
 .secondary-section{
 	background-color:@neutral-offwhite;
@@ -3252,6 +3274,12 @@ input[type='range']::-webkit-slider-thumb {
 		left:0;
 		top:-140px;
 	}
+	>.anchor-top{
+		height:1px;
+		width:1px;
+		position:absolute;
+		top:-160px;
+	}
 	>.anchor-scroll{
 		top:-70px;
 	}
@@ -3523,7 +3551,6 @@ h3.ui.header.error-2{
 		}
 		&.banner-section{
 			position: relative;
-			background: #e7f5f1;
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width: @largestTabletScreen){
 				padding-left: 100px !important;
 				padding-right: 100px !important;
@@ -3535,22 +3562,6 @@ h3.ui.header.error-2{
 			@media only screen and (min-width : 1367px){
 				padding-left: 105px !important;
 				padding-right: 105px !important;
-			}
-			&:before{
-				content: '';
-				width: 40px;
-				height: 40px;
-				position: absolute;
-				left: 0px;
-				top: 50%;
-				margin-left: -20px;
-				margin-top: -20px;
-				transform: rotate(45deg);
-				background: #e7f5f1;
-				@media only screen and (max-width : @largestTabletScreen){
-					left: 50%;
-					top: 0;
-				}
 			}
 		}
 	}
@@ -3949,5 +3960,63 @@ h3.ui.header.error-2{
 .offering-side-menu{
 	&.collection-header-wrap{
 		max-height: 100% !important;
+	}
+}
+.investor-signup-container{
+	.ui.primary.button{
+		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+			width: 100% !important;
+		}
+	}
+	.ui.grid{
+		@media only screen and (min-width : @computerBreakpoint){
+			height: 500px;
+		}
+	}
+	.progressWrap {
+		margin: 0 auto;
+		max-width: 120px !important;
+		position: absolute;
+		bottom: 5%;
+		left: 35%;
+		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+			margin-top: 28px;
+			position: relative;
+			bottom: 1%;
+			left: 4.5%;
+		}
+		.steps{
+			width: 20px !important;
+			height: 3px !important;
+			border-radius: 10px !important;
+			color: transparent !important;
+			display: inline-block;
+			margin-right: 15px;
+		}
+	}
+	.protipWrap{
+		font-size: 13px !important;
+		line-height: 18px !important;
+		padding: 20px 24px;
+		background-color:@neutral-offwhite;
+		border-radius: 4px;
+		margin-top: 21px;
+	}
+	.investmentCards{
+		@media only screen and (min-width : @mobileBreakpoint ) and (max-width: @tabletBreakpoint ){
+			flex-direction: row !important;
+			height: 100px !important;
+			.content{
+				padding: 15px !important;
+				justify-content: center !important;
+				align-items: center !important;
+				display: flex !important;
+				flex-direction: column !important;
+				.ui.header,.description{
+					font-size: 13px !important;
+					margin-bottom: 0 !important;
+				}
+			}
+		}
 	}
 }

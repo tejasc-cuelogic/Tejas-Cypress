@@ -76,6 +76,13 @@ function AgreementTemplate(props) {
     const isFormValid = currentAction && currentAction === 'CUSTOM' ? props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid : props.agreementsStore.isAgreementFormValid;
     if (isFormValid) {
       setShowError(false);
+      if (isMobile) {
+        document.querySelector('#loadFirst').scrollIntoView({
+          block: 'start',
+          // behavior: 'smooth',
+        });
+      }
+
       if (currentAction !== 'NEXT') {
         props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
         props.investmentStore.investNowSubmit(currentAction === 'DYNAMIC').then((investmentStatus) => {
@@ -172,6 +179,9 @@ function AgreementTemplate(props) {
         disableCloseIcon={showDocuSign || showAgreementPdf || inProgress}
         back={isBackButtonVisible && moveBack}
       >
+        <div className="anchor-wrap">
+          <span id="loadFirst" className="anchor-top" />
+        </div>
         {(showDocuSign || showAgreementPdf)
           && (
             <Button
